@@ -1,0 +1,78 @@
+{
+  "limite_bytes": 52428800,
+  "partes": {
+    "M0+S|comedouro": {
+      "arquivo": "medidas_M0+S_comedouro.json",
+      "bytes": 16712959,
+      "sha256": "6d7dd37f0334f893313eb16ca10e609670642a32adb7a0b14f1f6ad42c4760bd",
+      "vidas": 1800
+    },
+    "M0+S|longe": {
+      "arquivo": "medidas_M0+S_longe.json",
+      "bytes": 16262981,
+      "sha256": "00d017fdf7f0c7b94f1974353f69c9369d3519dc350e54753ddc9e196a112ca5",
+      "vidas": 1800
+    },
+    "M0+S|perto": {
+      "arquivo": "medidas_M0+S_perto.json",
+      "bytes": 16794879,
+      "sha256": "a5d5add513e98de4cfd14799ddbe5fefae408587c6a78a3e637d807442a5603b",
+      "vidas": 1800
+    },
+    "M0|comedouro": {
+      "arquivo": "medidas_M0_comedouro.json",
+      "bytes": 16528489,
+      "sha256": "6e782e60b4b6600c434c63546e85e78cb40fdc542136a44abb2963fe99205053",
+      "vidas": 1800
+    },
+    "M0|longe": {
+      "arquivo": "medidas_M0_longe.json",
+      "bytes": 15957352,
+      "sha256": "1cb02c00cf4a52fb44304605a47ce0867413dab852c4de87c0cb0402e9eac21c",
+      "vidas": 1800
+    },
+    "M0|perto": {
+      "arquivo": "medidas_M0_perto.json",
+      "bytes": 16779256,
+      "sha256": "8f9e1469eafb592910bc87b4757558d027bf6b9246704c3b09d9585a6c8a9452",
+      "vidas": 1800
+    },
+    "M3+S|comedouro": {
+      "arquivo": "medidas_M3+S_comedouro.json",
+      "bytes": 17345589,
+      "sha256": "3fc2d6c1ed35520884d50c27e9299fdfb6502aac3fe8c2fc5ab26445444c0be6",
+      "vidas": 1800
+    },
+    "M3+S|longe": {
+      "arquivo": "medidas_M3+S_longe.json",
+      "bytes": 16922631,
+      "sha256": "c5bbde7a11336c92434244b966433fa95ecf2f4012cd1f8f720e49b15d5843f3",
+      "vidas": 1800
+    },
+    "M3+S|perto": {
+      "arquivo": "medidas_M3+S_perto.json",
+      "bytes": 17566948,
+      "sha256": "17ff6c5823e8876a515edeb28052d115d0be2419a6f16b3a9319d4ed4f6c0531",
+      "vidas": 1800
+    },
+    "M3|comedouro": {
+      "arquivo": "medidas_M3_comedouro.json",
+      "bytes": 17284968,
+      "sha256": "c8a33bc4bfb0c4c5dd6e884a84146ae7590b1c0bc847180bb7cc1928735de526",
+      "vidas": 1800
+    },
+    "M3|longe": {
+      "arquivo": "medidas_M3_longe.json",
+      "bytes": 16616763,
+      "sha256": "c9401948fbaac16605cf5321a3c275fd864741bdca8e61ab02234b6c49d8996f",
+      "vidas": 1800
+    },
+    "M3|perto": {
+      "arquivo": "medidas_M3_perto.json",
+      "bytes": 17572997,
+      "sha256": "f4a817acdc3228efbd3f1c0ebf2d230f34bd2ec00f6b69a00b9e3e9a79565060",
+      "vidas": 1800
+    }
+  },
+  "vidas": 21600
+}

@@ -1,0 +1,246 @@
+{
+  "ablacao_formula_zerada": {
+    "guarda_por_ponto": {
+      "media": 0.635625,
+      "por_forma": {
+        "duelista": 0.815,
+        "emboscador": 0.8183333333333334,
+        "espelho": 0.555,
+        "furioso": 0.8066666666666666,
+        "muralha": 0.6216666666666667,
+        "sentinela": 0.33,
+        "tita": 0.7416666666666667,
+        "vigia": 0.39666666666666667
+      },
+      "valor_original": 0.03
+    },
+    "guts_inicial_por_folego": {
+      "media": 0.59125,
+      "por_forma": {
+        "duelista": 0.5683333333333334,
+        "emboscador": 0.6316666666666667,
+        "espelho": 0.6766666666666667,
+        "furioso": 0.4566666666666666,
+        "muralha": 0.735,
+        "sentinela": 0.4166666666666667,
+        "tita": 0.7466666666666667,
+        "vigia": 0.4983333333333333
+      },
+      "valor_original": 2.0
+    },
+    "guts_max_por_folego": {
+      "media": 0.65875,
+      "por_forma": {
+        "duelista": 0.8250000000000001,
+        "emboscador": 0.7433333333333333,
+        "espelho": 0.6466666666666666,
+        "furioso": 0.8066666666666666,
+        "muralha": 0.785,
+        "sentinela": 0.3233333333333333,
+        "tita": 0.7416666666666667,
+        "vigia": 0.3983333333333334
+      },
+      "valor_original": 2.0
+    },
+    "hp_por_vigor": {
+      "media": 0.46,
+      "por_forma": {
+        "duelista": 0.6633333333333333,
+        "emboscador": 0.5616666666666666,
+        "espelho": 0.5333333333333333,
+        "furioso": 0.7783333333333333,
+        "muralha": 0.4666666666666666,
+        "sentinela": 0.10166666666666667,
+        "tita": 0.34,
+        "vigia": 0.23500000000000001
+      },
+      "valor_original": 3.0
+    },
+    "mult_por_ponto": {
+      "media": 0.7416666666666667,
+      "por_forma": {
+        "duelista": 0.8650000000000001,
+        "emboscador": 0.7166666666666667,
+        "espelho": 0.6866666666666666,
+        "furioso": 0.8966666666666666,
+        "muralha": 0.8300000000000001,
+        "sentinela": 0.66,
+        "tita": 0.7683333333333332,
+        "vigia": 0.51
+      },
+      "valor_original": 0.03
+    },
+    "regen_por_recuperacao": {
+      "media": 0.6908333333333333,
+      "por_forma": {
+        "duelista": 0.7799999999999999,
+        "emboscador": 0.71,
+        "espelho": 0.5666666666666668,
+        "furioso": 0.7733333333333333,
+        "muralha": 0.745,
+        "sentinela": 0.6666666666666666,
+        "tita": 0.6233333333333334,
+        "vigia": 0.6616666666666667
+      },
+      "valor_original": 0.4
+    }
+  },
+  "ablacao_stat_para_10": {
+    "folego": {
+      "media": 0.6652083333333333,
+      "por_forma": {
+        "duelista": 0.8033333333333333,
+        "emboscador": 0.6516666666666667,
+        "espelho": 0.6566666666666666,
+        "furioso": 0.7999999999999999,
+        "muralha": 0.75,
+        "sentinela": 0.3866666666666667,
+        "tita": 0.75,
+        "vigia": 0.5233333333333333
+      },
+      "valor_original": 8
+    },
+    "forca": {
+      "media": 0.700625,
+      "por_forma": {
+        "duelista": 0.8333333333333334,
+        "emboscador": 0.8183333333333334,
+        "espelho": 0.6866666666666666,
+        "furioso": 0.915,
+        "muralha": 0.8066666666666666,
+        "sentinela": 0.3233333333333333,
+        "tita": 0.755,
+        "vigia": 0.4666666666666666
+      },
+      "valor_original": 9
+    },
+    "guarda": {
+      "media": 0.648125,
+      "por_forma": {
+        "duelista": 0.815,
+        "emboscador": 0.8183333333333334,
+        "espelho": 0.6366666666666667,
+        "furioso": 0.8066666666666666,
+        "muralha": 0.6466666666666666,
+        "sentinela": 0.3233333333333333,
+        "tita": 0.7416666666666667,
+        "vigia": 0.39666666666666667
+      },
+      "valor_original": 15
+    },
+    "mira": {
+      "media": 0.7233333333333334,
+      "por_forma": {
+        "duelista": 0.8250000000000001,
+        "emboscador": 0.8883333333333333,
+        "espelho": 0.68,
+        "furioso": 0.8066666666666666,
+        "muralha": 0.8066666666666666,
+        "sentinela": 0.6333333333333333,
+        "tita": 0.75,
+        "vigia": 0.39666666666666667
+      },
+      "valor_original": 7
+    },
+    "recuperacao": {
+      "media": 0.6877083333333334,
+      "por_forma": {
+        "duelista": 0.8066666666666666,
+        "emboscador": 0.8266666666666667,
+        "espelho": 0.6666666666666666,
+        "furioso": 0.8283333333333333,
+        "muralha": 0.7783333333333333,
+        "sentinela": 0.515,
+        "tita": 0.7683333333333334,
+        "vigia": 0.3116666666666667
+      },
+      "valor_original": 8
+    },
+    "vigor": {
+      "media": 0.5633333333333334,
+      "por_forma": {
+        "duelista": 0.6966666666666667,
+        "emboscador": 0.7883333333333332,
+        "espelho": 0.5633333333333334,
+        "furioso": 0.765,
+        "muralha": 0.6,
+        "sentinela": 0.16333333333333333,
+        "tita": 0.6166666666666667,
+        "vigia": 0.3133333333333333
+      },
+      "valor_original": 13
+    }
+  },
+  "base": {
+    "media": 0.6708333333333334,
+    "por_forma": {
+      "duelista": 0.8250000000000001,
+      "emboscador": 0.8183333333333334,
+      "espelho": 0.6766666666666667,
+      "furioso": 0.8066666666666666,
+      "muralha": 0.7783333333333333,
+      "sentinela": 0.3233333333333333,
+      "tita": 0.7416666666666667,
+      "vigia": 0.39666666666666667
+    }
+  },
+  "especies": {
+    "brasa": {
+      "folego": 10,
+      "forca": 14,
+      "guarda": 12,
+      "mira": 8,
+      "recuperacao": 7,
+      "vigor": 9
+    },
+    "cirro": {
+      "folego": 11,
+      "forca": 7,
+      "guarda": 9,
+      "mira": 15,
+      "recuperacao": 11,
+      "vigor": 7
+    },
+    "faisca": {
+      "folego": 13,
+      "forca": 11,
+      "guarda": 8,
+      "mira": 11,
+      "recuperacao": 9,
+      "vigor": 8
+    },
+    "ferrugem": {
+      "folego": 8,
+      "forca": 9,
+      "guarda": 15,
+      "mira": 7,
+      "recuperacao": 8,
+      "vigor": 13
+    },
+    "limo": {
+      "folego": 12,
+      "forca": 6,
+      "guarda": 9,
+      "mira": 7,
+      "recuperacao": 15,
+      "vigor": 11
+    },
+    "seixo": {
+      "folego": 7,
+      "forca": 12,
+      "guarda": 12,
+      "mira": 7,
+      "recuperacao": 7,
+      "vigor": 15
+    }
+  },
+  "partidas_por_par_por_semente": 20,
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "unidade": "pontos da Ferrugem contra as outras 3 especies ativas, mesmo arquetipo e mesmo estilo"
+}

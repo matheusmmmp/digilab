@@ -1,0 +1,172 @@
+{
+  "_meta": {
+    "versao": "pve-treino-v0.3-PROPOSTO (sobrecarga e evolucao sombria)",
+    "modo": "campanha (produto). A arena de pesquisa normaliza o total de stats (ver 'normalizacao_pvp').",
+    "evidencia": "Calibrado com sim_combate_v2/pve.py (prototipo, 150 partidas por celula, nao canonico)."
+  },
+  "treino": {
+    "exercicios": {
+      "levantar_pedra": {
+        "principal": "forca",
+        "secundario": "vigor"
+      },
+      "corrida": {
+        "principal": "folego",
+        "secundario": "recuperacao"
+      },
+      "alvo": {
+        "principal": "mira",
+        "secundario": "folego"
+      },
+      "esquiva": {
+        "principal": "guarda",
+        "secundario": "vigor"
+      },
+      "meditar": {
+        "principal": "recuperacao",
+        "secundario": "guarda"
+      },
+      "resistencia": {
+        "principal": "vigor",
+        "secundario": "forca"
+      }
+    },
+    "ganho_base": {
+      "principal": 2,
+      "secundario": 1
+    },
+    "retorno_decrescente": "ganho = ganho_base * aptidao_especie * (1 - pontos_ja_treinados_no_stat / teto_por_stat)",
+    "teto_por_stat": 10,
+    "teto_total_por_estagio": {
+      "crianca": 10,
+      "adolescente": 12,
+      "adulto": 14
+    },
+    "teto_total_vida": 36,
+    "sucesso": "Sem aleatoriedade: ganho = ganho_base * (1 - fadiga/100) enquanto fadiga < limite.",
+    "fadiga": {
+      "por_sessao": 20,
+      "limite_falha": 60,
+      "recupera_por_hora_acordado": 10,
+      "zera_ao_dormir": true
+    },
+    "estresse": "treinar acima do limite de fadiga gera estresse, que reduz vinculo (obediencia)",
+    "custa_orcamento": true,
+    "nota": "Treino disputa o orcamento de interacoes com cuidado e ensino: e uma escolha do dono, nao um grind livre.",
+    "esforco": "A cada 4 sessoes, 1 coracao de esforco (visual).",
+    "efeitos_extras": {
+      "humor": "+1 por sessao com ganho"
+    },
+    "anti_grind": "Intervalo minimo entre sessoes + teto por dia do cronograma + fadiga. Tocar de novo antes do intervalo nao faz nada.",
+    "simulacao": "Igual para humanos e donos simulados: nao ha habilidade do jogador envolvida.",
+    "interacao": "Um botao por exercicio. Cada toque = uma sessao.",
+    "intervalo_minimo_min": 10,
+    "forcar": {
+      "quando": "fadiga >= limite (60). O mesmo botao vira 'Forcar', com confirmacao.",
+      "ganho": "ganho_base * 1.5 (a tentacao e real: forcar rende mais agora)",
+      "custos": {
+        "sobrecarga": 15,
+        "estresse": 10,
+        "vinculo": -0.05
+      },
+      "falha_por_obediencia": "com vinculo baixo o pet 'enrola' e a sessao nao rende, mas a sobrecarga entra do mesmo jeito",
+      "inspiracao": "Monster Rancher (fadiga e estresse encurtam a vida) e Next Order (passar do limite derruba o vinculo)"
+    },
+    "sobrecarga": {
+      "_nota": "Medidor persistente: NAO zera na evolucao, ao contrario dos contadores.",
+      "faixa": [
+        0,
+        100
+      ],
+      "decai": {
+        "por_hora_acordado_bem_cuidado": 2,
+        "por_sono_completo": 10
+      },
+      "aviso": 30,
+      "limiar_sombrio": 60,
+      "efeito": "ver arvore_evolucao.json > ramos_sombrios"
+    },
+    "pedido_de_pausa": "Com fadiga >= 40 o pet pede descanso (desejo). Atender: +vinculo; ignorar e treinar: -vinculo."
+  },
+  "aptidao_especie": {
+    "_nota": "Multiplicador de ganho por stat; media 1.0 por especie.",
+    "brasa": {
+      "forca": 1.2,
+      "guarda": 1.1,
+      "folego": 1.0,
+      "vigor": 0.9,
+      "mira": 0.9,
+      "recuperacao": 0.9
+    },
+    "cirro": {
+      "mira": 1.2,
+      "recuperacao": 1.1,
+      "folego": 1.0,
+      "guarda": 0.9,
+      "forca": 0.9,
+      "vigor": 0.9
+    },
+    "ferrugem": {
+      "guarda": 1.2,
+      "vigor": 1.1,
+      "forca": 1.0,
+      "folego": 0.9,
+      "recuperacao": 0.9,
+      "mira": 0.9
+    },
+    "limo": {
+      "recuperacao": 1.2,
+      "folego": 1.1,
+      "vigor": 1.0,
+      "guarda": 0.9,
+      "mira": 0.9,
+      "forca": 0.9
+    },
+    "faisca": {
+      "folego": 1.2,
+      "forca": 1.1,
+      "mira": 1.0,
+      "recuperacao": 0.9,
+      "vigor": 0.9,
+      "guarda": 0.9
+    },
+    "seixo": {
+      "vigor": 1.2,
+      "forca": 1.1,
+      "guarda": 1.0,
+      "folego": 0.9,
+      "recuperacao": 0.9,
+      "mira": 0.9
+    }
+  },
+  "npcs": {
+    "_nota": "Cada NPC testa uma coisa diferente. Stats uniformes no total indicado. Estilo fixo em gambits.",
+    "tier1_brutamontes": {
+      "total_stats": 72,
+      "estilo": "agressivo",
+      "estagio_minimo_sugerido": "crianca",
+      "licao": "prova de STATS: contra estilo parecido, o treino decide",
+      "calibracao": "estilo espelho (agressivo): 0,03 sem treino -> 0,97 com +15; estilo adaptativo ja vence sem treino (0,99)"
+    },
+    "tier2_sentinela": {
+      "total_stats": 80,
+      "estilo": "contragolpe",
+      "estagio_minimo_sugerido": "adolescente",
+      "licao": "prova de ESTILO: pune quem so ataca; treino quase nao ajuda",
+      "calibracao": "agressivo: 0,00 mesmo com +30; adaptativo: 0,88 sem treino -> 0,98 com +30"
+    },
+    "tier3_soberano": {
+      "total_stats": 90,
+      "estilo": "adaptativo",
+      "estagio_minimo_sugerido": "adulto",
+      "licao": "prova de STATS E ESTILO: exige estilo bom e treino quase no teto",
+      "calibracao": "adaptativo: 0,34 sem treino -> 0,52 com +30; aleatorio: 0,08 no maximo",
+      "risco": "atirador vence sem treino (0,67): falta resposta a luta de longe no gambit do chefe"
+    }
+  },
+  "normalizacao_pvp": {
+    "regra": "Na arena entre jogadores e na pesquisa, o total de stats volta ao orcamento da especie (60) mantendo as PROPORCOES treinadas.",
+    "motivo": "Na simulacao, stats decidem espelhos; sem normalizacao, a arena mediria horas de treino, nao o que o pet aprendeu.",
+    "efeito": "Treino muda o perfil do pet no PvP (especializacao) e o poder so no PvE."
+  }
+}

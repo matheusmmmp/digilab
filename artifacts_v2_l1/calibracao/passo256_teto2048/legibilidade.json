@@ -1,0 +1,1695 @@
+{
+  "bandit": {
+    "aprendido_ic": {
+      "ic_inferior": 0.15286458333333333,
+      "ic_superior": 0.1654017857142857,
+      "media": 0.15941220238095238,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "por_dono": {
+      "aleatorio": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.008928571428571428,
+          "energia": 0.01994047619047619,
+          "fome": 0.026785714285714284,
+          "habito": 0.045535714285714284,
+          "higiene": 0.017857142857142856,
+          "hora": 0.058779761904761904,
+          "humor": 0.03244047619047619,
+          "saude": 0.03794642857142857,
+          "sujeira": 0.029613095238095237,
+          "tempo_sem_cuidado": 0.002232142857142857
+        },
+        "fracao_com_fator": 0.14017857142857143,
+        "fracao_decisao_com_fator": 0.14017857142857143,
+        "fracao_decisao_decidiu": 0.14017857142857143,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8598214285714286
+      },
+      "atencioso": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.01011904761904762,
+          "energia": 0.0730654761904762,
+          "fome": 0.04136904761904762,
+          "habito": 0.05416666666666667,
+          "higiene": 0.04375,
+          "hora": 0.054464285714285715,
+          "humor": 0.041220238095238095,
+          "saude": 0.057886904761904764,
+          "sujeira": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.1888392857142857,
+        "fracao_decisao_com_fator": 0.1888392857142857,
+        "fracao_decisao_decidiu": 0.1888392857142857,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8111607142857142
+      },
+      "incoerente": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.008482142857142856,
+          "energia": 0.023214285714285715,
+          "fome": 0.04389880952380952,
+          "habito": 0.045089285714285714,
+          "higiene": 0.039285714285714285,
+          "hora": 0.0681547619047619,
+          "humor": 0.03869047619047619,
+          "saude": 0.04568452380952381,
+          "sujeira": 0.003273809523809524,
+          "tempo_sem_cuidado": 0.0013392857142857143
+        },
+        "fracao_com_fator": 0.1587797619047619,
+        "fracao_decisao_com_fator": 0.1587797619047619,
+        "fracao_decisao_decidiu": 0.1587797619047619,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.841220238095238
+      },
+      "relapso": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.01011904761904762,
+          "energia": 0.016666666666666666,
+          "fome": 0.027232142857142858,
+          "habito": 0.04598214285714286,
+          "higiene": 0.028273809523809524,
+          "hora": 0.05178571428571429,
+          "humor": 0.04181547619047619,
+          "saude": 0.04895833333333333,
+          "sujeira": 0.017410714285714286,
+          "tempo_sem_cuidado": 0.01130952380952381
+        },
+        "fracao_com_fator": 0.14985119047619047,
+        "fracao_decisao_com_fator": 0.14985119047619047,
+        "fracao_decisao_decidiu": 0.14985119047619047,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8501488095238096
+      }
+    },
+    "por_semente": {
+      "3101": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.010044642857142858,
+          "energia": 0.03180803571428571,
+          "fome": 0.028273809523809524,
+          "habito": 0.049107142857142856,
+          "higiene": 0.032924107142857144,
+          "hora": 0.06343005952380952,
+          "humor": 0.03757440476190476,
+          "saude": 0.048177083333333336,
+          "sujeira": 0.016927083333333332,
+          "tempo_sem_cuidado": 0.003720238095238095
+        },
+        "fracao_com_fator": 0.16108630952380953,
+        "fracao_decisao_com_fator": 0.16108630952380953,
+        "fracao_decisao_decidiu": 0.16108630952380953,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8389136904761905
+      },
+      "3202": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.007626488095238095,
+          "energia": 0.029389880952380952,
+          "fome": 0.03757440476190476,
+          "habito": 0.042782738095238096,
+          "higiene": 0.034970238095238096,
+          "hora": 0.050037202380952384,
+          "humor": 0.03869047619047619,
+          "saude": 0.04352678571428571,
+          "sujeira": 0.00744047619047619,
+          "tempo_sem_cuidado": 0.0027901785714285715
+        },
+        "fracao_com_fator": 0.14750744047619047,
+        "fracao_decisao_com_fator": 0.14750744047619047,
+        "fracao_decisao_decidiu": 0.14750744047619047,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8524925595238095
+      },
+      "3303": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.013392857142857142,
+          "energia": 0.03813244047619048,
+          "fome": 0.03552827380952381,
+          "habito": 0.05431547619047619,
+          "higiene": 0.032552083333333336,
+          "hora": 0.05617559523809524,
+          "humor": 0.03943452380952381,
+          "saude": 0.04259672619047619,
+          "sujeira": 0.016555059523809524,
+          "tempo_sem_cuidado": 0.00427827380952381
+        },
+        "fracao_com_fator": 0.16666666666666666,
+        "fracao_decisao_com_fator": 0.16666666666666666,
+        "fracao_decisao_decidiu": 0.16666666666666666,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8333333333333334
+      },
+      "3404": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.008370535714285714,
+          "energia": 0.033854166666666664,
+          "fome": 0.03701636904761905,
+          "habito": 0.05022321428571429,
+          "higiene": 0.02808779761904762,
+          "hora": 0.06398809523809523,
+          "humor": 0.039806547619047616,
+          "saude": 0.053943452380952384,
+          "sujeira": 0.012648809523809524,
+          "tempo_sem_cuidado": 0.00427827380952381
+        },
+        "fracao_com_fator": 0.16629464285714285,
+        "fracao_decisao_com_fator": 0.16629464285714285,
+        "fracao_decisao_decidiu": 0.16629464285714285,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8337053571428571
+      },
+      "3505": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.007626488095238095,
+          "energia": 0.032924107142857144,
+          "fome": 0.03571428571428571,
+          "habito": 0.04203869047619048,
+          "higiene": 0.032924107142857144,
+          "hora": 0.057849702380952384,
+          "humor": 0.03720238095238095,
+          "saude": 0.04985119047619048,
+          "sujeira": 0.010230654761904762,
+          "tempo_sem_cuidado": 0.004464285714285714
+        },
+        "fracao_com_fator": 0.15550595238095238,
+        "fracao_decisao_com_fator": 0.15550595238095238,
+        "fracao_decisao_decidiu": 0.15550595238095238,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8444940476190477
+      }
+    },
+    "por_vida": {
+      "aleatorio-bandit@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.014136904761904762,
+          "energia": 0.023065476190476192,
+          "fome": 0.028273809523809524,
+          "habito": 0.041666666666666664,
+          "higiene": 0.021577380952380952,
+          "hora": 0.06845238095238096,
+          "humor": 0.03422619047619048,
+          "saude": 0.04985119047619048,
+          "sujeira": 0.03422619047619048,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.15848214285714285,
+        "fracao_decisao_com_fator": 0.15848214285714285,
+        "fracao_decisao_decidiu": 0.15848214285714285,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8415178571428571
+      },
+      "aleatorio-bandit@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.006696428571428571,
+          "energia": 0.015625,
+          "fome": 0.029017857142857144,
+          "habito": 0.03571428571428571,
+          "higiene": 0.011904761904761904,
+          "hora": 0.057291666666666664,
+          "humor": 0.02976190476190476,
+          "saude": 0.026041666666666668,
+          "sujeira": 0.018601190476190476
+        },
+        "fracao_com_fator": 0.11532738095238096,
+        "fracao_decisao_com_fator": 0.11532738095238096,
+        "fracao_decisao_decidiu": 0.11532738095238096,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8846726190476191
+      },
+      "aleatorio-bandit@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.009672619047619048,
+          "energia": 0.022321428571428572,
+          "fome": 0.019345238095238096,
+          "habito": 0.058779761904761904,
+          "higiene": 0.021577380952380952,
+          "hora": 0.04836309523809524,
+          "humor": 0.03125,
+          "saude": 0.033482142857142856,
+          "sujeira": 0.03720238095238095,
+          "tempo_sem_cuidado": 0.002976190476190476
+        },
+        "fracao_com_fator": 0.14285714285714285,
+        "fracao_decisao_com_fator": 0.14285714285714285,
+        "fracao_decisao_decidiu": 0.14285714285714285,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8571428571428571
+      },
+      "aleatorio-bandit@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.00818452380952381,
+          "energia": 0.022321428571428572,
+          "fome": 0.031994047619047616,
+          "habito": 0.046875,
+          "higiene": 0.010416666666666666,
+          "hora": 0.06770833333333333,
+          "humor": 0.03571428571428571,
+          "saude": 0.04985119047619048,
+          "sujeira": 0.03422619047619048,
+          "tempo_sem_cuidado": 0.004464285714285714
+        },
+        "fracao_com_fator": 0.15625,
+        "fracao_decisao_com_fator": 0.15625,
+        "fracao_decisao_decidiu": 0.15625,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.84375
+      },
+      "aleatorio-bandit@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.005952380952380952,
+          "energia": 0.01636904761904762,
+          "fome": 0.025297619047619048,
+          "habito": 0.044642857142857144,
+          "higiene": 0.023809523809523808,
+          "hora": 0.052083333333333336,
+          "humor": 0.03125,
+          "saude": 0.03050595238095238,
+          "sujeira": 0.023809523809523808,
+          "tempo_sem_cuidado": 0.002232142857142857
+        },
+        "fracao_com_fator": 0.12797619047619047,
+        "fracao_decisao_com_fator": 0.12797619047619047,
+        "fracao_decisao_decidiu": 0.12797619047619047,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8720238095238095
+      },
+      "atencioso-bandit@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.00818452380952381,
+          "energia": 0.06398809523809523,
+          "fome": 0.02976190476190476,
+          "habito": 0.061755952380952384,
+          "higiene": 0.044642857142857144,
+          "hora": 0.058779761904761904,
+          "humor": 0.03943452380952381,
+          "saude": 0.05431547619047619,
+          "sujeira": 0.001488095238095238,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.18154761904761904,
+        "fracao_decisao_com_fator": 0.18154761904761904,
+        "fracao_decisao_decidiu": 0.18154761904761904,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8184523809523809
+      },
+      "atencioso-bandit@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.00818452380952381,
+          "energia": 0.06696428571428571,
+          "fome": 0.049107142857142856,
+          "habito": 0.047619047619047616,
+          "higiene": 0.03720238095238095,
+          "hora": 0.047619047619047616,
+          "humor": 0.036458333333333336,
+          "saude": 0.046130952380952384,
+          "sujeira": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.17038690476190477,
+        "fracao_decisao_com_fator": 0.17038690476190477,
+        "fracao_decisao_decidiu": 0.17038690476190477,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8296130952380952
+      },
+      "atencioso-bandit@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.019345238095238096,
+          "energia": 0.09375,
+          "fome": 0.04985119047619048,
+          "habito": 0.05654761904761905,
+          "higiene": 0.04017857142857143,
+          "hora": 0.046130952380952384,
+          "humor": 0.03943452380952381,
+          "saude": 0.049107142857142856,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.19791666666666666,
+        "fracao_decisao_com_fator": 0.19791666666666666,
+        "fracao_decisao_decidiu": 0.19791666666666666,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8020833333333334
+      },
+      "atencioso-bandit@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.004464285714285714,
+          "energia": 0.07589285714285714,
+          "fome": 0.03125,
+          "habito": 0.05654761904761905,
+          "higiene": 0.05357142857142857,
+          "hora": 0.05654761904761905,
+          "humor": 0.04389880952380952,
+          "saude": 0.07217261904761904,
+          "sujeira": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.19791666666666666,
+        "fracao_decisao_com_fator": 0.19791666666666666,
+        "fracao_decisao_decidiu": 0.19791666666666666,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8020833333333334
+      },
+      "atencioso-bandit@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.010416666666666666,
+          "energia": 0.06473214285714286,
+          "fome": 0.046875,
+          "habito": 0.04836309523809524,
+          "higiene": 0.043154761904761904,
+          "hora": 0.06324404761904762,
+          "humor": 0.046875,
+          "saude": 0.06770833333333333,
+          "sujeira": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.19642857142857142,
+        "fracao_decisao_com_fator": 0.19642857142857142,
+        "fracao_decisao_decidiu": 0.19642857142857142,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8035714285714286
+      },
+      "incoerente-bandit@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.011160714285714286,
+          "energia": 0.024553571428571428,
+          "fome": 0.034970238095238096,
+          "habito": 0.04538690476190476,
+          "higiene": 0.03869047619047619,
+          "hora": 0.06696428571428571,
+          "humor": 0.031994047619047616,
+          "saude": 0.04017857142857143,
+          "sujeira": 0.006696428571428571,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.15104166666666666,
+        "fracao_decisao_com_fator": 0.15104166666666666,
+        "fracao_decisao_decidiu": 0.15104166666666666,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8489583333333334
+      },
+      "incoerente-bandit@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.00744047619047619,
+          "energia": 0.01488095238095238,
+          "fome": 0.03125,
+          "habito": 0.04389880952380952,
+          "higiene": 0.052083333333333336,
+          "hora": 0.043154761904761904,
+          "humor": 0.04092261904761905,
+          "saude": 0.049107142857142856,
+          "sujeira": 0.002976190476190476,
+          "tempo_sem_cuidado": 0.002976190476190476
+        },
+        "fracao_com_fator": 0.14434523809523808,
+        "fracao_decisao_com_fator": 0.14434523809523808,
+        "fracao_decisao_decidiu": 0.14434523809523808,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8556547619047619
+      },
+      "incoerente-bandit@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.011160714285714286,
+          "energia": 0.025297619047619048,
+          "fome": 0.046875,
+          "habito": 0.052083333333333336,
+          "higiene": 0.04241071428571429,
+          "hora": 0.07961309523809523,
+          "humor": 0.05357142857142857,
+          "saude": 0.04836309523809524,
+          "sujeira": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.18080357142857142,
+        "fracao_decisao_com_fator": 0.18080357142857142,
+        "fracao_decisao_decidiu": 0.18080357142857142,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8191964285714286
+      },
+      "incoerente-bandit@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.00744047619047619,
+          "energia": 0.023809523809523808,
+          "fome": 0.05803571428571429,
+          "habito": 0.046130952380952384,
+          "higiene": 0.025297619047619048,
+          "hora": 0.07738095238095238,
+          "humor": 0.029017857142857144,
+          "saude": 0.04092261904761905,
+          "sujeira": 0.001488095238095238,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.15550595238095238,
+        "fracao_decisao_com_fator": 0.15550595238095238,
+        "fracao_decisao_decidiu": 0.15550595238095238,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8444940476190477
+      },
+      "incoerente-bandit@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.005208333333333333,
+          "energia": 0.027529761904761904,
+          "fome": 0.04836309523809524,
+          "habito": 0.03794642857142857,
+          "higiene": 0.03794642857142857,
+          "hora": 0.07366071428571429,
+          "humor": 0.03794642857142857,
+          "saude": 0.04985119047619048,
+          "sujeira": 0.004464285714285714,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.16220238095238096,
+        "fracao_decisao_com_fator": 0.16220238095238096,
+        "fracao_decisao_decidiu": 0.16220238095238096,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8377976190476191
+      },
+      "relapso-bandit@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.006696428571428571,
+          "energia": 0.015625,
+          "fome": 0.020089285714285716,
+          "habito": 0.047619047619047616,
+          "higiene": 0.026785714285714284,
+          "hora": 0.05952380952380952,
+          "humor": 0.044642857142857144,
+          "saude": 0.04836309523809524,
+          "sujeira": 0.025297619047619048,
+          "tempo_sem_cuidado": 0.011904761904761904
+        },
+        "fracao_com_fator": 0.15327380952380953,
+        "fracao_decisao_com_fator": 0.15327380952380953,
+        "fracao_decisao_decidiu": 0.15327380952380953,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8467261904761905
+      },
+      "relapso-bandit@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.00818452380952381,
+          "energia": 0.020089285714285716,
+          "fome": 0.04092261904761905,
+          "habito": 0.04389880952380952,
+          "higiene": 0.03869047619047619,
+          "hora": 0.052083333333333336,
+          "humor": 0.047619047619047616,
+          "saude": 0.05282738095238095,
+          "sujeira": 0.00744047619047619,
+          "tempo_sem_cuidado": 0.00818452380952381
+        },
+        "fracao_com_fator": 0.15997023809523808,
+        "fracao_decisao_com_fator": 0.15997023809523808,
+        "fracao_decisao_decidiu": 0.15997023809523808,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8400297619047619
+      },
+      "relapso-bandit@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.013392857142857142,
+          "energia": 0.011160714285714286,
+          "fome": 0.026041666666666668,
+          "habito": 0.04985119047619048,
+          "higiene": 0.026041666666666668,
+          "hora": 0.050595238095238096,
+          "humor": 0.033482142857142856,
+          "saude": 0.03943452380952381,
+          "sujeira": 0.028273809523809524,
+          "tempo_sem_cuidado": 0.011160714285714286
+        },
+        "fracao_com_fator": 0.14508928571428573,
+        "fracao_decisao_com_fator": 0.14508928571428573,
+        "fracao_decisao_decidiu": 0.14508928571428573,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8549107142857143
+      },
+      "relapso-bandit@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.013392857142857142,
+          "energia": 0.013392857142857142,
+          "fome": 0.026785714285714284,
+          "habito": 0.05133928571428571,
+          "higiene": 0.023065476190476192,
+          "hora": 0.05431547619047619,
+          "humor": 0.050595238095238096,
+          "saude": 0.05282738095238095,
+          "sujeira": 0.014136904761904762,
+          "tempo_sem_cuidado": 0.011160714285714286
+        },
+        "fracao_com_fator": 0.15550595238095238,
+        "fracao_decisao_com_fator": 0.15550595238095238,
+        "fracao_decisao_decidiu": 0.15550595238095238,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8444940476190477
+      },
+      "relapso-bandit@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.008928571428571428,
+          "energia": 0.023065476190476192,
+          "fome": 0.022321428571428572,
+          "habito": 0.03720238095238095,
+          "higiene": 0.026785714285714284,
+          "hora": 0.04241071428571429,
+          "humor": 0.03273809523809524,
+          "saude": 0.05133928571428571,
+          "sujeira": 0.011904761904761904,
+          "tempo_sem_cuidado": 0.014136904761904762
+        },
+        "fracao_com_fator": 0.13541666666666666,
+        "fracao_decisao_com_fator": 0.13541666666666666,
+        "fracao_decisao_decidiu": 0.13541666666666666,
+        "fracao_impulsos_com_fator": 0.0,
+        "fracao_impulsos_decidiu": 0.8645833333333334
+      }
+    },
+    "total": {
+      "decisoes": 26880,
+      "fatores": {
+        "dormindo": 0.00941220238095238,
+        "energia": 0.03322172619047619,
+        "fome": 0.03482142857142857,
+        "habito": 0.04769345238095238,
+        "higiene": 0.03229166666666667,
+        "hora": 0.05829613095238095,
+        "humor": 0.03854166666666667,
+        "saude": 0.047619047619047616,
+        "sujeira": 0.012760416666666666,
+        "tempo_sem_cuidado": 0.00390625
+      },
+      "fracao_com_fator": 0.15941220238095238,
+      "fracao_decisao_com_fator": 0.15941220238095238,
+      "fracao_decisao_decidiu": 0.15941220238095238,
+      "fracao_impulsos_com_fator": 0.0,
+      "fracao_impulsos_decidiu": 0.8405877976190477
+    }
+  },
+  "instinto": {
+    "aprendido_ic": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "por_dono": {
+      "aleatorio": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.2748511904761905,
+          "energia": 0.31994047619047616,
+          "fome": 0.16041666666666668,
+          "higiene": 0.18586309523809524,
+          "hora": 0.02619047619047619,
+          "humor": 0.003720238095238095,
+          "tempo_sem_cuidado": 0.01949404761904762
+        },
+        "fracao_com_fator": 0.6424107142857143,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.6424107142857143,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "atencioso": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.29345238095238096,
+          "energia": 0.33645833333333336,
+          "hora": 0.023660714285714285,
+          "tempo_sem_cuidado": 0.0026785714285714286
+        },
+        "fracao_com_fator": 0.3391369047619048,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.3391369047619048,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "incoerente": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.2925595238095238,
+          "energia": 0.3352678571428571,
+          "hora": 0.023660714285714285,
+          "tempo_sem_cuidado": 0.006101190476190476
+        },
+        "fracao_com_fator": 0.3413690476190476,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.3413690476190476,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "relapso": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.26845238095238094,
+          "energia": 0.3136904761904762,
+          "fome": 0.1244047619047619,
+          "higiene": 0.07380952380952381,
+          "hora": 0.027232142857142858,
+          "humor": 0.00505952380952381,
+          "tempo_sem_cuidado": 0.2974702380952381
+        },
+        "fracao_com_fator": 0.7428571428571429,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7428571428571429,
+        "fracao_impulsos_decidiu": 1.0
+      }
+    },
+    "por_semente": {
+      "3101": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.2883184523809524,
+          "energia": 0.3325892857142857,
+          "fome": 0.050037202380952384,
+          "higiene": 0.034412202380952384,
+          "hora": 0.02659970238095238,
+          "humor": 0.002232142857142857,
+          "tempo_sem_cuidado": 0.09095982142857142
+        },
+        "fracao_com_fator": 0.49367559523809523,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.49367559523809523,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "3202": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.2805059523809524,
+          "energia": 0.32421875,
+          "fome": 0.07533482142857142,
+          "higiene": 0.05859375,
+          "hora": 0.023995535714285716,
+          "humor": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.07570684523809523
+        },
+        "fracao_com_fator": 0.5172991071428571,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.5172991071428571,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "3303": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.27938988095238093,
+          "energia": 0.32421875,
+          "fome": 0.08389136904761904,
+          "higiene": 0.07217261904761904,
+          "hora": 0.025483630952380952,
+          "humor": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.07719494047619048
+        },
+        "fracao_com_fator": 0.5204613095238095,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.5204613095238095,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "3404": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.2825520833333333,
+          "energia": 0.32645089285714285,
+          "fome": 0.07273065476190477,
+          "higiene": 0.06696428571428571,
+          "hora": 0.02492559523809524,
+          "humor": 0.006882440476190476,
+          "tempo_sem_cuidado": 0.08500744047619048
+        },
+        "fracao_com_fator": 0.5187872023809523,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.5187872023809523,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "3505": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.28087797619047616,
+          "energia": 0.32421875,
+          "fome": 0.0740327380952381,
+          "higiene": 0.09244791666666667,
+          "hora": 0.02492559523809524,
+          "humor": 0.0003720238095238095,
+          "tempo_sem_cuidado": 0.0783110119047619
+        },
+        "fracao_com_fator": 0.5319940476190477,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.5319940476190477,
+        "fracao_impulsos_decidiu": 1.0
+      }
+    },
+    "por_vida": {
+      "aleatorio-instinto@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29017857142857145,
+          "energia": 0.33630952380952384,
+          "fome": 0.07142857142857142,
+          "higiene": 0.0744047619047619,
+          "hora": 0.028273809523809524,
+          "tempo_sem_cuidado": 0.03720238095238095
+        },
+        "fracao_com_fator": 0.5193452380952381,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.5193452380952381,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "aleatorio-instinto@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2708333333333333,
+          "energia": 0.31473214285714285,
+          "fome": 0.17708333333333334,
+          "higiene": 0.16666666666666666,
+          "hora": 0.023809523809523808,
+          "humor": 0.001488095238095238,
+          "tempo_sem_cuidado": 0.01488095238095238
+        },
+        "fracao_com_fator": 0.6629464285714286,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.6629464285714286,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "aleatorio-instinto@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2708333333333333,
+          "energia": 0.3169642857142857,
+          "fome": 0.20833333333333334,
+          "higiene": 0.21502976190476192,
+          "hora": 0.026041666666666668,
+          "humor": 0.002976190476190476,
+          "tempo_sem_cuidado": 0.004464285714285714
+        },
+        "fracao_com_fator": 0.6681547619047619,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.6681547619047619,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "aleatorio-instinto@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.27157738095238093,
+          "energia": 0.31473214285714285,
+          "fome": 0.17857142857142858,
+          "higiene": 0.1793154761904762,
+          "hora": 0.026041666666666668,
+          "humor": 0.014136904761904762,
+          "tempo_sem_cuidado": 0.036458333333333336
+        },
+        "fracao_com_fator": 0.65625,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.65625,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "aleatorio-instinto@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2708333333333333,
+          "energia": 0.3169642857142857,
+          "fome": 0.16666666666666666,
+          "higiene": 0.29389880952380953,
+          "hora": 0.026785714285714284,
+          "tempo_sem_cuidado": 0.004464285714285714
+        },
+        "fracao_com_fator": 0.7053571428571429,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7053571428571429,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "atencioso-instinto@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.296875,
+          "energia": 0.34077380952380953,
+          "hora": 0.024553571428571428,
+          "tempo_sem_cuidado": 0.00818452380952381
+        },
+        "fracao_com_fator": 0.3489583333333333,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.3489583333333333,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "atencioso-instinto@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29464285714285715,
+          "energia": 0.33779761904761907,
+          "hora": 0.024553571428571428
+        },
+        "fracao_com_fator": 0.33779761904761907,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.33779761904761907,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "atencioso-instinto@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29092261904761907,
+          "energia": 0.33407738095238093,
+          "hora": 0.023065476190476192,
+          "tempo_sem_cuidado": 0.002232142857142857
+        },
+        "fracao_com_fator": 0.33630952380952384,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.33630952380952384,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "atencioso-instinto@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29389880952380953,
+          "energia": 0.33705357142857145,
+          "hora": 0.023065476190476192,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.33779761904761907,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.33779761904761907,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "atencioso-instinto@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29092261904761907,
+          "energia": 0.3325892857142857,
+          "hora": 0.023065476190476192,
+          "tempo_sem_cuidado": 0.002232142857142857
+        },
+        "fracao_com_fator": 0.33482142857142855,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.33482142857142855,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "incoerente-instinto@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29985119047619047,
+          "energia": 0.34375,
+          "hora": 0.024553571428571428,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.34523809523809523,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.34523809523809523,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "incoerente-instinto@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.28869047619047616,
+          "energia": 0.33035714285714285,
+          "hora": 0.021577380952380952,
+          "tempo_sem_cuidado": 0.011160714285714286
+        },
+        "fracao_com_fator": 0.34151785714285715,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.34151785714285715,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "incoerente-instinto@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.28943452380952384,
+          "energia": 0.3318452380952381,
+          "hora": 0.023809523809523808,
+          "tempo_sem_cuidado": 0.003720238095238095
+        },
+        "fracao_com_fator": 0.33556547619047616,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.33556547619047616,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "incoerente-instinto@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2931547619047619,
+          "energia": 0.33630952380952384,
+          "hora": 0.023809523809523808,
+          "tempo_sem_cuidado": 0.011904761904761904
+        },
+        "fracao_com_fator": 0.3482142857142857,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.3482142857142857,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "incoerente-instinto@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2916666666666667,
+          "energia": 0.33407738095238093,
+          "hora": 0.024553571428571428,
+          "tempo_sem_cuidado": 0.002232142857142857
+        },
+        "fracao_com_fator": 0.33630952380952384,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.33630952380952384,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "relapso-instinto@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2663690476190476,
+          "energia": 0.30952380952380953,
+          "fome": 0.12872023809523808,
+          "higiene": 0.06324404761904762,
+          "hora": 0.029017857142857144,
+          "humor": 0.008928571428571428,
+          "tempo_sem_cuidado": 0.3169642857142857
+        },
+        "fracao_com_fator": 0.7611607142857143,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7611607142857143,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "relapso-instinto@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.26785714285714285,
+          "energia": 0.31398809523809523,
+          "fome": 0.12425595238095238,
+          "higiene": 0.06770833333333333,
+          "hora": 0.026041666666666668,
+          "humor": 0.001488095238095238,
+          "tempo_sem_cuidado": 0.2767857142857143
+        },
+        "fracao_com_fator": 0.7269345238095238,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7269345238095238,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "relapso-instinto@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2663690476190476,
+          "energia": 0.31398809523809523,
+          "fome": 0.12723214285714285,
+          "higiene": 0.07366071428571429,
+          "hora": 0.029017857142857144,
+          "tempo_sem_cuidado": 0.29836309523809523
+        },
+        "fracao_com_fator": 0.7418154761904762,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7418154761904762,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "relapso-instinto@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.27157738095238093,
+          "energia": 0.3177083333333333,
+          "fome": 0.11235119047619048,
+          "higiene": 0.08854166666666667,
+          "hora": 0.026785714285714284,
+          "humor": 0.013392857142857142,
+          "tempo_sem_cuidado": 0.29092261904761907
+        },
+        "fracao_com_fator": 0.7328869047619048,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7328869047619048,
+        "fracao_impulsos_decidiu": 1.0
+      },
+      "relapso-instinto@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2700892857142857,
+          "energia": 0.3132440476190476,
+          "fome": 0.12946428571428573,
+          "higiene": 0.07589285714285714,
+          "hora": 0.025297619047619048,
+          "humor": 0.001488095238095238,
+          "tempo_sem_cuidado": 0.30431547619047616
+        },
+        "fracao_com_fator": 0.7514880952380952,
+        "fracao_decisao_com_fator": 0.0,
+        "fracao_decisao_decidiu": 0.0,
+        "fracao_impulsos_com_fator": 0.7514880952380952,
+        "fracao_impulsos_decidiu": 1.0
+      }
+    },
+    "total": {
+      "decisoes": 26880,
+      "fatores": {
+        "dormindo": 0.28232886904761906,
+        "energia": 0.3263392857142857,
+        "fome": 0.07120535714285714,
+        "higiene": 0.06491815476190477,
+        "hora": 0.025186011904761905,
+        "humor": 0.002194940476190476,
+        "tempo_sem_cuidado": 0.0814360119047619
+      },
+      "fracao_com_fator": 0.5164434523809524,
+      "fracao_decisao_com_fator": 0.0,
+      "fracao_decisao_decidiu": 0.0,
+      "fracao_impulsos_com_fator": 0.5164434523809524,
+      "fracao_impulsos_decidiu": 1.0
+    }
+  },
+  "lobos": {
+    "aprendido_ic": {
+      "ic_inferior": 0.1126860119047619,
+      "ic_superior": 0.1535342261904762,
+      "media": 0.13292410714285713,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "por_dono": {
+      "aleatorio": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.26011904761904764,
+          "energia": 0.3101190476190476,
+          "fome": 0.20163690476190477,
+          "habito": 0.09479166666666666,
+          "higiene": 0.18303571428571427,
+          "hora": 0.031101190476190477,
+          "humor": 0.028422619047619047,
+          "saude": 0.060267857142857144,
+          "sujeira": 0.022470238095238095,
+          "tempo_sem_cuidado": 0.012648809523809524
+        },
+        "fracao_com_fator": 0.7574404761904762,
+        "fracao_decisao_com_fator": 0.11413690476190476,
+        "fracao_decisao_decidiu": 0.16101190476190477,
+        "fracao_impulsos_com_fator": 0.6433035714285714,
+        "fracao_impulsos_decidiu": 0.8389880952380953
+      },
+      "atencioso": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.315625,
+          "energia": 0.36949404761904764,
+          "fome": 0.004166666666666667,
+          "habito": 0.17202380952380952,
+          "higiene": 0.015178571428571428,
+          "hora": 0.03720238095238095,
+          "humor": 0.005803571428571429,
+          "saude": 0.18735119047619048,
+          "sujeira": 0.007291666666666667,
+          "tempo_sem_cuidado": 0.00505952380952381
+        },
+        "fracao_com_fator": 0.571577380952381,
+        "fracao_decisao_com_fator": 0.2087797619047619,
+        "fracao_decisao_decidiu": 0.21071428571428572,
+        "fracao_impulsos_com_fator": 0.36279761904761904,
+        "fracao_impulsos_decidiu": 0.7892857142857143
+      },
+      "incoerente": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.29196428571428573,
+          "energia": 0.3360119047619048,
+          "fome": 0.01800595238095238,
+          "habito": 0.11636904761904762,
+          "higiene": 0.015029761904761905,
+          "hora": 0.03080357142857143,
+          "humor": 0.021726190476190475,
+          "saude": 0.1349702380952381,
+          "tempo_sem_cuidado": 0.0019345238095238096
+        },
+        "fracao_com_fator": 0.4980654761904762,
+        "fracao_decisao_com_fator": 0.16324404761904762,
+        "fracao_decisao_decidiu": 0.22291666666666668,
+        "fracao_impulsos_com_fator": 0.33482142857142855,
+        "fracao_impulsos_decidiu": 0.7770833333333333
+      },
+      "relapso": {
+        "decisoes": 6720,
+        "fatores": {
+          "dormindo": 0.26845238095238094,
+          "energia": 0.3148809523809524,
+          "fome": 0.12247023809523809,
+          "habito": 0.040625,
+          "higiene": 0.0712797619047619,
+          "hora": 0.027678571428571427,
+          "humor": 0.015178571428571428,
+          "saude": 0.0400297619047619,
+          "sujeira": 0.00014880952380952382,
+          "tempo_sem_cuidado": 0.2943452380952381
+        },
+        "fracao_com_fator": 0.7828869047619048,
+        "fracao_decisao_com_fator": 0.045535714285714284,
+        "fracao_decisao_decidiu": 0.05773809523809524,
+        "fracao_impulsos_com_fator": 0.7373511904761905,
+        "fracao_impulsos_decidiu": 0.9422619047619047
+      }
+    },
+    "por_semente": {
+      "3101": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.29203869047619047,
+          "energia": 0.33686755952380953,
+          "fome": 0.06640625,
+          "habito": 0.13467261904761904,
+          "higiene": 0.03311011904761905,
+          "hora": 0.02976190476190476,
+          "humor": 0.022321428571428572,
+          "saude": 0.14229910714285715,
+          "sujeira": 0.005022321428571429,
+          "tempo_sem_cuidado": 0.07905505952380952
+        },
+        "fracao_com_fator": 0.6493675595238095,
+        "fracao_decisao_com_fator": 0.16722470238095238,
+        "fracao_decisao_decidiu": 0.20386904761904762,
+        "fracao_impulsos_com_fator": 0.48214285714285715,
+        "fracao_impulsos_decidiu": 0.7961309523809523
+      },
+      "3202": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.2857142857142857,
+          "energia": 0.3322172619047619,
+          "fome": 0.07868303571428571,
+          "habito": 0.09207589285714286,
+          "higiene": 0.062313988095238096,
+          "hora": 0.029947916666666668,
+          "humor": 0.025297619047619048,
+          "saude": 0.09281994047619048,
+          "sujeira": 0.002232142857142857,
+          "tempo_sem_cuidado": 0.078125
+        },
+        "fracao_com_fator": 0.6395089285714286,
+        "fracao_decisao_com_fator": 0.11030505952380952,
+        "fracao_decisao_decidiu": 0.13988095238095238,
+        "fracao_impulsos_com_fator": 0.5292038690476191,
+        "fracao_impulsos_decidiu": 0.8601190476190477
+      },
+      "3303": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.2747395833333333,
+          "energia": 0.32273065476190477,
+          "fome": 0.10584077380952381,
+          "habito": 0.09188988095238096,
+          "higiene": 0.07347470238095238,
+          "hora": 0.034412202380952384,
+          "humor": 0.012834821428571428,
+          "saude": 0.07924107142857142,
+          "sujeira": 0.02659970238095238,
+          "tempo_sem_cuidado": 0.08389136904761904
+        },
+        "fracao_com_fator": 0.6493675595238095,
+        "fracao_decisao_com_fator": 0.12109375,
+        "fracao_decisao_decidiu": 0.14936755952380953,
+        "fracao_impulsos_com_fator": 0.5282738095238095,
+        "fracao_impulsos_decidiu": 0.8506324404761905
+      },
+      "3404": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.2814360119047619,
+          "energia": 0.33761160714285715,
+          "fome": 0.11495535714285714,
+          "habito": 0.12816220238095238,
+          "higiene": 0.07496279761904762,
+          "hora": 0.02976190476190476,
+          "humor": 0.012276785714285714,
+          "saude": 0.12704613095238096,
+          "sujeira": 0.0027901785714285715,
+          "tempo_sem_cuidado": 0.07607886904761904
+        },
+        "fracao_com_fator": 0.6854538690476191,
+        "fracao_decisao_com_fator": 0.15513392857142858,
+        "fracao_decisao_decidiu": 0.19828869047619047,
+        "fracao_impulsos_com_fator": 0.5303199404761905,
+        "fracao_impulsos_decidiu": 0.8017113095238095
+      },
+      "3505": {
+        "decisoes": 5376,
+        "fatores": {
+          "dormindo": 0.28627232142857145,
+          "energia": 0.33370535714285715,
+          "fome": 0.06696428571428571,
+          "habito": 0.08296130952380952,
+          "higiene": 0.11179315476190477,
+          "hora": 0.03459821428571429,
+          "humor": 0.016183035714285716,
+          "saude": 0.08686755952380952,
+          "sujeira": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.07533482142857142
+        },
+        "fracao_com_fator": 0.6387648809523809,
+        "fracao_decisao_com_fator": 0.11086309523809523,
+        "fracao_decisao_decidiu": 0.12406994047619048,
+        "fracao_impulsos_com_fator": 0.5279017857142857,
+        "fracao_impulsos_decidiu": 0.8759300595238095
+      }
+    },
+    "por_vida": {
+      "aleatorio-lobos@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2700892857142857,
+          "energia": 0.31473214285714285,
+          "fome": 0.07142857142857142,
+          "habito": 0.16145833333333334,
+          "higiene": 0.046130952380952384,
+          "hora": 0.03720238095238095,
+          "humor": 0.03869047619047619,
+          "saude": 0.17857142857142858,
+          "sujeira": 0.020089285714285716,
+          "tempo_sem_cuidado": 0.023809523809523808
+        },
+        "fracao_com_fator": 0.6644345238095238,
+        "fracao_decisao_com_fator": 0.22098214285714285,
+        "fracao_decisao_decidiu": 0.3273809523809524,
+        "fracao_impulsos_com_fator": 0.44345238095238093,
+        "fracao_impulsos_decidiu": 0.6726190476190477
+      },
+      "aleatorio-lobos@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.25967261904761907,
+          "energia": 0.30580357142857145,
+          "fome": 0.19866071428571427,
+          "habito": 0.041666666666666664,
+          "higiene": 0.18303571428571427,
+          "hora": 0.029017857142857144,
+          "humor": 0.026041666666666668,
+          "saude": 0.02976190476190476,
+          "sujeira": 0.008928571428571428,
+          "tempo_sem_cuidado": 0.015625
+        },
+        "fracao_com_fator": 0.7425595238095238,
+        "fracao_decisao_com_fator": 0.060267857142857144,
+        "fracao_decisao_decidiu": 0.11086309523809523,
+        "fracao_impulsos_com_fator": 0.6822916666666666,
+        "fracao_impulsos_decidiu": 0.8891369047619048
+      },
+      "aleatorio-lobos@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2537202380952381,
+          "energia": 0.31473214285714285,
+          "fome": 0.296875,
+          "habito": 0.09375,
+          "higiene": 0.21577380952380953,
+          "hora": 0.03125,
+          "humor": 0.015625,
+          "saude": 0.004464285714285714,
+          "sujeira": 0.06994047619047619,
+          "tempo_sem_cuidado": 0.005208333333333333
+        },
+        "fracao_com_fator": 0.8244047619047619,
+        "fracao_decisao_com_fator": 0.10639880952380952,
+        "fracao_decisao_decidiu": 0.12797619047619047,
+        "fracao_impulsos_com_fator": 0.7180059523809523,
+        "fracao_impulsos_decidiu": 0.8720238095238095
+      },
+      "aleatorio-lobos@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2537202380952381,
+          "energia": 0.30431547619047616,
+          "fome": 0.3072916666666667,
+          "habito": 0.1056547619047619,
+          "higiene": 0.17485119047619047,
+          "hora": 0.028273809523809524,
+          "humor": 0.011904761904761904,
+          "saude": 0.07217261904761904,
+          "sujeira": 0.010416666666666666,
+          "tempo_sem_cuidado": 0.00818452380952381
+        },
+        "fracao_com_fator": 0.8147321428571429,
+        "fracao_decisao_com_fator": 0.109375,
+        "fracao_decisao_decidiu": 0.12797619047619047,
+        "fracao_impulsos_com_fator": 0.7053571428571429,
+        "fracao_impulsos_decidiu": 0.8720238095238095
+      },
+      "aleatorio-lobos@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.26339285714285715,
+          "energia": 0.31101190476190477,
+          "fome": 0.13392857142857142,
+          "habito": 0.07142857142857142,
+          "higiene": 0.29538690476190477,
+          "hora": 0.02976190476190476,
+          "humor": 0.04985119047619048,
+          "saude": 0.01636904761904762,
+          "sujeira": 0.002976190476190476,
+          "tempo_sem_cuidado": 0.010416666666666666
+        },
+        "fracao_com_fator": 0.7410714285714286,
+        "fracao_decisao_com_fator": 0.07366071428571429,
+        "fracao_decisao_decidiu": 0.11086309523809523,
+        "fracao_impulsos_com_fator": 0.6674107142857143,
+        "fracao_impulsos_decidiu": 0.8891369047619048
+      },
+      "atencioso-lobos@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.3244047619047619,
+          "energia": 0.37351190476190477,
+          "habito": 0.1875,
+          "higiene": 0.001488095238095238,
+          "hora": 0.028273809523809524,
+          "saude": 0.18898809523809523,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.5632440476190477,
+        "fracao_decisao_com_fator": 0.18898809523809523,
+        "fracao_decisao_decidiu": 0.18973214285714285,
+        "fracao_impulsos_com_fator": 0.3742559523809524,
+        "fracao_impulsos_decidiu": 0.8102678571428571
+      },
+      "atencioso-lobos@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.3229166666666667,
+          "energia": 0.37202380952380953,
+          "habito": 0.21577380952380953,
+          "higiene": 0.002232142857142857,
+          "hora": 0.031994047619047616,
+          "humor": 0.000744047619047619,
+          "saude": 0.22098214285714285,
+          "tempo_sem_cuidado": 0.000744047619047619
+        },
+        "fracao_com_fator": 0.5944940476190477,
+        "fracao_decisao_com_fator": 0.22172619047619047,
+        "fracao_decisao_decidiu": 0.22247023809523808,
+        "fracao_impulsos_com_fator": 0.37276785714285715,
+        "fracao_impulsos_decidiu": 0.7775297619047619
+      },
+      "atencioso-lobos@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.30431547619047616,
+          "energia": 0.3474702380952381,
+          "fome": 0.005952380952380952,
+          "habito": 0.12797619047619047,
+          "higiene": 0.002232142857142857,
+          "hora": 0.03720238095238095,
+          "humor": 0.011904761904761904,
+          "saude": 0.14136904761904762,
+          "sujeira": 0.036458333333333336,
+          "tempo_sem_cuidado": 0.019345238095238096
+        },
+        "fracao_com_fator": 0.5319940476190477,
+        "fracao_decisao_com_fator": 0.1875,
+        "fracao_decisao_decidiu": 0.19122023809523808,
+        "fracao_impulsos_com_fator": 0.3444940476190476,
+        "fracao_impulsos_decidiu": 0.8087797619047619
+      },
+      "atencioso-lobos@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.3132440476190476,
+          "energia": 0.38764880952380953,
+          "fome": 0.014136904761904762,
+          "habito": 0.20982142857142858,
+          "higiene": 0.015625,
+          "hora": 0.03273809523809524,
+          "humor": 0.004464285714285714,
+          "saude": 0.22023809523809523
+        },
+        "fracao_com_fator": 0.609375,
+        "fracao_decisao_com_fator": 0.25,
+        "fracao_decisao_decidiu": 0.2537202380952381,
+        "fracao_impulsos_com_fator": 0.359375,
+        "fracao_impulsos_decidiu": 0.7462797619047619
+      },
+      "atencioso-lobos@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.3132440476190476,
+          "energia": 0.36681547619047616,
+          "fome": 0.000744047619047619,
+          "habito": 0.11904761904761904,
+          "higiene": 0.05431547619047619,
+          "hora": 0.05580357142857143,
+          "humor": 0.011904761904761904,
+          "saude": 0.16517857142857142,
+          "tempo_sem_cuidado": 0.004464285714285714
+        },
+        "fracao_com_fator": 0.5587797619047619,
+        "fracao_decisao_com_fator": 0.1956845238095238,
+        "fracao_decisao_decidiu": 0.19642857142857142,
+        "fracao_impulsos_com_fator": 0.3630952380952381,
+        "fracao_impulsos_decidiu": 0.8035714285714286
+      },
+      "incoerente-lobos@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.30580357142857145,
+          "energia": 0.34672619047619047,
+          "fome": 0.03869047619047619,
+          "habito": 0.1480654761904762,
+          "higiene": 0.019345238095238096,
+          "hora": 0.025297619047619048,
+          "humor": 0.04836309523809524,
+          "saude": 0.16666666666666666,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.5654761904761905,
+        "fracao_decisao_com_fator": 0.21726190476190477,
+        "fracao_decisao_decidiu": 0.25595238095238093,
+        "fracao_impulsos_com_fator": 0.3482142857142857,
+        "fracao_impulsos_decidiu": 0.7440476190476191
+      },
+      "incoerente-lobos@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.29985119047619047,
+          "energia": 0.3430059523809524,
+          "fome": 0.005208333333333333,
+          "habito": 0.05580357142857143,
+          "higiene": 0.018601190476190476,
+          "hora": 0.028273809523809524,
+          "humor": 0.03943452380952381,
+          "saude": 0.07961309523809523
+        },
+        "fracao_com_fator": 0.44494047619047616,
+        "fracao_decisao_com_fator": 0.10193452380952381,
+        "fracao_decisao_decidiu": 0.11383928571428571,
+        "fracao_impulsos_com_fator": 0.3430059523809524,
+        "fracao_impulsos_decidiu": 0.8861607142857143
+      },
+      "incoerente-lobos@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.27306547619047616,
+          "energia": 0.31398809523809523,
+          "fome": 0.013392857142857142,
+          "habito": 0.1130952380952381,
+          "higiene": 0.005952380952380952,
+          "hora": 0.041666666666666664,
+          "humor": 0.01711309523809524,
+          "saude": 0.13392857142857142,
+          "tempo_sem_cuidado": 0.005208333333333333
+        },
+        "fracao_com_fator": 0.47172619047619047,
+        "fracao_decisao_com_fator": 0.15327380952380953,
+        "fracao_decisao_decidiu": 0.23660714285714285,
+        "fracao_impulsos_com_fator": 0.31845238095238093,
+        "fracao_impulsos_decidiu": 0.7633928571428571
+      },
+      "incoerente-lobos@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2849702380952381,
+          "energia": 0.33779761904761907,
+          "fome": 0.03125,
+          "habito": 0.16294642857142858,
+          "higiene": 0.006696428571428571,
+          "hora": 0.03125,
+          "humor": 0.002232142857142857,
+          "saude": 0.171875,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.5379464285714286,
+        "fracao_decisao_com_fator": 0.21354166666666666,
+        "fracao_decisao_decidiu": 0.3630952380952381,
+        "fracao_impulsos_com_fator": 0.3244047619047619,
+        "fracao_impulsos_decidiu": 0.6369047619047619
+      },
+      "incoerente-lobos@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2961309523809524,
+          "energia": 0.3385416666666667,
+          "fome": 0.001488095238095238,
+          "habito": 0.10193452380952381,
+          "higiene": 0.024553571428571428,
+          "hora": 0.027529761904761904,
+          "humor": 0.001488095238095238,
+          "saude": 0.12276785714285714,
+          "tempo_sem_cuidado": 0.001488095238095238
+        },
+        "fracao_com_fator": 0.47023809523809523,
+        "fracao_decisao_com_fator": 0.13020833333333334,
+        "fracao_decisao_decidiu": 0.14508928571428573,
+        "fracao_impulsos_com_fator": 0.3400297619047619,
+        "fracao_impulsos_decidiu": 0.8549107142857143
+      },
+      "relapso-lobos@3101": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.26785714285714285,
+          "energia": 0.3125,
+          "fome": 0.15550595238095238,
+          "habito": 0.041666666666666664,
+          "higiene": 0.06547619047619048,
+          "hora": 0.028273809523809524,
+          "humor": 0.002232142857142857,
+          "saude": 0.034970238095238096,
+          "tempo_sem_cuidado": 0.29017857142857145
+        },
+        "fracao_com_fator": 0.8043154761904762,
+        "fracao_decisao_com_fator": 0.041666666666666664,
+        "fracao_decisao_decidiu": 0.04241071428571429,
+        "fracao_impulsos_com_fator": 0.7626488095238095,
+        "fracao_impulsos_decidiu": 0.9575892857142857
+      },
+      "relapso-lobos@3202": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.2604166666666667,
+          "energia": 0.3080357142857143,
+          "fome": 0.11086309523809523,
+          "habito": 0.05505952380952381,
+          "higiene": 0.04538690476190476,
+          "hora": 0.03050595238095238,
+          "humor": 0.034970238095238096,
+          "saude": 0.04092261904761905,
+          "tempo_sem_cuidado": 0.2961309523809524
+        },
+        "fracao_com_fator": 0.7760416666666666,
+        "fracao_decisao_com_fator": 0.057291666666666664,
+        "fracao_decisao_decidiu": 0.11235119047619048,
+        "fracao_impulsos_com_fator": 0.71875,
+        "fracao_impulsos_decidiu": 0.8876488095238095
+      },
+      "relapso-lobos@3303": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.26785714285714285,
+          "energia": 0.31473214285714285,
+          "fome": 0.10714285714285714,
+          "habito": 0.03273809523809524,
+          "higiene": 0.06994047619047619,
+          "hora": 0.027529761904761904,
+          "humor": 0.006696428571428571,
+          "saude": 0.03720238095238095,
+          "tempo_sem_cuidado": 0.30580357142857145
+        },
+        "fracao_com_fator": 0.7693452380952381,
+        "fracao_decisao_com_fator": 0.03720238095238095,
+        "fracao_decisao_decidiu": 0.041666666666666664,
+        "fracao_impulsos_com_fator": 0.7321428571428571,
+        "fracao_impulsos_decidiu": 0.9583333333333334
+      },
+      "relapso-lobos@3404": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.27380952380952384,
+          "energia": 0.32068452380952384,
+          "fome": 0.10714285714285714,
+          "habito": 0.03422619047619048,
+          "higiene": 0.10267857142857142,
+          "hora": 0.026785714285714284,
+          "humor": 0.03050595238095238,
+          "saude": 0.04389880952380952,
+          "sujeira": 0.000744047619047619,
+          "tempo_sem_cuidado": 0.29464285714285715
+        },
+        "fracao_com_fator": 0.7797619047619048,
+        "fracao_decisao_com_fator": 0.047619047619047616,
+        "fracao_decisao_decidiu": 0.04836309523809524,
+        "fracao_impulsos_com_fator": 0.7321428571428571,
+        "fracao_impulsos_decidiu": 0.9516369047619048
+      },
+      "relapso-lobos@3505": {
+        "decisoes": 1344,
+        "fatores": {
+          "dormindo": 0.27232142857142855,
+          "energia": 0.31845238095238093,
+          "fome": 0.13169642857142858,
+          "habito": 0.03943452380952381,
+          "higiene": 0.07291666666666667,
+          "hora": 0.025297619047619048,
+          "humor": 0.001488095238095238,
+          "saude": 0.043154761904761904,
+          "tempo_sem_cuidado": 0.2849702380952381
+        },
+        "fracao_com_fator": 0.7849702380952381,
+        "fracao_decisao_com_fator": 0.04389880952380952,
+        "fracao_decisao_decidiu": 0.04389880952380952,
+        "fracao_impulsos_com_fator": 0.7410714285714286,
+        "fracao_impulsos_decidiu": 0.9561011904761905
+      }
+    },
+    "total": {
+      "decisoes": 26880,
+      "fatores": {
+        "dormindo": 0.28404017857142855,
+        "energia": 0.3326264880952381,
+        "fome": 0.08656994047619047,
+        "habito": 0.10595238095238095,
+        "higiene": 0.07113095238095238,
+        "hora": 0.03169642857142857,
+        "humor": 0.017782738095238095,
+        "saude": 0.1056547619047619,
+        "sujeira": 0.007477678571428572,
+        "tempo_sem_cuidado": 0.07849702380952381
+      },
+      "fracao_com_fator": 0.6524925595238096,
+      "fracao_decisao_com_fator": 0.13292410714285716,
+      "fracao_decisao_decidiu": 0.1630952380952381,
+      "fracao_impulsos_com_fator": 0.5195684523809524,
+      "fracao_impulsos_decidiu": 0.8369047619047619
+    }
+  }
+}

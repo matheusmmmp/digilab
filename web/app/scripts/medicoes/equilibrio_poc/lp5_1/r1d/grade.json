@@ -1,0 +1,275 @@
+{
+ "fase": "lp5_1",
+ "bases": 1,
+ "grupos": [
+  "treino",
+  "estagio",
+  "sparring",
+  "formas_crianca",
+  "formas_adolescente",
+  "formas_adulto",
+  "formas_mega"
+ ],
+ "tam": {
+  "pets": 10,
+  "lutas": 5,
+  "lutasT2": 4,
+  "lutasGrade": 3,
+  "lutasE1": 4,
+  "lutasFormas": 5
+ },
+ "candidatos": [
+  {
+   "nome": "w10_g02",
+   "pesoPonto": 10,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w10_g027",
+   "pesoPonto": 10,
+   "gama": {
+    "vigor": 0.027,
+    "recuperacao": 0.027,
+    "guarda": 0.081,
+    "forca": 0.027,
+    "mira": 0.189,
+    "folego": 0.189
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w10_g035",
+   "pesoPonto": 10,
+   "gama": {
+    "vigor": 0.035,
+    "recuperacao": 0.035,
+    "guarda": 0.105,
+    "forca": 0.035,
+    "mira": 0.245,
+    "folego": 0.245
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w15_g02",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w15_g027",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.027,
+    "recuperacao": 0.027,
+    "guarda": 0.081,
+    "forca": 0.027,
+    "mira": 0.189,
+    "folego": 0.189
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w15_g035",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.035,
+    "recuperacao": 0.035,
+    "guarda": 0.105,
+    "forca": 0.035,
+    "mira": 0.245,
+    "folego": 0.245
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w25_g02",
+   "pesoPonto": 25,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w25_g027",
+   "pesoPonto": 25,
+   "gama": {
+    "vigor": 0.027,
+    "recuperacao": 0.027,
+    "guarda": 0.081,
+    "forca": 0.027,
+    "mira": 0.189,
+    "folego": 0.189
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "w25_g035",
+   "pesoPonto": 25,
+   "gama": {
+    "vigor": 0.035,
+    "recuperacao": 0.035,
+    "guarda": 0.105,
+    "forca": 0.035,
+    "mira": 0.245,
+    "folego": 0.245
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": ["ref_ilha_bola.png", "ref_ilha_kits.png"],
+ "prompt_base": "Concept art of a single toy ball prop for a cozy low-poly 3D island game. Match exactly the art style of the reference screenshots: simple rounded shapes, flat toon shading with three tones, soft saturated pastel colors, no outlines, no realistic texture. Show only the ball, centered, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters.",
+ "variantes": [
+  {"nome": "concept_1_faixas", "prompt": "The ball is white with two wide blue stripes around it, like the ball in the first reference image."},
+  {"nome": "concept_2_gomos", "prompt": "The ball has six curved panels like a beach ball, alternating white, sky blue and sunny yellow."},
+  {"nome": "concept_3_estrela", "prompt": "The ball is coral red with a single big cream star on the side and a thin cream band around the middle."},
+  {"nome": "concept_4_bolinhas", "prompt": "The ball is mint green with large white polka dots, slightly squashy and soft looking."}
+ ]
+}

@@ -1,0 +1,104 @@
+{
+  "iguais_a_equilibrio_rodada2": {
+    "colaterais_E3": true,
+    "colaterais_E4_escala": true,
+    "colaterais_S1": true,
+    "colaterais_campanha_escala": true,
+    "matriz_a_c_e2v_v": true,
+    "matriz_v21c": true,
+    "painel_a_c_e2v_v": true,
+    "painel_v21c": true
+  },
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "chaves": {
+      "muralha_lista_espelho": true,
+      "preparo_sob_pele_oculto": true,
+      "vigia_bate_em_quem_recua": true,
+      "vigia_recua_do_preparo_sob_pele": true
+    },
+    "config": "experiments/configs/v21d/validacao.json",
+    "config_sha256": "e329a02d4fbe4c7aaf7e9e84922d67a268cad649527e8071df2377fe4af04f27",
+    "conjunto": "calibracao",
+    "epsilons": [
+      0.05,
+      0.15
+    ],
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "hashes": {
+      "a_c_e2v_v": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "ba601d09a6d74f8424b0e9af242bb6c8cc95a51429c534b9b1883bdbe1b0e1ee",
+        "regras_sha256": "6a7735f8778fdcd4402e85aee1de8977baa4a7e21f96425b9b505e41daa329db"
+      },
+      "v21c": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "6a7735f8778fdcd4402e85aee1de8977baa4a7e21f96425b9b505e41daa329db"
+      }
+    },
+    "partidas_e3_por_semente": 40,
+    "partidas_e4_por_semente": 100,
+    "partidas_por_bot_por_semente_painel": 50,
+    "partidas_por_par_por_semente": 100,
+    "partidas_por_semente_campanha": 10,
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "6a7735f8778fdcd4402e85aee1de8977baa4a7e21f96425b9b505e41daa329db"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "segundos": 192,
+    "sementes": [
+      3101,
+      3202,
+      3303,
+      3404,
+      3505
+    ],
+    "variante": "a_c_e2v_v"
+  }
+}

@@ -1,0 +1,32 @@
+{
+ "deriva_dia_final": {
+  "ic_inferior": 0.021752225860603012,
+  "ic_superior": 0.022739497567943606,
+  "media": 0.022236138307207297,
+  "n": 20,
+  "nivel": 0.95,
+  "sem_valor": 0
+ },
+ "deriva_nula": false,
+ "fracao_aprendido_decidiu": {
+  "ic_inferior": 0.3194444444444445,
+  "ic_superior": 0.32921626984126984,
+  "media": 0.32446676587301587,
+  "n": 20,
+  "nivel": 0.95,
+  "sem_valor": 0
+ },
+ "fracao_aprendido_decidiu_com_escolha_descritiva": {
+  "ic_inferior": 0.46507083368757735,
+  "ic_superior": 0.4795830529630208,
+  "media": 0.4725111900349862,
+  "n": 20,
+  "nivel": 0.95,
+  "sem_valor": 0
+ },
+ "limiar": 0.01,
+ "muda_menos_de_1pct": false,
+ "nao_aprende": false,
+ "onde": "P1, as tres condicoes, ponto passo 128, teto 4096 (vidas da C-B; o w0_info nao age no P1)",
+ "unidades": 20
+}

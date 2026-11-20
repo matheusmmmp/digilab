@@ -1,0 +1,30 @@
+{
+  "aprovado": "pelo Matheus em 2026-10-29",
+  "conjuncao": {
+    "k_da_conta": 0.8007977759079912,
+    "k_fixado": 0.9327605720124036
+  },
+  "custo": {
+    "parede_h_4_processos": 3.659679052499996,
+    "parede_por_vida_s_4_processos": 0.6099465087499993,
+    "vidas": 21600
+  },
+  "folga_sigma_d": {
+    "comparacao": "privacao|longe",
+    "fator": 1.2,
+    "k_da_conta": 0.6464401743257083,
+    "k_fixado": 0.8211306108606374
+  },
+  "fontes": {
+    "artifacts_v2_digibrain_prototipo/l2/piloto/medidas.json": "922c22f2681d295eac78383d5252be014ad89590dcf224a187d72970c993f6ad",
+    "artifacts_v2_digibrain_prototipo/l2/piloto/meta.json": "f75e52af2af5687ec30abdc9a2c76ee1ca3ba0b9d11496fa7a6b60299a2e41cb",
+    "artifacts_v2_digibrain_prototipo/l2/piloto/resultado.json": "0480de0f086c354847c1fa6d53f7a1b63622471c9b0f1591450a95eec90b1931"
+  },
+  "k": 450,
+  "k_por_base": 150,
+  "rotulo": "o K da avaliacao da L-2 fixado pelo Matheus (A5.9), com o porque e o custo; so leitura do piloto",
+  "script": {
+    "arquivo": "experiments/k_fixado_l2_digibrain.py",
+    "sha256": "40fc2b864d07b2642789c55dac34c93fb1bb81da01bbe020bd4922b6d0312c55"
+  }
+}

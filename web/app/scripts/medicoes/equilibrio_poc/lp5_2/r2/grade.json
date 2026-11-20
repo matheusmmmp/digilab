@@ -1,0 +1,416 @@
+{
+ "fase": "lp5_2",
+ "bases": 2,
+ "grupos": [
+  "lideres"
+ ],
+ "tam": {},
+ "candidatos": [
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0010",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 9.6,
+    "npc_tier2_sentinela": 7.2,
+    "npc_tier2_carcereiro": 9.0,
+    "npc_tier2_porteiro": 9.0,
+    "npc_v6_youkomon": 9.0,
+    "npc_v5_myotismon": 11.0,
+    "npc_v6_marinbullmon": 11.0,
+    "npc_v5_puppetmon": 9.0,
+    "npc_v5_machinedramon": 7.2,
+    "npc_v5_piedmon": 11.0
+   }
+  },
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0020",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 19.2,
+    "npc_tier2_sentinela": 14.4,
+    "npc_tier2_carcereiro": 18.0,
+    "npc_tier2_porteiro": 18.0,
+    "npc_v6_youkomon": 18.0,
+    "npc_v5_myotismon": 22.0,
+    "npc_v6_marinbullmon": 22.0,
+    "npc_v5_puppetmon": 18.0,
+    "npc_v5_machinedramon": 14.4,
+    "npc_v5_piedmon": 22.0
+   }
+  },
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0030",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 28.8,
+    "npc_tier2_sentinela": 21.6,
+    "npc_tier2_carcereiro": 27.0,
+    "npc_tier2_porteiro": 27.0,
+    "npc_v6_youkomon": 27.0,
+    "npc_v5_myotismon": 33.0,
+    "npc_v6_marinbullmon": 33.0,
+    "npc_v5_puppetmon": 27.0,
+    "npc_v5_machinedramon": 21.6,
+    "npc_v5_piedmon": 33.0
+   }
+  },
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0200",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 192.0,
+    "npc_tier2_sentinela": 144.0,
+    "npc_tier2_carcereiro": 180.0,
+    "npc_tier2_porteiro": 180.0,
+    "npc_v6_youkomon": 180.0,
+    "npc_v5_myotismon": 220.0,
+    "npc_v6_marinbullmon": 220.0,
+    "npc_v5_puppetmon": 180.0,
+    "npc_v5_machinedramon": 144.0,
+    "npc_v5_piedmon": 220.0
+   }
+  },
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0300",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 288.0,
+    "npc_tier2_sentinela": 216.0,
+    "npc_tier2_carcereiro": 270.0,
+    "npc_tier2_porteiro": 270.0,
+    "npc_v6_youkomon": 270.0,
+    "npc_v5_myotismon": 330.0,
+    "npc_v6_marinbullmon": 330.0,
+    "npc_v5_puppetmon": 270.0,
+    "npc_v5_machinedramon": 216.0,
+    "npc_v5_piedmon": 330.0
+   }
+  },
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0500",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 480.0,
+    "npc_tier2_sentinela": 360.0,
+    "npc_tier2_carcereiro": 450.0,
+    "npc_tier2_porteiro": 450.0,
+    "npc_v6_youkomon": 450.0,
+    "npc_v5_myotismon": 550.0,
+    "npc_v6_marinbullmon": 550.0,
+    "npc_v5_puppetmon": 450.0,
+    "npc_v5_machinedramon": 360.0,
+    "npc_v5_piedmon": 550.0
+   }
+  },
+  {
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2,
+    "recuaAbaixo": 0.75,
+    "danoProj": 0.7,
+    "velProj": 1
+   },
+   "nome": "n0800",
+   "esquiva": {
+    "ligada": 1,
+    "gamaMira": 0.6,
+    "gamaFolego": 0.6,
+    "kAtento": 0.5,
+    "pertoChance": 0,
+    "pertoReacao": 200,
+    "contraMs": 0
+   },
+   "npcTotal": {
+    "npc_tier1_brutamontes": 768.0,
+    "npc_tier2_sentinela": 576.0,
+    "npc_tier2_carcereiro": 720.0,
+    "npc_tier2_porteiro": 720.0,
+    "npc_v6_youkomon": 720.0,
+    "npc_v5_myotismon": 880.0,
+    "npc_v6_marinbullmon": 880.0,
+    "npc_v5_puppetmon": 720.0,
+    "npc_v5_machinedramon": 576.0,
+    "npc_v5_piedmon": 880.0
+   }
+  }
+ ]
+}

@@ -1,0 +1,3269 @@
+{
+  "J1": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": -0.0017113095238095177,
+          "ic_superior": 0.016778273809523802,
+          "media": 0.00736607142857143,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -3.8,
+          "ic_superior": 0.2,
+          "media": -1.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.003670074063345787,
+          "ic_superior": 0.0029628703074011204,
+          "media": -0.00016894602393566164,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.003995683054084242,
+          "ic_superior": 0.025609088769744957,
+          "media": 0.010848687711488423,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.0009283854166630301,
+          "ic_superior": 0.03304036458334895,
+          "media": 0.015460844494055298,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.012537202380952383,
+          "ic_superior": 0.004985119047619046,
+          "media": -0.003645833333333333,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.009523809523809526,
+          "ic_superior": 0.004687499999999997,
+          "media": -0.002380952380952385,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -6.65,
+          "ic_superior": -1.15,
+          "media": -3.95,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.03312836104799718,
+          "ic_superior": -0.0068594530239581815,
+          "media": -0.020213095681195347,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.025609088769744957,
+          "ic_superior": 0.003995683054084242,
+          "media": -0.010848687711488423,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.06428571428571431,
+          "ic_superior": -0.03411458333333334,
+          "media": -0.04873511904761905,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 1.2,
+          "ic_superior": 20.3,
+          "media": 10.45,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.011028891770139541,
+          "ic_superior": -0.003983354522191927,
+          "media": -0.007465084728632524,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": -0.00011160714285715078,
+          "ic_superior": 0.0,
+          "media": -3.72023809523836e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.1829425556033743,
+          "ic_superior": 0.002517868745938922,
+          "media": -0.0838777257314409,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.0379338727678598,
+          "ic_superior": -0.00912444196428595,
+          "media": -0.022491908482144208,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.05606398809523808,
+          "ic_superior": -0.016666666666666663,
+          "media": -0.03671875,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.05442708333333333,
+          "ic_superior": -0.013764880952380942,
+          "media": -0.03422619047619047,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -7.6,
+          "ic_superior": -0.5,
+          "media": -4.1,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.006686097876105679,
+          "ic_superior": 0.07342390518218901,
+          "media": 0.038065119302946496,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.002517868745938922,
+          "ic_superior": 0.1829425556033743,
+          "media": 0.0838777257314409,
+          "n": 18,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": -0.0007440476190476164,
+          "ic_superior": 0.012686011904761907,
+          "media": 0.005766369047619046,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -2.65,
+          "ic_superior": 1.2,
+          "media": -0.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": 0.0002384291206368872,
+          "ic_superior": 0.003510591172347877,
+          "media": 0.0018412251801934551,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.019161931163005887,
+          "ic_superior": 0.0058915350041943235,
+          "media": -0.006160607107443913,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.000517671130955516,
+          "ic_superior": 0.02025111607144036,
+          "media": 0.010235398065478246,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.01350446428571428,
+          "ic_superior": 0.0002232142857142863,
+          "media": -0.006622023809523805,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.010379464285714284,
+          "ic_superior": 0.001711309523809515,
+          "media": -0.004092261904761909,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -6.05,
+          "ic_superior": -0.7,
+          "media": -3.45,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.02949056349288201,
+          "ic_superior": -0.004090731342819595,
+          "media": -0.017256977181266054,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0058915350041943235,
+          "ic_superior": 0.019161931163005883,
+          "media": 0.006160607107443908,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.06063988095238095,
+          "ic_superior": -0.030840773809523804,
+          "media": -0.045721726190476195,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -1.65,
+          "ic_superior": 16.0,
+          "media": 7.15,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.016020374519477687,
+          "ic_superior": -0.002383176109521508,
+          "media": -0.009211162501925493,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.15787272811729336,
+          "ic_superior": 0.12547263717740062,
+          "media": -0.011338047613553443,
+          "n": 16,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.02267094494047689,
+          "ic_superior": 0.00072907366071433,
+          "media": -0.010902715773809829,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.05904017857142857,
+          "ic_superior": -0.010044642857142858,
+          "media": -0.034375,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.05885416666666667,
+          "ic_superior": -0.010788690476190474,
+          "media": -0.03463541666666666,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -4.55,
+          "ic_superior": 3.3,
+          "media": -0.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.0010101715476420012,
+          "ic_superior": 0.061797752821565334,
+          "media": 0.02840906558812991,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.12547263717740062,
+          "ic_superior": 0.15787272811729333,
+          "media": 0.01133804761355344,
+          "n": 16,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": -0.019161931163005887,
+      "ic_superior": 0.0058915350041943235,
+      "media": -0.006160607107443913,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.031175595238095245,
+      "ic_superior": -0.007347470238095245,
+      "media": -0.019363839285714286,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "J2": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": 0.015178571428571434,
+          "ic_superior": 0.03288690476190478,
+          "media": 0.024107142857142865,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -7.5,
+          "ic_superior": -3.55,
+          "media": -5.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.007318858502293156,
+          "ic_superior": 0.0016285345493189582,
+          "media": -0.002665414875101568,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.012546931961574451,
+          "ic_superior": 0.024121704396173654,
+          "media": 0.005678664651636764,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.012419642857155305,
+          "ic_superior": 0.04413216145835298,
+          "media": 0.027452473958348232,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.02886904761904762,
+          "ic_superior": -0.012872023809523814,
+          "media": -0.020721726190476193,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.026376488095238092,
+          "ic_superior": -0.008668154761904759,
+          "media": -0.017708333333333333,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -8.45,
+          "ic_superior": -4.45,
+          "media": -6.35,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.06261162491483357,
+          "ic_superior": -0.033925348635970944,
+          "media": -0.04868863989922375,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.024121704396173654,
+          "ic_superior": 0.012546931961574451,
+          "media": -0.005678664651636764,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.08843005952380949,
+          "ic_superior": -0.0497395833333333,
+          "media": -0.0688988095238095,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 6.65,
+          "ic_superior": 23.5,
+          "media": 14.75,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.013150722754709271,
+          "ic_superior": -0.004287942314305544,
+          "media": -0.008603427123626523,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.14961639677719138,
+          "ic_superior": -0.021653829558241324,
+          "media": -0.08526387157907794,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.05063178943452819,
+          "ic_superior": -0.010128534226190705,
+          "media": -0.02675818452381113,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.06037946428571429,
+          "ic_superior": -0.02886904761904762,
+          "media": -0.04449404761904762,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.0603422619047619,
+          "ic_superior": -0.027046130952380943,
+          "media": -0.04341517857142857,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -5.75,
+          "ic_superior": -1.2,
+          "media": -3.4,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.023998153600093334,
+          "ic_superior": 0.08015106584223762,
+          "media": 0.04992783680511847,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": 0.021653829558241324,
+          "ic_superior": 0.14961639677719138,
+          "media": 0.08526387157907794,
+          "n": 18,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": 0.006882440476190474,
+          "ic_superior": 0.023325892857142854,
+          "media": 0.014843749999999998,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -9.65,
+          "ic_superior": -3.15,
+          "media": -6.4,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.006175457823483695,
+          "ic_superior": 0.00055095463121269,
+          "media": -0.002763863758183557,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": -0.00011160714285715078,
+          "ic_superior": 0.0,
+          "media": -3.72023809523836e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.034029486160363075,
+          "ic_superior": 0.0004243206953404105,
+          "media": -0.016860761042887806,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.012992466517860336,
+          "ic_superior": 0.03485704985121024,
+          "media": 0.024280877976203624,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0228422619047619,
+          "ic_superior": -0.003087797619047615,
+          "media": -0.012834821428571425,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.019828869047619047,
+          "ic_superior": -0.0005952380952380972,
+          "media": -0.010416666666666668,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -5.25,
+          "ic_superior": -0.25,
+          "media": -2.75,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.08033345501840902,
+          "ic_superior": -0.04063870242332801,
+          "media": -0.06033034817667439,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0004243206953404133,
+          "ic_superior": 0.03402948616036307,
+          "media": 0.016860761042887803,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.11026785714285714,
+          "ic_superior": -0.07150297619047619,
+          "media": -0.09069940476190477,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -3.55,
+          "ic_superior": 13.2,
+          "media": 4.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.019347270738240996,
+          "ic_superior": -0.011236133168379162,
+          "media": -0.01530112078737193,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.09910926151611535,
+          "ic_superior": 0.19860657660193265,
+          "media": 0.05174723289928266,
+          "n": 15,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.03398828125000153,
+          "ic_superior": -0.008133742559524126,
+          "media": -0.020483723958334227,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.05174851190476191,
+          "ic_superior": -0.013169642857142855,
+          "media": -0.032328869047619044,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.04977678571428572,
+          "ic_superior": -0.01063988095238095,
+          "media": -0.03013392857142857,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.7,
+          "ic_superior": 0.2,
+          "media": -4.8,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.00509494360044375,
+          "ic_superior": 0.04814916382385963,
+          "media": 0.021309998348544086,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.19860657660193265,
+          "ic_superior": 0.09910926151611535,
+          "media": -0.05174723289928266,
+          "n": 15,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": -0.034029486160363075,
+      "ic_superior": 0.0004243206953404105,
+      "media": -0.016860761042887806,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.03117559523809525,
+      "ic_superior": -0.009430803571428581,
+      "media": -0.020275297619047623,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "J3": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": 0.0037202380952381015,
+          "ic_superior": 0.034226190476190466,
+          "media": 0.01875,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -10.55,
+          "ic_superior": -2.9,
+          "media": -6.5,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.005474361484254756,
+          "ic_superior": 0.0020061861740604298,
+          "media": -0.0014944327896330416,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.0017552930179356107,
+          "ic_superior": 0.026314095417626686,
+          "media": 0.01251469193942939,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.003936383928561332,
+          "ic_superior": 0.042176618303594815,
+          "media": 0.022917038690487813,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.026674107142857145,
+          "ic_superior": 0.0005952380952381001,
+          "media": -0.012239583333333333,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.018489583333333337,
+          "ic_superior": 0.00915178571428571,
+          "media": -0.0034226190476190506,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -7.25,
+          "ic_superior": -2.1,
+          "media": -4.65,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.08251904689105197,
+          "ic_superior": -0.03392269304323597,
+          "media": -0.05727901496803842,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.026314095417626682,
+          "ic_superior": 0.0017552930179356135,
+          "media": -0.01251469193942939,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.1411830357142857,
+          "ic_superior": -0.09992559523809524,
+          "media": -0.12034970238095237,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 7.0,
+          "ic_superior": 23.8,
+          "media": 15.7,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.01837716422460527,
+          "ic_superior": -0.008406214485966715,
+          "media": -0.013935287455336948,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": -0.00011160714285715078,
+          "ic_superior": 0.0,
+          "media": -3.72023809523836e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.1515517059392107,
+          "ic_superior": -0.024044881093145613,
+          "media": -0.08785030616561264,
+          "n": 16,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.07955868675597247,
+          "ic_superior": -0.025124069940477157,
+          "media": -0.049768415178579,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.03902529761904762,
+          "ic_superior": 0.003980654761904766,
+          "media": -0.01755952380952381,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.03537946428571428,
+          "ic_superior": 0.004241071428571432,
+          "media": -0.015662202380952377,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.05,
+          "ic_superior": -1.45,
+          "media": -5.3,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.03020470286170368,
+          "ic_superior": 0.0861585998657365,
+          "media": 0.05825773144343277,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": 0.024044881093145613,
+          "ic_superior": 0.1515517059392107,
+          "media": 0.08785030616561264,
+          "n": 16,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": 0.014546130952380946,
+          "ic_superior": 0.04267113095238094,
+          "media": 0.028050595238095232,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -12.2,
+          "ic_superior": -4.7,
+          "media": -7.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.009015461999428109,
+          "ic_superior": -0.0006866753809310809,
+          "media": -0.00473872619315342,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.04097539244593622,
+          "ic_superior": -0.01417792998020495,
+          "media": -0.027430153386042856,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.013056547619060577,
+          "ic_superior": 0.05146735491074306,
+          "media": 0.030958984375021637,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.037127976190476183,
+          "ic_superior": -0.011458333333333327,
+          "media": -0.023735119047619047,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.02842261904761905,
+          "ic_superior": -0.0004464285714285768,
+          "media": -0.013988095238095244,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -8.85,
+          "ic_superior": -4.35,
+          "media": -6.75,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.08973071564568798,
+          "ic_superior": -0.048072438868895125,
+          "media": -0.06784642943878175,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": 0.014177929980204946,
+          "ic_superior": 0.040975392445936204,
+          "media": 0.02743015338604285,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.14174107142857145,
+          "ic_superior": -0.10465029761904762,
+          "media": -0.12436755952380954,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -0.3,
+          "ic_superior": 15.15,
+          "media": 7.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.019545736321213408,
+          "ic_superior": -0.011029766274258303,
+          "media": -0.015382275659325127,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.04761646177087353,
+          "ic_superior": 0.18479195664186934,
+          "media": 0.06968810816336286,
+          "n": 16,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.07681966145834518,
+          "ic_superior": -0.020480561755953076,
+          "media": -0.04663132440476702,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0420014880952381,
+          "ic_superior": -0.0026041666666666713,
+          "media": -0.02131696428571429,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.0423735119047619,
+          "ic_superior": -0.001785714285714278,
+          "media": -0.021242559523809525,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -10.4,
+          "ic_superior": -1.25,
+          "media": -5.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.0044360370542133164,
+          "ic_superior": 0.05439484925834703,
+          "media": 0.02723380753632798,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.18479195664186934,
+          "ic_superior": 0.04761646177087353,
+          "media": -0.06968810816336286,
+          "n": 16,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": -0.04097539244593622,
+      "ic_superior": -0.01417792998020495,
+      "media": -0.027430153386042856,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.027399553571428575,
+      "ic_superior": -0.007831101190476189,
+      "media": -0.017615327380952377,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "T1": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.001674107142857137,
+          "media": 0.0005580357142857123,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.45,
+          "media": 0.15,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0006128613912001468,
+          "ic_superior": 0.00010739447915889231,
+          "media": -0.00015977985610122515,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.001132404181184668,
+          "media": 0.00037746806039488934,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.0027689732142887557,
+          "ic_superior": 0.0,
+          "media": -0.0009229910714295853,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0003348214285714274,
+          "ic_superior": 0.00011160714285714246,
+          "media": -7.440476190476164e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.00022321428571428492,
+          "ic_superior": 0.0,
+          "media": -7.440476190476164e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -6.35,
+          "ic_superior": -3.3,
+          "media": -4.7,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.003117235147955727,
+          "media": 0.001039078382651909,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.001132404181184668,
+          "ic_superior": 0.0,
+          "media": -0.00037746806039488934,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.03017113095238095,
+          "ic_superior": -0.007886904761904767,
+          "media": -0.018452380952380953,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -5.35,
+          "ic_superior": 2.05,
+          "media": -1.5,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.006459595670971405,
+          "ic_superior": 0.00010067310973113138,
+          "media": -0.003010519358312902,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.09686270519603853,
+          "ic_superior": 0.009376271876271873,
+          "media": -0.03871475746475747,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.01361579241071525,
+          "ic_superior": 0.0001093749999999727,
+          "media": -0.00606008184523848,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": 0.005394345238095238,
+          "ic_superior": 0.025967261904761906,
+          "media": 0.01532738095238095,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.008258928571428572,
+          "ic_superior": 0.04125744047619047,
+          "media": 0.023697916666666666,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -8.35,
+          "ic_superior": -3.35,
+          "media": -5.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.01826030623824231,
+          "ic_superior": 0.0045810844378123645,
+          "media": -0.005972651739007704,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.009376271876271873,
+          "ic_superior": 0.09686270519603853,
+          "media": 0.03871475746475747,
+          "n": 18,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0005580357142857123,
+          "media": 0.0001860119047619041,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -0.75,
+          "ic_superior": 0.0,
+          "media": -0.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": 0.0,
+          "ic_superior": 6.031059462572319e-05,
+          "media": 2.3352238294703163e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0012499999999999955,
+          "media": 0.0004166666666666652,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.00016573660714286342,
+          "ic_superior": 5.580357142855874e-05,
+          "media": -3.664434523810156e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.00029761904761904656,
+          "media": 0.00011160714285714246,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.00011160714285714246,
+          "media": 3.720238095238082e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -6.3,
+          "ic_superior": -3.9,
+          "media": -5.1,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.0046917420814479634,
+          "ic_superior": 0.0,
+          "media": -0.0015639140271493212,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0012499999999999955,
+          "ic_superior": 0.0,
+          "media": -0.0004166666666666652,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.03798363095238094,
+          "ic_superior": -0.008742559523809534,
+          "media": -0.022321428571428575,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -4.2,
+          "ic_superior": 0.05,
+          "media": -1.85,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.008331989184431255,
+          "ic_superior": -0.0015210984029453089,
+          "media": -0.004783109659211485,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.0667902087019734,
+          "ic_superior": 0.08553450906392085,
+          "media": 0.0047757616385067465,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.028802176339286983,
+          "ic_superior": -0.001720610119047633,
+          "media": -0.012915457589286245,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0006324404761904795,
+          "ic_superior": 0.020721726190476186,
+          "media": 0.009523809523809521,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.0005580357142857054,
+          "ic_superior": 0.03002232142857142,
+          "media": 0.014025297619047621,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -7.95,
+          "ic_superior": -2.85,
+          "media": -5.45,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.013199916402474884,
+          "ic_superior": -0.00011919446845478128,
+          "media": -0.0059805436657878845,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.08553450906392085,
+          "ic_superior": 0.0667902087019734,
+          "media": -0.004775761638506745,
+          "n": 18,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0012499999999999955,
+      "media": 0.0004166666666666652,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.000260416666666663,
+      "ic_superior": 0.015029761904761902,
+      "media": 0.00703125,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "T2": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.001674107142857137,
+          "media": 0.0005580357142857123,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.45,
+          "media": 0.15,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0006128613912001468,
+          "ic_superior": 0.00010739447915889231,
+          "media": -0.00015977985610122515,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.001132404181184668,
+          "media": 0.00037746806039488934,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.0027689732142887557,
+          "ic_superior": 0.0,
+          "media": -0.0009229910714295853,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0003348214285714274,
+          "ic_superior": 0.00022321428571428492,
+          "media": -3.720238095238082e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.00022321428571428492,
+          "ic_superior": 0.0,
+          "media": -7.440476190476164e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.0,
+          "ic_superior": -5.35,
+          "media": -7.05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.003117235147955727,
+          "media": 0.001039078382651909,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.001132404181184668,
+          "ic_superior": 0.0,
+          "media": -0.00037746806039488934,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.044084821428571425,
+          "ic_superior": -0.0008928571428571397,
+          "media": -0.021056547619047617,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -2.55,
+          "ic_superior": 1.5,
+          "media": -0.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.002252126015528944,
+          "ic_superior": 0.0015027421529752983,
+          "media": -0.0003194186443445385,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.07977154018820685,
+          "ic_superior": 0.03245650953984288,
+          "media": -0.02388198221531555,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.02481445312500178,
+          "ic_superior": -0.0005506882440477811,
+          "media": -0.011377604166667544,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -5.551115123125783e-18,
+          "ic_superior": 0.03210565476190476,
+          "media": 0.015773809523809523,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.0011160714285714287,
+          "ic_superior": 0.06599702380952381,
+          "media": 0.03162202380952381,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.2,
+          "ic_superior": -5.05,
+          "media": -7.1,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.008316074215614738,
+          "ic_superior": 0.004077858235306502,
+          "media": -0.00209810761284485,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.03245650953984288,
+          "ic_superior": 0.07977154018820685,
+          "media": 0.023881982215315553,
+          "n": 18,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0005580357142857123,
+          "media": 0.0001860119047619041,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -0.75,
+          "ic_superior": 0.0,
+          "media": -0.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": 0.0,
+          "ic_superior": 6.031059462572319e-05,
+          "media": 2.3352238294703163e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0012499999999999955,
+          "media": 0.0004166666666666652,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.00016573660714286342,
+          "ic_superior": 5.580357142855874e-05,
+          "media": -3.664434523810156e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.00029761904761904656,
+          "media": 0.00011160714285714246,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.00011160714285714246,
+          "media": 3.720238095238082e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -8.75,
+          "ic_superior": -5.55,
+          "media": -7.1,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.0046917420814479634,
+          "ic_superior": 0.0,
+          "media": -0.0015639140271493212,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0012499999999999955,
+          "ic_superior": 0.0,
+          "media": -0.0004166666666666652,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.052827380952380966,
+          "ic_superior": -0.006770833333333342,
+          "media": -0.02834821428571429,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -1.0,
+          "ic_superior": 2.0,
+          "media": 0.45,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0023608715231164335,
+          "ic_superior": 0.0030899959353866023,
+          "media": 0.0004899529209504835,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.11929012345679012,
+          "ic_superior": 0.010842879457430546,
+          "media": -0.04824729960823872,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.029941034226192043,
+          "ic_superior": -0.005246186755952781,
+          "media": -0.016310639880953152,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": 0.0024553571428571424,
+          "ic_superior": 0.03054315476190476,
+          "media": 0.015736607142857146,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.006324404761904765,
+          "ic_superior": 0.0658110119047619,
+          "media": 0.03337053571428572,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.05,
+          "ic_superior": -2.7,
+          "media": -5.95,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.0030489597352019683,
+          "ic_superior": 0.0050048735852703434,
+          "media": 0.0009010933643094201,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.010842879457430546,
+          "ic_superior": 0.11929012345679012,
+          "media": 0.04824729960823872,
+          "n": 18,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0012499999999999955,
+      "media": 0.0004166666666666652,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": 0.0031808035714285766,
+      "ic_superior": 0.03292410714285716,
+      "media": 0.01670386904761905,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "T3": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.001674107142857137,
+          "media": 0.0005580357142857123,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.45,
+          "media": 0.15,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0006128613912001468,
+          "ic_superior": 0.00010739447915889231,
+          "media": -0.00015977985610122515,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.001132404181184668,
+          "media": 0.00037746806039488934,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.0027689732142887557,
+          "ic_superior": 0.0,
+          "media": -0.0009229910714295853,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0003348214285714274,
+          "ic_superior": 0.00022321428571428492,
+          "media": -3.720238095238082e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.00022321428571428492,
+          "ic_superior": 0.0,
+          "media": -7.440476190476164e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.1,
+          "ic_superior": -5.5,
+          "media": -7.2,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.003117235147955727,
+          "media": 0.001039078382651909,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.001132404181184668,
+          "ic_superior": 0.0,
+          "media": -0.00037746806039488934,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.057180059523809515,
+          "ic_superior": 0.0031622023809523723,
+          "media": -0.024441964285714296,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -1.55,
+          "ic_superior": 3.95,
+          "media": 0.95,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0010288660699798113,
+          "ic_superior": 0.0035108526747439266,
+          "media": 0.0010957440403654647,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.06440234148567484,
+          "ic_superior": 0.03424222382555716,
+          "media": -0.013160219410219411,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.04286625744047934,
+          "ic_superior": -0.0017690662202383078,
+          "media": -0.02012127976190628,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.002083333333333337,
+          "ic_superior": 0.03843005952380952,
+          "media": 0.017187499999999994,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.001376488095238096,
+          "ic_superior": 0.06729910714285715,
+          "media": 0.03072916666666667,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -11.95,
+          "ic_superior": -7.7,
+          "media": -9.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.006868208130548441,
+          "ic_superior": 0.010144305248615405,
+          "media": 0.0014615809586858747,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.03424222382555716,
+          "ic_superior": 0.06440234148567484,
+          "media": 0.013160219410219411,
+          "n": 18,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0005580357142857123,
+          "media": 0.0001860119047619041,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -0.75,
+          "ic_superior": 0.0,
+          "media": -0.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": 0.0,
+          "ic_superior": 6.031059462572319e-05,
+          "media": 2.3352238294703163e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0012499999999999955,
+          "media": 0.0004166666666666652,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.00016573660714286342,
+          "ic_superior": 5.580357142855874e-05,
+          "media": -3.664434523810156e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.00029761904761904656,
+          "media": 0.00011160714285714246,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.00011160714285714246,
+          "media": 3.720238095238082e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -9.15,
+          "ic_superior": -5.9,
+          "media": -7.5,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.0046917420814479634,
+          "ic_superior": 0.0,
+          "media": -0.0015639140271493212,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0012499999999999955,
+          "ic_superior": 0.0,
+          "media": -0.0004166666666666652,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.05498511904761905,
+          "ic_superior": -0.0013020833333333259,
+          "media": -0.026004464285714284,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": -3.15,
+          "ic_superior": 1.95,
+          "media": -0.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.001607535739385831,
+          "ic_superior": 0.0037759891733570665,
+          "media": 0.0010440093036902238,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.07329339143064632,
+          "ic_superior": 0.08189416792357969,
+          "media": 0.0013019206646657634,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.033256975446430456,
+          "ic_superior": -0.0035025111607145444,
+          "media": -0.017089657738096113,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": 0.005989583333333326,
+          "ic_superior": 0.04709821428571428,
+          "media": 0.024590773809523805,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": 0.008110119047619048,
+          "ic_superior": 0.07875744047619047,
+          "media": 0.039322916666666666,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -12.85,
+          "ic_superior": -6.65,
+          "media": -9.7,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.009161440146789004,
+          "ic_superior": 0.00447089046978843,
+          "media": -0.0020634110382267267,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.08189416792357969,
+          "ic_superior": 0.07329339143064632,
+          "media": -0.0013019206646657634,
+          "n": 18,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0012499999999999955,
+      "media": 0.0004166666666666652,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": 0.004055059523809515,
+      "ic_superior": 0.03939732142857142,
+      "media": 0.019680059523809516,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "X1": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": -0.005729166666666674,
+          "ic_superior": 0.004650297619047619,
+          "media": -0.0007068452380952411,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 2.05,
+          "ic_superior": 7.35,
+          "media": 4.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.001546929929592975,
+          "ic_superior": 0.002600468118750157,
+          "media": 0.0005186947820822839,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.01860965914292597,
+          "ic_superior": 0.05561946125171371,
+          "media": 0.017191505581507106,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.006026599702389385,
+          "ic_superior": 0.010417968749998507,
+          "media": 0.0024534970238057063,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.01138392857142857,
+          "ic_superior": -0.0001860119047619041,
+          "media": -0.005729166666666665,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.013430059523809535,
+          "ic_superior": -0.004650297619047622,
+          "media": -0.008965773809523809,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -3.9,
+          "ic_superior": 0.25,
+          "media": -1.6,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.013638471421264836,
+          "ic_superior": 0.051699660233811354,
+          "media": 0.031820779413690256,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.01809466004420029,
+          "ic_superior": 0.006468427882438357,
+          "media": -0.00554581561102672,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.016183035714285688,
+          "ic_superior": 0.006473214285714296,
+          "media": -0.00476190476190475,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 20.4,
+          "ic_superior": 30.95,
+          "media": 25.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0012740190519299561,
+          "ic_superior": 0.005621095675635219,
+          "media": 0.00186105775943011,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.11947102829760377,
+          "ic_superior": 0.05340415804173863,
+          "media": -0.034048921967859164,
+          "n": 19,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.013919084821429062,
+          "ic_superior": 0.004986607142857385,
+          "media": -0.0036730840773810058,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.013430059523809523,
+          "ic_superior": 0.016889880952380955,
+          "media": 0.0010416666666666658,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.014136904761904759,
+          "ic_superior": 0.013913690476190477,
+          "media": -0.0005208333333333315,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -3.95,
+          "ic_superior": 1.6,
+          "media": -1.15,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.06361128060729823,
+          "ic_superior": 0.09702737778024409,
+          "media": 0.08015732058544414,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.03651313782251602,
+          "ic_superior": 0.12918895132064864,
+          "media": 0.049260226240321725,
+          "n": 19,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": -0.012388392857142877,
+          "ic_superior": -0.0020461309523809534,
+          "media": -0.007403273809523816,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 2.95,
+          "ic_superior": 7.2,
+          "media": 5.1,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.001326248334100495,
+          "ic_superior": 0.0020267964771485164,
+          "media": 0.00030344054438945814,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.0666547254101836,
+          "ic_superior": 0.00933697510624439,
+          "media": -0.029867455960641408,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.017199776785726067,
+          "ic_superior": 0.004357700892856709,
+          "media": -0.00613513764881482,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.007886904761904758,
+          "ic_superior": 0.0059151785714285695,
+          "media": -0.0013392857142857108,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.010193452380952392,
+          "ic_superior": 0.003199404761904753,
+          "media": -0.00364583333333334,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -2.55,
+          "ic_superior": 1.05,
+          "media": -0.75,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.019222221399136017,
+          "ic_superior": 0.05455386625789075,
+          "media": 0.036725311213156434,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.005257033698239003,
+          "ic_superior": 0.019385324701702806,
+          "media": 0.0067955737352656115,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.02008928571428571,
+          "ic_superior": 0.010230654761904772,
+          "media": -0.005394345238095238,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 20.85,
+          "ic_superior": 29.5,
+          "media": 25.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.005194727897363969,
+          "ic_superior": 0.003968172238119795,
+          "media": -0.0006397499132069957,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.11701387145481089,
+          "ic_superior": 0.12767296294979127,
+          "media": 0.009535447995223502,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.012647321428571685,
+          "ic_superior": 0.010552920386905435,
+          "media": -0.0016885230654760165,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.032775297619047614,
+          "ic_superior": 0.007403273809523807,
+          "media": -0.012723214285714287,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.03537946428571428,
+          "ic_superior": 0.0030133928571428616,
+          "media": -0.01610863095238095,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -6.5,
+          "ic_superior": 1.2,
+          "media": -2.7,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.06811618330362568,
+          "ic_superior": 0.09570816696130237,
+          "media": 0.08223238933623696,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.14237648543131085,
+          "ic_superior": 0.07929165683341578,
+          "media": -0.03182179314523286,
+          "n": 18,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": -0.0666547254101836,
+      "ic_superior": 0.00933697510624439,
+      "media": -0.029867455960641408,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.019828869047619047,
+      "ic_superior": -0.00013020833333333425,
+      "media": -0.009877232142857146,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "X2": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": -0.01458333333333334,
+          "ic_superior": -0.005915178571428573,
+          "media": -0.010230654761904757,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 3.25,
+          "ic_superior": 9.35,
+          "media": 6.4,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0009730548535399449,
+          "ic_superior": 0.002091053776566398,
+          "media": 0.0005654132639492628,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": 0.0004290761258774284,
+          "ic_superior": 0.07351763082978062,
+          "media": 0.03491304812187455,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.018893043154768856,
+          "ic_superior": -0.0014979538690498672,
+          "media": -0.01003255208334058,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.007440476190476197,
+          "ic_superior": 0.00472470238095238,
+          "media": -0.0013392857142857178,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.012834821428571421,
+          "ic_superior": -0.0022321428571428588,
+          "media": -0.0075520833333333325,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -3.8,
+          "ic_superior": 1.05,
+          "media": -1.15,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.03684575452506376,
+          "ic_superior": 0.07766417301289283,
+          "media": 0.05785758499029895,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.016639696211915415,
+          "ic_superior": 0.011944209330918854,
+          "media": -0.0028656427816241086,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.015959821428571424,
+          "ic_superior": 0.009188988095238071,
+          "media": -0.0032366071428571452,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 34.25,
+          "ic_superior": 45.5,
+          "media": 39.95,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0005816564457945353,
+          "ic_superior": 0.008596491921645133,
+          "media": 0.0038153742889212596,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.1404922813354129,
+          "ic_superior": 0.02535943353288906,
+          "media": -0.05802422586983039,
+          "n": 19,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.01330673363095276,
+          "ic_superior": 0.0020780319940478854,
+          "media": -0.00549395461309532,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.02306547619047619,
+          "ic_superior": 0.007217261904761909,
+          "media": -0.007961309523809523,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.025967261904761906,
+          "ic_superior": 0.005133928571428567,
+          "media": -0.010379464285714285,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -5.6,
+          "ic_superior": 1.1,
+          "media": -2.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.13140557321274862,
+          "ic_superior": 0.17525661803821768,
+          "media": 0.15366174660400433,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": 0.02904582578747544,
+          "ic_superior": 0.14726336483478922,
+          "media": 0.08796452728784662,
+          "n": 19,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": -0.018266369047619052,
+          "ic_superior": -0.005059523809523814,
+          "media": -0.011644345238095244,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 3.7,
+          "ic_superior": 8.7,
+          "media": 6.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0005186160051066039,
+          "ic_superior": 0.0018051764533360162,
+          "media": 0.0005608078376464508,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.1062531825563384,
+          "ic_superior": -0.02363028203244618,
+          "media": -0.0636502978325645,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.02063997395834612,
+          "ic_superior": -0.0017417224702398482,
+          "media": -0.011070777529771975,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.0061383928571428535,
+          "ic_superior": 0.00632440476190477,
+          "media": 7.44047619047672e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.011123511904761903,
+          "ic_superior": 0.002976190476190475,
+          "media": -0.0041294642857142875,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -3.4,
+          "ic_superior": 0.55,
+          "media": -1.45,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.04228863251668665,
+          "ic_superior": 0.08313197081199543,
+          "media": 0.06316893725501656,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0005150131270380803,
+          "ic_superior": 0.025728604928833443,
+          "media": 0.012612029522125945,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.019122023809523832,
+          "ic_superior": 0.0077752976190476,
+          "media": -0.006547619047619052,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 35.05,
+          "ic_superior": 45.85,
+          "media": 40.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.006469267097841751,
+          "ic_superior": 0.00426072605203265,
+          "media": -0.001231957904519003,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.07507237583294553,
+          "ic_superior": 0.13769838101513257,
+          "media": 0.03117206792844714,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.019695498511905968,
+          "ic_superior": 0.0033311941964289824,
+          "media": -0.008748604910714709,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.028385416666666673,
+          "ic_superior": 0.011383928571428566,
+          "media": -0.00922619047619048,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.03173363095238096,
+          "ic_superior": 0.0095610119047619,
+          "media": -0.012165178571428573,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -5.75,
+          "ic_superior": 3.65,
+          "media": -1.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": 0.137004616819996,
+          "ic_superior": 0.17857331828279605,
+          "media": 0.15820593243275916,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.18451202373403797,
+          "ic_superior": 0.02224102393539734,
+          "media": -0.08133217339096398,
+          "n": 18,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": -0.1062531825563384,
+      "ic_superior": -0.02363028203244618,
+      "media": -0.0636502978325645,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.017578125000000007,
+      "ic_superior": 0.0017113095238095039,
+      "media": -0.008147321428571434,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  },
+  "X3": {
+    "contrastes": {
+      "casado_frutas/P1": {
+        "acerto": {
+          "ic_inferior": 0.021279761904761905,
+          "ic_superior": 0.029687500000000006,
+          "media": 0.02566964285714286,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 57.1,
+          "ic_superior": 64.35,
+          "media": 60.7,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.006960419642108135,
+          "ic_superior": -0.003015014729847787,
+          "media": -0.0050569255618980995,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": -0.00011160714285715078,
+          "ic_superior": 0.0,
+          "media": -3.72023809523836e-05,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.04366684617354031,
+          "ic_superior": 0.060995102733616344,
+          "media": 0.009320284511446448,
+          "n": 19,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.027625279017868716,
+          "ic_superior": 0.04687202380955105,
+          "media": 0.036515438988116655,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.019977678571428566,
+          "ic_superior": -0.009672619047619044,
+          "media": -0.014769345238095238,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.011495535714285715,
+          "ic_superior": -0.0005952380952381015,
+          "media": -0.00621279761904762,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -6.35,
+          "ic_superior": -1.35,
+          "media": -3.75,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.018006398435408383,
+          "ic_superior": 0.02138300817544484,
+          "media": 0.0011957777710084577,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.0353724763760994,
+          "ic_superior": -0.01447180537301434,
+          "media": -0.02467998269148406,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "casado_frutas/P3": {
+        "acerto": {
+          "ic_inferior": -0.02113095238095236,
+          "ic_superior": 0.005468749999999983,
+          "media": -0.00848214285714285,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 1.75,
+          "ic_superior": 15.9,
+          "media": 8.85,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0023559127784090247,
+          "ic_superior": 0.007303436756086723,
+          "media": 0.002196052313880472,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.11564911115164726,
+          "ic_superior": 0.09095269229329517,
+          "media": -0.007275854410061611,
+          "n": 18,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.009491164434524102,
+          "ic_superior": 0.005838541666666958,
+          "media": -0.0017417224702381106,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.01763392857142857,
+          "ic_superior": 0.01614583333333333,
+          "media": -0.0006696428571428576,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.015066964285714284,
+          "ic_superior": 0.017075892857142866,
+          "media": 0.0009672619047619097,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -4.65,
+          "ic_superior": 0.7,
+          "media": -2.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.029154685270907404,
+          "ic_superior": 0.0054670827650826715,
+          "media": -0.011122639104484279,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.08912746790256028,
+          "ic_superior": 0.0571153506117658,
+          "media": -0.019396675457086395,
+          "n": 19,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P1": {
+        "acerto": {
+          "ic_inferior": 0.02127976190476189,
+          "ic_superior": 0.03151041666666666,
+          "media": 0.026264880952380942,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 60.75,
+          "ic_superior": 66.65,
+          "media": 63.5,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.008439118303429815,
+          "ic_superior": -0.004692817083538426,
+          "media": -0.00657315022559124,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.045863711539505254,
+          "ic_superior": 0.06152875905508283,
+          "media": 0.003326140969788341,
+          "n": 19,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": 0.026498418898834492,
+          "ic_superior": 0.048056826636941705,
+          "media": 0.03772098214288249,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.028497023809523802,
+          "ic_superior": -0.013802083333333335,
+          "media": -0.02113095238095238,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.01670386904761905,
+          "ic_superior": -0.002604166666666674,
+          "media": -0.009598214285714293,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -4.95,
+          "ic_superior": -1.45,
+          "media": -3.25,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.01322254570029317,
+          "ic_superior": 0.02366492476287822,
+          "media": 0.005001053402087281,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.009327635549053918,
+          "ic_superior": 0.01571941528141267,
+          "media": 0.003059125666330087,
+          "n": 20,
+          "nivel": 0.95
+        }
+      },
+      "descasado/P3": {
+        "acerto": {
+          "ic_inferior": -0.02116815476190479,
+          "ic_superior": 0.009375,
+          "media": -0.006324404761904767,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "consumos": {
+          "ic_inferior": 1.0,
+          "ic_superior": 16.25,
+          "media": 8.9,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "deriva_final": {
+          "ic_inferior": -0.0069645460880612044,
+          "ic_superior": 0.0025828680660143688,
+          "media": -0.0021305955785190537,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "fora_privacao": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "g_ap": {
+          "ic_inferior": -0.1578055359546898,
+          "ic_superior": 0.1442131553457015,
+          "media": -0.0026204133240002037,
+          "n": 17,
+          "nivel": 0.95
+        },
+        "humor": {
+          "ic_inferior": -0.00959365699404765,
+          "ic_superior": 0.01209691220238151,
+          "media": 0.0005699404761906723,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_com_fator": {
+          "ic_inferior": -0.02399553571428571,
+          "ic_superior": 0.02418154761904762,
+          "media": 0.00033482142857142597,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "m1_decidiu": {
+          "ic_inferior": -0.025632440476190472,
+          "ic_superior": 0.02276785714285714,
+          "media": -0.001078869047619045,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "no_teto": {
+          "ic_inferior": -4.4,
+          "ic_superior": 4.45,
+          "media": 0.1,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "p_comer": {
+          "ic_inferior": -0.029635320557855515,
+          "ic_superior": 0.006046991891837775,
+          "media": -0.010934837105733754,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "saude": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "taxa_final": {
+          "ic_inferior": -0.12164576479591961,
+          "ic_superior": 0.14641265978985277,
+          "media": 0.010934460276565543,
+          "n": 18,
+          "nivel": 0.95
+        }
+      }
+    },
+    "g_ap_descasado_P1": {
+      "ic_inferior": -0.045863711539505254,
+      "ic_superior": 0.06152875905508283,
+      "media": 0.003326140969788341,
+      "n": 19,
+      "nivel": 0.95
+    },
+    "m1_descasado_P1_P3": {
+      "ic_inferior": -0.01722470238095239,
+      "ic_superior": 0.0064174107142857175,
+      "media": -0.0053385416666666685,
+      "n": 20,
+      "nivel": 0.95
+    },
+    "piora_cuidado": false
+  }
+}

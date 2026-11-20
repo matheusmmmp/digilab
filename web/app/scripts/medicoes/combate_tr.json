@@ -1,0 +1,58 @@
+{
+ "gerado_por": "web/app/scripts/medir_combate_tr.ts",
+ "data": "2026-10-29",
+ "node": "v24.19.0",
+ "maquina": {
+  "cpu": "Intel(R) Core(TM) i7-14700KF",
+  "nucleos": 20,
+  "plataforma": "win32 10.0.26300"
+ },
+ "lutas": 560,
+ "pares": 112,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "limite_s": 80,
+ "morte_subita_s": 50,
+ "duracao_s": {
+  "media": 46.9,
+  "mediana": 45.1,
+  "p90": 80,
+  "max": 80
+ },
+ "acoes_por_luta": 49.5,
+ "fim": {
+  "ko": 483,
+  "limite": 77
+ },
+ "resultado": {
+  "vitorias_a": 224,
+  "empates": 23,
+  "derrotas_a": 313
+ },
+ "custo": {
+  "ms_por_luta": 0.863,
+  "us_por_passo": 0.294,
+  "ms_por_luta_repeticoes": [
+   0.816,
+   0.779,
+   0.863,
+   0.939,
+   1.074
+  ],
+  "refazer_lutas_s": {
+   "100": 0.09,
+   "500": 0.43,
+   "1000": 0.86
+  },
+  "luta_no_limite_ms": 1.47
+ },
+ "turnos_hoje": {
+  "turnos_por_luta": 25,
+  "ms_por_luta": 0.0941
+ }
+}

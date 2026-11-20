@@ -1,0 +1,9 @@
+{
+  "descricao": "Bateria V2.1 na CALIBRACAO (rapida, sem E5): so para ajustar numeros e bots.",
+  "saida": "artifacts_combate_v21/calibracao",
+  "conjunto": "calibracao",
+  "sementes_calibracao": [3101, 3202, 3303, 3404, 3505],
+  "sementes_validacao": [4101, 4202, 4303, 4404, 4505],
+  "partidas_por_par_por_semente": 40,
+  "pular_e5": true
+}

@@ -1,0 +1,12 @@
+DigiLab: a lata gigante da ilha (lata.gltf, lata.bin, lata_cor.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-10, no repositorio do DigiLab (licenca do projeto).
+O modelo e a textura saem de docs/objetos3d/lata/mao/lata_mao.py: o corpo e uma superficie de revolucao, e as faixas pastel, o adesivo das
+cerejas e o metal da tampa sao pintados pelo codigo, pela posicao no espaco; o mesmo script gera sempre os mesmos arquivos. Sem marca e sem
+texto. Nada vem de modelo, textura ou imagem de terceiros. A lata anterior, gerada pela Meshy (public/mapa_digital/lata/), saiu.
+
+Referencia de desenho: o concept 1 da lata (docs/mapa_digital/lata/concept/concept_1_cereja.png), gerado pela Meshy (meshy.ai, plano Pro,
+conta do Matheus) como imagem de conceito e escolhido pelo Matheus em 2026-11-06; ele so guiou a forma e as cores, e nao entra nos arquivos.
+A lata refeita a mao e posta dentro do mapa foi pedida pelo Matheus em 2026-11-10 (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 17).
+
+Uso: no jogo DigiLab, publicado.

@@ -1,0 +1,25 @@
+{
+  "descricao": "rodada 3 (depois da validacao 1 reprovar o K4 por 0,004: espelho sem treino 0,504 contra o chefe de 110): total do chefe com folga, 40 partidas por par por semente",
+  "npcs": {
+    "v2c:agressivo@110": {
+      "total": 110,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@115": {
+      "total": 115,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@120": {
+      "total": 120,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@125": {
+      "total": 125,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@130": {
+      "total": 130,
+      "estilo": "v2c:agressivo"
+    }
+  }
+}

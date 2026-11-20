@@ -1,0 +1,199 @@
+{
+  "atencioso": {
+    "acerto_total": {
+      "bracos": [
+        "P0",
+        "P1",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/padrao": {
+            "ic_inferior": 0.5675347222222222,
+            "ic_superior": 0.5751240079365079,
+            "media": 0.5713541666666667,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/padrao": {
+            "ic_inferior": 0.3293402777777778,
+            "ic_superior": 0.33529265873015873,
+            "media": 0.332390873015873,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/padrao": {
+            "ic_inferior": 0.6226686507936507,
+            "ic_superior": 0.6881696428571428,
+            "media": 0.6574652777777777,
+            "n": 30,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/padrao"
+      ]
+    },
+    "deriva_final": {
+      "bracos": [
+        "P0",
+        "P1",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/padrao": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/padrao": {
+            "ic_inferior": 0.036830190057738244,
+            "ic_superior": 0.037847260582106156,
+            "media": 0.037405550553752956,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/padrao": {
+            "ic_inferior": 0.025363892346965004,
+            "ic_superior": 0.035586617365465846,
+            "media": 0.03024878756290362,
+            "n": 30,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/padrao"
+      ]
+    },
+    "fracao_fora_de_privacao": {
+      "bracos": [
+        "P0",
+        "P1",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/padrao"
+      ]
+    },
+    "humor_medio": {
+      "bracos": [
+        "P0",
+        "P1",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/padrao": {
+            "ic_inferior": 0.9071562913359764,
+            "ic_superior": 0.9145884796626962,
+            "media": 0.9108722304894158,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/padrao": {
+            "ic_inferior": 0.6296754918980513,
+            "ic_superior": 0.6412953249007013,
+            "media": 0.6354509548610154,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/padrao": {
+            "ic_inferior": 0.8680828166335791,
+            "ic_superior": 0.9160826719576659,
+            "media": 0.8943768807870288,
+            "n": 30,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/padrao"
+      ]
+    },
+    "saude_media": {
+      "bracos": [
+        "P0",
+        "P1",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 30,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/padrao"
+      ]
+    }
+  }
+}

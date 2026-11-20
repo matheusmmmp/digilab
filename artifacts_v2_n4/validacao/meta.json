@@ -1,0 +1,88 @@
+{
+ "bootstrap": {
+  "nivel": 0.95,
+  "reamostragens": 10000,
+  "semente": 20261001
+ },
+ "config": {
+  "conjunto": "validacao",
+  "descricao": "V2, N4 (docs/PLANO_ANALISE_V2_N4.md, secao 5): validacao UNICA no ponto escolhido pela calibracao (artifacts_v2_n4/calibracao/resultado.json, escolha: w_fruta 6, k_saciedade 1,0, duracao 120; a calibracao NAO fechou: p(comer | fruta) ficou abaixo de 0,30 em todos os pontos e o G-SEP(ii) nao passou no ponto).",
+  "ponto": {
+   "duracao_min": 120,
+   "k_saciedade": 1.0,
+   "w_fruta": 6.0
+  },
+  "saida": "artifacts_v2_n4/validacao",
+  "sementes": [
+   11101,
+   11202,
+   11303,
+   11404,
+   11505
+  ]
+ },
+ "config_frutas": {
+  "duracao_min": 120,
+  "efeito_humor_neutro": 0.0,
+  "efeito_humor_ruim": -0.1,
+  "horarios_oferta": [
+   540,
+   720,
+   900,
+   1080
+  ],
+  "k_saciedade": 1.0,
+  "ligada": true,
+  "meia_vida_recente": 16,
+  "mundo": "descasado",
+  "neofobia_max": 1.0,
+  "nutricao": 0.1,
+  "pref_max": 1.0,
+  "pref_min": 0.2,
+  "rotacao_ofertas": [
+   [
+    "a"
+   ],
+   [
+    "b",
+    "c"
+   ],
+   [
+    "a",
+    "b",
+    "c"
+   ],
+   [
+    "c"
+   ],
+   [
+    "a",
+    "b"
+   ],
+   [
+    "b"
+   ],
+   [
+    "a",
+    "c"
+   ]
+  ],
+  "taxa_incentivo": 0.3,
+  "w_fruta": 6.0
+ },
+ "dias": 14,
+ "orcamento": 224,
+ "plataforma": "Windows-11-10.0.26200-SP0",
+ "python": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+ "segundos": 26.0,
+ "sha256": {
+  "digilab/ambiente.py": "e21799de3c2c24266fc4239ba76217f16488a4e393ed3d8ce263150dabeec3dd",
+  "digilab/config.py": "8b80a961d82c7ce3b82ad5bd4f9cc66925777bfc90d407954bc8efc95e19eacf",
+  "digilab/engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "digilab/events.py": "fadca8e105f5bf1985f4a92dbf5c0717c087993e3bb34b8468d74e92205d24d0",
+  "digilab/frutas.py": "f6f89e1be2e5d1812e218f837a9cb086fe60dd07298bfcbfde3a879aba2083d4",
+  "digilab/metrics.py": "8d63b854ed9c690fdca66e5e68442abb820275a2a2e508921912b813349a3a03",
+  "digilab/policy.py": "092eed095ceceb4f3aaf97c5d375fc64fa1380cbd46cb3617a3b2f4bc4610985",
+  "experiments/run_v2_n4.py": "57d566356e04f709af419704e562cddbfe325b8e7f473b2d11d427339cbf1b0a"
+ }
+}

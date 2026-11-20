@@ -1,0 +1,72 @@
+{
+  "braco": "exigente",
+  "carater_adulto": {
+    "atento": 0.47656249999999994,
+    "impetuoso": -0.171875,
+    "paciente": -0.14218750000000016,
+    "resistente": 0.00937500000000004
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 18,
+    "treino": 100
+  },
+  "enroladas": 15,
+  "especie": "ferrugem",
+  "fala_fria": true,
+  "forma": {
+    "adulta": "sentinela",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "ferrugem/arisco/cacador/sentinela"
+  },
+  "obediencia_cuidado": 0.832,
+  "ovo": 909,
+  "sessoes": 100,
+  "sombria": false,
+  "treino": {
+    "enroladas": 15,
+    "especie": "ferrugem",
+    "estresse": 150.0,
+    "fadiga": 0.0,
+    "fala_fria": true,
+    "forcadas": 18,
+    "pausas": {
+      "atendidas": 2,
+      "ignoradas": 15
+    },
+    "pontos": {
+      "folego": 6.5217538001079,
+      "forca": 6.406669630525,
+      "guarda": 6.527665888544271,
+      "mira": 2.875377230900315,
+      "recuperacao": 6.3270788961504865,
+      "vigor": 7.341454553772026
+    },
+    "pontos_estagio": {
+      "adolescente": 12.0,
+      "adulto": 13.999999999999998,
+      "crianca": 10.0
+    },
+    "sessoes": 100,
+    "sobrecarga": 64.0,
+    "sombria": false,
+    "total": 36.0,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 45.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 48.5,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.04867349557811254
+}

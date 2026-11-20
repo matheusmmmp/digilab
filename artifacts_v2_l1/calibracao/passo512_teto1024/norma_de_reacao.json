@@ -1,0 +1,1163 @@
+{
+  "ambientes": {
+    "amb1": 17893268654995937229,
+    "amb2": 17347297275427857554,
+    "amb3": 15257528618812206473,
+    "amb4": 7282972038699111375
+  },
+  "medidas": {
+    "acerto_ultimos_7": {
+      "celulas": {
+        "cuidado": {
+          "3101": {
+            "alpha": 0.5089285714285714,
+            "beta": -4.643608627038329
+          },
+          "3202": {
+            "alpha": 0.47953869047619047,
+            "beta": 6.363755917937962
+          },
+          "3303": {
+            "alpha": 0.44233630952380953,
+            "beta": 0.7456601788532045
+          },
+          "3404": {
+            "alpha": 0.4769345238095238,
+            "beta": -4.706733298264146
+          },
+          "3505": {
+            "alpha": 0.46242559523809523,
+            "beta": -0.3787480273541065
+          }
+        },
+        "ensino": {
+          "3101": {
+            "alpha": 0.6826636904761905,
+            "beta": 11.17701209889501
+          },
+          "3202": {
+            "alpha": 0.7161458333333333,
+            "beta": -3.3416622830087155
+          },
+          "3303": {
+            "alpha": 0.7265625,
+            "beta": 0.5799579168858835
+          },
+          "3404": {
+            "alpha": 0.6882440476190476,
+            "beta": -2.5526038926879955
+          },
+          "3505": {
+            "alpha": 0.6960565476190477,
+            "beta": 13.587585481325718
+          }
+        },
+        "instinto": {
+          "3101": {
+            "alpha": 0.6153273809523809,
+            "beta": 1.3650710152550776
+          },
+          "3202": {
+            "alpha": 0.5710565476190477,
+            "beta": 0.1814834297738335
+          },
+          "3303": {
+            "alpha": 0.5405505952380952,
+            "beta": 1.0928458705943984
+          },
+          "3404": {
+            "alpha": 0.5617559523809524,
+            "beta": -1.479484481851632
+          },
+          "3505": {
+            "alpha": 0.5770089285714286,
+            "beta": -2.990531299316113
+          }
+        }
+      },
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": -0.10833333333333336,
+          "ic_superior": -0.09017857142857148,
+          "media": -0.0991071428571429,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -3.763808521830607,
+          "ic_superior": 3.586270384008376,
+          "media": -0.15781167806419583,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "3101": {
+            "alpha": -0.10639880952380953,
+            "beta": -6.008679642293407
+          },
+          "3202": {
+            "alpha": -0.0915178571428572,
+            "beta": 6.182272488164129
+          },
+          "3303": {
+            "alpha": -0.0982142857142857,
+            "beta": -0.34718569174119396
+          },
+          "3404": {
+            "alpha": -0.08482142857142866,
+            "beta": -3.227248816412514
+          },
+          "3505": {
+            "alpha": -0.11458333333333337,
+            "beta": 2.6117832719620067
+          }
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.1962797619047619,
+          "ic_superior": 0.2601190476190476,
+          "media": 0.2279017857142857,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -3.517622304050369,
+          "ic_superior": 12.345607574960496,
+          "media": 4.413992635455063,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "3101": {
+            "alpha": 0.17373511904761907,
+            "beta": 15.82062072593334
+          },
+          "3202": {
+            "alpha": 0.2366071428571428,
+            "beta": -9.705418200946678
+          },
+          "3303": {
+            "alpha": 0.28422619047619047,
+            "beta": -0.16570226196732096
+          },
+          "3404": {
+            "alpha": 0.21130952380952378,
+            "beta": 2.15412940557615
+          },
+          "3505": {
+            "alpha": 0.23363095238095244,
+            "beta": 13.966333508679824
+          }
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.09322916666666665,
+          "ic_superior": 0.16145833333333326,
+          "media": 0.12879464285714282,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -1.9410836401892682,
+          "ic_superior": 11.694634402945812,
+          "media": 4.2561809573908675,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "3101": {
+            "alpha": 0.06733630952380953,
+            "beta": 9.811941083639933
+          },
+          "3202": {
+            "alpha": 0.1450892857142856,
+            "beta": -3.523145712782549
+          },
+          "3303": {
+            "alpha": 0.18601190476190477,
+            "beta": -0.5128879537085149
+          },
+          "3404": {
+            "alpha": 0.12648809523809512,
+            "beta": -1.0731194108363635
+          },
+          "3505": {
+            "alpha": 0.11904761904761907,
+            "beta": 16.57811678064183
+          }
+        }
+      },
+      "medias": {
+        "cuidado": {
+          "alpha": 0.47403273809523805,
+          "beta": -0.523934771173083
+        },
+        "ensino": {
+          "alpha": 0.7019345238095238,
+          "beta": 3.8900578642819803
+        },
+        "instinto": {
+          "alpha": 0.573139880952381,
+          "beta": -0.36612309310888713
+        }
+      },
+      "valores": {
+        "cuidado": {
+          "3101": {
+            "amb1": 0.505952380952381,
+            "amb2": 0.4806547619047619,
+            "amb3": 0.5089285714285714,
+            "amb4": 0.5401785714285714
+          },
+          "3202": {
+            "amb1": 0.4345238095238095,
+            "amb2": 0.5208333333333333,
+            "amb3": 0.4836309523809524,
+            "amb4": 0.47916666666666663
+          },
+          "3303": {
+            "amb1": 0.4375,
+            "amb2": 0.45833333333333337,
+            "amb3": 0.4330357142857143,
+            "amb4": 0.4404761904761905
+          },
+          "3404": {
+            "amb1": 0.5044642857142857,
+            "amb2": 0.47023809523809523,
+            "amb3": 0.4538690476190476,
+            "amb4": 0.47916666666666663
+          },
+          "3505": {
+            "amb1": 0.47619047619047616,
+            "amb2": 0.47470238095238093,
+            "amb3": 0.44791666666666663,
+            "amb4": 0.45089285714285715
+          }
+        },
+        "ensino": {
+          "3101": {
+            "amb1": 0.7336309523809524,
+            "amb2": 0.7455357142857143,
+            "amb3": 0.681547619047619,
+            "amb4": 0.5699404761904762
+          },
+          "3202": {
+            "amb1": 0.7083333333333333,
+            "amb2": 0.6458333333333333,
+            "amb3": 0.7604166666666667,
+            "amb4": 0.75
+          },
+          "3303": {
+            "amb1": 0.7425595238095238,
+            "amb2": 0.7008928571428571,
+            "amb3": 0.75,
+            "amb4": 0.712797619047619
+          },
+          "3404": {
+            "amb1": 0.650297619047619,
+            "amb2": 0.6994047619047619,
+            "amb3": 0.6696428571428571,
+            "amb4": 0.7336309523809524
+          },
+          "3505": {
+            "amb1": 0.6517857142857143,
+            "amb2": 0.724702380952381,
+            "amb3": 0.75,
+            "amb4": 0.6577380952380952
+          }
+        },
+        "instinto": {
+          "3101": {
+            "amb1": 0.6116071428571429,
+            "amb2": 0.6354166666666667,
+            "amb3": 0.6056547619047619,
+            "amb4": 0.6086309523809524
+          },
+          "3202": {
+            "amb1": 0.5744047619047619,
+            "amb2": 0.5610119047619048,
+            "amb3": 0.5803571428571429,
+            "amb4": 0.5684523809523809
+          },
+          "3303": {
+            "amb1": 0.5372023809523809,
+            "amb2": 0.5550595238095238,
+            "amb3": 0.5342261904761905,
+            "amb4": 0.5357142857142857
+          },
+          "3404": {
+            "amb1": 0.5595238095238095,
+            "amb2": 0.5520833333333334,
+            "amb3": 0.5625,
+            "amb4": 0.5729166666666667
+          },
+          "3505": {
+            "amb1": 0.5788690476190476,
+            "amb2": 0.5595238095238095,
+            "amb3": 0.5758928571428571,
+            "amb4": 0.59375
+          }
+        }
+      },
+      "z": {
+        "amb1": -0.0025793650793651812,
+        "amb2": 0.002579365079364959,
+        "amb3": 0.00347222222222221,
+        "amb4": -0.00347222222222221
+      }
+    },
+    "jsd_vs_instinto": {
+      "celulas": {
+        "cuidado": {
+          "3101": {
+            "alpha": 0.007665213220554601,
+            "beta": 3.6887594937165105
+          },
+          "3202": {
+            "alpha": 0.004635687161818435,
+            "beta": 0.00611755745855938
+          },
+          "3303": {
+            "alpha": 0.004474205064230299,
+            "beta": 0.09842239345485053
+          },
+          "3404": {
+            "alpha": 0.003907773132746145,
+            "beta": -0.11361253738868879
+          },
+          "3505": {
+            "alpha": 0.004751720609043733,
+            "beta": 0.09807805948440483
+          }
+        },
+        "ensino": {
+          "3101": {
+            "alpha": 0.02794573291808555,
+            "beta": 5.3212713131619624
+          },
+          "3202": {
+            "alpha": 0.022676064675946718,
+            "beta": 5.226387326065624
+          },
+          "3303": {
+            "alpha": 0.023593421394706243,
+            "beta": 0.04291932169003668
+          },
+          "3404": {
+            "alpha": 0.021608058080976565,
+            "beta": -0.43140281368734945
+          },
+          "3505": {
+            "alpha": 0.03044610155788738,
+            "beta": 1.063059886044084
+          }
+        },
+        "instinto": {
+          "3101": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "3202": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "3303": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "3404": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "3505": {
+            "alpha": 0.0,
+            "beta": 0.0
+          }
+        }
+      },
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.0042221454338201205,
+          "ic_superior": 0.006444313066987567,
+          "media": 0.005086919837678642,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -0.028936298639451342,
+          "ic_superior": 2.2341636864125882,
+          "media": 0.7555529933451273,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "3101": {
+            "alpha": 0.007665213220554601,
+            "beta": 3.6887594937165105
+          },
+          "3202": {
+            "alpha": 0.004635687161818435,
+            "beta": 0.00611755745855938
+          },
+          "3303": {
+            "alpha": 0.004474205064230299,
+            "beta": 0.09842239345485053
+          },
+          "3404": {
+            "alpha": 0.003907773132746145,
+            "beta": -0.11361253738868879
+          },
+          "3505": {
+            "alpha": 0.004751720609043733,
+            "beta": 0.09807805948440483
+          }
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.018120108251038672,
+          "ic_superior": 0.023064315101496563,
+          "media": 0.02016695588784185,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.04367902608654605,
+          "ic_superior": 3.4475636107003664,
+          "media": 1.4888940133097444,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "3101": {
+            "alpha": 0.020280519697530947,
+            "beta": 1.632511819445452
+          },
+          "3202": {
+            "alpha": 0.018040377514128285,
+            "beta": 5.220269768607065
+          },
+          "3303": {
+            "alpha": 0.019119216330475943,
+            "beta": -0.05550307176481385
+          },
+          "3404": {
+            "alpha": 0.01770028494823042,
+            "beta": -0.31779027629866063
+          },
+          "3505": {
+            "alpha": 0.025694380948843645,
+            "beta": 0.9649818265596792
+          }
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.02243233338171056,
+          "ic_superior": 0.02839202045353888,
+          "media": 0.025253875725520493,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.05721858040989171,
+          "ic_superior": 4.431675432899851,
+          "media": 2.244447006654872,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "3101": {
+            "alpha": 0.02794573291808555,
+            "beta": 5.3212713131619624
+          },
+          "3202": {
+            "alpha": 0.022676064675946718,
+            "beta": 5.226387326065624
+          },
+          "3303": {
+            "alpha": 0.023593421394706243,
+            "beta": 0.04291932169003668
+          },
+          "3404": {
+            "alpha": 0.021608058080976565,
+            "beta": -0.43140281368734945
+          },
+          "3505": {
+            "alpha": 0.03044610155788738,
+            "beta": 1.063059886044084
+          }
+        }
+      },
+      "medias": {
+        "cuidado": {
+          "alpha": 0.005086919837678642,
+          "beta": 0.7555529933451273
+        },
+        "ensino": {
+          "alpha": 0.025253875725520493,
+          "beta": 2.244447006654872
+        },
+        "instinto": {
+          "alpha": 0.0,
+          "beta": 0.0
+        }
+      },
+      "valores": {
+        "cuidado": {
+          "3101": {
+            "amb1": 0.004582858912804759,
+            "amb2": 0.0045961965127981185,
+            "amb3": 0.0045685056827341735,
+            "amb4": 0.016913291773881352
+          },
+          "3202": {
+            "amb1": 0.00472547506794108,
+            "amb2": 0.004595418197455665,
+            "amb3": 0.004562586784712462,
+            "amb4": 0.004659268597164532
+          },
+          "3303": {
+            "amb1": 0.0036350286192918515,
+            "amb2": 0.004758356203214198,
+            "amb3": 0.004750990301429778,
+            "amb4": 0.00475244513298537
+          },
+          "3404": {
+            "amb1": 0.004562586784712462,
+            "amb2": 0.004582858912804759,
+            "amb3": 0.0019171411507331827,
+            "amb4": 0.0045685056827341735
+          },
+          "3505": {
+            "amb1": 0.004461021893634784,
+            "amb2": 0.00445889507756952,
+            "amb3": 0.005435946209716202,
+            "amb4": 0.0046510192552544245
+          }
+        },
+        "ensino": {
+          "3101": {
+            "amb1": 0.02327497846533853,
+            "amb2": 0.023915462168866773,
+            "amb3": 0.02296810951011278,
+            "amb4": 0.04162438152802411
+          },
+          "3202": {
+            "amb1": 0.02361205379985469,
+            "amb2": 0.012007850212570923,
+            "amb3": 0.02379977017624077,
+            "amb4": 0.03128458451512049
+          },
+          "3303": {
+            "amb1": 0.023300251112397388,
+            "amb2": 0.023511359477110673,
+            "amb3": 0.024044711600649436,
+            "amb4": 0.023517363388667476
+          },
+          "3404": {
+            "amb1": 0.023303780048838728,
+            "amb2": 0.021908680101294098,
+            "amb3": 0.02008032133751812,
+            "amb4": 0.021139450836255316
+          },
+          "3505": {
+            "amb1": 0.02800193219770445,
+            "amb2": 0.02417542627059859,
+            "amb3": 0.04341728468733757,
+            "amb4": 0.026189763075908912
+          }
+        },
+        "instinto": {
+          "3101": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "3202": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "3303": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "3404": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "3505": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          }
+        }
+      },
+      "z": {
+        "amb1": -0.0005496007275651287,
+        "amb2": -0.001546231645447491,
+        "amb3": 0.0002560926416792543,
+        "amb4": 0.001839739731333367
+      }
+    }
+  },
+  "ovos": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "vidas": {
+    "cuidado-amb1@3101": {
+      "acerto_ultimos_7": 0.505952380952381,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 86,
+      "ovo": 3101,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 0
+    },
+    "cuidado-amb1@3202": {
+      "acerto_ultimos_7": 0.4345238095238095,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 89,
+      "ovo": 3202,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 0
+    },
+    "cuidado-amb1@3303": {
+      "acerto_ultimos_7": 0.4375,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 85,
+      "ovo": 3303,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 0
+    },
+    "cuidado-amb1@3404": {
+      "acerto_ultimos_7": 0.5044642857142857,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 90,
+      "ovo": 3404,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 0
+    },
+    "cuidado-amb1@3505": {
+      "acerto_ultimos_7": 0.47619047619047616,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 84,
+      "ovo": 3505,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 0
+    },
+    "cuidado-amb2@3101": {
+      "acerto_ultimos_7": 0.4806547619047619,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 91,
+      "ovo": 3101,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 0
+    },
+    "cuidado-amb2@3202": {
+      "acerto_ultimos_7": 0.5208333333333333,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 92,
+      "ovo": 3202,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 0
+    },
+    "cuidado-amb2@3303": {
+      "acerto_ultimos_7": 0.45833333333333337,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 91,
+      "ovo": 3303,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 0
+    },
+    "cuidado-amb2@3404": {
+      "acerto_ultimos_7": 0.47023809523809523,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 96,
+      "ovo": 3404,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 0
+    },
+    "cuidado-amb2@3505": {
+      "acerto_ultimos_7": 0.47470238095238093,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 88,
+      "ovo": 3505,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 0
+    },
+    "cuidado-amb3@3101": {
+      "acerto_ultimos_7": 0.5089285714285714,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 85,
+      "ovo": 3101,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 0
+    },
+    "cuidado-amb3@3202": {
+      "acerto_ultimos_7": 0.4836309523809524,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 77,
+      "ovo": 3202,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 0
+    },
+    "cuidado-amb3@3303": {
+      "acerto_ultimos_7": 0.4330357142857143,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 81,
+      "ovo": 3303,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 0
+    },
+    "cuidado-amb3@3404": {
+      "acerto_ultimos_7": 0.4538690476190476,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 79,
+      "ovo": 3404,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 0
+    },
+    "cuidado-amb3@3505": {
+      "acerto_ultimos_7": 0.44791666666666663,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 93,
+      "ovo": 3505,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 0
+    },
+    "cuidado-amb4@3101": {
+      "acerto_ultimos_7": 0.5401785714285714,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 101,
+      "ovo": 3101,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 0
+    },
+    "cuidado-amb4@3202": {
+      "acerto_ultimos_7": 0.47916666666666663,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 75,
+      "ovo": 3202,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 0
+    },
+    "cuidado-amb4@3303": {
+      "acerto_ultimos_7": 0.4404761904761905,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 81,
+      "ovo": 3303,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 0
+    },
+    "cuidado-amb4@3404": {
+      "acerto_ultimos_7": 0.47916666666666663,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 77,
+      "ovo": 3404,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 0
+    },
+    "cuidado-amb4@3505": {
+      "acerto_ultimos_7": 0.45089285714285715,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 82,
+      "ovo": 3505,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 0
+    },
+    "ensino-amb1@3101": {
+      "acerto_ultimos_7": 0.7336309523809524,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 138
+    },
+    "ensino-amb1@3202": {
+      "acerto_ultimos_7": 0.7083333333333333,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 135
+    },
+    "ensino-amb1@3303": {
+      "acerto_ultimos_7": 0.7425595238095238,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 139
+    },
+    "ensino-amb1@3404": {
+      "acerto_ultimos_7": 0.650297619047619,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 134
+    },
+    "ensino-amb1@3505": {
+      "acerto_ultimos_7": 0.6517857142857143,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 140
+    },
+    "ensino-amb2@3101": {
+      "acerto_ultimos_7": 0.7455357142857143,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 133
+    },
+    "ensino-amb2@3202": {
+      "acerto_ultimos_7": 0.6458333333333333,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 132
+    },
+    "ensino-amb2@3303": {
+      "acerto_ultimos_7": 0.7008928571428571,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 133
+    },
+    "ensino-amb2@3404": {
+      "acerto_ultimos_7": 0.6994047619047619,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 128
+    },
+    "ensino-amb2@3505": {
+      "acerto_ultimos_7": 0.724702380952381,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 136
+    },
+    "ensino-amb3@3101": {
+      "acerto_ultimos_7": 0.681547619047619,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 139
+    },
+    "ensino-amb3@3202": {
+      "acerto_ultimos_7": 0.7604166666666667,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 147
+    },
+    "ensino-amb3@3303": {
+      "acerto_ultimos_7": 0.75,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 143
+    },
+    "ensino-amb3@3404": {
+      "acerto_ultimos_7": 0.6696428571428571,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 145
+    },
+    "ensino-amb3@3505": {
+      "acerto_ultimos_7": 0.75,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 131
+    },
+    "ensino-amb4@3101": {
+      "acerto_ultimos_7": 0.5699404761904762,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 123
+    },
+    "ensino-amb4@3202": {
+      "acerto_ultimos_7": 0.75,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 149
+    },
+    "ensino-amb4@3303": {
+      "acerto_ultimos_7": 0.712797619047619,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 143
+    },
+    "ensino-amb4@3404": {
+      "acerto_ultimos_7": 0.7336309523809524,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 147
+    },
+    "ensino-amb4@3505": {
+      "acerto_ultimos_7": 0.6577380952380952,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 142
+    },
+    "instinto-amb1@3101": {
+      "acerto_ultimos_7": 0.6116071428571429,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 136
+    },
+    "instinto-amb1@3202": {
+      "acerto_ultimos_7": 0.5744047619047619,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 138
+    },
+    "instinto-amb1@3303": {
+      "acerto_ultimos_7": 0.5372023809523809,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 137
+    },
+    "instinto-amb1@3404": {
+      "acerto_ultimos_7": 0.5595238095238095,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 138
+    },
+    "instinto-amb1@3505": {
+      "acerto_ultimos_7": 0.5788690476190476,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 17893268654995937229,
+      "sinais": 136
+    },
+    "instinto-amb2@3101": {
+      "acerto_ultimos_7": 0.6354166666666667,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 131
+    },
+    "instinto-amb2@3202": {
+      "acerto_ultimos_7": 0.5610119047619048,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 123
+    },
+    "instinto-amb2@3303": {
+      "acerto_ultimos_7": 0.5550595238095238,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 128
+    },
+    "instinto-amb2@3404": {
+      "acerto_ultimos_7": 0.5520833333333334,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 131
+    },
+    "instinto-amb2@3505": {
+      "acerto_ultimos_7": 0.5595238095238095,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 17347297275427857554,
+      "sinais": 125
+    },
+    "instinto-amb3@3101": {
+      "acerto_ultimos_7": 0.6056547619047619,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 143
+    },
+    "instinto-amb3@3202": {
+      "acerto_ultimos_7": 0.5803571428571429,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 144
+    },
+    "instinto-amb3@3303": {
+      "acerto_ultimos_7": 0.5342261904761905,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 139
+    },
+    "instinto-amb3@3404": {
+      "acerto_ultimos_7": 0.5625,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 144
+    },
+    "instinto-amb3@3505": {
+      "acerto_ultimos_7": 0.5758928571428571,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 15257528618812206473,
+      "sinais": 145
+    },
+    "instinto-amb4@3101": {
+      "acerto_ultimos_7": 0.6086309523809524,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3101,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 143
+    },
+    "instinto-amb4@3202": {
+      "acerto_ultimos_7": 0.5684523809523809,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3202,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 149
+    },
+    "instinto-amb4@3303": {
+      "acerto_ultimos_7": 0.5357142857142857,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3303,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 143
+    },
+    "instinto-amb4@3404": {
+      "acerto_ultimos_7": 0.5729166666666667,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3404,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 145
+    },
+    "instinto-amb4@3505": {
+      "acerto_ultimos_7": 0.59375,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 3505,
+      "semente_ambiente": 7282972038699111375,
+      "sinais": 149
+    }
+  }
+}

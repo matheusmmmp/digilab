@@ -1,0 +1,10 @@
+{
+ "teto_sessao": 36,
+ "saldo_inicio_sessao": 230,
+ "tarefas": [
+  {"etapa": "vistas", "id": "01a1b8a8-b524-75ba-90d6-f1936a6f63f1", "creditos": 6},
+  {"etapa": "malha", "id": "01a1b8a9-b599-7560-97d6-cbfe4b71935f", "creditos": 30}
+ ],
+ "gasto_sessao": 36,
+ "nota": "as outras sessoes do retrabalho (portao, barraca, carro) gastaram do mesmo saldo ao mesmo tempo; o antes e o depois de cada tarefa (vistas.json, malha.json) misturam os gastos delas"
+}

@@ -1,0 +1,118 @@
+{
+ "conferencia_calibracao_c_iguais": true,
+ "legibilidade": {
+  "A": 0.25539434523809523,
+  "C": 0.32332589285714286
+ },
+ "m6": [
+  {
+   "A": "fecha (K2)",
+   "B": "nao fecha: nao aprende (piloto da calibracao B)",
+   "C": "fecha (calibracao C, piloto: aprende)",
+   "criterio": "admissao",
+   "passo": 0,
+   "resultado": "A e C seguem"
+  },
+  {
+   "CC-1": "empate",
+   "CC-2": "empate",
+   "criterio": "desempenho (CC-1, CC-2)",
+   "passo": 1,
+   "resultado": "empate"
+  },
+  {
+   "A": 0.25539434523809523,
+   "C": 0.32332589285714286,
+   "c_menos_a": 0.06793154761904763,
+   "criterio": "legibilidade (P1 descasado)",
+   "passo": 2,
+   "resultado": "C vence"
+  },
+  {
+   "recomendacao": "C"
+  }
+ ],
+ "modo": "piloto",
+ "primarios": {
+  "CC-1": {
+   "d": "C:P1 - A:P1",
+   "holm_rejeita": false,
+   "ic90": {
+    "ic_inferior": 8.264678705315332e-05,
+    "ic_superior": 0.024814737735297784,
+    "nivel": 0.9
+   },
+   "ic95": {
+    "ic_inferior": -0.0020575165594122562,
+    "ic_superior": 0.027214938247157545,
+    "nivel": 0.95
+   },
+   "leitura": "empate",
+   "leitura_m6": "empate",
+   "media": 0.012446192034535328,
+   "p_ajustado": 0.0984,
+   "p_bilateral": 0.0984
+  },
+  "CC-2": {
+   "d": "C:P1 - A:P1",
+   "holm_rejeita": true,
+   "ic90": {
+    "ic_inferior": 0.020558830236206964,
+    "ic_superior": 0.04625770834541067,
+    "nivel": 0.9
+   },
+   "ic95": {
+    "ic_inferior": 0.018122638708421963,
+    "ic_superior": 0.04892079389463588,
+    "nivel": 0.95
+   },
+   "leitura": "empate",
+   "leitura_m6": "empate",
+   "media": 0.033393655680744774,
+   "p_ajustado": 0.0,
+   "p_bilateral": 0.0
+  }
+ },
+ "segundos": 5407.163181199998,
+ "tamanho_amostra": {
+  "alfa_familia": 0.05,
+  "alfa_passo_bilateral": 0.025,
+  "alfa_por_lado": 0.0125,
+  "delta": 0.1986268570547561,
+  "k_validacao": 1,
+  "n_validacao": 5,
+  "poder": 0.8,
+  "por_contraste": {
+   "CC-1": {
+    "media_d": 0.012446192034535328,
+    "motivo_simulado": null,
+    "n_formula": 5,
+    "n_simulado": 5,
+    "poder_no_n_simulado": 1.0,
+    "sigma2_d": 0.0012041907071221214,
+    "sigma_d": 0.03470145108092919,
+    "unidades": 20
+   },
+   "CC-2": {
+    "media_d": 0.033393655680744774,
+    "motivo_simulado": null,
+    "n_formula": 5,
+    "n_simulado": 5,
+    "poder_no_n_simulado": 1.0,
+    "sigma2_d": 0.0013041334665124013,
+    "sigma_d": 0.03611278812986338,
+    "unidades": 20
+   }
+  },
+  "regra": "o maior entre a formula e o N simulado de cada contraste, ao multiplo de 5"
+ },
+ "tempo": {
+  "horas_validacao_estimadas": 0.3754974431388887,
+  "segundos": 5407.163181199998,
+  "segundos_por_unidade": 270.3581590599999,
+  "vidas": 940,
+  "vidas_por_unidade": 47
+ },
+ "unidades": 20,
+ "vidas": 940
+}

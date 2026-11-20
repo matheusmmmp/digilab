@@ -1,0 +1,7 @@
+{
+  "descricao": "GOSTO_VISUAL, GV3: a run descritiva genoma x dono, uma vez (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secoes 2 a 6). Nao roda antes do plano APROVADO pelo Matheus.",
+  "fase": "gosto_visual",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+  "unidades": {"bases": [89303, 89404, 89505], "k": 12},
+  "dias": 14
+}

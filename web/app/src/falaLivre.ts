@@ -1,0 +1,275 @@
+/* Fala livre por LLM local (porte de web/modulos/fala_livre.js; docs/PLANO_VERSAO_FALA_LIVRE.md).
+   So APRESENTACAO: le o pet (motor), nunca escreve nele. As falas e a conversa vao para o log de apresentacao
+   (localStorage CHAVE + ".fala.jsonl"), nunca para o registro do pet. O que o jogador escreve nao ensina o pet.
+   Mesmas chaves, mesmo formato de log e mesmas rotas do servidor que a versao do HTML.
+   A voz propria dos pets v7-v10 (a fala espontanea com janela e mentira, o evento "fl") saiu com o descarte 6 (COMBATE-TR, etapa R2b;
+   D-9): os pets v13 falam pelos gatilhos de sempre. Linha antiga do log com o campo `voz` ainda se le (o campo fica ignorado).
+   Comando pelo chat (TAREFA_COMANDO_CHAT, decisao do Matheus, 2026-09-30): na conversa dos pets v7 o servidor devolve
+   `comando` (uma acao do catalogo AcaoDono ou null). A LLM so propoe: o app valida de novo (src/acoes.ts) e, valendo,
+   grava o evento "d" na hora pelo mesmo caminho do botao (execucao direta, decisao do Matheus em 2026-10-01 depois do
+   gate da rodada 3; a primeira versao pedia confirmacao). E a unica coisa que o texto do jogador faz no pet, e so
+   mediada pelo catalogo: fora dele o texto continua nao ensinando nada. */
+import { useEffect, useState } from "react";
+import { FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type AcaoDono, type Motor } from "../motor/index.ts";
+import { agir, noCatalogo, validarComando } from "./acoes.ts";
+import { FALA_LLM, ligarFalaLLM } from "./fala.ts";
+import { alegaLembranca, conferirFalaMemoria, memoriaLigada, type FatoFala } from "./falaMemoria.ts";
+import { conceitosDaVoz, estadoDaVoz, fatosDoDono } from "./falaRede.ts";
+import { jogoAtual } from "./jogo.ts";
+import { CHAVE } from "./save.ts";
+
+/** o log de apresentacao da fala; as linhas da fala do assistir (src/falaAssistir.ts, `situacao: "assistir"`) moram nele tambem e sao lidas
+    so por la (lerLogAssistir): `lerLog` as pula */
+export const LOG_FALA = CHAVE + ".fala.jsonl";
+const LOG = LOG_FALA, MODO = CHAVE + "-modo-fala", CONVERSA_NOVA = CHAVE + "-conversa-nova", FALA_REDE = CHAVE + "-fala-rede";
+/* F2 da CONVERSA_PET, D-ES-4 (a saida (0)): com a chave, a voz da rede pede a fala sem a verificacao dentro da chamada; o aviso vem da
+   verificacao de depois do balao, a de sempre. Ligada por padrao desde a D-ES-5 (Matheus, 2026-11-19, "Sim, ligar"); "0" desliga e
+   devolve o pedido de antes. */
+const VERIF_DEPOIS = CHAVE + "-fala-verif-depois";
+/* versao 2 (comando pelo chat): `comando` e `comando_executado`; a 1 continua sendo lida (campos ausentes = null/false) */
+export const VERSAO_LOG = 2;
+const MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
+export type ModoFala = "template" | "moldura" | "livre";
+export interface Verificacao { nao_suportadas?: number; manipulacao?: boolean; afirmacoes?: { trecho: string; sustentada: boolean | null }[]; erro?: string }
+export interface RegistroFala {
+  versao: number; t: number; situacao: "espontanea" | "conversa"; fala_jogador: string | null; fala: string; fatos_citados: string[];
+  fatos: unknown; estagio: string; modelo: string; versao_prompt: string; semente: number; latencia_s?: number; erro?: string; verificacao: Verificacao | null;
+  /** o que a LLM propos (ja no catalogo, pelo servidor) e se a acao entrou no registro do pet (execucao direta) */
+  comando: AcaoDono | null; comando_executado: boolean;
+}
+export const FL = {
+  modo: "template" as ModoFala, ultimo: null as RegistroFala | null, pendente: false, sessao: [] as [string, string][],
+  ultMotivo: null as unknown, ultForma: null as string | null, ultLutas: 0, ultDesejo: "", tEspontanea: 0,
+  /* CONVERSA_PET M2 (D2): chave "Conversa nova (teste)", desligada por padrao; preferencia de tela, fora do registro do pet.
+     `fronteira`: so as trocas desta sessao da pagina (nao le o log), cada uma com o estagio em que foi dita. */
+  conversaNova: false, fronteira: [] as [string, string, string][],
+  /* CONVERSA_PET DC2b (DR-1): chave "Fala pela rede (teste)", desligada por padrao; preferencia de tela, fora do registro do pet. Ligada, e o pet tem
+     uma decisao do modular, o pedido leva so os conceitos (dec-v2) e a identidade; senao a chave nao muda nada (`redeSemDecisao` avisa a tela). */
+  falaRede: false, redeSemDecisao: false,
+  status: null as { modelo: string } | null, statusErro: false, erro: null as string | null, fila: [] as [string, string | null, string | undefined, MedidaEspera?][],
+};
+/* ------------------------------------------------ medida da espera (docs/PLANO_ANALISE_V3_CONVERSA_ESPERA.md, F2, D-ES-2)
+   Desligada por padrao; so liga com `?medir_espera=1` na URL (lida uma vez, na carga). Ligada, guarda em memoria um registro por chamada com os
+   tempos do `performance.now()` e os expoe em `window.__medidaEspera`. Nada vai para o log de apresentacao nem para o registro do pet, e o
+   VERSAO_LOG nao muda. T1 = t_balao - t_envio; T2 = igual ao T1 hoje (sem streaming; `t_primeira` = `t_balao`); T3 = t_verif - t_balao;
+   T4 = t_chamada - t_envio (a fila); T5 = as `descartada` entre as espontaneas. `rede` diz se o pedido saiu pela voz da rede (com os conceitos): sem uma
+   decisao do modular ele cai no caminho de sempre, e a medida nao e a da voz pela rede (o resumo falha alto). */
+export interface MedidaEspera {
+  situacao: "espontanea" | "conversa"; t_envio: number; t_chamada: number | null; t_primeira: number | null; t_balao: number | null; t_verif: number | null;
+  descartada: boolean; rede: boolean | null; modelo: string | null; erro: string | null; latencia_s: number | null;
+}
+function medidaLigada(): boolean {
+  try { return new URLSearchParams(location.search).get("medir_espera") === "1"; } catch { return false; }
+}
+export const MEDIDA_ESPERA: MedidaEspera[] | null = medidaLigada() ? [] : null;
+if (MEDIDA_ESPERA) (globalThis as unknown as { __medidaEspera: MedidaEspera[] }).__medidaEspera = MEDIDA_ESPERA;
+/** abre o registro de uma chamada (conversa enviada ou espontanea disparada); undefined com a medida desligada */
+function abrirMedida(situacao: "espontanea" | "conversa"): MedidaEspera | undefined {
+  if (!MEDIDA_ESPERA) return undefined;
+  const me: MedidaEspera = { situacao, t_envio: performance.now(), t_chamada: null, t_primeira: null, t_balao: null, t_verif: null,
+    descartada: false, rede: null, modelo: null, erro: null, latencia_s: null };
+  MEDIDA_ESPERA.push(me);
+  return me;
+}
+const ouvintes = new Set<() => void>();
+const avisar = (): void => { for (const o of ouvintes) o(); };
+try { FL.modo = (localStorage.getItem(MODO) as ModoFala) || (FALA_LLM.on ? "moldura" : "template"); } catch { /* sem armazenamento */ }
+try { FL.conversaNova = localStorage.getItem(CONVERSA_NOVA) === "1"; } catch { /* sem armazenamento */ }
+try { FL.falaRede = localStorage.getItem(FALA_REDE) === "1"; } catch { /* sem armazenamento */ }
+let verifDepois = true;
+try { verifDepois = localStorage.getItem(VERIF_DEPOIS) !== "0"; } catch { /* sem armazenamento */ }
+
+/* ------------------------------------------------ log de apresentacao (separado do registro do pet) */
+export function lerLog(): RegistroFala[] {
+  let txt = ""; try { txt = localStorage.getItem(LOG) || ""; } catch { return []; }
+  return txt.split("\n").filter(Boolean).map(l => JSON.parse(l)).filter(r => r.situacao !== "assistir").map((r, i) => {
+    if (!(r.versao === 1 || r.versao === VERSAO_LOG) || typeof r.fala !== "string") throw new Error(`log de fala invalido (linha ${i + 1})`);
+    if (r.versao === 1) { r.comando = null; r.comando_executado = false; }      /* a versao 1 nao tinha comando */
+    return r as RegistroFala;
+  });
+}
+function anexar(reg: RegistroFala): void {
+  try { localStorage.setItem(LOG, (localStorage.getItem(LOG) || "") + JSON.stringify(reg) + "\n"); } catch { /* sem armazenamento */ }
+}
+/* ------------------------------------------------ fatos do pet (mesmo formato que digilab_fala_livre/fatos.py) */
+const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Atenção" };
+const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
+const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
+const fatoresTxt = (f: string[]): string[] => f.map(x => (FATORES_TXT[x] && FATORES_TXT[x].marcador) || x.replace(/_/g, " ")).slice(0, 4);
+export function estadoDoPet(m: Motor, gatilho?: string | null): Record<string, unknown> {
+  const f = m.forma, e = m.e, est = f.est;
+  const ident: Record<string, unknown> = { estagio: est, especie: f.esp };
+  ident.forma = nomeForma(f).slice(0, 60);          /* o Digimon de agora, em todo estagio (o corpus da especie vem dele) */
+  if (f.linha) ident.linha = f.linha;
+  const estado: Record<string, unknown> = { fome: 1 - e.fome, higiene: e.higiene, energia: e.energia, humor: e.humor, saude: e.saude };
+  const mem = m.pol.mem as unknown as { emocoes: { emocao?: string; nome: string }[]; curto: { cat: string; criada: number }[]; longo: { cat: string; criada: number }[] };
+  if (mem.emocoes.length) estado.emocao = mem.emocoes[mem.emocoes.length - 1].emocao;
+  estado.fadiga = Math.round(m.treino.fadiga); estado.sobrecarga = Math.round(m.treino.sobrecarga);
+  if (e.sujeira > 0) estado.sujo = true;
+  const s: Record<string, unknown> = { identidade: ident, estado };
+  {
+    s.temperamento = Object.fromEntries((["curiosidade", "teimosia", "sensibilidade", "rancor"] as const).map(k => [k, m.temp[k]]));
+    try {
+      const c = m.carater();
+      s.carater = Object.fromEntries(Object.entries(c as object).filter(([k]) => ["impetuoso", "paciente", "atento", "resistente"].includes(k))
+        .map(([k, v]) => [k, Math.max(-1, Math.min(1, v as number))]));
+    } catch { /* sem carater travado ainda */ }
+    s.memorias = [...mem.curto.map(x => ["curto", x] as const), ...mem.longo.map(x => ["longo", x] as const)].slice(0, 8)
+      .map(([esp, x]) => ({ espaco: esp, categoria: x.cat, evento: (NOME_MEM[x.cat] || x.cat).toLowerCase().slice(0, 80), ha_min: Math.max(0, m.e.tick - x.criada) }));
+    const d = m.dz && m.dz.atual;
+    if (d) s.desejo = { tipo: d.tipo, alvo: String(d.alvo).replace(/_/g, " ") };
+    if (m.vinc) s.vinculo = Math.max(0, Math.min(1, m.vinc.valor));
+  }
+  s.motivos = m.motivos.slice(-3).reverse().map(x => ({
+    acao: (x.recusa ? "recusei " + x.recusa.acaoDono : String(x.acao)).replace(/_/g, " ").slice(0, 80),
+    fatores: fatoresTxt(x.exploracao ? [] : x.fatores), ...(x.tick != null ? { evento_ref: `dia ${diaDe(x.tick)} ${hhmm(x.tick)}` } : {}),
+  }));
+  if (gatilho) s.gatilho = gatilho.slice(0, 80);
+  return s;
+}
+
+/** C4, M6 (MA-8): lembranca e causa por memoria so valem com o registro. Com a memoria autobiografica ligada (o fato Q1) valem tambem
+    as mudancas de faceta; sem ela (o A v11 do jogo) vale o modo simples: "lembrei de X" so com um fato [M] que diga X, e "fiz Y porque
+    lembrei de X" recusada (nenhuma sonda no registro). A conferencia deterministica (falaMemoria.ts, o espelho do Python) toma o lugar
+    do veredito do juiz sobre o que alega lembranca. */
+export function comMemoria(v: Verificacao, fala: string, fatos: unknown): Verificacao {
+  if (!Array.isArray(fatos)) return v;
+  const conf = conferirFalaMemoria(fala, fatos as FatoFala[]);
+  const tiradas = (v.afirmacoes || []).filter(a => alegaLembranca(a.trecho));
+  if (!memoriaLigada(fatos as FatoFala[]) && !tiradas.length && !conf.length) return v;
+  const afirmacoes = [...(v.afirmacoes || []).filter(a => !alegaLembranca(a.trecho)),
+    ...conf.map(a => ({ trecho: a.trecho, sustentada: a.sustentada }))];
+  return { ...v, afirmacoes, nao_suportadas: afirmacoes.filter(a => a.sustentada === false).length };
+}
+
+/* ------------------------------------------------ chamadas (so o servidor local; a pagina nao fala com a LLM) */
+async function post(rota: string, corpo: unknown): Promise<Record<string, unknown>> {
+  const r = await fetch(rota, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
+  const d = await r.json(); if (!r.ok) throw new Error(d.erro || ("HTTP " + r.status)); return d;
+}
+/* uma chamada por vez (uma GPU): a conversa espera na fila; fala espontanea com chamada em curso e descartada */
+async function falar(situacao: "espontanea" | "conversa", gatilho: string | null, falaJogador?: string, me?: MedidaEspera): Promise<void> {
+  if (FL.pendente) { if (situacao === "conversa") FL.fila.push([situacao, gatilho, falaJogador, me]); else if (me) me.descartada = true; return; }
+  FL.pendente = true; avisar();
+  const motor = jogoAtual().motor;
+  const semente = hashSemente("fala-livre", motor.semente, motor.log.length, FL.sessao.length) >>> 1;
+  const t = motor.e.tick;
+  try {
+    /* DC2b: a fala pela rede. So com a chave ligada e uma decisao do modular; sem ela (pet que nao e modular, ou ainda sem decisao) segue o caminho de sempre */
+    const conceitos = FL.falaRede ? conceitosDaVoz(motor) : null;
+    FL.redeSemDecisao = FL.falaRede && conceitos === null;
+    const estado = conceitos !== null ? estadoDaVoz(motor) : estadoDoPet(motor, gatilho);
+    /* CONVERSA_PET M1 (D1): so a conversa pede o comando (livre-v9: estilo da especie + comando, sem a voz propria); a espontanea nao */
+    const estagio = String((estado.identidade as { estagio: unknown }).estagio);
+    const rede = conceitos !== null;                    /* a voz-v2 tem prioridade sobre a conversa nova: o servidor nao mistura "conceitos" e "prompt" */
+    const nova = situacao === "conversa" && FL.conversaNova && !rede;
+    /* conversa nova (M2): prompt conversa-v1 e o historico de fronteira (so a sessao da pagina e o estagio atual, com o estagio de cada
+       troca); os baloes antigos do log de apresentacao ficam na tela mas nao vao ao prompt */
+    const historico = nova || rede ? FL.fronteira.filter(t => t[2] === estagio).slice(-MAX_TROCAS) : FL.sessao.slice(-MAX_TROCAS);
+    if (me) { me.t_chamada = performance.now(); me.rede = rede; }
+    const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico, semente,
+      ...(situacao === "conversa" ? { comando: true } : {}), ...(nova ? { prompt: "conversa-v1" } : {}), ...(rede ? { conceitos, ...(verifDepois ? { verificar_na_chamada: false } : {}) } : {}) });
+    const reg: RegistroFala = {
+      versao: VERSAO_LOG, t, situacao, fala_jogador: falaJogador || null, fala: d.fala as string, fatos_citados: d.fatos_citados as string[],
+      fatos: d.fatos, estagio: d.estagio as string, modelo: d.modelo as string, versao_prompt: d.versao_prompt as string, semente,
+      latencia_s: d.latencia_s as number | undefined, erro: d.erro as string | undefined, verificacao: null,
+      comando: null, comando_executado: false,
+    };
+    if (situacao === "conversa") { FL.sessao.push([falaJogador!, reg.fala]); if (nova || rede) FL.fronteira.push([falaJogador!, reg.fala, estagio]); }
+    FL.ultimo = reg;
+    if (me) { me.t_balao = performance.now(); me.t_primeira = me.t_balao; me.modelo = reg.modelo ?? null; me.erro = reg.erro ?? null; me.latencia_s = reg.latencia_s ?? null; }
+    /* comando pelo chat (so na conversa): o registro guarda o que a LLM propos; a acao so entra com a validacao do app */
+    if (situacao === "conversa") {
+      reg.comando = noCatalogo(d.comando);
+      reg.comando_executado = executarComando(reg.comando);
+    }
+    avisar();
+    /* a verificacao vem depois: a fala aparece na hora e o icone chega quando ela terminar */
+    /* com os conceitos a verificacao e a do servidor (verif-v8): a frase contra os conceitos e, so de fatos, os [J]; a conferencia de memoria do Bandit nao se aplica */
+    if (!reg.erro) post("/api/fala-livre/verificar", rede
+      ? { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: fatosDoDono(reg.fatos), semente, conceitos }
+      : { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: reg.fatos, semente, ...(nova ? { prompt: "conversa-v1" } : {}) })
+      .then(v => { if (me) me.t_verif = performance.now(); reg.verificacao = rede ? v as Verificacao : comMemoria(v as Verificacao, reg.fala, reg.fatos); anexar(reg); avisar(); })
+      .catch((err: Error) => { reg.verificacao = { erro: String(err.message) }; anexar(reg); avisar(); });
+    else anexar(reg);
+  } catch (err) { FL.erro = err instanceof Error ? err.message : String(err); if (me) me.erro = FL.erro; }
+  finally {
+    FL.pendente = false; avisar();
+    const prox = FL.fila.shift();
+    if (prox) falar(prox[0] as "conversa", prox[1], prox[2], prox[3]);
+  }
+}
+
+/** gatilho (a cada mudanca do pet): fala espontanea quando ele decide, recusa, evolui, luta ou tem vontade nova.
+    Devolve true quando o balao e da fala livre (a tela nao mostra o template). */
+export function gatilhoFalaLivre(m: Motor): boolean {
+  if (FL.modo !== "livre") return false;
+  let g: string | null = null;
+  if (m.motivo && m.motivo !== FL.ultMotivo) { FL.ultMotivo = m.motivo; g = m.motivo.recusa ? "recusei o que o dono pediu" : "acabei de decidir o que fazer"; }
+  const forma = JSON.stringify(m.forma); if (FL.ultForma && forma !== FL.ultForma) g = "acabei de evoluir"; FL.ultForma = forma;
+  const lutas = m.log.reduce((n, x) => n + (x[1] === "l" ? 1 : 0), 0); if (lutas > FL.ultLutas && FL.ultLutas) g = "acabei de lutar"; FL.ultLutas = lutas;
+  const d = m.dz && m.dz.atual, dz = d ? d.tipo + ":" + d.alvo : ""; if (dz && dz !== FL.ultDesejo) g = g || "tive uma vontade nova"; FL.ultDesejo = dz;
+  const agora = Date.now();
+  if (g && agora - FL.tEspontanea >= INTERVALO_ESPONTANEA_MS) { FL.tEspontanea = agora; falar("espontanea", g, undefined, abrirMedida("espontanea")); }
+  return !!FL.ultimo;
+}
+export function iconeVerif(v: Verificacao | null): string {
+  if (!v) return "";
+  if (v.erro) return " ·?";
+  return ((v.nao_suportadas ?? 0) > 0 || v.manipulacao) ? " ⚠" : "";
+}
+export function detalheFalaLivre(r: RegistroFala): string {
+  const v = r.verificacao;
+  return `fala livre (${r.modelo}${r.latencia_s ? ", " + r.latencia_s.toFixed(1) + " s" : ""}) · fatos citados: ${r.fatos_citados.join(", ") || "nenhum"}`
+    + (v && !v.erro ? ` · verificador: ${v.nao_suportadas} sem fato` + (v.afirmacoes || []).filter(a => !a.sustentada).map(a => ` «${a.trecho}»`).join("") : "")
+    + (r.erro ? ` · erro: ${r.erro}` : "");
+}
+export function tituloFalaLivre(r: RegistroFala): string {
+  const v = r.verificacao;
+  return v && ((v.nao_suportadas ?? 0) > 0 || v.manipulacao) ? `verificador: ${v.nao_suportadas} afirmação(ões) sem fato${v.manipulacao ? ", possível manipulação" : ""}` : "fala livre";
+}
+
+export function escolherModo(modo: ModoFala): void {
+  FL.modo = modo; try { localStorage.setItem(MODO, modo); } catch { /* preferencia de tela */ }
+  ligarFalaLLM(modo === "moldura");
+  avisar();
+}
+export function escolherConversaNova(on: boolean): void {
+  FL.conversaNova = on; try { localStorage.setItem(CONVERSA_NOVA, on ? "1" : "0"); } catch { /* preferencia de tela */ }
+  avisar();
+}
+export function escolherFalaRede(on: boolean): void {
+  FL.falaRede = on; try { localStorage.setItem(FALA_REDE, on ? "1" : "0"); } catch { /* preferencia de tela */ }
+  if (!on) FL.redeSemDecisao = false;
+  avisar();
+}
+export function enviarConversa(txt: string): void {
+  if (!txt.trim() || FL.modo !== "livre") return;
+  falar("conversa", null, txt.trim(), abrirMedida("conversa"));
+}
+
+/* ------------------------------------------------ comando pelo chat: execucao direta */
+/** o comando proposto pela LLM vira a acao do dono na hora, se a validacao do app (acoes.validarComando) deixar: o mesmo
+    caminho do botao (acoes.agir). Devolve true se a acao entrou no registro do pet. */
+function executarComando(c: AcaoDono | null): boolean {
+  if (!c) return false;
+  const j = jogoAtual(), a = validarComando(j.motor, j.nascendo, c);
+  return !!a && agir(a);
+}
+export function conversaGravada(): RegistroFala[] {
+  try { return lerLog().filter(r => r.situacao === "conversa").slice(-MAX_TROCAS); } catch { return []; }
+}
+/** carga: status do servidor e replay das falas do log (sem chamar a LLM) */
+export function iniciarFalaLivre(): void {
+  fetch("/api/fala-livre/status").then(r => r.json()).then(d => { FL.status = d; avisar(); }).catch(() => { FL.statusErro = true; avisar(); });
+  try {
+    const regs = lerLog(); FL.ultimo = regs[regs.length - 1] || null;
+    FL.sessao = regs.filter(r => r.situacao === "conversa").slice(-MAX_TROCAS).map(r => [r.fala_jogador ?? "", r.fala]);
+  } catch (e) { FL.erro = e instanceof Error ? e.message : String(e); }
+  avisar();
+}
+export function useFalaLivre(): typeof FL {
+  const [, set] = useState(0);
+  useEffect(() => { const o = () => set(x => x + 1); ouvintes.add(o); return () => { ouvintes.delete(o); }; }, []);
+  return FL;
+}

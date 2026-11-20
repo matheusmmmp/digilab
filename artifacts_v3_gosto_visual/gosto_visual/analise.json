@@ -1,0 +1,689 @@
+{
+  "conferencia": {
+    "a_run_pode_rodar": true,
+    "fracao_olhou": 0.9442239858906526,
+    "minimo": 0.25,
+    "replicas": 4536
+  },
+  "familiarizacao": {
+    "proprio|agitado": {
+      "com_criterio": 36,
+      "estaveis": 32,
+      "fracao_media_olhando": 0.04807919147879156,
+      "vidas": 36
+    },
+    "proprio|calmo": {
+      "com_criterio": 36,
+      "estaveis": 26,
+      "fracao_media_olhando": 0.050024394379280836,
+      "vidas": 36
+    },
+    "proprio|nenhum": {
+      "com_criterio": 36,
+      "estaveis": 29,
+      "fracao_media_olhando": 0.04301403694524645,
+      "vidas": 36
+    },
+    "total": {
+      "com_criterio": 216,
+      "estaveis": 168,
+      "nao_estabilizou": false
+    },
+    "vazio|agitado": {
+      "com_criterio": 36,
+      "estaveis": 27,
+      "fracao_media_olhando": 0.0557431236708016,
+      "vidas": 36
+    },
+    "vazio|calmo": {
+      "com_criterio": 36,
+      "estaveis": 30,
+      "fracao_media_olhando": 0.06127715930655587,
+      "vidas": 36
+    },
+    "vazio|nenhum": {
+      "com_criterio": 36,
+      "estaveis": 24,
+      "fracao_media_olhando": 0.053030814587892466,
+      "vidas": 36
+    }
+  },
+  "fase": "gosto_visual",
+  "modo": "gosto_visual",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+  "principal": {
+    "celulas": {
+      "proprio|agitado": {
+        "escolha": {
+          "media": 0.5182225034263218,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "pets": 36,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5091313749272525,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.20874669312169314,
+          "n": 36,
+          "sem_variancia": false
+        }
+      },
+      "proprio|calmo": {
+        "escolha": {
+          "media": 0.511201137375028,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "pets": 36,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5067417753621621,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.21106150793650794,
+          "n": 36,
+          "sem_variancia": false
+        }
+      },
+      "proprio|nenhum": {
+        "escolha": {
+          "media": 0.4965872606352483,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "pets": 36,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5015657221007607,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.20510912698412698,
+          "n": 36,
+          "sem_variancia": false
+        }
+      },
+      "vazio|agitado": {
+        "escolha": {
+          "media": 0.5310324422166528,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "pets": 36,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5255736624679817,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.24842923280423282,
+          "n": 36,
+          "sem_variancia": false
+        }
+      },
+      "vazio|calmo": {
+        "escolha": {
+          "media": 0.48325511491146167,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "pets": 36,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.4940358629422588,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.2533068783068783,
+          "n": 36,
+          "sem_variancia": false
+        }
+      },
+      "vazio|nenhum": {
+        "escolha": {
+          "media": 0.5126427179058758,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "pets": 36,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5198569137841799,
+          "n": 36,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.21891534391534392,
+          "n": 36,
+          "sem_variancia": false
+        }
+      }
+    },
+    "divergencia": {
+      "pets": 216,
+      "sinais_opostos": 45,
+      "spearman_escolha_tempo": 0.7503094931299505
+    },
+    "dono": {
+      "proprio|agitado-nenhum|escolha": {
+        "ic95": [
+          -0.026504441932718496,
+          0.06571350762527234
+        ],
+        "indefinidas": 0,
+        "ponto": 0.021635242791073556,
+        "unidades": 36
+      },
+      "proprio|agitado-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.03107153777690414,
+          0.04439754790952946
+        ],
+        "indefinidas": 0,
+        "ponto": 0.007565652826491808,
+        "unidades": 36
+      },
+      "proprio|calmo-agitado|escolha": {
+        "ic95": [
+          -0.044280636231100644,
+          0.027238029714809892
+        ],
+        "indefinidas": 0,
+        "ponto": -0.007021366051293824,
+        "unidades": 36
+      },
+      "proprio|calmo-agitado|tempo_relativo": {
+        "ic95": [
+          -0.026266992984603988,
+          0.023220674850167308
+        ],
+        "indefinidas": 0,
+        "ponto": -0.0023895995650903695,
+        "unidades": 36
+      },
+      "proprio|calmo-nenhum|escolha": {
+        "ic95": [
+          -0.03280641691374406,
+          0.06662346225039724
+        ],
+        "indefinidas": 0,
+        "ponto": 0.014613876739779732,
+        "unidades": 36
+      },
+      "proprio|calmo-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.027678566132283148,
+          0.03916515449141439
+        ],
+        "indefinidas": 0,
+        "ponto": 0.005176053261401439,
+        "unidades": 36
+      },
+      "vazio|agitado-nenhum|escolha": {
+        "ic95": [
+          -0.01779216559918316,
+          0.05846560846560846
+        ],
+        "indefinidas": 0,
+        "ponto": 0.018389724310776935,
+        "unidades": 36
+      },
+      "vazio|agitado-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.02119925335063876,
+          0.034089584405739365
+        ],
+        "indefinidas": 0,
+        "ponto": 0.005716748683801728,
+        "unidades": 36
+      },
+      "vazio|calmo-agitado|escolha": {
+        "ic95": [
+          -0.09735333704631949,
+          0.004467186484730348
+        ],
+        "indefinidas": 0,
+        "ponto": -0.04777732730519108,
+        "unidades": 36
+      },
+      "vazio|calmo-agitado|tempo_relativo": {
+        "ic95": [
+          -0.06613131845612558,
+          0.0057831481954596425
+        ],
+        "indefinidas": 0,
+        "ponto": -0.031537799525722755,
+        "unidades": 36
+      },
+      "vazio|calmo-nenhum|escolha": {
+        "ic95": [
+          -0.08019237909588788,
+          0.018583018002522638
+        ],
+        "indefinidas": 0,
+        "ponto": -0.029387602994414144,
+        "unidades": 36
+      },
+      "vazio|calmo-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.06159918972314545,
+          0.008119633793817242
+        ],
+        "indefinidas": 0,
+        "ponto": -0.02582105084192103,
+        "unidades": 36
+      }
+    },
+    "genoma": {
+      "agitado|escolha": {
+        "ic95": [
+          -0.22767804209130985,
+          0.44803334293356356
+        ],
+        "indefinidas": 0,
+        "ponto": 0.1167409496343281,
+        "unidades": 36
+      },
+      "agitado|tempo_relativo": {
+        "ic95": [
+          -0.0975483870967742,
+          0.5295486874434243
+        ],
+        "indefinidas": 0,
+        "ponto": 0.23077418157060586,
+        "unidades": 36
+      },
+      "calmo|escolha": {
+        "ic95": [
+          -0.2622200236264029,
+          0.42802565076242804
+        ],
+        "indefinidas": 0,
+        "ponto": 0.10273188007973634,
+        "unidades": 36
+      },
+      "calmo|tempo_relativo": {
+        "ic95": [
+          -0.19489229975493358,
+          0.43552861552082334
+        ],
+        "indefinidas": 0,
+        "ponto": 0.1370744580996627,
+        "unidades": 36
+      },
+      "nenhum|escolha": {
+        "ic95": [
+          -0.16800662467048316,
+          0.5224938929808982
+        ],
+        "indefinidas": 0,
+        "ponto": 0.17465051280990598,
+        "unidades": 36
+      },
+      "nenhum|tempo_relativo": {
+        "ic95": [
+          -0.08461439090556776,
+          0.5553260167850226
+        ],
+        "indefinidas": 0,
+        "ponto": 0.24364502270672442,
+        "unidades": 36
+      }
+    },
+    "interacao": {
+      "escolha": {
+        "ic95": [
+          -0.02460187778815231,
+          0.10644680874299037
+        ],
+        "indefinidas": 0,
+        "ponto": 0.04075596125389726,
+        "unidades": 36
+      },
+      "tempo_relativo": {
+        "ic95": [
+          -0.011030596346259863,
+          0.07007632077729194
+        ],
+        "indefinidas": 0,
+        "ponto": 0.029148199960632386,
+        "unidades": 36
+      }
+    },
+    "pets": 216,
+    "repetibilidade": {
+      "proprio|escolha": 0.0,
+      "proprio|tempo_relativo": 0.0,
+      "vazio|escolha": 0.04353524175724548,
+      "vazio|tempo_relativo": 0.031193825490888557
+    },
+    "unidades": 36
+  },
+  "so_estaveis": {
+    "celulas": {
+      "proprio|agitado": {
+        "escolha": {
+          "media": 0.5301729354022311,
+          "n": 32,
+          "sem_variancia": false
+        },
+        "pets": 32,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5132050691339135,
+          "n": 32,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.20210193452380953,
+          "n": 32,
+          "sem_variancia": false
+        }
+      },
+      "proprio|calmo": {
+        "escolha": {
+          "media": 0.5111265153834813,
+          "n": 26,
+          "sem_variancia": false
+        },
+        "pets": 26,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5118733329766427,
+          "n": 26,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.20570054945054944,
+          "n": 26,
+          "sem_variancia": false
+        }
+      },
+      "proprio|nenhum": {
+        "escolha": {
+          "media": 0.5134781680367246,
+          "n": 29,
+          "sem_variancia": false
+        },
+        "pets": 29,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5145224183277226,
+          "n": 29,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.2026888341543514,
+          "n": 29,
+          "sem_variancia": false
+        }
+      },
+      "vazio|agitado": {
+        "escolha": {
+          "media": 0.5259769794857514,
+          "n": 27,
+          "sem_variancia": false
+        },
+        "pets": 27,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.5157543152774287,
+          "n": 27,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.25220458553791886,
+          "n": 27,
+          "sem_variancia": false
+        }
+      },
+      "vazio|calmo": {
+        "escolha": {
+          "media": 0.4849855029731191,
+          "n": 30,
+          "sem_variancia": false
+        },
+        "pets": 30,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.4959110942356741,
+          "n": 30,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.24652777777777776,
+          "n": 30,
+          "sem_variancia": false
+        }
+      },
+      "vazio|nenhum": {
+        "escolha": {
+          "media": 0.5129385964912281,
+          "n": 24,
+          "sem_variancia": false
+        },
+        "pets": 24,
+        "sem_sonda_valida": 0,
+        "tempo_relativo": {
+          "media": 0.511640578380475,
+          "n": 24,
+          "sem_variancia": false
+        },
+        "tempo_total": {
+          "media": 0.20932539682539683,
+          "n": 24,
+          "sem_variancia": false
+        }
+      }
+    },
+    "divergencia": {
+      "pets": 168,
+      "sinais_opostos": 34,
+      "spearman_escolha_tempo": 0.7677214763577939
+    },
+    "dono": {
+      "proprio|agitado-nenhum|escolha": {
+        "ic95": [
+          -0.06785846970367093,
+          0.04741822504980401
+        ],
+        "indefinidas": 0,
+        "ponto": -0.009081822202565227,
+        "unidades": 36
+      },
+      "proprio|agitado-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.06709639984076075,
+          0.028246500498569083
+        ],
+        "indefinidas": 0,
+        "ponto": -0.01777540348409433,
+        "unidades": 36
+      },
+      "proprio|calmo-agitado|escolha": {
+        "ic95": [
+          -0.05382205513784464,
+          0.025635268727373973
+        ],
+        "indefinidas": 0,
+        "ponto": -0.011451757736587475,
+        "unidades": 36
+      },
+      "proprio|calmo-agitado|tempo_relativo": {
+        "ic95": [
+          -0.0268462181523327,
+          0.03726636752455658
+        ],
+        "indefinidas": 0,
+        "ponto": 0.004367365056956691,
+        "unidades": 36
+      },
+      "proprio|calmo-nenhum|escolha": {
+        "ic95": [
+          -0.059609962406015043,
+          0.057902541821682245
+        ],
+        "indefinidas": 0,
+        "ponto": -0.002832009996981252,
+        "unidades": 36
+      },
+      "proprio|calmo-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.04044290937622612,
+          0.05193835410293836
+        ],
+        "indefinidas": 0,
+        "ponto": 0.005308567457935974,
+        "unidades": 36
+      },
+      "vazio|agitado-nenhum|escolha": {
+        "ic95": [
+          -0.0625730994152047,
+          0.04527986633249791
+        ],
+        "indefinidas": 0,
+        "ponto": -0.009006312076487518,
+        "unidades": 36
+      },
+      "vazio|agitado-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.042754830197186074,
+          0.021365709661057403
+        ],
+        "indefinidas": 0,
+        "ponto": -0.012821046222257583,
+        "unidades": 36
+      },
+      "vazio|calmo-agitado|escolha": {
+        "ic95": [
+          -0.1067203166808163,
+          0.048565253713995137
+        ],
+        "indefinidas": 0,
+        "ponto": -0.032886025223486534,
+        "unidades": 36
+      },
+      "vazio|calmo-agitado|tempo_relativo": {
+        "ic95": [
+          -0.06423308020962873,
+          0.03684618667816371
+        ],
+        "indefinidas": 0,
+        "ponto": -0.014180754384078531,
+        "unidades": 36
+      },
+      "vazio|calmo-nenhum|escolha": {
+        "ic95": [
+          -0.10765070571164755,
+          0.03827624617098301
+        ],
+        "indefinidas": 0,
+        "ponto": -0.03263421712175176,
+        "unidades": 36
+      },
+      "vazio|calmo-nenhum|tempo_relativo": {
+        "ic95": [
+          -0.08364116601252411,
+          0.01990479992607021
+        ],
+        "indefinidas": 0,
+        "ponto": -0.031133548917482434,
+        "unidades": 36
+      }
+    },
+    "genoma": {
+      "agitado|escolha": {
+        "ic95": [
+          -0.2683203581348526,
+          0.4729240465190469
+        ],
+        "indefinidas": 0,
+        "ponto": 0.10067078990116837,
+        "unidades": 36
+      },
+      "agitado|tempo_relativo": {
+        "ic95": [
+          -0.12111990261716372,
+          0.5445344129554656
+        ],
+        "indefinidas": 0,
+        "ponto": 0.2320381231671554,
+        "unidades": 36
+      },
+      "calmo|escolha": {
+        "ic95": [
+          -0.30877031417561773,
+          0.5002086751449836
+        ],
+        "indefinidas": 0,
+        "ponto": 0.12292171623049729,
+        "unidades": 36
+      },
+      "calmo|tempo_relativo": {
+        "ic95": [
+          -0.19358114970546414,
+          0.558282208588957
+        ],
+        "indefinidas": 0,
+        "ponto": 0.21507950391280672,
+        "unidades": 36
+      },
+      "nenhum|escolha": {
+        "ic95": [
+          -0.11025413132879287,
+          0.6157671044861979
+        ],
+        "indefinidas": 0,
+        "ponto": 0.267143765097329,
+        "unidades": 36
+      },
+      "nenhum|tempo_relativo": {
+        "ic95": [
+          -0.10517627523840163,
+          0.5978354322885431
+        ],
+        "indefinidas": 0,
+        "ponto": 0.2670279611337152,
+        "unidades": 36
+      }
+    },
+    "interacao": {
+      "escolha": {
+        "ic95": [
+          -0.06616889445836817,
+          0.13240138160527365
+        ],
+        "indefinidas": 0,
+        "ponto": 0.032322510650684,
+        "unidades": 36
+      },
+      "tempo_relativo": {
+        "ic95": [
+          -0.06338924092079302,
+          0.09968448282201414
+        ],
+        "indefinidas": 0,
+        "ponto": 0.021819376276148866,
+        "unidades": 36
+      }
+    },
+    "pets": 168,
+    "repetibilidade": {
+      "proprio|escolha": 0.0,
+      "proprio|tempo_relativo": 0.0,
+      "vazio|escolha": 0.042988642814629136,
+      "vazio|tempo_relativo": 0.031192655022157845
+    },
+    "unidades": 36
+  },
+  "vidas": 216
+}

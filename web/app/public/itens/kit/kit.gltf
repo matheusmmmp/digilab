@@ -1,0 +1,146 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": true,
+   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
+   "tarefas_meshy": {
+    "concept": "01a1b0de-7865-74a7-bff0-5ba9d434962c",
+    "vistas": "01a1b0ef-887d-7466-b8e1-d39d83cc3222",
+    "malha": "01a1b0f0-fe5c-723f-ae91-c479851acbbe"
+   },
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept e a cruz vermelha do concept (a Meshy nao a trouxe) posta sobre a tampa no Blender",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "kit"
+  }
+ ],
+ "materials": [
+  {
+   "name": "kit",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "kit",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "kit_cor",
+   "uri": "kit_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 1406,
+   "max": [
+    0.9434450268745422,
+    0.8816829919815063,
+    0.9407039880752563
+   ],
+   "min": [
+    -0.9455859661102295,
+    -0.8691190481185913,
+    -0.9431290030479431
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 1406,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 1406,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 1551,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 16872,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 16872,
+   "byteOffset": 16872,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 11248,
+   "byteOffset": 33744,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 3102,
+   "byteOffset": 44992,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 48096,
+   "uri": "kit.bin"
+  }
+ ]
+}

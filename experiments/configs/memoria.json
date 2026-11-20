@@ -1,0 +1,5 @@
+{
+  "descricao": "Arena v1 + memoria curta de vida (PROTOCOLO_ARENA_V1_MEMORIA): features de memoria em todos os bracos. Resultado principal: divergencia comportamental (JSD) com x sem memoria.",
+  "protocolo": "arena-v1-memoria",
+  "saida": "artifacts_v1_memoria"
+}

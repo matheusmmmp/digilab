@@ -1,0 +1,28 @@
+{
+ "descricao": "POS HOC (nao estava no PLANO_ANALISE_V3): atencioso - aleatorio na condicao neutra so nos ovos em que os dois bracos sobreviveram; mede quanto do efeito vem das mortes do aleatorio",
+ "fonte": "artifacts_educacao/partidas_neutra.json + pets.json",
+ "atencioso-aleatorio_so_vivos": {
+  "n": 69,
+  "estimativa": 0.058428442028985506,
+  "ic95": [
+   0.011843297101449284,
+   0.10463315217391304
+  ],
+  "p_bootstrap": 0.0154,
+  "t": 2.4080886019779686,
+  "p_t_normal": 0.01603628862915385,
+  "leitura": "SUSTENTADA"
+ },
+ "atencioso-permissivo_so_vivos": {
+  "n": 80,
+  "estimativa": 0.0768984375,
+  "ic95": [
+   0.036039062499999996,
+   0.117171875
+  ],
+  "p_bootstrap": 0.0002,
+  "t": 3.7093026160096016,
+  "p_t_normal": 0.00020783090708520469,
+  "leitura": "SUSTENTADA"
+ }
+}

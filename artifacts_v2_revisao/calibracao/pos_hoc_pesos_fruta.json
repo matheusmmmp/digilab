@@ -1,0 +1,1828 @@
+{
+  "descricao": "POS HOC (fora do plano): pesos da sub-decisao da fruta no fim da vida, por efeito da fruta no mundo; base, P1 e P3",
+  "nota": "peso prior 1024 (S); piso no coeficiente 64/1024 com o aprendizado ligado; efeito vigente pela condicao do mundo",
+  "resumo_por_tipo": {
+    "casado_frutas/P1/boa": {
+      "media": 1602.95,
+      "n": 20,
+      "zero": 0
+    },
+    "casado_frutas/P1/neutra": {
+      "media": 951.95,
+      "n": 20,
+      "zero": 0
+    },
+    "casado_frutas/P1/ruim": {
+      "media": 66.65,
+      "n": 20,
+      "zero": 14
+    },
+    "casado_frutas/P3/boa": {
+      "media": 1024.0,
+      "n": 20,
+      "zero": 0
+    },
+    "casado_frutas/P3/neutra": {
+      "media": 1024.0,
+      "n": 20,
+      "zero": 0
+    },
+    "casado_frutas/P3/ruim": {
+      "media": 1024.0,
+      "n": 20,
+      "zero": 0
+    },
+    "descasado/P1/boa": {
+      "media": 1701.3,
+      "n": 20,
+      "zero": 0
+    },
+    "descasado/P1/neutra": {
+      "media": 986.95,
+      "n": 20,
+      "zero": 0
+    },
+    "descasado/P1/ruim": {
+      "media": 89.5,
+      "n": 20,
+      "zero": 17
+    },
+    "descasado/P3/boa": {
+      "media": 1024.0,
+      "n": 20,
+      "zero": 0
+    },
+    "descasado/P3/neutra": {
+      "media": 1024.0,
+      "n": 20,
+      "zero": 0
+    },
+    "descasado/P3/ruim": {
+      "media": 1024.0,
+      "n": 20,
+      "zero": 0
+    }
+  },
+  "vidas": [
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1464,
+        "b": 1113,
+        "c": 0
+      },
+      "vida": "atencioso-P1~casado_frutas~g13119098170631307097@17094400725468603986"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 316,
+        "b": 1969,
+        "c": 0
+      },
+      "vida": "atencioso-P1~casado_frutas~g1355520232125250106@10092145758441615557"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 1540,
+        "c": 1145
+      },
+      "vida": "atencioso-P1~casado_frutas~g14905537096993048078@6835273112204919870"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1271,
+        "b": 1224,
+        "c": 466
+      },
+      "vida": "atencioso-P1~casado_frutas~g1566487438950836314@12784769750385033778"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1537,
+        "b": 1047,
+        "c": 90
+      },
+      "vida": "atencioso-P1~casado_frutas~g15979190552080503034@8285407641767362342"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1119,
+        "b": 0,
+        "c": 1573
+      },
+      "vida": "atencioso-P1~casado_frutas~g1652579558203733367@5091298817088003800"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1519,
+        "b": 1062,
+        "c": 0
+      },
+      "vida": "atencioso-P1~casado_frutas~g17801502557854555836@13365706655353094944"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1013,
+        "b": 0,
+        "c": 1633
+      },
+      "vida": "atencioso-P1~casado_frutas~g17809963515490922768@15770802635462241588"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1266,
+        "b": 1407,
+        "c": 214
+      },
+      "vida": "atencioso-P1~casado_frutas~g2325706094192072750@2294660051889987806"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1014,
+        "b": 86,
+        "c": 1510
+      },
+      "vida": "atencioso-P1~casado_frutas~g2426634507416391601@4125696142797700722"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 1928,
+        "c": 448
+      },
+      "vida": "atencioso-P1~casado_frutas~g2819519457059648054@5130775373699103146"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 79,
+        "b": 1131,
+        "c": 1536
+      },
+      "vida": "atencioso-P1~casado_frutas~g3309071082219540346@8664010821587252507"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1650,
+        "b": 1033,
+        "c": 0
+      },
+      "vida": "atencioso-P1~casado_frutas~g4821687023712589383@6991632696949614863"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 1779,
+        "c": 703
+      },
+      "vida": "atencioso-P1~casado_frutas~g5560323139134196639@16242105500752386716"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 398,
+        "b": 870,
+        "c": 1610
+      },
+      "vida": "atencioso-P1~casado_frutas~g56899406647008687@11865926914768434412"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 1003,
+        "c": 1643
+      },
+      "vida": "atencioso-P1~casado_frutas~g6053435223152340962@13073608422279423298"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 567,
+        "b": 0,
+        "c": 1866
+      },
+      "vida": "atencioso-P1~casado_frutas~g6726397720053829469@15841289645157844265"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1205,
+        "b": 1458,
+        "c": 0
+      },
+      "vida": "atencioso-P1~casado_frutas~g7312521963003654172@8726901493421201710"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1063,
+        "b": 1512,
+        "c": 0
+      },
+      "vida": "atencioso-P1~casado_frutas~g7564538699466368927@16395152859354662801"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 556,
+        "c": 1795
+      },
+      "vida": "atencioso-P1~casado_frutas~g9195206488085061631@13423165154397403924"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 642,
+        "b": 50,
+        "c": 1748
+      },
+      "vida": "atencioso-P1~descasado~g13119098170631307097@17094400725468603986"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 675,
+        "b": 0,
+        "c": 1984
+      },
+      "vida": "atencioso-P1~descasado~g1355520232125250106@10092145758441615557"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1732,
+        "b": 0,
+        "c": 1204
+      },
+      "vida": "atencioso-P1~descasado~g14905537096993048078@6835273112204919870"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 290,
+        "b": 874,
+        "c": 1685
+      },
+      "vida": "atencioso-P1~descasado~g1566487438950836314@12784769750385033778"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 509,
+        "c": 2042
+      },
+      "vida": "atencioso-P1~descasado~g15979190552080503034@8285407641767362342"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 826,
+        "b": 1837,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g1652579558203733367@5091298817088003800"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 869,
+        "c": 1828
+      },
+      "vida": "atencioso-P1~descasado~g17801502557854555836@13365706655353094944"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1530,
+        "b": 1211,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g17809963515490922768@15770802635462241588"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 915,
+        "c": 1957
+      },
+      "vida": "atencioso-P1~descasado~g2325706094192072750@2294660051889987806"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 648,
+        "b": 1970,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g2426634507416391601@4125696142797700722"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1807,
+        "b": 0,
+        "c": 777
+      },
+      "vida": "atencioso-P1~descasado~g2819519457059648054@5130775373699103146"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 2031,
+        "b": 1282,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g3309071082219540346@8664010821587252507"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 0,
+        "b": 1252,
+        "c": 1572
+      },
+      "vida": "atencioso-P1~descasado~g4821687023712589383@6991632696949614863"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1189,
+        "b": 0,
+        "c": 1551
+      },
+      "vida": "atencioso-P1~descasado~g5560323139134196639@16242105500752386716"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1630,
+        "b": 1354,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g56899406647008687@11865926914768434412"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1434,
+        "b": 1415,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g6053435223152340962@13073608422279423298"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 251,
+        "b": 2048,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g6726397720053829469@15841289645157844265"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1293,
+        "b": 0,
+        "c": 1417
+      },
+      "vida": "atencioso-P1~descasado~g7312521963003654172@8726901493421201710"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1581,
+        "b": 858,
+        "c": 1218
+      },
+      "vida": "atencioso-P1~descasado~g7564538699466368927@16395152859354662801"
+    },
+    {
+      "braco": "P1",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1686,
+        "b": 883,
+        "c": 0
+      },
+      "vida": "atencioso-P1~descasado~g9195206488085061631@13423165154397403924"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g13119098170631307097@17094400725468603986"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g1355520232125250106@10092145758441615557"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g14905537096993048078@6835273112204919870"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g1566487438950836314@12784769750385033778"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g15979190552080503034@8285407641767362342"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g1652579558203733367@5091298817088003800"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g17801502557854555836@13365706655353094944"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g17809963515490922768@15770802635462241588"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g2325706094192072750@2294660051889987806"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g2426634507416391601@4125696142797700722"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g2819519457059648054@5130775373699103146"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g3309071082219540346@8664010821587252507"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g4821687023712589383@6991632696949614863"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g5560323139134196639@16242105500752386716"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g56899406647008687@11865926914768434412"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g6053435223152340962@13073608422279423298"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g6726397720053829469@15841289645157844265"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g7312521963003654172@8726901493421201710"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g7564538699466368927@16395152859354662801"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "casado_frutas",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~casado_frutas~g9195206488085061631@13423165154397403924"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g13119098170631307097@17094400725468603986"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g1355520232125250106@10092145758441615557"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g14905537096993048078@6835273112204919870"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g1566487438950836314@12784769750385033778"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g15979190552080503034@8285407641767362342"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g1652579558203733367@5091298817088003800"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g17801502557854555836@13365706655353094944"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g17809963515490922768@15770802635462241588"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g2325706094192072750@2294660051889987806"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g2426634507416391601@4125696142797700722"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g2819519457059648054@5130775373699103146"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g3309071082219540346@8664010821587252507"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g4821687023712589383@6991632696949614863"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.1,
+          "c": 0.0
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": -0.1,
+          "c": 0.0
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g5560323139134196639@16242105500752386716"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g56899406647008687@11865926914768434412"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g6053435223152340962@13073608422279423298"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g6726397720053829469@15841289645157844265"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g7312521963003654172@8726901493421201710"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": 0.0,
+          "b": 0.1,
+          "c": -0.1
+        },
+        "descasado": {
+          "a": 0.0,
+          "b": -0.1,
+          "c": 0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g7564538699466368927@16395152859354662801"
+    },
+    {
+      "braco": "P3",
+      "efeito": {
+        "casado": {
+          "a": -0.1,
+          "b": 0.0,
+          "c": 0.1
+        },
+        "descasado": {
+          "a": 0.1,
+          "b": 0.0,
+          "c": -0.1
+        }
+      },
+      "mundo": "descasado",
+      "pesos_fruta": {
+        "a": 1024,
+        "b": 1024,
+        "c": 1024
+      },
+      "vida": "atencioso-P3~descasado~g9195206488085061631@13423165154397403924"
+    }
+  ]
+}

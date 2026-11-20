@@ -1,0 +1,439 @@
+{
+ "acoes": {
+  "brincar": 55,
+  "chamar_atencao": 223,
+  "comer": 96,
+  "dormir": 583,
+  "emburrar": 6,
+  "explorar": 363,
+  "ocioso": 18
+ },
+ "cadeia": {
+  "elegiveis": 105,
+  "fechadas": 19,
+  "refeicoes_por_dia": 5.071428571428571,
+  "sem_decisao": 0,
+  "taxa": 0.18095238095238095
+ },
+ "cadeia_w": {
+  "elegiveis": 105,
+  "fechadas": 24,
+  "refeicoes_por_dia": 5.071428571428571,
+  "sem_decisao": 0,
+  "taxa": 0.22857142857142856
+ },
+ "cheiro": {
+  "achou": 6,
+  "busca_entregue_sozinha": 2,
+  "compostas": 4,
+  "compostas_com_refeicao": 3,
+  "decisoes_comer_cheiro": 12,
+  "decisoes_dormir": 35,
+  "decisoes_explorar_cheiro": 6,
+  "decisoes_nos_episodios": 98,
+  "episodios": 13,
+  "fins_busca": {
+   "achou": 6,
+   "sumiu": 1,
+   "trocou": 2
+  }
+ },
+ "com_cadeia": false,
+ "corpo": {
+  "dias_8_14": {
+   "fracao_fora": 0.0,
+   "menor_media": 0.4489949303350968,
+   "menor_minimo": 0.21705555555555556,
+   "n_ticks": 10080
+  },
+  "vida": {
+   "fracao_fora": 0.0,
+   "menor_media": 0.43633483829365055,
+   "menor_minimo": 0.16283333333333333,
+   "n_ticks": 20160
+  }
+ },
+ "d_fe": 0.37396329365079345,
+ "d_fe_vida": 0.37610348462301607,
+ "entropia_dia": 1.9416442326133077,
+ "episodios": {
+  "codificados": 74,
+  "no_fim": 16,
+  "sairam": 58,
+  "sairam_r_pos": 55
+ },
+ "episodios_fome": {
+  "com_cadeia": true,
+  "episodios": [
+   [
+    25,
+    462,
+    16,
+    35,
+    "fechou"
+   ],
+   [
+    156,
+    212,
+    12,
+    163,
+    "fechou"
+   ],
+   [
+    275,
+    162,
+    11,
+    286,
+    "janela_vencida"
+   ],
+   [
+    412,
+    121,
+    10,
+    415,
+    "fechou"
+   ],
+   [
+    492,
+    149,
+    11,
+    498,
+    "fechou"
+   ],
+   [
+    606,
+    183,
+    11,
+    617,
+    "janela_vencida"
+   ],
+   [
+    740,
+    349,
+    14,
+    752,
+    "fechou"
+   ],
+   [
+    878,
+    100,
+    10,
+    881,
+    "fechou"
+   ],
+   [
+    937,
+    135,
+    10,
+    941,
+    "fechou"
+   ],
+   [
+    1012,
+    106,
+    10,
+    1017,
+    "fechou"
+   ],
+   [
+    1122,
+    115,
+    10,
+    1127,
+    "fechou"
+   ],
+   [
+    1204,
+    43,
+    9,
+    1205,
+    "fechou"
+   ],
+   [
+    1279,
+    126,
+    10,
+    1286,
+    "fechou"
+   ]
+  ],
+  "fechados": 11,
+  "fora_de_episodio": 60,
+  "latencia_media": 5.7272727272727275,
+  "latencias": [
+   10,
+   7,
+   3,
+   6,
+   12,
+   3,
+   4,
+   5,
+   5,
+   1,
+   7
+  ],
+  "latencias_depois_da_janela": [
+   15,
+   14
+  ],
+  "motivos": {
+   "fechou": 11,
+   "janela_vencida": 2,
+   "saciado_por_outra_comida": 0,
+   "vida_acabou": 0
+  },
+  "n": 13,
+  "no_episodio_sem_fechar": 0,
+  "oferta_mudou": 0,
+  "por_d0": {
+   "alem_do_corte": {
+    "fechados": 1,
+    "n": 1
+   },
+   "ate_corte": {
+    "fechados": 10,
+    "n": 12
+   }
+  },
+  "taxa": 0.8461538461538461
+ },
+ "exaustao": 0.013392857142857142,
+ "exploracao": 0.2700892857142857,
+ "falta_ao_comer": 0.2791666666666667,
+ "fins": {
+  "achou": 6,
+  "meta": 75,
+  "sumiu": 1,
+  "trocou": 13
+ },
+ "fins_conferidos": {
+  "achou": 6,
+  "desistiu": 0,
+  "meta": 75,
+  "sumiu": 1,
+  "trocou": 13
+ },
+ "g_apr_media": 1024.0,
+ "influencia": {
+  "afeto": 0.046130952380952384,
+  "aprendido": 0.3229166666666667,
+  "habito": 0.24107142857142858,
+  "incentivo": 0.01636904761904762,
+  "memoria": 0.12946428571428573,
+  "persistencia": 0.005952380952380952
+ },
+ "influencia_por_dia": {
+  "afeto": [
+   0.041666666666666664,
+   0.0,
+   0.020833333333333332,
+   0.03125,
+   0.0,
+   0.020833333333333332,
+   0.041666666666666664,
+   0.052083333333333336,
+   0.020833333333333332,
+   0.03125,
+   0.03125,
+   0.041666666666666664,
+   0.03125,
+   0.11458333333333333
+  ],
+  "aprendido": [
+   0.07291666666666667,
+   0.125,
+   0.11458333333333333,
+   0.1875,
+   0.16666666666666666,
+   0.14583333333333334,
+   0.2708333333333333,
+   0.3229166666666667,
+   0.3645833333333333,
+   0.25,
+   0.3020833333333333,
+   0.2708333333333333,
+   0.3333333333333333,
+   0.4166666666666667
+  ],
+  "habito": [
+   0.0,
+   0.010416666666666666,
+   0.03125,
+   0.13541666666666666,
+   0.08333333333333333,
+   0.07291666666666667,
+   0.15625,
+   0.16666666666666666,
+   0.2708333333333333,
+   0.20833333333333334,
+   0.2604166666666667,
+   0.22916666666666666,
+   0.1875,
+   0.3645833333333333
+  ],
+  "incentivo": [
+   0.041666666666666664,
+   0.03125,
+   0.020833333333333332,
+   0.052083333333333336,
+   0.020833333333333332,
+   0.052083333333333336,
+   0.020833333333333332,
+   0.03125,
+   0.03125,
+   0.020833333333333332,
+   0.0,
+   0.010416666666666666,
+   0.0,
+   0.020833333333333332
+  ],
+  "memoria": [
+   0.03125,
+   0.07291666666666667,
+   0.125,
+   0.11458333333333333,
+   0.09375,
+   0.11458333333333333,
+   0.17708333333333334,
+   0.15625,
+   0.14583333333333334,
+   0.125,
+   0.11458333333333333,
+   0.07291666666666667,
+   0.14583333333333334,
+   0.14583333333333334
+  ],
+  "persistencia": [
+   0.020833333333333332,
+   0.020833333333333332,
+   0.0,
+   0.010416666666666666,
+   0.0,
+   0.0,
+   0.0,
+   0.020833333333333332,
+   0.0,
+   0.0,
+   0.010416666666666666,
+   0.010416666666666666,
+   0.0,
+   0.0
+  ]
+ },
+ "influencia_vida": {
+  "afeto": 0.03422619047619048,
+  "aprendido": 0.23883928571428573,
+  "habito": 0.15550595238095238,
+  "incentivo": 0.025297619047619048,
+  "memoria": 0.11681547619047619,
+  "persistencia": 0.006696428571428571
+ },
+ "intencoes_com_meta": 0.8863636363636364,
+ "latencia_media": 43.421052631578945,
+ "memoria": {
+  "com_lembranca": 0.8973214285714286,
+  "decidiu": {
+   "lembranca": 0.1130952380952381,
+   "memoria": 0.12946428571428573
+  },
+  "decidiu_vida": {
+   "lembranca": 0.10044642857142858,
+   "memoria": 0.11681547619047619
+  },
+  "decisoes": 1344,
+  "episodios": {
+   "codificados": 169,
+   "consolidacoes": 13,
+   "esquecidos": 1,
+   "guardados": {
+    "central": 2,
+    "duradoura": 32,
+    "recente": 16
+   },
+   "negativos_guardados": 0,
+   "sairam_da_recente": 64
+  },
+  "facetas": null,
+  "fala": {
+   "alegacoes": {
+    "causa_falsa": {
+     "n": 1071,
+     "sustentadas": 0
+    },
+    "causa_verdadeira": {
+     "n": 135,
+     "sustentadas": 135
+    },
+    "faceta_falsa": {
+     "n": 0,
+     "sustentadas": 0
+    },
+    "faceta_verdadeira": {
+     "n": 0,
+     "sustentadas": 0
+    },
+    "falsa": {
+     "n": 1295,
+     "sustentadas": 0
+    },
+    "verdadeira": {
+     "n": 1206,
+     "sustentadas": 1206
+    }
+   }
+  },
+  "lembrou_negativo": 0
+ },
+ "nada_a_fazer": 1,
+ "pesos_no_teto": 0.0,
+ "privacao": 0.0,
+ "racao_na_janela": {
+  "d_min_media_celulas": 5.9714285714285715,
+  "elegiveis": 105,
+  "entraram_na_visao": 32,
+  "visiveis_em_k0": 24
+ },
+ "reflexos": 34,
+ "repeticao": {
+  "indice": -0.1781186612576065,
+  "n_nao_pos": 464,
+  "n_pos": 204,
+  "p_nao_pos": 0.39870689655172414,
+  "p_pos": 0.22058823529411764
+ },
+ "repeticao_r_possivel": {
+  "por_acao": {
+   "aliviar": {
+    "indice": null,
+    "n_nao_pos": 0,
+    "n_pos": 0
+   },
+   "brincar": {
+    "indice": null,
+    "n_nao_pos": 0,
+    "n_pos": 43
+   },
+   "comer": {
+    "indice": -0.25641025641025644,
+    "n_nao_pos": 13,
+    "n_pos": 39
+   },
+   "explorar": {
+    "indice": 0.01921989824759751,
+    "n_nao_pos": 29,
+    "n_pos": 122
+   }
+  },
+  "total": {
+   "indice": -0.0889355742296919,
+   "n_nao_pos": 42,
+   "n_pos": 204
+  }
+ },
+ "taxa_p1": 36.80555555555556,
+ "taxa_p2": 1.0631104432757326,
+ "visitas_lugar_lembrado": 3,
+ "visitas_vazias": 3,
+ "visitas_vazias_v1": 3
+}

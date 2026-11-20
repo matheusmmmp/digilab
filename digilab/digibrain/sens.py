@@ -1,0 +1,446 @@
+"""M-SENS, a codificacao sensorial (docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2.1 e 4.2).
+
+Le so a Observacao (a G-RECEPTOR: nenhum arquivo do pacote importa o digilab/corpo.py):
+  - `obs.corpo` (a PercepcaoCorpo): a interocepcao, a falta de cada receptor do prototipo (RECEPTORES_DIGIBRAIN), pelas funcoes do A
+    (`falta_receptor`, `leitura_receptor`). Os orgaos (o Olfato e a Audicao), o paladar e o banheiro ficam fora do prototipo (secao 6): um
+    desses receptores presente falha alto;
+  - `obs.mundo` (a PercepcaoMundo): a posicao, a regiao, os `vistos` e se ha cheiro (so `direcao_cheiro != 0`: a direcao fica no motor,
+    o G-SEM-DIRECAO);
+  - do `vetor_estado`, so a hora e o dormindo; o `ticks_desde_cuidado`.
+
+As saidas, por decisao:
+  - a falta de cada receptor presente, em [0, S];
+  - o contexto: a noite e o dormindo (S ou 0) e o tempo sem cuidado, `min(S, div_arred(ticks x S, escala))` (o corte do A);
+  - as linhas de objeto, uma por item dos `vistos` (no maximo `max_vistos`, na ordem deles): a classe (racao, a, b, c, podre, bola), a
+    proximidade `prox = clamp(S - div_arred(d x S, R), 0, S)`, com R o raio da visao em subunidades, e a novidade `nov = S - hab[classe]`;
+  - as conjuncoes: a comida a vista (a maior proximidade entre as comidas boas), sem comida (`S - comida a vista`) e a bola a vista.
+
+O estado e a habituacao por classe (PE-11, um integrador por classe): `hab[c] <- hab[c] + mul(k_hab, visto_c x S - hab[c])`. A novidade
+da decisao sai da habituacao de antes dela (a primeira vez que se ve uma classe, nov = S), e so depois a habituacao anda. Sem rng.
+
+**A tela** (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 5 e 6; so com a subchave `olhar`, `Sens(olhar=ConfigOlhar,
+genoma=GenomaVisao)`). Desligada, um receptor da tela presente falha alto, como hoje; ligada, a porta se abre so para eles:
+  - os receptores da tela (`tela_<canal>`, o nivel em [0, S], e `novidade_tela`) sao lidos a parte, em `tela_niveis` e `tela_novidade`,
+    e ficam fora dos `receptores` (a falta, a urgencia, o r e o P1 sao os dos onze de hoje);
+  - as linhas da classe `tela`, uma por TV a vista, chegam do motor pelo gancho `ver_tela` do M-ADAPT (id, dx, dy, d), em `telas`, com a
+    proximidade e a novidade da linha de objeto (`nov = S - hab[tela]`, a habituacao da classe `tela`); ficam fora de `objetos` (as
+    unidades de comer, de brincar e da memoria nao as veem);
+  - o gosto: o agrado do nivel visto e o pico em inteiros sobre a distancia ao alvo, por canal k,
+        pico(x, l) = max(0, S - div_arred(|x| x S, l)),  A = div_arred(sum_k pico(n_k - alvo_k, l_k), 7)        em [0, S],
+    com o alvo = o otimo do genoma (na escala S) + o deslocamento aprendido, e `agrado_inato` o mesmo contra o otimo so;
+  - a exposicao (Zajonc 1968, `10.1037/h0025848`; espec, 5.3): o estado novo, o deslocamento do alvo por canal, so quando o pet olhou
+    (`expor`): `desloc_k <- clamp(desloc_k + mul(k_expo, n_k - (o_k + desloc_k)), -teto, teto)`, com k_expo da `tau_exposicao`.
+
+**O enjoo** (D-GV-ENJOO-CER; so com a subchave `olhar` e a `ConfigEnjooTela` ligada, `Sens(..., enjoo=ConfigEnjooTela)`): o receptor
+`enjoo_tela` do corpo (o enjoo do estimulo de agora, em [0, S]) fica a parte, em `tela_enjoo`, e e exigido (falha alto sem ele). Desligado, o
+receptor, se o corpo o manda, fica fora dos `receptores` e ninguem o le (como o `novidade_tela`). Com ele:
+  - o agrado efetivo cai com a familiaridade: `agrado_efetivo(niveis, e) = max(0, A - mul(peso_tedio, div_arred(max(0, e - sat) S, S - sat)))`,
+    com sat a `saturacao_exposicao` (o tedio, o lado de cima do U invertido);
+  - a exposicao satura: o passo de cada canal e multiplicado por `max(0, S - div_arred(e S, sat))` (na escala S): anda so enquanto a
+    imagem e nova (o lado de baixo do U).
+
+**O orgao da visao** (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md, secoes 7 e 8; so com o olhar e a ConfigOrgao ligada,
+`ligar_orgao`). Os conceitos que o pet ve na TV que olha chegam do motor pelo gancho `ver_conceitos` do M-ADAPT (os pares da lista
+`ov-lista-1`, digilab/orgao.py), como as linhas da tela, e nao por um receptor do corpo (D-OV2-1): a percepcao nao tem dinamica no corpo.
+  - o nivel visto `a_c = div_arred(n x S, 15)`, em `conceitos`, e a novidade `nov_c = S - hab_c`, em `nov_conceito`, lida antes de a
+    habituacao andar;
+  - a habituacao por conceito (PE-11 por conceito, OV1-8), com duas velocidades: `hab_c <- integrar(hab_c, a_c, k)`, com k da
+    `tau_hab_subida` quando o alvo sobe e da `tau_hab_volta` quando cai (o conceito apagado tem alvo 0);
+  - o gosto por conceito (OV1-9), todo aprendido, em [-teto, teto]: so quando o pet olhou, a exposicao `mul(k_expo, mul(a_c, nov_c))` e a
+    consequencia `mul(k_consequencia, mul(a_c, r_n))` (`expor_conceitos`);
+  - o termo no agrado, `termo_conceitos(conceitos) = sum_c div_arred(a_c x g_c x nov_c, S x S)` (o M-ADAPT o soma ao agrado da retina)."""
+from __future__ import annotations
+
+from dataclasses import fields
+
+from ..config import (CANAIS_TELA, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, Config, ConfigDigibrainInatos,
+                      ConfigEnjooTela, ConfigMundo, ConfigOlhar)
+from .. import orgao as _orgao
+from ..genoma_visao import GenomaVisao
+from .base import div_arred, falta_receptor, leitura_receptor
+from . import dever as _dever
+from ._comum import clamp, ganho_de_tau, integrar, mul
+
+CLASSES_OBJETO = ("racao", "a", "b", "c", "podre", "bola")
+COMIDAS_BOAS = ("racao", "a", "b", "c")
+CLASSE_TELA = "tela"                                   # a classe da TV (so com a subchave `olhar`)
+RECEPTORES_TELA = tuple(f"tela_{c}" for c in CANAIS_TELA) + ("novidade_tela",)
+RECEPTORES_OLFATO_COMIDA = ("olfato_comida_esq", "olfato_comida_dir")   # as duas narinas do Olfato da comida (o PV-2, DP-13)
+RECEPTOR_ENJOO_TELA = "enjoo_tela"                     # o enjoo (D-GV-ENJOO-CER): o mesmo nome do corpo.RECEPTOR_ENJOO_TELA (conferido por teste)
+
+
+def pico(x: int, largura: int, S: int) -> int:
+    """o pico em inteiros sobre a distancia x ao alvo: S em x = 0, 0 a partir de |x| = largura (a forma do agrado, GV-7)"""
+    if type(largura) is not int or largura <= 0:
+        raise ValueError(f"M-SENS: largura do pico {largura!r}")
+    return max(0, S - div_arred(abs(x) * S, largura))
+
+
+def leitura_do_orgao(intensidade: int, co, S: int) -> int:
+    """a leitura de uma narina sem adaptacao a uma intensidade (a conta do orgao, `corpo.leitura_orgao` com a = 0; o M-SENS nao importa o
+    corpo, a G-RECEPTOR, e um teste confere as duas): e = max(0, I - limiar), r = div_arred(S e, e + K)"""
+    e = max(0, intensidade - co.limiar)
+    return div_arred(S * e, e + co.meia_saturacao) if e else 0
+
+
+def classe_do_tipo(tipo: str) -> str:
+    """a classe do item dos `vistos`: o tipo maduro, `podre` (qualquer `_podre`) ou `bola`"""
+    if tipo.endswith("_podre"):
+        return "podre"
+    if tipo not in CLASSES_OBJETO:
+        raise ValueError(f"M-SENS: tipo de objeto desconhecido {tipo!r}")
+    return tipo
+
+
+class Sens:
+    """o M-SENS (docstring do modulo)"""
+
+    def __init__(self, cfg: Config, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None,
+                 olhar: ConfigOlhar | None = None, genoma: GenomaVisao | None = None, enjoo: ConfigEnjooTela | None = None) -> None:
+        self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.S = self.p.escala
+        self.cfg = cfg
+        self.raio = cfg_mundo.raio_visao_celulas * cfg_mundo.sub
+        self.max_vistos = cfg_mundo.max_vistos
+        self.k_hab = ganho_de_tau(self.p.tau_hab, cfg.intervalo_decisao_ticks, self.S)
+        self.hab = {c: 0 for c in CLASSES_OBJETO}
+        self.social: dict | None = None               # a CO6: a reputacao e o peso dos deveres da ultima decisao que os trouxe (senao None)
+        self.dever = None                             # a CO7 (`ligar_dever`): a ConfigCooperacao; None desligada
+        self.receptores: tuple | None = None          # os receptores presentes, fixados na primeira decisao
+        self.olhar = olhar                            # a tela (P1d): so com a subchave `olhar`; None desligada
+        self.enjoo: ConfigEnjooTela | None = None     # o enjoo (D-GV-ENJOO-CER): so com o olhar e a ConfigEnjooTela ligada
+        if enjoo is not None:
+            if not isinstance(enjoo, ConfigEnjooTela):
+                raise TypeError(f"M-SENS: o enjoo pede a ConfigEnjooTela: {enjoo!r}")
+            if enjoo.ligada:
+                if olhar is None:
+                    raise ValueError("M-SENS: o enjoo (ConfigEnjooTela ligada) so com a subchave olhar")
+                self.enjoo = enjoo
+        if (olhar is None) != (genoma is None):
+            raise ValueError("M-SENS: a ConfigOlhar e o GenomaVisao vem juntos (so com a subchave `olhar`)")
+        if olhar is not None:
+            if not isinstance(olhar, ConfigOlhar) or not isinstance(genoma, GenomaVisao):
+                raise TypeError(f"M-SENS: a tela pede a ConfigOlhar e o GenomaVisao: {olhar!r}, {genoma!r}")
+            self.hab[CLASSE_TELA] = 0
+            self.otimo, self.largura = genoma.na_escala(self.S, olhar.escala)
+            self.desloc = {c: 0 for c in CANAIS_TELA}
+            self.k_expo = ganho_de_tau(olhar.tau_exposicao, cfg.intervalo_decisao_ticks, self.S)
+            self.exposicoes = 0
+            self.tela_presente: bool | None = None    # se os receptores da tela estao no corpo, fixado na primeira decisao
+        self.ir_ate_tv = False                        # a TV no jogo (D-GV-TVJOGO-3): as linhas da TV fora do raio, so com `ligar_ir_ate_tv`
+        self.orgao = None                             # o orgao da visao (OV2): a ConfigOrgao, so com `ligar_orgao`; None desligado
+        self.olfato: dict | None = None               # o PV-2 (so com `ligar_olfato`): o limiar do cheiro forte; None desligado
+        self.c_ant: int | None = None                 # o PV-2: o nivel do cheiro da decisao anterior (None na primeira)
+
+    def ligar_olfato(self, limiar_forte: int) -> None:
+        """o PV-2 (docstring do modulo): as duas narinas do Olfato da comida ficam a parte, fora dos `receptores` (como a tela), e o M-SENS
+        le o nivel e a variacao. `limiar_forte` e o do cheiro forte do explorar, na escala do receptor (o mesmo do motor, `olfato_forte`)"""
+        if self.olfato is not None:
+            raise RuntimeError("M-SENS: ligar_olfato duas vezes")
+        if type(limiar_forte) is not int or limiar_forte < 0:
+            raise ValueError(f"M-SENS: limiar do cheiro forte {limiar_forte!r}")
+        self.olfato = {"limiar_forte": limiar_forte}
+
+    def _ler_olfato(self, pc) -> dict:
+        """o nivel (a media das duas narinas, PV2-3: nunca a diferenca), a variacao desde a decisao anterior e o cheiro forte do explorar
+        (a maior narina acima do limiar, a regra do motor). O estado anda aqui, uma vez por decisao"""
+        S = self.S
+        esq, dir_ = (getattr(pc, r) for r in RECEPTORES_OLFATO_COMIDA)
+        if any(type(v) is not int or not 0 <= v <= S for v in (esq, dir_)):
+            raise ValueError(f"M-SENS: leitura das narinas fora de [0, S]: {esq!r}, {dir_!r}")
+        maximo = max(esq, dir_)
+        c = div_arred(esq + dir_, 2)
+        dc = 0 if self.c_ant is None else clamp(c - self.c_ant, -S, S)
+        self.c_ant = c
+        return {"c": c, "dC": dc, "ha": maximo > 0, "forte": maximo > self.olfato["limiar_forte"]}
+
+    def ligar_orgao(self, cfg) -> None:
+        """o orgao da visao (a docstring do modulo; so com a subchave `olhar`)"""
+        self._exigir_olhar("ligar_orgao")
+        if not cfg.ligada:
+            raise ValueError("M-SENS: ligar_orgao com a ConfigOrgao desligada")
+        S, passo = self.S, self.cfg.intervalo_decisao_ticks
+        self.orgao = cfg
+        self.hab_conceito = {c: 0 for c in _orgao.CONCEITOS}
+        self.gosto_conceito = {c: 0 for c in _orgao.CONCEITOS}
+        self.k_hab_sobe = ganho_de_tau(cfg.tau_hab_subida, passo, S)
+        self.k_hab_volta = ganho_de_tau(cfg.tau_hab_volta, passo, S)
+        self.k_expo_conceito = ganho_de_tau(cfg.tau_exposicao, passo, S)
+
+    def ler_conceitos(self, pares) -> dict[str, int]:
+        """os pares do gancho (canonicos da lista) no nivel visto em [0, S]"""
+        if type(pares) is not tuple:
+            raise ValueError(f"M-SENS: os conceitos da tela sao uma tupla de pares: {pares!r}")
+        if _orgao.canonico(pares, "tv") != pares:
+            raise ValueError(f"M-SENS: os conceitos da tela fora da ordem canonica: {pares!r}")
+        return {c: div_arred(n * self.S, _orgao.NIVEL_MAX) for c, n in pares}
+
+    def novidade_conceitos(self, conceitos: dict) -> dict[str, int]:
+        """a novidade de cada conceito visto com a habituacao de agora, S - hab_c"""
+        return {c: self.S - self.hab_conceito[c] for c in conceitos}
+
+    def termo_conceitos(self, conceitos: dict, nov: dict) -> int:
+        """o termo dos conceitos no agrado (a docstring do modulo), com a novidade dada"""
+        S = self.S
+        return sum(div_arred(a * self.gosto_conceito[c] * nov[c], S * S) for c, a in conceitos.items())
+
+    def expor_conceitos(self, conceitos: dict, r_n: int) -> dict:
+        """a exposicao e a consequencia dos conceitos vistos (so quando o pet olhou); devolve o gosto deles depois"""
+        if self.orgao is None:
+            raise RuntimeError("M-SENS: expor_conceitos sem o orgao ligado")
+        S, teto = self.S, self.orgao.teto_gosto
+        for c, a in conceitos.items():
+            nov = S - self.hab_conceito[c]
+            passo = mul(self.k_expo_conceito, mul(a, nov, S), S) + mul(self.orgao.k_consequencia, mul(a, r_n, S), S)
+            self.gosto_conceito[c] = clamp(self.gosto_conceito[c] + passo, -teto, teto)
+        return {c: self.gosto_conceito[c] for c in conceitos}
+
+    def ligar_ir_ate_tv(self) -> None:
+        """a decisao D (D-GV-TVJOGO-3; so com a subchave `olhar`): o motor manda a linha da TV tambem fora do raio da visao (o pet sabe onde
+        ela fica). A linha longe tem a proximidade 0 (a conta de sempre) e nao conta como vista na habituacao da classe `tela`"""
+        self._exigir_olhar("ligar_ir_ate_tv")
+        self.ir_ate_tv = True
+
+    def longe(self, linha: dict) -> bool:
+        """a linha da TV esta fora do raio da visao (so com o ir ate a TV)"""
+        return linha["d"] > self.raio
+
+    def _receptores(self, pc) -> tuple:
+        presentes = tuple(f.name for f in fields(pc) if getattr(pc, f.name) is not None)
+        if self.olhar is not None:                    # a tela (P1d): os receptores dela ficam a parte, fora dos `receptores`
+            tela = tuple(r for r in presentes if r in RECEPTORES_TELA)
+            if tela and tela != RECEPTORES_TELA:
+                raise ValueError(f"M-SENS: os receptores da tela vem todos juntos: {tela}")
+            if self.tela_presente is None:
+                self.tela_presente = bool(tela)
+            elif bool(tela) != self.tela_presente:
+                raise ValueError("M-SENS: os receptores da tela mudaram desde a primeira decisao")
+            enjoo = RECEPTOR_ENJOO_TELA in presentes
+            if self.enjoo is not None and self.tela_presente and not enjoo:
+                raise ValueError("M-SENS: o enjoo ligado (ConfigEnjooTela) sem o receptor enjoo_tela do corpo")
+            if enjoo and not tela:
+                raise ValueError("M-SENS: o receptor enjoo_tela sem os receptores da tela")
+            presentes = tuple(r for r in presentes if r not in RECEPTORES_TELA and r != RECEPTOR_ENJOO_TELA)
+        if self.olfato is not None:                   # o PV-2: as narinas ficam a parte, e vem as duas
+            if any(r not in presentes for r in RECEPTORES_OLFATO_COMIDA):
+                raise ValueError(f"M-SENS: o PV-2 ligado e o corpo sem as duas narinas do Olfato da comida: {presentes}")
+            presentes = tuple(r for r in presentes if r not in RECEPTORES_OLFATO_COMIDA)
+        fora = [r for r in presentes if r not in RECEPTORES_DIGIBRAIN]
+        if fora:
+            raise ValueError(f"M-SENS: receptores fora do prototipo (os orgaos, o paladar, o banheiro; espec, secao 6): {fora}")
+        if self.receptores is None:
+            self.receptores = presentes
+        elif presentes != self.receptores:
+            raise ValueError(f"M-SENS: receptores {presentes}, na primeira decisao {self.receptores}")
+        return presentes
+
+    # ------------------------------------------------------------ a tela (P1d, so com a subchave `olhar`)
+    def _exigir_olhar(self, onde: str) -> ConfigOlhar:
+        if self.olhar is None:
+            raise RuntimeError(f"M-SENS: {onde} sem a subchave olhar")
+        return self.olhar
+
+    def niveis_tela(self, pc) -> dict | None:
+        """os niveis da tela na percepcao do corpo (canal -> [0, S]), ou None sem os receptores da tela"""
+        self._exigir_olhar("niveis_tela")
+        if getattr(pc, "tela_cor", None) is None:
+            return None
+        niveis = {c: getattr(pc, f"tela_{c}") for c in CANAIS_TELA}
+        if any(type(v) is not int or not 0 <= v <= self.S for v in niveis.values()):
+            raise ValueError(f"M-SENS: niveis da tela fora de [0, S]: {niveis!r}")
+        return niveis
+
+    def _agrado(self, niveis: dict, desloc: dict) -> int:
+        S = self.S
+        if tuple(niveis) != CANAIS_TELA:
+            raise ValueError(f"M-SENS: os niveis da tela por canal, na ordem {CANAIS_TELA}: {niveis!r}")
+        return div_arred(sum(pico(niveis[c] - (self.otimo[c] + desloc[c]), self.largura[c], S) for c in CANAIS_TELA), len(CANAIS_TELA))
+
+    def agrado(self, niveis: dict) -> int:
+        """o agrado do nivel visto contra o alvo (o otimo do genoma mais o deslocamento da exposicao), em [0, S]"""
+        self._exigir_olhar("agrado")
+        return self._agrado(niveis, self.desloc)
+
+    def agrado_inato(self, niveis: dict) -> int:
+        """o agrado do nivel visto contra o otimo do genoma so (o inato, fixo na vida)"""
+        self._exigir_olhar("agrado_inato")
+        return self._agrado(niveis, dict.fromkeys(CANAIS_TELA, 0))
+
+    def expor(self, niveis: dict, enjoo: int | None = None) -> None:
+        """a exposicao: o alvo de cada canal anda para o nivel visto, com o teto do deslocamento (so quando o pet olhou). Com o enjoo
+        (D-GV-ENJOO-CER), `enjoo` e o do que o pet olhou, em [0, S], e o passo cai a zero quando ele chega a saturacao"""
+        co = self._exigir_olhar("expor")
+        S = self.S
+        fator = None
+        if self.enjoo is not None:
+            self._conferir_enjoo(enjoo)
+            fator = max(0, S - div_arred(enjoo * S, self.enjoo.saturacao_exposicao))
+        elif enjoo is not None:
+            raise RuntimeError("M-SENS: o enjoo na exposicao sem a ConfigEnjooTela ligada")
+        for c in CANAIS_TELA:
+            alvo = self.otimo[c] + self.desloc[c]
+            passo = mul(self.k_expo, niveis[c] - alvo, S)
+            if fator is not None:
+                passo = mul(fator, passo, S)
+            self.desloc[c] = clamp(self.desloc[c] + passo, -co.teto_exposicao, co.teto_exposicao)
+        self.exposicoes += 1
+
+    def _conferir_enjoo(self, enjoo) -> None:
+        if type(enjoo) is not int or not 0 <= enjoo <= self.S:
+            raise ValueError(f"M-SENS: o enjoo da tela e inteiro em [0, S]: {enjoo!r}")
+
+    def tedio(self, enjoo: int) -> int:
+        """o tedio do enjoo (D-GV-ENJOO-CER), em [0, peso_tedio]: 0 ate a saturacao, e mul(peso_tedio, (e - sat)/(S - sat)) acima"""
+        if self.enjoo is None:
+            raise RuntimeError("M-SENS: o tedio sem a ConfigEnjooTela ligada")
+        self._conferir_enjoo(enjoo)
+        S, sat = self.S, self.enjoo.saturacao_exposicao
+        return mul(self.enjoo.peso_tedio, div_arred(max(0, enjoo - sat) * S, S - sat), S)
+
+    def agrado_efetivo(self, niveis: dict, enjoo: int) -> int:
+        """o agrado do nivel visto menos o tedio do enjoo (D-GV-ENJOO-CER), em [0, S]"""
+        self._exigir_olhar("agrado_efetivo")
+        return max(0, self.agrado(niveis) - self.tedio(enjoo))
+
+    def _linhas_tela(self, telas: list | None) -> list[dict]:
+        """as linhas da classe `tela` (a TV a vista, do motor): a proximidade e a novidade da linha; a habituacao anda depois"""
+        S = self.S
+        out = []
+        for linha in telas or ():
+            if type(linha) not in (tuple, list) or len(linha) != 4 or any(type(v) is not int for v in linha) or linha[3] < 0:
+                raise ValueError(f"M-SENS: linha da tela malformada (id, dx, dy, d inteiros): {linha!r}")
+            ident, dx, dy, d = linha
+            if d > self.raio and not self.ir_ate_tv:
+                raise ValueError(f"M-SENS: linha da tela fora do raio da visao ({d} > {self.raio}) sem o ir ate a TV: {linha!r}")
+            out.append({"id": ident, "tipo": CLASSE_TELA, "classe": CLASSE_TELA, "dx": dx, "dy": dy, "d": d, "prox": self.proximidade(d),
+                        "nov": S - self.hab[CLASSE_TELA]})
+        if len({o["id"] for o in out}) != len(out):
+            raise ValueError(f"M-SENS: duas linhas da tela com o mesmo id: {telas!r}")
+        return out
+
+    def proximidade(self, d: int) -> int:
+        return clamp(self.S - div_arred(d * self.S, self.raio), 0, self.S)
+
+    def resumir_lutas(self, lutas: list[dict]) -> list[dict]:
+        """o resumo da luta na Observacao (ponte da luta, PE2): os resumos que chegaram desde a decisao anterior, na ordem, em inteiros
+        (o rival, o resultado -1, 0, +1, a vida perdida em S e o tick). Falha alto num resumo malformado"""
+        out = []
+        for r in lutas:
+            if (type(r.get("rival")) is not str or not r["rival"] or r.get("resultado") not in (-1, 0, 1)
+                    or type(r.get("resultado")) is not int or type(r.get("vida_perdida_s")) is not int or r["vida_perdida_s"] < 0
+                    or type(r.get("tick")) is not int):
+                raise ValueError(f"M-SENS: resumo da luta malformado {r!r}")
+            out.append({"rival": r["rival"], "resultado": r["resultado"], "vida_perdida_s": r["vida_perdida_s"], "tick": r["tick"]})
+        return out
+
+    def ligar_dever(self, cfg, sub: int) -> None:
+        """a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): a percepcao social em posicoes absolutas vai ao `sens["social"]` (digibrain/dever.py), com
+        a posicao em que o pet viu cada outro na decisao anterior em que o via (o estado novo)"""
+        if not cfg.co7:
+            raise ValueError("M-SENS: os deveres so com a subchave co7")
+        self.dever = cfg
+        self.r_escudo = cfg.r_escudo_celulas * sub
+        self.antes: dict[str, tuple[int, int]] = {}
+
+    def _ler_social(self, ps) -> None:
+        """a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md, 2.3): a reputacao de cada outro e o peso dos deveres, se a percepcao social os traz, vao
+        ao estado (o painel e as medidas); nenhum modulo os usa na decisao (o G-SEM-DECISAO-CO6). Sem eles (a CO6 desligada, o pet sozinho),
+        o estado fica como estava. Um campo sem o outro ou fora da escala falha alto"""
+        if ps is None or (ps.reputacao is None and ps.peso_dever is None):
+            return
+        S = self.S
+        if ps.reputacao is None or ps.peso_dever is None:
+            raise ValueError(f"M-SENS: a reputacao e o peso dos deveres vem juntos (a CO6): {ps.reputacao!r} {ps.peso_dever!r}")
+        if type(ps.peso_dever) is not int or not 0 <= ps.peso_dever <= S:
+            raise ValueError(f"M-SENS: o peso dos deveres e inteiro em [0, S]: {ps.peso_dever!r}")
+        rep = {}
+        for item in ps.reputacao:
+            if type(item) not in (tuple, list) or len(item) != 2 or type(item[0]) is not str or type(item[1]) is not int or item[0] in rep:
+                raise ValueError(f"M-SENS: a reputacao e (id, r inteiro), um por outro: {ps.reputacao!r}")
+            rep[item[0]] = item[1]
+        self.social = {"reputacao": rep, "peso_dever": ps.peso_dever}
+
+    def codificar(self, obs, lutas: list[dict] | None = None, telas: list | None = None, conceitos: tuple | None = None) -> dict:
+        S = self.S
+        if telas is not None and self.olhar is None:
+            raise RuntimeError("M-SENS: as linhas da tela sem a subchave olhar")
+        if (conceitos is None) != (self.orgao is None):
+            raise RuntimeError("M-SENS: os conceitos da tela vem com o orgao ligado, e so com ele")
+        pc, pm = obs.corpo, obs.mundo
+        self._ler_social(getattr(obs, "social", None))
+        recs = self._receptores(pc)
+        falta = {r: falta_receptor(pc, r, S) for r in recs}
+        leitura = {r: leitura_receptor(pc, r, S) for r in recs}
+        hora, dormindo = obs.vetor_estado[7], obs.vetor_estado[6]
+        minuto = int(round(hora * TICKS_POR_DIA)) % TICKS_POR_DIA     # a hora do dia em ticks (a fronteira da noite cai num multiplo de 15)
+        ticks = obs.ticks_desde_cuidado
+        if type(ticks) is not int or ticks < 0:
+            raise ValueError(f"M-SENS: ticks_desde_cuidado {ticks!r}")
+        contexto = {"noite": S if self.cfg.e_noite(minuto) else 0, "dormindo": S if dormindo != 0 else 0,
+                    "sem_cuidado": min(S, div_arred(ticks * S, self.p.escala_cuidado))}
+        if len(pm.vistos) > self.max_vistos:
+            raise ValueError(f"M-SENS: {len(pm.vistos)} vistos, o maximo e {self.max_vistos}")
+        objetos = []
+        vistas = set()
+        for ident, tipo, dx, dy, d in pm.vistos:
+            c = classe_do_tipo(tipo)
+            vistas.add(c)
+            objetos.append({"id": ident, "tipo": tipo, "classe": c, "dx": dx, "dy": dy, "d": d, "prox": self.proximidade(d),
+                            "nov": S - self.hab[c]})
+        linhas_tela = self._linhas_tela(telas) if self.olhar is not None else None
+        for c in CLASSES_OBJETO:                       # a habituacao anda depois da novidade da decisao
+            self.hab[c] = integrar(self.hab[c], S if c in vistas else 0, self.k_hab, S)
+        if linhas_tela is not None:                    # a classe `tela` (P1d), no fim, com a mesma regra
+            # o ir ate a TV (D-GV-TVJOGO-3): a linha longe nao conta como vista (sem ele, toda linha esta no raio: a conta de hoje)
+            vista = any(not self.longe(o) for o in linhas_tela)
+            self.hab[CLASSE_TELA] = integrar(self.hab[CLASSE_TELA], S if vista else 0, self.k_hab, S)
+        comida = max((o["prox"] for o in objetos if o["classe"] in COMIDAS_BOAS), default=0)
+        bola = max((o["prox"] for o in objetos if o["classe"] == "bola"), default=0)
+        out = {"falta": falta, "leitura": leitura, "contexto": contexto, "objetos": objetos,
+               "conjuncoes": {"comida_vista": comida, "sem_comida": S - comida, "bola_vista": bola},
+               "ha_cheiro": pm.direcao_cheiro != 0, "pos": (pm.x, pm.y), "regiao": pm.regiao, "minuto": minuto, "pc": pc}
+        if self.olfato is not None:                    # o PV-2: o cheiro das narinas no lugar do oraculo (o mundo nao manda a direcao)
+            if pm.direcao_cheiro != 0:
+                raise RuntimeError("M-SENS: o PV-2 ligado e o mundo mandando a direcao do cheiro (o motor sem a ConfigOlfato da comida?)")
+            out["olfato"] = self._ler_olfato(pc)
+            out["ha_cheiro"] = out["olfato"]["ha"]
+        if lutas is not None:                          # a ponte da luta (PE2): desligada, nenhum campo novo
+            out["lutas"] = self.resumir_lutas(lutas)
+        if self.dever is not None:                     # a CO7: desligada, nenhum campo novo
+            ps = getattr(obs, "social", None)
+            out["social"] = _dever.social(ps, (pm.x, pm.y), self.antes, self.r_escudo)
+            if out["social"] is not None:
+                for o in out["social"]["outros"]:
+                    self.antes[o["id"]] = (o["x"], o["y"])
+        if self.olhar is not None:                     # a tela (P1d): desligada, nenhum campo novo
+            out["telas"] = linhas_tela
+            out["tela_niveis"] = self.niveis_tela(pc)
+            out["tela_novidade"] = getattr(pc, "novidade_tela", None)
+            if self.enjoo is not None:                 # o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
+                e = getattr(pc, RECEPTOR_ENJOO_TELA, None)
+                if e is not None:
+                    self._conferir_enjoo(e)
+                out["tela_enjoo"] = e
+        if self.orgao is not None:                     # o orgao (OV2): desligado, nenhum campo novo
+            vistos = self.ler_conceitos(conceitos)
+            out["conceitos"] = vistos
+            out["nov_conceito"] = self.novidade_conceitos(vistos)
+            for c in _orgao.CONCEITOS:                 # a habituacao anda depois da novidade da decisao, com duas velocidades
+                alvo, h = vistos.get(c, 0), self.hab_conceito[c]
+                if alvo != h:
+                    self.hab_conceito[c] = integrar(h, alvo, self.k_hab_sobe if alvo > h else self.k_hab_volta, S)
+        return out
+
+    def estado_interno(self) -> dict:
+        out = {"hab": dict(self.hab), "receptores": None if self.receptores is None else list(self.receptores)}
+        if self.dever is not None:                     # a CO7: desligada, o estado de hoje
+            out["dever_antes"] = {i: list(v) for i, v in sorted(self.antes.items())}
+        if self.olhar is not None:                     # a tela (P1d): desligada, o estado e o de hoje, byte a byte
+            out["tela"] = {"otimo": dict(self.otimo), "largura": dict(self.largura), "desloc": dict(self.desloc),
+                           "exposicoes": self.exposicoes}
+        if self.olfato is not None:                    # o PV-2: desligado, o estado de hoje
+            out["olfato"] = {"c_ant": self.c_ant}
+        if self.orgao is not None:                     # o orgao (OV2): desligado, o estado de hoje
+            out["orgao"] = {"hab": {c: v for c, v in self.hab_conceito.items() if v},
+                            "gosto": {c: v for c, v in self.gosto_conceito.items() if v}}
+        return out

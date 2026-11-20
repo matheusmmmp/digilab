@@ -1,0 +1,3726 @@
+{
+ "arquivos": {
+  "digilab/__init__.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/ambiente.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/arena.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/campanha.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/__init__.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/bots.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/gambits.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/lutador.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/partida.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/regras.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/v21/__init__.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/v21/bots.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/v21/catalogo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/v21/gambits.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/v21/partida.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/combate_v2/v21/regras.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/confianca.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/config.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/contrato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/cooperacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/corpo_grafo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/desejo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/digibrain/__init__.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/_comum.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/adapt.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/afeto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/arb.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/base.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/decodificador.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/dever.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/estado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/ganchos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/impulso.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/mem.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/pers.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/plast.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/digibrain/sens.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/donos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/donos_educacao.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "digilab/educacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/emocao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/engine.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/events.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/evolucao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/expressao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/frutas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/genoma.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/genoma_paladar.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/genoma_visao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/gestos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/grupo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/heranca.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/historia.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/instinto_banheiro.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/instinto_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/memoria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "digilab/memoria_espacos.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "digilab/metrics.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/modelo_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/motivo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/motor_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/obediencia.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria_espacos.py"
+   ],
+   "raiz": false
+  },
+  "digilab/orgao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/painel_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/personalidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/personas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/policies/__init__.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py",
+    "digilab/policies/camada_unica.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "digilab/policies/bandit.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/policies/camada_unica.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "digilab/policies/cerebro_b.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "digilab/policies/cerebro_c.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "digilab/policies/lobos.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/policy.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/protocol.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/rede_de_si.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/state.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/temperamento.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/tracos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/treino.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/treino_stats.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/treino_vida.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "digilab/tv.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "digilab/vinculo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/adendo4_poder_digibrain_modular.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/adendo6_poder_longe_regular.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/adendo7_poder_habito_intencao.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/adendo8_poder_redecidir_evento.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/adendo9_poder_memoria_autobio.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_canal.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_dono_ambiente.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_empates_cheiro.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_poder.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_v21d.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_v3_cooperacao_bancada.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/analisar_vinculo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/auditoria_pet_vivo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/avaliar_bots_v2c.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/avaliar_fala.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/avaliar_v21c.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/avaliar_voz.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "experiments/bancada/__init__.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/bracos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "experiments/bancada/config.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/faixas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/grupo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/medidas.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "experiments/bancada/mundos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/nucleo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "experiments/bancada/passo0.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/pet_que_pensa.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "experiments/bancada/regras_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/rodar.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada/vida.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/bancada_v2.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "experiments/bootstrap_memoria.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_campanha.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_carater_v11.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_combate_v2.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_equilibrio.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_equilibrio_geral.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_escala.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_ferrugem_v21c.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_ganho_conteudo_dc3.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_progressao.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_sombrias.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_treino.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/calibrar_v21.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/cerebro_b_bancada.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/cerebro_b.py"
+   ],
+   "raiz": false
+  },
+  "experiments/cerebro_c_bancada.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/cerebro_c.py"
+   ],
+   "raiz": false
+  },
+  "experiments/comparar_calibracoes_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/comparar_voz_v3b_dc4.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/conferir_piloto_caido_l2.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/custo_adendo3.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/custo_k_l2_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/custo_orgaos.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/d_comida_dc4.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/descritivo_dc13_longe_fixo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/descritivo_dc13_longe_geometria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/descritivo_dc13_rel.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/descritivo_individualidade_facetas.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/descritivo_plato.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/descritivo_reavaliacao_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnosticar_arquetipos.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnostico_avaliacao_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnostico_calibracao_conserto_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnostico_calibracao_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnostico_calibracao_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnostico_combate.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diagnostico_replay_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/diario.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria.py",
+    "digilab/memoria_espacos.py",
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "experiments/entradas_dc4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/entradas_dc5.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_constantes_web.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_decodificador.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_decodificador_v4.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_arvore_sacode.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_carater_v11.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_co6.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_co6_par.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_co7.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_co7_par.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_confianca.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_contrato.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_cooperacao.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_corpo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_decisao_na_comida.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_digibrain_modular.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_fala_memoria.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_fala_rede.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_fala_unidades.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_grupo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_grupo_agua.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_grupo_traco.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_ilha_agua.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_ilha_grande.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_ilha_maior.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_levar_pet.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_lobos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_mudar_ilha.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_mvp_mundo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_mvp_produto.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_painel_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_v21d.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_v21e.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_vinculo.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_voz_jogo_dc5.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabarito_voz_v4_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_gabaritos_voz.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "experiments/exportar_gosto_visual.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/exportar_tv_jogo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/figuras_artigo_a1.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/k_fixado_l2_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/legibilidade.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria.py"
+   ],
+   "raiz": false
+  },
+  "experiments/leitura_l2_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/leitura_l2_proximo_passo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/longe_l0_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/marcacao_dc4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/marcacao_dc5.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_carater_v11.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "experiments/medir_competicao_etapa0.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/medir_credito_canal_etapa0.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/medir_desempenho_perfil.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_e0_influencia_aprendido.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/medir_estilo_latino.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_ilha_grande.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_k4_orcamento.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_v11_parado.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_v3_acoes_novas_hoje.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/medir_v3_espaco_acoes.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/memoria_espacos.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria_espacos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/montador_voz_rede.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/plano_an3_poder_acoes_novas.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/poder_l2_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/poder_longe_geometria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/relato_avaliacao_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/relato_piloto_digibrain.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/resumo_calibracao_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/resumo_marcacao_dc4.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_arena.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria.py",
+    "digilab/memoria_espacos.py",
+    "digilab/obediencia.py",
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_bateria_combate.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_bateria_sombria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_bateria_v21.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_campanha.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_confirmatoria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_educacao.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_natureza_criacao.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_pesquisa_v21.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_poder.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_revisao_aprendiz.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_treino.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_v2_a1.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_cerebro_b.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_cerebro_c.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_conjunta.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_dois_pets.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_pet_que_pensa.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_pet_que_pensa_paladar.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_calibracao_rede_de_si.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_comparacao_cerebros.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_v2_competicao.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_digibrain_l2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v2_digibrain_prototipo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v2_experimento_maior.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_habito_intencao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_l1.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py",
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_v2_longe_regular.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_memoria_autobio.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_mundo_alvo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "experiments/run_v2_n3.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_n4.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_piloto_pet_que_pensa_adendo7.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_redecidir_evento.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_validacao_mundo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v2_validacao_pet_que_pensa.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/run_v3_acoes_novas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_conversa_dc3.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_conversa_dc4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_conversa_dc5.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_cooperacao_bancada.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_gosto_visual.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_individualidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_individualidade_i5.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_individualidade_i7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_individualidade_i7_ad2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_individualidade_i7_ad3.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_individualidade_i7_ad4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_v3_longe_geometria.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "experiments/run_vinculo_novo.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "experiments/sinal_dono.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/sonda_duas_tvs.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/sondas_individualidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "experiments/validar_v21d.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "servidor/__init__.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "servidor/alerta.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "servidor/fala_livre.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "servidor/fala_livre_claude.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "servidor/fala_llm.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "servidor/servidor_local.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tests/gabarito_arvore_sacode.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_bancada_k4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_bancada_liga.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_bancada_montagem.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_banheiro.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_banheiro_ligado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_banheiro_perto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_canais_reforco.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_cerebro_n6_n7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_competicao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_conversa_dc3.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_corpo_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_credito_canal.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_digibrain.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_digibrain_conserto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_digibrain_modular.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_dois_pets.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_equilibrio_cuidado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_fruta_ao_lado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_genoma_g0.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_gosto_visual.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_gosto_visual_enjoo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_habito_intencao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_lance_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_limpeza_cadeia.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_limpeza_lg.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_limpeza_mecanicas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_lugar_estilos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_lugar_estilos_lg.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_memoria_autobio.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_metabolismo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_metabolismo_ligado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_orgao_sem_direcao.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_orgao_visao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_orgaos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_p2d_p3i.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_p2d_p3i_bancada.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_p4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_paladar.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_paladar_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_pet_que_pensa.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_pet_que_pensa_plano.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_pqp_adendo7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_pqp_ao_lado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_pqp_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_rede_de_si.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_redecidir_evento.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_sentidos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/gabarito_sono_segura.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_tv_jogo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_acoes_novas_an4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_adendo3.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_adendo4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_agentes.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_agentes_ux.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_alvo_aprendido.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_ambiente.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_aparar_fala.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_arena.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_arvore_fala.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_arvore_sacode.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_auditoria_pet_vivo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_banheiro.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_dois_pets.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_frutas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_k4_canais.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_liga_gestos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_liga_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_liga_n6_n7.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_metabolismo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_modulos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_montagem.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_mundo_fisico.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_mundos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_n5.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_n6_n7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_p2d_p3i.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_p4_contrato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_pesos_janela.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_pet_que_pensa.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_pqp_adendo7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_pqp_adendo8.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_pqp_ao_lado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bancada_pqp_paladar.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_pqp_plano.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_rede_de_si.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bancada_v2.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_bandit.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_banheiro_cerebros.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_banheiro_continuar.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_banheiro_corpo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_banheiro_g2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_banheiro_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_banheiro_perto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_bola_no_golpe.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_cerebro_b.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_cerebro_c.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_conjunta.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_calibracao_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_dois_pets.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_pet_que_pensa.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibracao_rede_de_si.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_calibrar_carater_v11.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_campanha.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_canais_reforco.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_canal_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_canal_fruta_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_canonico_intacto.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_catalogo_fala_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cerebro_b.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/cerebro_b.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_cerebro_c.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/cerebro_c.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_cerebro_n6_n7.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_cheiro_orgao.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_comando_chat.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_combate_v2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_combate_v21.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_combate_v21c.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_combate_v2c.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_comer_ve_fruta.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_comparacao_a_c.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_comparar_calibracoes_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_competicao_etapa0.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_competicao_regras.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_conferir_saude.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_confianca.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_connectome_cerebro_a.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_dc3a.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_dc4a.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_dc5a.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_dc5a2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_dc5c.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_m1.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_m2.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_m2b.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_m4.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_conversa_v1.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao_agua.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao_bancada.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao_co6.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao_co7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao_gabarito.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_cooperacao_traco.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_corpo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_corpo_cerebros.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_corpo_digestao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_corpo_drives.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_corpo_gestos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_corpo_grafo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_corpo_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_corpo_no_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_corpo_quimica.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_corpo_risco.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_corpo_vida.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_corpus_latino.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_credito_canal_etapa0.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_credito_corrida.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_custo_k_l2_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_d_comida_dc4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_dc2b.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_dc3d.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_decisao_na_comida.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_decodificador.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_decodificador_v4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_descritivo_dc13.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_descritivo_dc13_longe_geometria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_descritivo_dc13_rel.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_descritivo_plato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_descritivo_reavaliacao_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_diagnostico_calibracao_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_alcance.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_conserto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_etapa0.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_l2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_l2_credito.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_l2_fases.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_l2_k.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_mecanismo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_digibrain_reavaliacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_digibrain_vidas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_dominancia.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_donos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_educacao.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_emocao_habituacao.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria_espacos.py",
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_engine.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_entradas_sociais.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_equilibrio_cuidado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_equilibrio_v21d.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_equilibrio_v21e.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_escala.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_evolucao_pesquisa.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_experimento_maior.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_faixas_r17.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_fala_livre.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_fala_livre_claude.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_fala_llm.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_fala_memoria.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_figuras_artigo_a1.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_fruta_ao_lado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_frutas.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_frutas_cenario.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_arvore_sacode.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_carater_v11_web.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_contrato_web.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_conversa_dc3.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_digibrain_conserto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_digibrain_modular.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_digibrain_modular_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_equilibrio_cuidado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_fala_unidades_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_genoma_g0.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_gosto_visual.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_gosto_visual_enjoo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_gosto_visual_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_habito_intencao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_lance_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_limpeza_cadeia.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_limpeza_lg.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_limpeza_mecanicas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_lobos_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_lugar_estilos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_lugar_estilos_lg.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_memoria_autobio.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_mundo_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_mvp_mundo_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_mvp_produto_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_orgao_visao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_redecidir_evento.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_sono_segura.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_tv_jogo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_tv_jogo_web.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabaritos_mundo_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabaritos_voz.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gasto_atividades.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_genoma_g0.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_cerebro.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_enjoo_cerebro.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_gv3b.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_gv3b2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_gvn2.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_porque.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_sonda.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gosto_visual_tv_jogo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_grupo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_grupo_social.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_habito_intencao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_historia.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_hook_h4.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_hooks.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_ilha_agua.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_ilha_grande.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_ilha_maior.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_individualidade_i5.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_individualidade_i7.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_individualidade_i7_ad2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_individualidade_i7_ad3.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_individualidade_i7_ad4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_informacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_infra_conferir_autorizacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_infra_estado_atual.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_infra_indice_desvios.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_infra_nova_tarefa.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_infra_verificar_relato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_k4_dono_julga_fruta.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_lance_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_leitura_l2_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_levar_pet.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_lobos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py",
+    "digilab/policies/__init__.py",
+    "digilab/policies/camada_unica.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_lobos_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_lobos_n5.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_longe_ancora.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_longe_fixo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_longe_geometria.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_longe_l0_digibrain.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_longe_regular.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_medidas_r17.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_medir_carater_v11.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_medir_v3_acoes_novas_hoje.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_medir_v3_espaco_acoes.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_memoria.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria.py",
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_memoria_autobio.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_memoria_autobio_run.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_memoria_controle.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_memoria_espacos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/memoria_espacos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_mentira.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_metabolismo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_metrics.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_metrics_individualidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_metrics_pet_vivo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_modelo_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_motivo_expressao.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_movimento_an4.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_mudar_ilha.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_mundo_alvo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_mundo_cerebros.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_mundo_componente.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_mundo_contrato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_n3_consequencia.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_n5_acoplado.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_n7_pedido.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_natureza_criacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_orgao_visao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_orgaos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_p2d_p3i_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_p4_gabaritos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_painel_digibrain.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_painel_v21d.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_paladar_cerebro.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_paladar_corpo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_paladar_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_passeio_an2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_passeio_gabarito.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_personalidade.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py",
+    "digilab/policies/bandit.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_personas_modo_livre.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_pesos_janela.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_pet_que_pensa_mundo.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_planejador.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_planilha_progressao.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_plano_an3_poder.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_poder.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_ponte_luta_pe1.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_ponte_luta_pe2.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_pre_run.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_protocol.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_rede_de_si.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_redecidir_evento.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_redecidir_evento_run.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_reproducao_v3_confirmatoria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_resumo_calibracao_dc5.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_resumo_marcacao_dc4.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_revisao_aprendiz.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_run_arena.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_run_educacao.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_run_v2_competicao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_run_v3_individualidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_sentidos_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_servidor_fala_livre.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_servidor_remoto.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_sinal_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_sondas_individualidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_sono_segura.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_sprites_acoes.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_sprites_geracao.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_teto_por_plano.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_treino_sombrio.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_troca_digestao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_validacao_blocos.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_validacao_mundo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_validacao_pet_que_pensa.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_viabilidade_do_corpo.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_vinculo_b.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_vontade_lobos.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/bandit.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": false
+  },
+  "tests/test_voz_dc2.py": {
+   "classe": "REVER",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_voz_fala_livre.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tools/cerebro_do_gabarito.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/bandit.py",
+    "digilab/policies/camada_unica.py",
+    "digilab/policies/cerebro_b.py",
+    "digilab/policies/cerebro_c.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "tools/conferir_autorizacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/conferir_fumacas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/conferir_saude.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/connectome_cerebro_a.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
+  },
+  "tools/custo_p4_contrato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/decisor_livre.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/dividir_bancada.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/estimar_custo_llm.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/gerar_catalogo_fala_web.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/gerar_estado_atual.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/gerar_indice_desvios.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/gerar_personas.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/gerar_planilha_progressao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/gerar_tabela_arena.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/inventario_limpeza.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/llm_pesquisa.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/nova_tarefa.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/pre_run.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/registro_por_mes.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_acoes/gerar_acoes.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_acoes/visualizador.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_geracao/converter.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_geracao/ficha.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_geracao/gates.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_geracao/limpar.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/sprites_geracao/montar_candidato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
+  "tools/verificar_relato.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  }
+ },
+ "resumo": {
+  "digilab": {
+   "FICA": 71,
+   "REVER": 4,
+   "SAI": 10
+  },
+  "experiments": {
+   "FICA": 44,
+   "REFAZ": 7,
+   "REVER": 32,
+   "SAI": 109
+  },
+  "servidor": {
+   "FICA": 6
+  },
+  "tests": {
+   "FICA": 237,
+   "REFAZ": 89,
+   "REVER": 25,
+   "SAI": 11
+  },
+  "tools": {
+   "FICA": 26,
+   "REFAZ": 2
+  }
+ },
+ "rotulo": "inventario da LIMPEZA, gerado por tools/inventario_limpeza.py; so le o codigo",
+ "saem": [
+  "digilab/policies/bandit.py",
+  "digilab/policies/lobos.py",
+  "digilab/policies/cerebro_b.py",
+  "digilab/policies/cerebro_c.py",
+  "digilab/policies/camada_unica.py",
+  "digilab/policies/__init__.py",
+  "digilab/memoria.py",
+  "digilab/memoria_espacos.py",
+  "digilab/obediencia.py"
+ ]
+}

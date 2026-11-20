@@ -1,0 +1,14 @@
+{
+ "id": "01a1b8a8-b524-75ba-90d6-f1936a6f63f1",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same old wooden railway wagon: red painted wooden planks with wood grain, chipped paint and moss, cream curved canvas roof, round windows with brass rims, iron spoked wheels, buffers, standing on a short piece of rail track with wooden sleepers and grass tufts between the rails. Front, side and back views, same hand-painted anime style, same colors and details, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794099426951,
+ "finished_at": 1794099452265,
+ "saldo": {
+  "antes": 230,
+  "depois": 212
+ }
+}

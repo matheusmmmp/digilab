@@ -1,0 +1,72 @@
+{
+  "braco": "exigente",
+  "carater_adulto": {
+    "atento": -0.19999999999999998,
+    "impetuoso": -0.10468749999999999,
+    "paciente": 0.40937500000000004,
+    "resistente": -2.168404344971009e-18
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 14,
+    "treino": 104
+  },
+  "enroladas": 34,
+  "especie": "brasa",
+  "fala_fria": true,
+  "forma": {
+    "adulta": "predador",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "brasa/arisco/cacador/predador"
+  },
+  "obediencia_cuidado": 0.6444444444444444,
+  "ovo": 808,
+  "sessoes": 104,
+  "sombria": true,
+  "treino": {
+    "enroladas": 34,
+    "especie": "brasa",
+    "estresse": 100.0,
+    "fadiga": 0.0,
+    "fala_fria": true,
+    "forcadas": 14,
+    "pausas": {
+      "atendidas": 0,
+      "ignoradas": 15
+    },
+    "pontos": {
+      "folego": 5.77182291540625,
+      "forca": 6.92265341263872,
+      "guarda": 5.555632544303641,
+      "mira": 5.533246800000001,
+      "recuperacao": 4.541543794800153,
+      "vigor": 6.269220361939364
+    },
+    "pontos_estagio": {
+      "adolescente": 10.594119829088125,
+      "adulto": 14.0,
+      "crianca": 10.0
+    },
+    "sessoes": 104,
+    "sobrecarga": 0.0,
+    "sombria": true,
+    "total": 34.59411982908813,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 47.5,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 78.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 0.6
+  },
+  "vinculo_final": 0.11432904973909747
+}

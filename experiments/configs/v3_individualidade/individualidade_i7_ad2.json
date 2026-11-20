@@ -1,0 +1,9 @@
+{
+  "descricao": "INDIVIDUALIDADE, I7, adendo 2: historia ou sorteio, os ramos E, R, R0 e S em 360 pets novos (docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, secao 14; AD2-1)",
+  "fase": "individualidade-i7-ad2",
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md",
+  "vidas": null,
+  "unidades": {"bases": [88101, 88202, 88303, 88404, 88505], "k": 12, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

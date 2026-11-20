@@ -1,0 +1,278 @@
+{
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "fase 4 da rodada de equilibrio geral: a validacao unica nas sementes de validacao, tudo congelado (nenhum numero muda por causa do resultado); so as variantes v21d e v21e; chaves da ConfigCombateV21E desligadas por padrao",
+    "config": "experiments/configs/v21e/calibracao.json",
+    "config_sha256": "f0d5b4c0bfc8093a1a1cb93b68252daec06c3ff75d4d8d826ee2aa16ee8391c0",
+    "conjunto": "validacao",
+    "epsilon_bots_canonico": 0.05,
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "fase": 4,
+    "metodo": "E3 de run_bateria_v21: o usuario da tecnica contra as 8 formas, sem e com a resposta declarada (RESPOSTAS_V21C) no topo da lista do oponente; ok = a resposta reduz a taxa media dos usuarios",
+    "partidas_por_par_por_semente": 40,
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      4101,
+      4202,
+      4303,
+      4404,
+      4505
+    ],
+    "variantes": {
+      "v21d": {
+        "base": {},
+        "descricao": "V21D validada (a_c_e2v_v): o combate dos pets v6-v8",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "76ef7389f38585c03b3d3a1562f3397dc9329d0af34764d2af944db09d60ebbc",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21e": {
+        "base": {},
+        "descricao": "V21E escolhida (experiments/configs/v21e/calibracao.json): as cinco chaves da V21E",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "d08010297ae1f40051bfe9bf3b311328d1645d34c898023102fa66195058a36c",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": true,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": true,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      }
+    }
+  },
+  "por_variante": {
+    "v21d": {
+      "ok": false,
+      "por_tecnica": {
+        "contra_golpe": {
+          "por_usuario": {
+            "espelho": {
+              "taxa_com_resposta": 0.9478125,
+              "taxa_sem_resposta": 0.426328125
+            },
+            "muralha": {
+              "taxa_com_resposta": 0.0434375,
+              "taxa_sem_resposta": 0.435234375
+            }
+          },
+          "reducao": -0.06484374999999998,
+          "taxa_com_resposta": 0.495625,
+          "taxa_sem_resposta": 0.43078125,
+          "usuarios": [
+            "espelho",
+            "muralha"
+          ]
+        },
+        "investida": {
+          "por_usuario": {
+            "duelista": {
+              "taxa_com_resposta": 0.464453125,
+              "taxa_sem_resposta": 0.474375
+            },
+            "furioso": {
+              "taxa_com_resposta": 0.52578125,
+              "taxa_sem_resposta": 0.698515625
+            }
+          },
+          "reducao": 0.09132812499999998,
+          "taxa_com_resposta": 0.4951171875,
+          "taxa_sem_resposta": 0.5864453125,
+          "usuarios": [
+            "duelista",
+            "furioso"
+          ]
+        },
+        "marcar": {
+          "por_usuario": {
+            "emboscador": {
+              "taxa_com_resposta": 0.48453125,
+              "taxa_sem_resposta": 0.534375
+            },
+            "sentinela": {
+              "taxa_com_resposta": 0.4196875,
+              "taxa_sem_resposta": 0.5509375
+            }
+          },
+          "reducao": 0.09054687499999997,
+          "taxa_com_resposta": 0.452109375,
+          "taxa_sem_resposta": 0.54265625,
+          "usuarios": [
+            "sentinela",
+            "emboscador"
+          ]
+        },
+        "pele_dura": {
+          "por_usuario": {
+            "tita": {
+              "taxa_com_resposta": 0.006484375,
+              "taxa_sem_resposta": 0.412734375
+            },
+            "vigia": {
+              "taxa_com_resposta": 0.194609375,
+              "taxa_sem_resposta": 0.4578125
+            }
+          },
+          "reducao": 0.33472656250000005,
+          "taxa_com_resposta": 0.100546875,
+          "taxa_sem_resposta": 0.4352734375,
+          "usuarios": [
+            "vigia",
+            "tita"
+          ]
+        }
+      }
+    },
+    "v21e": {
+      "ok": false,
+      "por_tecnica": {
+        "contra_golpe": {
+          "por_usuario": {
+            "espelho": {
+              "taxa_com_resposta": 0.96078125,
+              "taxa_sem_resposta": 0.461015625
+            },
+            "muralha": {
+              "taxa_com_resposta": 0.0,
+              "taxa_sem_resposta": 0.45578125
+            }
+          },
+          "reducao": -0.021992187500000038,
+          "taxa_com_resposta": 0.480390625,
+          "taxa_sem_resposta": 0.4583984375,
+          "usuarios": [
+            "espelho",
+            "muralha"
+          ]
+        },
+        "investida": {
+          "por_usuario": {
+            "duelista": {
+              "taxa_com_resposta": 0.529453125,
+              "taxa_sem_resposta": 0.512890625
+            },
+            "furioso": {
+              "taxa_com_resposta": 0.468125,
+              "taxa_sem_resposta": 0.523359375
+            }
+          },
+          "reducao": 0.019335937499999956,
+          "taxa_com_resposta": 0.4987890625,
+          "taxa_sem_resposta": 0.518125,
+          "usuarios": [
+            "duelista",
+            "furioso"
+          ]
+        },
+        "marcar": {
+          "por_usuario": {
+            "emboscador": {
+              "taxa_com_resposta": 0.566171875,
+              "taxa_sem_resposta": 0.534296875
+            },
+            "sentinela": {
+              "taxa_com_resposta": 0.4825,
+              "taxa_sem_resposta": 0.56375
+            }
+          },
+          "reducao": 0.024687500000000084,
+          "taxa_com_resposta": 0.5243359375,
+          "taxa_sem_resposta": 0.5490234375,
+          "usuarios": [
+            "sentinela",
+            "emboscador"
+          ]
+        },
+        "pele_dura": {
+          "por_usuario": {
+            "tita": {
+              "taxa_com_resposta": 0.006171875,
+              "taxa_sem_resposta": 0.45578125
+            },
+            "vigia": {
+              "taxa_com_resposta": 0.187109375,
+              "taxa_sem_resposta": 0.486796875
+            }
+          },
+          "reducao": 0.37464843750000004,
+          "taxa_com_resposta": 0.096640625,
+          "taxa_sem_resposta": 0.4712890625,
+          "usuarios": [
+            "vigia",
+            "tita"
+          ]
+        }
+      }
+    }
+  },
+  "v21d_igual_validacao_v21d": true
+}

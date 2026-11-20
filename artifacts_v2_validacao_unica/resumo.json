@@ -1,0 +1,288 @@
+{
+  "alfa": 0.05,
+  "blocos": {
+    "n6": "confirma",
+    "n7_G-ARB": true,
+    "n7_G-URG": true,
+    "n7_holm": {
+      "G-EROSAO": false,
+      "G-MARCA": false,
+      "G-MARCA-E": false
+    }
+  },
+  "contratos": {
+    "K2_humor_da_fruta_no_P1": true,
+    "K4_dono_julga_fruta": true,
+    "montagem": "completa"
+  },
+  "delta": {
+    "delta": 0.1986268570547561,
+    "origem": "adendo (secao 7.3)"
+  },
+  "duracoes": {
+    "descasado": {
+      "P0": "plato",
+      "P1": "plato",
+      "ganho_P0_menos_P1": "plato"
+    },
+    "leitura_limiar": "L-3: o limiar tambem e forma possivel da curva (abaixo de uma duracao minima aprender nao rende; Liedtke e Fromhage 2019). Com tres duracoes, um limiar abaixo de 7 dias aparece como crescente ou plato, e um entre 7 e 14 dias como um degrau no passo a. A regra registrada (forma_da_curva) nao muda; a leitura nomeia o limiar antes de escolher.",
+    "mutavel": {
+      "P0": "crescente",
+      "P1": "plato",
+      "ganho_P0_menos_P1": "decrescente"
+    }
+  },
+  "modo": "validacao",
+  "predicoes": {
+    "1": {
+      "apoio_teorico": "APOIADA",
+      "contrastes": [
+        "p1_casado"
+      ],
+      "cuidado": {},
+      "leitura": "confirma",
+      "secundarios": [
+        "p1_casado_P2",
+        "p1_casado_P3"
+      ]
+    },
+    "2": {
+      "apoio_teorico": "APOIADA COM RESSALVA (a relacao com a duracao da vida nao e monotonica)",
+      "componentes_da_mudanca": {
+        "descasado": "experiencia confiavel (o efeito de cada fruta e fixo) e melhor acao estavel dentro da vida; o que muda e entre o mundo de origem do prior e o mundo da vida",
+        "mutavel": "a melhor acao troca uma vez, no meio da vida, num momento fixo (fim do dia dias // 2)"
+      },
+      "contrastes": [
+        "p2_descasado",
+        "p2_mutavel"
+      ],
+      "cuidado": {},
+      "inclinacao_final": {
+        "descasado": {
+          "cresce": false,
+          "dias": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "ic95": {
+            "ic_inferior": -0.04855911330049261,
+            "ic_superior": 0.026531198686371108,
+            "nivel": 0.95
+          },
+          "media": -0.010016420361247943,
+          "n": 29,
+          "sem_valor": 1
+        },
+        "mutavel": {
+          "cresce": false,
+          "dias": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "ic95": {
+            "ic_inferior": -0.0015804597701149397,
+            "ic_superior": 0.06263957307060755,
+            "nivel": 0.95
+          },
+          "media": 0.031169950738916256,
+          "n": 29,
+          "sem_valor": 1
+        }
+      },
+      "k2": true,
+      "leitura": "confirma",
+      "limitacao_mutavel": "os modelos disponiveis tratam mudanca entre geracoes, nao dentro da vida (Kozielska e Weissing 2024, 10.1371/journal.pcbi.1011840): no mutavel o resultado descreve o que este motor faz; o teste nao muda",
+      "mutavel_valor_e_eficiencia": {
+        "eficiencia": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.3234896384721904,
+            "ic_superior": 0.3360953517292145,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.3222087440309838,
+            "ic_superior": 0.3372897409936548,
+            "nivel": 0.95
+          },
+          "media": 0.3298500685119344,
+          "medida": "taxa da fruta ruim do P1 depois da troca (distancia ao otimo 0)",
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 1.8659206644714175e-36,
+            "t": 83.80437182391414
+          }
+        },
+        "leitura": "no mutavel, o contraste primario mede o valor do aprendizado (P0 - P1); a eficiencia (a distancia do P1 ao otimo, a taxa da fruta ruim 0, depois da troca) e outra coisa e nao se le como falha (Eliassen et al. 2009, resumo; o texto completo e o L-1)",
+        "valor": {
+          "contraste": "p2_mutavel",
+          "d": "P0 - P1",
+          "media": 0.10162982220534438
+        }
+      },
+      "por_condicao": {
+        "descasado": "confirma",
+        "mutavel": "confirma"
+      }
+    },
+    "3": {
+      "apoio_teorico": "APOIADA (pela informacao filtrada, nao pela economia de tentativas)",
+      "censura": {
+        "P1": {
+          "censuradas": 3,
+          "n": 30,
+          "sem_referencia": 1
+        },
+        "P2": {
+          "censuradas": 0,
+          "n": 30,
+          "sem_referencia": 1
+        }
+      },
+      "contrastes": [
+        "p3_consumos"
+      ],
+      "cuidado": {
+        "p3_consumos": {
+          "P2": "sem_efeito_acima_do_so_cuidado"
+        }
+      },
+      "leitura": "confirma"
+    },
+    "4": {
+      "apoio_teorico": "SEM APOIO DIRETO",
+      "contrastes": [
+        "p4a_piora",
+        "p4b_recupera"
+      ],
+      "cuidado": {
+        "p4a_piora": {
+          "P2e": "sem_efeito_acima_do_so_cuidado"
+        },
+        "p4b_recupera": {
+          "P2e": "sem_efeito_acima_do_so_cuidado"
+        }
+      },
+      "dia_do_cruzamento_P2e_P0": 3,
+      "leitura": "inconclusivo",
+      "w_info_P2e": {
+        "fracao_cruza_zero": 1.0,
+        "fracao_no_limite": 0.0,
+        "leitura": "descritivo (adendo 4.2, L-4): separa 'nao refutou' de 'refutou devagar'",
+        "limite_de_baixo": -16128,
+        "media_por_dia": [
+          -24.666666666666668,
+          -254.76666666666668,
+          -439.3,
+          -738.2333333333333,
+          -1070.6,
+          -1351.8333333333333,
+          -1502.4333333333334,
+          -1611.5666666666666,
+          -2246.766666666667,
+          -2324.4,
+          -2515.6,
+          -2578.366666666667,
+          -2837.4,
+          -3004.133333333333
+        ],
+        "w0": 256
+      }
+    },
+    "5": {
+      "apoio_teorico": "CONTESTADA (Ho et al. 2017, 10.1016/j.cognition.2017.03.006): mantida como registrada (P-5)",
+      "contrastes": [
+        "p5_equivalencia"
+      ],
+      "cuidado": {
+        "p5_equivalencia": {
+          "P3": "sem_efeito_acima_do_so_cuidado"
+        }
+      },
+      "k4": true,
+      "leitura": "confirma"
+    }
+  },
+  "status": "resultado",
+  "tamanho_amostra": {
+    "alfa_passo": 0.008333333333333333,
+    "n_da_run": 30,
+    "n_validacao": 35,
+    "n_validacao_formula": 35,
+    "poder": 0.8,
+    "por_contraste": {
+      "p1_casado": {
+        "delta": 0.1986268570547561,
+        "n": 5,
+        "n_simulado": 5,
+        "poder_no_n_simulado": 0.819,
+        "poder_simulado_no_n_da_run": 1.0,
+        "sigma_d": 0.08813952120794433
+      },
+      "p2_descasado": {
+        "delta": 0.1986268570547561,
+        "n": 5,
+        "n_simulado": 5,
+        "poder_no_n_simulado": 0.9655,
+        "poder_simulado_no_n_da_run": 1.0,
+        "sigma_d": 0.07381434512823676
+      },
+      "p2_mutavel": {
+        "delta": 0.1986268570547561,
+        "n": 5,
+        "n_simulado": 5,
+        "poder_no_n_simulado": 0.971,
+        "poder_simulado_no_n_da_run": 1.0,
+        "sigma_d": 0.07275206242368458
+      },
+      "p3_consumos": {
+        "delta": 17.5,
+        "n": 35,
+        "n_simulado": 35,
+        "poder_no_n_simulado": 0.8515,
+        "poder_simulado_no_n_da_run": 0.781,
+        "sigma_d": 30.11594998252178
+      },
+      "p4a_piora": {
+        "delta": 0.1986268570547561,
+        "n": 5,
+        "n_simulado": 5,
+        "poder_no_n_simulado": 1.0,
+        "poder_simulado_no_n_da_run": 1.0,
+        "sigma_d": 0.03456452283488831
+      },
+      "p4b_recupera": {
+        "delta": 0.1986268570547561,
+        "n": 5,
+        "n_simulado": 5,
+        "poder_no_n_simulado": 0.9875,
+        "poder_simulado_no_n_da_run": 1.0,
+        "sigma_d": 0.07312721137010197
+      }
+    },
+    "regra": "simulacao (adendo 2)",
+    "sem_n_simulado": [],
+    "simulacao": {
+      "replicas": 2000,
+      "semente": 4242
+    }
+  },
+  "unidades": 30,
+  "vidas": {
+    "blocos": 510,
+    "duracoes": 240,
+    "frutas": 720,
+    "p2d_p3i": 120,
+    "padrao": 90
+  }
+}

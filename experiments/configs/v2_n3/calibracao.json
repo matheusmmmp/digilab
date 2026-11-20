@@ -1,0 +1,7 @@
+{
+  "descricao": "V2, N3 (docs/PLANO_ANALISE_V2_N3.md, secao 6): grade do ganho do sinal de consequencia nas sementes de calibracao; P0, P1, P3, acoplados P1<-P0 e P3<-P3 sem sinais.",
+  "conjunto": "calibracao",
+  "sementes": [8101, 8202, 8303, 8404, 8505],
+  "saida": "artifacts_v2_n3/calibracao",
+  "grade_ganho": [4, 8, 16, 32, 64]
+}

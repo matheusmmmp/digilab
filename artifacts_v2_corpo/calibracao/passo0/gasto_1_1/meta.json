@@ -1,0 +1,95 @@
+{
+  "bancada_sha256": "4d4699d52ee96db199d6b3e79ef5efe3e72aa488d5f339c50801eabe1cfd5560",
+  "cfg_lobos": {
+    "alvo_aprendido": false,
+    "aprendizado_ligado": true,
+    "bits_ponto_fixo": 10,
+    "entradas_sociais": false,
+    "escala_ticks_desde_cuidado": 480.0,
+    "fator_familiaridade": 16,
+    "janela_latencia_ticks": 120,
+    "janela_social_ticks": 240,
+    "maximo_pesos": 1000,
+    "memoria_ganho": 0,
+    "memoria_janela_recencia_ticks": 240,
+    "memoria_ligada": false,
+    "memoria_modo": "relevante",
+    "memoria_permutacao": [],
+    "modelo_outros": false,
+    "passo": 512,
+    "piso_peso": 64,
+    "presenca_fruta_mundo": false,
+    "recompensa_elogio": 1.0,
+    "recompensa_pedido_ignorado": -0.5,
+    "recompensa_repreensao": -1.0,
+    "recompensa_tapa": -1.0,
+    "teto": 16384,
+    "traco_decisoes": 0,
+    "traco_fator": 0,
+    "w0_alvo": 64,
+    "w0_info": 0,
+    "w0_pedido": 0
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "bracos": [
+      "P0-q"
+    ],
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "corpo": {
+      "gasto_atividades_den": 1,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 375,
+      "gasto_basal_dormindo": 187
+    },
+    "descricao": "Passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2 e A3.2b; TAREFA_V2_METABOLISMO, ME-7; PCD-9): so o P0-q, com o metabolismo, nas 20 unidades da calibracao (bases 33101...33505, K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao). Um m_gasto em {1/4, 1/2, 1}, o mesmo no basal e no gasto das atividades sobre o combustivel (3 pontos, 480 vidas), montado por experiments/bancada_v2.pontos_passo0; a regra e escolha_passo0 (fracao do tempo acordado com a falta em [0,05; 0,30], o ponto mais perto de 1). Rodar: python experiments/bancada_v2.py --passo0 --config <esta> --saida <pasta>.",
+    "dias": 14,
+    "donos": [
+      "atencioso",
+      "relapso",
+      "aleatorio",
+      "incoerente"
+    ],
+    "montagem": "completa",
+    "mundos": [
+      "bola",
+      "padrao"
+    ],
+    "orcamento": 224,
+    "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+    "ponto": "T3",
+    "sonda": {
+      "amostras": 10,
+      "estados": 10,
+      "semente": 101
+    },
+    "unidades": {
+      "bases": [
+        33101,
+        33202,
+        33303,
+        33404,
+        33505
+      ],
+      "k": 4,
+      "prefixo": "corpo"
+    }
+  },
+  "config_sha256": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+  "corpo_sha256": "5bc401ffc146fcef37b4959963c00fe7d8e20d1237360957667823ed59a32f26",
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "lobos_sha256": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+  "metrics_sha256": "42df894783f9034943d3219bc429602886ea5d1051f6dc3c2ef7fd225943a465",
+  "motor_corpo_sha256": "75daab70783af5041f335c106021a8b8290b512b910f09c263326cb3d3c1e99e",
+  "mundo_sha256": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "ponto": "T3",
+  "python": "3.13.0"
+}

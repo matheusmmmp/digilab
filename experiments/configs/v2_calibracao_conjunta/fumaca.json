@@ -1,0 +1,38 @@
+{
+  "descricao": "Fumaca do orquestrador da calibracao conjunta (docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md). NAO canonica: so as sementes dos testes, vida curta, grades curtas; confere o encanamento das etapas A1, A2, B, C e D e do adendo, nunca como resultado.",
+  "sementes": [
+    101,
+    202
+  ],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "sonda": {
+    "estados": 20,
+    "amostras": 20,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 500,
+    "semente": 101,
+    "nivel": 0.95
+  },
+  "grades": {
+    "g": [
+      256,
+      512
+    ],
+    "w0_pedido": [
+      512
+    ],
+    "ganho": [
+      4,
+      8
+    ],
+    "w0_info": [
+      512
+    ]
+  },
+  "canais": true,
+  "saida": "artifacts_fumaca/v2_calibracao_conjunta"
+}

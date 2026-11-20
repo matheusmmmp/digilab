@@ -1,0 +1,33 @@
+{
+  "descricao": "Fumaca do piloto do adendo 8 do J5, NAO canonica: a config do piloto nas sementes dos testes, com 2 dias de fase 1 e 2 de janela; confere o encanamento dos dois passos, nunca como resultado.",
+  "tipo": "pet_que_pensa",
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true,
+    "ganho_gosto": 512
+  },
+  "d_a": 2,
+  "janela": 2,
+  "paladar": true,
+  "fruta_ao_lado": true,
+  "adendo_7": true,
+  "g_plano": 1024,
+  "sementes": [
+    101,
+    202,
+    303
+  ],
+  "adendo_8": true,
+  "piloto_adendo8": {}
+}

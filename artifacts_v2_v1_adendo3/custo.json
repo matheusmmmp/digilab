@@ -1,0 +1,80 @@
+{
+  "decisao": "cabe: a maior entre 28 e 21 dias",
+  "duracao_maior": 28,
+  "fonte_k2": "artifacts_v2_calibracao_conjunta/D/resultado.json",
+  "horas_sem_o_bloco_de_duracoes": 4.907001044772729,
+  "maquina": "Windows-11-10.0.26200-SP0",
+  "medida_da_razao": {
+    "bases": [
+      101,
+      202
+    ],
+    "bracos": [
+      "P0",
+      "P1"
+    ],
+    "k": 1,
+    "mundos": [
+      "descasado",
+      "mutavel"
+    ],
+    "por_duracao": {
+      "14": {
+        "razao_a_14": 1.0,
+        "segundos": 66.08121400000164,
+        "segundos_por_vida": 8.260151750000205,
+        "vidas": 8
+      },
+      "21": {
+        "razao_a_14": 1.7133654717662237,
+        "segundos": 113.2212703999976,
+        "segundos_por_vida": 14.1526587999997,
+        "vidas": 8
+      },
+      "28": {
+        "razao_a_14": 2.5720181744844663,
+        "segundos": 169.96208340000157,
+        "segundos_por_vida": 21.245260425000197,
+        "vidas": 8
+      },
+      "7": {
+        "razao_a_14": 0.4170457900485509,
+        "segundos": 27.558892099998047,
+        "segundos_por_vida": 3.444861512499756,
+        "vidas": 8
+      }
+    }
+  },
+  "opcoes": {
+    "21": {
+      "bloco_duracoes_horas": 0.8711608572933905,
+      "cabe": true,
+      "total_horas": 5.778161902066119
+    },
+    "28": {
+      "bloco_duracoes_horas": 1.222278333071336,
+      "cabe": true,
+      "total_horas": 6.129279377844064
+    }
+  },
+  "python": "3.13.0",
+  "segundos_por_vida_k2": 12.267502611931823,
+  "teto_horas": 12.0,
+  "unidades": 30,
+  "vidas_por_unidade_bloco_duracoes": {
+    "7": 4,
+    "D": 4
+  },
+  "vidas_por_unidade_p2d_p3i": 4,
+  "vidas_por_unidade_sem_o_adendo3": {
+    "blocos": {
+      "ablacoes": 4,
+      "n6": 4,
+      "n7": 6,
+      "p2a": 3
+    },
+    "padrao": 3,
+    "principal": 24,
+    "total": 44
+  }
+}

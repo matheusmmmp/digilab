@@ -1,0 +1,7 @@
+{
+  "descricao": "V2, A1 (docs/PLANO_ANALISE_V2_A1.md, secao 4): grade duracao x ganho x w_bola nas sementes de calibracao; bolas_por_dia 4 (sensibilidade {2, 8} no ponto escolhido).",
+  "conjunto": "calibracao",
+  "sementes": [6101, 6202, 6303, 6404, 6505],
+  "saida": "artifacts_v2_a1/calibracao",
+  "grade": {"duracao_min": [30, 60, 120], "ganho_humor_bola": [0.05, 0.15, 0.30], "w_bola": [1.0, 3.0, 6.0]}
+}

@@ -1,0 +1,5 @@
+{
+  "descricao": "TAREFA_PERSONALIDADE_OBEDIENCIA, run temperamento sorteado, obediencia desligada; mesmos 10 ovos nas tres runs.",
+  "protocolo": "arena-v1-personalidade-sem-obediencia",
+  "saida": "artifacts_v1_personalidade/sem_obediencia"
+}

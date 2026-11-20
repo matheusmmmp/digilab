@@ -1,0 +1,77 @@
+{
+  "comparacao_que_domina": "privacao|longe",
+  "cpu_por_vida_s": 2.017708333333333,
+  "fontes": {
+    "artifacts_v2_digibrain_prototipo/l2/piloto/medidas.json": "922c22f2681d295eac78383d5252be014ad89590dcf224a187d72970c993f6ad",
+    "artifacts_v2_digibrain_prototipo/l2/piloto/meta.json": "f75e52af2af5687ec30abdc9a2c76ee1ca3ba0b9d11496fa7a6b60299a2e41cb",
+    "artifacts_v2_digibrain_prototipo/l2/piloto/resultado.json": "0480de0f086c354847c1fa6d53f7a1b63622471c9b0f1591450a95eec90b1931"
+  },
+  "fora_da_grade": {
+    "conjuncao": 0.8007977759079912,
+    "k": 297,
+    "parede_h_4_processos": 2.415388174649997,
+    "vidas": 14256
+  },
+  "grade": {
+    "102": {
+      "conjuncao": 0.3597960330497839,
+      "parede_h_4_processos": 0.8295272518999991,
+      "vidas": 4896
+    },
+    "12": {
+      "conjuncao": 0.006911982674718425,
+      "parede_h_4_processos": 0.0975914413999999,
+      "vidas": 576
+    },
+    "201": {
+      "conjuncao": 0.6336527787822724,
+      "parede_h_4_processos": 1.6346566434499983,
+      "vidas": 9648
+    },
+    "21": {
+      "conjuncao": 0.03249909725330354,
+      "parede_h_4_processos": 0.17078502244999982,
+      "vidas": 1008
+    },
+    "30": {
+      "conjuncao": 0.06662746395097531,
+      "parede_h_4_processos": 0.24397860349999972,
+      "vidas": 1440
+    },
+    "51": {
+      "conjuncao": 0.1568814964236492,
+      "parede_h_4_processos": 0.41476362594999955,
+      "vidas": 2448
+    }
+  },
+  "parede_por_vida_s_4_processos": 0.6099465087499993,
+  "regra_do_k": {
+    "alvo": 0.8,
+    "conjuncao": {
+      "102": 0.35979603304978397,
+      "12": 0.0069119826747184275,
+      "201": 0.6336527787822724,
+      "21": 0.03249909725330355,
+      "30": 0.06662746395097532,
+      "51": 0.15688149642364924
+    },
+    "grade": [
+      12,
+      21,
+      30,
+      51,
+      102,
+      201
+    ],
+    "k": null,
+    "k_por_base": null,
+    "motivo": "nenhum K da grade chega a 0.8",
+    "volta_ao_matheus": true
+  },
+  "rotulo": "o custo do K da avaliacao da L-2, para o Matheus (A5.8); o K fora da grade e so informacao, a regra nao muda",
+  "script": {
+    "arquivo": "experiments/custo_k_l2_digibrain.py",
+    "sha256": "5993fe1f036890d6c8057e53febf0ed8821b3995c9c68064c7acb61e1adb0480"
+  },
+  "vidas_por_unidade": 48
+}

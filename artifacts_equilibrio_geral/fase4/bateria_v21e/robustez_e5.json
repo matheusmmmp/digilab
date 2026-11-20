@@ -1,0 +1,482 @@
+{
+  "custo_contra_golpe+": {
+    "de": 15,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 16,
+    "suporte": [
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "custo_contra_golpe-": {
+    "de": 15,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 14,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita"
+    ]
+  },
+  "custo_investida+": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 22,
+    "suporte": [
+      "duelista",
+      "emboscador",
+      "espelho",
+      "vigia"
+    ]
+  },
+  "custo_investida-": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 18,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "custo_marcar+": {
+    "de": 10,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 11,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "custo_marcar-": {
+    "de": 10,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 9,
+    "suporte": [
+      "duelista",
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "tita",
+      "vigia"
+    ]
+  },
+  "custo_pele_dura+": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 22,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha"
+    ]
+  },
+  "custo_pele_dura-": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 18,
+    "suporte": [
+      "furioso",
+      "sentinela",
+      "tita"
+    ]
+  },
+  "dano_extra_duelista+": {
+    "de": 4.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 4.4,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "dano_extra_duelista-": {
+    "de": 4.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 3.6,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "dano_investida+": {
+    "de": 8.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 8.8,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "dano_investida-": {
+    "de": 8.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 7.2,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "fracao_contra_golpe+": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.55,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita"
+    ]
+  },
+  "fracao_contra_golpe-": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.45,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "fracao_espelho_disparo+": {
+    "de": 1.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.1,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "fracao_espelho_disparo-": {
+    "de": 1.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.9,
+    "suporte": [
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "guts_extra_muralha+": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 4,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "guts_extra_muralha-": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "limiar_hp_furioso+": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.55,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "limiar_hp_furioso-": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.45,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_emboscador+": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 2.2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_emboscador-": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.8,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_furioso+": {
+    "de": 1.25,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.375,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita"
+    ]
+  },
+  "mult_furioso-": {
+    "de": 1.25,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.125,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_marcar+": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 2.2,
+    "suporte": [
+      "duelista",
+      "emboscador",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita"
+    ]
+  },
+  "mult_marcar-": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.8,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_pele_dura+": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.55,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita"
+    ]
+  },
+  "mult_pele_dura-": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 0.45,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_tita+": {
+    "de": 1.3,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.4300000000000002,
+    "suporte": [
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "mult_tita-": {
+    "de": 1.3,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1.1700000000000002,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha"
+    ]
+  },
+  "recarga_sentinela+": {
+    "de": 4,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 5,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "recarga_sentinela-": {
+    "de": 4,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 3,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "turnos_marcar+": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 4,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela",
+      "tita",
+      "vigia"
+    ]
+  },
+  "turnos_marcar-": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 2,
+    "suporte": [
+      "duelista",
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "tita",
+      "vigia"
+    ]
+  },
+  "turnos_pele_dura+": {
+    "de": 2,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 3,
+    "suporte": [
+      "furioso",
+      "muralha",
+      "sentinela",
+      "vigia"
+    ]
+  },
+  "turnos_pele_dura-": {
+    "de": 2,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 1,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha"
+    ]
+  }
+}

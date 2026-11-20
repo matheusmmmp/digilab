@@ -1,0 +1,27 @@
+{
+ "bancada_sha256": "4d9b5961cf357a6261c2db6bb0812cbcd443efefa1b18dce1242976e640161d8",
+ "bootstrap": {
+  "nivel": 0.95,
+  "reamostragens": 10000,
+  "semente": 4242
+ },
+ "bracos": [
+  "P0",
+  "P1",
+  "P2",
+  "P2e",
+  "P3"
+ ],
+ "cerebro_c_sha256": "f87ab51ce7121b98faac1d21e5a9ad7f4a595ec5ae3bf0d91fa04935f9a273ed",
+ "frutas_sha256": "d0b248d2bbbd1e64ec4901aa74b84610763064c266a1a839214ed7bd88bdc808",
+ "janelas": {
+  "final": "dias 8-14",
+  "inicio": "dias 1-7"
+ },
+ "lobos_sha256": "94e78011c72d44d779711998114f2fc6413460f37f25fb8912361d99aafb73ab",
+ "plataforma": "Windows-11-10.0.26200-SP0",
+ "python": "3.13.0",
+ "rotulo": "POS HOC DESCRITIVO (V-3, Q-1): sem gate, sem run nova, nao muda nenhuma leitura registrada",
+ "script_sha256": "11506b5fa2f7d34ea30ffa504fc94db7f37e801a9f9f098af2e78d343c6caac1",
+ "segundos": 436.6990560999984
+}

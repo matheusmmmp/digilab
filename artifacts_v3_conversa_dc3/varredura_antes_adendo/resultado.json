@@ -1,0 +1,2976 @@
+{
+  "descritivo": {
+    "coincidencia_dec": {
+      "atende": {
+        "fome": {
+          "coincide": 0,
+          "falas": 771,
+          "fracao": 0.0
+        },
+        "higiene": {
+          "coincide": 0,
+          "falas": 298,
+          "fracao": 0.0
+        },
+        "solidao": {
+          "coincide": 55,
+          "falas": 351,
+          "fracao": 0.15669515669515668
+        }
+      },
+      "ignora": {
+        "fome": {
+          "coincide": 17,
+          "falas": 2029,
+          "fracao": 0.008378511582060127
+        },
+        "higiene": {
+          "coincide": 0,
+          "falas": 777,
+          "fracao": 0.0
+        },
+        "solidao": {
+          "coincide": 73,
+          "falas": 1321,
+          "fracao": 0.05526116578349735
+        }
+      }
+    },
+    "corpo": {
+      "dias_8_14|fracao_fora": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03789132011584045,
+            "ic95": {
+              "ic_inferior": -0.04023281184177697,
+              "ic_superior": 0.05386376422272935
+            },
+            "media": 0.006815476190476189,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.011846204985331158,
+            "ic95": {
+              "ic_inferior": -0.011956030055151452,
+              "ic_superior": 0.01746198243610384
+            },
+            "media": 0.0027529761904761937,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.02461009657251375,
+            "ic95": {
+              "ic_inferior": 0.050702449728512455,
+              "ic_superior": 0.1118173915413288
+            },
+            "media": 0.08125992063492063,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.052192618479785576,
+            "ic95": {
+              "ic_inferior": 0.08708418561404674,
+              "ic_superior": 0.21669557629071518
+            },
+            "media": 0.15188988095238096,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.027647789009093728,
+            "ic95": {
+              "ic_inferior": 0.040115180201919044,
+              "ic_superior": 0.10877370868696987
+            },
+            "media": 0.07444444444444445,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.042983989358222695,
+            "ic95": {
+              "ic_inferior": 0.0957652326766259,
+              "ic_superior": 0.2025085768471836
+            },
+            "media": 0.14913690476190475,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "dias_8_14|menor_media": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04622155545530096,
+            "ic95": {
+              "ic_inferior": -0.05171880450017905,
+              "ic_superior": 0.06306447819947295
+            },
+            "media": 0.005672836849646945,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.010354938764004895,
+            "ic95": {
+              "ic_inferior": -0.017560120010784903,
+              "ic_superior": 0.008154589322954018
+            },
+            "media": -0.004702765343915443,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03003348849603786,
+            "ic95": {
+              "ic_inferior": 0.32058656527169227,
+              "ic_superior": 0.39516956808368653
+            },
+            "media": 0.3578780666776894,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.014653283875320016,
+            "ic95": {
+              "ic_inferior": 0.27784647005576174,
+              "ic_superior": 0.3142353801426509
+            },
+            "media": 0.2960409250992063,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.01811552273367287,
+            "ic95": {
+              "ic_inferior": 0.32971183744099897,
+              "ic_superior": 0.3746986222150859
+            },
+            "media": 0.3522052298280424,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.024873341341996792,
+            "ic95": {
+              "ic_inferior": 0.269859357983731,
+              "ic_superior": 0.3316280229025124
+            },
+            "media": 0.3007436904431217,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "dias_8_14|menor_minimo": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.01711827276175021,
+            "ic95": {
+              "ic_inferior": -0.029010698555252915,
+              "ic_superior": 0.0134995874441418
+            },
+            "media": -0.007755555555555557,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03660546976432165,
+            "ic95": {
+              "ic_inferior": -0.008585027277027944,
+              "ic_superior": 0.0823183606103613
+            },
+            "media": 0.03686666666666667,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.019076933667341516,
+            "ic95": {
+              "ic_inferior": 0.052535080491362955,
+              "ic_superior": 0.09990936395308148
+            },
+            "media": 0.07622222222222222,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.006322865374433482,
+            "ic95": {
+              "ic_inferior": 0.07157690347685455,
+              "ic_superior": 0.087278652078701
+            },
+            "media": 0.07942777777777778,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.010867598943194555,
+            "ic95": {
+              "ic_inferior": 0.07048387142309583,
+              "ic_superior": 0.09747168413245973
+            },
+            "media": 0.08397777777777778,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.038976678687151906,
+            "ic95": {
+              "ic_inferior": -0.005834827584281367,
+              "ic_superior": 0.0909570498065036
+            },
+            "media": 0.04256111111111111,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "episodio": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.09654912744604184,
+            "ic95": {
+              "ic_inferior": -0.08392086964703112,
+              "ic_superior": 0.15584228156844304
+            },
+            "media": 0.035960705960705955,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.017999293613045142,
+            "ic95": {
+              "ic_inferior": 0.027543767200731862,
+              "ic_superior": 0.07224191694556607
+            },
+            "media": 0.049892842073148966,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04632094054318044,
+            "ic95": {
+              "ic_inferior": 0.8823442631239031,
+              "ic_superior": 0.9973743515947116
+            },
+            "media": 0.9398593073593073,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.045796118725948964,
+            "ic95": {
+              "ic_inferior": 0.8478541719813104,
+              "ic_superior": 0.9615809557402626
+            },
+            "media": 0.9047175638607865,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0648317042470056,
+            "ic95": {
+              "ic_inferior": 0.8233994082929004,
+              "ic_superior": 0.9843977945043023
+            },
+            "media": 0.9038986013986013,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04471574720410996,
+            "ic95": {
+              "ic_inferior": 0.7993027883315132,
+              "ic_superior": 0.9103466552437612
+            },
+            "media": 0.8548247217876372,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "exaustao": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.028710261112495576,
+            "ic95": {
+              "ic_inferior": -0.043014569030986737,
+              "ic_superior": 0.02828242617384388
+            },
+            "media": -0.0073660714285714276,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.018628328418028906,
+            "ic95": {
+              "ic_inferior": -0.017326553314811144,
+              "ic_superior": 0.028933696171954
+            },
+            "media": 0.005803571428571427,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.020387787281037552,
+            "ic95": {
+              "ic_inferior": 0.07684295662533716,
+              "ic_superior": 0.12747251956513903
+            },
+            "media": 0.1021577380952381,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.01907941797868397,
+            "ic95": {
+              "ic_inferior": 0.14044667835109123,
+              "ic_superior": 0.18782713117271824
+            },
+            "media": 0.16413690476190473,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.014562724596333303,
+            "ic95": {
+              "ic_inferior": 0.09144179867678603,
+              "ic_superior": 0.12760582037083304
+            },
+            "media": 0.10952380952380954,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.02232855788924911,
+            "ic95": {
+              "ic_inferior": 0.1306087668704441,
+              "ic_superior": 0.18605789979622261
+            },
+            "media": 0.15833333333333335,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "limiar": 0.15,
+      "privacao_de_hoje": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03364605217015667,
+            "ic95": {
+              "ic_inferior": -0.03842887737565488,
+              "ic_superior": 0.045125305947083444
+            },
+            "media": 0.0033482142857142834,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.008224166708455596,
+            "ic95": {
+              "ic_inferior": -0.011997366002829551,
+              "ic_superior": 0.008425937431400979
+            },
+            "media": -0.0017857142857142863,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.021642387196787703,
+            "ic95": {
+              "ic_inferior": 0.05102921269684834,
+              "ic_superior": 0.10477435873172308
+            },
+            "media": 0.07790178571428572,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.035929681257808266,
+            "ic95": {
+              "ic_inferior": 0.08410764641048102,
+              "ic_superior": 0.17333282977999515
+            },
+            "media": 0.12872023809523808,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.027504110475370457,
+            "ic95": {
+              "ic_inferior": 0.040402707648684914,
+              "ic_superior": 0.10870443520845793
+            },
+            "media": 0.07455357142857143,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03264750046210128,
+            "ic95": {
+              "ic_inferior": 0.08996872642582046,
+              "ic_superior": 0.17104317833608426
+            },
+            "media": 0.13050595238095236,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "status": "as definicoes da AD6-4, DECIDIDAS, SEM FONTE",
+      "vida|fracao_fora": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.018597243711582563,
+            "ic95": {
+              "ic_inferior": -0.018284980363445797,
+              "ic_superior": 0.027898075601541037
+            },
+            "media": 0.004806547619047619,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.00730828230352234,
+            "ic95": {
+              "ic_inferior": -0.012063022294834636,
+              "ic_superior": 0.006085839755152093
+            },
+            "media": -0.002988591269841271,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.012075703494596761,
+            "ic95": {
+              "ic_inferior": 0.02733986308285518,
+              "ic_superior": 0.05732779564730354
+            },
+            "media": 0.04233382936507936,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0234029908743797,
+            "ic95": {
+              "ic_inferior": 0.10118440433654705,
+              "ic_superior": 0.15930170677456404
+            },
+            "media": 0.13024305555555554,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.013710686697500809,
+            "ic95": {
+              "ic_inferior": 0.02050321568309373,
+              "ic_superior": 0.054551347808969766
+            },
+            "media": 0.037527281746031746,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.021981272335868055,
+            "ic95": {
+              "ic_inferior": 0.10593829233123712,
+              "ic_superior": 0.16052500131955658
+            },
+            "media": 0.13323164682539684,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "vida|menor_media": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.042567627829973656,
+            "ic95": {
+              "ic_inferior": -0.0629782782614907,
+              "ic_superior": 0.04273110366933911
+            },
+            "media": -0.010123587296075797,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0063695220427787205,
+            "ic95": {
+              "ic_inferior": -0.01130119477550701,
+              "ic_superior": 0.004516417637060256
+            },
+            "media": -0.0033923885692233773,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.015963447698503306,
+            "ic95": {
+              "ic_inferior": 0.37716243731733223,
+              "ic_superior": 0.41680491390621277
+            },
+            "media": 0.3969836756117725,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.009818688267536124,
+            "ic95": {
+              "ic_inferior": 0.30721385799965517,
+              "ic_superior": 0.3315968814624257
+            },
+            "media": 0.31940536973104044,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.030925562860664318,
+            "ic95": {
+              "ic_inferior": 0.36870810487957395,
+              "ic_superior": 0.4455064209361226
+            },
+            "media": 0.40710726290784827,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.011961328255783263,
+            "ic95": {
+              "ic_inferior": 0.3079458076343603,
+              "ic_superior": 0.3376497089661673
+            },
+            "media": 0.3227977583002638,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      },
+      "vida|menor_minimo": {
+        "contrastes": {
+          "atende|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.017234531891124078,
+            "ic95": {
+              "ic_inferior": -0.030005053330658962,
+              "ic_superior": 0.01279394221954785
+            },
+            "media": -0.008605555555555556,
+            "motivo": null,
+            "n": 5
+          },
+          "ignora|LAB+F - LAB": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04066207662317115,
+            "ic95": {
+              "ic_inferior": -0.019205303301861175,
+              "ic_superior": 0.08177196996852784
+            },
+            "media": 0.03128333333333333,
+            "motivo": null,
+            "n": 5
+          }
+        },
+        "niveis": {
+          "LAB+F|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.017581545020522,
+            "ic95": {
+              "ic_inferior": 0.052114072959663624,
+              "ic_superior": 0.09577481592922528
+            },
+            "media": 0.07394444444444445,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB+F|ignora": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0028164392851459806,
+            "ic95": {
+              "ic_inferior": 0.07034737318095194,
+              "ic_superior": 0.07734151570793696
+            },
+            "media": 0.07384444444444445,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|atende": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.009770542619855856,
+            "ic95": {
+              "ic_inferior": 0.0704182689860095,
+              "ic_superior": 0.0946817310139905
+            },
+            "media": 0.08255,
+            "motivo": null,
+            "n": 5
+          },
+          "LAB|ignora": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.038976678687151906,
+            "ic95": {
+              "ic_inferior": -0.005834827584281367,
+              "ic_superior": 0.0909570498065036
+            },
+            "media": 0.04256111111111111,
+            "motivo": null,
+            "n": 5
+          }
+        }
+      }
+    },
+    "credito": {
+      "LAB": {
+        "atendimentos": 1002,
+        "dentro_do_intervalo": 0,
+        "fora_do_intervalo": 1002,
+        "fracao_dentro": 0.0,
+        "sem_orcamento": 309,
+        "vidas": 20,
+        "vidas_com_algum_dentro": 0
+      },
+      "LAB+F": {
+        "atendimentos": 1057,
+        "dentro_do_intervalo": 0,
+        "fora_do_intervalo": 1057,
+        "fracao_dentro": 0.0,
+        "sem_orcamento": 363,
+        "vidas": 20,
+        "vidas_com_algum_dentro": 0
+      }
+    },
+    "fala": {
+      "EXT": {
+        "classe": {
+          "classe": "indeterminado",
+          "motivo": null
+        },
+        "dp": 2.2451509855343375,
+        "gate": null,
+        "ic95": {
+          "ic_inferior": -2.1543898159363533,
+          "ic_superior": 3.42105648260302
+        },
+        "media": 0.6333333333333335,
+        "motivo": null,
+        "n": 5,
+        "previsao": "< 0"
+      },
+      "abaixo_do_limiar": {
+        "LAB+F|atende": {
+          "fome": 524,
+          "higiene": 106,
+          "sem_conteudo": 0,
+          "solidao": 50
+        },
+        "LAB+F|ignora": {
+          "fome": 815,
+          "higiene": 206,
+          "sem_conteudo": 0,
+          "solidao": 38
+        },
+        "LAB|atende": {
+          "fome": 0,
+          "higiene": 0,
+          "sem_conteudo": 899,
+          "solidao": 0
+        },
+        "LAB|ignora": {
+          "fome": 0,
+          "higiene": 0,
+          "sem_conteudo": 859,
+          "solidao": 0
+        }
+      },
+      "dias_1_3|falas_por_dia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.46622002435664534,
+          "ic95": {
+            "ic_inferior": 3.4544447138480048,
+            "ic_superior": 4.612221952818662
+          },
+          "media": 4.033333333333333,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 2.246911460452127,
+          "ic95": {
+            "ic_inferior": 11.62675759907182,
+            "ic_superior": 17.206575734261513
+          },
+          "media": 14.416666666666666,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.41915921133197637,
+          "ic95": {
+            "ic_inferior": 3.4462117644402683,
+            "ic_superior": 4.487121568893064
+          },
+          "media": 3.9666666666666663,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.264361938335346,
+          "ic95": {
+            "ic_inferior": 13.196753967136543,
+            "ic_superior": 16.336579366196794
+          },
+          "media": 14.76666666666667,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "dias_1_3|pertinencia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.04023831341301026,
+          "ic95": {
+            "ic_inferior": 0.14398241310781956,
+            "ic_superior": 0.24390734333456848
+          },
+          "media": 0.19394487822119402,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.06939719057154058,
+          "ic95": {
+            "ic_inferior": 0.41794166873106114,
+            "ic_superior": 0.5902776549493964
+          },
+          "media": 0.5041096618402288,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "dias_1_3|pertinente_por_dia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.19002923751652298,
+          "ic95": {
+            "ic_inferior": 0.6140475371696213,
+            "ic_superior": 1.0859524628303787
+          },
+          "media": 0.85,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.382680568879,
+          "ic95": {
+            "ic_inferior": 5.316508649940379,
+            "ic_superior": 8.750158016726287
+          },
+          "media": 7.033333333333333,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "dias_8_14|falas_por_dia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.31703344315960214,
+          "ic95": {
+            "ic_inferior": 5.877779558830714,
+            "ic_superior": 6.665077584026429
+          },
+          "media": 6.271428571428571,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 2.0389385493837873,
+          "ic95": {
+            "ic_inferior": 12.518323408680345,
+            "ic_superior": 17.581676591319656
+          },
+          "media": 15.05,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.46538331797891225,
+          "ic95": {
+            "ic_inferior": 5.050721717272398,
+            "ic_superior": 6.206421139870458
+          },
+          "media": 5.628571428571428,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.8094625326948343,
+          "ic95": {
+            "ic_inferior": 11.216348086686558,
+            "ic_superior": 13.226509056170585
+          },
+          "media": 12.221428571428572,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "dias_8_14|pertinencia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.06576285103933127,
+          "ic95": {
+            "ic_inferior": 0.26704394384407115,
+            "ic_superior": 0.4303546729536204
+          },
+          "media": 0.3486993083988458,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0588049441578919,
+          "ic95": {
+            "ic_inferior": 0.4590224930465955,
+            "ic_superior": 0.6050544572010698
+          },
+          "media": 0.5320384751238326,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "dias_8_14|pertinente_por_dia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.5678459118386225,
+          "ic95": {
+            "ic_inferior": 1.5663547461713652,
+            "ic_superior": 2.9765023966857775
+          },
+          "media": 2.2714285714285714,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.764047120940356,
+          "ic95": {
+            "ic_inferior": 5.766789055936216,
+            "ic_superior": 10.1474966583495
+          },
+          "media": 7.957142857142857,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "por_conteudo": {
+        "LAB+F|atende": {
+          "fome": 771,
+          "higiene": 298,
+          "sem_conteudo": 0,
+          "solidao": 351
+        },
+        "LAB+F|ignora": {
+          "fome": 2029,
+          "higiene": 777,
+          "sem_conteudo": 0,
+          "solidao": 1321
+        },
+        "LAB|atende": {
+          "fome": 0,
+          "higiene": 0,
+          "sem_conteudo": 1311,
+          "solidao": 0
+        },
+        "LAB|ignora": {
+          "fome": 0,
+          "higiene": 0,
+          "sem_conteudo": 3439,
+          "solidao": 0
+        }
+      },
+      "por_dia": {
+        "LAB+F|atende": [
+          5.05,
+          3.5,
+          3.55,
+          4.05,
+          2.6,
+          3.6,
+          4.75,
+          3.5,
+          3.8,
+          4.15,
+          4.6,
+          5.5,
+          8.9,
+          13.45
+        ],
+        "LAB+F|ignora": [
+          14.85,
+          15.2,
+          13.2,
+          13.95,
+          13.7,
+          14.9,
+          15.2,
+          15.7,
+          14.0,
+          15.0,
+          12.15,
+          18.95,
+          12.85,
+          16.7
+        ],
+        "LAB|atende": [
+          4.8,
+          3.65,
+          3.45,
+          4.35,
+          3.35,
+          2.65,
+          3.9,
+          2.4,
+          4.45,
+          3.5,
+          4.1,
+          5.0,
+          8.25,
+          11.7
+        ],
+        "LAB|ignora": [
+          15.5,
+          15.25,
+          13.55,
+          11.05,
+          10.3,
+          10.3,
+          10.45,
+          11.95,
+          12.95,
+          12.6,
+          11.5,
+          10.95,
+          11.95,
+          13.65
+        ]
+      },
+      "por_dono": {
+        "LAB+F|atende|aleatorio": [
+          2.8,
+          2.6,
+          3.0,
+          3.6,
+          2.6,
+          3.4,
+          4.2,
+          2.6,
+          2.8,
+          3.6,
+          3.4,
+          7.0,
+          22.6,
+          23.6
+        ],
+        "LAB+F|atende|atencioso": [
+          6.4,
+          4.6,
+          4.2,
+          4.8,
+          2.8,
+          4.2,
+          5.6,
+          4.8,
+          4.4,
+          4.2,
+          5.0,
+          5.2,
+          4.6,
+          6.4
+        ],
+        "LAB+F|atende|incoerente": [
+          6.4,
+          4.6,
+          4.2,
+          4.8,
+          2.8,
+          4.2,
+          5.6,
+          4.8,
+          4.4,
+          4.2,
+          5.0,
+          5.2,
+          4.6,
+          6.4
+        ],
+        "LAB+F|atende|relapso": [
+          4.6,
+          2.2,
+          2.8,
+          3.0,
+          2.2,
+          2.6,
+          3.6,
+          1.8,
+          3.6,
+          4.6,
+          5.0,
+          4.6,
+          3.8,
+          17.4
+        ],
+        "LAB+F|ignora|aleatorio": [
+          15.6,
+          16.4,
+          19.6,
+          20.6,
+          22.2,
+          20.6,
+          19.8,
+          16.4,
+          18.6,
+          20.8,
+          15.8,
+          24.8,
+          17.0,
+          19.2
+        ],
+        "LAB+F|ignora|atencioso": [
+          11.0,
+          16.0,
+          10.0,
+          11.4,
+          10.0,
+          12.4,
+          11.8,
+          14.2,
+          12.0,
+          11.6,
+          10.8,
+          17.2,
+          8.6,
+          15.6
+        ],
+        "LAB+F|ignora|incoerente": [
+          11.0,
+          16.0,
+          10.0,
+          11.4,
+          10.0,
+          12.4,
+          11.8,
+          14.2,
+          12.0,
+          11.6,
+          10.8,
+          17.2,
+          8.6,
+          15.6
+        ],
+        "LAB+F|ignora|relapso": [
+          21.8,
+          12.4,
+          13.2,
+          12.4,
+          12.6,
+          14.2,
+          17.4,
+          18.0,
+          13.4,
+          16.0,
+          11.2,
+          16.6,
+          17.2,
+          16.4
+        ],
+        "LAB|atende|aleatorio": [
+          3.4,
+          3.0,
+          3.4,
+          4.8,
+          2.2,
+          2.4,
+          4.0,
+          3.0,
+          5.0,
+          2.4,
+          3.0,
+          8.6,
+          19.8,
+          18.2
+        ],
+        "LAB|atende|atencioso": [
+          5.8,
+          4.0,
+          3.8,
+          4.8,
+          4.0,
+          2.8,
+          3.4,
+          2.6,
+          3.6,
+          3.8,
+          4.8,
+          3.6,
+          4.6,
+          6.0
+        ],
+        "LAB|atende|incoerente": [
+          5.8,
+          4.0,
+          3.8,
+          4.8,
+          4.0,
+          2.8,
+          3.4,
+          2.6,
+          3.6,
+          3.8,
+          4.8,
+          3.6,
+          4.6,
+          6.0
+        ],
+        "LAB|atende|relapso": [
+          4.2,
+          3.6,
+          2.8,
+          3.0,
+          3.2,
+          2.6,
+          4.8,
+          1.4,
+          5.6,
+          4.0,
+          3.8,
+          4.2,
+          4.0,
+          16.6
+        ],
+        "LAB|ignora|aleatorio": [
+          15.6,
+          16.4,
+          19.4,
+          17.0,
+          17.2,
+          14.0,
+          13.8,
+          14.8,
+          17.2,
+          16.4,
+          17.0,
+          18.4,
+          14.2,
+          14.8
+        ],
+        "LAB|ignora|atencioso": [
+          14.0,
+          17.2,
+          13.0,
+          8.4,
+          6.4,
+          8.2,
+          8.2,
+          10.8,
+          11.4,
+          10.6,
+          10.0,
+          8.0,
+          10.6,
+          13.6
+        ],
+        "LAB|ignora|incoerente": [
+          14.0,
+          17.2,
+          13.0,
+          8.4,
+          6.4,
+          8.2,
+          8.2,
+          10.8,
+          11.4,
+          10.6,
+          10.0,
+          8.0,
+          10.6,
+          13.6
+        ],
+        "LAB|ignora|relapso": [
+          18.4,
+          10.2,
+          8.8,
+          10.4,
+          11.2,
+          10.8,
+          11.6,
+          11.4,
+          11.8,
+          12.8,
+          9.0,
+          9.4,
+          12.4,
+          12.6
+        ]
+      },
+      "vida|falas_por_dia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.2890431081471188,
+          "ic95": {
+            "ic_inferior": 4.712534150113377,
+            "ic_superior": 5.430322992743766
+          },
+          "media": 5.071428571428571,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.3120200774658404,
+          "ic95": {
+            "ic_inferior": 13.110197619175866,
+            "ic_superior": 16.36837380939556
+          },
+          "media": 14.739285714285714,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.3195380913705511,
+          "ic95": {
+            "ic_inferior": 4.285383913033299,
+            "ic_superior": 5.078901801252415
+          },
+          "media": 4.682142857142857,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.8151350520381421,
+          "ic95": {
+            "ic_inferior": 11.270019009353145,
+            "ic_superior": 13.294266704932571
+          },
+          "media": 12.282142857142858,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "vida|pertinencia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.041054859875649684,
+          "ic95": {
+            "ic_inferior": 0.25705834951564005,
+            "ic_superior": 0.35901103243342897
+          },
+          "media": 0.3080346909745345,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.028580832244859192,
+          "ic95": {
+            "ic_inferior": 0.4862871109643877,
+            "ic_superior": 0.5572626918386735
+          },
+          "media": 0.5217749014015306,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        }
+      },
+      "vida|pertinente_por_dia": {
+        "LAB+F|atende": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.30529970219976515,
+          "ic95": {
+            "ic_inferior": 1.2173489225447927,
+            "ic_superior": 1.9755082203123504
+          },
+          "media": 1.5964285714285715,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB+F|ignora": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.1220482819107096,
+          "ic95": {
+            "ic_inferior": 6.192507329819371,
+            "ic_superior": 8.978921241609202
+          },
+          "media": 7.585714285714286,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|atende": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        },
+        "LAB|ignora": {
+          "classe": {
+            "classe": "≈ 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0,
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0
+          },
+          "media": 0.0,
+          "motivo": null,
+          "n": 5
+        }
+      }
+    },
+    "habito": {
+      "LAB+F|atende": {
+        "1": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "14": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "3": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "8": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        }
+      },
+      "LAB+F|ignora": {
+        "1": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "14": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "3": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "8": {
+          "chamar_atencao/fome": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/higiene": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          },
+          "chamar_atencao/solidao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        }
+      },
+      "LAB|atende": {
+        "1": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "14": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "3": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "8": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        }
+      },
+      "LAB|ignora": {
+        "1": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "14": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "3": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        },
+        "8": {
+          "chamar_atencao": {
+            "media": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "soma_abs_media": 0.0
+          }
+        }
+      }
+    }
+  },
+  "escuta": {
+    "bootstrap": {
+      "ic90": {
+        "ic_inferior": -6.807142857142857,
+        "ic_superior": -4.671428571428571,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -7.028571428571428,
+        "ic_superior": -4.614285714285714,
+        "nivel": 0.95
+      },
+      "motivo": null,
+      "p_unilateral": 1.0,
+      "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+    },
+    "classe": {
+      "classe": "< 0",
+      "motivo": null
+    },
+    "contraste": "G-ESCUTA: atende - ignora, no LAB+F, a fala pertinente por dia nos dias 8 a 14, nas 4 celulas de dono",
+    "dp": 1.6066269013059624,
+    "efeito_detectavel": 2.599600177217393,
+    "g1": -0.850776731121256,
+    "gl": 4,
+    "ic95": {
+      "ic_inferior": -7.6806050676115705,
+      "ic_superior": -3.6908235038169996,
+      "nivel": 0.95
+    },
+    "media": -5.685714285714285,
+    "motivo": null,
+    "n": 5,
+    "n_grupos": 5,
+    "p_unilateral": 0.9993100403389797,
+    "passa": false,
+    "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+    "t": -7.913252064411714,
+    "teste": "t sobre as unidades (A4.4.6)"
+  },
+  "fase": "conversa_dc3",
+  "guarda": {
+    "bootstrap": {
+      "ic90": {
+        "ic_inferior": 0.038581012621933336,
+        "ic_superior": 0.06254370830457787,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.03646978909127246,
+        "ic_superior": 0.06465493183523874,
+        "nivel": 0.95
+      },
+      "motivo": null,
+      "p_unilateral": 0.0,
+      "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+    },
+    "classe": {
+      "classe": "> 0",
+      "motivo": null,
+      "sinal": null
+    },
+    "contraste": "G-COMEDOURO-DC3: LAB+F - LAB, a taxa por episodio, com o dono que ignora, nas 4 celulas",
+    "falha": false,
+    "g1": 0.27351027865339866,
+    "gl": 4,
+    "ic95": {
+      "ic_inferior": 0.027543767200731862,
+      "ic_superior": 0.07224191694556607,
+      "nivel": 0.95
+    },
+    "margem": 0.018,
+    "margem_efetiva": 0.02912372924182057,
+    "media": 0.049892842073148966,
+    "motivo": null,
+    "n": 5,
+    "n_grupos": 5,
+    "p_unilateral": 0.0017226985430024474,
+    "ressalva_assimetria": null,
+    "t": 6.198231378667317,
+    "teste": "t sobre as unidades (A4.4.6)"
+  },
+  "leitura": {
+    "G-COMEDOURO-DC3": "> 0",
+    "G-ESCUTA": "< 0",
+    "dc3d_pode_rodar": false,
+    "linha": 4,
+    "o_que_diria": "o P2 de hoje nao liga a fala a resposta do dono",
+    "o_que_se_faz": "a subchave fica desligada; a leitura do credito (4.4) diz por que",
+    "ressalva_da_guarda": null,
+    "sinal_da_guarda": null
+  },
+  "margem": 0.018,
+  "modo": "fumaca",
+  "nao_demonstra": [
+    "que o pet 'quer se comunicar' ou entende linguagem",
+    "que a fala parece viva ao jogador (SEM FONTE; e do Matheus, jogando)",
+    "que o modular supera o A",
+    "um tamanho de efeito fora das condicoes da run",
+    "qualquer novidade"
+  ],
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC3.md",
+  "premissas": {
+    "G-ELEGIVEL-EP": {
+      "passa": true,
+      "por_braco": {
+        "LAB": {
+          "frac_vidas": 1.0,
+          "limiar": 0.8,
+          "passa": true,
+          "vidas": 20
+        },
+        "LAB+F": {
+          "frac_vidas": 1.0,
+          "limiar": 0.8,
+          "passa": true,
+          "vidas": 20
+        }
+      }
+    },
+    "P-ATENDE": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "dp": 0.48016200969626427,
+      "ic95": {
+        "ic_inferior": 3.4204667859216484,
+        "ic_superior": 4.612866547411684
+      },
+      "limiar": 1,
+      "media": 4.016666666666667,
+      "motivo": null,
+      "n": 5,
+      "passa": true
+    },
+    "P-FALA": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "dp": 0.024615438527159115,
+      "ic95": {
+        "ic_inferior": 0.2532484817978968,
+        "ic_superior": 0.3143766894362395
+      },
+      "limiar": 0.01,
+      "media": 0.2838125856170681,
+      "motivo": null,
+      "n": 5,
+      "passa": true
+    },
+    "conclusivo": true
+  },
+  "unidades": 5,
+  "vidas": 80
+}

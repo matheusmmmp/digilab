@@ -1,0 +1,339 @@
+{
+  "alfa": 0.025,
+  "bracos_an4": [
+    "LAB",
+    "LAB+P"
+  ],
+  "custo_rel": {
+    "cpu": 5452.859375,
+    "cpu_por_vida": 3.408037109375,
+    "vidas": 1600
+  },
+  "dispersao_episodio": {
+    "c4|comedouro|REL - EMB": {
+      "celulas_fora": 0,
+      "dp": 0.076285619332872,
+      "g1": 0.07490567047133408,
+      "ic95_t": [
+        0.06267965440962284,
+        0.08395394144493096
+      ],
+      "media": 0.0733167979272769,
+      "no_sigma": true,
+      "unidades": 200
+    },
+    "c4|comedouro|REL - REC": {
+      "celulas_fora": 0,
+      "dp": 0.06957411464682131,
+      "g1": -0.07950104809958863,
+      "ic95_t": [
+        0.03531863575600122,
+        0.05472124004981088
+      ],
+      "media": 0.04501993790290605,
+      "no_sigma": true,
+      "unidades": 200
+    },
+    "c4|comedouro|REL - RELsN": {
+      "celulas_fora": 0,
+      "dp": 0.027471431369250374,
+      "g1": 0.2470713963386182,
+      "ic95_t": [
+        -0.006007203623042103,
+        0.001653940395072499
+      ],
+      "media": -0.002176631613984802,
+      "no_sigma": true,
+      "unidades": 200
+    },
+    "c4|comedouro|REL - SEM": {
+      "celulas_fora": 0,
+      "dp": 0.08605550577172837,
+      "g1": 0.13876596114500572,
+      "ic95_t": [
+        0.18614403297862855,
+        0.21014291437680935
+      ],
+      "media": 0.19814347367771895,
+      "no_sigma": false,
+      "unidades": 200
+    },
+    "c4|comedouro|REL+F - REL": {
+      "celulas_fora": 0,
+      "dp": 0.05771328483324353,
+      "g1": 0.008956701307002322,
+      "ic95_t": [
+        -0.0045785377285275965,
+        0.011516356670053317
+      ],
+      "media": 0.00346890947076286,
+      "no_sigma": true,
+      "unidades": 200
+    },
+    "c4|longe_fixo|REL - EMB": {
+      "celulas_fora": 0,
+      "dp": 0.09249233119592092,
+      "g1": 0.11597059231535366,
+      "ic95_t": [
+        0.050653308992138775,
+        0.07644727146677921
+      ],
+      "media": 0.06355029022945899,
+      "no_sigma": false,
+      "unidades": 200
+    },
+    "c4|longe_fixo|REL - REC": {
+      "celulas_fora": 0,
+      "dp": 0.09558884777292952,
+      "g1": 0.04960180122778971,
+      "ic95_t": [
+        0.04265681188287439,
+        0.06931432089544644
+      ],
+      "media": 0.05598556638916041,
+      "no_sigma": false,
+      "unidades": 200
+    },
+    "c4|longe_fixo|REL - RELsN": {
+      "celulas_fora": 0,
+      "dp": 0.04855893508286865,
+      "g1": -0.0043087050105741565,
+      "ic95_t": [
+        -0.008704568508142491,
+        0.004837390410406783
+      ],
+      "media": -0.0019335890488678543,
+      "no_sigma": false,
+      "unidades": 200
+    },
+    "c4|longe_fixo|REL - SEM": {
+      "celulas_fora": 0,
+      "dp": 0.09425252338155175,
+      "g1": 0.08650374075593265,
+      "ic95_t": [
+        0.05147299666726536,
+        0.0777578358513288
+      ],
+      "media": 0.06461541625929708,
+      "no_sigma": false,
+      "unidades": 200
+    },
+    "c4|longe_fixo|REL+F - REL": {
+      "celulas_fora": 0,
+      "dp": 0.0699587202458903,
+      "g1": -0.10891468868560551,
+      "ic95_t": [
+        -0.012037229295950008,
+        0.007472632564640057
+      ],
+      "media": -0.0022822983656549754,
+      "no_sigma": false,
+      "unidades": 200
+    }
+  },
+  "dispersao_explorar_contexto": {
+    "c4|comedouro|REL+F - REL": {
+      "dp": 0.006047223735941027,
+      "g1": -0.1067369421251365,
+      "ic95_t": [
+        -0.005205194274902021,
+        -0.003518764058431309
+      ],
+      "media": -0.004361979166666665,
+      "unidades": 200
+    },
+    "c4|longe_fixo|REL+F - REL": {
+      "dp": 0.007249387627202071,
+      "g1": 0.06610169794693223,
+      "ic95_t": [
+        -0.0020673905181420437,
+        -4.5704719953193994e-05
+      ],
+      "media": -0.0010565476190476189,
+      "unidades": 200
+    }
+  },
+  "estimativa_parede": {
+    "K=100": {
+      "parede_s_pela_c4": 1288.6257426555578,
+      "vidas": 1600
+    },
+    "K=150": {
+      "parede_s_pela_c4": 1932.9386139833368,
+      "vidas": 2400
+    },
+    "K=200": {
+      "parede_s_pela_c4": 2577.2514853111156,
+      "vidas": 3200
+    },
+    "K=300": {
+      "parede_s_pela_c4": 3865.8772279666737,
+      "vidas": 4800
+    },
+    "K=400": {
+      "parede_s_pela_c4": 5154.502970622231,
+      "vidas": 6400
+    },
+    "K=50": {
+      "parede_s_pela_c4": 644.3128713277789,
+      "vidas": 800
+    }
+  },
+  "folga": 1.2,
+  "fonte": {
+    "artifacts_v2_digibrain_prototipo/memoria_autobio/run/medidas.json.gz": "8b48d0a234afc69adfaf72d150d0d4317d4f7dd9abfa7fc2e49908a6758fd93b",
+    "artifacts_v2_digibrain_prototipo/memoria_autobio/run/meta.json": "6315784c4290ddfcfa3a373ca2ae14165f164581a2f184dd9210446441213a18"
+  },
+  "fonte_da_simulacao": "c4|comedouro|REL+F - REL",
+  "fonte_do_sigma_max": "c4|comedouro|REL - EMB",
+  "lugares_an4": [
+    "comedouro",
+    "longe_fixo"
+  ],
+  "niveis_rel": {
+    "c4|comedouro|REL": {
+      "episodio": {
+        "celulas_sem_indice": 0,
+        "dp": 0.051997074175978805,
+        "g1": -0.7828287344560406,
+        "ic95_t": [
+          0.8686964006389596,
+          0.8831971766789243
+        ],
+        "media": 0.8759467886589419,
+        "unidades": 200
+      },
+      "episodios_por_vida": {
+        "celulas_sem_indice": 0,
+        "dp": 1.2741233807788146,
+        "g1": -0.06695277318924205,
+        "ic95_t": [
+          16.96608829417568,
+          17.32141170582432
+        ],
+        "media": 17.14375,
+        "unidades": 200
+      },
+      "explorar": {
+        "celulas_sem_indice": 0,
+        "dp": 0.007607163366298727,
+        "g1": 0.1052369961133942,
+        "ic95_t": [
+          0.32127464889413104,
+          0.32339611003444035
+        ],
+        "media": 0.3223353794642857,
+        "unidades": 200
+      }
+    },
+    "c4|longe_fixo|REL": {
+      "episodio": {
+        "celulas_sem_indice": 0,
+        "dp": 0.11687308450963713,
+        "g1": -1.206861495183829,
+        "ic95_t": [
+          0.5665826233590829,
+          0.5991758115419106
+        ],
+        "media": 0.5828792174504968,
+        "unidades": 200
+      },
+      "episodios_por_vida": {
+        "celulas_sem_indice": 0,
+        "dp": 2.6176557346652998,
+        "g1": -0.6049972758007996,
+        "ic95_t": [
+          13.02624831327388,
+          13.756251686726118
+        ],
+        "media": 13.39125,
+        "unidades": 200
+      },
+      "explorar": {
+        "celulas_sem_indice": 0,
+        "dp": 0.016253720983699517,
+        "g1": -0.9254502941554289,
+        "ic95_t": [
+          0.2647006832973524,
+          0.26923346848836194
+        ],
+        "media": 0.2669670758928572,
+        "unidades": 200
+      }
+    }
+  },
+  "parede_4_processos_c4": {
+    "processos": 4,
+    "s_por_vida": 0.8053910891597237,
+    "vidas": 14400,
+    "vidas_parede_s": 11597.631683900021
+  },
+  "poder_alvo": 0.8,
+  "por_k": {
+    "K=100": {
+      "dano_igual_a_margem_classe_menor_que_0": 0.8035,
+      "margem": 0.025868497930723097,
+      "poder_normal_na_margem": 0.8,
+      "verdadeiro_0_classe_menor_que_0": 0.024,
+      "verdadeiro_0_ic_dentro_da_margem": 0.5985,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.987,
+      "vidas": 1600
+    },
+    "K=150": {
+      "dano_igual_a_margem_classe_menor_que_0": 0.79,
+      "margem": 0.02106022155022527,
+      "poder_normal_na_margem": 0.8,
+      "verdadeiro_0_classe_menor_que_0": 0.0215,
+      "verdadeiro_0_ic_dentro_da_margem": 0.596,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9885,
+      "vidas": 2400
+    },
+    "K=200": {
+      "dano_igual_a_margem_classe_menor_que_0": 0.8015,
+      "margem": 0.01821242808298864,
+      "poder_normal_na_margem": 0.8,
+      "verdadeiro_0_classe_menor_que_0": 0.0265,
+      "verdadeiro_0_ic_dentro_da_margem": 0.6,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9825,
+      "vidas": 3200
+    },
+    "K=300": {
+      "dano_igual_a_margem_classe_menor_que_0": 0.8125,
+      "margem": 0.014849102327836313,
+      "poder_normal_na_margem": 0.8,
+      "verdadeiro_0_classe_menor_que_0": 0.0245,
+      "verdadeiro_0_ic_dentro_da_margem": 0.5975,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.986,
+      "vidas": 4800
+    },
+    "K=400": {
+      "dano_igual_a_margem_classe_menor_que_0": 0.7925,
+      "margem": 0.01285053470277163,
+      "poder_normal_na_margem": 0.8,
+      "verdadeiro_0_classe_menor_que_0": 0.019,
+      "verdadeiro_0_ic_dentro_da_margem": 0.5945,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9865,
+      "vidas": 6400
+    },
+    "K=50": {
+      "dano_igual_a_margem_classe_menor_que_0": 0.804,
+      "margem": 0.036911871484343314,
+      "poder_normal_na_margem": 0.8,
+      "verdadeiro_0_classe_menor_que_0": 0.0235,
+      "verdadeiro_0_ic_dentro_da_margem": 0.5825,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.984,
+      "vidas": 800
+    }
+  },
+  "replicas": 2000,
+  "rotulo": "o poder e a margem da guarda G-COMEDOURO-AN (LAB+P - LAB na taxa de fechamento por episodio, nas 4 celulas do comedouro), PROPOSTOS para o PLANO_ANALISE_V3_ACOES_NOVAS; aproximacao normal do t nao central, com a conferencia por simulacao; sem gate",
+  "script": {
+    "arquivo": "experiments/plano_an3_poder_acoes_novas.py",
+    "sha256": "0c36d0e2078425ecfa54fb122c975e7a6432437888da92b85e3958c173f938d6"
+  },
+  "semente": 4242,
+  "sigma_max_comedouro": 0.076285619332872,
+  "sigma_planejamento": 0.0915427431994464,
+  "unidade": "a media das 4 celulas do lugar (uma vida por dono) da diferenca a - b na medida, por unidade (base, k); as celulas com a taxa None num dos bracos ficam fora, contadas",
+  "vidas_por_unidade_an4": 16
+}

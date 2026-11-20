@@ -1,0 +1,1046 @@
+{
+  "descricao": "rodada 14: tier 3 (chefe), idem",
+  "tier": "tier3",
+  "npcs": {
+    "v21:duelista@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:duelista@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:duelista@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:duelista@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:furioso@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:furioso@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:furioso@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:furioso@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:espelho@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:espelho@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:espelho@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:espelho@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:muralha@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:muralha@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:muralha@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:muralha@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:vigia@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:vigia@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:vigia@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:vigia@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:tita@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v21:tita@135|e0.2": {
+      "total": 135,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@135|e0.3": {
+      "total": 135,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@135|e0.4": {
+      "total": 135,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@135|e0.5": {
+      "total": 135,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v21:tita@160|e0.2": {
+      "total": 160,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@160|e0.3": {
+      "total": 160,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@160|e0.4": {
+      "total": 160,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@160|e0.5": {
+      "total": 160,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v21:tita@185|e0.2": {
+      "total": 185,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@185|e0.3": {
+      "total": 185,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@185|e0.4": {
+      "total": 185,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@185|e0.5": {
+      "total": 185,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@135|e0.2": {
+      "total": 135,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@135|e0.3": {
+      "total": 135,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@135|e0.4": {
+      "total": 135,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@135|e0.5": {
+      "total": 135,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@160|e0.2": {
+      "total": 160,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@160|e0.3": {
+      "total": 160,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@160|e0.4": {
+      "total": 160,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@160|e0.5": {
+      "total": 160,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@185|e0.2": {
+      "total": 185,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@185|e0.3": {
+      "total": 185,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@185|e0.4": {
+      "total": 185,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@185|e0.5": {
+      "total": 185,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@135|e0.2": {
+      "total": 135,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@135|e0.3": {
+      "total": 135,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@135|e0.4": {
+      "total": 135,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@135|e0.5": {
+      "total": 135,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@160|e0.2": {
+      "total": 160,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@160|e0.3": {
+      "total": 160,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@160|e0.4": {
+      "total": 160,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@160|e0.5": {
+      "total": 160,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@185|e0.2": {
+      "total": 185,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@185|e0.3": {
+      "total": 185,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@185|e0.4": {
+      "total": 185,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@185|e0.5": {
+      "total": 185,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@135|e0.2": {
+      "total": 135,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@135|e0.3": {
+      "total": 135,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@135|e0.4": {
+      "total": 135,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@135|e0.5": {
+      "total": 135,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@160|e0.2": {
+      "total": 160,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@160|e0.3": {
+      "total": 160,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@160|e0.4": {
+      "total": 160,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@160|e0.5": {
+      "total": 160,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@185|e0.2": {
+      "total": 185,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@185|e0.3": {
+      "total": 185,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@185|e0.4": {
+      "total": 185,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@185|e0.5": {
+      "total": 185,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@135|e0.2": {
+      "total": 135,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@135|e0.3": {
+      "total": 135,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@135|e0.4": {
+      "total": 135,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@135|e0.5": {
+      "total": 135,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@160|e0.2": {
+      "total": 160,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@160|e0.3": {
+      "total": 160,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@160|e0.4": {
+      "total": 160,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@160|e0.5": {
+      "total": 160,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@185|e0.2": {
+      "total": 185,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@185|e0.3": {
+      "total": 185,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@185|e0.4": {
+      "total": 185,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@185|e0.5": {
+      "total": 185,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@110|e0.2": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@110|e0.3": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@110|e0.4": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@110|e0.5": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@135|e0.2": {
+      "total": 135,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@135|e0.3": {
+      "total": 135,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@135|e0.4": {
+      "total": 135,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@135|e0.5": {
+      "total": 135,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@160|e0.2": {
+      "total": 160,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@160|e0.3": {
+      "total": 160,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@160|e0.4": {
+      "total": 160,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@160|e0.5": {
+      "total": 160,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@185|e0.2": {
+      "total": 185,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@185|e0.3": {
+      "total": 185,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@185|e0.4": {
+      "total": 185,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@185|e0.5": {
+      "total": 185,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    }
+  }
+}

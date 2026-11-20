@@ -1,0 +1,178 @@
+{
+ "cerebro_c_sha256": "f87ab51ce7121b98faac1d21e5a9ad7f4a595ec5ae3bf0d91fa04935f9a273ed",
+ "config": {
+  "bootstrap": {
+   "nivel": 0.95,
+   "reamostragens": 10000,
+   "semente": 4242
+  },
+  "descricao": "Calibracao do cerebro C (Fly-like): etapas C-A (passo), C-B (teto) e C-C (w0_info) do adendo 1.2 e o piloto do 'nao aprende' (secao 7), unidades derivadas das bases 28101...28505 com K = 4 (prefixo comparacao-cerebros, 20 unidades), 14 dias, o dono atencioso, o ganho da K2 do A.",
+  "dias": 14,
+  "orcamento": 224,
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "saida": "artifacts_v2_comparacao_cerebros/calibracao_C",
+  "sonda": {
+   "amostras": 200,
+   "estados": 64,
+   "semente": 9001
+  },
+  "unidades": {
+   "bases": [
+    28101,
+    28202,
+    28303,
+    28404,
+    28505
+   ],
+   "k": 4
+  }
+ },
+ "dentro_do_teto_de_tempo": true,
+ "escolha_k2": "artifacts_v2_calibracao_conjunta/escolha.json",
+ "modo": "calibracao",
+ "orquestrador_sha256": "90b06e8ffea84c717da5d4fd9cc7f5a7584db3f114c737b630d0a04ad3b3e225",
+ "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+ "plano_sha256": "9cc6b8d198267e034b3c53323b3273111eb5fa253f4ec8c862c8cdda4eae61fd",
+ "plataforma": "Windows-11-10.0.26200-SP0",
+ "ponto": {
+  "ganho": 4,
+  "passo": 128,
+  "teto": 4096,
+  "w0_info": 256
+ },
+ "python": "3.13.0",
+ "segundos": 3577.516895500001,
+ "tarefa": "docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md",
+ "teto_segundos": 60372.966507200035,
+ "teto_vidas": 1260,
+ "unidades": 20,
+ "unidades_lista": [
+  {
+   "base": 28101,
+   "genoma": 540614926002289733,
+   "k": 0,
+   "semente": 14155974451992448055
+  },
+  {
+   "base": 28101,
+   "genoma": 3535767751194960189,
+   "k": 1,
+   "semente": 12240141204751227454
+  },
+  {
+   "base": 28101,
+   "genoma": 9448255062921845448,
+   "k": 2,
+   "semente": 4819014035915719784
+  },
+  {
+   "base": 28101,
+   "genoma": 12511130918565516463,
+   "k": 3,
+   "semente": 210224738453594515
+  },
+  {
+   "base": 28202,
+   "genoma": 15004644946213801952,
+   "k": 0,
+   "semente": 13822935355696912650
+  },
+  {
+   "base": 28202,
+   "genoma": 7625832981571383968,
+   "k": 1,
+   "semente": 6773016818731232651
+  },
+  {
+   "base": 28202,
+   "genoma": 2413848696904814690,
+   "k": 2,
+   "semente": 12028144294286172512
+  },
+  {
+   "base": 28202,
+   "genoma": 3227385282435117682,
+   "k": 3,
+   "semente": 17017545390334385746
+  },
+  {
+   "base": 28303,
+   "genoma": 11106862116827891785,
+   "k": 0,
+   "semente": 6599336110051169892
+  },
+  {
+   "base": 28303,
+   "genoma": 16547049188623401466,
+   "k": 1,
+   "semente": 2904740315273149079
+  },
+  {
+   "base": 28303,
+   "genoma": 6669099954877564859,
+   "k": 2,
+   "semente": 15744784155682929884
+  },
+  {
+   "base": 28303,
+   "genoma": 11224442187448915171,
+   "k": 3,
+   "semente": 11349152343098615714
+  },
+  {
+   "base": 28404,
+   "genoma": 6719596777364470023,
+   "k": 0,
+   "semente": 6264262120173222741
+  },
+  {
+   "base": 28404,
+   "genoma": 17868446032725352230,
+   "k": 1,
+   "semente": 1321498237604468441
+  },
+  {
+   "base": 28404,
+   "genoma": 7440427446598975326,
+   "k": 2,
+   "semente": 16245931030435283368
+  },
+  {
+   "base": 28404,
+   "genoma": 11696918830839655483,
+   "k": 3,
+   "semente": 2386976548279837209
+  },
+  {
+   "base": 28505,
+   "genoma": 1432071467702086694,
+   "k": 0,
+   "semente": 18219177572971686565
+  },
+  {
+   "base": 28505,
+   "genoma": 8969272573787987883,
+   "k": 1,
+   "semente": 3923321772405417760
+  },
+  {
+   "base": 28505,
+   "genoma": 6439227015813212205,
+   "k": 2,
+   "semente": 6342074412972073103
+  },
+  {
+   "base": 28505,
+   "genoma": 2113563265150131784,
+   "k": 3,
+   "semente": 11321570901639581968
+  }
+ ],
+ "vidas": 540,
+ "vidas_planejadas": {
+  "C-A": 180,
+  "C-B": 120,
+  "C-C": 240,
+  "total": 540
+ }
+}

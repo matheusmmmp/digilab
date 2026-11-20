@@ -1,0 +1,30 @@
+{
+ "save": "dia",
+ "esquema": "light",
+ "rotulo": "referencia",
+ "bola_tela": [
+  807.5018927237634,
+  554.0580512299213
+ ],
+ "m3": {
+  "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+  "data": "2026-11-06T02:35:00.392Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "devicePixelRatio": 1,
+  "tela_css": [
+   1280,
+   800
+  ],
+  "canvas_px": [
+   1280,
+   800
+  ],
+  "duracao_s": 10.016,
+  "quadros": 601,
+  "fps_media": 60,
+  "quadro_mediana_ms": 16.7,
+  "quadro_p95_ms": 17.8,
+  "draw_calls": 89,
+  "qualidade_baixa": false
+ }
+}

@@ -1,0 +1,150 @@
+# Roda os testes do PR a cada commit (docs/infra/GUIA_OPERACIONAL.md, seção "O que o CI confere"). O relato fica no verificar-relato.yml
+# desde a PI0 (docs/PLANO_V3_CONTA_PROTECAO.md, PI-2): editar o corpo do PR muda só o relato, e não roda de novo os testes do mesmo commit.
+# Gratuito enquanto o repositório for público (só runners padrão; docs/infra/MATRIZ_CAPACIDADES.md, GitHub Actions); no privado, os
+# minutos contam.
+# Sem secrets, sem chave de API, sem escrita: só lê o repositório e escreve o resumo do job.
+name: verificar-pr
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      suite_inteira:
+        description: "Rodar a suíte inteira (~36 min)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verificar-pr-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  # O testes decide, no primeiro passo, se os jobs web e servidor-web rodam (PI0): cada um nem liga a máquina quando o PR não muda a pasta
+  # dele.
+  testes:
+    if: github.event_name == 'pull_request'
+    runs-on: windows-latest
+    timeout-minutes: 60
+    outputs:
+      web: ${{ steps.mudou.outputs.web }}
+      servidor: ${{ steps.mudou.outputs.servidor }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: O PR muda web/app ou servidor_web?
+        id: mudou
+        shell: bash
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if git diff --quiet "origin/$BASE_REF...HEAD" -- web/app/; then
+            echo "web=nao" >> "$GITHUB_OUTPUT"
+            echo "O PR não muda web/app/: o job web não roda." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "web=sim" >> "$GITHUB_OUTPUT"
+            echo "O PR muda web/app/: tipos, Vitest e build no job web (VERIFICADA); o e2e fica fora do CI (D-IA-3)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          # O servidor_web (CN1) roda também quando o PR muda este workflow, para a mudança do CI se provar no próprio PR.
+          if git diff --quiet "origin/$BASE_REF...HEAD" -- servidor_web/ .github/workflows/verificar-pr.yml; then
+            echo "servidor=nao" >> "$GITHUB_OUTPUT"
+            echo "O PR não muda servidor_web/: o job servidor-web não roda." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "servidor=sim" >> "$GITHUB_OUTPUT"
+            echo "O PR muda servidor_web/ (ou este workflow): tipos e Vitest no job servidor-web (VERIFICADA)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pytest numpy Pillow
+      - name: Testes mudados no PR e testes da infra
+        shell: bash
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          # O Python no Windows escreve CRLF: tira o CR antes de virar nome de arquivo; junta com os testes da infra, sem repetir.
+          mapfile -t testes < <({ python tools/verificar_relato.py --listar-testes --base "origin/$BASE_REF"; ls tests/test_infra_*.py; } | tr -d '\r' | sort -u)
+          echo "Testes rodados pelo CI (VERIFICADA), ${#testes[@]} arquivos: ${testes[*]}" | tee -a "$GITHUB_STEP_SUMMARY"
+          python -m pytest "${testes[@]}" -q
+      - name: Rodada de saúde (G-NADA-PERDIDO, G-CONCAT)
+        run: python tools/conferir_saude.py
+      # O índice de desvios é gerado e pode estar atrasado no PR (docs/TAREFA_V3_INDICE_DESVIOS.md, D-ID2 e D-ID3): só aviso.
+      - name: Índice de desvios em dia (só aviso)
+        shell: bash
+        run: |
+          python tools/gerar_indice_desvios.py --conferir || echo "::warning::docs/REGISTRO_DESVIOS.md está atrás dos arquivos do mês; quem faz o merge regenera com python tools/gerar_indice_desvios.py"
+      - name: Estado atual derivado (só aviso)
+        shell: bash
+        run: |
+          python tools/gerar_estado_atual.py --conferir || echo "::warning::docs/ESTADO_ATUAL.md está desatualizado; o coordenador regenera no fim da rodada"
+
+  # O jogo web (INFRA_AGENTES E5, docs/TAREFA_V3_INFRA_AGENTES.md, seção 3.5; D-IA-3): só quando o PR muda web/app/. Os tipos, o Vitest e o
+  # build; o e2e não, porque os specs leem o atlas de D:\Trab\digilab\Assets e as referências das capturas, que ficam fora do git.
+  # O filtro é o passo `mudou` do job testes, e não o `paths:` do `on:`, que valeria para o workflow inteiro. Com `always()`, o web roda
+  # mesmo se os testes do Python reprovarem (como antes da PI0); só não roda se o PR não muda web/app/.
+  web:
+    needs: testes
+    if: always() && github.event_name == 'pull_request' && needs.testes.outputs.web == 'sim'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: web/app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/app/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Tipos
+        run: npm run tipos
+      - name: Vitest
+        run: npm test
+      - name: Build
+        run: npm run build
+
+  # O servidor do jogo web (CN1, servidor_web/CLAUDE.md): os tipos e o Vitest, com o cliente da Anthropic falso (nenhuma chamada paga,
+  # nenhuma chave). Com `always()`, roda mesmo se os testes do Python reprovarem.
+  servidor-web:
+    needs: testes
+    if: always() && github.event_name == 'pull_request' && needs.testes.outputs.servidor == 'sim'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: servidor_web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: servidor_web/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Tipos
+        run: npm run tipos
+      - name: Vitest
+        run: npm test
+
+  suite-inteira:
+    if: github.event_name == 'workflow_dispatch' && inputs.suite_inteira
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pytest
+      - run: python -m pytest tests/ -q

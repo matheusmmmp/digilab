@@ -1,0 +1,12 @@
+DigiLab: o cais, o lugar do multiplayer (cais.gltf, cais.bin, cais_cor.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cais/mao/cais_mao.py no repositorio do DigiLab).
+A malha (as tabuas, as estacas, o barco, as cordas, o barril, o caixote, a boia, o musgo) e a textura (pintada pelo codigo, pela posicao
+no espaco) saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
+
+O desenho segue o esboco 1 do cais (docs/objetos3d/cais/esbocos/esboco_1_pier_barco.png), gerado pela Meshy para o DigiLab em 2026-11-08,
+usado so como referencia de desenho: nenhum pixel e nenhum vertice dele esta nestes arquivos. O cais de antes (a malha da Meshy em voxel)
+saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md, secoes 11, 16 e 17.
+
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: a prancha e as capturas ficam no PR do cais feito a mao.

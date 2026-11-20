@@ -1,0 +1,1464 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "divergence.json": "3beb11cdca899d71dcfbee4299fc39a2ba1ce242456589f89112cdee9af628fa",
+    "matches.csv": "6aa568ecd0b02ded2a1ca680dc68a60b21af51485c6265576fc48fd1c0a62c59",
+    "partidas.jsonl": "a933730c48af40c253fb8b0418e4d88ce463bfc9a1598fcf9e182bf4b6b28834",
+    "preflight.json": "4c305da654b10dcde0c33d276ceef5c74786315a97de5a5f7b9f992e80a941ca",
+    "vidas/aleatorio-bandit@101.jsonl": "85a63f5a05927b6ebd0130eec5e32c8719737ca852e4f90a89cdcfd82b1a570a",
+    "vidas/aleatorio-bandit@101.politica.json": "22cf312100c326bc327df7f91ebfa6d5e6be32d6db71df4f6091930c9211f360",
+    "vidas/aleatorio-bandit@202.jsonl": "e754e40c3c0f50cf01bbd003258c668ae32c921af77927db9298ad4c05bd619b",
+    "vidas/aleatorio-bandit@202.politica.json": "f3957dfdf44e7db66fbdf5ed78056563f4baa5118d647a296ab26849f294e4ab",
+    "vidas/aleatorio-bandit@303.jsonl": "42e4e3477c913faa055599bc13339728b589f2ad6292923e1e24ba7cda3e6746",
+    "vidas/aleatorio-bandit@303.politica.json": "85f0e5f336cedff30ef99f27bb22b268b25f8755cf5b9ba56e1a789d143ac9f8",
+    "vidas/aleatorio-bandit@404.jsonl": "6bbe4848acfc6a982afd0efe31257041ea36938ced4df70597de870478300f6d",
+    "vidas/aleatorio-bandit@404.politica.json": "a6b930c54a4368ffa4eb04835a0c44f1d0680881d368811d1e25289a5b3f502f",
+    "vidas/aleatorio-bandit@505.jsonl": "11e49db8f3b6a609f4eedd530a13528dcb4793867c24c2fea6f3bb2f7ba0402e",
+    "vidas/aleatorio-bandit@505.politica.json": "871d3db903022af2aafa8a63b2d6a1c04a126f111543de4c18180d89294ce681",
+    "vidas/aleatorio-instinto@101.jsonl": "85a63f5a05927b6ebd0130eec5e32c8719737ca852e4f90a89cdcfd82b1a570a",
+    "vidas/aleatorio-instinto@101.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/aleatorio-instinto@202.jsonl": "e754e40c3c0f50cf01bbd003258c668ae32c921af77927db9298ad4c05bd619b",
+    "vidas/aleatorio-instinto@202.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/aleatorio-instinto@303.jsonl": "42e4e3477c913faa055599bc13339728b589f2ad6292923e1e24ba7cda3e6746",
+    "vidas/aleatorio-instinto@303.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/aleatorio-instinto@404.jsonl": "6bbe4848acfc6a982afd0efe31257041ea36938ced4df70597de870478300f6d",
+    "vidas/aleatorio-instinto@404.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/aleatorio-instinto@505.jsonl": "11e49db8f3b6a609f4eedd530a13528dcb4793867c24c2fea6f3bb2f7ba0402e",
+    "vidas/aleatorio-instinto@505.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/atencioso-bandit@101.jsonl": "59200d75b7ebe6d680ec3c9ee79c4e479977ca620b0014ee009ad1afbe81ba01",
+    "vidas/atencioso-bandit@101.politica.json": "d0f73bac367c1dfb3c8291c59c3c6da8bfc183cdea853fa0678d7f30b8481551",
+    "vidas/atencioso-bandit@202.jsonl": "e11a0d542f085d2b48b239830ef0e4fec9a2de7ef48249aa61e51f99cafb65c5",
+    "vidas/atencioso-bandit@202.politica.json": "e1973afc57e984ed487093330d41ef6559c668fa44bc02a8653624081b2165c6",
+    "vidas/atencioso-bandit@303.jsonl": "6972a1d2cd4d2b0051e1d5df2004a559556490c55201fbe6420a0561507de726",
+    "vidas/atencioso-bandit@303.politica.json": "40ef9b01d27d3f9288eeb8d75df558ad0307b7d2f6b6dca1da6c693a1a671f7a",
+    "vidas/atencioso-bandit@404.jsonl": "6a91bf69b505c460339a34b7298ac0278e0b61e174954210e04de15a2ed66b57",
+    "vidas/atencioso-bandit@404.politica.json": "3657c274cdcc5f0df69058e0913bc8f99e061a1228c305ab88d85e7e7ba1f1d3",
+    "vidas/atencioso-bandit@505.jsonl": "1ec2824918e23911b3a9978ca59a42020159cfa69638f42257dca1443f4f1d6c",
+    "vidas/atencioso-bandit@505.politica.json": "1b86c8f7d12df373a0fd5a64fb39e26e68283ac868e815948262ef33ebf0aa0e",
+    "vidas/atencioso-instinto@101.jsonl": "f6634d50b8948636bf5a513074bd20c63b77c68f30488cf7e342bef622a028e7",
+    "vidas/atencioso-instinto@101.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/atencioso-instinto@202.jsonl": "1a5d646981cd3507d512362509ae6de561c06a69c9cb0ba1b47ba5cb82c5c054",
+    "vidas/atencioso-instinto@202.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/atencioso-instinto@303.jsonl": "42962e941ab724c2e9c4bfdd1545af3e1f0ea6623600a377ce65d71be826e9f9",
+    "vidas/atencioso-instinto@303.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/atencioso-instinto@404.jsonl": "834e9742edcf38b9c39aad616d89c37d96d5da39c82e76fc01fced908805a733",
+    "vidas/atencioso-instinto@404.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/atencioso-instinto@505.jsonl": "5af35d0affcd3838ab87203241043d33ce3e8ea0fe0e2282df7a572b4d594958",
+    "vidas/atencioso-instinto@505.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/incoerente-bandit@101.jsonl": "8cd9a782ff076e43fac0012c8d58222565d4dd31a22a33d464ccf05046e60823",
+    "vidas/incoerente-bandit@101.politica.json": "04e899eacff5aad88641720a7c56c09ca6d91bfc92f327e1e0216e270f5f3c62",
+    "vidas/incoerente-bandit@202.jsonl": "f0bbb651dac3edc87816f2513205b1ddc00db4ececda15cf9028da3d73c71129",
+    "vidas/incoerente-bandit@202.politica.json": "7b85c43bf40ad37d1360e3eb4cd4d5d751096eaf83072f5d6364b23349a89146",
+    "vidas/incoerente-bandit@303.jsonl": "a7494e3c02e110ef30d438b20da889cabf1c6f8150dba2d4962080fc8db40350",
+    "vidas/incoerente-bandit@303.politica.json": "864c895b251cc81418b5000036e357fce0a9c367158179c064efee26c24766ee",
+    "vidas/incoerente-bandit@404.jsonl": "6648f0ff9c623c368f207f9dc0fbad57daf9ac9b72574a3c8514b174ca0065a9",
+    "vidas/incoerente-bandit@404.politica.json": "84ef7e98399bde203b650dee6d5cb5feb9bcfe5f6d0d5d5006c0bbf21d543ac0",
+    "vidas/incoerente-bandit@505.jsonl": "070cbe06a3d35bea9b7bc67d5b4fdad46a5fcf0c1ae118d5789f8bf066a334fe",
+    "vidas/incoerente-bandit@505.politica.json": "0967f8059ce4832ddd0e5786c8a2e1c7a3e962b25f0169d5791f9ccbc1d58a1e",
+    "vidas/incoerente-instinto@101.jsonl": "b4a1751d2d75b4b837881521c44558e66d6aab98cfdbc41f068d548a9eebe446",
+    "vidas/incoerente-instinto@101.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/incoerente-instinto@202.jsonl": "bcd147efe6f8cee34f917c6258eca96e8f1728d0e7294d4bdf828b495224789d",
+    "vidas/incoerente-instinto@202.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/incoerente-instinto@303.jsonl": "cfe751fac5956d500a6f995c23efbe1e224ef24a778900ef0c65bd4395166523",
+    "vidas/incoerente-instinto@303.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/incoerente-instinto@404.jsonl": "b8574b8c4aa399e6b278bf2c9f2fa19d88a42d5c1254b690e6822887fb7950ec",
+    "vidas/incoerente-instinto@404.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/incoerente-instinto@505.jsonl": "ef1a371cae90a25d8624b330073491aa11780b63c778c552ca36156e98876c87",
+    "vidas/incoerente-instinto@505.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/relapso-bandit@101.jsonl": "8acd571ec8ece757ddec72f926abc856bae14089c4131ff14bff01c326ab18c3",
+    "vidas/relapso-bandit@101.politica.json": "4a3d703e10c34c95a920fc50dd41be716c50509769e707338270924d49bf5f61",
+    "vidas/relapso-bandit@202.jsonl": "997ba6124ec6c6c99007765640459bc46742dd86a1382ac9830c7e9f6d76e2db",
+    "vidas/relapso-bandit@202.politica.json": "6fb3914a49572973acc8248fd3132774ab98ea00483df508ea504402d3da55fd",
+    "vidas/relapso-bandit@303.jsonl": "31d6cd8e9a99a407ee7d9d54b35b11fe99d7a8695b725dc09f08da91b0b9311a",
+    "vidas/relapso-bandit@303.politica.json": "b4b9ed7eb20ec7fefc95c39791c12b85e874aa07613b68423e87235cf2ff1f7d",
+    "vidas/relapso-bandit@404.jsonl": "f7b617381669d109f4fad4c7d5e5efaa6c88b4c0751ee638e698c379c14ded2b",
+    "vidas/relapso-bandit@404.politica.json": "7bb046868db6c449f16353ae266229fd252a0cfbd44e832c72ebe14251abbbaa",
+    "vidas/relapso-bandit@505.jsonl": "bdbb10dbc9b15984aa1d7d3c801da7c058a8bfff5190ae905efd4b21c9f05533",
+    "vidas/relapso-bandit@505.politica.json": "d570b61636490aebb363a97ff32ce27026db418f026a4467bdac7add657fd0ad",
+    "vidas/relapso-instinto@101.jsonl": "66a4ce8e1b254071237af4898eb95475f3f2ba3f0be647f0e82a410495e6eedf",
+    "vidas/relapso-instinto@101.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/relapso-instinto@202.jsonl": "a50bcc807e1cf432430d5c4c4ca3361ab212a8dfd4f5f25e62552ded6e0e64b8",
+    "vidas/relapso-instinto@202.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/relapso-instinto@303.jsonl": "3c1dce2f766c5d9b823677b23f4cd517c16cb1ac1211609888e0321e8ba277c1",
+    "vidas/relapso-instinto@303.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/relapso-instinto@404.jsonl": "fb0a374eab1a4b6c382a705ac6570cb5fb5252f631f15e60aef9e25c0486e2cf",
+    "vidas/relapso-instinto@404.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552",
+    "vidas/relapso-instinto@505.jsonl": "ba98a0062c9b74e6d005e08d99e468c433a542c55e10b2b7f98b4a375d98151b",
+    "vidas/relapso-instinto@505.politica.json": "82a8c31fe3c9b8f5a58cd3a79e06816e98c3863d46083bd0fb50a91e96197552"
+  },
+  "atencioso_vs_aleatorio_por_politica": {
+    "bandit": {
+      "ic_inferior": 0.47000000000000003,
+      "ic_superior": 0.71,
+      "media": 0.61,
+      "n": 5,
+      "nivel": 0.95,
+      "pergunta": "pet treinado por dono atencioso vence pet treinado por dono aleatorio com o mesmo orcamento?",
+      "por_semente": {
+        "101": 0.65,
+        "202": 0.7,
+        "303": 0.75,
+        "404": 0.35,
+        "505": 0.6
+      },
+      "secundario_todos_confrontos": {
+        "n_partidas": 500,
+        "pontos_medios": 0.676
+      },
+      "unidade": "pontos medios do atencioso no confronto direto, por semente de coorte (empate = 0.5)",
+      "veredito": "INCONCLUSIVO"
+    },
+    "instinto": {
+      "ic_inferior": 0.45999999999999996,
+      "ic_superior": 0.63,
+      "media": 0.54,
+      "n": 5,
+      "nivel": 0.95,
+      "pergunta": "pet treinado por dono atencioso vence pet treinado por dono aleatorio com o mesmo orcamento?",
+      "por_semente": {
+        "101": 0.55,
+        "202": 0.5,
+        "303": 0.7,
+        "404": 0.4,
+        "505": 0.55
+      },
+      "secundario_todos_confrontos": {
+        "n_partidas": 500,
+        "pontos_medios": 0.534
+      },
+      "unidade": "pontos medios do atencioso no confronto direto, por semente de coorte (empate = 0.5)",
+      "veredito": "INCONCLUSIVO"
+    }
+  },
+  "avisos": [
+    "run com 13 parametro(s) PROPOSTO(s), nao referendados: ['orcamento_interacoes', 'dias_simulados', 'partidas_por_par', 'semente_torneio', 'definicao_vitoria', 'limiar_divergencia_jsd_bits', 'estados_sonda', 'amostras_por_estado', 'semente_sonda', 'bootstrap_reamostragens', 'bootstrap_semente', 'nivel_confianca', 'politicas']"
+  ],
+  "bracos": [
+    "atencioso-bandit",
+    "atencioso-instinto",
+    "relapso-bandit",
+    "relapso-instinto",
+    "aleatorio-bandit",
+    "aleatorio-instinto",
+    "incoerente-bandit",
+    "incoerente-instinto"
+  ],
+  "bracos_dono_politica": {
+    "aleatorio-bandit": {
+      "dono": "aleatorio",
+      "politica": "bandit"
+    },
+    "aleatorio-instinto": {
+      "dono": "aleatorio",
+      "politica": "instinto"
+    },
+    "atencioso-bandit": {
+      "dono": "atencioso",
+      "politica": "bandit"
+    },
+    "atencioso-instinto": {
+      "dono": "atencioso",
+      "politica": "instinto"
+    },
+    "incoerente-bandit": {
+      "dono": "incoerente",
+      "politica": "bandit"
+    },
+    "incoerente-instinto": {
+      "dono": "incoerente",
+      "politica": "instinto"
+    },
+    "relapso-bandit": {
+      "dono": "relapso",
+      "politica": "bandit"
+    },
+    "relapso-instinto": {
+      "dono": "relapso",
+      "politica": "instinto"
+    }
+  },
+  "bradley_terry_por_braco_sem_confronto_interno": {
+    "aleatorio-bandit": {
+      "erro_padrao": 0.03029587554489354,
+      "forca_log": -0.3337724001753787
+    },
+    "aleatorio-instinto": {
+      "erro_padrao": 0.029883518408138632,
+      "forca_log": -0.10149223837657304
+    },
+    "atencioso-bandit": {
+      "erro_padrao": 0.030751759141193134,
+      "forca_log": 0.46516522363330726
+    },
+    "atencioso-instinto": {
+      "erro_padrao": 0.029843513451966484,
+      "forca_log": -0.0018925159728027893
+    },
+    "incoerente-bandit": {
+      "erro_padrao": 0.029938134595229527,
+      "forca_log": -0.15449987239059765
+    },
+    "incoerente-instinto": {
+      "erro_padrao": 0.02984350964402082,
+      "forca_log": -0.002908078248263623
+    },
+    "relapso-bandit": {
+      "erro_padrao": 0.03027833324182916,
+      "forca_log": 0.3217361067341698
+    },
+    "relapso-instinto": {
+      "erro_padrao": 0.029991332777816303,
+      "forca_log": -0.19233622520386134
+    }
+  },
+  "bradley_terry_por_pet": {
+    "aleatorio-bandit@101": {
+      "erro_padrao": 0.07703589033784931,
+      "forca_log": -0.8290058942485458
+    },
+    "aleatorio-bandit@202": {
+      "erro_padrao": 0.07291582928910273,
+      "forca_log": -0.4354931949496831
+    },
+    "aleatorio-bandit@303": {
+      "erro_padrao": 0.07530415833811469,
+      "forca_log": -0.6929820930925449
+    },
+    "aleatorio-bandit@404": {
+      "erro_padrao": 0.07696940849796968,
+      "forca_log": 0.8151411132123639
+    },
+    "aleatorio-bandit@505": {
+      "erro_padrao": 0.07438119065113197,
+      "forca_log": -0.6071953118234765
+    },
+    "aleatorio-instinto@101": {
+      "erro_padrao": 0.07150399954910208,
+      "forca_log": -0.11647771841786494
+    },
+    "aleatorio-instinto@202": {
+      "erro_padrao": 0.07146978117967215,
+      "forca_log": -0.0955404438901765
+    },
+    "aleatorio-instinto@303": {
+      "erro_padrao": 0.07180268452271155,
+      "forca_log": -0.2268463201246442
+    },
+    "aleatorio-instinto@404": {
+      "erro_padrao": 0.07144599910252936,
+      "forca_log": 0.06644366952922799
+    },
+    "aleatorio-instinto@505": {
+      "erro_padrao": 0.07158120907396465,
+      "forca_log": -0.15317200513634258
+    },
+    "atencioso-bandit@101": {
+      "erro_padrao": 0.07407285129541727,
+      "forca_log": 0.5654528778897294
+    },
+    "atencioso-bandit@202": {
+      "erro_padrao": 0.07238194312659503,
+      "forca_log": 0.3410308746375578
+    },
+    "atencioso-bandit@303": {
+      "erro_padrao": 0.07386618347629045,
+      "forca_log": 0.5430817721153409
+    },
+    "atencioso-bandit@404": {
+      "erro_padrao": 0.07260680195177657,
+      "forca_log": 0.3786795131382793
+    },
+    "atencioso-bandit@505": {
+      "erro_padrao": 0.07407285129541649,
+      "forca_log": 0.5654528778897294
+    },
+    "atencioso-instinto@101": {
+      "erro_padrao": 0.07140462220123467,
+      "forca_log": 0.003743809444591207
+    },
+    "atencioso-instinto@202": {
+      "erro_padrao": 0.07141549551910897,
+      "forca_log": -0.04326429435226519
+    },
+    "atencioso-instinto@303": {
+      "erro_padrao": 0.071411314510995,
+      "forca_log": 0.024636557255659552
+    },
+    "atencioso-instinto@404": {
+      "erro_padrao": 0.07148599370338657,
+      "forca_log": -0.10600665730633406
+    },
+    "atencioso-instinto@505": {
+      "erro_padrao": 0.07150919251992723,
+      "forca_log": 0.10830654498762199
+    },
+    "incoerente-bandit@101": {
+      "erro_padrao": 0.07792442147450045,
+      "forca_log": -0.8901707356475507
+    },
+    "incoerente-bandit@202": {
+      "erro_padrao": 0.08183164519063785,
+      "forca_log": 1.1089755255127869
+    },
+    "incoerente-bandit@303": {
+      "erro_padrao": 0.07142510301605956,
+      "forca_log": 0.045535166545013696
+    },
+    "incoerente-bandit@404": {
+      "erro_padrao": 0.07415993719523521,
+      "forca_log": -0.5846497067314883
+    },
+    "incoerente-bandit@505": {
+      "erro_padrao": 0.07303369981914307,
+      "forca_log": -0.45183567343187986
+    },
+    "incoerente-instinto@101": {
+      "erro_padrao": 0.07145911784554643,
+      "forca_log": 0.07690289408237928
+    },
+    "incoerente-instinto@202": {
+      "erro_padrao": 0.07140897646588565,
+      "forca_log": 0.019412978126488664
+    },
+    "incoerente-instinto@303": {
+      "erro_padrao": 0.07140502125330438,
+      "forca_log": -0.017147102994376745
+    },
+    "incoerente-instinto@404": {
+      "erro_padrao": 0.071422792008099,
+      "forca_log": -0.05371389109152461
+    },
+    "incoerente-instinto@505": {
+      "erro_padrao": 0.07141549551911142,
+      "forca_log": -0.04326429435226541
+    },
+    "relapso-bandit@101": {
+      "erro_padrao": 0.07148214225039062,
+      "forca_log": 0.09259937219240053
+    },
+    "relapso-bandit@202": {
+      "erro_padrao": 0.07223637669731754,
+      "forca_log": 0.31427138469437066
+    },
+    "relapso-bandit@303": {
+      "erro_padrao": 0.07428929381546658,
+      "forca_log": 0.5879481207048671
+    },
+    "relapso-bandit@404": {
+      "erro_padrao": 0.07532417605734978,
+      "forca_log": 0.6850844448082092
+    },
+    "relapso-bandit@505": {
+      "erro_padrao": 0.07140405719415424,
+      "forca_log": -0.0014789335270699584
+    },
+    "relapso-instinto@101": {
+      "erro_padrao": 0.07149477219899711,
+      "forca_log": -0.1112415499818812
+    },
+    "relapso-instinto@202": {
+      "erro_padrao": 0.0721158686860091,
+      "forca_log": -0.3010533989718199
+    },
+    "relapso-instinto@303": {
+      "erro_padrao": 0.07225062551342024,
+      "forca_log": -0.3277208279502711
+    },
+    "relapso-instinto@404": {
+      "erro_padrao": 0.07140788031791827,
+      "forca_log": -0.02759312861996854
+    },
+    "relapso-instinto@505": {
+      "erro_padrao": 0.07180268452271134,
+      "forca_log": -0.22684632012464404
+    }
+  },
+  "configs": {
+    "Config": {
+      "cura_saude_por_tick": 0.0003333333333333333,
+      "custo_brincar_energia": 0.08,
+      "custo_brincar_fome": 0.05,
+      "custo_repreender": 0.12,
+      "dano_saude_por_tick": 0.0005,
+      "decaimento_energia": 0.0011111111111111111,
+      "decaimento_fome": 0.0008333333333333334,
+      "decaimento_higiene": 0.0006666666666666666,
+      "decaimento_humor": 0.0008333333333333334,
+      "energia_por_tick_dormindo": 0.004166666666666667,
+      "fim_noite_tick": 420,
+      "ganho_alimentar": 0.45,
+      "ganho_brincar_humor": 0.25,
+      "ganho_elogiar": 0.1,
+      "ganho_limpar": 0.6,
+      "humor_por_tick_brincando": 0.008333333333333333,
+      "inicio_noite_tick": 1320,
+      "intervalo_decisao_ticks": 15,
+      "janela_atencao_ticks": 240,
+      "limiar_privacao": 0.15,
+      "multiplicador_noturno": 1.8,
+      "penalidade_higiene_por_sujeira": 0.12,
+      "prob_sujeira_por_tick": 0.0025,
+      "prob_sujeira_pos_refeicao": 0.35,
+      "saciedade_maxima": 1.0,
+      "saciedade_minima": 0.0,
+      "sujeira_maxima": 5
+    },
+    "ConfigArena": {
+      "dano_base": 10.0,
+      "fome_arena": 0.7,
+      "ganho_afinidade": 0.5,
+      "higiene_arena": 0.7,
+      "hora_arena": 0.5,
+      "hp_inicial": 100.0,
+      "mapa_pet_combate": [
+        [
+          "ocioso",
+          "bloqueio"
+        ],
+        [
+          "dormir",
+          "bloqueio"
+        ],
+        [
+          "comer",
+          "agarrao"
+        ],
+        [
+          "brincar",
+          "golpe"
+        ],
+        [
+          "chamar_atencao",
+          "carga"
+        ],
+        [
+          "explorar",
+          "finta"
+        ],
+        [
+          "emburrar",
+          "agarrao"
+        ]
+      ],
+      "max_turnos": 40,
+      "saude_arena": 1.0
+    },
+    "ConfigBandit": {
+      "escala_ticks_desde_cuidado": 480.0,
+      "iteracoes_bisseccao_prior": 40,
+      "janela_latencia_ticks": 120,
+      "lambda_regularizacao": 1.0,
+      "piso_prior": 0.05,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "variancia_amostra": 0.25
+    },
+    "ConfigDonos": {
+      "limiar_alimentar": 0.5,
+      "limiar_energia_sono_adequado": 0.4,
+      "limiar_humor_brincar": 0.4,
+      "limiar_limpar": 0.5,
+      "limiar_necessidade_pedido_adequado": 0.35,
+      "max_interacoes_por_passo": 6,
+      "passo_ticks": 15,
+      "prob_elogio_incoerente": 0.5,
+      "sujeira_para_limpar": 2,
+      "visitas_por_dia_relapso": 3
+    },
+    "ConfigMetricas": {
+      "max_iter_bradley_terry": 200,
+      "ridge_bradley_terry": 0.01,
+      "tolerancia_bradley_terry": 1e-10
+    },
+    "ConfigTracos": {
+      "alfa_ema": 0.003472222222222222
+    },
+    "TICKS_POR_DIA": 1440
+  },
+  "divergencia_resumo": {
+    "gate_usa": "pares bandit x bandit de bracos (donos) diferentes",
+    "jsd_entre_bracos_instinto": {
+      "esperado": 0.0,
+      "maximo": 0.0,
+      "media": 0.0,
+      "n_pares": 150
+    },
+    "jsd_media_dentro_do_braco": 0.01306018445439813,
+    "jsd_media_entre_bracos": 0.020406270280290587,
+    "jsd_por_par_de_bracos": {
+      "aleatorio-bandit x aleatorio-instinto": {
+        "media": 0.03623441208251797,
+        "n_pares": 25
+      },
+      "aleatorio-bandit x atencioso-bandit": {
+        "media": 0.024689392017093366,
+        "n_pares": 25
+      },
+      "aleatorio-bandit x atencioso-instinto": {
+        "media": 0.03623441208251797,
+        "n_pares": 25
+      },
+      "aleatorio-bandit x incoerente-bandit": {
+        "media": 0.01808536653277932,
+        "n_pares": 25
+      },
+      "aleatorio-bandit x incoerente-instinto": {
+        "media": 0.03623441208251797,
+        "n_pares": 25
+      },
+      "aleatorio-bandit x relapso-bandit": {
+        "media": 0.02271285524675152,
+        "n_pares": 25
+      },
+      "aleatorio-bandit x relapso-instinto": {
+        "media": 0.03623441208251797,
+        "n_pares": 25
+      },
+      "aleatorio-instinto x atencioso-bandit": {
+        "media": 0.035257853269240844,
+        "n_pares": 25
+      },
+      "aleatorio-instinto x atencioso-instinto": {
+        "media": 0.0,
+        "n_pares": 25
+      },
+      "aleatorio-instinto x incoerente-bandit": {
+        "media": 0.03683363727482678,
+        "n_pares": 25
+      },
+      "aleatorio-instinto x incoerente-instinto": {
+        "media": 0.0,
+        "n_pares": 25
+      },
+      "aleatorio-instinto x relapso-bandit": {
+        "media": 0.03553956873757308,
+        "n_pares": 25
+      },
+      "aleatorio-instinto x relapso-instinto": {
+        "media": 0.0,
+        "n_pares": 25
+      },
+      "atencioso-bandit x atencioso-instinto": {
+        "media": 0.035257853269240844,
+        "n_pares": 25
+      },
+      "atencioso-bandit x incoerente-bandit": {
+        "media": 0.024261931603207564,
+        "n_pares": 25
+      },
+      "atencioso-bandit x incoerente-instinto": {
+        "media": 0.035257853269240844,
+        "n_pares": 25
+      },
+      "atencioso-bandit x relapso-bandit": {
+        "media": 0.010719206696981074,
+        "n_pares": 25
+      },
+      "atencioso-bandit x relapso-instinto": {
+        "media": 0.035257853269240844,
+        "n_pares": 25
+      },
+      "atencioso-instinto x incoerente-bandit": {
+        "media": 0.03683363727482678,
+        "n_pares": 25
+      },
+      "atencioso-instinto x incoerente-instinto": {
+        "media": 0.0,
+        "n_pares": 25
+      },
+      "atencioso-instinto x relapso-bandit": {
+        "media": 0.03553956873757308,
+        "n_pares": 25
+      },
+      "atencioso-instinto x relapso-instinto": {
+        "media": 0.0,
+        "n_pares": 25
+      },
+      "incoerente-bandit x incoerente-instinto": {
+        "media": 0.03683363727482678,
+        "n_pares": 25
+      },
+      "incoerente-bandit x relapso-bandit": {
+        "media": 0.02196886958493069,
+        "n_pares": 25
+      },
+      "incoerente-bandit x relapso-instinto": {
+        "media": 0.03683363727482678,
+        "n_pares": 25
+      },
+      "incoerente-instinto x relapso-bandit": {
+        "media": 0.03553956873757308,
+        "n_pares": 25
+      },
+      "incoerente-instinto x relapso-instinto": {
+        "media": 0.0,
+        "n_pares": 25
+      },
+      "relapso-bandit x relapso-instinto": {
+        "media": 0.03553956873757308,
+        "n_pares": 25
+      }
+    },
+    "limiar": 0.02,
+    "piso_ruido_maximo": 0.012466970458725836
+  },
+  "efeito_do_treino": {
+    "cuidado_sozinho": "INCONCLUSIVO",
+    "definicao": "(pontos atencioso - pontos aleatorio | bandit) - (mesma diferenca | instinto), por semente; pontos = media do confronto direto, empate = 0.5",
+    "efeito": {
+      "ic_inferior": -4.4408920985006264e-17,
+      "ic_superior": 0.27999999999999997,
+      "media": 0.13999999999999996,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "por_semente": {
+      "101": {
+        "efeito": 0.19999999999999996,
+        "vantagem_bandit": 0.30000000000000004,
+        "vantagem_instinto": 0.10000000000000009
+      },
+      "202": {
+        "efeito": 0.3999999999999999,
+        "vantagem_bandit": 0.3999999999999999,
+        "vantagem_instinto": 0.0
+      },
+      "303": {
+        "efeito": 0.10000000000000009,
+        "vantagem_bandit": 0.5,
+        "vantagem_instinto": 0.3999999999999999
+      },
+      "404": {
+        "efeito": -0.10000000000000009,
+        "vantagem_bandit": -0.30000000000000004,
+        "vantagem_instinto": -0.19999999999999996
+      },
+      "505": {
+        "efeito": 0.09999999999999987,
+        "vantagem_bandit": 0.19999999999999996,
+        "vantagem_instinto": 0.10000000000000009
+      }
+    },
+    "vantagem_bandit": {
+      "ic_inferior": -0.06000000000000001,
+      "ic_superior": 0.41999999999999993,
+      "media": 0.21999999999999997,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "vantagem_instinto": {
+      "ic_inferior": -0.07999999999999999,
+      "ic_superior": 0.25999999999999995,
+      "media": 0.08000000000000003,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "veredito": "INDISTINGUIVEL_DE_ZERO"
+  },
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "finais_por_braco": {
+    "aleatorio-bandit": {
+      "humor": {
+        "ic_inferior": 0.16799999999999954,
+        "ic_superior": 0.7954999999999963,
+        "media": 0.48249999999999754,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 0.21696666666670517,
+        "ic_superior": 0.7954000000000133,
+        "media": 0.5098666666666851,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "aleatorio-instinto": {
+      "humor": {
+        "ic_inferior": 0.22349999999998915,
+        "ic_superior": 0.8064999999999847,
+        "media": 0.5149999999999869,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 0.22150000000003991,
+        "ic_superior": 0.7676000000000256,
+        "media": 0.5091000000000299,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "atencioso-bandit": {
+      "humor": {
+        "ic_inferior": 0.8539999999999921,
+        "ic_superior": 0.942499999999996,
+        "media": 0.8894999999999925,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "atencioso-instinto": {
+      "humor": {
+        "ic_inferior": 0.8714999999999969,
+        "ic_superior": 0.9554999999999987,
+        "media": 0.9089999999999978,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "incoerente-bandit": {
+      "humor": {
+        "ic_inferior": 0.7349999999999908,
+        "ic_superior": 0.9189999999999973,
+        "media": 0.8419999999999934,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "incoerente-instinto": {
+      "humor": {
+        "ic_inferior": 0.8309999999999949,
+        "ic_superior": 0.9474999999999987,
+        "media": 0.8869999999999966,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "relapso-bandit": {
+      "humor": {
+        "ic_inferior": 0.8674999999999965,
+        "ic_superior": 0.9714999999999993,
+        "media": 0.9194999999999979,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 0.9880000000000013,
+        "ic_superior": 1.0,
+        "media": 0.9960000000000004,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "relapso-instinto": {
+      "humor": {
+        "ic_inferior": 0.7589999999999921,
+        "ic_superior": 0.8904999999999974,
+        "media": 0.8189999999999934,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 0.9916000000000009,
+        "ic_superior": 1.0,
+        "media": 0.9972000000000003,
+        "n": 5,
+        "nivel": 0.95
+      }
+    }
+  },
+  "finais_por_pet": {
+    "aleatorio-bandit@101": {
+      "humor": 0.0,
+      "saude": 0.5750000000000005
+    },
+    "aleatorio-bandit@202": {
+      "humor": 0.9249999999999983,
+      "saude": 0.9195000000000089
+    },
+    "aleatorio-bandit@303": {
+      "humor": 0.10000000000000112,
+      "saude": 0.015000000000054636
+    },
+    "aleatorio-bandit@404": {
+      "humor": 0.6474999999999916,
+      "saude": 0.7815000000000241
+    },
+    "aleatorio-bandit@505": {
+      "humor": 0.7399999999999965,
+      "saude": 0.25833333333333774
+    },
+    "aleatorio-instinto@101": {
+      "humor": 0.13999999999997595,
+      "saude": 0.6020000000000438
+    },
+    "aleatorio-instinto@202": {
+      "humor": 0.9249999999999983,
+      "saude": 0.8620000000000152
+    },
+    "aleatorio-instinto@303": {
+      "humor": 0.10000000000000112,
+      "saude": 0.013000000000054635
+    },
+    "aleatorio-instinto@404": {
+      "humor": 0.6374999999999916,
+      "saude": 0.7560000000000269
+    },
+    "aleatorio-instinto@505": {
+      "humor": 0.7724999999999674,
+      "saude": 0.3125000000000088
+    },
+    "atencioso-bandit@101": {
+      "humor": 0.854999999999996,
+      "saude": 1.0
+    },
+    "atencioso-bandit@202": {
+      "humor": 0.8974999999999848,
+      "saude": 1.0
+    },
+    "atencioso-bandit@303": {
+      "humor": 0.8524999999999963,
+      "saude": 1.0
+    },
+    "atencioso-bandit@404": {
+      "humor": 0.8549999999999862,
+      "saude": 1.0
+    },
+    "atencioso-bandit@505": {
+      "humor": 0.9874999999999997,
+      "saude": 1.0
+    },
+    "atencioso-instinto@101": {
+      "humor": 0.8849999999999971,
+      "saude": 1.0
+    },
+    "atencioso-instinto@202": {
+      "humor": 0.9374999999999986,
+      "saude": 1.0
+    },
+    "atencioso-instinto@303": {
+      "humor": 0.8874999999999974,
+      "saude": 1.0
+    },
+    "atencioso-instinto@404": {
+      "humor": 0.8499999999999965,
+      "saude": 1.0
+    },
+    "atencioso-instinto@505": {
+      "humor": 0.9849999999999994,
+      "saude": 1.0
+    },
+    "incoerente-bandit@101": {
+      "humor": 0.6324999999999905,
+      "saude": 1.0
+    },
+    "incoerente-bandit@202": {
+      "humor": 0.8999999999999942,
+      "saude": 1.0
+    },
+    "incoerente-bandit@303": {
+      "humor": 0.8524999999999963,
+      "saude": 1.0
+    },
+    "incoerente-bandit@404": {
+      "humor": 0.9474999999999986,
+      "saude": 1.0
+    },
+    "incoerente-bandit@505": {
+      "humor": 0.8774999999999876,
+      "saude": 1.0
+    },
+    "incoerente-instinto@101": {
+      "humor": 0.7849999999999943,
+      "saude": 1.0
+    },
+    "incoerente-instinto@202": {
+      "humor": 0.8624999999999934,
+      "saude": 1.0
+    },
+    "incoerente-instinto@303": {
+      "humor": 0.9874999999999997,
+      "saude": 1.0
+    },
+    "incoerente-instinto@404": {
+      "humor": 0.9374999999999986,
+      "saude": 1.0
+    },
+    "incoerente-instinto@505": {
+      "humor": 0.8624999999999968,
+      "saude": 1.0
+    },
+    "relapso-bandit@101": {
+      "humor": 0.8574999999999963,
+      "saude": 1.0
+    },
+    "relapso-bandit@202": {
+      "humor": 0.932499999999998,
+      "saude": 1.0
+    },
+    "relapso-bandit@303": {
+      "humor": 0.9749999999999994,
+      "saude": 1.0
+    },
+    "relapso-bandit@404": {
+      "humor": 0.844999999999996,
+      "saude": 1.0
+    },
+    "relapso-bandit@505": {
+      "humor": 0.9874999999999997,
+      "saude": 0.9800000000000022
+    },
+    "relapso-instinto@101": {
+      "humor": 0.8749999999999971,
+      "saude": 1.0
+    },
+    "relapso-instinto@202": {
+      "humor": 0.9349999999999983,
+      "saude": 1.0
+    },
+    "relapso-instinto@303": {
+      "humor": 0.7724999999999956,
+      "saude": 1.0
+    },
+    "relapso-instinto@404": {
+      "humor": 0.7374999999999939,
+      "saude": 1.0
+    },
+    "relapso-instinto@505": {
+      "humor": 0.7749999999999816,
+      "saude": 0.9860000000000015
+    }
+  },
+  "gate": [
+    {
+      "mensagem": "todos os 40 pets com 224 interacoes (verificado)",
+      "ok": true,
+      "regra": "orcamento_igual_entre_bracos"
+    },
+    {
+      "mensagem": "40 vidas reconstruidas do disco sem divergencia",
+      "ok": true,
+      "regra": "replay_vidas_bit_a_bit"
+    },
+    {
+      "mensagem": "15600 partidas rejogadas sem divergencia",
+      "ok": true,
+      "regra": "replay_partidas_bit_a_bit"
+    },
+    {
+      "mensagem": "5 sementes",
+      "ok": true,
+      "regra": "sementes_suficientes"
+    },
+    {
+      "mensagem": "piso de ruido Monte Carlo maximo 0.012467 bits vs limiar 0.02 bits",
+      "ok": true,
+      "regra": "sonda_com_resolucao"
+    },
+    {
+      "mensagem": "JSD media entre pets bandit de bracos diferentes = 0.020406 bits, limiar 0.02 bits",
+      "ok": true,
+      "regra": "divergencia_entre_politicas"
+    },
+    {
+      "mensagem": "150 pares instinto x instinto de bracos diferentes, todos com JSD exatamente 0.0 (verificado; valor nao nulo levanta DivergenciaInstintoNaoNula)",
+      "ok": true,
+      "regra": "divergencia_instinto_zero"
+    }
+  ],
+  "interacoes_por_pet": {
+    "aleatorio-bandit@101": 224,
+    "aleatorio-bandit@202": 224,
+    "aleatorio-bandit@303": 224,
+    "aleatorio-bandit@404": 224,
+    "aleatorio-bandit@505": 224,
+    "aleatorio-instinto@101": 224,
+    "aleatorio-instinto@202": 224,
+    "aleatorio-instinto@303": 224,
+    "aleatorio-instinto@404": 224,
+    "aleatorio-instinto@505": 224,
+    "atencioso-bandit@101": 224,
+    "atencioso-bandit@202": 224,
+    "atencioso-bandit@303": 224,
+    "atencioso-bandit@404": 224,
+    "atencioso-bandit@505": 224,
+    "atencioso-instinto@101": 224,
+    "atencioso-instinto@202": 224,
+    "atencioso-instinto@303": 224,
+    "atencioso-instinto@404": 224,
+    "atencioso-instinto@505": 224,
+    "incoerente-bandit@101": 224,
+    "incoerente-bandit@202": 224,
+    "incoerente-bandit@303": 224,
+    "incoerente-bandit@404": 224,
+    "incoerente-bandit@505": 224,
+    "incoerente-instinto@101": 224,
+    "incoerente-instinto@202": 224,
+    "incoerente-instinto@303": 224,
+    "incoerente-instinto@404": 224,
+    "incoerente-instinto@505": 224,
+    "relapso-bandit@101": 224,
+    "relapso-bandit@202": 224,
+    "relapso-bandit@303": 224,
+    "relapso-bandit@404": 224,
+    "relapso-bandit@505": 224,
+    "relapso-instinto@101": 224,
+    "relapso-instinto@202": 224,
+    "relapso-instinto@303": 224,
+    "relapso-instinto@404": 224,
+    "relapso-instinto@505": 224
+  },
+  "motivos_reprovacao": [],
+  "n_partidas": 15600,
+  "preflight": {
+    "checagens": [
+      {
+        "checagem": "python>=3.10",
+        "detalhe": "3.13.0",
+        "ok": true
+      },
+      {
+        "checagem": "digilab so usa stdlib",
+        "detalhe": "imports fora da stdlib: []",
+        "ok": true
+      },
+      {
+        "checagem": "engine.py intocado",
+        "detalhe": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+        "ok": true
+      },
+      {
+        "checagem": "protocolo valido",
+        "detalhe": "arena-v1-ablacao",
+        "ok": true
+      },
+      {
+        "checagem": "saida gravavel",
+        "detalhe": "D:\\Trab\\digilab\\v1\\artifacts_ablacao",
+        "ok": true
+      },
+      {
+        "checagem": "replay v0 bit a bit",
+        "detalhe": "motor v0, 1 dia",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  "protocolo": {
+    "amostras_por_estado": {
+      "justificativa": "amostras Monte Carlo de acao por estado, com numeros aleatorios comuns",
+      "status": "PROPOSTO",
+      "valor": 200
+    },
+    "bootstrap_reamostragens": {
+      "justificativa": "bootstrap percentil sobre sementes",
+      "status": "PROPOSTO",
+      "valor": 10000
+    },
+    "bootstrap_semente": {
+      "justificativa": "semente do bootstrap",
+      "status": "PROPOSTO",
+      "valor": 4242
+    },
+    "bracos": {
+      "justificativa": "definidos no enunciado da tarefa; aleatorio e o controle critico",
+      "status": "DECIDIDO",
+      "valor": [
+        "atencioso",
+        "relapso",
+        "aleatorio",
+        "incoerente"
+      ]
+    },
+    "definicao_vitoria": {
+      "justificativa": "regra simples e simetrica; max_turnos em ConfigArena",
+      "status": "PROPOSTO",
+      "valor": "KO (hp do oponente chega a 0) ou, apos max_turnos, maior hp restante; hp igual = empate, conta 0.5 para cada lado"
+    },
+    "dias_simulados": {
+      "justificativa": "mesma janela da demo v0, que ja separa atencioso de relapso",
+      "status": "PROPOSTO",
+      "valor": 14
+    },
+    "estados_sonda": {
+      "justificativa": "estados sorteados uniformemente para condicionar a divergencia",
+      "status": "PROPOSTO",
+      "valor": 64
+    },
+    "limiar_divergencia_jsd_bits": {
+      "justificativa": "JSD media entre politicas de bracos diferentes abaixo disto = politicas praticamente iguais; a run e REPROVADA por falta de profundidade do ambiente",
+      "status": "PROPOSTO",
+      "valor": 0.02
+    },
+    "metricas": {
+      "justificativa": "lista do enunciado; implementadas uma unica vez em digilab/metrics.py",
+      "status": "DECIDIDO",
+      "valor": [
+        "taxa_vitoria_round_robin",
+        "rating_bradley_terry_com_erro_padrao",
+        "divergencia_jsd_entre_politicas",
+        "saude_humor_finais"
+      ]
+    },
+    "nivel_confianca": {
+      "justificativa": "intervalo de 95%",
+      "status": "PROPOSTO",
+      "valor": 0.95
+    },
+    "orcamento_interacoes": {
+      "justificativa": "16 interacoes/dia x 14 dias; na demo v0 o dono atencioso gastou ~13,6/dia. Igual entre bracos por construcao (simulador impoe)",
+      "status": "PROPOSTO",
+      "valor": 224
+    },
+    "partidas_por_par": {
+      "justificativa": "por par de pets, cada uma com semente de partida propria",
+      "status": "PROPOSTO",
+      "valor": 20
+    },
+    "politicas": {
+      "justificativa": "ablacao treino x cuidado: bandit aprende com o dono; instinto recebe o mesmo dono e orcamento sem aprender. Sementes, orcamento, duracao e vitoria herdados de arena-v1",
+      "status": "PROPOSTO",
+      "valor": [
+        "bandit",
+        "instinto"
+      ]
+    },
+    "semente_sonda": {
+      "justificativa": "raiz das sementes da sonda de divergencia",
+      "status": "PROPOSTO",
+      "valor": 9001
+    },
+    "semente_torneio": {
+      "justificativa": "raiz das sementes de partida",
+      "status": "PROPOSTO",
+      "valor": 7001
+    },
+    "sementes_coorte": {
+      "justificativa": "criterio de pronto exige incerteza sobre pelo menos 5 sementes; o numero 5 e decidido, os valores sao arbitrarios e fixados aqui",
+      "status": "DECIDIDO",
+      "valor": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "versao": "arena-v1-ablacao"
+  },
+  "protocolo_canonico_hash": "2b3460ee7a76a61a12bace52f5119d3c4130d68ba131a18414ad0fa195c7bdaf",
+  "protocolo_hash": "2b3460ee7a76a61a12bace52f5119d3c4130d68ba131a18414ad0fa195c7bdaf",
+  "resultado_central": {
+    "ic_inferior": 0.47000000000000003,
+    "ic_superior": 0.71,
+    "media": 0.61,
+    "n": 5,
+    "nivel": 0.95,
+    "pergunta": "pet treinado por dono atencioso vence pet treinado por dono aleatorio com o mesmo orcamento?",
+    "por_semente": {
+      "101": 0.65,
+      "202": 0.7,
+      "303": 0.75,
+      "404": 0.35,
+      "505": 0.6
+    },
+    "secundario_todos_confrontos": {
+      "n_partidas": 500,
+      "pontos_medios": 0.676
+    },
+    "unidade": "pontos medios do atencioso no confronto direto, por semente de coorte (empate = 0.5)",
+    "veredito": "INCONCLUSIVO"
+  },
+  "sementes_coorte": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "status_run": "APROVADA",
+  "taxa_vitoria_por_braco": {
+    "aleatorio-bandit": {
+      "ic_inferior": 0.32794871794871794,
+      "ic_superior": 0.5607692307692307,
+      "media": 0.4166666666666667,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "aleatorio-instinto": {
+      "ic_inferior": 0.4556410256410256,
+      "ic_superior": 0.497948717948718,
+      "media": 0.4746153846153846,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "atencioso-bandit": {
+      "ic_inferior": 0.5956410256410256,
+      "ic_superior": 0.6348717948717948,
+      "media": 0.6156410256410256,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "atencioso-instinto": {
+      "ic_inferior": 0.4838461538461538,
+      "ic_superior": 0.5153846153846154,
+      "media": 0.49974358974358973,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "incoerente-bandit": {
+      "ic_inferior": 0.33974358974358976,
+      "ic_superior": 0.6243589743589744,
+      "media": 0.46128205128205124,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "incoerente-instinto": {
+      "ic_inferior": 0.49000000000000005,
+      "ic_superior": 0.51,
+      "media": 0.49948717948717947,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "relapso-bandit": {
+      "ic_inferior": 0.5246153846153846,
+      "ic_superior": 0.6369230769230769,
+      "media": 0.5807692307692307,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "relapso-instinto": {
+      "ic_inferior": 0.4279487179487179,
+      "ic_superior": 0.47615384615384615,
+      "media": 0.45179487179487177,
+      "n": 5,
+      "nivel": 0.95
+    }
+  },
+  "taxa_vitoria_por_pet": {
+    "aleatorio-bandit@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.30641025641025643
+    },
+    "aleatorio-bandit@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.39487179487179486
+    },
+    "aleatorio-bandit@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.33589743589743587
+    },
+    "aleatorio-bandit@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.691025641025641
+    },
+    "aleatorio-bandit@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.35512820512820514
+    },
+    "aleatorio-instinto@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.4717948717948718
+    },
+    "aleatorio-instinto@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.47692307692307695
+    },
+    "aleatorio-instinto@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.44487179487179485
+    },
+    "aleatorio-instinto@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5166666666666667
+    },
+    "aleatorio-instinto@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.46282051282051284
+    },
+    "atencioso-bandit@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.6358974358974359
+    },
+    "atencioso-bandit@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5833333333333334
+    },
+    "atencioso-bandit@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.6307692307692307
+    },
+    "atencioso-bandit@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5923076923076923
+    },
+    "atencioso-bandit@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.6358974358974359
+    },
+    "atencioso-instinto@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5012820512820513
+    },
+    "atencioso-instinto@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.4897435897435897
+    },
+    "atencioso-instinto@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5064102564102564
+    },
+    "atencioso-instinto@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.47435897435897434
+    },
+    "atencioso-instinto@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5269230769230769
+    },
+    "incoerente-bandit@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.2935897435897436
+    },
+    "incoerente-bandit@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.75
+    },
+    "incoerente-bandit@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5115384615384615
+    },
+    "incoerente-bandit@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.36025641025641025
+    },
+    "incoerente-bandit@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.391025641025641
+    },
+    "incoerente-instinto@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5192307692307693
+    },
+    "incoerente-instinto@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5051282051282051
+    },
+    "incoerente-instinto@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.49615384615384617
+    },
+    "incoerente-instinto@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.48717948717948717
+    },
+    "incoerente-instinto@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.4897435897435897
+    },
+    "relapso-bandit@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5230769230769231
+    },
+    "relapso-bandit@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5769230769230769
+    },
+    "relapso-bandit@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.6410256410256411
+    },
+    "relapso-bandit@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.6628205128205128
+    },
+    "relapso-bandit@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.5
+    },
+    "relapso-instinto@101": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.47307692307692306
+    },
+    "relapso-instinto@202": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.4269230769230769
+    },
+    "relapso-instinto@303": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.4205128205128205
+    },
+    "relapso-instinto@404": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.4935897435897436
+    },
+    "relapso-instinto@505": {
+      "empates": 0,
+      "jogos": 780,
+      "taxa": 0.44487179487179485
+    }
+  }
+}

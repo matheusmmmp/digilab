@@ -1,0 +1,156 @@
+{
+ "modo": "redecidir_evento",
+ "vidas": 7200,
+ "primario": {
+  "contraste": "P-R: M3*R - M3*, a taxa de fechamento por episodio, nas 4 celulas do longe_fixo",
+  "n": 150,
+  "n_grupos": 5,
+  "media": 0.012367515927464587,
+  "teste": "t sobre as unidades (A4.4.6)",
+  "p_unilateral": 0.09318859046247341,
+  "ic95": {
+   "ic_inferior": -0.006041953001612293,
+   "ic_superior": 0.030776984856541467,
+   "nivel": 0.95
+  },
+  "t": 1.3274893774557355,
+  "gl": 149,
+  "motivo": null,
+  "g1": -0.20224169008339168,
+  "ressalva_assimetria": null,
+  "bootstrap": {
+   "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+   "p_unilateral": 0.0,
+   "ic95": {
+    "ic_inferior": 0.008184264348047622,
+    "ic_superior": 0.018401058936367686,
+    "nivel": 0.95
+   },
+   "ic90": {
+    "ic_inferior": 0.008629574225925795,
+    "ic_superior": 0.01749720868279226,
+    "nivel": 0.9
+   },
+   "motivo": null
+  },
+  "classe": {
+   "classe": "indeterminado",
+   "sinal": null,
+   "motivo": null
+  },
+  "margem": 0.025,
+  "margem_efetiva": 0.026250408516145244,
+  "passa": false
+ },
+ "guarda": {
+  "contraste": "G-COMEDOURO: M3*R - M3*, a taxa por episodio, nas 4 celulas do comedouro",
+  "n": 150,
+  "n_grupos": 5,
+  "media": -0.01341802744267433,
+  "teste": "t sobre as unidades (A4.4.6)",
+  "p_unilateral": 0.9738144144045598,
+  "ic95": {
+   "ic_inferior": -0.02697542339097286,
+   "ic_superior": 0.00013936850562419958,
+   "nivel": 0.95
+  },
+  "t": -1.9556999844536682,
+  "gl": 149,
+  "motivo": null,
+  "g1": 0.09544609476608318,
+  "ressalva_assimetria": null,
+  "bootstrap": {
+   "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+   "p_unilateral": 0.9845,
+   "ic95": {
+    "ic_inferior": -0.02468631913076715,
+    "ic_superior": -0.0018731524249570289,
+    "nivel": 0.95
+   },
+   "ic90": {
+    "ic_inferior": -0.02304533220276246,
+    "ic_superior": -0.003165142440563414,
+    "nivel": 0.9
+   },
+   "motivo": null
+  },
+  "classe": {
+   "classe": "indeterminado",
+   "sinal": null,
+   "motivo": null
+  },
+  "margem": 0.025,
+  "margem_efetiva": 0.019331746256724545,
+  "menor_que_0": false
+ },
+ "secundarias": {
+  "S1": {
+   "contraste": "S1: M2R - M2, a taxa por episodio, no longe_fixo",
+   "n": 150,
+   "n_grupos": 5,
+   "media": -0.009046765663293798,
+   "teste": "t sobre as unidades (A4.4.6)",
+   "p_unilateral": 0.8495927034386136,
+   "ic95": {
+    "ic_inferior": -0.02626395602033127,
+    "ic_superior": 0.008170424693743671,
+    "nivel": 0.95
+   },
+   "t": -1.038295319702245,
+   "gl": 149,
+   "motivo": null,
+   "g1": -0.43483984763609823,
+   "ressalva_assimetria": null,
+   "bootstrap": {
+    "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "p_unilateral": 0.9941,
+    "ic95": {
+     "ic_inferior": -0.018300138949233713,
+     "ic_superior": -0.0011163621606329254,
+     "nivel": 0.95
+    },
+    "ic90": {
+     "ic_inferior": -0.016293022200487874,
+     "ic_superior": -0.001872066991092096,
+     "nivel": 0.9
+    },
+    "motivo": null
+   },
+   "classe": {
+    "classe": "indeterminado",
+    "sinal": null,
+    "motivo": null
+   },
+   "margem": 0.025,
+   "margem_efetiva": 0.024550316041905128,
+   "previsao": null
+  },
+  "S2": {
+   "contraste": "S2: M3*R - M3*, a taxa por episodio, no longe sorteado",
+   "n": 150,
+   "n_grupos": 5,
+   "media": 0.03699630901720685,
+   "teste": "t sobre as unidades (A4.4.6)",
+   "p_unilateral": 8.101910714142972e-07,
+   "ic95": {
+    "ic_inferior": 0.022363178153500276,
+    "ic_superior": 0.051629439880913425,
+    "nivel": 0.95
+   },
+   "t": 4.995868268025903,
+   "gl": 149,
+   "motivo": null,
+   "g1": 0.0595364711908637,
+   "ressalva_assimetria": null,
+   "bootstrap": {
+    "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "p_unilateral": 0.0,
+    "ic95": {
+     "ic_inferior": 0.022705882030765935,
+     "ic_superior": 0.05047268191618037,
+     "nivel": 0.95
+    },
+    "ic90": {
+     "ic_inferior": 0.023805820684303657,
+     "ic_superior": 0.0490
+exit 0

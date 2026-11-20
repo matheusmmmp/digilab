@@ -1,0 +1,27 @@
+{
+ "nome": "g04_r135",
+ "pesoPonto": 30,
+ "gama": {
+  "vigor": 0.04,
+  "folego": 0.04,
+  "recuperacao": 0.04,
+  "forca": 0.04,
+  "mira": 0.04,
+  "guarda": 0.04
+ },
+ "mapa": {
+  "hp": 1300
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.81,
+  "adulto": 1.0935,
+  "mega": 1.4762
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.35,
+  "adulto": 1.8225,
+  "mega": 2.4604
+ }
+}

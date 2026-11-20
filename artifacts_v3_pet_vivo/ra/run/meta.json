@@ -1,0 +1,112 @@
+{
+  "artefatos_sha256": {
+    "medidas.json": "0abb14d8ade1819aa9338a8a746c3900d624a11b9227ca71ee54cd2edad196ba",
+    "medidas.json.gz": "605d64c0fed87cf5602f64e278a2cb1d2b64a9764fad3e5d9b6ccae5ce8cb5eb",
+    "resultado.json": "4c645a0ab873cfb8f8c4675953d25d73d4ae6d1352a0264a2c804a2f0a7e0c3f"
+  },
+  "comando": "python experiments/run_v3_pet_vivo_ra.py --config experiments/configs/v3_pet_vivo/ra.json --processos 4",
+  "config": {
+    "descricao": "O replay do R-a (docs/PLANO_ANALISE_V3_PET_VIVO_RA.md, APROVADO): as mesmas vidas do R1 (o HOJE e o OLF-0 da run do PV-2 e o HOJE da checagem do v38; 5 120 vidas), rejogadas pelo log com a ConfigRastro ligada, para medir as linhas de base do intervalo. Nenhuma vida nova e nenhuma faixa nova: as bases sao as da run do PV-2, para a conferencia. Uma vez, ate 4 processos.",
+    "dias": 14,
+    "fase": "ra",
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_RA.md",
+    "unidades": {
+      "bases": [
+        26101,
+        26202,
+        26303,
+        26404,
+        26505
+      ],
+      "k": 40,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_pet_vivo/ra.json",
+  "config_sha256": "2bc35734d707edd31cf4b801a9a044c790b9839fa1c34312b0740bf5509427b2",
+  "conjuntos": [
+    [
+      "run",
+      "HOJE"
+    ],
+    [
+      "run",
+      "OLF-0"
+    ],
+    [
+      "v38",
+      "HOJE"
+    ]
+  ],
+  "cortes": {
+    "eta2": 0.05
+  },
+  "disco_livre_gb": 87.7761116027832,
+  "duracao_s": 2004.8272383213043,
+  "fase": "ra",
+  "fim": "2026-11-19T21:52:02",
+  "fonte": {
+    "artefatos_sha256": {
+      "medidas.json": "b7acc323af11c7f1f8a3d863392667e1d70000de92526f0acb392690c5eb9e0b",
+      "medidas.json.gz": "0bea4881a24e14c08f5b925c06ea06c8fcb4192287b5ec63c8fad2c65e53193c",
+      "resultado.json": "fc3f48ca03fb96a7069981f1f2f8694bc774672126cf4b0c11c677a2534b9464",
+      "vidas.tar.gz": "3dcb15b7d74c4fe385fd5c8c648f38c240e386749ef6b972047cd337776474df"
+    },
+    "git_head": "34894b505f1ac0f7cba4526b5263439cd365e8f3",
+    "pasta": "artifacts_v3_pet_vivo/pv2/run",
+    "r1": "artifacts_v3_pet_vivo/r1/run",
+    "r1_medidas_sha256": "fa406f7a68e049081946700f2dce0cebf4c613f92b49335422d521775267b678",
+    "vidas_tar": "D:\\Trab\\digilab\\v3-pet-vivo-pv2-run\\artifacts_v3_pet_vivo\\pv2\\run\\vidas.tar.gz"
+  },
+  "git_head": "1688bca95ba764a97aa44bda02f96a70d75736a8",
+  "git_limpo": true,
+  "inicio": "2026-11-19T21:18:37",
+  "ks": [
+    4,
+    16,
+    96
+  ],
+  "linhas": [
+    "GLOBAL",
+    "CTX",
+    "FASE",
+    "ESTADO",
+    "MOVEL-4",
+    "MOVEL-16",
+    "MOVEL-96"
+  ],
+  "orquestrador_sha256": "ea6c4c0d2daee62ee628f94ba1f496fe3dba2665038212d8dbfffb2dbc3bebfd",
+  "piso": 5,
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_RA.md",
+  "plano_sha256": "a11d784102b0633820dd3fa9db3fe8b0c6134ca8a50186c2fd7f45dca3081977",
+  "processos": 4,
+  "pv2_sha256": "c6d031a445b91e0dfedaa56af4e2954ac9e86fbbcab4faed4f7ba3bc5a357f31",
+  "python": "3.13.0",
+  "r1_sha256": "d67d6e96327b7231aa3ab35a779aa2fcd2f0205a2a220cc6cb94738ea038f7e9",
+  "sha256": {
+    "config.py": "2aad6d34f59876e65e4f03d03c08d432d1a28214451e9aaadcd6f7e23c7562ca",
+    "corpo.py": "7cdec8083b6b1eb394cc95549958107a7a3ce031a252c25ed91cc936887e98ae",
+    "digibrain/__init__.py": "a18292fc00ac5e260970d9de4d5afdcfb70d904b3cf660c351d8dcc0a9d8b5f2",
+    "digibrain/_comum.py": "ab4b8b0622c0b419833a68284594bd1519eb2a04041b313701dd0eee23d8f3a4",
+    "digibrain/adapt.py": "be941486b6f70901dedca6bbbaf1d9c83597d8281305230af8096f86a45029ca",
+    "digibrain/afeto.py": "89f33f272faa44253a1594f7b4fe52055aca2b4eddb974af79eed69d0af0b2bb",
+    "digibrain/arb.py": "ace91ebfedeec9f8884badc12ce95b771b6f38570d4b633e54f25f0cf7a9458c",
+    "digibrain/base.py": "723fc6aa7da85f0588e6c15173ce68b4bc0f9711341c29da9f30e229ddd6c724",
+    "digibrain/decodificador.py": "c597db7e836adf400707f56382f2443feb274512dba935a8e5c7e822fa988b3c",
+    "digibrain/dever.py": "c6cf340cb7c5cb18a81435caa8ff0b576b48890115f6149f193df4a1863cedb7",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "0b753b3129917e017b39042a3abd9c2ffc6d6ef2795e3f0a534498d2456fb97f",
+    "digibrain/mem.py": "7c28530030d060c83af85f700c39a72d3c1e92e232d0299316f922d10b28ff6e",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "ca00797b0a76a9c68d9282cffd01a785c6df4a3f7d4ac1f3ab94889e3fc9a2a4",
+    "digibrain/rastro.py": "d15d5773ad41908ce360ae4e148dd4282c26a2385857738232ee4eb57d1cccec",
+    "digibrain/sens.py": "0c15c9352732a6c54d72ea1140122d16f0e740071e26c24af8370c9623bc5f38",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "ba5f2bd8b67231ad6ad973de36ae07329fbd929fb65a7102d828cbb667d50c56",
+    "mundo.py": "3f5d0361365d0f492d2d0cea135c899e45d86d56e981fbe5fc1bf936a1f9caaa"
+  },
+  "vidas": 5120,
+  "vidas_parede_s": 1994.287811200018
+}

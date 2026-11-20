@@ -1,0 +1,55 @@
+{
+ "analise_refeita_igual": {
+  "familiarizacao": true,
+  "principal": true,
+  "so_estaveis": true
+ },
+ "agrado_inato_proprio": {
+  "n": 108,
+  "min": -514,
+  "max": 459,
+  "positivos": 48
+ },
+ "agrado_inato_vazio": [
+  0
+ ],
+ "exposicao_delta_agora_menos_delta_inato": {
+  "proprio|nenhum": {
+   "n": 36,
+   "media": -8.777777777777777,
+   "min": -139.42857142857144,
+   "max": 129.14285714285717
+  },
+  "proprio|calmo": {
+   "n": 36,
+   "media": 9.54761904761905,
+   "min": -99.28571428571428,
+   "max": 92.0
+  },
+  "proprio|agitado": {
+   "n": 36,
+   "media": -37.38095238095238,
+   "min": -137.28571428571428,
+   "max": 108.14285714285717
+  },
+  "vazio|nenhum": {
+   "n": 36,
+   "media": -4.126984126984127,
+   "min": -152.85714285714286,
+   "max": 137.14285714285714
+  },
+  "vazio|calmo": {
+   "n": 36,
+   "media": 67.18253968253968,
+   "min": -23.0,
+   "max": 239.0
+  },
+  "vazio|agitado": {
+   "n": 36,
+   "media": -85.4920634920635,
+   "min": -217.85714285714286,
+   "max": 54.714285714285715
+  }
+ },
+ "dias_sem_sonda": 0
+}

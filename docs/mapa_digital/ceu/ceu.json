@@ -1,0 +1,14 @@
+{
+ "id": "01a1b1d2-ebbf-7730-85d9-3f44e1fac75d",
+ "ai_model": "nano-banana-2",
+ "prompt": "A wide panoramic painted anime sky for a game background, matching the sky in the reference image: saturated bright blue sky, huge fluffy white cumulus clouds with soft blue shading, painted TV anime background style with clean flat colors, lighter blue near the bottom horizon. Only the sky: no ground, no trees, no mountains, no objects, no text, no characters.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793984753655,
+ "finished_at": 1793984779177,
+ "aspect_ratio": "16:9",
+ "saldo": {
+  "antes": 602,
+  "depois": 596
+ }
+}

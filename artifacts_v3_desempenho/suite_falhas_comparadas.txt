@@ -1,0 +1,48 @@
+# falhas da suite: CPython (artifacts_v3_desempenho/suite_cpython.txt) x PyPy (artifacts_v3_desempenho/suite_pypy.txt)
+# gerado por: grep '^FAILED' <suite> | sed 's/ - .*//' | sort -u; comm
+## nos dois (7)
+FAILED tests/test_competicao_etapa0.py::test_o_artefato_se_refaz_igual
+FAILED tests/test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual
+FAILED tests/test_digibrain_etapa0.py::test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave
+FAILED tests/test_digibrain_vidas.py::test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain
+FAILED tests/test_medir_v3_espaco_acoes.py::test_o_artefato_se_refaz_igual
+FAILED tests/test_memoria_autobio.py::test_g2_separado_nada_fora_do_pacote_le_a_chave
+FAILED tests/test_redecidir_evento.py::test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave
+## so no PyPy (36)
+FAILED tests/test_bancada_p4_contrato.py::test_g2_com_a_chave_explicita_desligada
+FAILED tests/test_bancada_pqp_adendo7.py::test_g2_sem_o_adendo_7_as_vidas_sao_as_do_gabarito
+FAILED tests/test_bancada_pqp_adendo8.py::test_g2_sem_o_adendo_8_as_vidas_sao_as_dos_gabaritos
+FAILED tests/test_confianca.py::test_gate_g1_vida_69001_byte_a_byte_com_a_chave_desligada
+FAILED tests/test_custo_k_l2_digibrain.py::test_o_custo_do_k_se_refaz_igual
+FAILED tests/test_digibrain_l2.py::test_o_poder_da_l2_se_refaz_igual
+FAILED tests/test_digibrain_l2_k.py::test_o_k_fixado_se_refaz_igual_e_e_o_da_a5_9
+FAILED tests/test_digibrain_reavaliacao.py::test_as_analises_das_fases_antigas_se_refazem_iguais[avaliacao]
+FAILED tests/test_emocao_habituacao.py::test_sem_habituacao_reproduz_a_personalidade_completa_bit_a_bit
+FAILED tests/test_gabarito_carater_v11_web.py::test_gabarito_em_dia
+FAILED tests/test_gabarito_conversa_dc3.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_digibrain.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_digibrain_conserto.py::test_o_gabarito_do_conserto_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_digibrain_modular.py::test_o_gabarito_do_modular_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_genoma_g0.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_habito_intencao.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_memoria_autobio.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_redecidir_evento.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_genoma_g0.py::test_e2_chave_desligada_as_vidas_da_e0_saem_iguais_ao_gabarito_no_log_e_na_trajetoria
+FAILED tests/test_leitura_l2_digibrain.py::test_a_leitura_se_refaz_igual_das_partes
+FAILED tests/test_medir_carater_v11.py::test_o_artefato_se_refaz_igual
+FAILED tests/test_motivo_expressao.py::test_bateria_combate_v2_reproduz_artefatos
+FAILED tests/test_p4_gabaritos.py::test_g2_as_vidas_do_j5_com_o_adendo_8_sao_as_de_hoje
+FAILED tests/test_painel_v21d.py::test_r2_reproduz_a_analise_dono_ambiente
+FAILED tests/test_personalidade.py::test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos[aleatorio]
+FAILED tests/test_personalidade.py::test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos[atencioso]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|comedouro|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|comedouro|202]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|longe|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|longe|202]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|comedouro|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|comedouro|202]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|longe|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|longe|202]
+FAILED tests/test_plano_an3_poder.py::test_o_artefato_gravado_e_o_de_uma_execucao_nova
+FAILED tests/test_pre_run.py::test_a_lista_de_processos_da_maquina_responde
+## so no CPython (0)

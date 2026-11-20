@@ -1,0 +1,18 @@
+{
+  "descricao": "A varredura da AN4 antes da run (docs/PLANO_ANALISE_V3_ACOES_NOVAS.md, secao 11): o orquestrador inteiro com as cinco sementes dos testes (bases 101 a 505, K = 1), os 2 bracos, as 8 celulas e 14 dias (80 vidas). Nenhuma semente da faixa 78101...78505; nao e dado da AN4.",
+  "plano": "docs/PLANO_ANALISE_V3_ACOES_NOVAS.md",
+  "fase": "acoes_novas",
+  "unidades": {
+    "bases": [
+      101,
+      202,
+      303,
+      404,
+      505
+    ],
+    "k": 1,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

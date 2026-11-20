@@ -1,0 +1,225 @@
+{
+  "descricao": "rodada 8: predador contra o Brutamontes imprevisivel (NPCs fixos com epsilon alto)",
+  "candidatos": {
+    "pred_base_x1.4": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "base",
+        "passiva": {
+          "mult_predador": 1.4
+        }
+      }
+    },
+    "pred_base_x1.8": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "base",
+        "passiva": {
+          "mult_predador": 1.8
+        }
+      }
+    },
+    "pred_sem_leitura_x1.4": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "sem_leitura",
+        "passiva": {
+          "mult_predador": 1.4
+        }
+      }
+    },
+    "pred_sem_leitura_x1.8": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "sem_leitura",
+        "passiva": {
+          "mult_predador": 1.8
+        }
+      }
+    },
+    "pred_pesado_x1.4": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_predador": 1.4
+        }
+      }
+    },
+    "pred_pesado_x1.8": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_predador": 1.8
+        }
+      }
+    },
+    "pred_golpe_pesado_x1.4": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_predador": 1.4
+        }
+      }
+    },
+    "pred_golpe_pesado_x1.8": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_predador": 1.8
+        }
+      }
+    },
+    "pred_golpe_x1.4": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "golpe",
+        "passiva": {
+          "mult_predador": 1.4
+        }
+      }
+    },
+    "pred_golpe_x1.8": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "predador": {
+        "gambits": "golpe",
+        "passiva": {
+          "mult_predador": 1.8
+        }
+      }
+    }
+  }
+}

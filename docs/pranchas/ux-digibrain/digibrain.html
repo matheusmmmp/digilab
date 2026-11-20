@@ -1,0 +1,22 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Prancha D1 da UX_TELA_PET: o DigiBrain "scan holografico" (direcao A, Matheus 2026-11-07). docs/PROPOSTAS_V3_UX_TELA_PET.md, "DigiBrain scan (D1)".
+     So desenho; nenhum codigo do jogo. Le os dados reais de dados.json (Motor.reproduzir(4242, log, 13).digibrain(), dados_digibrain.mts).
+     Parametros: ?estado=com_escolha|uma_opcao|sem_decisao|replay|mudou (e os extras com_aprendido|save_e2e); ?pele=vidro|xcom;
+     ?largura=1920|390; ?notas (a fonte de cada leitura por cima do desenho); ?texto (o "mapa em texto" aberto); ?rolar (a 390, a folha
+     rolada ate o fim); ?reduzir (o quadro de "reduzir movimento"); ?selo=vivo|pausado (o selo e do app, nao do dados.json).
+     Precisa de servidor http (o fetch do dados.json nao roda em file://). -->
+<title>DigiBrain scan (D1) · prancha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Rajdhani:wght@600;700&family=Saira+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="digibrain.css">
+<script>
+(() => {
+  const p = new URLSearchParams(location.search).get("pele") ?? "vidro";
+  if (p !== "vidro" && p !== "xcom") { window.__erroPele = "pele desconhecida: " + p + " (vidro ou xcom)"; document.documentElement.dataset.pele = "vidro"; }
+  else document.documentElement.dataset.pele = p;
+})();
+</script>
+</head><body>
+<div id="tela" class="tela"></div>
+<script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
+<script src="digibrain.js"></script>
+</body></html>

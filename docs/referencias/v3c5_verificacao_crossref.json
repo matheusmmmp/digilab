@@ -1,0 +1,570 @@
+{
+ "data": "2026-11-07",
+ "fonte": "api.crossref.org/works (DataCite para 10.48550/*); fonte do resumo lido: PubMed, Crossref, Semantic Scholar ou Europe PMC",
+ "dois": {
+  "10.1016/S0893-6080(02)00044-8": {
+   "status": 200,
+   "title": "Metalearning and neuromodulation",
+   "year": 2002,
+   "authors": "Doya K",
+   "container": "Neural Networks",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:12371507"
+  },
+  "10.1016/S0893-6080(02)00052-7": {
+   "status": 200,
+   "title": "Opponent interactions between serotonin and dopamine",
+   "year": 2002,
+   "authors": "Daw N; Kakade S; Dayan P",
+   "container": "Neural Networks",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:12371515"
+  },
+  "10.3389/fnbot.2013.00001": {
+   "status": 200,
+   "title": "A neurorobotic platform to test the influence of neuromodulatory signaling on anxious and curious behavior",
+   "year": 2013,
+   "authors": "Krichmar J",
+   "container": "Frontiers in Neurorobotics",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:23386829"
+  },
+  "10.1371/journal.pcbi.1000437": {
+   "status": 200,
+   "title": "A Neural Computational Model of Incentive Salience",
+   "year": 2009,
+   "authors": "Zhang J; Berridge K; Tindell A",
+   "container": "PLoS Computational Biology",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:19609350"
+  },
+  "10.1016/j.cell.2011.02.008": {
+   "status": 200,
+   "title": "Presynaptic Facilitation by Neuropeptide Signaling Mediates Odor-Driven Food Search",
+   "year": 2011,
+   "authors": "Root C; Ko K; Jafari A",
+   "container": "Cell",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:21458672"
+  },
+  "10.1016/j.neuron.2019.07.028": {
+   "status": 200,
+   "title": "A Neural Circuit Arbitrates between Persistence and Withdrawal in Hungry Drosophila",
+   "year": 2019,
+   "authors": "Sayin S; De Backer J; Siju K",
+   "container": "Neuron",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:31471123"
+  },
+  "10.7554/eLife.04811": {
+   "status": 200,
+   "title": "Homeostatic reinforcement learning for integrating reward collection and physiological stability",
+   "year": 2014,
+   "authors": "Keramati M; Gutkin B",
+   "container": "eLife",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1016/j.physbeh.2011.06.004": {
+   "status": 200,
+   "title": "Allostasis: A model of predictive regulation",
+   "year": 2012,
+   "authors": "Sterling P",
+   "container": "Physiology &amp; Behavior",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:21684297"
+  },
+  "10.1038/nrn3950": {
+   "status": 200,
+   "title": "Interoceptive predictions in the brain",
+   "year": 2015,
+   "authors": "Barrett L; Simmons W",
+   "container": "Nature Reviews Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:26016744"
+  },
+  "10.1016/j.jmp.2017.09.004": {
+   "status": 200,
+   "title": "The free energy principle for action and perception: A mathematical review",
+   "year": 2017,
+   "authors": "Buckley C; Kim C; McGregor S",
+   "container": "Journal of Mathematical Psychology",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "s2"
+  },
+  "10.1016/j.biopsycho.2022.108266": {
+   "status": 200,
+   "title": "Simulating homeostatic, allostatic and goal-directed forms of interoceptive control using active inference",
+   "year": 2022,
+   "authors": "Tschantz A; Barca L; Maisto D",
+   "container": "Biological Psychology",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:35051559"
+  },
+  "10.1101/242974": {
+   "status": 200,
+   "title": "The Homeostatic Logic of Reward",
+   "year": 2018,
+   "authors": "Morville T; Friston K; Burdakov D",
+   "container": "",
+   "update_to": false,
+   "type": "posted-content",
+   "fonte_resumo": "crossref"
+  },
+  "10.1016/j.neunet.2024.106379": {
+   "status": 200,
+   "title": "Emergence of integrated behaviors through direct optimization for homeostasis",
+   "year": 2024,
+   "authors": "Yoshida N; Daikoku T; Nagai Y",
+   "container": "Neural Networks",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:38762941"
+  },
+  "10.1093/cercor/bhl152": {
+   "status": 200,
+   "title": "Solving the Distal Reward Problem through Linkage of STDP and Dopamine Signaling",
+   "year": 2007,
+   "authors": "Izhikevich E",
+   "container": "Cerebral Cortex",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:17220510"
+  },
+  "10.3389/fncir.2018.00053": {
+   "status": 200,
+   "title": "Eligibility Traces and Plasticity on Behavioral Time Scales: Experimental Support of NeoHebbian Three-Factor Learning Rules",
+   "year": 2018,
+   "authors": "Gerstner W; Lehmann M; Liakoni V",
+   "container": "Frontiers in Neural Circuits",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:30108488"
+  },
+  "10.1126/science.1255514": {
+   "status": 200,
+   "title": "A critical time window for dopamine actions on the structural plasticity of dendritic spines",
+   "year": 2014,
+   "authors": "Yagishita S; Hayashi-Takagi A; Ellis-Davies G",
+   "container": "Science",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1111/ejn.13921": {
+   "status": 200,
+   "title": "A silent eligibility trace enables dopamine‐dependent synaptic plasticity for reinforcement learning in the mouse striatum",
+   "year": 2018,
+   "authors": "Shindou T; Shindou M; Watanabe S",
+   "container": "European Journal of Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1126/science.aan3846": {
+   "status": 200,
+   "title": "Behavioral time scale synaptic plasticity underlies CA1 place fields",
+   "year": 2017,
+   "authors": "Bittner K; Milstein A; Grienberger C",
+   "container": "Science",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1037/rev0000120": {
+   "status": 200,
+   "title": "Habits without values.",
+   "year": 2019,
+   "authors": "Miller K; Shenhav A; Ludvig E",
+   "container": "Psychological Review",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:30676040"
+  },
+  "10.1038/nn1560": {
+   "status": 200,
+   "title": "Uncertainty-based competition between prefrontal and dorsolateral striatal systems for behavioral control",
+   "year": 2005,
+   "authors": "Daw N; Niv Y; Dayan P",
+   "container": "Nature Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:16286932"
+  },
+  "10.1038/s41562-017-0180-8": {
+   "status": 200,
+   "title": "The successor representation in human reinforcement learning",
+   "year": 2017,
+   "authors": "Momennejad I; Russek E; Cheong J",
+   "container": "Nature Human Behaviour",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:31024137"
+  },
+  "10.1016/S0004-3702(99)00052-1": {
+   "status": 200,
+   "title": "Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning",
+   "year": 1999,
+   "authors": "Sutton R; Precup D; Singh S",
+   "container": "Artificial Intelligence",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "nenhum"
+  },
+  "10.1523/JNEUROSCI.19-21-09557.1999": {
+   "status": 200,
+   "title": "The Fundamental Role of Pirouettes in\n                    <i>Caenorhabditis elegans</i>\n                    Chemotaxis",
+   "year": 1999,
+   "authors": "Pierce-Shimomura J; Morse T; Lockery S",
+   "container": "The Journal of Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1523/JNEUROSCI.3633-08.2009": {
+   "status": 200,
+   "title": "Parallel Use of Two Behavioral Mechanisms for Chemotaxis in\n                    <i>Caenorhabditis elegans</i>",
+   "year": 2009,
+   "authors": "Iino Y; Yoshida K",
+   "container": "The Journal of Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1038/ncomms1455": {
+   "status": 200,
+   "title": "Active sampling and decision making in Drosophila chemotaxis",
+   "year": 2011,
+   "authors": "Gomez-Marin A; Stephens G; Louis M",
+   "container": "Nature Communications",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:21863008"
+  },
+  "10.1523/JNEUROSCI.2606-10.2010": {
+   "status": 200,
+   "title": "Evolution and Analysis of Minimal Neural Circuits for Klinotaxis in\n                    <i>Caenorhabditis elegans</i>",
+   "year": 2010,
+   "authors": "Izquierdo E; Lockery S",
+   "container": "The Journal of Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1038/s41593-018-0232-z": {
+   "status": 200,
+   "title": "Prioritized memory access explains planning and hippocampal replay",
+   "year": 2018,
+   "authors": "Mattar M; Daw N",
+   "container": "Nature Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:30349103"
+  },
+  "10.48550/arXiv.1606.04460": {
+   "status": "404 no Crossref; registro no DataCite conferido (título, autores, ano); doi.org resolve para arxiv.org/abs",
+   "fonte_resumo": "s2err"
+  },
+  "10.1002/(SICI)1098-1063(2000)10:1<1::AID-HIPO1>3.0.CO;2-1": {
+   "status": 200,
+   "title": "A model of hippocampally dependent navigation, using the temporal difference learning rule",
+   "year": 2000,
+   "authors": "Foster D; Morris R; Dayan P",
+   "container": "Hippocampus",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "s2err"
+  },
+  "10.1146/annurev-psych-122414-033625": {
+   "status": 200,
+   "title": "Reinforcement Learning and Episodic Memory in Humans and Animals: An Integrative Framework",
+   "year": 2017,
+   "authors": "Gershman S; Daw N",
+   "container": "Annual Review of Psychology",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1016/S0306-4522(98)00319-4": {
+   "status": 200,
+   "title": "The basal ganglia: a vertebrate solution to the selection problem?",
+   "year": 1999,
+   "authors": "Redgrave P; Prescott T; Gurney K",
+   "container": "Neuroscience",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:10362291"
+  },
+  "10.1016/j.neunet.2005.06.049": {
+   "status": 200,
+   "title": "A robot model of the basal ganglia: Behavior and intrinsic processing",
+   "year": 2006,
+   "authors": "Prescott T; Montes González F; Gurney K",
+   "container": "Neural Networks",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:16153803"
+  },
+  "10.1007/PL00007984": {
+   "status": 200,
+   "title": "A computational model of action selection in the basal ganglia. I. A new functional anatomy",
+   "year": 2001,
+   "authors": "Gurney K; Prescott T; Redgrave P",
+   "container": "Biological Cybernetics",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:11417052"
+  },
+  "10.1080/09540098908915643": {
+   "status": 200,
+   "title": "How to do the Right Thing",
+   "year": 1989,
+   "authors": "MAES P",
+   "container": "Connection Science",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "nenhum"
+  },
+  "10.1145/566570.566597": {
+   "status": 200,
+   "title": "Integrated learning for interactive synthetic characters",
+   "year": 2002,
+   "authors": "Blumberg B; Downie M; Ivanov Y",
+   "container": "Proceedings of the 29th annual conference on Computer graphics and interactive techniques",
+   "update_to": false,
+   "type": "proceedings-article",
+   "fonte_resumo": "nenhum"
+  },
+  "10.1016/j.neunet.2008.03.014": {
+   "status": 200,
+   "title": "Central pattern generators for locomotion control in animals and robots: A review",
+   "year": 2008,
+   "authors": "Ijspeert A",
+   "container": "Neural Networks",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:18555958"
+  },
+  "10.1126/science.1138353": {
+   "status": 200,
+   "title": "From Swimming to Walking with a Salamander Robot Driven by a Spinal Cord Model",
+   "year": 2007,
+   "authors": "Ijspeert A; Crespi A; Ryczko D",
+   "container": "Science",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1177/02783640122068092": {
+   "status": 200,
+   "title": "AIBO: Toward the Era of Digital Creatures",
+   "year": 2001,
+   "authors": "Fujita M",
+   "container": "The International Journal of Robotics Research",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1145/267658.267663": {
+   "status": 200,
+   "title": "Creatures",
+   "year": 1997,
+   "authors": "Grand S; Cliff D; Malhotra A",
+   "container": "Proceedings of the first international conference on Autonomous agents  - AGENTS '97",
+   "update_to": false,
+   "type": "proceedings-article",
+   "fonte_resumo": "s2"
+  },
+  "10.1023/A:1010042522104": {
+   "status": 200,
+   "title": "Creatures: Entertainment Software Agents with Artificial Life",
+   "year": 1998,
+   "authors": "Grand S; Cliff D",
+   "container": "Autonomous Agents and Multi-Agent Systems",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "s2err"
+  },
+  "10.1145/192161.192167": {
+   "status": 200,
+   "title": "Evolving virtual creatures",
+   "year": 1994,
+   "authors": "Sims K",
+   "container": "Proceedings of the 21st annual conference on Computer graphics and interactive techniques  - SIGGRAPH '94",
+   "update_to": false,
+   "type": "proceedings-article",
+   "fonte_resumo": "nenhum"
+  },
+  "10.1162/106454603322221487": {
+   "status": 200,
+   "title": "A Taxonomy for Artificial Embryogeny",
+   "year": 2003,
+   "authors": "Stanley K; Miikkulainen R",
+   "container": "Artificial Life",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1162/artl.2009.15.2.15202": {
+   "status": 200,
+   "title": "A Hypercube-Based Encoding for Evolving Large-Scale Neural Networks",
+   "year": 2009,
+   "authors": "Stanley K; D'Ambrosio D; Gauci J",
+   "container": "Artificial Life",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1038/nature01568": {
+   "status": 200,
+   "title": "The evolutionary origin of complex features",
+   "year": 2003,
+   "authors": "Lenski R; Ofria C; Pennock R",
+   "container": "Nature",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:12736677"
+  },
+  "10.1162/106454604773563612": {
+   "status": 200,
+   "title": "Avida: A Software Platform for Research in Computational Evolutionary Biology",
+   "year": 2004,
+   "authors": "Ofria C; Wilke C",
+   "container": "Artificial Life",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.25088/ComplexSystems.28.3.251": {
+   "status": 200,
+   "title": "Lenia: Biology of Artificial Life",
+   "year": 2019,
+   "authors": " ; Chan B",
+   "container": "Complex Systems",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "s2"
+  },
+  "10.48550/arXiv.2307.09320": {
+   "status": "404 no Crossref; registro no DataCite conferido (título, autores, ano); doi.org resolve para arxiv.org/abs",
+   "fonte_resumo": "s2"
+  },
+  "10.1016/j.cell.2013.08.001": {
+   "status": 200,
+   "title": "Serotonin and the Neuropeptide PDF Initiate and Extend Opposing Behavioral States in C. elegans",
+   "year": 2013,
+   "authors": "Flavell S; Pokala N; Macosko E",
+   "container": "Cell",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:23972393"
+  },
+  "10.1073/pnas.0409009101": {
+   "status": 200,
+   "title": "A circuit for navigation in\n                    <i>Caenorhabditis elegans</i>",
+   "year": 2005,
+   "authors": "Gray J; Hill J; Bargmann C",
+   "container": "Proceedings of the National Academy of Sciences",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1098/rstb.1986.0056": {
+   "status": 200,
+   "title": "The structure of the nervous system of the nematode\n                    <i>Caenorhabditis elegans</i>",
+   "year": 1986,
+   "authors": "White J; Southgate E; Thomson J",
+   "container": "Philosophical Transactions of the Royal Society of London. B, Biological Sciences",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1038/s41586-019-1352-7": {
+   "status": 200,
+   "title": "Whole-animal connectomes of both Caenorhabditis elegans sexes",
+   "year": 2019,
+   "authors": "Cook S; Jarrell T; Brittin C",
+   "container": "Nature",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "pubmed:31270481"
+  },
+  "10.1126/science.add9330": {
+   "status": 200,
+   "title": "The connectome of an insect brain",
+   "year": 2023,
+   "authors": "Winding M; Pedigo B; Barnes C",
+   "container": "Science",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1177/105971239500300405": {
+   "status": 200,
+   "title": "On the Dynamics of Small Continuous-Time Recurrent Neural Networks",
+   "year": 1995,
+   "authors": "Beer R",
+   "container": "Adaptive Behavior",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1609/aaai.v35i9.16936": {
+   "status": 200,
+   "title": "Liquid Time-constant Networks",
+   "year": 2021,
+   "authors": "Hasani R; Lechner M; Amini A",
+   "container": "Proceedings of the AAAI Conference on Artificial Intelligence",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1038/s42256-022-00556-7": {
+   "status": 200,
+   "title": "Closed-form continuous-time neural networks",
+   "year": 2022,
+   "authors": "Hasani R; Lechner M; Amini A",
+   "container": "Nature Machine Intelligence",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "crossref"
+  },
+  "10.1038/s42256-020-00237-3": {
+   "status": 200,
+   "title": "Neural circuit policies enabling auditable autonomy",
+   "year": 2020,
+   "authors": "Lechner M; Hasani R; Amini A",
+   "container": "Nature Machine Intelligence",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "nenhum"
+  },
+  "10.1145/267658.267727": {
+   "status": "HTTP Error 404: Not Found",
+   "fonte_resumo": "nenhum",
+   "nota": "DOI errado citado antes; a revisão I usa 10.1145/267658.267663"
+  },
+  "10.1037/rev0000117": {
+   "status": 200,
+   "title": "Decision making on spatially continuous scales.",
+   "year": 2018,
+   "authors": "Ratcliff R",
+   "container": "Psychological Review",
+   "update_to": false,
+   "type": "journal-article",
+   "fonte_resumo": "nenhum",
+   "nota": "outro artigo (Ratcliff 2018); a revisão I usa 10.1037/rev0000120 para Miller et al. 2019"
+  }
+ }
+}

@@ -1,0 +1,390 @@
+{
+  "1.1_cadeia_por_celula_m3": {
+    "aleatorio|comedouro": {
+      "com_cadeia": {
+        "frac": 0.96,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.4734077380952381,
+      "elegiveis": 20.66,
+      "fechadas": 14.08,
+      "privacao": 0.46464285714285714,
+      "refeicoes_por_dia": 2.5485714285714285,
+      "taxa": 0.6858787357498178,
+      "vidas": 50
+    },
+    "aleatorio|longe": {
+      "com_cadeia": {
+        "frac": 0.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.49461309523809527,
+      "elegiveis": 28.54,
+      "fechadas": 3.64,
+      "privacao": 0.5913988095238095,
+      "refeicoes_por_dia": 1.87,
+      "taxa": 0.1320726662903514,
+      "vidas": 50
+    },
+    "aleatorio|perto": {
+      "com_cadeia": {
+        "frac": 1.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.4739434523809524,
+      "elegiveis": 20.96,
+      "fechadas": 18.84,
+      "privacao": 0.45800595238095243,
+      "refeicoes_por_dia": 2.5771428571428574,
+      "taxa": 0.8983933376460194,
+      "vidas": 50
+    },
+    "atencioso|comedouro": {
+      "com_cadeia": {
+        "frac": 0.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.4604761904761905,
+      "elegiveis": 109.6,
+      "fechadas": 20.98,
+      "privacao": 0.08732142857142858,
+      "refeicoes_por_dia": 6.4714285714285715,
+      "taxa": 0.1958453069917848,
+      "vidas": 50
+    },
+    "atencioso|longe": {
+      "com_cadeia": {
+        "frac": 0.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.45041666666666663,
+      "elegiveis": 165.88,
+      "fechadas": 7.26,
+      "privacao": 0.6160416666666666,
+      "refeicoes_por_dia": 3.0314285714285716,
+      "taxa": 0.04435834877988417,
+      "vidas": 50
+    },
+    "atencioso|perto": {
+      "com_cadeia": {
+        "frac": 0.96,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.46485119047619045,
+      "elegiveis": 57.74,
+      "fechadas": 34.94,
+      "privacao": 0.0002678571428571428,
+      "refeicoes_por_dia": 4.017142857142857,
+      "taxa": 0.6065891724147258,
+      "vidas": 50
+    },
+    "incoerente|comedouro": {
+      "com_cadeia": {
+        "frac": 0.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.4604761904761905,
+      "elegiveis": 109.6,
+      "fechadas": 20.98,
+      "privacao": 0.08732142857142858,
+      "refeicoes_por_dia": 6.4714285714285715,
+      "taxa": 0.1958453069917848,
+      "vidas": 50
+    },
+    "incoerente|longe": {
+      "com_cadeia": {
+        "frac": 0.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.44824404761904757,
+      "elegiveis": 166.1,
+      "fechadas": 7.58,
+      "privacao": 0.5927678571428572,
+      "refeicoes_por_dia": 3.0371428571428574,
+      "taxa": 0.046719292738572074,
+      "vidas": 50
+    },
+    "incoerente|perto": {
+      "com_cadeia": {
+        "frac": 0.96,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.4653125,
+      "elegiveis": 58.96,
+      "fechadas": 35.5,
+      "privacao": 0.0009226190476190476,
+      "refeicoes_por_dia": 4.115714285714286,
+      "taxa": 0.6040826426184569,
+      "vidas": 50
+    },
+    "relapso|comedouro": {
+      "com_cadeia": {
+        "frac": 0.94,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.47248511904761903,
+      "elegiveis": 28.86,
+      "fechadas": 18.96,
+      "privacao": 0.15104166666666666,
+      "refeicoes_por_dia": 2.978571428571428,
+      "taxa": 0.6540862911199952,
+      "vidas": 50
+    },
+    "relapso|longe": {
+      "com_cadeia": {
+        "frac": 0.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.4919642857142857,
+      "elegiveis": 34.52,
+      "fechadas": 3.64,
+      "privacao": 0.4173511904761905,
+      "refeicoes_por_dia": 2.15,
+      "taxa": 0.1060650145688643,
+      "vidas": 50
+    },
+    "relapso|perto": {
+      "com_cadeia": {
+        "frac": 1.0,
+        "vidas": 50,
+        "vidas_com_elegivel": 50
+      },
+      "dormir": 0.47110119047619053,
+      "elegiveis": 29.76,
+      "fechadas": 25.58,
+      "privacao": 0.14297619047619048,
+      "refeicoes_por_dia": 2.9828571428571427,
+      "taxa": 0.8587950182348384,
+      "vidas": 50
+    }
+  },
+  "1.2_longe_m3": {
+    "aleatorio": {
+      "privacao": 0.5913988095238095,
+      "refeicoes_por_dia": 1.87,
+      "taxa": 0.1320726662903514
+    },
+    "atencioso": {
+      "privacao": 0.6160416666666666,
+      "refeicoes_por_dia": 3.0314285714285716,
+      "taxa": 0.04435834877988417
+    },
+    "incoerente": {
+      "privacao": 0.5927678571428572,
+      "refeicoes_por_dia": 3.0371428571428574,
+      "taxa": 0.046719292738572074
+    },
+    "relapso": {
+      "privacao": 0.4173511904761905,
+      "refeicoes_por_dia": 2.15,
+      "taxa": 0.1060650145688643
+    }
+  },
+  "1.3_sono": {
+    "celulas_que_fecham": [
+      "atencioso|perto",
+      "relapso|comedouro",
+      "relapso|perto",
+      "aleatorio|comedouro",
+      "aleatorio|perto",
+      "incoerente|perto"
+    ],
+    "celulas_que_nao_fecham": [
+      "atencioso|comedouro",
+      "atencioso|longe",
+      "relapso|longe",
+      "aleatorio|longe",
+      "incoerente|comedouro",
+      "incoerente|longe"
+    ],
+    "dormir_por_braco": {
+      "A11": 0.45875744047619044,
+      "M0": 0.47382688492063496,
+      "M1": 0.4666307043650793,
+      "M2": 0.4615054563492063,
+      "M3": 0.4689409722222222,
+      "M3-sp": 0.4691344246031746,
+      "M4": 0.46174727182539677,
+      "M4-con": 0.4611867559523809,
+      "M4-emb": 0.4612748015873016
+    },
+    "dormir_por_celula_m3": {
+      "aleatorio|comedouro": 0.4734077380952381,
+      "aleatorio|longe": 0.49461309523809527,
+      "aleatorio|perto": 0.4739434523809524,
+      "atencioso|comedouro": 0.4604761904761905,
+      "atencioso|longe": 0.45041666666666663,
+      "atencioso|perto": 0.46485119047619045,
+      "incoerente|comedouro": 0.4604761904761905,
+      "incoerente|longe": 0.44824404761904757,
+      "incoerente|perto": 0.4653125,
+      "relapso|comedouro": 0.47248511904761903,
+      "relapso|longe": 0.4919642857142857,
+      "relapso|perto": 0.47110119047619053
+    },
+    "faixa_dormir_fecham": [
+      0.46485119047619045,
+      0.4739434523809524
+    ],
+    "faixa_dormir_nao_fecham": [
+      0.44824404761904757,
+      0.49461309523809527
+    ],
+    "frac_reflexo_m3": 0.1899702380952381,
+    "reflexos_por_vida_m3": 255.32
+  },
+  "1.4_ganhou_fica": {
+    "M0": {
+      "comedouro": {
+        "indice": -0.07277887491139248,
+        "p_nao_pos": 0.3630066985170369,
+        "p_pos": 0.2902278236056444
+      },
+      "longe": {
+        "indice": -0.07548293102841733,
+        "p_nao_pos": 0.26027872591869017,
+        "p_pos": 0.18527120737332634
+      },
+      "perto": {
+        "indice": -0.09151416076231957,
+        "p_nao_pos": 0.39974374428185394,
+        "p_pos": 0.30822958351953433
+      },
+      "todas": {
+        "indice": -0.07993273857996236,
+        "p_nao_pos": 0.34100972290586035,
+        "p_pos": 0.2613697023244202
+      }
+    },
+    "M1": {
+      "comedouro": {
+        "indice": -0.0748060059305007,
+        "p_nao_pos": 0.3555432773378398,
+        "p_pos": 0.28073727140733906
+      },
+      "longe": {
+        "indice": -0.07429392778417232,
+        "p_nao_pos": 0.26848650166628585,
+        "p_pos": 0.19419257388211353
+      },
+      "perto": {
+        "indice": -0.09996764043566282,
+        "p_nao_pos": 0.3890292987852809,
+        "p_pos": 0.28906165834961806
+      },
+      "todas": {
+        "indice": -0.08302252471677862,
+        "p_nao_pos": 0.3376863592631355,
+        "p_pos": 0.2546638345463569
+      }
+    },
+    "M2": {
+      "comedouro": {
+        "indice": -0.0671834029791037,
+        "p_nao_pos": 0.31790518010447727,
+        "p_pos": 0.2507217771253736
+      },
+      "longe": {
+        "indice": -0.11981888185627852,
+        "p_nao_pos": 0.27335656541110565,
+        "p_pos": 0.15353768355482716
+      },
+      "perto": {
+        "indice": -0.09614280639314733,
+        "p_nao_pos": 0.35300307349224225,
+        "p_pos": 0.25686026709909493
+      },
+      "todas": {
+        "indice": -0.09438169707617652,
+        "p_nao_pos": 0.3147549396692751,
+        "p_pos": 0.22037324259309854
+      }
+    },
+    "M2-M1": {
+      "comedouro": 0.007622602951396995,
+      "longe": -0.0455249540721062,
+      "perto": 0.0038248340425154903,
+      "todas": -0.011359172359397901
+    },
+    "M3": {
+      "comedouro": {
+        "indice": -0.058475599323677054,
+        "p_nao_pos": 0.3255308088086183,
+        "p_pos": 0.2670552094849412
+      },
+      "longe": {
+        "indice": -0.10163958198892456,
+        "p_nao_pos": 0.25585914803225895,
+        "p_pos": 0.15421956604333442
+      },
+      "perto": {
+        "indice": -0.07464260852646219,
+        "p_nao_pos": 0.34278521829314973,
+        "p_pos": 0.2681426097666876
+      },
+      "todas": {
+        "indice": -0.07825259661302127,
+        "p_nao_pos": 0.30805839171134236,
+        "p_pos": 0.22980579509832105
+      }
+    }
+  },
+  "1.5_persistencia": {
+    "M3": {
+      "fins_por_vida": {
+        "meta": 81.11166666666666,
+        "trocou": 28.738333333333333
+      },
+      "intencoes_com_meta": 0.9341285219449582
+    },
+    "M3-sp": {
+      "fins_por_vida": {
+        "meta": 80.61,
+        "trocou": 29.835
+      },
+      "intencoes_com_meta": 0.9264556209282452
+    }
+  },
+  "1.6_visitas": {
+    "M3": {
+      "vazias_por_vida": 32.218333333333334,
+      "vidas_com_toda_visita_vazia": 1.0,
+      "visitas_por_vida": 32.218333333333334
+    },
+    "M3-sp": {
+      "vazias_por_vida": 31.998333333333335,
+      "vidas_com_toda_visita_vazia": 1.0,
+      "visitas_por_vida": 31.998333333333335
+    },
+    "M4": {
+      "vazias_por_vida": 31.891666666666666,
+      "vidas_com_toda_visita_vazia": 1.0,
+      "visitas_por_vida": 31.891666666666666
+    },
+    "M4-con": {
+      "vazias_por_vida": 31.31,
+      "vidas_com_toda_visita_vazia": 1.0,
+      "visitas_por_vida": 31.31
+    },
+    "M4-emb": {
+      "vazias_por_vida": 32.80166666666667,
+      "vidas_com_toda_visita_vazia": 1.0,
+      "visitas_por_vida": 32.80166666666667
+    }
+  },
+  "decisoes_por_vida": 1344,
+  "fonte": "artifacts_v2_digibrain_prototipo/avaliacao/medidas.json",
+  "proposta": "docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md, secao 1",
+  "vidas": 5400
+}

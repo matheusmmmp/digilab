@@ -1,0 +1,426 @@
+{
+ "acoplado": {
+  "cuidado": {
+   "humor": {
+    "ic_inferior": 0.6830703124999922,
+    "ic_superior": 0.8604996279761835,
+    "media": 0.7966004464285634,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "humor_bola_menos_acoplado": {
+    "ic_inferior": 0.051968377976196266,
+    "ic_superior": 0.2352094494047685,
+    "media": 0.11996912202381498,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "interacoes": [
+    84,
+    84,
+    96,
+    88,
+    81
+   ],
+   "mortes": 0,
+   "privacao": {
+    "ic_inferior": 0.0,
+    "ic_superior": 0.0,
+    "media": 0.0,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "privacao_bola_menos_acoplado": {
+    "ic_inferior": 0.0,
+    "ic_superior": 0.0,
+    "media": 0.0,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "privacao_sembola_menos_acoplado": {
+    "ic_inferior": 0.0,
+    "ic_superior": 0.0,
+    "media": 0.0,
+    "n": 5,
+    "nivel": 0.95
+   }
+  },
+  "cuidado-semcarinho": {
+   "humor": {
+    "ic_inferior": 0.6830703124999922,
+    "ic_superior": 0.8604996279761835,
+    "media": 0.7966004464285634,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "humor_bola_menos_acoplado": {
+    "ic_inferior": 0.051968377976196266,
+    "ic_superior": 0.2352094494047685,
+    "media": 0.11996912202381498,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "interacoes": [
+    84,
+    84,
+    96,
+    88,
+    81
+   ],
+   "mortes": 0,
+   "privacao": {
+    "ic_inferior": 0.0,
+    "ic_superior": 0.0,
+    "media": 0.0,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "privacao_bola_menos_acoplado": {
+    "ic_inferior": 0.0,
+    "ic_superior": 0.0,
+    "media": 0.0,
+    "n": 5,
+    "nivel": 0.95
+   },
+   "privacao_sembola_menos_acoplado": {
+    "ic_inferior": 0.0,
+    "ic_superior": 0.0,
+    "media": 0.0,
+    "n": 5,
+    "nivel": 0.95
+   }
+  }
+ },
+ "conjunto": "validacao",
+ "escolha": {
+  "fechou": null,
+  "ponto": {
+   "duracao_min": 120,
+   "ganho_humor_bola": 0.15,
+   "w_bola": 6.0
+  },
+  "regra": "validacao: o ponto do config, commitado antes"
+ },
+ "gates": {
+  "1a_dono": "nao testada: sem apoio na literatura (D6) e exige o aprendiz (A1 + L1, chat B)",
+  "1a_pet": {
+   "definicao": "Delta p = p(brincar | bola) - p(brincar | sem bola) no tempo livre, braco bola, media dos donos por semente",
+   "ic_inferior": 0.24547172806777268,
+   "passa": true
+  },
+  "G1": "replay do log bit a bit em toda vida (o orquestrador para se divergir)",
+  "G2": "tests/test_ambiente.py (a, b, c)",
+  "cuidado_controlado": {
+   "mortes": 0,
+   "passa": false,
+   "privacao_ic": [
+    0.008519345238095239,
+    0.028125
+   ]
+  }
+ },
+ "ponto": {
+  "duracao_min": 120,
+  "ganho_humor_bola": 0.15,
+  "w_bola": 6.0
+ },
+ "resumo": {
+  "delta_p": {
+   "ic_inferior": 0.24547172806777268,
+   "ic_superior": 0.3747134854241156,
+   "media": 0.31045202006728945,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": [
+    0.3358607093619047,
+    0.42330714096517885,
+    0.26778529486313674,
+    0.31740274310828603,
+    0.20790421203794068
+   ]
+  },
+  "delta_p_bolacega": {
+   "ic_inferior": -0.025251179046922916,
+   "ic_superior": 0.10650811397653555,
+   "media": 0.03549862404948263,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": [
+    0.17209692055399012,
+    -0.038369670672108,
+    0.05461947889281543,
+    0.027809336835829833,
+    -0.03866294536311421
+   ]
+  },
+  "humor_bola_menos_sembola": {
+   "ic_inferior": -0.04244159226190532,
+   "ic_superior": -0.007476097470239385,
+   "media": -0.02433026413690569,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": [
+    -0.012145182291668055,
+    0.001522507440474663,
+    -0.01613513764881014,
+    -0.0525846354166668,
+    -0.04230887276785811
+   ]
+  },
+  "mortes": 0,
+  "p_com_bola": {
+   "ic_inferior": 0.5596427256486349,
+   "ic_superior": 0.7060921806725772,
+   "media": 0.6265828965416385,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": [
+    0.6733058608058609,
+    0.7661168170972092,
+    0.5588045912653975,
+    0.5887699813670687,
+    0.5459172321726555
+   ]
+  },
+  "por_dono": {
+   "aleatorio": {
+    "bolas_postas": 30.8,
+    "decisoes_com_bola": 183.0,
+    "delta": [
+     0.21438746438746437,
+     0.37209302325581395,
+     0.29183976261127603,
+     0.1599485420240137,
+     0.2218045112781955
+    ],
+    "expiradas": 17.0,
+    "fracao_privacao": 0.3325892857142857,
+    "fracao_privacao_sembola": 0.2663690476190476,
+    "humor_medio": 0.5994159226190379,
+    "humor_medio_sembola": 0.6987406994047556,
+    "p_com_bola": [
+     0.5384615384615384,
+     0.7142857142857143,
+     0.55,
+     0.38636363636363635,
+     0.5
+    ],
+    "usadas": 13.6
+   },
+   "atencioso": {
+    "bolas_postas": 56.0,
+    "decisoes_com_bola": 99.4,
+    "delta": [
+     0.2211460855528652,
+     0.3231785918250795,
+     0.30029013539651833,
+     0.2326644477896394,
+     0.18190642593671136
+    ],
+    "expiradas": 0.4,
+    "fracao_privacao": 0.0,
+    "fracao_privacao_sembola": 0.0,
+    "humor_medio": 0.9165695684523785,
+    "humor_medio_sembola": 0.9067217261904739,
+    "p_com_bola": [
+     0.5714285714285714,
+     0.6588235294117647,
+     0.5957446808510638,
+     0.5242718446601942,
+     0.5544554455445545
+    ],
+    "usadas": 55.6
+   },
+   "incoerente": {
+    "bolas_postas": 56.0,
+    "decisoes_com_bola": 97.4,
+    "delta": [
+     0.23166907863000485,
+     0.3608140916369647,
+     0.2959343583678296,
+     0.1423611111111111,
+     0.2671916252225701
+    ],
+    "expiradas": 0.0,
+    "fracao_privacao": 0.0,
+    "fracao_privacao_sembola": 0.0,
+    "humor_medio": 0.8959583333333303,
+    "humor_medio_sembola": 0.8917514880952352,
+    "p_com_bola": [
+     0.5833333333333334,
+     0.691358024691358,
+     0.5894736842105263,
+     0.4444444444444444,
+     0.6292134831460674
+    ],
+    "usadas": 56.0
+   },
+   "relapso": {
+    "bolas_postas": 1.4,
+    "decisoes_com_bola": 2.0,
+    "delta": [
+     0.6762402088772845,
+     0.6371428571428571,
+     0.18307692307692308,
+     0.7346368715083799,
+     0.1607142857142857
+    ],
+    "expiradas": 0.0,
+    "fracao_privacao": 0.08764880952380952,
+    "fracao_privacao_sembola": 0.08764880952380952,
+    "humor_medio": 0.7346443452380885,
+    "humor_medio_sembola": 0.7466953124999932,
+    "p_com_bola": [
+     1.0,
+     1.0,
+     0.5,
+     1.0,
+     0.5
+    ],
+    "usadas": 1.4
+   }
+  },
+  "privacao_bola_menos_sembola": {
+   "ic_inferior": 0.008519345238095239,
+   "ic_superior": 0.028125,
+   "media": 0.01655505952380952,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": [
+    0.0390625,
+    0.01171875,
+    0.016555059523809507,
+    0.008556547619047616,
+    0.0068824404761904795
+   ]
+  },
+  "vidas_sem_delta": {}
+ },
+ "sementes": [
+  7101,
+  7202,
+  7303,
+  7404,
+  7505
+ ],
+ "sensibilidade_bolas_por_dia": {
+  "2": {
+   "delta_p": {
+    "ic_inferior": 0.2414866710586477,
+    "ic_superior": 0.34793734979486407,
+    "media": 0.2986122620982142,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     0.3351310258206714,
+     0.34528266018354864,
+     0.20324913600805747,
+     0.3569952013932759,
+     0.2524032870855175
+    ]
+   },
+   "humor_bola_menos_sembola": {
+    "ic_inferior": -0.04534830729166726,
+    "ic_superior": -0.0037437686011912107,
+    "media": -0.02345349702381021,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     -0.01123186383928687,
+     -0.002524181547620463,
+     -0.0012193080357141284,
+     -0.06096261160714311,
+     -0.041329520089286476
+    ]
+   },
+   "mortes": 0,
+   "p_com_bola": {
+    "ic_inferior": 0.5543233866404599,
+    "ic_superior": 0.6690686487425618,
+    "media": 0.6153164073073935,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     0.6703296703296703,
+     0.6904595404595404,
+     0.5046296296296297,
+     0.6237648221343873,
+     0.5873983739837398
+    ]
+   },
+   "privacao_bola_menos_sembola": {
+    "ic_inferior": 0.008519345238095239,
+    "ic_superior": 0.028125,
+    "media": 0.01655505952380952,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     0.0390625,
+     0.01171875,
+     0.016555059523809507,
+     0.008556547619047616,
+     0.0068824404761904795
+    ]
+   }
+  },
+  "8": {
+   "delta_p": {
+    "ic_inferior": 0.262627321198898,
+    "ic_superior": 0.3559850985024801,
+    "media": 0.31063699394293254,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     0.3618087996920903,
+     0.3567477484455993,
+     0.25952960923548213,
+     0.34281239623702153,
+     0.23228641610446943
+    ]
+   },
+   "humor_bola_menos_sembola": {
+    "ic_inferior": -0.05343740699404844,
+    "ic_superior": -0.01288383556547763,
+    "media": -0.032877232142858516,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     -0.023234281994049644,
+     -0.007718563988097227,
+     -0.012873883928572027,
+     -0.06687686011904825,
+     -0.05368257068452542
+    ]
+   },
+   "mortes": 0,
+   "p_com_bola": {
+    "ic_inferior": 0.5718075972190142,
+    "ic_superior": 0.6820748779159184,
+    "media": 0.6269412375674663,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     0.6949869783395795,
+     0.7072172619047619,
+     0.5582849298546309,
+     0.6059659090909091,
+     0.5682511086474501
+    ]
+   },
+   "privacao_bola_menos_sembola": {
+    "ic_inferior": 0.008816964285714286,
+    "ic_superior": 0.028125,
+    "media": 0.016703869047619044,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": [
+     0.0390625,
+     0.01171875,
+     0.016555059523809507,
+     0.009300595238095233,
+     0.0068824404761904795
+    ]
+   }
+  }
+ }
+}

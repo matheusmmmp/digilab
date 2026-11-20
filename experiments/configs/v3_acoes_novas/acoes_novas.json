@@ -1,0 +1,18 @@
+{
+  "descricao": "A run unica da AN4, o passeio ligado contra desligado (docs/PLANO_ANALISE_V3_ACOES_NOVAS.md, APROVADO pelo Matheus em 2026-11-05; so roda com a faixa em FAIXAS_RESERVADAS e o registro da run, a secao 14 do plano): os bracos LAB (o REL da C4) e LAB+P (o mesmo com a passeio) nas 8 celulas (4 donos x comedouro e longe_fixo), bases 78101, 78202, 78303, 78404 e 78505, K = 40 por base (AN3-2) (200 unidades), 14 dias, orcamento 16. 3 200 vidas, uma vez, da main limpa, com ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_ACOES_NOVAS.md",
+  "fase": "acoes_novas",
+  "unidades": {
+    "bases": [
+      78101,
+      78202,
+      78303,
+      78404,
+      78505
+    ],
+    "k": 40,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

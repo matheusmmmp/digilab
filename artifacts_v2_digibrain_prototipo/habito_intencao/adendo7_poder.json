@@ -1,0 +1,273 @@
+{
+  "custo_por_fonte_e_lugar": {
+    "c1|longe": {
+      "cpu": 2042.65625,
+      "cpu_por_vida": 3.404427083333333,
+      "parede": 2532.3934056000508,
+      "parede_por_vida_1_processo": 4.220655676000084,
+      "vidas": 600
+    },
+    "c1|longe_fixo": {
+      "cpu": 2038.03125,
+      "cpu_por_vida": 3.39671875,
+      "parede": 2541.041188300027,
+      "parede_por_vida_1_processo": 4.235068647166711,
+      "vidas": 600
+    },
+    "reavaliacao|comedouro": {
+      "cpu": 1282.8125,
+      "cpu_por_vida": 3.20703125,
+      "parede": 1541.4041783999855,
+      "parede_por_vida_1_processo": 3.853510445999964,
+      "vidas": 400
+    },
+    "reavaliacao|longe": {
+      "cpu": 1284.890625,
+      "cpu_por_vida": 3.2122265625,
+      "parede": 1540.1499551000124,
+      "parede_por_vida_1_processo": 3.8503748877500312,
+      "vidas": 400
+    },
+    "reavaliacao|perto": {
+      "cpu": 1234.9375,
+      "cpu_por_vida": 3.08734375,
+      "parede": 1485.694458100019,
+      "parede_por_vida_1_processo": 3.714236145250047,
+      "vidas": 400
+    }
+  },
+  "dispersao_indice": {
+    "c1|longe_fixo|M2 - M0": {
+      "celulas_fora": 28,
+      "dp": 0.04032694865630289,
+      "g1": -2.2592210221275053,
+      "ic95_t": [
+        -0.0333807023402952,
+        -0.020367937996925014
+      ],
+      "media": -0.02687432016861011,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M3 - M2": {
+      "celulas_fora": 7,
+      "dp": 0.02910541809450846,
+      "g1": -0.062173039503844146,
+      "ic95_t": [
+        0.014472460199455132,
+        0.023864243098950702
+      ],
+      "media": 0.019168351649202917,
+      "unidades": 150
+    },
+    "reavaliacao|comedouro|M2 - M1": {
+      "celulas_fora": 0,
+      "dp": 0.0288861624620998,
+      "g1": 0.4572978211217453,
+      "ic95_t": [
+        -0.011914041900686753,
+        0.004504671177448348
+      ],
+      "media": -0.003704685361619202,
+      "unidades": 50
+    },
+    "reavaliacao|longe|M2 - M1": {
+      "celulas_fora": 1,
+      "dp": 0.031922859803435275,
+      "g1": 0.022867126081244506,
+      "ic95_t": [
+        -0.053787731622071615,
+        -0.035642978872936944
+      ],
+      "media": -0.04471535524750428,
+      "unidades": 50
+    },
+    "reavaliacao|perto|M2 - M1": {
+      "celulas_fora": 0,
+      "dp": 0.02150098733981026,
+      "g1": -0.16014699861245438,
+      "ic95_t": [
+        -0.010401594620028078,
+        0.0018194313640270653
+      ],
+      "media": -0.004291081628000506,
+      "unidades": 50
+    }
+  },
+  "folga": 1.2,
+  "fonte": {
+    "artifacts_v2_digibrain_prototipo/longe_regular/run/medidas.json": "5a4fb207eaa11750ba40ffc80da1879febd822a5305545356fb091b664a4722d",
+    "artifacts_v2_digibrain_prototipo/reavaliacao/medidas.json": "73ae8a8a1659f880bc4516ed06fcbdd441a5a9b187c833dace06fad5476ddf01"
+  },
+  "fonte_da_simulacao": "reavaliacao|comedouro|M2 - M1",
+  "nivel_indice": {
+    "c1|longe_fixo|M0": {
+      "celulas_sem_indice": 27,
+      "dp": 0.040226807042458526,
+      "g1": 2.359567098395752,
+      "ic95_t": [
+        -0.09211895497109482,
+        -0.07913850448397564
+      ],
+      "media": -0.08562872972753523,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M2": {
+      "celulas_sem_indice": 5,
+      "dp": 0.021900744883434003,
+      "g1": -0.11002165767221252,
+      "ic95_t": [
+        -0.11757550971982665,
+        -0.1105085423045309
+      ],
+      "media": -0.11404202601217878,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M3": {
+      "celulas_sem_indice": 7,
+      "dp": 0.02384765134024137,
+      "g1": 0.2534170289698683,
+      "ic95_t": [
+        -0.09860546590787893,
+        -0.09091026760070635
+      ],
+      "media": -0.09475786675429264,
+      "unidades": 150
+    },
+    "c1|longe|M0": {
+      "celulas_sem_indice": 4,
+      "dp": 0.029027413703759813,
+      "g1": -0.05885965728657128,
+      "ic95_t": [
+        -0.07630141727941585,
+        -0.06693480496158792
+      ],
+      "media": -0.07161811112050188,
+      "unidades": 150
+    },
+    "c1|longe|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.022112497917242083,
+      "g1": 0.15134506678579973,
+      "ic95_t": [
+        -0.11697380613263612,
+        -0.10983850990944018
+      ],
+      "media": -0.11340615802103815,
+      "unidades": 150
+    },
+    "c1|longe|M3": {
+      "celulas_sem_indice": 0,
+      "dp": 0.022663009313233725,
+      "g1": -0.2778403211139173,
+      "ic95_t": [
+        -0.09334896637136555,
+        -0.08603603024971279
+      ],
+      "media": -0.08969249831053917,
+      "unidades": 150
+    },
+    "reavaliacao|comedouro|M1": {
+      "celulas_sem_indice": 0,
+      "dp": 0.024535067954674517,
+      "g1": 0.14908923121265227,
+      "ic95_t": [
+        -0.09071617373300277,
+        -0.07677059540881769
+      ],
+      "media": -0.08374338457091023,
+      "unidades": 50
+    },
+    "reavaliacao|comedouro|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.025150422467518904,
+      "g1": -0.14171094310932955,
+      "ic95_t": [
+        -0.09459574091218745,
+        -0.08030039895287139
+      ],
+      "media": -0.08744806993252942,
+      "unidades": 50
+    },
+    "reavaliacao|longe|M1": {
+      "celulas_sem_indice": 1,
+      "dp": 0.027259647443109537,
+      "g1": 0.06403240070955254,
+      "ic95_t": [
+        -0.07748927910372799,
+        -0.06199506693322011
+      ],
+      "media": -0.06974217301847405,
+      "unidades": 50
+    },
+    "reavaliacao|longe|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.0235368626218676,
+      "g1": 0.15633934469109326,
+      "ic95_t": [
+        -0.12173407428444127,
+        -0.10835586959370178
+      ],
+      "media": -0.11504497193907152,
+      "unidades": 50
+    }
+  },
+  "poder_alvo": 0.8,
+  "por_k": {
+    "K=100": {
+      "margem": 0.013674891768472893,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.809,
+      "verdadeiro_0_ic_acima_de_0": 0.023,
+      "verdadeiro_0_ic_dentro_da_margem": 0.6075,
+      "verdadeiro_0_sigma_comedouro_ic_dentro_da_margem": 0.9915,
+      "vidas": 3600
+    },
+    "K=150": {
+      "margem": 0.011133087475378615,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.811,
+      "verdadeiro_0_ic_acima_de_0": 0.0215,
+      "verdadeiro_0_ic_dentro_da_margem": 0.613,
+      "verdadeiro_0_sigma_comedouro_ic_dentro_da_margem": 0.9955,
+      "vidas": 5400
+    },
+    "K=200": {
+      "margem": 0.009627655364565042,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.822,
+      "verdadeiro_0_ic_acima_de_0": 0.0185,
+      "verdadeiro_0_ic_dentro_da_margem": 0.611,
+      "verdadeiro_0_sigma_comedouro_ic_dentro_da_margem": 0.994,
+      "vidas": 7200
+    },
+    "K=300": {
+      "margem": 0.007849696868211799,
+      "poder_normal_na_margem": 0.8000000000000003,
+      "poder_simulado_na_margem": 0.812,
+      "verdadeiro_0_ic_acima_de_0": 0.0275,
+      "verdadeiro_0_ic_dentro_da_margem": 0.6045,
+      "verdadeiro_0_sigma_comedouro_ic_dentro_da_margem": 0.9955,
+      "vidas": 10800
+    },
+    "K=50": {
+      "margem": 0.01951276215851262,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.8295,
+      "verdadeiro_0_ic_acima_de_0": 0.0215,
+      "verdadeiro_0_ic_dentro_da_margem": 0.61,
+      "verdadeiro_0_sigma_comedouro_ic_dentro_da_margem": 0.994,
+      "vidas": 1800
+    }
+  },
+  "replicas": 2000,
+  "rotulo": "o poder e a margem do primario da C2 (P-A: M2c - M2 no indice 'ganhou, fica' de hoje, nas 8 celulas do longe_fixo e do comedouro), PROPOSTOS para o adendo 7; aproximacao normal do t nao central, com a conferencia por simulacao; sem gate",
+  "script": {
+    "arquivo": "experiments/adendo7_poder_habito_intencao.py",
+    "sha256": "4b05371a8df9897a2c17c000c7a8d3267441c0759c486fee2e44e1ca34bf2713"
+  },
+  "semente": 4242,
+  "sigma_max_4_celulas": 0.04032694865630289,
+  "sigma_planejamento": 0.04839233838756347,
+  "unidade": "a media das 4 celulas do lugar (uma vida por dono) da diferenca a - b no indice de hoje, por unidade (base, k); as celulas com o indice None num dos bracos ficam fora, contadas",
+  "vidas_por_unidade_c2": 36
+}

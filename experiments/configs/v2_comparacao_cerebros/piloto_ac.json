@@ -1,0 +1,12 @@
+{
+  "descricao": "Piloto da comparacao A x C (secao 6.3 do plano; tarefa COMPARACAO-A-C, passo 1): o desenho inteiro da validacao (A e C em P1, P2, P2e e P3 nas tres condicoes, os so cuidado sem_ensino, o P0 comum e o C no registro do P1 do A) nas unidades da calibracao, 28101...28505 com K = 4 (prefixo comparacao-cerebros, 20 unidades), 14 dias, o dono atencioso. Da o sigma2_d de CC-1 e CC-2, o N e o tempo do adendo 2; nada se escolhe.",
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "unidades": {"bases": [28101, 28202, 28303, 28404, 28505], "k": 4, "prefixo": "comparacao-cerebros"},
+  "dias": 14,
+  "orcamento": 224,
+  "sonda": {"estados": 64, "amostras": 200, "semente": 9001},
+  "bootstrap": {"reamostragens": 10000, "semente": 4242, "nivel": 0.95},
+  "delta": 0.1986268570547561,
+  "simulacao": {"semente": 4242, "replicas": 2000},
+  "saida": "artifacts_v2_comparacao_cerebros/piloto"
+}

@@ -1,0 +1,110 @@
+{
+ "dias": 14,
+ "donos": [
+  "atencioso",
+  "relapso",
+  "aleatorio",
+  "incoerente"
+ ],
+ "escolhido": 1536,
+ "grade": [
+  256,
+  512,
+  768,
+  1024,
+  1280,
+  1536,
+  1792,
+  2048,
+  2304,
+  2560,
+  2816,
+  3072,
+  3328,
+  3584,
+  3840,
+  4096
+ ],
+ "lab_falas_dia_1": 317,
+ "lugar": "comedouro",
+ "modo": "ignora",
+ "orcamento_por_dia": 16,
+ "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC3.md",
+ "por_ganho": {
+  "1024": {
+   "falas_dia_1": 179,
+   "razao": 0.5646687697160884
+  },
+  "1280": {
+   "falas_dia_1": 265,
+   "razao": 0.8359621451104101
+  },
+  "1536": {
+   "falas_dia_1": 328,
+   "razao": 1.0347003154574133
+  },
+  "1792": {
+   "falas_dia_1": 392,
+   "razao": 1.2365930599369086
+  },
+  "2048": {
+   "falas_dia_1": 535,
+   "razao": 1.6876971608832807
+  },
+  "2304": {
+   "falas_dia_1": 587,
+   "razao": 1.8517350157728707
+  },
+  "256": {
+   "falas_dia_1": 6,
+   "razao": 0.01892744479495268
+  },
+  "2560": {
+   "falas_dia_1": 626,
+   "razao": 1.974763406940063
+  },
+  "2816": {
+   "falas_dia_1": 712,
+   "razao": 2.2460567823343847
+  },
+  "3072": {
+   "falas_dia_1": 748,
+   "razao": 2.359621451104101
+  },
+  "3328": {
+   "falas_dia_1": 796,
+   "razao": 2.5110410094637223
+  },
+  "3584": {
+   "falas_dia_1": 836,
+   "razao": 2.637223974763407
+  },
+  "3840": {
+   "falas_dia_1": 919,
+   "razao": 2.8990536277602525
+  },
+  "4096": {
+   "falas_dia_1": 990,
+   "razao": 3.1230283911671926
+  },
+  "512": {
+   "falas_dia_1": 37,
+   "razao": 0.1167192429022082
+  },
+  "768": {
+   "falas_dia_1": 85,
+   "razao": 0.26813880126182965
+  }
+ },
+ "regra": "a razao LAB+F / LAB das falas do dia 1 mais perto de 1; empate: o menor ganho",
+ "secao": "3.1",
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "status": "PROPOSTO, SEM FONTE",
+ "vidas_por_braco": 20
+}

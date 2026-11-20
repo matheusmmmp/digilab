@@ -1,0 +1,125 @@
+{
+  "descricao": "celula mais barata (horas da confirmatoria completa) com poder >= 0,8 para delta 0,10",
+  "variantes": {
+    "neutra": {
+      "A": {
+        "M": 50,
+        "N": 160,
+        "delta": 0.1,
+        "horas_completa": 0.24090447424999523,
+        "horas_principal": 0.09562439282499573,
+        "poder_formula": 0.8590730857505868,
+        "poder_simulado": 0.8635
+      },
+      "A_N_minimo_formula": {
+        "0.05": {
+          "M": 50,
+          "N": 542,
+          "horas_completa": 0.8160639065218588,
+          "horas_principal": 0.32392763069467306
+        },
+        "0.1": {
+          "M": 50,
+          "N": 137,
+          "horas_completa": 0.2062744560765584,
+          "horas_principal": 0.0818783863564026
+        },
+        "0.15": {
+          "M": 50,
+          "N": 62,
+          "horas_completa": 0.09335048377187313,
+          "horas_principal": 0.03705445221968584
+        }
+      },
+      "B": {
+        "M": 50,
+        "N": 40,
+        "delta": 0.1,
+        "horas_completa": 0.06944357950002818,
+        "horas_principal": 0.027777431800011267,
+        "poder_formula": 0.808549228567711,
+        "poder_simulado": 0.8055
+      },
+      "B_N_minimo_formula": {
+        "0.05": {
+          "M": 50,
+          "N": 152,
+          "horas_completa": 0.26388560210010703,
+          "horas_principal": 0.10555424084004282
+        },
+        "0.1": {
+          "M": 50,
+          "N": 40,
+          "horas_completa": 0.06944357950002818,
+          "horas_principal": 0.027777431800011267
+        },
+        "0.15": {
+          "M": 50,
+          "N": 19,
+          "horas_completa": 0.03298570026251338,
+          "horas_principal": 0.013194280105005353
+        }
+      }
+    },
+    "real": {
+      "A": {
+        "M": 50,
+        "N": 160,
+        "delta": 0.1,
+        "horas_completa": 0.24090447424999523,
+        "horas_principal": 0.09562439282499573,
+        "poder_formula": 0.8739803955939527,
+        "poder_simulado": 0.8755
+      },
+      "A_N_minimo_formula": {
+        "0.05": {
+          "M": 50,
+          "N": 518,
+          "horas_completa": 0.7799282353843595,
+          "horas_principal": 0.30958397177092367
+        },
+        "0.1": {
+          "M": 50,
+          "N": 131,
+          "horas_completa": 0.19724053829218355,
+          "horas_principal": 0.07829247162546525
+        },
+        "0.15": {
+          "M": 50,
+          "N": 60,
+          "horas_completa": 0.09033917784374819,
+          "horas_principal": 0.035859147309373396
+        }
+      },
+      "B": {
+        "M": 50,
+        "N": 80,
+        "delta": 0.1,
+        "horas_completa": 0.13888715900005635,
+        "horas_principal": 0.055554863600022535,
+        "poder_formula": 0.9696685411858555,
+        "poder_simulado": 0.971
+      },
+      "B_N_minimo_formula": {
+        "0.05": {
+          "M": 50,
+          "N": 170,
+          "horas_completa": 0.29513521287511973,
+          "horas_principal": 0.11805408515004788
+        },
+        "0.1": {
+          "M": 50,
+          "N": 44,
+          "horas_completa": 0.07638793745003099,
+          "horas_principal": 0.030555174980012395
+        },
+        "0.15": {
+          "M": 50,
+          "N": 21,
+          "horas_completa": 0.03645787923751479,
+          "horas_principal": 0.014583151695005915
+        }
+      }
+    }
+  }
+}

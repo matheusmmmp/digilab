@@ -1,0 +1,1984 @@
+{
+ "descricao": "Calibracao dos desafiantes da campanha v6 (NPCs que nao sao lideres) na escala dos pets v6: motor web, regras V21D.",
+ "conjunto": "calibracao",
+ "limite": "desafiado",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "n_por_semente": 10,
+ "pet_lado": "A",
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "metas": {
+  "sem_treino_max": 0.3,
+  "com_treino_min": 0.8,
+  "pior_forma_min": 0.5
+ },
+ "treino_tipico": {
+  "crianca": 8,
+  "adolescente": 22,
+  "adulto": 36,
+  "mega": 40
+ },
+ "desafiantes": {
+  "npc_tier2_sentinela": {
+   "nome": "Tortomon",
+   "lugar": "Torre de pedra",
+   "estagio": "adolescente",
+   "escolha": {
+    "fator": 1.5,
+    "sem": 0.3106,
+    "com": 0.8894,
+    "pior": 0.575,
+    "pior_forma": "colosso",
+    "passa": false,
+    "folga": -0.0106,
+    "travados": [],
+    "por_forma": {
+     "brigao": {
+      "sem": 0.465,
+      "com": 0.9925
+     },
+     "guardiao": {
+      "sem": 0.04,
+      "com": 0.99
+     },
+     "cacador": {
+      "sem": 0.725,
+      "com": 1
+     },
+     "colosso": {
+      "sem": 0.0125,
+      "com": 0.575
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.5,
+     "sem": 0.9913,
+     "com": 1,
+     "pior": 1,
+     "pior_forma": "brigao",
+     "passa": false,
+     "folga": -0.6913,
+     "travados": []
+    },
+    {
+     "fator": 0.6,
+     "sem": 0.9812,
+     "com": 1,
+     "pior": 1,
+     "pior_forma": "brigao",
+     "passa": false,
+     "folga": -0.6812,
+     "travados": []
+    },
+    {
+     "fator": 0.7,
+     "sem": 0.9331,
+     "com": 0.9988,
+     "pior": 0.995,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.6331,
+     "travados": []
+    },
+    {
+     "fator": 0.8,
+     "sem": 0.8644,
+     "com": 0.9975,
+     "pior": 0.99,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.5644,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.7694,
+     "com": 0.9962,
+     "pior": 0.985,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.4694,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.6575,
+     "com": 0.9912,
+     "pior": 0.965,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.3575,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.5719,
+     "com": 0.9856,
+     "pior": 0.9425,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.2719,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.505,
+     "com": 0.9688,
+     "pior": 0.875,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.205,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.4481,
+     "com": 0.9444,
+     "pior": 0.7775,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.1481,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.3775,
+     "com": 0.9231,
+     "pior": 0.6925,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0775,
+     "travados": []
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.3106,
+     "com": 0.8894,
+     "pior": 0.575,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0106,
+     "travados": []
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.2437,
+     "com": 0.8475,
+     "pior": 0.445,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.055,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.2012,
+     "com": 0.8163,
+     "pior": 0.39,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.11,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.8,
+     "sem": 0.1563,
+     "com": 0.7575,
+     "pior": 0.295,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.205,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.9,
+     "sem": 0.1156,
+     "com": 0.7119,
+     "pior": 0.2175,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.2825,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2,
+     "sem": 0.0856,
+     "com": 0.6725,
+     "pior": 0.18,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.32,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.1,
+     "sem": 0.0575,
+     "com": 0.6275,
+     "pior": 0.14,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.36,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.2,
+     "sem": 0.0375,
+     "com": 0.5956,
+     "pior": 0.1075,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.3925,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.3,
+     "sem": 0.0194,
+     "com": 0.5613,
+     "pior": 0.09,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.41,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.4,
+     "sem": 0.0081,
+     "com": 0.5325,
+     "pior": 0.0675,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.4325,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.5,
+     "sem": 0.0063,
+     "com": 0.5031,
+     "pior": 0.04,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.46,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.6,
+     "sem": 0.0025,
+     "com": 0.4763,
+     "pior": 0.0375,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.4625,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.7,
+     "sem": 0.0013,
+     "com": 0.4494,
+     "pior": 0.0125,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.4875,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.8,
+     "sem": 0,
+     "com": 0.4175,
+     "pior": 0.0075,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.4925,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0,
+     "com": 0.3725,
+     "pior": 0.0025,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.4975,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0,
+     "com": 0.3294,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.5,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.1,
+     "sem": 0,
+     "com": 0.2881,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.5119,
+     "travados": [
+      "guardiao",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.2,
+     "sem": 0,
+     "com": 0.245,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.555,
+     "travados": [
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.3,
+     "sem": 0,
+     "com": 0.2119,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.5881,
+     "travados": [
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.4,
+     "sem": 0,
+     "com": 0.1794,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.6206,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.5,
+     "sem": 0,
+     "com": 0.1537,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.6462,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.6,
+     "sem": 0,
+     "com": 0.1275,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.6725,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.7,
+     "sem": 0,
+     "com": 0.1063,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.6938,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.8,
+     "sem": 0,
+     "com": 0.085,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.715,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.9,
+     "sem": 0,
+     "com": 0.0756,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.7244,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 4,
+     "sem": 0,
+     "com": 0.0669,
+     "pior": 0,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.7331,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    }
+   ]
+  },
+  "npc_tier2_porteiro": {
+   "nome": "Devidramon",
+   "lugar": "Torre de pedra",
+   "estagio": "adolescente",
+   "escolha": {
+    "fator": 1.1,
+    "sem": 0.1756,
+    "com": 0.92,
+    "pior": 0.68,
+    "pior_forma": "cacador",
+    "passa": true,
+    "folga": 0.12,
+    "travados": [],
+    "por_forma": {
+     "brigao": {
+      "sem": 0.43,
+      "com": 1
+     },
+     "guardiao": {
+      "sem": 0.1175,
+      "com": 1
+     },
+     "cacador": {
+      "sem": 0.01,
+      "com": 0.68
+     },
+     "colosso": {
+      "sem": 0.145,
+      "com": 1
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.5,
+     "sem": 0.9437,
+     "com": 0.9812,
+     "pior": 0.925,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.6438,
+     "travados": []
+    },
+    {
+     "fator": 0.6,
+     "sem": 0.9038,
+     "com": 0.9775,
+     "pior": 0.91,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.6038,
+     "travados": []
+    },
+    {
+     "fator": 0.7,
+     "sem": 0.8594,
+     "com": 0.9712,
+     "pior": 0.885,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.5594,
+     "travados": []
+    },
+    {
+     "fator": 0.8,
+     "sem": 0.7519,
+     "com": 0.9637,
+     "pior": 0.855,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.4519,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.5731,
+     "com": 0.9487,
+     "pior": 0.795,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.2731,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.3506,
+     "com": 0.9313,
+     "pior": 0.725,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.0506,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.1756,
+     "com": 0.92,
+     "pior": 0.68,
+     "pior_forma": "cacador",
+     "passa": true,
+     "folga": 0.12,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.0756,
+     "com": 0.8975,
+     "pior": 0.595,
+     "pior_forma": "cacador",
+     "passa": true,
+     "folga": 0.095,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.0287,
+     "com": 0.88,
+     "pior": 0.545,
+     "pior_forma": "cacador",
+     "passa": true,
+     "folga": 0.045,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.0106,
+     "com": 0.8525,
+     "pior": 0.485,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.015,
+     "travados": [
+      "cacador"
+     ]
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.0025,
+     "com": 0.8175,
+     "pior": 0.435,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.065,
+     "travados": [
+      "cacador"
+     ]
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.0013,
+     "com": 0.7638,
+     "pior": 0.3475,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.1525,
+     "travados": [
+      "cacador"
+     ]
+    },
+    {
+     "fator": 1.7,
+     "sem": 0,
+     "com": 0.6831,
+     "pior": 0.295,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.205,
+     "travados": [
+      "cacador"
+     ]
+    },
+    {
+     "fator": 1.8,
+     "sem": 0,
+     "com": 0.5737,
+     "pior": 0.175,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.325,
+     "travados": [
+      "cacador"
+     ]
+    },
+    {
+     "fator": 1.9,
+     "sem": 0,
+     "com": 0.4537,
+     "pior": 0.115,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.385,
+     "travados": [
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2,
+     "sem": 0,
+     "com": 0.3544,
+     "pior": 0.0825,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.4456,
+     "travados": [
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.1,
+     "sem": 0,
+     "com": 0.2588,
+     "pior": 0.05,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.5413,
+     "travados": [
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.2,
+     "sem": 0,
+     "com": 0.1756,
+     "pior": 0.03,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.6244,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.3,
+     "sem": 0,
+     "com": 0.1106,
+     "pior": 0.01,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.6894,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.4,
+     "sem": 0,
+     "com": 0.0662,
+     "pior": 0.005,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.7338,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.5,
+     "sem": 0,
+     "com": 0.0412,
+     "pior": 0,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.7588,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.6,
+     "sem": 0,
+     "com": 0.0263,
+     "pior": 0,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.7738,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.7,
+     "sem": 0,
+     "com": 0.015,
+     "pior": 0,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.785,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.8,
+     "sem": 0,
+     "com": 0.0069,
+     "pior": 0,
+     "pior_forma": "cacador",
+     "passa": false,
+     "folga": -0.7931,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0,
+     "com": 0.0019,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7981,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0,
+     "com": 0.0013,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7988,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.1,
+     "sem": 0,
+     "com": 0,
+     "pior": 0,
+     "pior_forma": "brigao",
+     "passa": false,
+     "folga": -0.8,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.2,
+     "sem": 0,
+     "com": 0.0013,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7988,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.3,
+     "sem": 0,
+     "com": 0.0006,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7994,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.4,
+     "sem": 0,
+     "com": 0.0006,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7994,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.5,
+     "sem": 0,
+     "com": 0.0006,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7994,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.6,
+     "sem": 0,
+     "com": 0.0006,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7994,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.7,
+     "sem": 0,
+     "com": 0.0006,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "folga": -0.7994,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.8,
+     "sem": 0,
+     "com": 0,
+     "pior": 0,
+     "pior_forma": "brigao",
+     "passa": false,
+     "folga": -0.8,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 3.9,
+     "sem": 0,
+     "com": 0,
+     "pior": 0,
+     "pior_forma": "brigao",
+     "passa": false,
+     "folga": -0.8,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    },
+    {
+     "fator": 4,
+     "sem": 0,
+     "com": 0,
+     "pior": 0,
+     "pior_forma": "brigao",
+     "passa": false,
+     "folga": -0.8,
+     "travados": [
+      "brigao",
+      "guardiao",
+      "cacador",
+      "colosso"
+     ]
+    }
+   ]
+  },
+  "npc_v5_puppetmon": {
+   "nome": "Puppetmon",
+   "lugar": "Montanha Espiral",
+   "estagio": "mega",
+   "escolha": {
+    "fator": 1.8,
+    "sem": 0.1519,
+    "com": 0.9413,
+    "pior": 0.77,
+    "pior_forma": "espelho",
+    "passa": true,
+    "folga": 0.1412,
+    "travados": [],
+    "por_forma": {
+     "duelista": {
+      "sem": 0,
+      "com": 0.98
+     },
+     "furioso": {
+      "sem": 0,
+      "com": 1
+     },
+     "espelho": {
+      "sem": 0,
+      "com": 0.77
+     },
+     "muralha": {
+      "sem": 0,
+      "com": 0.785
+     },
+     "sentinela": {
+      "sem": 0.23,
+      "com": 1
+     },
+     "emboscador": {
+      "sem": 0.985,
+      "com": 1
+     },
+     "vigia": {
+      "sem": 0,
+      "com": 0.995
+     },
+     "tita": {
+      "sem": 0,
+      "com": 1
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.5,
+     "sem": 0.95,
+     "com": 0.9856,
+     "pior": 0.935,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.65,
+     "travados": []
+    },
+    {
+     "fator": 0.6,
+     "sem": 0.9306,
+     "com": 0.9844,
+     "pior": 0.935,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.6306,
+     "travados": []
+    },
+    {
+     "fator": 0.7,
+     "sem": 0.9153,
+     "com": 0.9794,
+     "pior": 0.91,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.6153,
+     "travados": []
+    },
+    {
+     "fator": 0.8,
+     "sem": 0.8878,
+     "com": 0.9769,
+     "pior": 0.905,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5878,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.8406,
+     "com": 0.9756,
+     "pior": 0.9,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5406,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.7434,
+     "com": 0.9719,
+     "pior": 0.885,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.4434,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.5584,
+     "com": 0.9688,
+     "pior": 0.88,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.2584,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.4097,
+     "com": 0.9656,
+     "pior": 0.87,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.1097,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.3141,
+     "com": 0.9625,
+     "pior": 0.86,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.0141,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.2522,
+     "com": 0.9569,
+     "pior": 0.835,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.0478,
+     "travados": []
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.2066,
+     "com": 0.9525,
+     "pior": 0.815,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.0934,
+     "travados": []
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.1825,
+     "com": 0.9481,
+     "pior": 0.795,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1175,
+     "travados": []
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.1691,
+     "com": 0.945,
+     "pior": 0.785,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1309,
+     "travados": []
+    },
+    {
+     "fator": 1.8,
+     "sem": 0.1519,
+     "com": 0.9413,
+     "pior": 0.77,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1412,
+     "travados": []
+    },
+    {
+     "fator": 1.9,
+     "sem": 0.1366,
+     "com": 0.9359,
+     "pior": 0.75,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1359,
+     "travados": []
+    },
+    {
+     "fator": 2,
+     "sem": 0.1181,
+     "com": 0.9269,
+     "pior": 0.72,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1269,
+     "travados": []
+    },
+    {
+     "fator": 2.1,
+     "sem": 0.1019,
+     "com": 0.9184,
+     "pior": 0.71,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1184,
+     "travados": []
+    },
+    {
+     "fator": 2.2,
+     "sem": 0.0881,
+     "com": 0.9075,
+     "pior": 0.68,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.1075,
+     "travados": []
+    },
+    {
+     "fator": 2.3,
+     "sem": 0.0703,
+     "com": 0.8941,
+     "pior": 0.66,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.0941,
+     "travados": []
+    },
+    {
+     "fator": 2.4,
+     "sem": 0.055,
+     "com": 0.8784,
+     "pior": 0.61,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.0784,
+     "travados": []
+    },
+    {
+     "fator": 2.5,
+     "sem": 0.0416,
+     "com": 0.8575,
+     "pior": 0.56,
+     "pior_forma": "espelho",
+     "passa": true,
+     "folga": 0.0575,
+     "travados": []
+    },
+    {
+     "fator": 2.6,
+     "sem": 0.0338,
+     "com": 0.8269,
+     "pior": 0.4925,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.0075,
+     "travados": [
+      "espelho"
+     ]
+    },
+    {
+     "fator": 2.7,
+     "sem": 0.0225,
+     "com": 0.7828,
+     "pior": 0.445,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.055,
+     "travados": [
+      "espelho"
+     ]
+    },
+    {
+     "fator": 2.8,
+     "sem": 0.0138,
+     "com": 0.7278,
+     "pior": 0.365,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.135,
+     "travados": [
+      "espelho",
+      "muralha"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0.0084,
+     "com": 0.6653,
+     "pior": 0.2975,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.2025,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0.0034,
+     "com": 0.5909,
+     "pior": 0.215,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.285,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.1,
+     "sem": 0.0013,
+     "com": 0.5322,
+     "pior": 0.1525,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.3475,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.2,
+     "sem": 0,
+     "com": 0.4616,
+     "pior": 0.0975,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.4025,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.3,
+     "sem": 0,
+     "com": 0.4066,
+     "pior": 0.065,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.435,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.4,
+     "sem": 0,
+     "com": 0.365,
+     "pior": 0.0325,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.4675,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.5,
+     "sem": 0,
+     "com": 0.3269,
+     "pior": 0.0125,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.4875,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.6,
+     "sem": 0,
+     "com": 0.3009,
+     "pior": 0,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.7,
+     "sem": 0,
+     "com": 0.2728,
+     "pior": 0,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5272,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.8,
+     "sem": 0,
+     "com": 0.2506,
+     "pior": 0,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5494,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.9,
+     "sem": 0,
+     "com": 0.2375,
+     "pior": 0,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5625,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 4,
+     "sem": 0,
+     "com": 0.2262,
+     "pior": 0,
+     "pior_forma": "espelho",
+     "passa": false,
+     "folga": -0.5738,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    }
+   ]
+  },
+  "npc_v5_machinedramon": {
+   "nome": "Machinedramon",
+   "lugar": "Montanha Espiral",
+   "estagio": "mega",
+   "escolha": {
+    "fator": 2.2,
+    "sem": 0.1303,
+    "com": 0.9619,
+    "pior": 0.7625,
+    "pior_forma": "duelista",
+    "passa": true,
+    "folga": 0.1619,
+    "travados": [],
+    "por_forma": {
+     "duelista": {
+      "sem": 0,
+      "com": 0.7625
+     },
+     "furioso": {
+      "sem": 0.06,
+      "com": 0.9975
+     },
+     "espelho": {
+      "sem": 0.0025,
+      "com": 0.99
+     },
+     "muralha": {
+      "sem": 0,
+      "com": 0.995
+     },
+     "sentinela": {
+      "sem": 0.045,
+      "com": 1
+     },
+     "emboscador": {
+      "sem": 0.935,
+      "com": 1
+     },
+     "vigia": {
+      "sem": 0,
+      "com": 0.95
+     },
+     "tita": {
+      "sem": 0,
+      "com": 1
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.5,
+     "sem": 0.995,
+     "com": 1,
+     "pior": 1,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.695,
+     "travados": []
+    },
+    {
+     "fator": 0.6,
+     "sem": 0.99,
+     "com": 1,
+     "pior": 1,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.69,
+     "travados": []
+    },
+    {
+     "fator": 0.7,
+     "sem": 0.9697,
+     "com": 0.9994,
+     "pior": 0.995,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.6697,
+     "travados": []
+    },
+    {
+     "fator": 0.8,
+     "sem": 0.9275,
+     "com": 0.9994,
+     "pior": 0.995,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.6275,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.8681,
+     "com": 0.9988,
+     "pior": 0.99,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.5681,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.7947,
+     "com": 0.9988,
+     "pior": 0.99,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.4947,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.6791,
+     "com": 0.9981,
+     "pior": 0.985,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.3791,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.5928,
+     "com": 0.9969,
+     "pior": 0.975,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.2928,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.5066,
+     "com": 0.9969,
+     "pior": 0.975,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.2066,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.4225,
+     "com": 0.9956,
+     "pior": 0.965,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.1225,
+     "travados": []
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.3516,
+     "com": 0.995,
+     "pior": 0.96,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.0516,
+     "travados": []
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.2891,
+     "com": 0.9925,
+     "pior": 0.94,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.0109,
+     "travados": []
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.2406,
+     "com": 0.99,
+     "pior": 0.92,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.0594,
+     "travados": []
+    },
+    {
+     "fator": 1.8,
+     "sem": 0.2025,
+     "com": 0.9881,
+     "pior": 0.91,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.0975,
+     "travados": []
+    },
+    {
+     "fator": 1.9,
+     "sem": 0.1797,
+     "com": 0.9816,
+     "pior": 0.8775,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1203,
+     "travados": []
+    },
+    {
+     "fator": 2,
+     "sem": 0.1616,
+     "com": 0.9753,
+     "pior": 0.8325,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1384,
+     "travados": []
+    },
+    {
+     "fator": 2.1,
+     "sem": 0.1478,
+     "com": 0.9688,
+     "pior": 0.7925,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1522,
+     "travados": []
+    },
+    {
+     "fator": 2.2,
+     "sem": 0.1303,
+     "com": 0.9619,
+     "pior": 0.7625,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1619,
+     "travados": []
+    },
+    {
+     "fator": 2.3,
+     "sem": 0.1162,
+     "com": 0.9491,
+     "pior": 0.715,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1491,
+     "travados": []
+    },
+    {
+     "fator": 2.4,
+     "sem": 0.0956,
+     "com": 0.9281,
+     "pior": 0.67,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1281,
+     "travados": []
+    },
+    {
+     "fator": 2.5,
+     "sem": 0.0772,
+     "com": 0.9116,
+     "pior": 0.635,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.1116,
+     "travados": []
+    },
+    {
+     "fator": 2.6,
+     "sem": 0.0563,
+     "com": 0.8922,
+     "pior": 0.5925,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.0922,
+     "travados": []
+    },
+    {
+     "fator": 2.7,
+     "sem": 0.0387,
+     "com": 0.8659,
+     "pior": 0.5275,
+     "pior_forma": "duelista",
+     "passa": true,
+     "folga": 0.0275,
+     "travados": []
+    },
+    {
+     "fator": 2.8,
+     "sem": 0.0313,
+     "com": 0.84,
+     "pior": 0.4725,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.0275,
+     "travados": [
+      "duelista"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0.0187,
+     "com": 0.8041,
+     "pior": 0.4375,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.0625,
+     "travados": [
+      "duelista"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0.0125,
+     "com": 0.7753,
+     "pior": 0.39,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.11,
+     "travados": [
+      "duelista"
+     ]
+    },
+    {
+     "fator": 3.1,
+     "sem": 0.0081,
+     "com": 0.7412,
+     "pior": 0.355,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.145,
+     "travados": [
+      "duelista"
+     ]
+    },
+    {
+     "fator": 3.2,
+     "sem": 0.0044,
+     "com": 0.6994,
+     "pior": 0.3175,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.1825,
+     "travados": [
+      "duelista",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.3,
+     "sem": 0.0037,
+     "com": 0.6666,
+     "pior": 0.2725,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.2275,
+     "travados": [
+      "duelista",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.4,
+     "sem": 0.0006,
+     "com": 0.6269,
+     "pior": 0.235,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.265,
+     "travados": [
+      "duelista",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 3.5,
+     "sem": 0,
+     "com": 0.5875,
+     "pior": 0.2,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.3,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.6,
+     "sem": 0,
+     "com": 0.5519,
+     "pior": 0.1825,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.3175,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.7,
+     "sem": 0,
+     "com": 0.5081,
+     "pior": 0.135,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.365,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.8,
+     "sem": 0,
+     "com": 0.4759,
+     "pior": 0.105,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.395,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3.9,
+     "sem": 0,
+     "com": 0.4456,
+     "pior": 0.0775,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.4225,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 4,
+     "sem": 0,
+     "com": 0.4162,
+     "pior": 0.065,
+     "pior_forma": "duelista",
+     "passa": false,
+     "folga": -0.435,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    }
+   ]
+  }
+ }
+}

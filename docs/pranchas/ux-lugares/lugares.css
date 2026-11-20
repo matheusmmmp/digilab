@@ -1,0 +1,56 @@
+/* Prancha da L1 de "Lugares da ilha" (docs/PROPOSTAS_V3_UX_TELA_PET.md, secao "Lugares da ilha (L1)"): a camera solta e o minimapa, so
+   no desktop. HTML estatico, so desenho; nenhum codigo do jogo. Vem depois de ../ux-pet/pet.css (os tokens --hx-* e --hud-* copiados de
+   web/app/src/estilo/tokens.css, as caixas da HUD, o topo, o trilho, a pilha e o dock). Nenhuma cor nova: so tokens; os dois literais
+   de opacidade sao o --hx-foco com transparencia (color-mix). O fundo e uma captura real da ilha e o mapa e a grade de verdade
+   (ilha_png.py), as duas fora do git, em D:\Trab\digilab\capturas_ux_lugares_aprovar\fundo\ (UI_GUIDELINES 5.1). */
+
+/* ---- a cena: a captura real da ilha a 1920 no lugar do fundo neutro da P1 */
+.cena{background:var(--hud-fundo-2) var(--fundo-cena) var(--fundo-pos,center top)/var(--fundo-tam,cover) no-repeat}
+
+/* ---- o minimapa: um circulo de --mm px (PROPOSTO, SEM FONTE), a 16 px da direita e de baixo, no lugar da etiqueta do DigiBrain */
+.minimapa{--mm:232px;position:fixed;z-index:8;right:16px;bottom:16px;width:var(--mm);height:var(--mm);border-radius:50%;overflow:hidden;padding:0;
+  border:2px solid var(--hx-borda);box-shadow:var(--hud-brilho);cursor:crosshair;
+  background:var(--hud-fundo-2) var(--fundo-mapa) var(--mx) var(--mz)/var(--mw) var(--mh) no-repeat;image-rendering:pixelated}
+:root[data-pele="vidro"] .minimapa{box-shadow:var(--hud-brilho),0 0 12px var(--hx-luz)}
+:root[data-pele="xcom"] .minimapa{border-top-color:var(--hx-borda-topo)}
+.minimapa .n{position:absolute;left:50%;top:6px;transform:translateX(-50%);font:700 11px/1 var(--hx-f);letter-spacing:.06em;color:var(--hx-rotulo);
+  padding:2px 5px;background:var(--hud-fundo-2);border:1px solid var(--hx-borda)}
+/* uma marca: centrada no ponto (left/top em px dentro do circulo) */
+.mm{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center}
+.mm.ic{width:18px;height:18px;background:var(--hx-miolo);border:1px solid var(--hx-borda);color:var(--hx-texto)}
+.mm.ic svg{width:12px;height:12px;stroke-width:2.4}
+.mm.arv{width:7px;height:7px;border-radius:50%;background:var(--hx-miolo);border:1px solid var(--hx-texto-2)}
+/* a comida no chao: a cor que a cena ja pinta (COR_FRUTA e COR_RACAO, web/app/src/telas/pet/ilha/itens.ts:22-24), vinda do gerar.py */
+.mm.comida{width:7px;height:7px;border-radius:50%;background:var(--c);border:1px solid var(--hx-miolo)}
+/* o pet: o rosa com o anel claro (pergunta L1-2) */
+.mm.pet{width:12px;height:12px;border-radius:50%;background:var(--hx-necessidade);border:2px solid var(--hx-foco);z-index:3}
+.mm.pet.chama{box-shadow:0 0 0 4px color-mix(in srgb,var(--hx-necessidade) 45%,transparent)}
+/* o cone da vista: do ponto da camera no chao, abrindo para onde ela olha; --hx-foco a 30 % */
+.cone{position:absolute;z-index:2;background:linear-gradient(0deg,color-mix(in srgb,var(--hx-foco) 45%,transparent),color-mix(in srgb,var(--hx-foco) 12%,transparent));
+  clip-path:polygon(50% 100%,0 0,100% 0);transform-origin:50% 100%}
+.alvo{position:absolute;z-index:2;width:8px;height:8px;transform:translate(-50%,-50%) rotate(45deg);border:2px solid var(--hx-foco)}
+
+/* ---- o "seguir o pet": so o icone e a tecla, em cima do minimapa (so quando a camera esta longe) */
+.seguir{--ch:var(--hud-ch-p);position:fixed;z-index:9;right:24px;bottom:258px;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 10px 0 12px;cursor:pointer}
+.seguir svg{width:22px;height:22px}
+kbd{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 5px;font:700 13px/1 var(--hx-f-num);color:var(--hx-texto);
+  background:var(--hx-tecla);border:1px solid var(--hx-borda)}
+
+/* ---- o aviso na borda: o pet fora da tela e chamando (borda rosa: chamado de cuidado, guia 3) */
+.borda{--ch:var(--hud-ch-p);position:fixed;z-index:9;display:flex;align-items:center;gap:8px;min-height:52px;padding:4px 10px 4px 6px;border-color:var(--hx-necessidade);cursor:pointer}
+.borda .exc{font:900 20px/1 var(--hx-f);color:var(--hx-necessidade);width:14px;text-align:center}
+.borda .retrato{width:40px;height:40px;cursor:inherit}
+.borda .seta svg{width:22px;height:22px}
+
+/* ---- o quadro da prancha (nao e tela): o minimapa ampliado com a legenda */
+body.d .quadro.mapa{left:104px;top:86px;width:1290px;flex-direction:row;gap:22px;align-items:flex-start}
+.quadro.mapa .col{display:flex;flex-direction:column;gap:8px}
+.quadro.mapa .grande{position:relative;width:340px;height:340px}
+.quadro.mapa .grande .minimapa{position:absolute;right:auto;bottom:auto;left:0;top:0;--mm:340px}
+.quadro.mapa .grande .mm.ic{width:24px;height:24px}
+.quadro.mapa .grande .mm.ic svg{width:15px;height:15px}
+.quadro.mapa .titulo{font:700 13px/1.2 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;color:var(--hx-rotulo)}
+.quadro.mapa .apoio{font:500 12px/1.3 var(--hx-f);color:var(--hx-sec);max-width:340px}
+.legenda{display:grid;grid-template-columns:28px 1fr;gap:6px 10px;align-items:center;font:500 13px/1.25 var(--hx-f);color:var(--hx-texto-2);width:440px}
+.legenda .mm{position:static;transform:none;justify-self:center}
+.legenda small{display:block;color:var(--hx-sec);font-size:11.5px}

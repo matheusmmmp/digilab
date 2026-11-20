@@ -1,0 +1,17 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=1920">
+<title>Lugares da ilha · antes x depois a 390 · Evolução</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700;800;900&family=Rajdhani:wght@700&display=swap">
+<link rel="stylesheet" href="lugares.css">
+<style>:root{--assets-spr:url("../../../../Assets/arena_up/sprites/Growlmon.png")}</style>
+<script>const q=new URLSearchParams(location.search);document.documentElement.dataset.pele=q.get("pele")==="xcom"?"xcom":"vidro";if(q.has("sem"))addEventListener("DOMContentLoaded",()=>document.body.classList.add("sem-notas"));</script>
+<script>
+addEventListener("load", () => {
+  const re = /[\p{L}\p{N}]+(?:[-'’][\p{L}\p{N}]+)*/gu, n = el => (el.innerText.match(re) || []).length;
+  document.querySelectorAll("[data-conta]").forEach(e => { const a = document.querySelector(e.dataset.conta);
+    e.querySelector("b").textContent = a ? n(a) : "ERRO: sem " + e.dataset.conta; });
+  document.querySelectorAll("iframe[data-conta-em]").forEach(f => { const go = () => { const d = f.contentDocument, a = d && d.querySelector(".painel-lugar");
+      document.querySelector(f.dataset.contaEm).querySelector("b").textContent = a ? n(a) : "ERRO: o iframe não abriu"; };
+    if (f.contentDocument && f.contentDocument.readyState === "complete") go(); else f.addEventListener("load", go); });
+});
+</script>
+</head><body><div class="cena-cel" style="opacity:.25" aria-hidden="true"></div><div class="cel-cx" style="left:500px" role="img" aria-label="O jogo de hoje a 390: Crescer · Evolução"><i class="so-militar" style="position:absolute;inset:0;background:url('img/antes/antes_evolucao_390_militar.jpg') 0 0/390px auto no-repeat"></i><i class="so-vidro" style="position:absolute;inset:0;background:url('img/antes/antes_evolucao_390_vidro.jpg') 0 0/390px auto no-repeat"></i></div><iframe class="cel-cx" style="left:1030px" id="ifr" data-conta-em="#conta-depois" title="O depois a 390: Crescer · Evolução"></iframe><script>document.getElementById("ifr").src="crescer_evolucao_390.html?sem&pele="+(new URLSearchParams(location.search).get("pele")||"vidro");</script><span class="titulo-pr">Crescer · Evolução a 390: antes (a M1 do mobile) × depois (a M2, a regra do texto)</span><span class="contagem" style="left:500px;top:894px;white-space:normal;width:390px"><b>235</b> palavras na folha, antes · antes_palavras.json (medir_antes.mjs)</span><span class="contagem" id="conta-depois" style="left:1030px;top:894px;white-space:normal;width:390px"><b>…</b> palavras na folha, depois · innerText de .painel-lugar no iframe</span></body></html>

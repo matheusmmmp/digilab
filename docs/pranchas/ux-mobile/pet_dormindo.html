@@ -1,0 +1,22 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UX Pet M1 · mobile mínimo · dormindo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Rajdhani:wght@600;700&family=Saira+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="minimo.css">
+<script>
+const q = new URLSearchParams(location.search), pele = q.get("pele") ?? "vidro";
+if (pele !== "vidro" && pele !== "xcom") throw new Error("pele desconhecida: " + pele + " (vidro ou xcom)");
+document.documentElement.dataset.pele = pele;
+if (q.has("notas")) addEventListener("DOMContentLoaded", () => document.body.classList.add("notas"));
+</script>
+</head><body>
+<div class="cena" style="background-image:url('../../../../capturas_ux_mobile_aprovar/minimo/_fundo/cena_noite.png')" role="img" aria-label="A cena 3D do jogo (captura, fundo da prancha)"></div>
+<section class="tela pet-tela" aria-label="Tela do pet">
+<button type="button" class="cx forma topo-retrato" aria-label="Painéis do pet" aria-expanded="false" aria-controls="leque"><img src="../../../../capturas_ux_mobile_aprovar/minimo/_fundo/retrato.png" alt="" width="52" height="52"></button><span class="cx pilula topo-relogio" role="group" aria-label="01:25, dia 4"><small aria-hidden="true">D4</small><b aria-hidden="true">01:25</b></span><div class="coluna"><button type="button" class="cx forma bt48 ic topo-bt" aria-label="Conversar"><i data-lucide="message-circle" aria-hidden="true"></i></button><nav class="dl-nav hx-nav" aria-label="Destinos"><button type="button" class="cx forma bt48 ic hx-nav__bt"><i data-lucide="sprout" aria-hidden="true"></i><span class="sr-only hx-nav__rot">Crescer</span></button><button type="button" class="cx forma bt48 ic hx-nav__bt"><i data-lucide="swords" aria-hidden="true"></i><span class="sr-only hx-nav__rot">Lutar</span></button><button type="button" class="cx forma bt48 ic hx-nav__bt"><i data-lucide="book-open" aria-hidden="true"></i><span class="sr-only hx-nav__rot">Diário</span></button></nav></div><button type="button" class="cx forma ic pet-agora" data-caso="uma" aria-label="Agora: dormindo. De noite: só havia uma opção. Porquê no DigiBrain." aria-expanded="false" aria-controls="pet-painel"><i data-lucide="moon" aria-hidden="true"></i></button><div class="pet-dock"><div class="acoes-pet dock" role="group" aria-label="Cuidar e ensinar"><button type="button" class="hx-btn dock-bt acao-destaque" aria-label="Alimentar (reserva: põe a ração no comedouro)" title="Reserva temporária: põe a ração no comedouro"><i data-lucide="drumstick" aria-hidden="true"></i><span class="sr-only">Alimentar</span></button><button type="button" class="hx-btn dock-bt acao-destaque"><i data-lucide="music" aria-hidden="true"></i><span class="sr-only">Brincar</span></button><button type="button" class="hx-btn dock-bt acao-destaque"><i data-lucide="droplet" aria-hidden="true"></i><span class="sr-only">Limpar</span></button><button type="button" class="hx-btn dock-bt acao-mais" aria-expanded="false" aria-controls="acoes-mais" aria-haspopup="true"><i data-lucide="ellipsis" aria-hidden="true"></i><span class="sr-only">Mais</span></button></div></div><span class="nota" style="left:14px;top:250px">cena_noite.png é outra captura (outro pet, acordado); no jogo o pet dorme achatado com o zz (sono.ts). Sem aviso de energia dormindo: pergunta M1-8</span>
+</section>
+<script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
+<script>
+/* falhar alto: sem o lucide a prancha nao tem icone nenhum */
+if (!window.lucide) document.body.insertAdjacentHTML("beforeend", '<p class="erro-prancha">os ícones (lucide) não carregaram</p>');
+else lucide.createIcons();
+</script>
+</body></html>

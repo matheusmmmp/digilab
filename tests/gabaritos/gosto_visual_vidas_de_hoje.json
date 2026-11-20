@@ -1,0 +1,262 @@
+{
+ "A|completa|fisico|P1~lobos|aleatorio|comedouro|101": {
+  "acoes": "bd15c518fcd902950eb6fcfe6607358ad3575c22bd6c10b476aa76d7e4ee584e",
+  "estado": "b241d0075efa1ae78543e996b93fbfc6e8ca2e16e9587296ec5dc143cf735d66",
+  "estado_motor": "54c0609f1e7d9765c969cc345707872272e1edb4ea863db55927dcd1bdab39a9",
+  "fisico": "5edee11d21e95af27551533695b21ee3daad582dae465854ed275cc71698f72e",
+  "interacoes": 36,
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "d93c35626da276ef3fd9b0ac9697dd6749a0d9b14cf9d1572cdc14c327a67d2b",
+  "rngs": "0c862dfbde675589b8b193a6883e1ce33decd9c76fe2093f9912a3822cd19bcf"
+ },
+ "A|completa|fisico|P1~lobos|aleatorio|comedouro|202": {
+  "acoes": "e19db6348c029563bd9663eb14069594dc514fa990f656ef75e491dd25b09465",
+  "estado": "f75505474cb35e04e1d3dc5397211eeb793dbc5e3bb312eedf579bb81c9b4895",
+  "estado_motor": "f6920baa7a83c46c0f8283fc5aa27ca4cca0d35392233e1bf01cdaaf329281d5",
+  "fisico": "ad85e127c4d63229fe5f6356ee678f220769ba8a34a3b7f4976e45ebba4c97b5",
+  "interacoes": 34,
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "2375ec6661353c55819ed29ccda94dc852252705d91c575faab3c7f1f10c3d96",
+  "rngs": "aca4dd1e34bd173b4418de84eb8f83d83140f9974c88b577e7e8f9511daca702"
+ },
+ "A|completa|fisico|P1~lobos|aleatorio|comedouro|303": {
+  "acoes": "c430422ce213694c8670622f17b6f5885ee72a930271877915b2dbc409922627",
+  "estado": "3e825bf2a938a8c3e40ec1d113a7342e7c87d4d4072778f847f6663f18d2ddf4",
+  "estado_motor": "fc3ba10ec0c7c89877b118fa35e80be0929221a47fe453038d72273dda538cc5",
+  "fisico": "f2a1d3c96acba0e112c464bdcdba73dc2b46c086505014560255a15dda397957",
+  "interacoes": 32,
+  "log": "32e24c61d6ec095ad47b5958a628f7f722213cc8629e06a8fc433880eaa57ec9",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "f55a279ccad295c47ec9364b3a69029da5d99f397d538f6ac26ad0ecece7ddeb",
+  "rngs": "de71bdd02fc9dc0ce14f17aad3906386e79fd7d71646f3db5a5fc0f198efd2b6"
+ },
+ "A|completa|fisico|P1~lobos|aleatorio|comedouro|404": {
+  "acoes": "f36dd4730b50432dbe17fbba37d8a605d173189cdab7aff0fbda17ced236633b",
+  "estado": "1ea6b022901c084f81d3b34ad4a26f8f87be1387eecf96f6dc6ba0c58f369d1d",
+  "estado_motor": "7eb4e4596be36e3d5f3b118f05d7f875f399852fc0ba8db1ea2ff72c80ddb1a7",
+  "fisico": "f1cc5d55e86d9112a82ecef1503f6458c15a180ada9a1cff559688081234bfbb",
+  "interacoes": 27,
+  "log": "070ed5d502df2e6df14f91ba0fa3d26b10e78d68620a8925782b3223f55268db",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "55819375f5443d6b79263a5c56c17d02b3d50abcbb7ac50535c3cc00e810f5e8",
+  "rngs": "a714b641c17d247f51df0302c362e2efb1170d83e1c338c4d2e03462132c9830"
+ },
+ "A|completa|fisico|P1~lobos|aleatorio|comedouro|505": {
+  "acoes": "3883b89966cede6ab9a7b5f58b64678e1453afb5676109129b0b6a0d6b961986",
+  "estado": "dc7fb42290844cd66aa24f07178123672cf671ed32f29527093482b9de0d66d7",
+  "estado_motor": "6dac675429a22a172bbcbf1b95b56d9a1ab85f25f3c0ac0010a0c394c8e26135",
+  "fisico": "bea6a091f4e01d85768ff3d62de7c8c2e757f0aa900630b202b22fd25a06e7e5",
+  "interacoes": 33,
+  "log": "451170f64b63836830e789fc7f76c46cc48ad32ddf6a2292bb36a2ddeaa58d20",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "8ad620297f9cfb084728fa8bff511e24d492268be57194802f79f21a724e4905",
+  "rngs": "bb0a97831c869c6033306d1ed02d1a5513e99d1e082b273f11255ca11591b8af"
+ },
+ "A|completa|fisico|P1~lobos|atencioso|comedouro|101": {
+  "acoes": "f75d2de95b364d7cba1a00cea47059c1fcd97df034b16876f9ce9c8639728772",
+  "estado": "68684a05ac053626228a3347f82e0c37b1e12a5d6f60dc818c5c2f8a84575a5b",
+  "estado_motor": "f56bb2e2f57e68037c5f9301111d09ee165e10c705b1af5b30d28695d4c96581",
+  "fisico": "8775a1e808221813ae00fbee0878682a812615693fdc1b0c14859bb665fb5d1b",
+  "interacoes": 42,
+  "log": "3ff93f1645310914f6546879a472110c5ee9b840be3ae2f0d22b12eb3870eb42",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "a9f4ea06409fda0a58134e677f02973f85068e6e4c68597daf9522858a46471c",
+  "rngs": "961dfec737158b9733d1a7d3c07e2e0c69b203f42a243aa97645ee7598b1acc8"
+ },
+ "A|completa|fisico|P1~lobos|atencioso|comedouro|202": {
+  "acoes": "75b8bc5df0d13cd2875018667914d3fc43c9021cb0b07f9065a474874eb95784",
+  "estado": "8f94820866f2932d774128c54acc054369dab43cbb0601bd11d1ce951548ac08",
+  "estado_motor": "f72f553eefb0b069e6644bf152e7d9a6b2be8b784789bbb7f1d4a79e5859b75a",
+  "fisico": "279b2a70396cceae2452138fc16a88e620d04d3633087d8bea2f5a3e1eb191ab",
+  "interacoes": 40,
+  "log": "d9b65f14fed670f329e64bcf398641cba6f36ef020493ffae04ba59badc8f939",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "0d51f5543fffa5c0bf030cc19640e356dfb3ba32d98a50ee5d720fd6b1bf1b16",
+  "rngs": "5da6c7625ca9e2c79ab2269446af7bf84fd1091aea121cbb54968ebcd5d95fa9"
+ },
+ "A|completa|fisico|P1~lobos|atencioso|comedouro|303": {
+  "acoes": "67abf12fb8fdf5f771758a76afe6fd7e7718b5e4889faee128133492647fa659",
+  "estado": "28afde51435cb8d1c5a4b156c2d85fdb6179286d9d3bad86f111da41c7b78a8e",
+  "estado_motor": "d37a06e5442b1ccce414c2a1b6f470640a52c66930b33b912e04acef98bdab8c",
+  "fisico": "2de74eaea9a6b1cac5477b1bdfc339eaba31109a3f97303ab32747d3a584bb18",
+  "interacoes": 44,
+  "log": "106f846207da25c5f373cacfa2aa2e498367bea847067a4ce9a9d76bac1fc1ba",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "4dcff4eac5609132eecf1cc4a962fe380cf8aa7f3eb8bf11fc56887c9a4615d0",
+  "rngs": "7db0acad74c13c867cd1569365928e3915c1ec05f10d2d1512529d44c1af13de"
+ },
+ "A|completa|fisico|P1~lobos|atencioso|comedouro|404": {
+  "acoes": "491c4aef13a048c4e3315685bea356394a8ea60348d753198b104c5457de7848",
+  "estado": "355995d86c13bca23e92ffbc9a00ce2be1b53146f4225d5d9c7c3461edcba418",
+  "estado_motor": "c996f2a61b2fa3d00c59a297300f9e827c3cff4f4cc5ea938983f4746b974145",
+  "fisico": "2dd65f4138ff8d0bb8a258633ea5eacbad3352bca8dfbe8aff349a789e08d328",
+  "interacoes": 40,
+  "log": "06e7b179c3916bc25c0084b2400df788dfcd6791ac842f07042ff469c76ab17d",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "4d09070fd475a2843bd486e0e886c9971488d522f4fedf876878b967e253621e",
+  "rngs": "661826b717e17e78606900fec7e45c544f9df4846916bad032bd2932729b0aec"
+ },
+ "A|completa|fisico|P1~lobos|atencioso|comedouro|505": {
+  "acoes": "7eae851b772cadfb9c9d0f407ad12de4adc17d5e1ebff57e15010b9de4b0ca6b",
+  "estado": "13c88a89eae0534c3c51f4ef1e9612a4bb0674ba77e239cb7e3232c124d74ab9",
+  "estado_motor": "3a31189c153f522c8b660a23e55861324f5f2de9af017ebc28deb415de149f9e",
+  "fisico": "66e19bc3458de7159796f48702b423643e488b9bc2c5d21d4c9a93cb8a9e6501",
+  "interacoes": 29,
+  "log": "31b27385ce91928e7c5cf36e68a3eaaf66d87f025739e136c01f154c7a695514",
+  "motor": "MotorMundo",
+  "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+  "politica": "8899080b690fd4622a48814e527c42586199d2dbb7b46ab74ef3e020fed7c2a5",
+  "rngs": "aaf0e80a746a5a27053d63314010a60962367db39a901be150f936e4fe18873f"
+ },
+ "modular|LAB|aleatorio|comedouro|101": {
+  "corpo": "8a5d3936320db3da04c0790e960d7351a388abd5291b7c83bab2c01df38d18d2",
+  "decisoes": 288,
+  "estado": "8d35b24fb32e22e3e6a3c6b906e5c73121cffdcd46d49ece4de2f374ba3b9b7e",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "379435c505fc826efbdeb729e2adbd57d427f614157393e1165d3af78dfa1606"
+ },
+ "modular|LAB|aleatorio|comedouro|202": {
+  "corpo": "0353b1e960ccdd95a9e2fed571b7174519d9cd6f3e32103c4dc6779cbb1f5885",
+  "decisoes": 288,
+  "estado": "2eb134a24297db7698f9b688162b06360e8bed5c34c21bc5740cf276efe49645",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "c2940d5ca613cc4961f2f7e4713b113e64eeababadf85fed082013f90dbde3f3"
+ },
+ "modular|LAB|aleatorio|comedouro|303": {
+  "corpo": "d1da0a40d6dcf37eabc135a4c47eaa7f78ba856c3787987b1c5274d6cb75e832",
+  "decisoes": 288,
+  "estado": "c1e04da5e3a13308fd230cd326542460981a06f31b9315b3ab2589def37644af",
+  "log": "32e24c61d6ec095ad47b5958a628f7f722213cc8629e06a8fc433880eaa57ec9",
+  "medidas": "d06d0d7bb8053305803174590db4f5607b14efa9b33132730782ee4841cedae0"
+ },
+ "modular|LAB|aleatorio|comedouro|404": {
+  "corpo": "e6087d526d8126eff4ba54b7a2960f2be85bc90e1eedada144d5bbdbed2230b4",
+  "decisoes": 288,
+  "estado": "6395cb81e1b8d4834ca80837057b78d794983b40cd8e0241a11b750aed90874e",
+  "log": "070ed5d502df2e6df14f91ba0fa3d26b10e78d68620a8925782b3223f55268db",
+  "medidas": "ae59aa9dbe768ebb32226cdbe025473390d373debd1b0284947edff2a2371951"
+ },
+ "modular|LAB|aleatorio|comedouro|505": {
+  "corpo": "e5ecf5ae9dbde7bcd001c779391a4205a2ad1c6059d9e7dc4c89e87c291eb9ae",
+  "decisoes": 288,
+  "estado": "c6abcbb5bc3fd75271aac7c38ccdc175d10340737ace536c41e6309950f42444",
+  "log": "451170f64b63836830e789fc7f76c46cc48ad32ddf6a2292bb36a2ddeaa58d20",
+  "medidas": "90d632a3d04d240560dbe384245d4a33bf506f3008ce4d6cfea9730d511ecfc9"
+ },
+ "modular|LAB|atencioso|comedouro|101": {
+  "corpo": "8db1a087eded2a6ee04b3d1a8816417eb1382b2b3198e9b8419688b290900eff",
+  "decisoes": 288,
+  "estado": "e07298bf6ad704aa7fe7cec48487dec80ed09d5370143c9418eab9e05a046141",
+  "log": "c1ee04f557f186a6d7480c45bd3d58508e4d2c1dc53dd6b77f3b9632054e8a75",
+  "medidas": "a09884999fd399345dbdac0e19e5ec976bfc5463fd9dac0c33c5caf2604ff8f7"
+ },
+ "modular|LAB|atencioso|comedouro|202": {
+  "corpo": "7c469b884f946726beb0320f02abddd628a63522413f9e46656bf37dcf230eda",
+  "decisoes": 288,
+  "estado": "69430f2d43fb8c87958d5c02c5643f33c761c40eb32a871c8c5fd59db52f353c",
+  "log": "f11a294cb4f594bef36c28ca606ed494b90f53b362b7f3a1eec6e9286a79701a",
+  "medidas": "1607ffab36548aa52b80c9db1104f44b0facd34d81f891255a42e62c320c3dce"
+ },
+ "modular|LAB|atencioso|comedouro|303": {
+  "corpo": "a20dacaf5307f3b9891c8ce8850af937e4e13c7bf5f601daf94e052d17d0b321",
+  "decisoes": 288,
+  "estado": "e14773e1c2e5c364002be55a170a78b53124c025bd8c7977fadb318a054e13ea",
+  "log": "d18fe940e5e42a35db3db8d39d232071bcfd8865e950f6530c9f689d20d109b7",
+  "medidas": "2122a12f00ee61d1b2e4c65cd6525152dc3900184849ef01d77cdda6aa4847d3"
+ },
+ "modular|LAB|atencioso|comedouro|404": {
+  "corpo": "d960caaa9a7495676e6d728f05fc06db1223f53d8fedfebcc043335fd62d1d6a",
+  "decisoes": 288,
+  "estado": "81a6fc1052c84706014382056943835460af2729a7743b470693076c785923b6",
+  "log": "4b75ca12e606a156ee1c33520eb789dddff9ffade8feb2e3ab2ed8665897347c",
+  "medidas": "e1327ff228ddd8d52e521a68e6af1862300516169f43cf55bbd8e2e080ed9a1d"
+ },
+ "modular|LAB|atencioso|comedouro|505": {
+  "corpo": "a507348f63f701e34c93083dddf264483fe6b3a1aceaacdec11f8879d00705db",
+  "decisoes": 288,
+  "estado": "ab98aa01165aa57819546e106910b58606e9b964b171bf55ca68a8b8078f4d4a",
+  "log": "b5e9ccd7fa1d8d5a76f1e0b07b494d7203345d4c4bdea3ee18372f4f568de3d3",
+  "medidas": "d28ab34de17b00af2479ea85b86f22278627ce8053736ff8ef8688a6995eb18e"
+ },
+ "modular|LAB|incoerente|comedouro|101": {
+  "corpo": "8db1a087eded2a6ee04b3d1a8816417eb1382b2b3198e9b8419688b290900eff",
+  "decisoes": 288,
+  "estado": "e07298bf6ad704aa7fe7cec48487dec80ed09d5370143c9418eab9e05a046141",
+  "log": "c1ee04f557f186a6d7480c45bd3d58508e4d2c1dc53dd6b77f3b9632054e8a75",
+  "medidas": "a09884999fd399345dbdac0e19e5ec976bfc5463fd9dac0c33c5caf2604ff8f7"
+ },
+ "modular|LAB|incoerente|comedouro|202": {
+  "corpo": "7c469b884f946726beb0320f02abddd628a63522413f9e46656bf37dcf230eda",
+  "decisoes": 288,
+  "estado": "69430f2d43fb8c87958d5c02c5643f33c761c40eb32a871c8c5fd59db52f353c",
+  "log": "f11a294cb4f594bef36c28ca606ed494b90f53b362b7f3a1eec6e9286a79701a",
+  "medidas": "1607ffab36548aa52b80c9db1104f44b0facd34d81f891255a42e62c320c3dce"
+ },
+ "modular|LAB|incoerente|comedouro|303": {
+  "corpo": "a20dacaf5307f3b9891c8ce8850af937e4e13c7bf5f601daf94e052d17d0b321",
+  "decisoes": 288,
+  "estado": "e14773e1c2e5c364002be55a170a78b53124c025bd8c7977fadb318a054e13ea",
+  "log": "d18fe940e5e42a35db3db8d39d232071bcfd8865e950f6530c9f689d20d109b7",
+  "medidas": "2122a12f00ee61d1b2e4c65cd6525152dc3900184849ef01d77cdda6aa4847d3"
+ },
+ "modular|LAB|incoerente|comedouro|404": {
+  "corpo": "d960caaa9a7495676e6d728f05fc06db1223f53d8fedfebcc043335fd62d1d6a",
+  "decisoes": 288,
+  "estado": "81a6fc1052c84706014382056943835460af2729a7743b470693076c785923b6",
+  "log": "4b75ca12e606a156ee1c33520eb789dddff9ffade8feb2e3ab2ed8665897347c",
+  "medidas": "e1327ff228ddd8d52e521a68e6af1862300516169f43cf55bbd8e2e080ed9a1d"
+ },
+ "modular|LAB|incoerente|comedouro|505": {
+  "corpo": "a507348f63f701e34c93083dddf264483fe6b3a1aceaacdec11f8879d00705db",
+  "decisoes": 288,
+  "estado": "ab98aa01165aa57819546e106910b58606e9b964b171bf55ca68a8b8078f4d4a",
+  "log": "b5e9ccd7fa1d8d5a76f1e0b07b494d7203345d4c4bdea3ee18372f4f568de3d3",
+  "medidas": "d28ab34de17b00af2479ea85b86f22278627ce8053736ff8ef8688a6995eb18e"
+ },
+ "modular|LAB|relapso|comedouro|101": {
+  "corpo": "ffe8056098e8241e23f0542bfe507a49471a6db201d1a2707b5d8b08dccf79e1",
+  "decisoes": 288,
+  "estado": "d018ad88dcfce03743af526498cd0cf5b08223e2995a3ae17851327ec463bd00",
+  "log": "ee5453bf787e145345361e1bd6b765107df945a411ab9dbdb4b0408d9a87790a",
+  "medidas": "e48ca0365893a2d59517a11d5f9e33245d69dd3a94b693eb79fdef99b0771f6a"
+ },
+ "modular|LAB|relapso|comedouro|202": {
+  "corpo": "54699c03059e6511bc02fca66520ae8075425e8cf346c2d99de679c7fdbf3e50",
+  "decisoes": 288,
+  "estado": "3e7a5c9018beefcd6ecc8550e024b49ebee1e1e2d6090328d6c066e97434b081",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "c498ca1da53453b4928a37661e5a473924abcbf879da931060f6df65d08d2f7a"
+ },
+ "modular|LAB|relapso|comedouro|303": {
+  "corpo": "000830c03a71002d53fdd59cb62eac6d2ecc8102cf638e421ecdee757c4ea311",
+  "decisoes": 288,
+  "estado": "fefc91562a613f01a11eafe5f913c7b437e9b8ae0dc3e1df3b72ea07eb3fa26d",
+  "log": "2140b02e94fd7d0016abf65607135bbf7acc9dc1a76fa194310e19d39a7f68ce",
+  "medidas": "75baf9f6b62baee0bb92b957cf42012f414d46310d6344e74768e7881dc1a1af"
+ },
+ "modular|LAB|relapso|comedouro|404": {
+  "corpo": "a7fe7c69c7d8b8b83254c39dee2f390734a66cedcbaa796f4d5ef5ca7112170d",
+  "decisoes": 288,
+  "estado": "d2c7132535e656b663a8c3b2fe7b4245d7968ae1f28964faaf71bee57d7f3b77",
+  "log": "dd821bd3383d4eca8d1586c7613397bbafe1434fd85dc4981dad193bf867500c",
+  "medidas": "a5f3c8d27745c85c7453ecdced0db8c343bd0667f57d9be08a2acc1cdce6d9b3"
+ },
+ "modular|LAB|relapso|comedouro|505": {
+  "corpo": "c8f7a63b092bf6f0b4f827ca8362c773f0d7930c1c0968d772a648de25e88339",
+  "decisoes": 288,
+  "estado": "16169b92dd516aa170065b33494f2d37bad0a78f20badd00efeb931ee191fcd0",
+  "log": "55774bb20166dc3fe33cfebf0fabc6b7289d5fbe6554f45af2d6ae189da5c6f1",
+  "medidas": "0ed352a2ef421f01fdd632f8cd9330ddaec4f32fe9acaa8dc018d77add2c8206"
+ }
+}

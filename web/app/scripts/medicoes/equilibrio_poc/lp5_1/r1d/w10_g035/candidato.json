@@ -1,0 +1,28 @@
+{
+ "nome": "w10_g035",
+ "pesoPonto": 10,
+ "gama": {
+  "vigor": 0.035,
+  "recuperacao": 0.035,
+  "guarda": 0.105,
+  "forca": 0.035,
+  "mira": 0.245,
+  "folego": 0.245
+ },
+ "mapa": {
+  "hp": 1300,
+  "vel": 60
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.9,
+  "adulto": 1.35,
+  "mega": 2.025
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.5,
+  "adulto": 2.25,
+  "mega": 3.375
+ }
+}

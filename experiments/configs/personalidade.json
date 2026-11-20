@@ -1,0 +1,5 @@
+{
+  "descricao": "TAREFA_PERSONALIDADE_OBEDIENCIA, run completa (temperamento sorteado + obediencia ligada); mesmos 10 ovos nas tres runs.",
+  "protocolo": "arena-v1-personalidade",
+  "saida": "artifacts_v1_personalidade/completa"
+}

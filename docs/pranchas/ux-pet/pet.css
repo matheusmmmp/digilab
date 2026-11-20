@@ -1,0 +1,193 @@
+/* Prancha da P1 da UX_TELA_PET (docs/PROPOSTAS_V3_UX_TELA_PET.md, secao "P1"): a proposta B refinada, a linha do agora e o chip de
+   causa. HTML estatico, so desenho; nenhum codigo do jogo. Os tokens abaixo sao copias dos de web/app/src/estilo/tokens.css (o Militar,
+   data-pele="xcom", e o :root de la, linhas 105-133; o Holografico, data-pele="vidro", linhas 147-171; os --dl-* das linhas 6-34); nao
+   ha cor nova. Os literais que nao sao token vem do CSS do app e estao citados onde aparecem. O sprite fica fora do git
+   (D:\Trab\digilab\Assets, UI_GUIDELINES 5.1): gerar.py aponta para la, so para as capturas. */
+:root{
+  /* --dl-* (tokens.css:7-12, :16, :18, :25, :28) */
+  --dl-bg:#E8F0FB; --dl-hex:#D4E3F7; --dl-learned:#6FE3FF; --dl-learned-bg:#0F3A86; --dl-learned-ink:#E6FBFF; --dl-need-ink:#0B1636;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%23D4E3F7' stroke-width='1.5'/%3E%3C/svg%3E");
+  /* Militar (tokens.css:105-133) */
+  --hx-chao:#101214; --hx-miolo:#131518; --hx-miolo-2:#1C1F22; --hx-borda:#3E4442; --hx-borda-topo:#6E7872;
+  --hx-texto:#E4E7E2; --hx-texto-2:#C9D0C8; --hx-sec:#9DA89F; --hx-rotulo:#B9C3A4;
+  --hx-escolhido:#C5CFB0; --hx-escolhido-ink:#12150D; --hx-escolhido-borda:#C5CFB0;
+  --hx-btn-bg:rgba(14,30,22,.92); --hx-btn-ink:#A6E8BC; --hx-btn-borda:#6CC58A;
+  --hx-medidor:#AEB9A6; --hx-medidor-trilho:rgba(150,160,150,.18); --hx-medidor-alt:12px;
+  --hx-mascara:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 9px);
+  --hx-alerta:#FFB020; --hx-perigo:#E07C7C; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF; --hx-foco:#F4F1E4;
+  --hx-f:"Saira Condensed","Rajdhani",system-ui,sans-serif; --hx-f-num:var(--hx-f); --hx-num:var(--hx-texto);
+  --hx-vidro:none; --hx-reflexo:none; --hx-luz:transparent; --hx-tecla:rgba(255,255,255,.035);
+  --hud-fundo-1:rgba(30,33,36,.97); --hud-fundo-2:rgba(19,21,24,.97); --hud-desfoque:none;
+  --hud-ch:0px; --hud-ch-p:0px; --hud-brilho:none;
+  --hud-risca:repeating-linear-gradient(-60deg,rgba(185,195,164,.45) 0 2px,transparent 2px 6px);
+  /* a grade da malha de aprendido: a do .dl-malha (web/app/src/estilo/pet.css:3) */
+  --malha:linear-gradient(rgba(111,227,255,.38) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.38) 1px,transparent 1px);
+}
+/* Holografico (tokens.css:147-171) */
+:root[data-pele="vidro"]{
+  --hx-chao:rgba(6,18,38,.82); --hx-miolo:rgba(5,14,30,.86); --hx-miolo-2:rgba(10,26,52,.78);
+  --hx-borda:rgba(110,200,255,.72); --hx-borda-topo:rgba(110,200,255,.72);
+  --hx-texto:#EAF5FF; --hx-texto-2:#D2E6F7; --hx-sec:#C2D7EA; --hx-rotulo:#8ED8FF;
+  --hx-escolhido:linear-gradient(180deg,rgba(58,168,255,.40),rgba(58,168,255,.16)); --hx-escolhido-ink:#FFFFFF; --hx-escolhido-borda:#5FD4FF;
+  --hx-btn-bg:rgba(58,168,255,.26); --hx-btn-ink:#F2FAFF; --hx-btn-borda:#5FD4FF;
+  --hx-medidor:#5FD4FF; --hx-medidor-trilho:rgba(95,190,255,.16); --hx-medidor-alt:5px;
+  --hx-alerta:#FFBE45; --hx-perigo:#F7B4B4; --hx-foco:#FFFFFF;
+  --hx-f:"Barlow",system-ui,sans-serif; --hx-f-num:"Rajdhani",system-ui,sans-serif; --hx-num:#7FE3FF;
+  --hx-vidro:blur(12px) saturate(140%);
+  --hx-reflexo:linear-gradient(155deg,rgba(170,225,255,.10),rgba(170,225,255,.02) 34%,transparent 35%);
+  --hx-luz:#5FD4FF; --hx-tecla:rgba(95,190,255,.08);
+  --hud-fundo-1:var(--hx-miolo-2); --hud-fundo-2:var(--hx-miolo); --hud-desfoque:var(--hx-vidro);
+  --hud-ch:12px; --hud-ch-p:8px; --hud-brilho:inset 0 0 18px rgba(58,168,255,.18),inset 0 1px 0 rgba(170,225,255,.20);
+  --hud-risca:linear-gradient(90deg,rgba(95,212,255,.75),rgba(95,212,255,0));
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{color:var(--hx-texto);font:500 15px/1.25 var(--hx-f);overflow:hidden}
+button{font:inherit;color:inherit}
+
+/* ---- a cena: fundo neutro (o hexagonal do guia, tokens --dl-bg e --dl-hex-img) no lugar da ilha 3D, e o pet em escala inteira */
+.cena{position:fixed;inset:0;background:var(--dl-bg) var(--dl-hex-img) 0 0/28px 48px repeat}
+.pet{position:absolute;left:50%;bottom:var(--pet-y);width:calc(98.9px*var(--k));height:calc(76.9px*var(--k));transform:translateX(-50%);z-index:2;
+  image-rendering:pixelated;background-image:var(--assets-spr);background-repeat:no-repeat;
+  background-size:calc(791px*var(--k)) calc(538px*var(--k));background-position:0 calc(-307.6px*var(--k))}
+/* a sombra do pet: o mesmo literal da prancha B3 (docs/pranchas/b3/luta.css:41) */
+.sombra{position:absolute;left:50%;bottom:calc(var(--pet-y) - 4px);width:calc(70px*var(--k));height:calc(14px*var(--k));transform:translateX(-50%);border-radius:50%;background:rgba(0,0,0,.4);z-index:1}
+
+/* ---- a caixa da HUD (pet_hud.css:10-20; pele-xcom.css:15-21; pele-vidro.css:166-174) */
+.caixa{--ch:var(--hud-ch);position:relative;border:1px solid var(--hx-borda);color:var(--hx-texto);
+  background:
+    linear-gradient(45deg,transparent calc(50% - 1px),var(--hx-borda) calc(50% - 1px) 50%,transparent 50%) right top/var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(45deg,transparent 50%,var(--hx-borda) 50% calc(50% + 1px),transparent calc(50% + 1px)) left bottom/var(--ch) var(--ch) no-repeat border-box,
+    var(--hx-reflexo) border-box,
+    linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2)) border-box;
+  box-shadow:var(--hud-brilho);-webkit-backdrop-filter:var(--hud-desfoque);backdrop-filter:var(--hud-desfoque);
+  clip-path:polygon(0 0,calc(100% - var(--ch)) 0,100% var(--ch),100% 100%,var(--ch) 100%,0 calc(100% - var(--ch)))}
+:root[data-pele="xcom"] .caixa{border-top:2px solid var(--hx-borda-topo);clip-path:none;
+  background:
+    linear-gradient(var(--hx-rotulo),var(--hx-rotulo)) left 3px top 3px/9px 1px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo),var(--hx-rotulo)) left 3px top 3px/1px 9px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo),var(--hx-rotulo)) right 3px bottom 3px/9px 1px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo),var(--hx-rotulo)) right 3px bottom 3px/1px 9px no-repeat padding-box,
+    linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2)) border-box}
+.caixa.p{--ch:var(--hud-ch-p)}
+:focus-visible{outline:2px solid var(--hx-foco);outline-offset:-4px}
+
+/* ---- o topo (casca.css:46-77): a plaquinha, a linha do agora (NOVA), a marca e o relogio */
+.topo{position:fixed;z-index:20;top:var(--topo-y);left:12px;right:12px;display:flex;align-items:center;gap:10px}
+.topo-pet{display:flex;align-items:center;gap:10px;min-width:0;padding:4px 16px 4px 4px;flex:none}
+.retrato{width:44px;height:44px;flex:none;padding:3px;background:var(--hx-tecla);border:1px solid var(--hx-borda);overflow:hidden;position:relative;cursor:pointer}
+.retrato i{position:absolute;left:50%;top:50%;width:98.9px;height:76.9px;background-image:var(--assets-spr);background-repeat:no-repeat;background-size:791px 538px;
+  background-position:0 -307.6px;transform:translate(-50%,-52%) scale(.5);image-rendering:pixelated}
+.topo-pet-txt{display:flex;flex-direction:column;line-height:1.2}
+.topo-pet-txt b{font:700 17px/1.15 var(--hx-f);letter-spacing:.02em}
+.topo-pet-txt small{font:500 13px/1.2 var(--hx-f);color:var(--hx-texto-2)}
+.logo{margin:0 auto;padding:6px 14px;font:700 22px/1 var(--hx-f);letter-spacing:.14em;color:#FFFFFF;
+  background:linear-gradient(90deg,transparent,rgba(6,11,18,.72) 18%,rgba(6,11,18,.72) 82%,transparent)} /* casca.css:59-60 */
+.relogio{display:flex;align-items:center;gap:10px;padding:4px 14px;min-height:48px;flex:none}
+.relogio .hora{display:flex;flex-direction:column;line-height:1.1}
+.relogio .hora small{font:500 12px/1.1 var(--hx-f);color:var(--hx-sec)}
+.relogio .hora b{font:700 18px/1.1 var(--hx-f-num);font-variant-numeric:tabular-nums}
+.relogio .salvo{padding-left:10px;border-left:1px solid var(--hx-borda);color:var(--hx-sec);font:500 12px/1 var(--hx-f)}
+.topo-bt{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--hx-borda-topo);background:var(--hx-miolo);flex:none;cursor:pointer}
+/* todo icone da prancha: 20 px, traco na cor do texto (currentColor); o rabicho do balao tem a regra propria */
+svg:not(.rabicho){width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.painel-cab svg{color:var(--hx-rotulo)}  /* o .hud-painel__ic (pet_hud.css:35) */
+
+/* ---- A LINHA DO AGORA (nova): um botao, uma linha; abre o DigiBrain. Altura 48 a 1920 (a do relogio), 44 a 390 */
+.agora{--ch:var(--hud-ch-p);display:flex;align-items:center;gap:8px;min-height:var(--agora-alt);padding:0 10px 0 12px;min-width:0;cursor:pointer;text-align:left;white-space:nowrap}
+.agora .rot{font:700 12px/1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-rotulo);flex:none}
+.agora .acao{font:600 16px/1.2 var(--hx-f);color:var(--hx-texto);flex:none}
+.agora .ponto{color:var(--hx-sec);flex:none}
+.agora .neutro{font:500 14px/1.2 var(--hx-f);color:var(--hx-texto-2);overflow:hidden;text-overflow:ellipsis;min-width:0}
+.agora .seta{margin-left:auto;padding-left:4px;color:var(--hx-sec);font:600 18px/1 var(--hx-f);flex:none}
+
+/* ---- os chips de causa (guia 3 e 7.7): a forma carrega o sentido sem cor (tracejado + malha, tracejado + "?", solido) */
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:26px;padding:2px 9px;font:600 13px/1.2 var(--hx-f);white-space:nowrap;flex:none}
+.chip b{font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+/* aprendido: malha ciano tracejada (--dl-learned sobre --dl-learned-bg) */
+.chip.aprendido{color:var(--dl-learned-ink);border:1px dashed var(--hx-aprendido);background-color:var(--dl-learned-bg);background-image:var(--malha);background-size:10px 10px}
+/* sem registro: cinza tracejado + "?" */
+.chip.sem{color:var(--hx-texto-2);border:1px dashed var(--hx-sec);background:transparent}
+.chip.sem .q{font:900 15px/1 var(--hx-f);color:var(--hx-texto)}
+/* vem do corpo: necessidade, solido (--hx-necessidade, tinta --dl-need-ink) */
+.chip.corpo{color:var(--dl-need-ink);border:1px solid var(--hx-necessidade);background:var(--hx-necessidade)}
+/* outro fator: so o marcador, neutro */
+.chip.neutro{color:var(--hx-texto-2);border:1px solid var(--hx-borda);background:transparent}
+
+/* ---- o balao (pet_hud.css:118-136), agora com o chip embaixo da fala */
+.balao{--ch:var(--hud-ch-p);position:fixed;z-index:6;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:44px;padding:8px 14px 8px;
+  border-color:var(--hx-rotulo);font:600 15px/1.25 var(--hx-f);cursor:pointer;text-align:left;max-width:var(--balao-max)}
+.balao::before{content:"";position:absolute;left:10px;top:0;width:36px;height:2px;background:var(--hx-rotulo)}
+.balao .fala{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* a marca do fator no Rookie (TextoFala, TelaPet.tsx:74: span.fala-marca) */
+.balao .marca{padding:0 6px;border:1px solid var(--hx-borda);font-weight:700}
+.balao small{color:var(--hx-sec);font:500 12px/1.2 var(--hx-f);letter-spacing:.02em}
+/* sobre o pet: centrado nele, com o rabicho apontando para a cabeca (a altura do quadro do sprite e 76,9 px x --k) */
+.balao{left:50%;transform:translateX(-50%);width:max-content;bottom:calc(var(--pet-y) + 76.9px*var(--k) + 19px)}
+.rabicho{position:fixed;z-index:6;left:50%;transform:translateX(-50%);bottom:calc(var(--pet-y) + 76.9px*var(--k) + 6px);width:24px;height:14px;overflow:visible}
+.rabicho .f{fill:var(--hud-fundo-2);stroke:none}
+.rabicho .l{fill:none;stroke:var(--hx-rotulo);stroke-width:1}
+
+/* ---- a pilha da direita (pet_hud.css:26-63), sem mudanca */
+.pilha{position:fixed;z-index:6;right:12px;top:72px;width:300px;display:flex;flex-direction:column;gap:8px}
+.painel{display:flex;flex-direction:column}
+.painel::before{content:"";position:absolute;left:12px;top:0;width:56px;height:2px;background:var(--hx-rotulo)}
+:root[data-pele="vidro"] .painel::before{width:72px;background:var(--hx-luz);box-shadow:0 0 8px var(--hx-luz)}
+:root[data-pele="xcom"] .painel::before{display:none}
+.painel-cab{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 12px;border:0;background:none;width:100%;text-align:left;cursor:pointer}
+.painel-cab .tit{font:700 15px/1.1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+:root[data-pele="vidro"] .painel-cab .tit{font-size:13px;letter-spacing:2px}
+.painel-cab .resumo{display:block;color:var(--hx-sec);font:500 13px/1.2 var(--hx-f);letter-spacing:0;text-transform:none}
+.risca{flex:1 1 auto;min-width:24px;max-width:96px;height:7px;margin-left:auto;background:var(--hud-risca)}
+:root[data-pele="vidro"] .risca{height:1px}
+.painel-corpo{padding:10px 12px 12px;border-top:1px solid var(--hx-borda);display:flex;flex-direction:column;gap:6px}
+.med{display:flex;align-items:center;gap:8px;min-height:20px}
+.med .rot{min-width:64px;font:600 12px/1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;color:var(--hx-texto-2)}
+.med .tri{flex:1;height:var(--hx-medidor-alt);border:1px solid var(--hx-borda);background:var(--hx-medidor-trilho)}
+.med .tri i{display:block;height:100%;width:var(--v);background:var(--c,var(--hx-medidor));-webkit-mask-image:var(--hx-mascara);mask-image:var(--hx-mascara)}
+.med.alerta{--c:var(--hx-alerta)} .med.ok{--c:var(--hx-ok)}
+.med em{min-width:3em;text-align:right;font:700 13px/1 var(--hx-f-num);font-style:normal;color:var(--hx-num)}
+.detalhes{align-self:flex-start;min-height:44px;margin:-4px 0 -8px;padding:0 4px;border:0;background:none;color:var(--hx-rotulo);font:600 13px/1 var(--hx-f);letter-spacing:.06em;cursor:pointer}
+
+/* ---- o trilho (casca.css:93-103), a etiqueta do DigiBrain (pet_hud.css:94-98), o dock e os botoes da borda: sem mudanca */
+.trilho{position:fixed;z-index:30;left:12px;top:86px;width:76px;display:flex;flex-direction:column;gap:2px;padding:5px}
+.nav-bt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;border:0;background:none;color:var(--hx-texto-2);
+  font:600 11px/1.1 var(--hx-f);letter-spacing:.03em;text-transform:uppercase;cursor:pointer}
+.nav-bt[aria-current="page"]{background:var(--hx-escolhido);color:var(--hx-escolhido-ink)}
+.etiqueta-db{position:fixed;z-index:6;right:12px;bottom:16px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;font:700 14px/1 var(--hx-f);letter-spacing:.06em;cursor:pointer}
+.dock{position:fixed;z-index:11;left:50%;transform:translateX(-50%);bottom:var(--dock-b);display:flex;gap:6px;padding:6px}
+.dock button{min-width:var(--dock-min);min-height:48px;padding:0 12px;border:1px solid var(--hx-borda);background:var(--hx-tecla);font:600 15px/1 var(--hx-f);cursor:pointer}
+.lado{position:fixed;z-index:6;right:10px;top:70px;display:flex;flex-direction:column;gap:6px}
+.lado button{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--hx-borda);background:var(--hx-miolo-2);cursor:pointer}
+.barra{position:fixed;z-index:30;left:0;right:0;bottom:0;height:64px;display:flex;background:var(--hx-chao);border-top:1px solid var(--hx-borda)}
+.barra .nav-bt{flex:1 1 0;min-height:64px}
+.alerta-pos{position:fixed;z-index:6;display:flex;align-items:center;min-height:48px;padding:0 12px;color:var(--hx-sec);font:500 13px/1.2 var(--hx-f);border-style:dashed}
+
+/* ---- o quadro da prancha (nao e tela): os estados da linha do agora e do chip, lado a lado */
+.quadro{position:fixed;z-index:7;display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px}
+.quadro h2{font:700 13px/1.2 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-rotulo);margin-bottom:2px}
+.quadro .caso{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:10px}
+.quadro .caso > small{font:500 12px/1.25 var(--hx-f);color:var(--hx-sec)}
+.quadro .agora{min-height:40px}
+.quadro .sep{height:1px;background:var(--hx-borda);margin:4px 0}
+
+/* nota de prancha (so nas pranchas, nao e tela; some com ?sem); o mesmo literal da B3 (docs/pranchas/b3/luta.css:91) */
+.nota{position:fixed;z-index:40;font:600 11px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:2px 6px;border-radius:3px;max-width:300px}
+body.sem-notas .nota{display:none}
+
+/* ---- celular, 390 px */
+body.m{--topo-y:10px;--agora-alt:44px;--k:2;--pet-y:200px;--dock-b:76px;--dock-min:0;--balao-max:250px}
+body.m .topo{left:10px;right:10px;gap:6px}
+body.m .topo-pet{padding:0 12px 0 0}
+body.m .topo-pet-txt small{display:none}
+body.m .relogio{margin-left:auto;padding:3px 12px;min-height:44px}
+body.m .relogio .hora small,body.m .relogio .salvo{display:none}
+body.m .agora{position:fixed;z-index:20;top:70px;left:10px;right:64px}
+body.m .alerta-pos{top:120px;left:10px;right:64px}
+body.m .dock{left:10px;right:10px;transform:none;justify-content:space-between}
+body.m .dock button{flex:1 1 0;padding:0 6px;font-size:14px}
+body.m .dock button.mais{flex:0 0 48px}
+/* ---- desktop, 1920 x 950 */
+body.d{--topo-y:12px;--agora-alt:48px;--k:3;--pet-y:150px;--dock-b:16px;--dock-min:96px;--balao-max:330px}
+body.d .agora{flex:0 1 auto}
+body.d .quadro{left:104px;top:448px;width:560px}

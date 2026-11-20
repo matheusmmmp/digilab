@@ -1,0 +1,109 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DigiLab · a página de entrada (prancha, rodada 2)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=DotGothic16&family=Saira+Condensed:wght@600;700&display=swap">
+<link rel="stylesheet" href="inicial.css">
+<script>if(new URLSearchParams(location.search).has("sem"))addEventListener("DOMContentLoaded",()=>document.body.classList.add("sem-notas"));</script>
+</head><body><div class="pi">
+
+<header class="barra">
+  <a class="marca" href="#topo" aria-label="DigiLab"><i aria-hidden="true"></i>DIGILAB</a>
+  <nav aria-label="Nesta página"><a href="#lab">O laboratório</a><a href="#dia">Primeiro dia</a><a href="#jogo">O jogo</a></nav>
+  <a class="bt" href="#/config/conta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Entrar</a>
+  <a class="bt acao" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Jogar</a>
+</header>
+
+<main id="topo">
+<section class="heroi" aria-labelledby="h1">
+  <span class="lcd olho">Laboratório de pets com IA</span>
+  <h1 id="h1">Crie um Digimon<em>que decide sozinho</em></h1>
+  <p class="sub">Você cuida, ensina e treina. Ele escolhe o que fazer, e o jogo mostra o porquê.</p>
+  <div class="cta">
+    <a class="bt claro jogar" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a>
+    <ul class="garantias" aria-label="Para começar"><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>No navegador</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem conta</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem instalar</li></ul>
+    <a class="ja" href="#/config/conta">Já tenho conta: entrar</a>
+  </div>
+  <span class="corte" aria-hidden="true"></span>
+  <div class="fila" aria-label="A linha do Agumon, do In-Training ao Mega"><figure><span class="pet vira" role="img" aria-label="Koromon" style="width:59px;height:49px;background-image:url('../../../../Assets/arena_up/sprites/Koromon.png');background-size:956px 668px;background-position:-60px -44px"></span><figcaption class="lcd"><b>Koromon</b><span class="nv"> · In-Training</span></figcaption></figure><figure><span class="pet vira" role="img" aria-label="Agumon" style="width:68px;height:75px;background-image:url('../../../../Assets/arena_up/sprites/Agumon.png');background-size:996px 723px;background-position:-50px -18px"></span><figcaption class="lcd"><b>Agumon</b><span class="nv"> · Rookie</span></figcaption></figure><figure><span class="pet vira" role="img" aria-label="Greymon" style="width:110px;height:126px;background-image:url('../../../../Assets/arena_up/sprites/Greymon.png');background-size:1244px 1104px;background-position:-760px -650px"></span><figcaption class="lcd"><b>Greymon</b><span class="nv"> · Champion</span></figcaption></figure><figure><span class="pet vira" role="img" aria-label="MetalGreymon" style="width:144px;height:122px;background-image:url('../../../../Assets/arena_up/sprites/MetalGreymon.png');background-size:1733px 1096px;background-position:-88px -24px"></span><figcaption class="lcd"><b>MetalGreymon</b><span class="nv"> · Ultimate</span></figcaption></figure><figure><span class="pet vira" role="img" aria-label="WarGreymon" style="width:169px;height:136px;background-image:url('../../../../Assets/arena_up/sprites/WarGreymon_Adventure.png');background-size:3032px 2431px;background-position:-183px -194px"></span><figcaption class="lcd"><b>WarGreymon</b><span class="nv"> · Mega</span></figcaption></figure></div>
+  <span class="regua" aria-hidden="true"></span>
+  <span class="nota" style="right:20px;top:90px;max-width:320px">1 · a ideia do 'Explore 14K': a imagem grande (a ilha de verdade, de uma captura do jogo), o título em caixa alta e UM botão. Ele leva direto ao jogo (CN-1: sem conta)</span>
+  <span class="nota" style="right:20px;bottom:150px;max-width:300px">embaixo a imagem acaba num corte reto, em degrau (as formas do Valorant), e os pets ficam na borda, sobre uma régua de laboratório. É a linha do Agumon no jogo (nomes.ts e formas.ts), do In-Training ao Mega; é uma das linhas possíveis, não a única</span>
+</section>
+
+<section class="sec" id="lab" aria-labelledby="t1">
+  <div class="marca-sec"><span class="losango" aria-hidden="true"><span>01</span></span><span class="lcd">Laboratório aberto</span><h2 id="t1">Um cérebro que você pode ver</h2></div>
+  <div class="duas">
+    <p>Cada pet nasce com uma rede própria. Ela muda com o que ele vive: a comida que achou, o elogio, a bronca.</p>
+    <p>Abra o DigiBrain a qualquer hora e veja a escolha de agora e a chance de cada opção. Nada ali é texto inventado.</p>
+  </div>
+  <div class="especime">
+    <svg class="trilhas" viewBox="0 0 1080 560" aria-hidden="true">
+<path d="M470 60V0M540 26V0M610 60V20l40-20M410 110V40L360 0M670 110V70l60-40V0"/>
+<path d="M470 500v60M540 534v26M610 500v40l-40 20M410 450v70l50 40M670 450v50l70 40v20"/>
+<path d="M300 280H170l-40-40H0M780 280h130l40 40h130M335 200l-60-40H190M745 360l60 40h85"/>
+<circle class="no" cx="470" cy="60" r="5"/><circle class="no" cx="610" cy="60" r="5"/><circle class="no" cx="540" cy="26" r="5"/>
+<circle class="no" cx="470" cy="500" r="5"/><circle class="no" cx="610" cy="500" r="5"/><circle class="no" cx="540" cy="534" r="5"/>
+<circle class="cheio" cx="410" cy="110" r="4"/><circle class="cheio" cx="670" cy="110" r="4"/><circle class="cheio" cx="410" cy="450" r="4"/><circle class="cheio" cx="670" cy="450" r="4"/>
+<circle class="cheio" cx="300" cy="280" r="4"/><circle class="cheio" cx="780" cy="280" r="4"/><circle class="no" cx="190" cy="160" r="5"/><circle class="no" cx="890" cy="400" r="5"/>
+<g class="cheio"><rect x="500" y="6" width="14" height="3"/><rect x="500" y="12" width="14" height="3"/><rect x="500" y="18" width="14" height="3"/>
+<rect x="566" y="538" width="14" height="3"/><rect x="566" y="544" width="14" height="3"/><rect x="566" y="550" width="14" height="3"/>
+<path d="M636 34l5 8h-10zM636 22l5 8h-10zM444 524l5 8h-10zM444 536l5 8h-10zM60 232l8 5-8 5zM1010 312l8 5-8 5z"/></g>
+</svg>
+    <div class="anel"><i class="miolo" aria-hidden="true"></i><span class="sombra" aria-hidden="true"></span><span class="pet" role="img" aria-label="Agumon" style="width:135px;height:150px;background-image:url('../../../../Assets/arena_up/sprites/Agumon.png');background-size:1992px 1446px;background-position:-99px -36px"></span></div>
+    <div class="ficha f1"><span class="lcd">Espécime</span><b>Agumon</b><span class="lcd">Rookie · Coragem</span></div>
+    <figure class="ficha f2"><img src="../digibrain-lab/scan_lab_mapa_1280.png" alt="O DigiBrain aberto no jogo: a rede do pet e a escolha de agora"><figcaption class="lcd">O DigiBrain, no jogo</figcaption></figure>
+    <div class="ficha f3"><span class="lcd">Escolha de agora</span><span class="barra-op"><span>explorar</span><i><b style="width:48%"></b></i><span>48 %</span></span><span class="barra-op"><span>comer</span><i><b style="width:31%"></b></i><span>31 %</span></span><span class="barra-op"><span>dormir</span><i><b style="width:21%"></b></i><span>21 %</span></span><span class="etq-apr">aprendido com você</span></div>
+  </div>
+  <span class="nota" style="left:20px;top:30px;max-width:300px">2 · as seções numeradas com o losango e o título no meio (o 'Explore 14K'); no lugar da foto em losango, o pet numa moldura de oito lados, em camadas, com trilhas de circuito</span>
+  <span class="nota" style="right:20px;top:330px;max-width:260px">as três fichas: quem é o pet, a captura real do DigiBrain e a escolha de agora. As porcentagens são EXEMPLO</span>
+</section>
+
+<div class="panorama" role="img" aria-label="O jogo: a ilha, um Gomamon ao lado do saco de pancada e o menu de treino"><span class="lcd">Captura do jogo · a ilha e o treino</span></div>
+
+<section class="sec" id="dia" aria-labelledby="t2">
+  <div class="lado-a-lado">
+    <div>
+      <div class="marca-sec"><span class="losango" aria-hidden="true"><span>02</span></span><span class="lcd">Primeiro dia</span><h2 id="t2">Do ovo ao primeiro cuidado</h2></div>
+      <p>Você escolhe um brasão e recebe um ovo. Ele choca num In-Training, que cresce com o que vive. Como ele vai evoluir depende de como foi criado.</p>
+      <div class="chips" aria-label="Os brasões"><span class="chip">Coragem</span><span class="chip">Amizade</span><span class="chip">Conhecimento</span><span class="chip">Sinceridade</span></div>
+    </div>
+    <div class="agenda">
+      <header><span class="lcd">Em um minuto</span><span class="lcd">3 passos</span></header>
+      <ol>
+        <li><span class="n" aria-hidden="true">1</span><span><b>Escolha um brasão</b><small>Ele define o ovo.</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v6c0 4-3 7-7 8-4-1-7-4-7-8V7z"/></svg></li>
+        <li><span class="n" aria-hidden="true">2</span><span><b>O ovo choca</b><small>Nasce um In-Training.</small></span><span class="pet" role="img" aria-label="Koromon" style="width:22px;height:18px;background-image:url('../../../../Assets/arena_up/sprites/Koromon.png');background-size:359px 251px;background-position:-22px -17px"></span></li>
+        <li><span class="n" aria-hidden="true">3</span><span><b>Cuide e ensine</b><small>Comida, brincadeira, elogio.</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 15.6a5 5 0 1 0-7-7c-1.6 1.6-1.7 3.4-1.4 5l-2.8 2.8a2 2 0 1 0 2.4 2.4l2.8-2.8c1.6.3 3.4.2 5-1.4z"/></svg></li>
+      </ol>
+    </div>
+  </div>
+  <span class="nota" style="right:20px;top:36px;max-width:280px">3 · o texto ao lado de uma ficha com cabeçalho escuro (a agenda do 'Explore 14K'), com os três primeiros minutos do jogo</span>
+</section>
+
+<section class="azul" id="jogo" aria-labelledby="t3">
+  <div class="marca-sec"><span class="losango" aria-hidden="true"><span>03</span></span><span class="lcd">O jogo</span><h2 id="t3">O ovo está esperando</h2></div>
+  <ul class="tres">
+    <li><span class="palco"><span class="pet" role="img" aria-label="Tokomon" style="width:61px;height:48px;background-image:url('../../../../Assets/arena_up/sprites/Tokomon.png');background-size:2164px 1036px;background-position:-30px -534px"></span></span><h3>Cuidar</h3><p>Alimentar, brincar, limpar e dar carinho. Ele sente e responde.</p></li>
+    <li><span class="palco"><span class="pet" role="img" aria-label="Agumon" style="width:68px;height:75px;background-image:url('../../../../Assets/arena_up/sprites/Agumon.png');background-size:996px 723px;background-position:-50px -18px"></span></span><h3>Treinar</h3><p>Seis exercícios no saco de pancada. O treino muda os golpes.</p></li>
+    <li><span class="palco"><span class="pet" role="img" aria-label="Greymon" style="width:61px;height:69px;background-image:url('../../../../Assets/arena_up/sprites/Greymon.png');background-size:684px 607px;background-position:-418px -358px"></span></span><h3>Lutar</h3><p>Ele luta sozinho na arena. Seis medalhas até a Liga.</p></li>
+  </ul>
+  <div class="fecho"><a class="bt claro jogar" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a><ul class="garantias" aria-label="Para começar"><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>No navegador</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem conta</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem instalar</li></ul></div>
+  <span class="nota" style="left:20px;top:80px;max-width:300px">4 · a faixa azul do fim, com a borda em degraus de circuito no lugar do papel rasgado, três colunas e o botão de novo</span>
+</section>
+
+<section class="sec" aria-labelledby="t4" style="padding-bottom:40px">
+  <div class="marca-sec"><span class="lcd">Sem pegadinha</span><h2 id="t4">O que o jogo não faz</h2></div>
+  <ul class="nao">
+    <li><b>Sem gacha</b><span>Nada de caixa de prêmio nem sorteio pago.</span></li>
+    <li><b>Sem vantagem à venda</b><span>Os Bits só se ganham jogando.</span></li>
+    <li><b>Sem culpa</b><span>Nenhuma contagem nem aviso insistente.</span></li>
+    <li><b>Conta opcional</b><span>Entrar é escolha, e você pode apagar tudo.</span></li>
+  </ul>
+</section>
+</main>
+
+<footer class="rodape">
+  <nav aria-label="Rodapé"><a href="#termos">Termos</a><a href="#privacidade">Privacidade</a><a href="#creditos">Créditos</a></nav>
+  <span>Sprites, ícones e fundos: Digimon UP (Bandai). DigiLab é um projeto pessoal.</span>
+</footer>
+
+<div class="fixo"><a class="bt acao" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a></div>
+</div></body></html>

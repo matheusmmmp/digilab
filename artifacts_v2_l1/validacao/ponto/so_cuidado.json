@@ -1,0 +1,302 @@
+{
+  "cuidado": {
+    "divergencia": {
+      "acoplado_x_ensino": {
+        "ic_inferior": 0.01481971431709721,
+        "ic_superior": 0.029732005553341594,
+        "media": 0.021602088375022192,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "4101": 0.01934926968584959,
+          "4202": 0.018961949720062286,
+          "4303": 0.03665382946500293,
+          "4404": 0.022193438556475986,
+          "4505": 0.01085195444772016
+        }
+      },
+      "acoplado_x_relapso": {
+        "ic_inferior": 0.011039677434440351,
+        "ic_superior": 0.06904337083587361,
+        "media": 0.031123892342332454,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "4101": 0.012735049361726319,
+          "4202": 0.012932179563260886,
+          "4303": 0.014020432748351725,
+          "4404": 0.009480968354041237,
+          "4505": 0.1064508316842821
+        }
+      },
+      "g5c_ensino_menos_acoplado": {
+        "ic_inferior": -0.010011073031923709,
+        "ic_superior": 0.024607543101701313,
+        "media": 0.009890594228469074,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "4101": 0.013272115531233168,
+          "4202": 0.012765931096992445,
+          "4303": 0.03233322296009365,
+          "4404": 0.01803320045934465,
+          "4505": -0.026951498905318547
+        }
+      },
+      "jsd_vs_instinto": {
+        "atencioso-cuidado@4101": 0.004750990301429778,
+        "atencioso-cuidado@4202": 0.004185950534439017,
+        "atencioso-cuidado@4303": 0.004343839819151734,
+        "atencioso-cuidado@4404": 0.004674639944749062,
+        "atencioso-cuidado@4505": 0.0737236123273225
+      }
+    },
+    "tarefa_por_dono": {
+      "atencioso": {
+        "acerto_total": {
+          "ic_inferior": 0.4284226190476191,
+          "ic_superior": 0.4867559523809524,
+          "media": 0.45907738095238093,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.46875,
+          0.5229166666666667,
+          0.4520833333333333,
+          0.49375,
+          0.46875,
+          0.41875,
+          0.4791666666666667,
+          0.4520833333333333,
+          0.43125,
+          0.4604166666666666,
+          0.4520833333333333,
+          0.4125,
+          0.4708333333333334,
+          0.44375
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 4,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 4,
+          "nivel": 0.95,
+          "por_vida": [
+            0,
+            0,
+            0,
+            null,
+            0
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5653273809523809,
+          "ic_superior": 0.5938988095238095,
+          "media": 0.5800595238095239,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.3788690476190476,
+          "ic_superior": 0.49375,
+          "media": 0.44613095238095235,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    },
+    "volume": {
+      "atencioso-cuidado@4101": {
+        "interacoes": 90,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4101"
+      },
+      "atencioso-cuidado@4202": {
+        "interacoes": 87,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4202"
+      },
+      "atencioso-cuidado@4303": {
+        "interacoes": 91,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4303"
+      },
+      "atencioso-cuidado@4404": {
+        "interacoes": 85,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4404"
+      },
+      "atencioso-cuidado@4505": {
+        "interacoes": 144,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4505"
+      }
+    }
+  },
+  "cuidado-semcarinho": {
+    "divergencia": {
+      "acoplado_x_ensino": {
+        "ic_inferior": 0.01481971431709721,
+        "ic_superior": 0.029732005553341594,
+        "media": 0.021602088375022192,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "4101": 0.01934926968584959,
+          "4202": 0.018961949720062286,
+          "4303": 0.03665382946500293,
+          "4404": 0.022193438556475986,
+          "4505": 0.01085195444772016
+        }
+      },
+      "acoplado_x_relapso": {
+        "ic_inferior": 0.011039677434440351,
+        "ic_superior": 0.06904337083587361,
+        "media": 0.031123892342332454,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "4101": 0.012735049361726319,
+          "4202": 0.012932179563260886,
+          "4303": 0.014020432748351725,
+          "4404": 0.009480968354041237,
+          "4505": 0.1064508316842821
+        }
+      },
+      "g5c_ensino_menos_acoplado": {
+        "ic_inferior": -0.010011073031923709,
+        "ic_superior": 0.024607543101701313,
+        "media": 0.009890594228469074,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "4101": 0.013272115531233168,
+          "4202": 0.012765931096992445,
+          "4303": 0.03233322296009365,
+          "4404": 0.01803320045934465,
+          "4505": -0.026951498905318547
+        }
+      },
+      "jsd_vs_instinto": {
+        "atencioso-cuidado-semcarinho@4101": 0.004750990301429778,
+        "atencioso-cuidado-semcarinho@4202": 0.004185950534439017,
+        "atencioso-cuidado-semcarinho@4303": 0.004343839819151734,
+        "atencioso-cuidado-semcarinho@4404": 0.004674639944749062,
+        "atencioso-cuidado-semcarinho@4505": 0.0737236123273225
+      }
+    },
+    "tarefa_por_dono": {
+      "atencioso": {
+        "acerto_total": {
+          "ic_inferior": 0.4284226190476191,
+          "ic_superior": 0.4867559523809524,
+          "media": 0.45907738095238093,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.46875,
+          0.5229166666666667,
+          0.4520833333333333,
+          0.49375,
+          0.46875,
+          0.41875,
+          0.4791666666666667,
+          0.4520833333333333,
+          0.43125,
+          0.4604166666666666,
+          0.4520833333333333,
+          0.4125,
+          0.4708333333333334,
+          0.44375
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 4,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 4,
+          "nivel": 0.95,
+          "por_vida": [
+            0,
+            0,
+            0,
+            null,
+            0
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5653273809523809,
+          "ic_superior": 0.5938988095238095,
+          "media": 0.5800595238095239,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.3788690476190476,
+          "ic_superior": 0.49375,
+          "media": 0.44613095238095235,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    },
+    "volume": {
+      "atencioso-cuidado-semcarinho@4101": {
+        "interacoes": 90,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4101"
+      },
+      "atencioso-cuidado-semcarinho@4202": {
+        "interacoes": 87,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4202"
+      },
+      "atencioso-cuidado-semcarinho@4303": {
+        "interacoes": 91,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4303"
+      },
+      "atencioso-cuidado-semcarinho@4404": {
+        "interacoes": 85,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4404"
+      },
+      "atencioso-cuidado-semcarinho@4505": {
+        "interacoes": 144,
+        "interacoes_origem": 224,
+        "origem": "atencioso-lobos@4505"
+      }
+    }
+  }
+}

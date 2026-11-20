@@ -1,0 +1,240 @@
+{
+  "descricao": "rodada 6: tier 1 por linha; estilo, total, estagio e epsilon do NPC",
+  "tier": "tier1",
+  "npcs": {
+    "crianca|crianca:arisco@66|e0.05": {
+      "total": 66,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.05
+    },
+    "crianca|crianca:arisco@72|e0.05": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.05
+    },
+    "crianca|crianca:arisco@78|e0.05": {
+      "total": 78,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.05
+    },
+    "crianca|crianca:sereno@66|e0.05": {
+      "total": 66,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.05
+    },
+    "crianca|crianca:sereno@72|e0.05": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.05
+    },
+    "crianca|crianca:sereno@78|e0.05": {
+      "total": 78,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.05
+    },
+    "adulto|v2:agressivo@42|e0.05": {
+      "total": 42,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "adulto|v2:agressivo@48|e0.05": {
+      "total": 48,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "adulto|v2:agressivo@54|e0.05": {
+      "total": 54,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "adulto|v2c:tartaruga@48|e0.05": {
+      "total": 48,
+      "estilo": "v2c:tartaruga",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "adulto|v2c:tartaruga@54|e0.05": {
+      "total": 54,
+      "estilo": "v2c:tartaruga",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "adulto|v21:espelho@42|e0.05": {
+      "total": 42,
+      "estilo": "v21:espelho",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "adulto|v21:espelho@48|e0.05": {
+      "total": 48,
+      "estilo": "v21:espelho",
+      "estagio": "adulto",
+      "epsilon": 0.05
+    },
+    "crianca|crianca:arisco@66|e0.25": {
+      "total": 66,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.25
+    },
+    "crianca|crianca:arisco@72|e0.25": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.25
+    },
+    "crianca|crianca:arisco@78|e0.25": {
+      "total": 78,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.25
+    },
+    "crianca|crianca:sereno@66|e0.25": {
+      "total": 66,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.25
+    },
+    "crianca|crianca:sereno@72|e0.25": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.25
+    },
+    "crianca|crianca:sereno@78|e0.25": {
+      "total": 78,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.25
+    },
+    "adulto|v2:agressivo@42|e0.25": {
+      "total": 42,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "adulto|v2:agressivo@48|e0.25": {
+      "total": 48,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "adulto|v2:agressivo@54|e0.25": {
+      "total": 54,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "adulto|v2c:tartaruga@48|e0.25": {
+      "total": 48,
+      "estilo": "v2c:tartaruga",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "adulto|v2c:tartaruga@54|e0.25": {
+      "total": 54,
+      "estilo": "v2c:tartaruga",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "adulto|v21:espelho@42|e0.25": {
+      "total": 42,
+      "estilo": "v21:espelho",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "adulto|v21:espelho@48|e0.25": {
+      "total": 48,
+      "estilo": "v21:espelho",
+      "estagio": "adulto",
+      "epsilon": 0.25
+    },
+    "crianca|crianca:arisco@66|e0.5": {
+      "total": 66,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "crianca|crianca:arisco@72|e0.5": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "crianca|crianca:arisco@78|e0.5": {
+      "total": 78,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "crianca|crianca:sereno@66|e0.5": {
+      "total": 66,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "crianca|crianca:sereno@72|e0.5": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "crianca|crianca:sereno@78|e0.5": {
+      "total": 78,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "adulto|v2:agressivo@42|e0.5": {
+      "total": 42,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    },
+    "adulto|v2:agressivo@48|e0.5": {
+      "total": 48,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    },
+    "adulto|v2:agressivo@54|e0.5": {
+      "total": 54,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    },
+    "adulto|v2c:tartaruga@48|e0.5": {
+      "total": 48,
+      "estilo": "v2c:tartaruga",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    },
+    "adulto|v2c:tartaruga@54|e0.5": {
+      "total": 54,
+      "estilo": "v2c:tartaruga",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    },
+    "adulto|v21:espelho@42|e0.5": {
+      "total": 42,
+      "estilo": "v21:espelho",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    },
+    "adulto|v21:espelho@48|e0.5": {
+      "total": 48,
+      "estilo": "v21:espelho",
+      "estagio": "adulto",
+      "epsilon": 0.5
+    }
+  }
+}

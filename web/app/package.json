@@ -1,0 +1,49 @@
+{
+  "name": "digilab-web",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Jogo web do Digilab em TypeScript (TAREFA_FRONT_TS). Sprites do Digimon UP (Bandai) com o credito, autorizados pelo Matheus (docs/UI_GUIDELINES.md, 5.1).",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/conferir_build.ts",
+    "tipos": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.poc.json --noEmit",
+    "teste": "vitest run",
+    "test": "vitest run",
+    "gabaritos": "node test/gerar_gabaritos.mjs",
+    "e2e": "npm run build && playwright test",
+    "e2e:conta": "playwright test -c playwright.conta.config.ts",
+    "capturas": "npm run build && playwright test -c playwright.capturas.config.ts",
+    "poc": "vite --config poc/vite.config.ts",
+    "poc:build": "vite build --config poc/vite.config.ts",
+    "poc:preview": "vite preview --config poc/vite.config.ts",
+    "poc:e2e": "npm run poc:build && playwright test -c playwright.poc.config.ts",
+    "poc:medir": "node poc/medir.mjs",
+    "poc:medir02": "node poc/medir_poc02.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "24.19.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.186.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.1",
+    "vitest": "5.0.2"
+  },
+  "dependencies": {
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "1.48.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwind-merge": "3.7.0",
+    "three": "0.186.1"
+  }
+}

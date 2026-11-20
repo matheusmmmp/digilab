@@ -1,0 +1,36 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LM5a · painel DigiBrain modular 1280 px</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&family=Barlow:wght@400;600;700&family=Rajdhani:wght@700&display=swap">
+<link rel="stylesheet" href="lab.css">
+<style>:root{--assets-fundo:url("../../../../Assets/arena_up/mapas/floresta_fundo.png");--assets-piso:url("../../../../Assets/arena_up/mapas/floresta_piso.jpg");--assets-spr:url("../../../../Assets/arena_up/sprites/Agumon.png");--assets-ovo:url("../../../../Assets/eggs/egg_1.png")}</style>
+<script>const q=new URLSearchParams(location.search);if((q.get("pele")||"vidro")==="vidro")document.documentElement.dataset.pele="vidro";if(q.has("sem"))addEventListener("DOMContentLoaded",()=>document.body.classList.add("sem-notas"));</script>
+</head><body class="d">
+<div class="cena"><div class="fundo"></div><div class="piso"></div></div>
+<div class="pet" style="left:calc(50% - 95px);bottom:60%;opacity:.9;transform:scale(.5);transform-origin:bottom"></div>
+<aside class="caixa db" style="right:0;top:0;bottom:0;width:480px" aria-label="DigiBrain modular">
+  <div class="topo"><h1>DigiBrain</h1><span style="display:flex;gap:8px;align-items:center"><span class="selo">modular · experimental</span><button class="bt" style="min-height:40px;padding:0 12px" aria-label="Fechar">×</button></span></div>
+  <section class="agora"><h2>Agora</h2><b>Explorar o lugar lembrado</b>
+    <small>Sem o lugar lembrado, teria explorado pelo cheiro.</small>
+    <span class="fonte">motivo.acao, motivo.escolha · motivo.sondas.sem_memoria, .memoria_decidiu</span></section>
+  <section><h2>Lembrança da vez</h2>
+    <div class="lembr"><b>Lembrou do lugar (14, 9)</b>
+      <small>de um episódio guardado na memória duradoura · semelhança 72% · peso na escolha +17%</small></div>
+    <span class="fonte">motivo.alvo {tipo "ponto", x, y, do_mem} · motivo.lembranca {recuperado, memoria, sim, sigma, L}</span>
+    <small>Sem lembrança, o bloco diz “Nada lembrado nesta decisão.”</small></section>
+  <section><h2>O peso de cada módulo nesta escolha</h2>
+    <ul class="barras" role="list"><li><span>Lugar lembrado</span><span class="tr"><b class="pos" style="--w:22.2%"></b></span><em>+44%</em><span class="fonte" style="grid-column:1/-1;margin-top:-3px">unidades[escolha].termos.memoria ÷ .soma</span></li><li><span>Inato</span><span class="tr"><b class="pos" style="--w:18.5%"></b></span><em>+37%</em><span class="fonte" style="grid-column:1/-1;margin-top:-3px">termos.inato ÷ soma</span></li><li><span>Lembrança</span><span class="tr"><b class="pos" style="--w:8.3%"></b></span><em>+17%</em><span class="fonte" style="grid-column:1/-1;margin-top:-3px">termos.lembranca ÷ soma</span></li><li><span>Persistência</span><span class="tr"><b class="pos" style="--w:6.5%"></b></span><em>+13%</em><span class="fonte" style="grid-column:1/-1;margin-top:-3px">termos.persistencia ÷ soma</span></li><li><span>Hábito (P2)</span><span class="tr"><b class="neg" style="--w:5.6%"></b></span><em>−11%</em><span class="fonte" style="grid-column:1/-1;margin-top:-3px">termos.habito ÷ soma</span></li></ul>
+    <small>Sem contribuição agora: incentivo (P1), objeto à vista.</small>
+    <small>Cada barra é a parte da soma da unidade escolhida; para a esquerda da linha, o módulo puxou contra.</small></section>
+  <section><h2>Intenção em curso</h2>
+    <div class="kv"><span>Explorar → lugar (14, 9)</span><em>desde a decisão 41</em><span>Compromisso</span><em>62%</em><span>Frustração</span><em>12%</em><span>Passos sem avançar</span><em>2</em></div>
+    <span class="fonte">motivo.estado {I, C, n_sp, F} · estado_interno().modulos.estado.I.inicio</span></section>
+  <section><h2>As opções e a chance de cada uma</h2>
+    <ul class="chances" role="list"><li class="esc"><span>explorar · lugar (14, 9) · escolhida</span><span class="tr"><b style="--w:55%"></b></span><em>55%</em></li><li class=""><span>explorar · cheiro</span><span class="tr"><b style="--w:25%"></b></span><em>25%</em></li><li class=""><span>ocioso</span><span class="tr"><b style="--w:12%"></b></span><em>12%</em></li><li class=""><span>chamar você</span><span class="tr"><b style="--w:8%"></b></span><em>8%</em></li></ul>
+    <span class="fonte">motivo.unidades[i].w ÷ soma dos w (com o reflexo do sono não há sorteio: uma opção só)</span></section>
+  <section><h2>O que mudaria a escolha</h2>
+    <div class="chips"><span class="sim">sem o lugar lembrado: sim</span><span>sem a lembrança: não</span><span>sem o hábito: não</span><span>sem o incentivo: não</span><span>sem a persistência: não</span><span>só o inato: sim</span></div>
+    <span class="fonte">motivo.sondas.{sem_memoria, sem_lembranca, sem_habito, sem_incentivo, sem_persistencia, so_inato} e os campos *_decidiu</span></section>
+  <section><h2>Últimas ações</h2><ol class="ult" role="list" style="list-style:none;padding:0;display:grid;gap:6px"><li><span class="h">14:30</span>explorar</li><li><span class="h">14:12</span>explorar</li><li><span class="h">13:58</span>ocioso</li><li><span class="h">13:40</span>chamar você</li><li><span class="h">13:21</span>dormir</li></ol>
+    <span class="fonte">Motor.historico (quem = pet), como o painel do A v11</span></section>
+</aside><span class="nota" style="right:490px;top:12px">coluna à direita, como o painel do A v11</span>
+</body></html>

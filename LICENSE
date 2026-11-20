@@ -1,0 +1,81 @@
+Digilab
+Copyright (c) 2026 Matheus de Medeiros Pereira. Todos os direitos reservados.
+Copyright (c) 2026 Matheus de Medeiros Pereira. All rights reserved.
+
+================================================================================
+PORTUGUÊS
+================================================================================
+
+1. O que é do autor. O código-fonte, os documentos, os dados, os modelos, as
+   imagens, os sons e os demais materiais próprios deste repositório e do jogo
+   publicado a partir dele (juntos, "a Obra") são de autoria de Matheus de
+   Medeiros Pereira e estão protegidos pela Lei n.º 9.610/1998 (Lei de Direitos
+   Autorais), pela Lei n.º 9.609/1998 (Lei do Software) e pelos tratados
+   internacionais aplicáveis.
+
+2. Nenhuma licença é concedida. Ver o código num repositório público ou jogar
+   o jogo publicado não dá nenhum direito sobre a Obra. Sem a autorização
+   prévia e por escrito do autor, é proibido:
+   a) copiar, reproduzir ou espelhar a Obra, no todo ou em parte;
+   b) modificar a Obra ou criar obras derivadas dela;
+   c) distribuir, publicar, sublicenciar, vender ou disponibilizar a Obra, ou
+      cópias e derivados dela, a terceiros;
+   d) usar a Obra para fins comerciais;
+   e) usar a Obra, no todo ou em parte, para treinar, ajustar (fine-tuning),
+      avaliar ou alimentar modelos de inteligência artificial ou de
+      aprendizado de máquina, inclusive por coleta automática (scraping) ou
+      por mineração de textos e dados.
+
+3. O que não é do autor. Os sprites, os ícones, os fundos, os sons e os nomes
+   do Digimon UP e da franquia Digimon NÃO são do projeto: pertencem aos
+   respectivos donos dos direitos (Bandai Namco e licenciadores). Eles não
+   estão neste repositório (ficam fora do git), são usados com o crédito e a
+   procedência registrados na seção 5.1 das docs/UI_GUIDELINES.md, e esta
+   licença não concede nem restringe nenhum direito sobre eles. O mesmo vale
+   para as bibliotecas e os assets de terceiros, que seguem as próprias
+   licenças.
+
+4. Sem garantia. A Obra é disponibilizada para leitura "no estado em que se
+   encontra", sem garantia de nenhum tipo.
+
+5. Pedidos de autorização: pelo perfil do autor no GitHub (matheusmmmp).
+
+================================================================================
+ENGLISH
+================================================================================
+
+1. What belongs to the author. The source code, documents, data, models,
+   images, sounds and other original materials in this repository and in the
+   game published from it (together, "the Work") are authored by Matheus de
+   Medeiros Pereira and are protected by Brazilian Law No. 9,610/1998
+   (Copyright Law), Law No. 9,609/1998 (Software Law) and the applicable
+   international treaties.
+
+2. No license is granted. Viewing the code in a public repository or playing
+   the published game grants no rights in the Work. Without the author's prior
+   written permission, you may not:
+   a) copy, reproduce or mirror the Work, in whole or in part;
+   b) modify the Work or create derivative works from it;
+   c) distribute, publish, sublicense, sell or make available the Work, or
+      copies or derivatives of it, to third parties;
+   d) use the Work for commercial purposes;
+   e) use the Work, in whole or in part, to train, fine-tune, evaluate or feed
+      artificial intelligence or machine learning models, including through
+      automated collection (scraping) or text and data mining.
+
+3. What does not belong to the author. The sprites, icons, backgrounds, sounds
+   and names from Digimon UP and the Digimon franchise are NOT part of the
+   project: they belong to their respective rights holders (Bandai Namco and
+   licensors). They are not in this repository (they are kept out of git), they
+   are used with the credit and provenance recorded in section 5.1 of
+   docs/UI_GUIDELINES.md, and this license neither grants nor restricts any
+   rights in them. The same applies to third-party libraries and assets, which
+   remain under their own licenses.
+
+4. No warranty. The Work is made available for reading "as is", without
+   warranty of any kind.
+
+5. Permission requests: through the author's GitHub profile (matheusmmmp).
+
+In case of divergence between the two versions, the Portuguese version prevails.
+Em caso de divergência entre as duas versões, prevalece a versão em português.

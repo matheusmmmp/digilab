@@ -1,0 +1,404 @@
+......................................................s................. [  1%]
+........................................................................ [  2%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+........................................................................ [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+...................................F.................................... [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+..................F..................................................... [ 38%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+..........................................................F............. [ 43%]
+........................................................................ [ 44%]
+......................................................F................. [ 45%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 65%]
+........................................................................ [ 66%]
+.............................................F.......................... [ 68%]
+.........................................F..............s.ss............ [ 69%]
+.........................s.ss........................................... [ 70%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................F............... [ 91%]
+........................................................................ [ 93%]
+..............................s......................................... [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+================================== FAILURES ===================================
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        """a etapa 0: a sombra nao muda a vida (o G2 e conferido dentro da medida, falha alto), e o artefato se refaz igual"""
+        import medir_competicao_etapa0 as m
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        m.main()
+>       assert json.loads(m.ARQUIVO.read_text(encoding="utf-8")) == gravado
+E       AssertionError: assert {'analise': {...erente'], ...} == {'analise': {...erente'], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'analise': {'abertas_por_regras': {'abandono+fome_moderada': 955, 'pedido_necessidade+abandono': 1, 'pedido_necessida...80, 'frac_abertas': 0.1738467261904762, 'frac_das_forcadas_que_abrem': 0.3146377592243469, ...}, 'kappa_cr2': 16, ...}} != {'analise': {'abertas_por_regras': {'abandono+fome_moderada': 955, 'pedido_necessidade+abandono': 1, 'pedido_necessida...80, 'frac_abertas': 0.1738467261904762, 'frac_das_forcadas_que_abrem': 0.3146377592243469, ...}, 'kappa_cr2': 16, ...}}
+E         Use -v to get more diff
+
+tests\test_competicao_etapa0.py:42: AssertionError
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        """a etapa 0: as sombras nao mudam a vida (o G2 e conferido dentro da medida, falha alto), e o artefato se refaz igual"""
+        import medir_credito_canal_etapa0 as m
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        m.main()
+>       assert json.loads(m.ARQUIVO.read_text(encoding="utf-8")) == gravado
+E       AssertionError: assert {'analise': {...o8.json', ...} == {'analise': {...o8.json', ...}
+E         
+E         Omitting 9 identical items, use -vv to show
+E         Differing items:
+E         {'analise': {'cl': {'passo': 512, 'teto': 16384, 'w0_alvo': 64}, 'cortes_no_teto': {'c1_gosto': 0, 'c1_humor': 0, 'c1_...ar': 0.0, 'frac_c1_mudaria_a_classe': 0.0, 'limiar': 0.05, 'media_dp_c1_menos_hoje': 4.594185335129055e-07, ...}, ...}} != {'analise': {'cl': {'passo': 512, 'teto': 16384, 'w0_alvo': 64}, 'cortes_no_teto': {'c1_gosto': 0, 'c1_humor': 0, 'c1_...ar': 0.0, 'frac_c1_mudaria_a_classe': 0.0, 'limiar': 0.05, 'media_dp_c1_menos_hoje': 4.594185335129055e-07, ...}, ...}}
+E         Use -v to get more diff
+
+tests\test_credito_canal_etapa0.py:71: AssertionError
+____________ test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave ____________
+
+    def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
+        """o G2: a chave nao chega ao motor, a bancada nem as ferramentas; so o config, o pacote, o orquestrador do prototipo e o exportador
+        do gabarito do modular para a web (LM0, #543: monta a config do braco REL pelo orquestrador; desvio de 2026-11-03)"""
+        nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain")
+        citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
+                 if nomes.search(p.read_text(encoding="utf-8"))}
+>       assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
+                                                                                 "experiments/run_v2_digibrain_prototipo.py",
+                                                                                 "experiments/exportar_gabarito_digibrain_modular.py",
+                                                                                 # a AN0 (#575): so le as constantes (CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN); nenhuma vida
+                                                                                 "experiments/medir_v3_acoes_novas_hoje.py",
+                                                                                 # a DC1 (2026-11-06): o gabarito do decodificador de conceitos le o motivo; nenhuma vida
+                                                                                 "experiments/exportar_decodificador.py",
+                                                                                 # a DC3 (#672, #679, #686): o orquestrador da run unica monta o LAB e o LAB+F; a calibracao
+                                                                                 # do ganho_conteudo so le as constantes; o exportador do gabarito da fala_unidades para a web
+                                                                                 "experiments/run_v3_conversa_dc3.py", "experiments/calibrar_ganho_conteudo_dc3.py",
+                                                                                 "experiments/exportar_gabarito_fala_unidades.py"}
+E       AssertionError: assert {'digilab/con...ades.py', ...} == {'digilab/con...hoje.py', ...}
+E         
+E         Extra items in the left set:
+E         'experiments/entradas_dc4.py'
+E         Use -v to get more diff
+
+tests\test_digibrain_etapa0.py:66: AssertionError
+_______ test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain _______
+
+    def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
+        """o G2 das 196 vidas e o tests/test_gabarito_digibrain.py, que passa sem mudanca; aqui, o resto: nenhum modulo do motor, da bancada
+        nem das ferramentas cita o pacote (e o explorar do motor nao ganha candidato)"""
+        nomes = re.compile(r"digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
+        citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
+                 if nomes.search(p.read_text(encoding="utf-8"))}
+>       assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"experiments/run_v2_digibrain_prototipo.py",
+                                                                                 # o exportador do gabarito do modular (LM0, #543) monta o braco REL pelo orquestrador
+                                                                                 "experiments/exportar_gabarito_digibrain_modular.py",
+                                                                                 # o gabarito do decodificador de conceitos (DC1) so le o motivo; nenhuma vida
+                                                                                 "experiments/exportar_decodificador.py",
+                                                                                 # a DC3 (#672, #686): o orquestrador da run unica e o exportador do gabarito da fala_unidades
+                                                                                 "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py"}
+E       AssertionError: assert {'experiments...versa_dc3.py'} == {'experiments...versa_dc3.py'}
+E         
+E         Extra items in the left set:
+E         'experiments/entradas_dc4.py'
+E         Use -v to get more diff
+
+tests\test_digibrain_vidas.py:174: AssertionError
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        m.main()
+>       assert json.loads(m.ARQUIVO.read_text(encoding="utf-8")) == gravado
+E       AssertionError: assert {'braco': 'P1...]}, ...}, ...} == {'braco': 'P1...]}, ...}, ...}
+E         
+E         Omitting 9 identical items, use -vv to show
+E         Differing items:
+E         {'v11': {'acoes_por_frequencia': {'brincar': 3765, 'chamar_atencao': 4969, 'comer': 423, 'dormir': 10604, ...}, 'credi...s_com_outra_regra_urgente': 0.3446673848639914, 'forcadas_com_uniao_so_urgentes_maior_que_1': 0.3211688661459736, ...}} != {'v11': {'acoes_por_frequencia': {'brincar': 3765, 'chamar_atencao': 4969, 'comer': 423, 'dormir': 10604, ...}, 'credi...s_com_outra_regra_urgente': 0.3446673848639914, 'forcadas_com_uniao_so_urgentes_maior_que_1': 0.3211688661459736, ...}}
+E         Use -v to get more diff
+
+tests\test_medir_v3_espaco_acoes.py:41: AssertionError
+---------------------------- Captured stdout call -----------------------------
+{
+ "frac_forcadas": 0.5525297619047619,
+ "forcadas_com_outra_regra_urgente": 0.3446673848639914,
+ "forcadas_uniao_media_so_urgentes": 1.4737409103151091,
+ "credito": {
+  "forcadas": {
+   "aplicacoes": 2658,
+   "com_peso_mudado": 0,
+   "frac_mudou": 0.0,
+   "abs_f": 3320804
+  },
+  "com_escolha": {
+   "aplicacoes": 19402,
+   "com_peso_mudado": 18156,
+   "frac_mudou": 0.9357798165137615,
+   "abs_f": 3918648
+  },
+  "frac_abs_f_nas_forcadas": 0.4587093056214752,
+  "por_regra": {
+   "abandono": {
+    "aplicacoes": 338,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 429804
+   },
+   "fome_moderada": {
+    "aplicacoes": 968,
+    "com_peso_mudado": 966,
+    "frac_mudou": 0.9979338842975206,
+    "abs_f": 331094
+   },
+   "pedido_necessidade": {
+    "aplicacoes": 382,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 899886
+   },
+   "sono_continuar": {
+    "aplicacoes": 1666,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 1686060
+   },
+   "sono_exaustao": {
+    "aplicacoes": 130,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 161016
+   },
+   "sono_noite": {
+    "aplicacoes": 142,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 144038
+   },
+   "tempo_livre": {
+    "aplicacoes": 18434,
+    "com_peso_mudado": 17190,
+    "frac_mudou": 0.9325160030378649,
+    "abs_f": 3587554
+   }
+  }
+ }
+}
+{
+ "config": "experiments/configs/v2_mundo_alvo/fumaca_piloto.json",
+ "braco": "P1-alvo",
+ "dias": 4,
+ "subdecisoes": {
+  "comer": {
+   "n": 858,
+   "candidatos_medio": 3.2867132867132867,
+   "classes_medio": 1.6503496503496504,
+   "frac_mais_de_uma_classe": 0.5559440559440559,
+   "frac_alvo_fora_do_padrao": 0.013986013986013986
+  },
+  "explorar": {
+   "n": 642,
+   "candidatos_medio": 2.7476635514018692,
+   "classes_medio": 2.7476635514018692,
+   "frac_mais_de_uma_classe": 1.0,
+   "frac_alvo_fora_do_padrao": 0.1806853582554517
+  },
+  "brincar": {
+   "n": 679,
+   "candidatos_medio": 0.0014727540500736377,
+   "classes_medio": 0.0014727540500736377,
+   "frac_mais_de_uma_classe": 0.0,
+   "frac_alvo_fora_do_padrao": 0.0
+  }
+ }
+}
+{
+ "P1": {
+  "x_proprio_depois_total": 36,
+  "x_na_mao_total": 10,
+  "vidas_sem_x_proprio_depois": 0,
+  "classe_x_desceu": 4,
+  "sinal_x_proprio_depois": {
+   "n": 36,
+   "f_drives_medio": -86.58333333333333,
+   "gosto_medio": 65.94444444444444,
+   "frac_total_positivo": 0.3611111111111111,
+   "frac_gosto_maior_que_perda": 0.0
+  },
+  "humor_previsto_desceu": 0
+ },
+ "P1-plan": {
+  "x_proprio_depois_total": 31,
+  "x_na_mao_total": 10,
+  "vidas_sem_x_proprio_depois": 0,
+  "classe_x_desceu": 3,
+  "sinal_x_proprio_depois": {
+   "n": 31,
+   "f_drives_medio": 110.96774193548387,
+   "gosto_medio": 82.80645161290323,
+   "frac_total_positivo": 0.45161290322580644,
+   "frac_gosto_maior_que_perda": 0.0
+  },
+  "humor_previsto_desceu": 5
+ }
+}
+_______________ test_g2_separado_nada_fora_do_pacote_le_a_chave _______________
+
+    def test_g2_separado_nada_fora_do_pacote_le_a_chave():
+        donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/mem.py",
+                          # a M6 (a fala, que a espec 9 permite ler a chave): a chave do estado da fala e o fato Q1 so existem com ela
+                          "digilab_fala_livre/fatos.py", "digilab_fala_livre/memoria_fala.py", "digilab_fala_livre/verificador.py",
+                          "web/app/src/falaMemoria.ts",
+                          # o plano da validacao (o adendo 9, que a espec 9 permite: o orquestrador): os bracos SUBCHAVES_C4, a run e o poder
+                          "experiments/run_v2_digibrain_prototipo.py", "experiments/run_v2_memoria_autobio.py",
+                          "experiments/adendo9_poder_memoria_autobio.py",
+                          # o espelho TS do modular (LM1-LM4, #545-#548) porta o pacote para a web e so le; o exportador do gabarito (LM0, #543) monta o braco REL pelo orquestrador
+                          "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/constantes.ts", "web/app/motor/digibrain/impulso.ts",
+                          "web/app/motor/digibrain/mem.ts", "web/app/test/digibrain_modular_arb.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
+                          "experiments/exportar_gabarito_digibrain_modular.py",
+                          # o poder da AN3 (#577): so le o artefato da run da C4 no git e importa o poder do adendo 9; nenhuma vida
+                          "experiments/plano_an3_poder_acoes_novas.py",
+                          # o orquestrador da AN4: importa o da C4 so pela conferir_memoria (o papel REL nos dois bracos); a config passa pelo
+                          # orquestrador do prototipo
+                          "experiments/run_v3_acoes_novas.py",
+                          # o descritivo da D-C1-3 no REL (adendo 11, #646): so le os artefatos da run da C4 e importa o orquestrador dela; nenhuma vida
+                          "experiments/descritivo_dc13_rel.py",
+                          # o orquestrador da DC3 (#672): monta o LAB (o REL da C4) e o LAB+F pela config do orquestrador da C4
+                          "experiments/run_v3_conversa_dc3.py",
+                          # a bateria da INDIVIDUALIDADE (I1): importa o orquestrador da C4 so pela vida (`viver`); nao le a chave
+                          "experiments/sondas_individualidade.py",
+                          # o orquestrador do I2 da INDIVIDUALIDADE: importa o da C4 pela vida, pela conferir_memoria e pelo COM_FACETAS; nao le a chave
+                          "experiments/run_v3_individualidade.py",
+                          # a medicao de desempenho (docs/DESEMPENHO_PERFIL_2026-11.md): importa o orquestrador da C4 pela vida e pela analise; nao le a chave
+                          "experiments/medir_desempenho_perfil.py"}
+        achados = set()
+        for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
+            if not (RAIZ / pasta).exists():
+                continue
+            for f in (RAIZ / pasta).rglob("*"):
+                if f.suffix in (".py", ".ts", ".tsx", ".js") and "node_modules" not in f.parts and "memoria_autobio" in f.read_text(
+>                       encoding="utf-8", errors="ignore"):
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                       AssertionError: assert {'digilab/con...fala.py', ...} == {'digilab/con...fala.py', ...}
+E                         
+E                         Extra items in the left set:
+E                         'experiments/medir_desempenho_perfil.py'
+E                         'experiments/auditoria_pet_vivo.py'
+E                         Use -v to get more diff
+
+tests\test_memoria_autobio.py:709: AssertionError
+______ test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave ______
+
+    def test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
+        donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/arb.py", "digilab/digibrain/estado.py",
+                          "experiments/run_v2_digibrain_prototipo.py",
+                          "experiments/run_v2_redecidir_evento.py", "experiments/adendo8_poder_redecidir_evento.py",   # a run e o poder da C3 (adendo 8)
+                          "experiments/adendo9_poder_memoria_autobio.py",   # o poder da C4 (adendo 9): so le o artefato da run da C3, pelo caminho
+                          # o espelho TS do modular (LM1-LM4, #545-#548) porta o pacote para a web e so le; o exportador do gabarito (LM0, #543) monta o braco REL pelo orquestrador
+                          "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/arb.ts", "web/app/motor/digibrain/constantes.ts",
+                          "web/app/motor/digibrain/estado.ts", "web/app/test/digibrain_modular_estado.test.ts",
+                          "experiments/exportar_gabarito_digibrain_modular.py"}
+        achados = set()
+        for pasta in ("digilab", "experiments", "web", "tools", "servidor"):
+            if not (RAIZ / pasta).exists():
+                continue
+            for f in (RAIZ / pasta).rglob("*"):
+                if f.suffix in (".py", ".ts", ".tsx", ".js") and "node_modules" not in f.parts and "redecidir_evento" in f.read_text(
+                        encoding="utf-8", errors="ignore"):
+                    achados.add(f.relative_to(RAIZ).as_posix())
+>       assert achados == donos_da_chave
+E       AssertionError: assert {'digilab/con...obio.py', ...} == {'digilab/con...obio.py', ...}
+E         
+E         Extra items in the left set:
+E         'experiments/auditoria_pet_vivo.py'
+E         Use -v to get more diff
+
+tests\test_redecidir_evento.py:344: AssertionError
+============================ slowest 30 durations =============================
+209.46s call     tests/test_calibracao_rede_de_si.py::test_a_fumaca_inteira
+126.95s call     tests/test_sprites_acoes.py::test_pe_e_carne
+98.57s setup    tests/test_descritivo_dc13.py::test_a_particao_cobre_cada_episodio_uma_vez_e_as_somas_fecham
+84.58s call     tests/test_bancada_montagem.py::test_simples_e_sem_chave_byte_a_byte_pelo_gabarito
+78.91s call     tests/test_canonico_intacto.py::test_run_canonica_reproduz_artifacts
+74.99s call     tests/test_gabarito_digibrain_conserto.py::test_o_gabarito_do_conserto_esta_em_dia_byte_a_byte
+71.94s call     tests/test_validacao_blocos.py::test_fumaca_com_os_blocos
+69.09s call     tests/test_calibracao_corpo.py::test_a_fumaca_inteira
+64.11s call     tests/test_motivo_expressao.py::test_bateria_combate_v2_reproduz_artefatos
+64.00s call     tests/test_digibrain_conserto.py::test_t_cenario_1_e_a_fumaca_da_reavaliacao
+63.30s call     tests/test_mundo_componente.py::test_g2_vidas_do_mundo_fisico_de_hoje_com_um_pet
+60.15s call     tests/test_poder.py::test_piloto_reproduz_com_a_mesma_semente
+54.29s call     tests/test_gabarito_digibrain_modular.py::test_o_gabarito_do_modular_esta_em_dia_byte_a_byte
+52.65s setup    tests/test_descritivo_dc13_rel.py::test_a_particao_cobre_cada_episodio_uma_vez_e_as_somas_fecham
+50.35s call     tests/test_bancada_p2d_p3i.py::test_bracos_de_antes_byte_a_byte_pelo_gabarito
+50.25s call     tests/test_adendo3.py::test_fumaca_com_o_bloco_de_duracoes
+50.14s call     tests/test_medir_v3_espaco_acoes.py::test_o_artefato_se_refaz_igual
+48.32s call     tests/test_run_v2_competicao.py::test_a_fumaca_de_ponta_a_ponta
+47.97s call     tests/test_calibracao_corpo.py::test_a_fumaca_com_o_m_sol
+47.92s call     tests/test_mundo_alvo.py::test_fumaca_da_validacao
+47.72s call     tests/test_paladar_mundo.py::test_ligado_a_vida_e_a_mesma_e_o_consumo_leva_o_perfil
+47.03s call     tests/test_gabarito_digibrain.py::test_o_gabarito_esta_em_dia_byte_a_byte
+46.56s call     tests/test_corpo_no_mundo.py::test_g2_vidas_do_mundo_de_hoje_com_o_corpo_desligado
+45.03s call     tests/test_metabolismo.py::test_g2_a_subchave_desligada_e_a_vida_de_hoje_byte_a_byte
+44.75s call     tests/test_bancada_k4_canais.py::test_bracos_de_antes_byte_a_byte_pelo_gabarito
+40.25s call     tests/test_validacao_pet_que_pensa.py::test_a_fumaca_da_validacao
+39.61s call     tests/test_competicao_etapa0.py::test_o_artefato_se_refaz_igual
+39.11s call     tests/test_bancada_liga_n6_n7.py::test_bracos_antigos_byte_a_byte_pelo_gabarito
+38.93s call     tests/test_medir_carater_v11.py::test_o_artefato_se_refaz_igual
+37.19s call     tests/test_competicao_etapa0.py::test_as_vidas_de_hoje_sao_as_do_gabarito
+=========================== short test summary info ===========================
+FAILED tests/test_competicao_etapa0.py::test_o_artefato_se_refaz_igual - Asse...
+FAILED tests/test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual - A...
+FAILED tests/test_digibrain_etapa0.py::test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave
+FAILED tests/test_digibrain_vidas.py::test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain
+FAILED tests/test_medir_v3_espaco_acoes.py::test_o_artefato_se_refaz_igual - ...
+FAILED tests/test_memoria_autobio.py::test_g2_separado_nada_fora_do_pacote_le_a_chave
+FAILED tests/test_redecidir_evento.py::test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave
+7 failed, 5170 passed, 8 skipped in 5246.22s (1:27:26)
+rc 1 fim 00:07:08

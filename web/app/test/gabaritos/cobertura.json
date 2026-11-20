@@ -1,0 +1,99 @@
+{
+ "runtime": "node v24.19.0",
+ "vidas": 60,
+ "sementes": 60,
+ "eventos": {
+  "t": 10857,
+  "d": 2400,
+  "tr": 7491,
+  "g": 822,
+  "l": 4128
+ },
+ "acoesDono": {
+  "alimentar": 642,
+  "elogiar": 364,
+  "acariciar": 259,
+  "limpar": 610,
+  "repreender": 339,
+  "brincar": 186
+ },
+ "exercicios": {
+  "meditar": 1256,
+  "alvo": 1238,
+  "esquiva": 1273,
+  "levantar_pedra": 1235,
+  "resistencia": 1258,
+  "corrida": 1231
+ },
+ "gambit": {
+  "vetar": 240,
+  "liberar": 240,
+  "travar": 192,
+  "destravar": 150
+ },
+ "rivais": {
+  "aleatorio": 695,
+  "npc_tier1_brutamontes": 498,
+  "contragolpe": 90,
+  "emboscador": 95,
+  "npc_tier2_carcereiro": 402,
+  "npc_tier2_sentinela": 404,
+  "tartaruga": 99,
+  "tita": 94,
+  "npc_tier3_soberano": 379,
+  "adaptativo": 97,
+  "atirador": 101,
+  "npc_tier2_porteiro": 392,
+  "duelista": 89,
+  "espelho": 113,
+  "muralha": 91,
+  "oraculo": 125,
+  "agressivo": 91,
+  "vigia": 80,
+  "sentinela": 88,
+  "furioso": 105
+ },
+ "estagioFinal": {
+  "adulto": 60
+ },
+ "versao": {
+  "1": 20,
+  "2": 20,
+  "3": 20
+ },
+ "perfil": {
+  "atencioso": 12,
+  "relapso": 12,
+  "aleatorio": 12,
+  "incoerente": 12,
+  "exigente": 12
+ },
+ "ramos": {
+  "sereno": 36,
+  "arisco": 24
+ },
+ "linhas": {
+  "guardiao": 14,
+  "cacador": 14,
+  "brigao": 13,
+  "colosso": 19
+ },
+ "adultas": {
+  "espelho": 5,
+  "emboscador": 3,
+  "duelista": 7,
+  "vigia": 7,
+  "furioso": 4,
+  "tita": 6,
+  "predador": 7,
+  "bastiao_rachado": 6,
+  "colosso_partido": 6,
+  "sentinela": 4,
+  "muralha": 3,
+  "devastador": 2
+ },
+ "sombrias": 21,
+ "falaFria": 21,
+ "checkpoints": 1293,
+ "eventosTotal": 25698
+}

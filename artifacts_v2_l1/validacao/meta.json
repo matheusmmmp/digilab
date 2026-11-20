@@ -1,0 +1,52 @@
+{
+  "bootstrap": {
+    "nivel": 0.95,
+    "reamostragens": 10000,
+    "semente": 20261001
+  },
+  "config": "experiments\\configs\\v2_l1\\validacao.json",
+  "config_lobos_base": {
+    "bits_ponto_fixo": 10,
+    "escala_ticks_desde_cuidado": 480.0,
+    "janela_latencia_ticks": 120,
+    "piso_peso": 64,
+    "recompensa_elogio": 1.0,
+    "recompensa_pedido_ignorado": -0.5,
+    "recompensa_repreensao": -1.0
+  },
+  "config_sha256": "5a47a8a43910c1d5b1d287ebbe33154ddbe8c11becacb507e904b9a05a7325d4",
+  "conjunto": "validacao",
+  "descricao": "V2, L1 (docs/PLANO_ANALISE_V2_L1.md, secao 6): validacao UNICA no ponto escolhido pela calibracao (artifacts_v2_l1/calibracao/escolha.json: passo 512, teto 1024; a calibracao NAO fechou: nenhum ponto passou G6). So roda depois do referendo do Matheus.",
+  "dias": 14,
+  "gates": {
+    "g3_ic_min": 0.02,
+    "g3_media_min": 0.1,
+    "g4_min": 0.5,
+    "g6_razao_max": 1.5
+  },
+  "n_ambientes": 4,
+  "orcamento": 224,
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0",
+  "sementes": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "sha256": {
+    "digilab/config.py": "a900cfe5d9d0ec71e2584d60c7d323be9cc67f33c984cbbe817e98c21a19cc11",
+    "digilab/engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "digilab/metrics.py": "05bc86582e75716064ea7a387b39a094e4857cd7b57a1bdb12fc8134852d32bf",
+    "digilab/motivo.py": "101fd17e92063066df048d655b4e45502e971a3530902d50032de3a0a14d16e4",
+    "digilab/policies/camada_unica.py": "873983bbb20aa6e7a62bf59c4e44c700a386c6ca52c6f55dee682ab6b365d6a4",
+    "digilab/policies/lobos.py": "16a2d7b85a71c0d9bfee5d9a0542005f1ca3c37f4aef637bef4df56e4c17c97d",
+    "engine_congelado": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630"
+  },
+  "sonda": {
+    "amostras": 200,
+    "estados": 64,
+    "semente": 9001
+  }
+}

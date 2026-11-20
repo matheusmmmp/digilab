@@ -1,0 +1,18 @@
+{
+  "n": 200,
+  "aprovadas": 183,
+  "fracao_aprovada": 0.915,
+  "fracao_aprovada_com_fator": 0.9,
+  "fracao_aprovada_sem_fator": 0.93,
+  "quedas_por_tipo": {
+    "reprovada": 16,
+    "resposta interrompida": 1
+  },
+  "tempo_medio_s": 2.6424405804990965,
+  "tempo_max_s": 3.750475400011055,
+  "provedor": "ollama",
+  "modelo": "qwen2.5:3b",
+  "versao_prompt": "fala-v2",
+  "semente_amostra": 20260924,
+  "gasto": null
+}

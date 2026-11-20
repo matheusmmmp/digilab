@@ -1,0 +1,72 @@
+{
+  "braco": "atencioso",
+  "carater_adulto": {
+    "atento": 0.18437499999999998,
+    "impetuoso": -0.44687499999999997,
+    "paciente": 0.49999999999999994,
+    "resistente": 0.20937500000000003
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 25,
+    "treino": 49
+  },
+  "enroladas": 1,
+  "especie": "ferrugem",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "muralha",
+    "linha": "guardiao",
+    "ramo": "arisco",
+    "rotulo": "ferrugem/arisco/guardiao/muralha"
+  },
+  "obediencia_cuidado": 0.9338842975206612,
+  "ovo": 505,
+  "sessoes": 49,
+  "sombria": false,
+  "treino": {
+    "enroladas": 1,
+    "especie": "ferrugem",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 15,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.498467055284465,
+      "forca": 5.523968,
+      "guarda": 5.311037423999999,
+      "mira": 2.68860308196788,
+      "recuperacao": 4.233600567006254,
+      "vigor": 5.8987931217414
+    },
+    "pontos_estagio": {
+      "adolescente": 7.158841750000001,
+      "adulto": 14.0,
+      "crianca": 6.995627499999999
+    },
+    "sessoes": 49,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 28.15446925,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.36514511932575155
+}

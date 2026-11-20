@@ -1,0 +1,30 @@
+{
+  "descricao": "Rodada de equilibrio geral, FASE 1 (as formas; docs/PLANO_EQUILIBRIO_GERAL.md, docs/EQUILIBRIO_GERAL.md): a variante escolhida na calibracao. Regras da validacao V21C (experiments/configs/v21c/validacao.json) + as quatro chaves da V21D validada (a_c_e2v_v, experiments/configs/v21d/validacao.json) + as cinco chaves da ConfigCombateV21E. A base V2C nao muda. So sementes de calibracao; a validacao (4101..4505) fica para a fase 4.",
+  "variante": "v21e",
+  "base": "experiments/configs/v21c/validacao.json",
+  "regras_v21": {
+    "preparo_sob_pele_oculto": true,
+    "muralha_lista_espelho": true,
+    "vigia_bate_em_quem_recua": true,
+    "vigia_recua_do_preparo_sob_pele": true,
+    "investida_erra_contra_recuo": false,
+    "preparo_prende": false,
+    "tita_bate_em_quem_recua": false,
+    "duelista_defende_do_golpe": true,
+    "tita_defende_do_golpe": true,
+    "espelho_sem_carregar": true,
+    "muralha_sem_carregar": true,
+    "muralha_contra_golpe_na_pele": true
+  },
+  "sementes_calibracao": [3101, 3202, 3303, 3404, 3505],
+  "sementes_validacao": [4101, 4202, 4303, 4404, 4505],
+  "partidas_por_par_por_semente": 100,
+  "partidas_por_bot_por_semente_painel": 50,
+  "epsilons": [0.05, 0.15],
+  "metas": {
+    "M_A1_faixa_forca": [0.40, 0.60],
+    "M_A2_faixa_painel": [0.40, 0.60],
+    "M_A3_amplitude_max": 0.20,
+    "M_A4_vitorias_min": 2
+  }
+}

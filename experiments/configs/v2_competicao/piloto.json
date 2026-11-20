@@ -1,0 +1,42 @@
+{
+  "descricao": "O piloto da competicao (PLANO_ANALISE_V2_V3_COMPETICAO, secao 6): as margens, o N, a G-ABRE e o custo; nao e evidencia.",
+  "plano": "docs/PLANO_ANALISE_V2_V3_COMPETICAO.md",
+  "dias": 14,
+  "orcamento_por_dia": 16,
+  "kappa": 16,
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8,
+    "alfa": 0.025,
+    "semente": 4242,
+    "alfas_relato": [
+      0.025,
+      0.0167
+    ]
+  },
+  "g_abre": {
+    "limiar": 0.05
+  },
+  "holm": {
+    "alfa": 0.05
+  },
+  "fase": "piloto",
+  "unidades": {
+    "bases": [
+      58101,
+      58202,
+      58303,
+      58404,
+      58505
+    ],
+    "k": 4,
+    "prefixo": "competicao"
+  }
+}

@@ -1,0 +1,2 @@
+calibracao: ponto {'passo': 128, 'teto': 4096, 'w0_info': 256, 'ganho': 4}; fecharam {'C-A': True, 'C-B': True, 'C-C': True}; nao aprende False; 540 vidas, 3578 s (teto 60373 s)
+rc=0

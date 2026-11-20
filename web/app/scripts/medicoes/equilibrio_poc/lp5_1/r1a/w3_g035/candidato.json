@@ -1,0 +1,12 @@
+{
+ "nome": "w3_g035",
+ "pesoPonto": 3,
+ "gama": {
+  "vigor": 0.35,
+  "folego": 0.35,
+  "recuperacao": 0.35,
+  "forca": 0.35,
+  "mira": 0.35,
+  "guarda": 0.35
+ }
+}

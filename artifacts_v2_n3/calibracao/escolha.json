@@ -1,0 +1,60 @@
+{
+  "calibracao_fechou": false,
+  "conjunto": "calibracao",
+  "ganho": 4,
+  "gates": {
+    "G6": {
+      "deriva_media_dia14": 0.035172967117167844,
+      "deriva_media_dia7": 0.020998123127606586,
+      "passa": false,
+      "pesos_no_teto_por_vida": {
+        "aleatorio-P1@8101": 14,
+        "aleatorio-P1@8202": 8,
+        "aleatorio-P1@8303": 8,
+        "aleatorio-P1@8404": 8,
+        "aleatorio-P1@8505": 8,
+        "atencioso-P1@8101": 7,
+        "atencioso-P1@8202": 7,
+        "atencioso-P1@8303": 7,
+        "atencioso-P1@8404": 7,
+        "atencioso-P1@8505": 7,
+        "incoerente-P1@8101": 9,
+        "incoerente-P1@8202": 7,
+        "incoerente-P1@8303": 7,
+        "incoerente-P1@8404": 7,
+        "incoerente-P1@8505": 4,
+        "relapso-P1@8101": 0,
+        "relapso-P1@8202": 2,
+        "relapso-P1@8303": 0,
+        "relapso-P1@8404": 6,
+        "relapso-P1@8505": 2
+      },
+      "razao_deriva_14_7": 1.6750529037009672,
+      "vidas_com_peso_no_teto": 18
+    },
+    "G_P1_privacao": {
+      "definicao": "por semente, media nos 4 donos de (privacao P0 - privacao P1), vidas fechadas",
+      "ic_inferior": 0.0008184523809523725,
+      "ic_superior": 0.009077380952380948,
+      "media": 0.005096726190476186,
+      "n": 5,
+      "nivel": 0.95,
+      "passa": true,
+      "por_semente": {
+        "8101": -0.0016741071428571508,
+        "8202": 0.012090773809523808,
+        "8303": 0.005952380952380959,
+        "8404": 0.006882440476190466,
+        "8505": 0.002232142857142849
+      }
+    },
+    "sem_mortes_novas": {
+      "mortes_P0": 0,
+      "mortes_P1": 0,
+      "nota": "mundo padrao (MotorComFeedback, sem lesoes nem morte): vale por construcao",
+      "passa": true
+    }
+  },
+  "regra": "secao 6 do plano: G6 passando, maior IC inferior do G-P1; empate: menor ganho",
+  "segundos_total": 2305.0491967999988
+}

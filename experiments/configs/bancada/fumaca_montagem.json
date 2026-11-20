@@ -1,0 +1,16 @@
+{
+  "descricao": "Fumaca da BANCADA-MONTAGEM (docs/TAREFA_V2_BANCADA_MONTAGEM.md). NAO canonica: unidades derivadas das sementes dos testes, vida curta, ganho da memoria, w0_info e w0_pedido S/2 so para as pecas agirem (os valores sao os que a K2 varre); confere o encanamento da montagem completa (o cerebro A da secao 1 do PLANO_CALIBRACAO_CONJUNTA_V2 em cada braco, os canais, o K4, as ablacoes da K-7 e o so cuidado do P3), nunca como resultado.",
+  "bracos": ["P0", "P1", "P2", "P2e", "P2a", "P3", "P1c-mem", "P1c-can"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1},
+  "mundos": ["casado_frutas", "descasado", "mutavel"],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "lobos": {"memoria_ganho": 512, "w0_info": 512, "w0_pedido": 512},
+  "julgamento_fruta": true,
+  "montagem": "completa",
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P3", "destino": "P0", "filtro": "sem_ensino"}, {"origem": "P2", "destino": "P0", "filtro": "sem_ensino"}]
+}

@@ -1,0 +1,292 @@
+{
+ "braco": "REL",
+ "dias": 14,
+ "dono": "atencioso",
+ "fases": {
+  "conferir_e_medir": {
+   "arquivos_top15": {
+    "/digilab/metrics.py": 0.068,
+    "/digilab_fala_livre/fatos.py": 0.005,
+    "/digilab_fala_livre/memoria_fala.py": 0.107,
+    "/experiments/run_v2_digibrain_prototipo.py": 0.039,
+    "/experiments/run_v2_memoria_autobio.py": 0.014,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/re/__init__.py": 0.007,
+    "builtin:<built-in method builtins.any>": 0.006,
+    "builtin:<built-in method builtins.len>": 0.009,
+    "builtin:<built-in method builtins.min>": 0.019,
+    "builtin:<method 'endswith' of 'str' objects>": 0.015,
+    "builtin:<method 'findall' of 're.Pattern' objects>": 0.005,
+    "builtin:<method 'get' of 'dict' objects>": 0.008,
+    "builtin:<method 'join' of 'str' objects>": 0.031,
+    "builtin:<method 'search' of 're.Pattern' objects>": 0.006,
+    "builtin:<method 'startswith' of 'str' objects>": 0.003
+   },
+   "categorias": {
+    "cerebro": {
+     "frac": 0.0004,
+     "s": 0.0
+    },
+    "corpo": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "fala": {
+     "frac": 0.5586,
+     "s": 0.202
+    },
+    "json_gzip": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "log_eventos": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "metricas": {
+     "frac": 0.2611,
+     "s": 0.094
+    },
+    "motor_mundo": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "orquestrador": {
+     "frac": 0.1797,
+     "s": 0.065
+    },
+    "outros": {
+     "frac": 0.0001,
+     "s": 0.0
+    }
+   },
+   "parede_com_profiler_s": 0.361
+  },
+  "gravar_log": {
+   "arquivos_top15": {
+    "/digilab/events.py": 0.001,
+    "/experiments/medir_desempenho_perfil.py": 0.0,
+    "<frozen codecs>": 0.0,
+    "<frozen ntpath>": 0.0,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/json/__init__.py": 0.001,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/json/encoder.py": 0.002,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/pathlib/_abc.py": 0.0,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/pathlib/_local.py": 0.0,
+    "builtin:<built-in method _io.open>": 0.007,
+    "builtin:<built-in method builtins.isinstance>": 0.0,
+    "builtin:<method '__exit__' of '_io._IOBase' objects>": 0.0,
+    "builtin:<method 'disable' of '_lsprof.Profiler' objects>": 0.0,
+    "builtin:<method 'join' of 'str' objects>": 0.0,
+    "builtin:<method 'read' of '_io.TextIOWrapper' objects>": 0.0,
+    "builtin:<method 'write' of '_io.TextIOWrapper' objects>": 0.0
+   },
+   "categorias": {
+    "cerebro": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "corpo": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "fala": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "json_gzip": {
+     "frac": 0.3339,
+     "s": 0.004
+    },
+    "log_eventos": {
+     "frac": 0.0922,
+     "s": 0.001
+    },
+    "metricas": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "motor_mundo": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "orquestrador": {
+     "frac": 0.5726,
+     "s": 0.007
+    },
+    "outros": {
+     "frac": 0.0012,
+     "s": 0.0
+    }
+   },
+   "parede_com_profiler_s": 0.012
+  },
+  "replay_g1": {
+   "arquivos_top15": {
+    "/digilab/corpo.py": 0.595,
+    "/digilab/corpo_grafo.py": 0.19,
+    "/digilab/digibrain/_comum.py": 0.068,
+    "/digilab/digibrain/adapt.py": 0.073,
+    "/digilab/digibrain/arb.py": 0.059,
+    "/digilab/digibrain/impulso.py": 0.067,
+    "/digilab/digibrain/mem.py": 0.366,
+    "/digilab/motor_corpo.py": 0.166,
+    "/digilab/mundo.py": 0.298,
+    "/digilab/policies/lobos.py": 0.181,
+    "/digilab/state.py": 0.096,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/dataclasses.py": 0.26,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/json/encoder.py": 0.075,
+    "builtin:<built-in method builtins.getattr>": 0.08,
+    "builtin:<built-in method builtins.sum>": 0.083
+   },
+   "categorias": {
+    "cerebro": {
+     "frac": 0.3758,
+     "s": 1.216
+    },
+    "corpo": {
+     "frac": 0.3736,
+     "s": 1.209
+    },
+    "fala": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "json_gzip": {
+     "frac": 0.0288,
+     "s": 0.093
+    },
+    "log_eventos": {
+     "frac": 0.0013,
+     "s": 0.004
+    },
+    "metricas": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "motor_mundo": {
+     "frac": 0.2074,
+     "s": 0.671
+    },
+    "orquestrador": {
+     "frac": 0.0131,
+     "s": 0.042
+    },
+    "outros": {
+     "frac": 0.0,
+     "s": 0.0
+    }
+   },
+   "parede_com_profiler_s": 3.357
+  },
+  "viver": {
+   "arquivos_top15": {
+    "/digilab/corpo.py": 0.593,
+    "/digilab/corpo_grafo.py": 0.189,
+    "/digilab/digibrain/_comum.py": 0.067,
+    "/digilab/digibrain/adapt.py": 0.072,
+    "/digilab/digibrain/arb.py": 0.057,
+    "/digilab/digibrain/impulso.py": 0.066,
+    "/digilab/digibrain/mem.py": 0.365,
+    "/digilab/motor_corpo.py": 0.164,
+    "/digilab/mundo.py": 0.314,
+    "/digilab/policies/lobos.py": 0.178,
+    "/digilab/state.py": 0.096,
+    "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/dataclasses.py": 0.271,
+    "builtin:<built-in method builtins.getattr>": 0.081,
+    "builtin:<built-in method builtins.max>": 0.046,
+    "builtin:<built-in method builtins.sum>": 0.088
+   },
+   "categorias": {
+    "cerebro": {
+     "frac": 0.3776,
+     "s": 1.206
+    },
+    "corpo": {
+     "frac": 0.3772,
+     "s": 1.205
+    },
+    "fala": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "json_gzip": {
+     "frac": 0.0027,
+     "s": 0.009
+    },
+    "log_eventos": {
+     "frac": 0.0012,
+     "s": 0.004
+    },
+    "metricas": {
+     "frac": 0.0,
+     "s": 0.0
+    },
+    "motor_mundo": {
+     "frac": 0.2252,
+     "s": 0.719
+    },
+    "orquestrador": {
+     "frac": 0.0151,
+     "s": 0.048
+    },
+    "outros": {
+     "frac": 0.001,
+     "s": 0.003
+    }
+   },
+   "parede_com_profiler_s": 3.317
+  }
+ },
+ "interpretador": {
+  "executavel": "C:\\Users\\mathe\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "implementacao": "CPython",
+  "maquina": "AMD64",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "versao": "3.13.0"
+ },
+ "log_bytes": 76657,
+ "log_eventos": 1563,
+ "log_sha256": "2c049dab1894cc6830ac560842ef2135589c45dbf87b5d0b73fdc92633cf94e7",
+ "lugar": "longe_fixo",
+ "medidas_sha256": "9fc752c6dcfbb420354403cb8c85c26712259013b4fcea8bb219fdb19f88af3d",
+ "modo": "perfil",
+ "parede_script_s": 7.222,
+ "semente": 101,
+ "total_categorias": {
+  "cerebro": {
+   "frac": 0.3561,
+   "s": 2.422
+  },
+  "corpo": {
+   "frac": 0.3549,
+   "s": 2.414
+  },
+  "fala": {
+   "frac": 0.0297,
+   "s": 0.202
+  },
+  "json_gzip": {
+   "frac": 0.0156,
+   "s": 0.106
+  },
+  "log_eventos": {
+   "frac": 0.0013,
+   "s": 0.009
+  },
+  "metricas": {
+   "frac": 0.0138,
+   "s": 0.094
+  },
+  "motor_mundo": {
+   "frac": 0.2044,
+   "s": 1.39
+  },
+  "orquestrador": {
+   "frac": 0.0238,
+   "s": 0.162
+  },
+  "outros": {
+   "frac": 0.0004,
+   "s": 0.003
+  }
+ }
+}

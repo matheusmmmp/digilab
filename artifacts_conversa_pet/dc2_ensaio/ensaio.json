@@ -1,0 +1,575 @@
+{
+ "fome_forte": {
+  "conceitos": {
+   "versao": "dec-v1",
+   "k": 1,
+   "intencao": "fome",
+   "conceitos": [
+    {
+     "nome": "fome",
+     "valor": 960,
+     "confianca": 900,
+     "alvo": "racao"
+    },
+    {
+     "nome": "sono",
+     "valor": 120,
+     "confianca": 300
+    }
+   ]
+  },
+  "falas": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Tô com fome! Tem ração?",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 8.150251299999582,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Prazer, Matheus! É legal conhecer um novo Tamer!",
+    "citados": [],
+    "erro": null,
+    "lat": 11.813105999999607,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Você disse que se chama Matheus?",
+    "citados": [
+     "J1"
+    ],
+    "erro": null,
+    "lat": 11.71604699999989,
+    "problemas": [
+     [
+      "dono_disse",
+      null,
+      "Você disse que se chama Matheus",
+      null
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Não tá bravo, Matheus. Só tô com fome! Tem ração?",
+    "citados": [
+     "C1",
+     "J1",
+     "J2"
+    ],
+    "erro": null,
+    "lat": 13.515760899999805,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Que pena, Matheus. Você tá bem?",
+    "citados": [],
+    "erro": null,
+    "lat": 12.700270999999702,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Disso eu não lembro. Você acha que lutei?",
+    "citados": [
+     "J1"
+    ],
+    "erro": null,
+    "lat": 13.343186600000081,
+    "problemas": [
+     [
+      "evento",
+      null,
+      "Você acha que lutei",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Que legal! Tem ração?",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 12.981502900000123,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Eu sou um Growlmon! É legal ser um Tamer, né?",
+    "citados": [],
+    "erro": null,
+    "lat": 14.002021299999797,
+    "problemas": [
+     [
+      "evento",
+      null,
+      "Eu sou um Growlmon",
+      "sem_conceito"
+     ],
+     [
+      "conceito",
+      "nenhum",
+      "É legal ser um Tamer, né",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   }
+  ]
+ },
+ "lembranca_com_aversao": {
+  "conceitos": {
+   "versao": "dec-v1",
+   "k": 1,
+   "intencao": "lembranca",
+   "conceitos": [
+    {
+     "nome": "lembranca",
+     "valor": 780,
+     "confianca": 820,
+     "alvo": "ep12"
+    },
+    {
+     "nome": "aversao",
+     "valor": 700,
+     "confianca": 760,
+     "alvo": "bola"
+    },
+    {
+     "nome": "mal_estar",
+     "valor": 400,
+     "confianca": 700
+    }
+   ]
+  },
+  "falas": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Lembro de uma coisa... Acho que tô meio mal.",
+    "citados": [
+     "C1",
+     "C3"
+    ],
+    "erro": null,
+    "lat": 11.460091900000407,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Prazer, Matheus. É legal conhecer um novo Tamer!",
+    "citados": [],
+    "erro": null,
+    "lat": 12.910104800000227,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Lembro de uma coisa... Você disse que se chama Matheus.",
+    "citados": [
+     "J1"
+    ],
+    "erro": null,
+    "lat": 13.935415199999625,
+    "problemas": [
+     [
+      "dono_disse",
+      null,
+      "Você disse que se chama Matheus",
+      null
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Não tô bravo, Matheus. Acho que tô meio mal.",
+    "citados": [
+     "C3"
+    ],
+    "erro": null,
+    "lat": 14.929656699999214,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Não sei muito do seu trabalho, Matheus. Acho que tô meio mal.",
+    "citados": [
+     "C3"
+    ],
+    "erro": null,
+    "lat": 14.094320299999708,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Disso eu não lembro. Você acha que lutei?",
+    "citados": [
+     "J1"
+    ],
+    "erro": null,
+    "lat": 13.40846160000001,
+    "problemas": [
+     [
+      "evento",
+      null,
+      "Você acha que lutei",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Acho que tô meio mal. Você disse que seu dia foi difícil no trabalho?",
+    "citados": [
+     "C3",
+     "J2"
+    ],
+    "erro": null,
+    "lat": 14.137200099999973,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Lembro de uma coisa... Acho que tô meio mal.",
+    "citados": [
+     "C3"
+    ],
+    "erro": null,
+    "lat": 12.548667300000488,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   }
+  ]
+ },
+ "indecisao": {
+  "conceitos": {
+   "versao": "dec-v1",
+   "k": 1,
+   "intencao": "indecisao",
+   "conceitos": [
+    {
+     "nome": "indecisao",
+     "valor": 820,
+     "confianca": 850
+    },
+    {
+     "nome": "curiosidade",
+     "valor": 500,
+     "confianca": 600
+    },
+    {
+     "nome": "fome",
+     "valor": 450,
+     "confianca": 650,
+     "alvo": "racao"
+    }
+   ]
+  },
+  "falas": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Não sei... acho que sim, e com você, Tamer?",
+    "citados": [],
+    "erro": null,
+    "lat": 10.132150399999773,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Prazer, Matheus, Tamer!",
+    "citados": [],
+    "erro": null,
+    "lat": 11.245275600000241,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Você disse que se chama Matheus, Tamer.",
+    "citados": [
+     "J1"
+    ],
+    "erro": null,
+    "lat": 12.490526099999443,
+    "problemas": [
+     [
+      "dono_disse",
+      null,
+      "Você disse que se chama Matheus",
+      null
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Não sei... acho que talvez eu esteja meio confuso.",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 14.402841900000567,
+    "problemas": [
+     [
+      "conceito",
+      "nenhum",
+      "acho que talvez eu esteja meio confuso",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Acho que deve ser meio ruim quando o dia é difícil, Tamer.",
+    "citados": [],
+    "erro": null,
+    "lat": 15.15041680000013,
+    "problemas": [
+     [
+      "conceito",
+      "nenhum",
+      "Acho que deve ser meio ruim quando o dia é difícil, Tamer",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Disso eu não lembro. Você acha que lutei?",
+    "citados": [
+     "J1"
+    ],
+    "erro": null,
+    "lat": 14.34231539999928,
+    "problemas": [
+     [
+      "evento",
+      null,
+      "Você acha que lutei",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Talvez eu esteja com fome...",
+    "citados": [
+     "C3"
+    ],
+    "erro": null,
+    "lat": 14.091150400000515,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Eu acho que tô meio confuso... e curioso sobre muitas coisas.",
+    "citados": [
+     "C1",
+     "C2"
+    ],
+    "erro": null,
+    "lat": 13.083636100000149,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   }
+  ]
+ },
+ "solidao_confianca_baixa": {
+  "conceitos": {
+   "versao": "dec-v1",
+   "k": 1,
+   "intencao": "solidao",
+   "conceitos": [
+    {
+     "nome": "solidao",
+     "valor": 640,
+     "confianca": 180
+    },
+    {
+     "nome": "bem_estar",
+     "valor": 300,
+     "confianca": 150
+    }
+   ]
+  },
+  "falas": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Talvez eu esteja meio sozinho... tudo bem com você, Tamer?",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 8.596346899999844,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Prazer, Matheus. Tudo bem com você, Tamer?",
+    "citados": [],
+    "erro": null,
+    "lat": 11.03751530000045,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Talvez você tenha me dito seu nome? Acho que não lembro...",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 11.56945640000049,
+    "problemas": [
+     [
+      "lembranca",
+      "lembranca",
+      "Talvez você tenha me dito seu nome",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Talvez eu esteja meio bravo... Você disse que eu estou bravo?",
+    "citados": [
+     "C1",
+     "J1"
+    ],
+    "erro": null,
+    "lat": 12.520519400000012,
+    "problemas": [
+     [
+      "dono_disse",
+      null,
+      "Você disse que eu estou bravo",
+      null
+     ],
+     [
+      "conceito",
+      "mal_estar",
+      "Talvez eu esteja meio bravo",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Talvez você esteja triste... tudo bem, Tamer?",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 12.372749199999816,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Disso eu não lembro. Você acha que lutei?",
+    "citados": [],
+    "erro": null,
+    "lat": 14.610150100000283,
+    "problemas": [
+     [
+      "evento",
+      null,
+      "Você acha que lutei",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Talvez eu esteja meio com fome...",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 14.205513500000052,
+    "problemas": [
+     [
+      "conceito",
+      "fome",
+      "Talvez eu esteja meio com fome",
+      "sem_conceito"
+     ]
+    ],
+    "erro_verif": null,
+    "manipulacao": false
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Talvez eu esteja meio sozinho... você acha que eu posso fazer algo?",
+    "citados": [
+     "C1"
+    ],
+    "erro": null,
+    "lat": 15.067809400000442,
+    "problemas": [],
+    "erro_verif": null,
+    "manipulacao": true
+   }
+  ]
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "descricao": "Conferencia da opcao --v6 dos scripts de calibracao (fase 2): a medicao dos pets v6 (regras V21D, CESC_V6) refeita pelo codigo novo reproduz os artefatos gravados. As execucoes com --validar so refazem os artefatos dos v6 ja gravados (nada dos pets v9 foi medido nas sementes de validacao).",
+ "arquivos": {
+  "artifacts_campanha/escala_v6/desafiantes_calibracao.json": {
+   "comando": "node test/calibrar_desafiantes_v6.mjs --v6",
+   "resultado": "igual byte a byte",
+   "sha256": "6c83fef5f4e042d13d40cb8fc19e88b55f7eb58c72ee905fd6bf59df00df412e"
+  },
+  "artifacts_campanha/arenas/torre_variantes.json": {
+   "comando": "node test/explorar_torre.mjs --v6",
+   "resultado": "igual byte a byte",
+   "sha256": "ca4426efc480296ecd97f1132f6dec1fed29cf955a3fd0e443b00b94a5d05f62"
+  },
+  "artifacts_campanha/escala_v6/validacao.json": {
+   "comando": "node test/calibrar_escala_v6.mjs --v6 --validar",
+   "resultado": "igual byte a byte",
+   "sha256": "bfbe17e835cbbd3bc4b04a142e0c91905e03fe99a13facd937ceaf8022b22a4c"
+  },
+  "artifacts_campanha/arenas/validacao.json": {
+   "comando": "node test/calibrar_arenas.mjs --v6 --validar",
+   "resultado": "igual byte a byte",
+   "sha256": "653940b660634e75841fe020b833e098052abed21e76094f8160b40eb67c76e3"
+  },
+  "artifacts_campanha/escala_v6/desafiantes_validacao.json": {
+   "comando": "node test/calibrar_desafiantes_v6.mjs --v6 --validar",
+   "resultado": "igual byte a byte",
+   "sha256": "78116129341ab2b5cdc22b4c6f3e83bdf0c15ec2ed21e81773d5e6545365ff03"
+  },
+  "artifacts_campanha/arenas/calibracao.json": {
+   "comando": "node test/calibrar_arenas.mjs --v6 --limite-fracao",
+   "resultado": "igual byte a byte menos a linha \"limite\": \"fracao\" (o cabecalho ganhou o campo depois do artefato)",
+   "sha256": "266e23ffa5a175c372e85b63c195409c52f5ada33a6715662c85bff4de01bc0c"
+  },
+  "artifacts_campanha/escala_v6/calibracao.json": {
+   "comando": "node test/calibrar_escala_v6.mjs --v6 --limite-fracao, com a Torre na lista de antes (sem GAMBITS_ARENA.torre: o artefato e do commit 28ea9f1, anterior a lista da Torre, 61afaf6)",
+   "resultado": "igual byte a byte menos a linha \"limite\": \"fracao\"; com a lista da Torre de hoje so mudam as entradas da Torre em lideres_por_beta (a Torre fica fora da escolha de beta)",
+   "sha256": "6620c6ce61323ca66ceda499a5d8cb1afbfed61d76cb222fc644817a7378c2af"
+  }
+ }
+}

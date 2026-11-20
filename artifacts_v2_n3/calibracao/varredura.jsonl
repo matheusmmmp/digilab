@@ -1,0 +1,5 @@
+{"G6_passa": false, "G6_vidas_no_teto": 18, "G_P1": 0.005096726190476186, "G_P1_ic_inferior": 0.0008184523809523725, "G_P1_passa": true, "ganho": 4, "razao_deriva": 1.6750529037009672, "segundos": 444.34716359998856}
+{"G6_passa": false, "G6_vidas_no_teto": 20, "G_P1": 0.007998511904761908, "G_P1_ic_inferior": 0.0040550595238095285, "G_P1_passa": true, "ganho": 8, "razao_deriva": 1.2811813176828348, "segundos": 463.36460200000147}
+{"G6_passa": false, "G6_vidas_no_teto": 20, "G_P1": 0.006733630952380954, "G_P1_ic_inferior": 0.0020089285714285643, "G_P1_passa": true, "ganho": 16, "razao_deriva": 1.0653936927185765, "segundos": 462.90027060000284}
+{"G6_passa": false, "G6_vidas_no_teto": 20, "G_P1": 0.006361607142857145, "G_P1_ic_inferior": -0.0014136904761904768, "G_P1_passa": false, "ganho": 32, "razao_deriva": 1.0286099196273026, "segundos": 468.31138349999674}
+{"G6_passa": false, "G6_vidas_no_teto": 20, "G_P1": 0.011272321428571425, "G_P1_ic_inferior": 0.0018229166666666574, "G_P1_passa": true, "ganho": 64, "razao_deriva": 1.0119620428208653, "segundos": 466.11602349999885}

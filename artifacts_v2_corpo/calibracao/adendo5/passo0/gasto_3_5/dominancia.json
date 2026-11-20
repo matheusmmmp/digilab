@@ -1,0 +1,512 @@
+{
+  "P0-q": {
+    "casado/bola": {
+      "origem": "sonda",
+      "resto": {
+        "contribuicao": {
+          "cansaco": 0,
+          "desconforto": 0,
+          "fome": 46096778
+        },
+        "decisoes": 745,
+        "f_por_unidade": {
+          "cansaco": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "desconforto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "fome": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "leitura": {
+          "cansaco": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "desconforto": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "fome": {
+            "domina": true,
+            "ic": {
+              "ic_inferior": 1.0,
+              "ic_superior": 1.0,
+              "media": 1.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 1.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "parcela": {
+          "cansaco": 0.0,
+          "desconforto": 0.0,
+          "fome": 1.0
+        }
+      },
+      "tempo_livre": {
+        "contribuicao": {
+          "cansaco": -224320737,
+          "desconforto": 0,
+          "fome": 0
+        },
+        "decisoes": 15000,
+        "f_por_unidade": {
+          "cansaco": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "desconforto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "fome": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "leitura": {
+          "cansaco": {
+            "domina": true,
+            "ic": {
+              "ic_inferior": 1.0,
+              "ic_superior": 1.0,
+              "media": 1.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 1.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "desconforto": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "fome": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "parcela": {
+          "cansaco": 1.0,
+          "desconforto": 0.0,
+          "fome": 0.0
+        }
+      },
+      "unidades": 20
+    },
+    "casado/padrao": {
+      "origem": "sonda",
+      "resto": {
+        "contribuicao": {
+          "cansaco": 0,
+          "desconforto": 0,
+          "fome": 45720422
+        },
+        "decisoes": 739,
+        "f_por_unidade": {
+          "cansaco": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "desconforto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "fome": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "leitura": {
+          "cansaco": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "desconforto": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "fome": {
+            "domina": true,
+            "ic": {
+              "ic_inferior": 1.0,
+              "ic_superior": 1.0,
+              "media": 1.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 1.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "parcela": {
+          "cansaco": 0.0,
+          "desconforto": 0.0,
+          "fome": 1.0
+        }
+      },
+      "tempo_livre": {
+        "contribuicao": {
+          "cansaco": -219943956,
+          "desconforto": 0,
+          "fome": 0
+        },
+        "decisoes": 14687,
+        "f_por_unidade": {
+          "cansaco": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "desconforto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "fome": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "leitura": {
+          "cansaco": {
+            "domina": true,
+            "ic": {
+              "ic_inferior": 1.0,
+              "ic_superior": 1.0,
+              "media": 1.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 1.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "desconforto": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          },
+          "fome": {
+            "domina": false,
+            "ic": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "media": 0.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "parcela": {
+          "cansaco": 1.0,
+          "desconforto": 0.0,
+          "fome": 0.0
+        }
+      },
+      "unidades": 20
+    }
+  }
+}

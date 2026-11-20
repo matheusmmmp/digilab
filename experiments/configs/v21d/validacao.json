@@ -1,0 +1,35 @@
+{
+  "descricao": "VALIDACAO da variante a_c_e2v_v do reequilibrio (docs/EQUILIBRIO_RODADA2.md, docs/VALIDACAO_V21D.md): regras da validacao V21C (experiments/configs/v21c/validacao.json) mais quatro chaves da ConfigCombateV21D ligadas; as outras tres desligadas. Registrado antes de rodar nas sementes de validacao.",
+  "variante": "a_c_e2v_v",
+  "base": "experiments/configs/v21c/validacao.json",
+  "regras_v21": {
+    "preparo_sob_pele_oculto": true,
+    "muralha_lista_espelho": true,
+    "vigia_bate_em_quem_recua": true,
+    "vigia_recua_do_preparo_sob_pele": true,
+    "investida_erra_contra_recuo": false,
+    "preparo_prende": false,
+    "tita_bate_em_quem_recua": false
+  },
+  "sementes_calibracao": [3101, 3202, 3303, 3404, 3505],
+  "sementes_validacao": [4101, 4202, 4303, 4404, 4505],
+  "partidas_por_par_por_semente": 100,
+  "partidas_por_bot_por_semente_painel": 50,
+  "partidas_por_semente_campanha": 10,
+  "epsilons": [0.05, 0.15],
+  "criterios": {
+    "faixa_forca": [0.40, 0.60],
+    "excecao_declarada": "furioso",
+    "vitorias_min_A6": 2,
+    "taxa_min_E4": 0.60,
+    "campanha_sem_treino_max": 0.30,
+    "campanha_com_treino_min": 0.80,
+    "campanha_excecao_aceita": "tier2_sentinela",
+    "relatados": {
+      "A3_suporte_min": 6,
+      "A4_extremos_max": {"0.05": 7, "0.15": 4},
+      "A5_amplitude_max": 0.20
+    }
+  },
+  "saida": "artifacts_combate_v21c/validacao_v21d"
+}

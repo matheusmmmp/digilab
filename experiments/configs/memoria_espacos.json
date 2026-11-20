@@ -1,0 +1,5 @@
+{
+  "descricao": "Arena v1 + memoria por espacos (PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS, docs/ADENDO_MEMORIA_EMOCAO_DF.md Parte 1) em todos os bracos. Resultado principal: divergencia (JSD) com espacos x sem memoria x memoria B1.",
+  "protocolo": "arena-v1-memoria-espacos",
+  "saida": "artifacts_v1_memoria_espacos"
+}

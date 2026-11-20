@@ -1,0 +1,198 @@
+{
+  "descricao": "rodada 12: tier 1, cada NPC sozinho vencivel por toda linha treinada (Q2) com o menor sucesso do basico",
+  "tier": "tier1",
+  "npcs": {
+    "cri|crianca:sereno@72|e0.2": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:sereno@84|e0.2": {
+      "total": 84,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:sereno@96|e0.2": {
+      "total": 96,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:sereno@108|e0.2": {
+      "total": 108,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:arisco@72|e0.2": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:arisco@84|e0.2": {
+      "total": 84,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:arisco@96|e0.2": {
+      "total": 96,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:arisco@108|e0.2": {
+      "total": 108,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "cri|crianca:sereno@72|e0.3": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:sereno@84|e0.3": {
+      "total": 84,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:sereno@96|e0.3": {
+      "total": 96,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:sereno@108|e0.3": {
+      "total": 108,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:arisco@72|e0.3": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:arisco@84|e0.3": {
+      "total": 84,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:arisco@96|e0.3": {
+      "total": 96,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:arisco@108|e0.3": {
+      "total": 108,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "cri|crianca:sereno@72|e0.4": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:sereno@84|e0.4": {
+      "total": 84,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:sereno@96|e0.4": {
+      "total": 96,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:sereno@108|e0.4": {
+      "total": 108,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:arisco@72|e0.4": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:arisco@84|e0.4": {
+      "total": 84,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:arisco@96|e0.4": {
+      "total": 96,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:arisco@108|e0.4": {
+      "total": 108,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.4
+    },
+    "cri|crianca:sereno@72|e0.5": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:sereno@84|e0.5": {
+      "total": 84,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:sereno@96|e0.5": {
+      "total": 96,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:sereno@108|e0.5": {
+      "total": 108,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:arisco@72|e0.5": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:arisco@84|e0.5": {
+      "total": 84,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:arisco@96|e0.5": {
+      "total": 96,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    },
+    "cri|crianca:arisco@108|e0.5": {
+      "total": 108,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.5
+    }
+  }
+}

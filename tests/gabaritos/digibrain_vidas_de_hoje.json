@@ -1,0 +1,3069 @@
+{
+ "dois_pets_direta|direta|afastado|drives|instinto|longe|101": {
+  "candidatos": "905000e7bf451b190de90eba7b371c9c20b8a525ddf798f353d943a70baafb71",
+  "impressao": "5c1a5a21ab315ebee0d4df76763f7f379d4f34c9c45afe62990ff3013365b898",
+  "n": {
+   "brincar": 28,
+   "comer": 27,
+   "explorar": 15
+  },
+  "tipos_explorar": {
+   "casa": 15,
+   "cheiro": 12,
+   "continuar": 2,
+   "vagar": 15
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|instinto|longe|202": {
+  "candidatos": "913e2be4456a1d21bfcde9ffb8ad253155147e27f0b1275378c7435419540487",
+  "impressao": "837c5f8a74308d75f127d332e2ff1651e99b54dfc466d0bd726cc39ea8f014b0",
+  "n": {
+   "brincar": 41,
+   "comer": 16,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 15,
+   "continuar": 2,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|instinto|perto|101": {
+  "candidatos": "5c43ac9d14d5c6e0585f5ac8a53cfcb1001b36e4ea7ea5110f2846c295c15ffc",
+  "impressao": "c79521f96b386c32c8e70c3e63fbf5a5df39be9d307dbc4046d7660d8a0e114b",
+  "n": {
+   "brincar": 71,
+   "comer": 22,
+   "explorar": 28
+  },
+  "tipos_explorar": {
+   "casa": 28,
+   "cheiro": 12,
+   "continuar": 2,
+   "vagar": 28
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|instinto|perto|202": {
+  "candidatos": "bf6f8004dafc32352137f15be27dd1becb8324a5e35167cdc78d70d08cca8e3d",
+  "impressao": "a0f5ba218d4056ecd3e9a195ebbf23a1315094b5ce58dee46f5745cbb12eb716",
+  "n": {
+   "brincar": 64,
+   "comer": 21,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro": 27,
+   "continuar": 6,
+   "vagar": 40
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|lobos|longe|101": {
+  "candidatos": "53ab6aa6e3bcb9d3074da8aca2f0d3ff8bb9364ce841e98b3f4c97befb45c5e6",
+  "impressao": "f40cf30db2c2edc8e93003c4f2273ec10a7391076ea7680780c0205d441fbe71",
+  "n": {
+   "brincar": 16,
+   "comer": 13,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro": 4,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|lobos|longe|202": {
+  "candidatos": "c5fb31f7151bcbdb849b01b5c2a585cb1ccaac96816da8a614bb3b293bc0717c",
+  "impressao": "277f8aa3d3fa8a2560ae8714f0239fd47e0fde150eb01f4b8a6e7366acc097f0",
+  "n": {
+   "brincar": 31,
+   "comer": 15,
+   "explorar": 22
+  },
+  "tipos_explorar": {
+   "casa": 22,
+   "cheiro": 16,
+   "continuar": 6,
+   "vagar": 22
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|lobos|perto|101": {
+  "candidatos": "a49bba1df73a1559dcf3910f127cbcd289b8e08b2a335a2d61725bcb70824589",
+  "impressao": "f6c5178d4e54c69ceb5197e3d4ba228e7a17f5daf19203cb237a94585911b1e3",
+  "n": {
+   "brincar": 72,
+   "comer": 18,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "casa": 36,
+   "cheiro": 14,
+   "continuar": 5,
+   "vagar": 36
+  }
+ },
+ "dois_pets_direta|direta|afastado|drives|lobos|perto|202": {
+  "candidatos": "70199159ae5ee147e9c0a5ca6f10544dc70f088fd416b64a7f8fd6d0f6630e8d",
+  "impressao": "548a2e6e030d6be850aa7bad8fb0fb1455d22ec81a3a2167d9ae010cbd816f5e",
+  "n": {
+   "brincar": 48,
+   "comer": 19,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "casa": 34,
+   "cheiro": 17,
+   "continuar": 5,
+   "vagar": 34
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|instinto|longe|101": {
+  "candidatos": "905000e7bf451b190de90eba7b371c9c20b8a525ddf798f353d943a70baafb71",
+  "impressao": "c59cb1d5e90207bb5414f77e55fd315041b1d5cdcc1268522d9a36c12f168cf1",
+  "n": {
+   "brincar": 28,
+   "comer": 27,
+   "explorar": 15
+  },
+  "tipos_explorar": {
+   "casa": 15,
+   "cheiro": 12,
+   "continuar": 2,
+   "vagar": 15
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|instinto|longe|202": {
+  "candidatos": "913e2be4456a1d21bfcde9ffb8ad253155147e27f0b1275378c7435419540487",
+  "impressao": "bb5a8bebbd1c99347dc080e829b947d4580875e83a9a0b4c07a82de1609c6a5c",
+  "n": {
+   "brincar": 41,
+   "comer": 16,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 15,
+   "continuar": 2,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|instinto|perto|101": {
+  "candidatos": "5c43ac9d14d5c6e0585f5ac8a53cfcb1001b36e4ea7ea5110f2846c295c15ffc",
+  "impressao": "108db02e427c1cd25088b7a6ed54942f94a3435fde3ae2d3fb3c97e307f9e0f8",
+  "n": {
+   "brincar": 71,
+   "comer": 22,
+   "explorar": 28
+  },
+  "tipos_explorar": {
+   "casa": 28,
+   "cheiro": 12,
+   "continuar": 2,
+   "vagar": 28
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|instinto|perto|202": {
+  "candidatos": "bf6f8004dafc32352137f15be27dd1becb8324a5e35167cdc78d70d08cca8e3d",
+  "impressao": "5363d845bedf267373fe10ef44e58c71b0161709f6adac2caa0231c402ff21fe",
+  "n": {
+   "brincar": 64,
+   "comer": 21,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro": 27,
+   "continuar": 6,
+   "vagar": 40
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|lobos|longe|101": {
+  "candidatos": "53ab6aa6e3bcb9d3074da8aca2f0d3ff8bb9364ce841e98b3f4c97befb45c5e6",
+  "impressao": "c69d9c2a2b582fab434518c98fbd9aedab98092de1adc5bf691d6cf1c02c7a11",
+  "n": {
+   "brincar": 16,
+   "comer": 13,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro": 4,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|lobos|longe|202": {
+  "candidatos": "c5fb31f7151bcbdb849b01b5c2a585cb1ccaac96816da8a614bb3b293bc0717c",
+  "impressao": "e04e8949b44103491cd5fc6d8283a6a7a4badc44dcd6dffea3c0d4106e67e25e",
+  "n": {
+   "brincar": 31,
+   "comer": 15,
+   "explorar": 22
+  },
+  "tipos_explorar": {
+   "casa": 22,
+   "cheiro": 16,
+   "continuar": 6,
+   "vagar": 22
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|lobos|perto|101": {
+  "candidatos": "a49bba1df73a1559dcf3910f127cbcd289b8e08b2a335a2d61725bcb70824589",
+  "impressao": "9dfc17bbd4920800cc81f481a3909762823ecfd6fea7ad5305b258e720362a24",
+  "n": {
+   "brincar": 72,
+   "comer": 18,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "casa": 36,
+   "cheiro": 14,
+   "continuar": 5,
+   "vagar": 36
+  }
+ },
+ "dois_pets_direta|direta|afastado|quimica|lobos|perto|202": {
+  "candidatos": "70199159ae5ee147e9c0a5ca6f10544dc70f088fd416b64a7f8fd6d0f6630e8d",
+  "impressao": "223f2841a4bff64d9ba55b2ab4195b9cfde071af35498d96d8bc860abd77f453",
+  "n": {
+   "brincar": 48,
+   "comer": 19,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "casa": 34,
+   "cheiro": 17,
+   "continuar": 5,
+   "vagar": 34
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|instinto|longe|101": {
+  "candidatos": "8019bb9b9b89b00e372544db8670dba81467aaaf2f9afc4771b39d4a56c9393c",
+  "impressao": "f540e03438ad2a0237d54835e9fed8338075deb89ffe4aefdf93960f0babbd55",
+  "n": {
+   "brincar": 52,
+   "comer": 23,
+   "explorar": 21
+  },
+  "tipos_explorar": {
+   "casa": 21,
+   "cheiro": 17,
+   "continuar": 1,
+   "vagar": 21
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|instinto|longe|202": {
+  "candidatos": "f262ed4adbc2a074666c9e782a5ae60cdb4e425e1aae387831f06ce5edeb0f5e",
+  "impressao": "e7c0b57633c98e16bf2a8d66f0fe45b5029885f14b7c160bda1db8e331b3fb19",
+  "n": {
+   "brincar": 25,
+   "comer": 44,
+   "explorar": 21
+  },
+  "tipos_explorar": {
+   "casa": 21,
+   "cheiro": 15,
+   "continuar": 2,
+   "vagar": 21
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|instinto|perto|101": {
+  "candidatos": "5d0819e379a3e140d1f95eb50eeef4043098c7d837ed10e6bdbfae4d91430e4c",
+  "impressao": "6d535680fcc38ac831f65ccf4d2723934b5f05b4c28336eabbdb41c694e645fc",
+  "n": {
+   "brincar": 74,
+   "comer": 21,
+   "explorar": 35
+  },
+  "tipos_explorar": {
+   "casa": 35,
+   "cheiro": 25,
+   "continuar": 7,
+   "vagar": 35
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|instinto|perto|202": {
+  "candidatos": "fbc9e05f979da476054a669a29fb55a60a7c87543d933d743d5f2c9ee8ccce47",
+  "impressao": "1798246398499e153f626dca9a41cd967d46fbb1690597de7aae6f47a15ca78f",
+  "n": {
+   "brincar": 56,
+   "comer": 23,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro": 21,
+   "continuar": 5,
+   "vagar": 40
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|lobos|longe|101": {
+  "candidatos": "d06730e89ced503b7f91ecdf20b517a7741363df8add390576bfd008452613dc",
+  "impressao": "1527bb28a4e66fecc1178379bdbf630eb6fd9c648e35815580d925e2b80e575e",
+  "n": {
+   "brincar": 15,
+   "comer": 23,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro": 4,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|lobos|longe|202": {
+  "candidatos": "46e989606059a8a21d4954e3a94d13ed569168ca49c7aa1ec9e95407570a4d08",
+  "impressao": "089beebc3e2eecc1b027c1617d126e73fbc8b20ecc302dfbea70d06e77235520",
+  "n": {
+   "brincar": 10,
+   "comer": 26,
+   "explorar": 11
+  },
+  "tipos_explorar": {
+   "casa": 11,
+   "cheiro": 5,
+   "continuar": 3,
+   "vagar": 11
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|lobos|perto|101": {
+  "candidatos": "05ad848674e544a4ad10c7047da19967f6bc66aaa163ee88325a8b721231a858",
+  "impressao": "0f7ca599c455e77c6ba3839aab2f282417da55c2243f471afa97b2635aceb88a",
+  "n": {
+   "brincar": 42,
+   "comer": 17,
+   "explorar": 27
+  },
+  "tipos_explorar": {
+   "casa": 27,
+   "cheiro": 10,
+   "continuar": 4,
+   "vagar": 27
+  }
+ },
+ "dois_pets_direta|direta|afastado|sem|lobos|perto|202": {
+  "candidatos": "b44418343777d8f8e88de907539f2cc74865a9c5c85b194616fb3fcc35616027",
+  "impressao": "fcbd581f02f8c4449c985b8ea2047f43c72a94357fd82575378ae4fda5d939e0",
+  "n": {
+   "brincar": 56,
+   "comer": 23,
+   "explorar": 31
+  },
+  "tipos_explorar": {
+   "casa": 31,
+   "cheiro": 13,
+   "continuar": 7,
+   "vagar": 31
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|instinto|longe|101": {
+  "candidatos": "191b97f7c880b42cb9cf3a2921d771a811ac275e7b282d9d280cc207d4d1d63f",
+  "impressao": "02177da2ead9d8f3a1cc9a3c8133c16cad71d587200bf44b26a8adde6c583303",
+  "n": {
+   "brincar": 33,
+   "comer": 20,
+   "explorar": 20
+  },
+  "tipos_explorar": {
+   "casa": 20,
+   "cheiro": 16,
+   "continuar": 1,
+   "vagar": 20
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|instinto|longe|202": {
+  "candidatos": "ff6bdfa907b3f2fa8a26262ef2db41efeb5d9f4a3c67e71a0c53ff7fa52ddb42",
+  "impressao": "3ae6e81cdcb8cd11d7da169f04dfd12b28cd218fb3d75b70d7efeee02b071943",
+  "n": {
+   "brincar": 47,
+   "comer": 14,
+   "explorar": 32
+  },
+  "tipos_explorar": {
+   "casa": 32,
+   "cheiro": 23,
+   "continuar": 3,
+   "vagar": 32
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|instinto|perto|101": {
+  "candidatos": "b6edc860546a3a94e7ffecdd5d91e8504fcef9558b92534cd63018ea688257d0",
+  "impressao": "efb0859961d2f4694dc825ef9205e7a533d73178ace25341f531381c0e270565",
+  "n": {
+   "brincar": 58,
+   "comer": 22,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 17,
+   "continuar": 3,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|instinto|perto|202": {
+  "candidatos": "30c7779b2b994fed046ff70feb6425491f95d5d5cde9df2d41f72ca78f746ff5",
+  "impressao": "e87112232455109d882e7642c31e9d0aaf6d6a848874fd6cab80d4f5b0352bf4",
+  "n": {
+   "brincar": 67,
+   "comer": 13,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "casa": 39,
+   "cheiro": 23,
+   "continuar": 6,
+   "vagar": 39
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|lobos|longe|101": {
+  "candidatos": "4c7bb816a03858722c73a44b78581af1e0332ca41d20d70281fc9dc7f1c83893",
+  "impressao": "4f8c27d9a7015748d028eeb3ebe21eab948944846a16c60724084fc94d67cdcb",
+  "n": {
+   "brincar": 16,
+   "comer": 34,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro": 4,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|lobos|longe|202": {
+  "candidatos": "6b2f2322aab113c203fd67378eac015160a3dd2ef32365a7d6da1848e7ef8f4f",
+  "impressao": "290751dfeaf98ad047f5bdc218a8e3e3b9806c43e694546d89843bac7e478afa",
+  "n": {
+   "brincar": 36,
+   "comer": 17,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 18,
+   "continuar": 3,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|lobos|perto|101": {
+  "candidatos": "268a30d0eb33c7d35409eeeb9fdba7153ab8b5ee4a1b272b47acba460cebce36",
+  "impressao": "e6a205060bfbc4153b5ccece58e594e944bdc30ae3ba1f0b078ac4728b8025b5",
+  "n": {
+   "brincar": 64,
+   "comer": 22,
+   "explorar": 29
+  },
+  "tipos_explorar": {
+   "casa": 29,
+   "cheiro": 17,
+   "continuar": 4,
+   "vagar": 29
+  }
+ },
+ "dois_pets_direta|direta|padrao|drives|lobos|perto|202": {
+  "candidatos": "89e436dddce5258970bdd4f61212c7cb8962e5df22da055095841baeefd0662c",
+  "impressao": "fad4d396f1971b6779601795f5dfaf379a56c8af0a642080f4f0b059cabe38c7",
+  "n": {
+   "brincar": 66,
+   "comer": 18,
+   "explorar": 38
+  },
+  "tipos_explorar": {
+   "casa": 38,
+   "cheiro": 22,
+   "continuar": 7,
+   "vagar": 38
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|instinto|longe|101": {
+  "candidatos": "191b97f7c880b42cb9cf3a2921d771a811ac275e7b282d9d280cc207d4d1d63f",
+  "impressao": "91e4c04db690acc64ea38b944549495e8ec8ad0e69cb57da18141b7a15358956",
+  "n": {
+   "brincar": 33,
+   "comer": 20,
+   "explorar": 20
+  },
+  "tipos_explorar": {
+   "casa": 20,
+   "cheiro": 16,
+   "continuar": 1,
+   "vagar": 20
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|instinto|longe|202": {
+  "candidatos": "ff6bdfa907b3f2fa8a26262ef2db41efeb5d9f4a3c67e71a0c53ff7fa52ddb42",
+  "impressao": "b1ff46ed08657a395e7f71543c6ec69754afdc312c877e92a9e6f665bef4df2e",
+  "n": {
+   "brincar": 47,
+   "comer": 14,
+   "explorar": 32
+  },
+  "tipos_explorar": {
+   "casa": 32,
+   "cheiro": 23,
+   "continuar": 3,
+   "vagar": 32
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|instinto|perto|101": {
+  "candidatos": "b6edc860546a3a94e7ffecdd5d91e8504fcef9558b92534cd63018ea688257d0",
+  "impressao": "7ad529de8910e27dc1524dc8623f9f4c73c3d1e952f8ee92cd6bd15d286602ad",
+  "n": {
+   "brincar": 58,
+   "comer": 22,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 17,
+   "continuar": 3,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|instinto|perto|202": {
+  "candidatos": "30c7779b2b994fed046ff70feb6425491f95d5d5cde9df2d41f72ca78f746ff5",
+  "impressao": "74c23ae344495940f641413f5e1fbec275e8a09669f7dd6b7ab4c5e5bed76482",
+  "n": {
+   "brincar": 67,
+   "comer": 13,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "casa": 39,
+   "cheiro": 23,
+   "continuar": 6,
+   "vagar": 39
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|lobos|longe|101": {
+  "candidatos": "4c7bb816a03858722c73a44b78581af1e0332ca41d20d70281fc9dc7f1c83893",
+  "impressao": "8c17fccfdcb5acd6bcab7c58067e7c5ff04add4760b3907b73459fda2948d0c0",
+  "n": {
+   "brincar": 16,
+   "comer": 34,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro": 4,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|lobos|longe|202": {
+  "candidatos": "6b2f2322aab113c203fd67378eac015160a3dd2ef32365a7d6da1848e7ef8f4f",
+  "impressao": "bfd5d47e14895fded5a3faef794c6c0d3ce5e87204aaa002e2a390d7cfc532a1",
+  "n": {
+   "brincar": 36,
+   "comer": 17,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 18,
+   "continuar": 3,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|lobos|perto|101": {
+  "candidatos": "268a30d0eb33c7d35409eeeb9fdba7153ab8b5ee4a1b272b47acba460cebce36",
+  "impressao": "1a122fe9b53198fb307c01ddb9bd39f429b473a996c9a9c05da46f113f02c882",
+  "n": {
+   "brincar": 64,
+   "comer": 22,
+   "explorar": 29
+  },
+  "tipos_explorar": {
+   "casa": 29,
+   "cheiro": 17,
+   "continuar": 4,
+   "vagar": 29
+  }
+ },
+ "dois_pets_direta|direta|padrao|quimica|lobos|perto|202": {
+  "candidatos": "89e436dddce5258970bdd4f61212c7cb8962e5df22da055095841baeefd0662c",
+  "impressao": "017e2aff090b781768c5a2b33ba9c415d87fd506a0d5fb89643211d63d82028c",
+  "n": {
+   "brincar": 66,
+   "comer": 18,
+   "explorar": 38
+  },
+  "tipos_explorar": {
+   "casa": 38,
+   "cheiro": 22,
+   "continuar": 7,
+   "vagar": 38
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|instinto|longe|101": {
+  "candidatos": "39e8cd5471e23374fa9226965c66e3b8abf4ec26a971d5ae2b772194501157c6",
+  "impressao": "5a886b7d8d73d53dc6356edb4ca8c22516eebaf0945b1014b27a98f96e14ffbb",
+  "n": {
+   "brincar": 32,
+   "comer": 39,
+   "explorar": 12
+  },
+  "tipos_explorar": {
+   "casa": 12,
+   "cheiro": 9,
+   "continuar": 1,
+   "vagar": 12
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|instinto|longe|202": {
+  "candidatos": "982cb5403a5d79e388c3481ce295ddbc7076709cdb9b772c71dc4df7f68fcbae",
+  "impressao": "6c6ae415708c3d1e69f0c5794c98b3dbc96d9519973cac7e60e69c5d3688001a",
+  "n": {
+   "brincar": 27,
+   "comer": 29,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 18,
+   "continuar": 5,
+   "vagar": 24
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|instinto|perto|101": {
+  "candidatos": "b366b908d5c3f38979e8f5b5c1d55a4d09b5023361387aa35f7aa8beed811ce9",
+  "impressao": "e7549c57443d322582b807cf157ec876db41f19a9681a7a0a35a5633c355b458",
+  "n": {
+   "brincar": 59,
+   "comer": 19,
+   "explorar": 33
+  },
+  "tipos_explorar": {
+   "casa": 33,
+   "cheiro": 25,
+   "continuar": 4,
+   "vagar": 33
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|instinto|perto|202": {
+  "candidatos": "11e646973e2ea2c22f0a201035631ec51914bd016eccc99f9ea6381782fab03c",
+  "impressao": "f0c28a496291c87219118d101d414c7cac678aeea0f54f9ce0a7f3471e943d65",
+  "n": {
+   "brincar": 58,
+   "comer": 18,
+   "explorar": 32
+  },
+  "tipos_explorar": {
+   "casa": 32,
+   "cheiro": 21,
+   "continuar": 4,
+   "vagar": 32
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|lobos|longe|101": {
+  "candidatos": "750d39f0de002fdcc31add25494f6ebef7460b2abe2a457b4a3b5b3008c06d27",
+  "impressao": "d4dffdc589e5aa890da78fa86a62d34f486a774ebdf6182a3cf9ffbb13654267",
+  "n": {
+   "brincar": 15,
+   "comer": 27,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro": 4,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|lobos|longe|202": {
+  "candidatos": "7d0f905efce92b5dc0bfe618d035e7d21d4e5232eb607eb8a87a71435c7213e1",
+  "impressao": "8b42b25fa9ba799ce70a5205aed03065ad67546a95a56e3e737c1aa2bb9f6ed1",
+  "n": {
+   "brincar": 10,
+   "comer": 26,
+   "explorar": 11
+  },
+  "tipos_explorar": {
+   "casa": 11,
+   "cheiro": 5,
+   "continuar": 3,
+   "vagar": 11
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|lobos|perto|101": {
+  "candidatos": "0fbf520bc2b31c040d036672a827b809335aab5775097ae76a8fd615c8bfc6dd",
+  "impressao": "bf6b55ca86f261ce02b69cce19927bf7a64347a4924dcead662904d8868246b1",
+  "n": {
+   "brincar": 53,
+   "comer": 15,
+   "explorar": 31
+  },
+  "tipos_explorar": {
+   "casa": 31,
+   "cheiro": 22,
+   "continuar": 4,
+   "vagar": 31
+  }
+ },
+ "dois_pets_direta|direta|padrao|sem|lobos|perto|202": {
+  "candidatos": "19b21957b2c53369688d91ad3a90a8cfbd2dc607f3069781805c8d311bc75aa9",
+  "impressao": "2f6048d0b7f2265a8411ee4cabc753f60fedca86e7181ce980de184d08370085",
+  "n": {
+   "brincar": 66,
+   "comer": 20,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro": 22,
+   "continuar": 8,
+   "vagar": 40
+  }
+ },
+ "olfato_grupo|instinto|101": {
+  "candidatos": "6422862647158ddf315310d5e3da8d904567ce30d5bfb838ec90ed7803fb7827",
+  "impressao": "25768a8e13ec09a18211797f784ddc3c7b90a01babd01425edeca12e3e27c8b7",
+  "n": {
+   "brincar": 62,
+   "comer": 26,
+   "explorar": 45
+  },
+  "tipos_explorar": {
+   "casa": 45,
+   "cheiro_seguir": 4,
+   "cheiro_virar": 4,
+   "continuar": 8,
+   "onde_comeu": 11,
+   "seguir": 5,
+   "vagar": 45
+  }
+ },
+ "olfato_grupo|instinto|202": {
+  "candidatos": "55201bb3c3d42cf226e4938fcd374bc01d05d765e275c51175e12ef80b16a9d0",
+  "impressao": "701dcf4fc38ca48ec041b68c3409be2255a37bd9df11b50a77da211940d2e8f1",
+  "n": {
+   "brincar": 59,
+   "comer": 31,
+   "explorar": 62
+  },
+  "tipos_explorar": {
+   "casa": 62,
+   "cheiro_seguir": 6,
+   "cheiro_virar": 6,
+   "continuar": 11,
+   "onde_comeu": 45,
+   "seguir": 14,
+   "vagar": 62
+  }
+ },
+ "olfato_grupo|lobos|101": {
+  "candidatos": "28cd1b5b52ceed65c963f0d167c1a60b32a4def46753d1f15f6ba69cf95aedb6",
+  "impressao": "1d3e94a312a27a1223da24465a240feb57bf38abf0aa439a4c5c83d210a42b40",
+  "n": {
+   "brincar": 52,
+   "comer": 38,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro_seguir": 8,
+   "cheiro_virar": 8,
+   "continuar": 7,
+   "onde_comeu": 27,
+   "seguir": 14,
+   "vagar": 40
+  }
+ },
+ "olfato_grupo|lobos|202": {
+  "candidatos": "a61c18b46d6ddb491665c951e8b6ab48191e446c6de1d6eff8e8129c96a246cc",
+  "impressao": "74a1ea989ca324396a487003b55ed65d124e7cb548db905ca1271e162053ccf7",
+  "n": {
+   "brincar": 45,
+   "comer": 31,
+   "explorar": 43
+  },
+  "tipos_explorar": {
+   "casa": 43,
+   "cheiro_seguir": 9,
+   "cheiro_virar": 9,
+   "continuar": 9,
+   "onde_comeu": 22,
+   "seguir": 24,
+   "vagar": 43
+  }
+ },
+ "olfato_vida|instinto|longe|101": {
+  "candidatos": "27c8045cedb4d45eb41d76c4b5e864395b8c87f18f8e832827c86d54d3d95143",
+  "impressao": "d5f8ed31f8b5ec8f9e3003ce2bb6d7493eca41a9801eced2dd4fa853367cad8d",
+  "n": {
+   "brincar": 21,
+   "comer": 32,
+   "explorar": 14
+  },
+  "tipos_explorar": {
+   "casa": 14,
+   "cheiro_seguir": 3,
+   "cheiro_virar": 3,
+   "continuar": 2,
+   "vagar": 14
+  }
+ },
+ "olfato_vida|instinto|longe|202": {
+  "candidatos": "e56e4d282de1a267ed99dc7c1c712f0d272b584911a3c13974347dd5f602b14a",
+  "impressao": "b3f7778f0b7b55238846390941a38bb4b3f952677bae01748a02f7a3eb814758",
+  "n": {
+   "brincar": 46,
+   "comer": 21,
+   "explorar": 27
+  },
+  "tipos_explorar": {
+   "casa": 27,
+   "continuar": 4,
+   "vagar": 27
+  }
+ },
+ "olfato_vida|instinto|perto|101": {
+  "candidatos": "bd84dc7ad892387d0a9b632fb4b3ede0fc68cb3ab68be142364fc1ad8cda868a",
+  "impressao": "2ca27695476ebed8289e7d35c382d61a8c32594168f5ce853cb242271231dd6f",
+  "n": {
+   "brincar": 78,
+   "comer": 13,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro_seguir": 2,
+   "cheiro_virar": 2,
+   "continuar": 6,
+   "vagar": 40
+  }
+ },
+ "olfato_vida|instinto|perto|202": {
+  "candidatos": "15d5917ed6bea12c45910f931890257e89a19508587d0c9cfe95ad2916a0738a",
+  "impressao": "668d166adeeb0be9ede53b9f3d422b7d3181809cea765cf4ff6951f086385297",
+  "n": {
+   "brincar": 60,
+   "comer": 18,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "casa": 39,
+   "cheiro_seguir": 3,
+   "cheiro_virar": 3,
+   "continuar": 8,
+   "vagar": 39
+  }
+ },
+ "olfato_vida|lobos|longe|101": {
+  "candidatos": "70d7db7940818514bb327872d081cf5e197fab0011438b9c9d75f1589a5bccf7",
+  "impressao": "a6c6f6db7238a5d1e8040acf4eaac5092e406e01639bba075cf5f7163c34f310",
+  "n": {
+   "brincar": 16,
+   "comer": 10,
+   "explorar": 7
+  },
+  "tipos_explorar": {
+   "casa": 7,
+   "cheiro_seguir": 1,
+   "cheiro_virar": 1,
+   "continuar": 1,
+   "vagar": 7
+  }
+ },
+ "olfato_vida|lobos|longe|202": {
+  "candidatos": "a21b082cd4874c54e8cd50d6ef835186ae8f0847c617928221ed5fa47324e7d2",
+  "impressao": "99fe4754f33d6005b293ea00b1ffec288148924cd3306ecbae7411fefe2f86e4",
+  "n": {
+   "brincar": 14,
+   "comer": 7,
+   "explorar": 9
+  },
+  "tipos_explorar": {
+   "casa": 9,
+   "continuar": 1,
+   "vagar": 9
+  }
+ },
+ "olfato_vida|lobos|perto|101": {
+  "candidatos": "3d5a7be678bace8004ad50e048fd6396fe90d11ec3ac2869ba3821d8f7633cd6",
+  "impressao": "79183e0d85891733459748792dab365a414a629261cc745cbdb286a7586e9a90",
+  "n": {
+   "brincar": 59,
+   "comer": 18,
+   "explorar": 54
+  },
+  "tipos_explorar": {
+   "casa": 54,
+   "cheiro_seguir": 1,
+   "cheiro_virar": 1,
+   "continuar": 12,
+   "vagar": 54
+  }
+ },
+ "olfato_vida|lobos|perto|202": {
+  "candidatos": "5cffd6dcc251e6932462d248efe1687a2cba17eac8e716380a84234e55be77c8",
+  "impressao": "3e95123beed66a1da261736778a8ba06c9ce23e04b39a475d069679e3b7d8a90",
+  "n": {
+   "brincar": 34,
+   "comer": 18,
+   "explorar": 27
+  },
+  "tipos_explorar": {
+   "casa": 27,
+   "cheiro_seguir": 1,
+   "cheiro_virar": 1,
+   "continuar": 3,
+   "vagar": 27
+  }
+ },
+ "p4_j1|completa|fisico|P1|atencioso|comedouro|101": {
+  "candidatos": "92dfb9299da9f49216a8e76356bd3f61507673b2b07d0075fdfe9edac1860599",
+  "impressao": "71053c3444c4d431a74a53ee9364b333c42671a4b3ec4d8d7cb20a79112a144f",
+  "n": {
+   "brincar": 88,
+   "comer": 64,
+   "explorar": 60
+  },
+  "tipos_explorar": {
+   "casa": 60,
+   "cheiro": 36,
+   "continuar": 10,
+   "vagar": 60
+  }
+ },
+ "p4_j1|completa|fisico|P1|atencioso|comedouro|202": {
+  "candidatos": "f5b271ad074493722456b1039648f2c283c791cce8361b6448f41d799416666b",
+  "impressao": "e65b2686dc062d4a265cea5b4c2c2c13dbb42600c4913996f83aa01a37eb0a0f",
+  "n": {
+   "brincar": 76,
+   "comer": 68,
+   "explorar": 64
+  },
+  "tipos_explorar": {
+   "casa": 64,
+   "cheiro": 10,
+   "continuar": 14,
+   "vagar": 64
+  }
+ },
+ "p4_j1|completa|fisico|P3|atencioso|comedouro|101": {
+  "candidatos": "fcd82e8db48449d4f70bf0ecb7a4378d8d2606ddb7a4c3e016c0266f92fd2df0",
+  "impressao": "56ffd9c8503719d373111de1b9ee70b73413799cff23d12b61000117c655c6a7",
+  "n": {
+   "brincar": 42,
+   "comer": 42,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "casa": 36,
+   "cheiro": 12,
+   "continuar": 8,
+   "vagar": 36
+  }
+ },
+ "p4_j1|completa|fisico|P3|atencioso|comedouro|202": {
+  "candidatos": "7dde22fa846a6dc1065e75358d3f866a6717cd6bf217c811ee75850d380a17a6",
+  "impressao": "4023ec182845dbe81eca2b46fef3eb0a3e68f677fa0bc9b14e21ac115a1e2128",
+  "n": {
+   "brincar": 54,
+   "comer": 52,
+   "explorar": 54
+  },
+  "tipos_explorar": {
+   "casa": 54,
+   "cheiro": 10,
+   "continuar": 8,
+   "vagar": 54
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P0z|atencioso|comedouro|101": {
+  "candidatos": "47daab1190fe49585a27a10df48ae5606938426e133c893a3f633dd45923e8ce",
+  "impressao": "e39ec52853b3537f8337030bdab8a658bdb03bd649c8e614f07dd6a10bd41ad6",
+  "n": {
+   "brincar": 112,
+   "comer": 54
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico_afastado|P0z|atencioso|comedouro|202": {
+  "candidatos": "a06911c772089540cabc0c043fb9f8a9b18bae2d72de8fdaae479bada9a466c5",
+  "impressao": "256b41d52651ea2c8a8a0d464a21623a0410a1fec24bb22289143ae0ed6b724f",
+  "n": {
+   "brincar": 78,
+   "comer": 42
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico_afastado|P0z|atencioso|longe|101": {
+  "candidatos": "7c522e44acdc164de9ce65b8678c23e67d655889a7f42f837eef88c919969f4c",
+  "impressao": "970759a3f0accfaacdaa5d0c6c29557dfad593832c7bd3ecbfa0cf57e963598e",
+  "n": {
+   "brincar": 62,
+   "comer": 26
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico_afastado|P0z|atencioso|longe|202": {
+  "candidatos": "4b6dda6c27b7b2bb3b873a31c7e34779c5cc7140686cc6bd0de321eb5a1016ae",
+  "impressao": "eeea39cf5a79d90457c845eaf7d36d25d5832feee4a4f62e1ac1008b57cd7dd7",
+  "n": {
+   "brincar": 48,
+   "comer": 48
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico_afastado|P0|atencioso|comedouro|101": {
+  "candidatos": "37681f8a43c0478bcf5d2876cc382b0f526ca20c026a8c026d5e9963e817a6b9",
+  "impressao": "f48fc01e4b105b2d1ba710f34abd266fd3cb45874cb0c61a760db26da53489f1",
+  "n": {
+   "brincar": 84,
+   "comer": 54,
+   "explorar": 66
+  },
+  "tipos_explorar": {
+   "casa": 66,
+   "cheiro": 24,
+   "continuar": 12,
+   "vagar": 66
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P0|atencioso|comedouro|202": {
+  "candidatos": "c42d9cfb69970e413664f1d1bff489a034ab57e766b8f68fd65f121f91468c97",
+  "impressao": "d7bf962966d02b58d6e6d48ec0cc004c9b4ddb0e11d5c9055414237d569aa62f",
+  "n": {
+   "brincar": 58,
+   "comer": 60,
+   "explorar": 54
+  },
+  "tipos_explorar": {
+   "casa": 54,
+   "cheiro": 14,
+   "continuar": 8,
+   "vagar": 54
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P0|atencioso|longe|101": {
+  "candidatos": "afa00978a4b785a27702bdd0d3572fa1d524d40ab999a4abc3e1b3fafdf744c9",
+  "impressao": "2d71f7c3d63899bd1c7b1132a84fcf9524f4ebaaa695a6d31976977f59ca6ce2",
+  "n": {
+   "brincar": 40,
+   "comer": 54,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro": 30,
+   "continuar": 8,
+   "vagar": 40
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P0|atencioso|longe|202": {
+  "candidatos": "97cbdc9e4af35bcb046be53e8b74b5daac548a5411cc914747fb55780df3cebd",
+  "impressao": "1e68a1975708e13cc601beb815a33f6e76d437db93db4acee2f43648671ba8d4",
+  "n": {
+   "brincar": 8,
+   "comer": 72,
+   "explorar": 22
+  },
+  "tipos_explorar": {
+   "casa": 22,
+   "cheiro": 12,
+   "continuar": 6,
+   "vagar": 22
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P1|atencioso|comedouro|101": {
+  "candidatos": "a8c29600f8966e14e500b8789e66af1d211c4525fbdb71d90e9aabbc9ed52b7c",
+  "impressao": "df75b0c9bfaa90c1b59694d132596ccebe44e1cb6738d6668225f1afdce378ba",
+  "n": {
+   "brincar": 90,
+   "comer": 52,
+   "explorar": 56
+  },
+  "tipos_explorar": {
+   "casa": 56,
+   "cheiro": 26,
+   "continuar": 10,
+   "vagar": 56
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P1|atencioso|comedouro|202": {
+  "candidatos": "4fe8057709517abb524f6fbe14c66e1292c9c9aedf742a87d641121c70af25e2",
+  "impressao": "74e4d9635873239b82b6a21a447df4a6c748356492da6115eb4386222f68c1a3",
+  "n": {
+   "brincar": 68,
+   "comer": 72,
+   "explorar": 68
+  },
+  "tipos_explorar": {
+   "casa": 68,
+   "cheiro": 16,
+   "continuar": 12,
+   "vagar": 68
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P1|atencioso|longe|101": {
+  "candidatos": "a7599d4f8775351daa061c9e0ab2e8060495cbda51bdcc240e65f3980738acd1",
+  "impressao": "4b6ddfb70e75cfe5ee4ed7f931a79c4f2fee0f6b952f38303d887e760e742933",
+  "n": {
+   "brincar": 92,
+   "comer": 44,
+   "explorar": 56
+  },
+  "tipos_explorar": {
+   "casa": 56,
+   "cheiro": 42,
+   "continuar": 10,
+   "vagar": 56
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P1|atencioso|longe|202": {
+  "candidatos": "8c30baf5f80c3a91a89583d14060e4a4b34ecc2385b44170562939280d7cd517",
+  "impressao": "a58931fc66123835833dc6f832a943539f8130e8579310b0d65248f2db4de3b3",
+  "n": {
+   "brincar": 14,
+   "comer": 74,
+   "explorar": 16
+  },
+  "tipos_explorar": {
+   "casa": 16,
+   "cheiro": 6,
+   "continuar": 4,
+   "vagar": 16
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P3|atencioso|comedouro|101": {
+  "candidatos": "fcd82e8db48449d4f70bf0ecb7a4378d8d2606ddb7a4c3e016c0266f92fd2df0",
+  "impressao": "6bf6c65304a94ca73053cb98ad36130468677ea8e811292fa445a8f1c5d63126",
+  "n": {
+   "brincar": 42,
+   "comer": 42,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "casa": 36,
+   "cheiro": 12,
+   "continuar": 8,
+   "vagar": 36
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P3|atencioso|comedouro|202": {
+  "candidatos": "819ce41e36d79027f6034ffe435afac14dd09e4f13063fa79f9dc0ef91a33e4d",
+  "impressao": "04627efe3258fe9a48e7cba2eddac162e649c8ac023e9d3d73346567c6783669",
+  "n": {
+   "brincar": 56,
+   "comer": 54,
+   "explorar": 60
+  },
+  "tipos_explorar": {
+   "casa": 60,
+   "cheiro": 14,
+   "continuar": 10,
+   "vagar": 60
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P3|atencioso|longe|101": {
+  "candidatos": "3a19341ffa326378c97e25bc6d07e98e2e3098b7a47bf747753cea55320793d6",
+  "impressao": "f074ed658b192c408462494318d12bb273df3796ef7f9950ed6d3dabe71fb7d5",
+  "n": {
+   "brincar": 38,
+   "comer": 42,
+   "explorar": 40
+  },
+  "tipos_explorar": {
+   "casa": 40,
+   "cheiro": 30,
+   "continuar": 4,
+   "vagar": 40
+  }
+ },
+ "p4_j1|simples|fisico_afastado|P3|atencioso|longe|202": {
+  "candidatos": "d115bf0eabe9766b11f8504cbecc7f9384d6c11ddf9e5b76893981c3c5a841e1",
+  "impressao": "2b456c7b3b2883ad5435490affa9602d0544624c22462da256785e7c3bff1f7f",
+  "n": {
+   "brincar": 12,
+   "comer": 54,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 14,
+   "continuar": 6,
+   "vagar": 24
+  }
+ },
+ "p4_j1|simples|fisico|P0z|atencioso|comedouro|101": {
+  "candidatos": "d5fa53d8bbeca414557fe5ac7780c0b978c4997be36a406bc1b4757d97f16e72",
+  "impressao": "0e6c59381cfb4b0b59ab08ddeeb607760d5b26a14696ff5d7eabdd3d081643e0",
+  "n": {
+   "brincar": 112,
+   "comer": 54
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico|P0z|atencioso|comedouro|202": {
+  "candidatos": "77c32178299499723ee4bb525a463f8e42662dbfaada7a362ec60d70e9029f79",
+  "impressao": "32d4728e48447899e5f77c8ab069d453a03552b8155d15fe3dba6bc40db4cb14",
+  "n": {
+   "brincar": 56,
+   "comer": 34
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico|P0z|atencioso|longe|101": {
+  "candidatos": "e8850333bd37e4285e6cc4042cf61d7dfb8d7890c8e1b39946269201c47d1056",
+  "impressao": "76e3c8b53e9d1a751d483023bef92c2e57671d611ae01ced82894cca0c245ee3",
+  "n": {
+   "brincar": 62,
+   "comer": 32
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico|P0z|atencioso|longe|202": {
+  "candidatos": "94fc27f3d9a41c2a1d15e4640b3fe3d916b7c6e724e12b01f14df4cee73b72f0",
+  "impressao": "0da0ff8869fbcdb66580e8b81cb6670882dfcf86d6b8ebdcb93622d6f8306334",
+  "n": {
+   "brincar": 38,
+   "comer": 62
+  },
+  "tipos_explorar": {}
+ },
+ "p4_j1|simples|fisico|P0|atencioso|comedouro|101": {
+  "candidatos": "fe3617d61adec09e651520a16a68faab3dee1ab1cade9624af763678f126fee1",
+  "impressao": "9849cef747693c2321d3d507086462b4c0e63be8fab729e028852b45401f281d",
+  "n": {
+   "brincar": 84,
+   "comer": 54,
+   "explorar": 66
+  },
+  "tipos_explorar": {
+   "casa": 66,
+   "cheiro": 44,
+   "continuar": 12,
+   "vagar": 66
+  }
+ },
+ "p4_j1|simples|fisico|P0|atencioso|comedouro|202": {
+  "candidatos": "6f321a45131f8c5ef919c97fbbc43d8eca06b1211a88ffff176914c8428695b5",
+  "impressao": "4a580ffac64ed30a7c710484754f3178b000e9da4ed955898468bb7f3e2888fe",
+  "n": {
+   "brincar": 74,
+   "comer": 66,
+   "explorar": 74
+  },
+  "tipos_explorar": {
+   "casa": 74,
+   "cheiro": 18,
+   "continuar": 12,
+   "vagar": 74
+  }
+ },
+ "p4_j1|simples|fisico|P0|atencioso|longe|101": {
+  "candidatos": "468437c551419824c1e26e6590f1cc9c8f94d5ce0cc6a2c498bb1df47be6b888",
+  "impressao": "87a525cef444e4cc5cda1e737714549d3daac398524ba11ad241e09d49e456a5",
+  "n": {
+   "brincar": 46,
+   "comer": 54,
+   "explorar": 44
+  },
+  "tipos_explorar": {
+   "casa": 44,
+   "cheiro": 34,
+   "continuar": 4,
+   "vagar": 44
+  }
+ },
+ "p4_j1|simples|fisico|P0|atencioso|longe|202": {
+  "candidatos": "fe075cfc4ba1c994b8db6ec7163dee5f3450c898557c68b3ee49f1a939a95e45",
+  "impressao": "2aa2d177111fe422ee4ebaa438f6808660301b08cadf7b0c2e0035639eacd0d5",
+  "n": {
+   "brincar": 14,
+   "comer": 84,
+   "explorar": 22
+  },
+  "tipos_explorar": {
+   "casa": 22,
+   "cheiro": 10,
+   "continuar": 4,
+   "vagar": 22
+  }
+ },
+ "p4_j1|simples|fisico|P1|atencioso|comedouro|101": {
+  "candidatos": "92dfb9299da9f49216a8e76356bd3f61507673b2b07d0075fdfe9edac1860599",
+  "impressao": "d1c5b2b1a1a3a635517241469b18884c80e894ac1a3e46ae47e84f893fb48b13",
+  "n": {
+   "brincar": 88,
+   "comer": 64,
+   "explorar": 60
+  },
+  "tipos_explorar": {
+   "casa": 60,
+   "cheiro": 36,
+   "continuar": 10,
+   "vagar": 60
+  }
+ },
+ "p4_j1|simples|fisico|P1|atencioso|comedouro|202": {
+  "candidatos": "f5b271ad074493722456b1039648f2c283c791cce8361b6448f41d799416666b",
+  "impressao": "38a3184c9441ea6af93d30c27f4a165135bddefd47e7bca6068130eeb28ffbe6",
+  "n": {
+   "brincar": 76,
+   "comer": 68,
+   "explorar": 64
+  },
+  "tipos_explorar": {
+   "casa": 64,
+   "cheiro": 10,
+   "continuar": 14,
+   "vagar": 64
+  }
+ },
+ "p4_j1|simples|fisico|P1|atencioso|longe|101": {
+  "candidatos": "ec24bf08aa1b92b41b5d70e02cf84cf575fa30d655eccaee47311be9adc6e897",
+  "impressao": "fb66671103cf22b38e08786e2b7cb02dfcaaaddedcf140769622494addfd6348",
+  "n": {
+   "brincar": 74,
+   "comer": 68,
+   "explorar": 48
+  },
+  "tipos_explorar": {
+   "casa": 48,
+   "cheiro": 32,
+   "continuar": 6,
+   "vagar": 48
+  }
+ },
+ "p4_j1|simples|fisico|P1|atencioso|longe|202": {
+  "candidatos": "382e7c2c2de7866388c56a007a8cc8a537293ae10a5d5584415fd5240e0e55b2",
+  "impressao": "75422528460f29e09f9c20291b599b598df3ba422fc0998178fb892b96e85e75",
+  "n": {
+   "brincar": 14,
+   "comer": 86,
+   "explorar": 16
+  },
+  "tipos_explorar": {
+   "casa": 16,
+   "cheiro": 6,
+   "continuar": 4,
+   "vagar": 16
+  }
+ },
+ "p4_j1|simples|fisico|P3|atencioso|comedouro|101": {
+  "candidatos": "fcd82e8db48449d4f70bf0ecb7a4378d8d2606ddb7a4c3e016c0266f92fd2df0",
+  "impressao": "56ffd9c8503719d373111de1b9ee70b73413799cff23d12b61000117c655c6a7",
+  "n": {
+   "brincar": 42,
+   "comer": 42,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "casa": 36,
+   "cheiro": 12,
+   "continuar": 8,
+   "vagar": 36
+  }
+ },
+ "p4_j1|simples|fisico|P3|atencioso|comedouro|202": {
+  "candidatos": "7dde22fa846a6dc1065e75358d3f866a6717cd6bf217c811ee75850d380a17a6",
+  "impressao": "4023ec182845dbe81eca2b46fef3eb0a3e68f677fa0bc9b14e21ac115a1e2128",
+  "n": {
+   "brincar": 54,
+   "comer": 52,
+   "explorar": 54
+  },
+  "tipos_explorar": {
+   "casa": 54,
+   "cheiro": 10,
+   "continuar": 8,
+   "vagar": 54
+  }
+ },
+ "p4_j1|simples|fisico|P3|atencioso|longe|101": {
+  "candidatos": "73877b3556f277aec17f65ca5d2dc54a1379b920d82cc8c468b7a386490a0722",
+  "impressao": "5681a7b9d9cbbc8a8eb974547c67407121aaf8b6cf9cdf92d25e578e9a51569c",
+  "n": {
+   "brincar": 38,
+   "comer": 42,
+   "explorar": 42
+  },
+  "tipos_explorar": {
+   "casa": 42,
+   "cheiro": 34,
+   "continuar": 6,
+   "vagar": 42
+  }
+ },
+ "p4_j1|simples|fisico|P3|atencioso|longe|202": {
+  "candidatos": "c3c69d482cbee29611e78799f3bb4d220e71589baa69f29341dcacd0b108256c",
+  "impressao": "75e211ed0c45bb3883eea4852b5fde567d8550de7abb6e8d597b9add933a2972",
+  "n": {
+   "brincar": 12,
+   "comer": 64,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "casa": 24,
+   "cheiro": 14,
+   "continuar": 6,
+   "vagar": 24
+  }
+ },
+ "pqp_plano|afastado|metabolismo|P1-plano|comedouro|101": {
+  "candidatos": "309199d39b20aa56fea2f0d20932b7785c26fdaa696d0528914ed0c64d7bbe28",
+  "impressao": "d179b61c9935d2114efb500cec4d4fceb2ea199a5a18d63fbe4baafea81b9f82",
+  "n": {
+   "brincar": 37,
+   "comer": 42,
+   "explorar": 29
+  },
+  "tipos_explorar": {
+   "arvore": 25,
+   "casa": 29,
+   "cheiro": 11,
+   "continuar": 5,
+   "vagar": 29
+  }
+ },
+ "pqp_plano|afastado|metabolismo|P1-plano|comedouro|202": {
+  "candidatos": "986c0a7f3ef0b6aa84b61f2cef4cd68c0f5772e4d23489b83d13b1a0845242be",
+  "impressao": "039d3dde09c1364660feed4f66369efc0c2f950735a58ae76e6a9813324bb742",
+  "n": {
+   "brincar": 35,
+   "comer": 38,
+   "explorar": 31
+  },
+  "tipos_explorar": {
+   "arvore": 28,
+   "casa": 31,
+   "cheiro": 9,
+   "continuar": 7,
+   "vagar": 31
+  }
+ },
+ "pqp_plano|afastado|quimica|P1-plano|comedouro|101": {
+  "candidatos": "ffba194fef61bba3ec0a3dc126b5118d057fdf0cb8f42c6d9d73777be6047c04",
+  "impressao": "4b15f40bbae13fed554cfbd8bfdc2f6c7caf2c53a77ede35271e2ab0983523d8",
+  "n": {
+   "brincar": 54,
+   "comer": 39,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "arvore": 52,
+   "casa": 39,
+   "cheiro": 19,
+   "continuar": 7,
+   "vagar": 39
+  }
+ },
+ "pqp_plano|afastado|quimica|P1-plano|comedouro|202": {
+  "candidatos": "9d808e5165e48b8b37b97e97ad30db77ec9d1b1e4ab672d347127eb91a503183",
+  "impressao": "d1f58c66e744679dd23c358eecba4bc9a73c67d519d0852f2d0bb159a0b411b5",
+  "n": {
+   "brincar": 52,
+   "comer": 35,
+   "explorar": 42
+  },
+  "tipos_explorar": {
+   "arvore": 39,
+   "casa": 42,
+   "cheiro": 14,
+   "continuar": 9,
+   "vagar": 42
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P0-arv|comedouro|101": {
+  "candidatos": "21fb31708d7d92e9758761d12a85e927e5d4246ad8f313af526c501b3eeb714b",
+  "impressao": "2f18a63dda5de0bd6e1b13a1ed97d87ea3b55d273b2035ff660d96a59ff9058a",
+  "n": {
+   "brincar": 38,
+   "comer": 42,
+   "explorar": 23
+  },
+  "tipos_explorar": {
+   "arvore": 19,
+   "casa": 23,
+   "cheiro": 8,
+   "continuar": 3,
+   "vagar": 23
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P0-arv|comedouro|202": {
+  "candidatos": "ed0a873da15093069ea276d05b4c0c053bc598f9858f55a74be9e5da44983517",
+  "impressao": "138985e482183166510db9dfd7762ca8c1d83fd83b4a2b80755c318c7e78ae40",
+  "n": {
+   "brincar": 41,
+   "comer": 36,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "arvore": 25,
+   "casa": 34,
+   "cheiro": 10,
+   "continuar": 4,
+   "vagar": 34
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P0-arv|longe|101": {
+  "candidatos": "6a67f39d70aca2ea8e6e7c9fbf7bc81424317ef35e6e1ae9ecdb0b2404d0457e",
+  "impressao": "56db3f987308e07f4a45184038d1b70d7dab8f34a53056a74809df65939d1f92",
+  "n": {
+   "brincar": 45,
+   "comer": 24,
+   "explorar": 35
+  },
+  "tipos_explorar": {
+   "arvore": 45,
+   "casa": 35,
+   "cheiro": 32,
+   "continuar": 7,
+   "vagar": 35
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P0-arv|longe|202": {
+  "candidatos": "bfa1ccf137db36fab7decfb3fd073100662a8d5de7261722aa3fef7444301e07",
+  "impressao": "8b392deb0ab99e8ad689e087d44cd2cf97096f36c7dfd56051e6425cf4c5c59a",
+  "n": {
+   "brincar": 15,
+   "comer": 33,
+   "explorar": 18
+  },
+  "tipos_explorar": {
+   "arvore": 4,
+   "casa": 18,
+   "cheiro": 8,
+   "continuar": 3,
+   "vagar": 18
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano-motivo|comedouro|101": {
+  "candidatos": "37a55b382f88936e7367bf19f093386b90552b63326b085f6a7b631d0a73a7a0",
+  "impressao": "d7bd0dd4cbf9f2e9feaf803e32a3dfd84d12b9b7564c1f905c4cc74683fb5ae5",
+  "n": {
+   "brincar": 38,
+   "comer": 54,
+   "explorar": 30
+  },
+  "tipos_explorar": {
+   "arvore": 26,
+   "casa": 30,
+   "cheiro": 16,
+   "continuar": 5,
+   "vagar": 30
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano-motivo|comedouro|202": {
+  "candidatos": "ddb263190d10b57d795ce81587dbd851a9a720da9e37be63a584db678bc4b983",
+  "impressao": "64ca9423d2233fbcbe1c42ce7013a798c50931011533b99f755bbd75d78fca9b",
+  "n": {
+   "brincar": 31,
+   "comer": 43,
+   "explorar": 33
+  },
+  "tipos_explorar": {
+   "arvore": 21,
+   "casa": 33,
+   "cheiro": 19,
+   "continuar": 7,
+   "vagar": 33
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano-motivo|longe|101": {
+  "candidatos": "6c846849892b4e20319105a1b98331a660d524bef40f84205dd0ce9919033e08",
+  "impressao": "99482e23976a02de3e768fed216e81f8bb5607a1c837d1eb636a7d1b618dee45",
+  "n": {
+   "brincar": 46,
+   "comer": 40,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "arvore": 39,
+   "casa": 24,
+   "cheiro": 20,
+   "continuar": 3,
+   "vagar": 24
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano-motivo|longe|202": {
+  "candidatos": "d57819361e2bae94ec9d6a0529802cad788c160a35ac6b0db9fc9d7dd1e15a4b",
+  "impressao": "47ee8c9bf5c11f72c29dd5363aea5f784b51d4a10aa68c94f7f9d64180bb66f3",
+  "n": {
+   "brincar": 29,
+   "comer": 38,
+   "explorar": 30
+  },
+  "tipos_explorar": {
+   "arvore": 15,
+   "casa": 30,
+   "cheiro": 22,
+   "continuar": 7,
+   "vagar": 30
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano|comedouro|101": {
+  "candidatos": "37a55b382f88936e7367bf19f093386b90552b63326b085f6a7b631d0a73a7a0",
+  "impressao": "6f4b36a459528cc50dcfbbad5d2579754b59c2aa572850660c672063a9db6739",
+  "n": {
+   "brincar": 38,
+   "comer": 54,
+   "explorar": 30
+  },
+  "tipos_explorar": {
+   "arvore": 26,
+   "casa": 30,
+   "cheiro": 16,
+   "continuar": 5,
+   "vagar": 30
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano|comedouro|202": {
+  "candidatos": "ddb263190d10b57d795ce81587dbd851a9a720da9e37be63a584db678bc4b983",
+  "impressao": "538fe6478641f41b85b99bc4013077ef3fd209aa40570414ffef47c1ab164961",
+  "n": {
+   "brincar": 31,
+   "comer": 43,
+   "explorar": 33
+  },
+  "tipos_explorar": {
+   "arvore": 21,
+   "casa": 33,
+   "cheiro": 19,
+   "continuar": 7,
+   "vagar": 33
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano|longe|101": {
+  "candidatos": "6c846849892b4e20319105a1b98331a660d524bef40f84205dd0ce9919033e08",
+  "impressao": "b85659fbea1c7b3c6ac54460224e0685689a0b63226e4a93e34e4967b71813f4",
+  "n": {
+   "brincar": 46,
+   "comer": 40,
+   "explorar": 24
+  },
+  "tipos_explorar": {
+   "arvore": 39,
+   "casa": 24,
+   "cheiro": 20,
+   "continuar": 3,
+   "vagar": 24
+  }
+ },
+ "pqp_plano|padrao|metabolismo|P1-plano|longe|202": {
+  "candidatos": "d57819361e2bae94ec9d6a0529802cad788c160a35ac6b0db9fc9d7dd1e15a4b",
+  "impressao": "064cab4b834b7ba388b285954e6a612cab57d2414b09534b56cad27e5afcefa2",
+  "n": {
+   "brincar": 29,
+   "comer": 38,
+   "explorar": 30
+  },
+  "tipos_explorar": {
+   "arvore": 15,
+   "casa": 30,
+   "cheiro": 22,
+   "continuar": 7,
+   "vagar": 30
+  }
+ },
+ "pqp_plano|padrao|metabolismo|instinto|comedouro|101": {
+  "candidatos": "21fb31708d7d92e9758761d12a85e927e5d4246ad8f313af526c501b3eeb714b",
+  "impressao": "290bcee3b4abffbc4c2969c463773070bcdb032189b564751387d4535fcaf917",
+  "n": {
+   "brincar": 38,
+   "comer": 42,
+   "explorar": 23
+  },
+  "tipos_explorar": {
+   "arvore": 19,
+   "casa": 23,
+   "cheiro": 8,
+   "continuar": 3,
+   "vagar": 23
+  }
+ },
+ "pqp_plano|padrao|metabolismo|instinto|comedouro|202": {
+  "candidatos": "ed0a873da15093069ea276d05b4c0c053bc598f9858f55a74be9e5da44983517",
+  "impressao": "9b799f1dc4de30553e9aa5ca9a98ebccc06cac31268ce635639e9cf5ea4ca037",
+  "n": {
+   "brincar": 41,
+   "comer": 36,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "arvore": 25,
+   "casa": 34,
+   "cheiro": 10,
+   "continuar": 4,
+   "vagar": 34
+  }
+ },
+ "pqp_plano|padrao|metabolismo|instinto|longe|101": {
+  "candidatos": "6a67f39d70aca2ea8e6e7c9fbf7bc81424317ef35e6e1ae9ecdb0b2404d0457e",
+  "impressao": "14a22124fc6f85c13ca1c0e24828319660f9f9a8c33217089b244a95b879c0ce",
+  "n": {
+   "brincar": 45,
+   "comer": 24,
+   "explorar": 35
+  },
+  "tipos_explorar": {
+   "arvore": 45,
+   "casa": 35,
+   "cheiro": 32,
+   "continuar": 7,
+   "vagar": 35
+  }
+ },
+ "pqp_plano|padrao|metabolismo|instinto|longe|202": {
+  "candidatos": "bfa1ccf137db36fab7decfb3fd073100662a8d5de7261722aa3fef7444301e07",
+  "impressao": "1b0dc0df9f3cf1cc4c4123f7add78d3bd34b10023349d25a30b5dd53b613f918",
+  "n": {
+   "brincar": 15,
+   "comer": 33,
+   "explorar": 18
+  },
+  "tipos_explorar": {
+   "arvore": 4,
+   "casa": 18,
+   "cheiro": 8,
+   "continuar": 3,
+   "vagar": 18
+  }
+ },
+ "pqp_plano|padrao|quimica|P0-arv|comedouro|101": {
+  "candidatos": "3ad12234be5caf7a777dd938f26eaf78eb4498967228c05bb0e98bc6e8181b4d",
+  "impressao": "abe520b3ac82e9cea87fb2778182182e9320e032eb2da1f92bdc7e1a37d891df",
+  "n": {
+   "brincar": 56,
+   "comer": 51,
+   "explorar": 33
+  },
+  "tipos_explorar": {
+   "arvore": 45,
+   "casa": 33,
+   "cheiro": 23,
+   "continuar": 6,
+   "vagar": 33
+  }
+ },
+ "pqp_plano|padrao|quimica|P0-arv|comedouro|202": {
+  "candidatos": "5f575b0c7424b455549e78d9e8c3f0c21f28f4e2956934562935a5a8d37822e1",
+  "impressao": "1342ff2bde2c8bfce8f212158cea61c6e30b087459ea454b7671509a7bbecf4a",
+  "n": {
+   "brincar": 39,
+   "comer": 39,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "arvore": 52,
+   "casa": 39,
+   "cheiro": 16,
+   "continuar": 5,
+   "vagar": 39
+  }
+ },
+ "pqp_plano|padrao|quimica|P0-arv|longe|101": {
+  "candidatos": "244309e40260280c92dc50fb33a84a02186d0ce9f521d6c5806972317d9bb3d9",
+  "impressao": "0a8e266a73ecd3d358405b1d183ab244b420a6c358e3e15453dd5ab16f8a0702",
+  "n": {
+   "brincar": 47,
+   "comer": 36,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "arvore": 50,
+   "casa": 34,
+   "cheiro": 31,
+   "continuar": 6,
+   "vagar": 34
+  }
+ },
+ "pqp_plano|padrao|quimica|P0-arv|longe|202": {
+  "candidatos": "a2f0db67622520dc0e753723d5c6d074dee73da7755d80ccd56bccb3a5326a76",
+  "impressao": "4afb27e85dc37bf46d681316cd34111661e998273304f494ea4da6c5468030a1",
+  "n": {
+   "brincar": 36,
+   "comer": 33,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "arvore": 21,
+   "casa": 34,
+   "cheiro": 25,
+   "continuar": 7,
+   "vagar": 34
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano-motivo|comedouro|101": {
+  "candidatos": "20b3cebf7bbb82ee874b43d16e840e2f0a36976b3f52bb3a8a45db1adab7ae8c",
+  "impressao": "cf756e2bfd208ab960150a304bcfd199b987b3212f84d75f4964955dabd87206",
+  "n": {
+   "brincar": 51,
+   "comer": 31,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "arvore": 41,
+   "casa": 39,
+   "cheiro": 29,
+   "continuar": 8,
+   "vagar": 39
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano-motivo|comedouro|202": {
+  "candidatos": "d47cc28c0ffd34c77568a937c15ea4326fef5541986eda82b96c848efc760efb",
+  "impressao": "6ecdfb0c686fe8623875d5488c006c8b0676362245a5718977fec4a63c4ada07",
+  "n": {
+   "brincar": 33,
+   "comer": 43,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "arvore": 50,
+   "casa": 36,
+   "cheiro": 16,
+   "continuar": 8,
+   "vagar": 36
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano-motivo|longe|101": {
+  "candidatos": "cb558ecb6a7c9571f6ea2931f480ac9d1972321a857f0e144002ebae3ae9ea81",
+  "impressao": "421ee674b21dca459edf74d4da6362b46004f794aef41d4af5a1574e20b17b1f",
+  "n": {
+   "brincar": 47,
+   "comer": 46,
+   "explorar": 37
+  },
+  "tipos_explorar": {
+   "arvore": 55,
+   "casa": 37,
+   "cheiro": 33,
+   "continuar": 4,
+   "vagar": 37
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano-motivo|longe|202": {
+  "candidatos": "9e5e0a64dfb699d521f7dd0de142ec875feabeaa45e375d8476f18168a12e4da",
+  "impressao": "cf2f869f4161922678a43e904398fd2f3acf0b5cacb82b1ac829e06eb565048f",
+  "n": {
+   "brincar": 26,
+   "comer": 38,
+   "explorar": 35
+  },
+  "tipos_explorar": {
+   "arvore": 29,
+   "casa": 35,
+   "cheiro": 28,
+   "continuar": 6,
+   "vagar": 35
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano|comedouro|101": {
+  "candidatos": "20b3cebf7bbb82ee874b43d16e840e2f0a36976b3f52bb3a8a45db1adab7ae8c",
+  "impressao": "892ff4b8715c92b7875093c1b97827087846c4ca843d7fe08d5daf154a40d764",
+  "n": {
+   "brincar": 51,
+   "comer": 31,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "arvore": 41,
+   "casa": 39,
+   "cheiro": 29,
+   "continuar": 8,
+   "vagar": 39
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano|comedouro|202": {
+  "candidatos": "d47cc28c0ffd34c77568a937c15ea4326fef5541986eda82b96c848efc760efb",
+  "impressao": "b7162bf007fffda4b6a8cdedc55816424be6f72613a146e37db81191baab99fd",
+  "n": {
+   "brincar": 33,
+   "comer": 43,
+   "explorar": 36
+  },
+  "tipos_explorar": {
+   "arvore": 50,
+   "casa": 36,
+   "cheiro": 16,
+   "continuar": 8,
+   "vagar": 36
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano|longe|101": {
+  "candidatos": "cb558ecb6a7c9571f6ea2931f480ac9d1972321a857f0e144002ebae3ae9ea81",
+  "impressao": "6a4d4a18db16ebb6a276a19b7975fd3c65af41bf25071c6e54692a54c4fcd537",
+  "n": {
+   "brincar": 47,
+   "comer": 46,
+   "explorar": 37
+  },
+  "tipos_explorar": {
+   "arvore": 55,
+   "casa": 37,
+   "cheiro": 33,
+   "continuar": 4,
+   "vagar": 37
+  }
+ },
+ "pqp_plano|padrao|quimica|P1-plano|longe|202": {
+  "candidatos": "9e5e0a64dfb699d521f7dd0de142ec875feabeaa45e375d8476f18168a12e4da",
+  "impressao": "899b99efcad892a6dbf104feed9bdf6ec58e97136abea3f71cf8ca5da90b51e6",
+  "n": {
+   "brincar": 26,
+   "comer": 38,
+   "explorar": 35
+  },
+  "tipos_explorar": {
+   "arvore": 29,
+   "casa": 35,
+   "cheiro": 28,
+   "continuar": 6,
+   "vagar": 35
+  }
+ },
+ "pqp_plano|padrao|quimica|instinto|comedouro|101": {
+  "candidatos": "3ad12234be5caf7a777dd938f26eaf78eb4498967228c05bb0e98bc6e8181b4d",
+  "impressao": "7daa31ddd84315616c9a21e6c897f74951ff4c59f2d204e1ece680f651bfafc0",
+  "n": {
+   "brincar": 56,
+   "comer": 51,
+   "explorar": 33
+  },
+  "tipos_explorar": {
+   "arvore": 45,
+   "casa": 33,
+   "cheiro": 23,
+   "continuar": 6,
+   "vagar": 33
+  }
+ },
+ "pqp_plano|padrao|quimica|instinto|comedouro|202": {
+  "candidatos": "5f575b0c7424b455549e78d9e8c3f0c21f28f4e2956934562935a5a8d37822e1",
+  "impressao": "9061a4fafa5e93494ddfec42bf53042993ffb23d7284c9c56fd45376544799ac",
+  "n": {
+   "brincar": 39,
+   "comer": 39,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "arvore": 52,
+   "casa": 39,
+   "cheiro": 16,
+   "continuar": 5,
+   "vagar": 39
+  }
+ },
+ "pqp_plano|padrao|quimica|instinto|longe|101": {
+  "candidatos": "244309e40260280c92dc50fb33a84a02186d0ce9f521d6c5806972317d9bb3d9",
+  "impressao": "7b8921015e9d0262f37868ae3d4bf9ceff06fec0885f8fac6f8fc5a1d0c99149",
+  "n": {
+   "brincar": 47,
+   "comer": 36,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "arvore": 50,
+   "casa": 34,
+   "cheiro": 31,
+   "continuar": 6,
+   "vagar": 34
+  }
+ },
+ "pqp_plano|padrao|quimica|instinto|longe|202": {
+  "candidatos": "a2f0db67622520dc0e753723d5c6d074dee73da7755d80ccd56bccb3a5326a76",
+  "impressao": "5a2bbac922a8d6599e00ca9c29707be10c5869c0e5e1e76ad0ee32f839101ebc",
+  "n": {
+   "brincar": 36,
+   "comer": 33,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "arvore": 21,
+   "casa": 34,
+   "cheiro": 25,
+   "continuar": 7,
+   "vagar": 34
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|afastado|aleatorio|101": {
+  "candidatos": "4417134b61797fa43ff809a490f6a878833dcec61f8d830c00ef859430f96c20",
+  "impressao": "8e9f91028b0456ba695a5966bedf002e36f16c0fc7adde1280c25d6f961f09de",
+  "n": {
+   "brincar": 43,
+   "comer": 76,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "casa": 34,
+   "cheiro": 3,
+   "continuar": 5,
+   "onde_comeu": 23,
+   "seguir": 18,
+   "vagar": 34
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|afastado|aleatorio|202": {
+  "candidatos": "35e416283fdb57d39444668d6fb8da4f6d20a49b638c8201fcd0109368380402",
+  "impressao": "34e47370d298b481219da70ef63f03c24e077bfd18da9d5e5f021d88ebe47248",
+  "n": {
+   "brincar": 59,
+   "comer": 63,
+   "explorar": 45
+  },
+  "tipos_explorar": {
+   "casa": 45,
+   "cheiro": 25,
+   "continuar": 6,
+   "onde_comeu": 32,
+   "seguir": 8,
+   "vagar": 45
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|afastado|atencioso|101": {
+  "candidatos": "024f9221788d2657c34e31600ba05d0460bd456967677fb6f28c51ee114905ed",
+  "impressao": "2c85425ea5594111f0f2acb3dd4d5204854ca6b8cdc7f25b96cfcf8b2de211db",
+  "n": {
+   "brincar": 80,
+   "comer": 51,
+   "explorar": 73
+  },
+  "tipos_explorar": {
+   "casa": 73,
+   "cheiro": 29,
+   "continuar": 17,
+   "seguir": 6,
+   "vagar": 73
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|afastado|atencioso|202": {
+  "candidatos": "ca9b58af293a70cf63c326aa40bb57a3e2ee5860e69cd0c6cac6420996fb750b",
+  "impressao": "6d42afc9f6d3564578f73ddb5d280876e6b1e8a8264efcb85c478f130cdd7be8",
+  "n": {
+   "brincar": 79,
+   "comer": 51,
+   "explorar": 72
+  },
+  "tipos_explorar": {
+   "casa": 72,
+   "cheiro": 38,
+   "continuar": 15,
+   "onde_comeu": 55,
+   "seguir": 35,
+   "vagar": 72
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|padrao|aleatorio|101": {
+  "candidatos": "ae5d39e03b11a0239bef537964fdac8ecd9bfc4a86fcadcc4c1a9ebe3bbd1733",
+  "impressao": "1924c68bcc1bbbb24e2d34aede09d694b12ad3a7ec0ad94a321759f959a726e1",
+  "n": {
+   "brincar": 81,
+   "comer": 78,
+   "explorar": 56
+  },
+  "tipos_explorar": {
+   "casa": 56,
+   "cheiro": 28,
+   "continuar": 10,
+   "onde_comeu": 45,
+   "seguir": 4,
+   "vagar": 56
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|padrao|aleatorio|202": {
+  "candidatos": "d9efc14be4e05cc97aae45aaf529507b9307acca85fbe07cb8f4ee0a6d0be928",
+  "impressao": "90557c9c45e45eec66c2182d4bab650c23e0d1204e18c1f50ba9f289c20b83cd",
+  "n": {
+   "brincar": 43,
+   "comer": 76,
+   "explorar": 42
+  },
+  "tipos_explorar": {
+   "casa": 42,
+   "cheiro": 18,
+   "continuar": 4,
+   "onde_comeu": 29,
+   "seguir": 15,
+   "vagar": 42
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|padrao|atencioso|101": {
+  "candidatos": "e3a76463037a7054420fc4abf29072a65a9aa7e0c5e56ecc495c90e026e33c02",
+  "impressao": "afbf190146fa54165606fcf5dfe2df30c9e8fa840f95293bb5846d14767abb38",
+  "n": {
+   "brincar": 92,
+   "comer": 50,
+   "explorar": 75
+  },
+  "tipos_explorar": {
+   "casa": 75,
+   "cheiro": 31,
+   "continuar": 16,
+   "seguir": 3,
+   "vagar": 75
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B0|padrao|atencioso|202": {
+  "candidatos": "b10fae78b37690612430f668740395aab2b239bdfdae3435c8590a09591ec307",
+  "impressao": "5cc2b20624fe683abf5760333ca37776e79e768d30d92b063da2c36ab3486c30",
+  "n": {
+   "brincar": 97,
+   "comer": 52,
+   "explorar": 82
+  },
+  "tipos_explorar": {
+   "casa": 82,
+   "cheiro": 39,
+   "continuar": 12,
+   "onde_comeu": 65,
+   "seguir": 42,
+   "vagar": 82
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|afastado|aleatorio|101": {
+  "candidatos": "d2aec18b51870d6aa427ed7f0f25817dae0733156a822c7a7bc3694c8c082a59",
+  "impressao": "48c66abb33dfd595ec3c17949455babe32bb3eec4df0823dcbc6d161f89b5fc5",
+  "n": {
+   "brincar": 45,
+   "comer": 61,
+   "explorar": 38
+  },
+  "tipos_explorar": {
+   "casa": 38,
+   "cheiro": 16,
+   "continuar": 7,
+   "onde_comeu": 23,
+   "seguir": 8,
+   "vagar": 38
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|afastado|aleatorio|202": {
+  "candidatos": "b4e659ab46e5ed2a7968002fe61ee2e06b77894dbaa22c9b3e8e356325069a67",
+  "impressao": "bc0a26d7dc2f02ed411d2936a7a504fc61a913a39bf4213e8c2f2263246a035c",
+  "n": {
+   "brincar": 45,
+   "comer": 54,
+   "explorar": 46
+  },
+  "tipos_explorar": {
+   "casa": 46,
+   "cheiro": 23,
+   "continuar": 9,
+   "onde_comeu": 35,
+   "seguir": 11,
+   "vagar": 46
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|afastado|atencioso|101": {
+  "candidatos": "e37008093c9fb02b015cc55c3d483bbed22e03bc5476963945496591614bf318",
+  "impressao": "82436090e7f95760ddef510e1d35c175f1fd38ec48d6c340d9cee48809491876",
+  "n": {
+   "brincar": 86,
+   "comer": 40,
+   "explorar": 58
+  },
+  "tipos_explorar": {
+   "casa": 58,
+   "cheiro": 22,
+   "continuar": 12,
+   "onde_comeu": 47,
+   "seguir": 14,
+   "vagar": 58
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|afastado|atencioso|202": {
+  "candidatos": "4ee80257300278fbf9bed281d5dc83475e94be9acd7dcddb3bafb6e688a04464",
+  "impressao": "6fdef310bcde5c3a094c054f81528236303dc9409674f24dca176334565d8c3e",
+  "n": {
+   "brincar": 72,
+   "comer": 37,
+   "explorar": 70
+  },
+  "tipos_explorar": {
+   "casa": 70,
+   "cheiro": 39,
+   "continuar": 12,
+   "onde_comeu": 47,
+   "seguir": 19,
+   "vagar": 70
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|padrao|aleatorio|101": {
+  "candidatos": "c19e72a99ddbc036b7fd2ac52096c5dfaf9cdb90b674f9c34442d509f3015da7",
+  "impressao": "d862390c66628a3a03602fa10430e70af4ad98c7ede350b841d5f5d2f2881caf",
+  "n": {
+   "brincar": 71,
+   "comer": 50,
+   "explorar": 48
+  },
+  "tipos_explorar": {
+   "casa": 48,
+   "cheiro": 27,
+   "continuar": 7,
+   "vagar": 48
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|padrao|aleatorio|202": {
+  "candidatos": "a1591ed52163b7232d4508635fde9883807e8a05280206ee670c9a87c333c469",
+  "impressao": "63a3ca5a933b40daab99e29855481f03fa3a1b1c8ed5a312e8c50bb1cc7df7cc",
+  "n": {
+   "brincar": 39,
+   "comer": 55,
+   "explorar": 46
+  },
+  "tipos_explorar": {
+   "casa": 46,
+   "cheiro": 34,
+   "continuar": 9,
+   "onde_comeu": 33,
+   "seguir": 13,
+   "vagar": 46
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|padrao|atencioso|101": {
+  "candidatos": "33b42da9fe35b1fe65f0a7a547cc0b91966bebb4e2c33ac5d4fd6aa4c6c27136",
+  "impressao": "4203bcf288d37e7a337cdac2abd870b7c5c1fd6365905cfa713c1e80b61b2a7b",
+  "n": {
+   "brincar": 90,
+   "comer": 42,
+   "explorar": 56
+  },
+  "tipos_explorar": {
+   "casa": 56,
+   "cheiro": 24,
+   "continuar": 6,
+   "onde_comeu": 45,
+   "seguir": 20,
+   "vagar": 56
+  }
+ },
+ "sentidos_direto|direto|instinto|drives|B1|padrao|atencioso|202": {
+  "candidatos": "1b2bd9fbfc4573965f6a76d6befc5569393baa846a479ddf0964c25ce97457f5",
+  "impressao": "ceb6d52569372f701734609e73d8d9627bed74741a87270e9ff33003b4de1209",
+  "n": {
+   "brincar": 79,
+   "comer": 45,
+   "explorar": 67
+  },
+  "tipos_explorar": {
+   "casa": 67,
+   "cheiro": 44,
+   "continuar": 10,
+   "onde_comeu": 49,
+   "seguir": 25,
+   "vagar": 67
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|afastado|aleatorio|101": {
+  "candidatos": "cd8693eddc84f547f170a4bd5898864baf3bc8130ffb69c3e53770dd23d72416",
+  "impressao": "962396c7aa71776e8cb84d128d03af239a33768c89782eec6c9a853feea6ff3b",
+  "n": {
+   "brincar": 41,
+   "comer": 69,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "casa": 34,
+   "cheiro": 2,
+   "continuar": 2,
+   "onde_comeu": 23,
+   "seguir": 26,
+   "vagar": 34
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|afastado|aleatorio|202": {
+  "candidatos": "3207775e30d1facc660da3b0e7715b72c4d1585dd6dcda8c252d97f6fbdf1b42",
+  "impressao": "e825f6d9201cf1d2573b3550888ee70c91a7c639e735db1e6acc374ff61c3a22",
+  "n": {
+   "brincar": 44,
+   "comer": 57,
+   "explorar": 47
+  },
+  "tipos_explorar": {
+   "casa": 47,
+   "cheiro": 15,
+   "continuar": 10,
+   "onde_comeu": 34,
+   "seguir": 21,
+   "vagar": 47
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|afastado|atencioso|101": {
+  "candidatos": "2850dc7f73b6603b280986647e12ad7be85ed26005b1372d781595ce79629d50",
+  "impressao": "1587688534fa0d8819de277bceece22fc0cfd4c279bd3ff478f3981aec36c584",
+  "n": {
+   "brincar": 73,
+   "comer": 61,
+   "explorar": 64
+  },
+  "tipos_explorar": {
+   "casa": 64,
+   "cheiro": 35,
+   "continuar": 16,
+   "seguir": 8,
+   "vagar": 64
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|afastado|atencioso|202": {
+  "candidatos": "f67ad326252b963e4dbeea2c95ef8debce79effaacc4db438344b640617537cd",
+  "impressao": "755c0d58b1bc67448ccd700464c2a903014b2d121863a130eaa9f7bf83d640a5",
+  "n": {
+   "brincar": 88,
+   "comer": 51,
+   "explorar": 89
+  },
+  "tipos_explorar": {
+   "casa": 89,
+   "cheiro": 47,
+   "continuar": 16,
+   "onde_comeu": 73,
+   "seguir": 30,
+   "vagar": 89
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|padrao|aleatorio|101": {
+  "candidatos": "885b1844674edd3ef2237f453a329648f5a66d1364b00437ec533d7580e08769",
+  "impressao": "1f7cd86e9832ef16cf6130557b94b9b5a21cea9ef6679a5f5487b228d5d09764",
+  "n": {
+   "brincar": 87,
+   "comer": 77,
+   "explorar": 60
+  },
+  "tipos_explorar": {
+   "casa": 60,
+   "cheiro": 38,
+   "continuar": 11,
+   "onde_comeu": 48,
+   "seguir": 15,
+   "vagar": 60
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|padrao|aleatorio|202": {
+  "candidatos": "58cee94a00e6b3a71a5b217e947bacf8c3c5f75790c4bdd97464295fedc085a1",
+  "impressao": "1b8e0c41ff67b1179a6cf2060b2a3ce8df68eeea2794c32053e90c77af8c17b3",
+  "n": {
+   "brincar": 50,
+   "comer": 86,
+   "explorar": 31
+  },
+  "tipos_explorar": {
+   "casa": 31,
+   "cheiro": 13,
+   "continuar": 5,
+   "onde_comeu": 18,
+   "seguir": 8,
+   "vagar": 31
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|padrao|atencioso|101": {
+  "candidatos": "a20022a9ac16cb5b59ddb6d5d98f9548854c27b300fd6ec9db55831e945d49cd",
+  "impressao": "5ec15c3cbadbbc98d40caef59e3ae77aabac1969f9816e89baba4fde20a10749",
+  "n": {
+   "brincar": 90,
+   "comer": 47,
+   "explorar": 85
+  },
+  "tipos_explorar": {
+   "casa": 85,
+   "cheiro": 58,
+   "continuar": 23,
+   "onde_comeu": 50,
+   "seguir": 19,
+   "vagar": 85
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B0|padrao|atencioso|202": {
+  "candidatos": "4a74603616ab94bb2eabe32b1733a7a1f9c97c5ab08a7293653bd4a55e330801",
+  "impressao": "603758eb486b242cb5918289a18bfc814c91e9c2b75b25be330951366465e5c7",
+  "n": {
+   "brincar": 85,
+   "comer": 54,
+   "explorar": 93
+  },
+  "tipos_explorar": {
+   "casa": 93,
+   "cheiro": 41,
+   "continuar": 16,
+   "onde_comeu": 77,
+   "seguir": 42,
+   "vagar": 93
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|afastado|aleatorio|101": {
+  "candidatos": "b79258e80322165d0570bc434d42b857d48b4d34cd9afd1be13087cf4efe9ef1",
+  "impressao": "cf9781762d620929f8fbaeff4c5043e1150305723aecf9a83a7178338944ed1c",
+  "n": {
+   "brincar": 53,
+   "comer": 41,
+   "explorar": 48
+  },
+  "tipos_explorar": {
+   "casa": 48,
+   "cheiro": 18,
+   "continuar": 12,
+   "onde_comeu": 33,
+   "seguir": 3,
+   "vagar": 48
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|afastado|aleatorio|202": {
+  "candidatos": "c3c8b2c0781be5c054737db29ea3dc6037de8058cdbf9341e26b14d4e32b5f53",
+  "impressao": "23fb77be26971f80cc4b05a299a8dcf8ef719d9f443baf520e4ec8c0a2c6b641",
+  "n": {
+   "brincar": 47,
+   "comer": 55,
+   "explorar": 44
+  },
+  "tipos_explorar": {
+   "casa": 44,
+   "cheiro": 21,
+   "continuar": 8,
+   "onde_comeu": 33,
+   "seguir": 11,
+   "vagar": 44
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|afastado|atencioso|101": {
+  "candidatos": "97b13f8ac2cb667d15968d7f3e88528aa72e4574fd0afff78b528191625f2bba",
+  "impressao": "f435b1ac1d47b2c906446397735bf97cf8cac1122d73ca07abec5cafa510100b",
+  "n": {
+   "brincar": 87,
+   "comer": 41,
+   "explorar": 63
+  },
+  "tipos_explorar": {
+   "casa": 63,
+   "cheiro": 34,
+   "continuar": 12,
+   "onde_comeu": 51,
+   "seguir": 31,
+   "vagar": 63
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|afastado|atencioso|202": {
+  "candidatos": "8468d1ed7bf0b33811698716c62051a02e20b34346555d6833eb9eec393d3a61",
+  "impressao": "29301731be827fa511c4982fe70e63383fe52bbe8244129d5cf6c812f93be144",
+  "n": {
+   "brincar": 95,
+   "comer": 35,
+   "explorar": 71
+  },
+  "tipos_explorar": {
+   "casa": 71,
+   "cheiro": 38,
+   "continuar": 10,
+   "onde_comeu": 52,
+   "seguir": 23,
+   "vagar": 71
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|padrao|aleatorio|101": {
+  "candidatos": "47ec0f0ce26dc9d990ff78a35f2b73753893623910bf6aee0dbbdb4b970294e6",
+  "impressao": "00b3280a32a335d3221e924756fd24bfcd8282641c175d98e23a2fbb87f82e9b",
+  "n": {
+   "brincar": 55,
+   "comer": 53,
+   "explorar": 48
+  },
+  "tipos_explorar": {
+   "casa": 48,
+   "cheiro": 16,
+   "continuar": 12,
+   "onde_comeu": 33,
+   "seguir": 3,
+   "vagar": 48
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|padrao|aleatorio|202": {
+  "candidatos": "97f80fa5ba6a045c5cd0e4aaf678b007f8504d83e42c2d8b88eb858e584a4146",
+  "impressao": "c57a6e64226394aa966013e04da9ce959362055a593c313b856b995a7b74d553",
+  "n": {
+   "brincar": 45,
+   "comer": 49,
+   "explorar": 50
+  },
+  "tipos_explorar": {
+   "casa": 50,
+   "cheiro": 35,
+   "continuar": 9,
+   "onde_comeu": 37,
+   "seguir": 7,
+   "vagar": 50
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|padrao|atencioso|101": {
+  "candidatos": "2a872625eb1dbcb48a896a0d97cf628d1ff1da84ccdb4eda75b40deeb6217e74",
+  "impressao": "43c0ad2b357f1b7c98f78def36efd1e7588642d20974732fa7a350a9a17b8f70",
+  "n": {
+   "brincar": 76,
+   "comer": 42,
+   "explorar": 66
+  },
+  "tipos_explorar": {
+   "casa": 66,
+   "cheiro": 40,
+   "continuar": 14,
+   "onde_comeu": 54,
+   "seguir": 30,
+   "vagar": 66
+  }
+ },
+ "sentidos_direto|direto|instinto|sem|B1|padrao|atencioso|202": {
+  "candidatos": "4c822fe857c2e582030e9a4c6ad2be5f582d088868ba17eed7e8b81bd54b0071",
+  "impressao": "e2132476ff59a917a7967730cd21f9b7218b0b529992d88495adc04081c92255",
+  "n": {
+   "brincar": 90,
+   "comer": 38,
+   "explorar": 70
+  },
+  "tipos_explorar": {
+   "casa": 70,
+   "cheiro": 39,
+   "continuar": 9,
+   "onde_comeu": 51,
+   "seguir": 22,
+   "vagar": 70
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|afastado|aleatorio|101": {
+  "candidatos": "c0a086a590035ba8ec149baaee104a7eae5a6a8e76c6fa720bd6a389fb928cc9",
+  "impressao": "d80a535eee8009a870f921eb7df9504624ed7b68a3b008f8374fea3f668cb957",
+  "n": {
+   "brincar": 54,
+   "comer": 32,
+   "explorar": 54
+  },
+  "tipos_explorar": {
+   "casa": 54,
+   "cheiro": 10,
+   "continuar": 13,
+   "onde_comeu": 38,
+   "seguir": 18,
+   "vagar": 54
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|afastado|aleatorio|202": {
+  "candidatos": "40799bc07cedeaaa92a510e31e380a2af45143f487de307b8bf258a9c4fe263d",
+  "impressao": "960ba478daad1c7c784d9d149838f99c701bd4fece918f9312b529cd6cf2f9b4",
+  "n": {
+   "brincar": 38,
+   "comer": 84,
+   "explorar": 38
+  },
+  "tipos_explorar": {
+   "casa": 38,
+   "cheiro": 16,
+   "continuar": 5,
+   "onde_comeu": 26,
+   "seguir": 14,
+   "vagar": 38
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|afastado|atencioso|101": {
+  "candidatos": "52bbf9438571f8a258e7e9aeea90cb29a1b06a58bbf32cf148b12c491e793dd6",
+  "impressao": "2a0a398aea70d13e200440b288caff03594abbf490469bd12e42b497b86932aa",
+  "n": {
+   "brincar": 116,
+   "comer": 45,
+   "explorar": 75
+  },
+  "tipos_explorar": {
+   "casa": 75,
+   "cheiro": 43,
+   "continuar": 16,
+   "onde_comeu": 62,
+   "seguir": 27,
+   "vagar": 75
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|afastado|atencioso|202": {
+  "candidatos": "441a2ffc38cea1063ba45d6bf859e758a9b6a9d3b9761038e3817d5253ee0dd3",
+  "impressao": "d86ea72037fade7f83708abe4ff701ecd6d6a97dab5a6c5f7d09dc29efd886ca",
+  "n": {
+   "brincar": 82,
+   "comer": 51,
+   "explorar": 58
+  },
+  "tipos_explorar": {
+   "casa": 58,
+   "cheiro": 25,
+   "continuar": 15,
+   "onde_comeu": 40,
+   "seguir": 21,
+   "vagar": 58
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|padrao|aleatorio|101": {
+  "candidatos": "cc32f1c71bda39f94cd5b99cda83570cc0d2c72b27b15af255fc30d5e08f2376",
+  "impressao": "2d4e6996056294107be62eee800bde964a84e7a4f9e97b88d6aa8e6cc216e5bd",
+  "n": {
+   "brincar": 47,
+   "comer": 61,
+   "explorar": 38
+  },
+  "tipos_explorar": {
+   "casa": 38,
+   "cheiro": 19,
+   "continuar": 7,
+   "onde_comeu": 26,
+   "seguir": 5,
+   "vagar": 38
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|padrao|aleatorio|202": {
+  "candidatos": "38d59af9c3a76f4830589281343dde129943a6dc05fa6fd5673b7cd7b732eaf9",
+  "impressao": "8eec0aebb368064500e971998acbe68b158cf43f56378c5199be8135111f9428",
+  "n": {
+   "brincar": 43,
+   "comer": 66,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "casa": 39,
+   "cheiro": 12,
+   "continuar": 6,
+   "onde_comeu": 27,
+   "seguir": 20,
+   "vagar": 39
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|padrao|atencioso|101": {
+  "candidatos": "b9236d368e3ce579051cd3be89b147b618c9cf2a33d4594be6103cbefd7788d9",
+  "impressao": "2d1dcf597786b29befcc59afe6f83bef91ad7b800e8edb0729bbf8b433d078a9",
+  "n": {
+   "brincar": 79,
+   "comer": 68,
+   "explorar": 59
+  },
+  "tipos_explorar": {
+   "casa": 59,
+   "cheiro": 31,
+   "continuar": 12,
+   "onde_comeu": 46,
+   "seguir": 23,
+   "vagar": 59
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B0|padrao|atencioso|202": {
+  "candidatos": "f4cfe9aac315267c0e183a9b707ed59f74262d55cf231abad9ad6299d6039c6d",
+  "impressao": "79d19a8b7bf819099699a4a9ba2a6f9e8aa08368a29db6a288a3959d31320734",
+  "n": {
+   "brincar": 75,
+   "comer": 43,
+   "explorar": 66
+  },
+  "tipos_explorar": {
+   "casa": 66,
+   "cheiro": 27,
+   "continuar": 14,
+   "onde_comeu": 48,
+   "seguir": 24,
+   "vagar": 66
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|afastado|aleatorio|101": {
+  "candidatos": "76682e5cca998b722fd10db438351ee4f68f2a986191cb586626a7e658777c0d",
+  "impressao": "02ad1baf6463ecaac9d5d0e7a3aeb23265a117b7c7edf435dad11d482d9879f2",
+  "n": {
+   "brincar": 48,
+   "comer": 23,
+   "explorar": 37
+  },
+  "tipos_explorar": {
+   "casa": 37,
+   "cheiro": 15,
+   "continuar": 5,
+   "onde_comeu": 31,
+   "seguir": 3,
+   "vagar": 37
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|afastado|aleatorio|202": {
+  "candidatos": "90dea3725c82d2ebf6cc786a04faf5c1890651f5ce5816957a2f4b859d0bc9f6",
+  "impressao": "caf1f55ef17072ff8759255a05f870ecd3af3cfa136d6c88bb668abe16576da7",
+  "n": {
+   "brincar": 51,
+   "comer": 40,
+   "explorar": 47
+  },
+  "tipos_explorar": {
+   "casa": 47,
+   "cheiro": 30,
+   "continuar": 9,
+   "onde_comeu": 33,
+   "seguir": 9,
+   "vagar": 47
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|afastado|atencioso|101": {
+  "candidatos": "bd182b3048914f8b084019eaabca9c3f380bece5e073e6ef1376d72404ba246b",
+  "impressao": "24a73be37ee52a3fa62a2926f039292d3588741d8cca58da119e5d01277de303",
+  "n": {
+   "brincar": 77,
+   "comer": 43,
+   "explorar": 41
+  },
+  "tipos_explorar": {
+   "casa": 41,
+   "cheiro": 21,
+   "continuar": 6,
+   "onde_comeu": 30,
+   "seguir": 19,
+   "vagar": 41
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|afastado|atencioso|202": {
+  "candidatos": "543ba5dcd8ee226a4b1cea8cdc83ee2c4602078bbf0cfdad918744cbb3e3e40a",
+  "impressao": "24f28573bc917151f9c2bf72dcb8fa1ab885c2c2183f7c94293c9798a8ca9396",
+  "n": {
+   "brincar": 64,
+   "comer": 50,
+   "explorar": 72
+  },
+  "tipos_explorar": {
+   "casa": 72,
+   "cheiro": 36,
+   "continuar": 15,
+   "onde_comeu": 26,
+   "seguir": 12,
+   "vagar": 72
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|padrao|aleatorio|101": {
+  "candidatos": "75d13641a0e9bea817496f43f1af7a2d79b94ca2c0157cc4d6e729f1aeba0301",
+  "impressao": "6b1c3924dab3b5979a3d3051b32929fe1e534a0878528cb7faa0fceea53561ed",
+  "n": {
+   "brincar": 45,
+   "comer": 23,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "casa": 34,
+   "cheiro": 18,
+   "continuar": 5,
+   "onde_comeu": 28,
+   "seguir": 3,
+   "vagar": 34
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|padrao|aleatorio|202": {
+  "candidatos": "fdb6b657396571cd347868006365d4456bb19da44d8b72c8c9687c64d306840b",
+  "impressao": "b2c6bf9a0d9510dcea8a2ea824e5f006314433e5153c1407faab4604369c482c",
+  "n": {
+   "brincar": 36,
+   "comer": 47,
+   "explorar": 37
+  },
+  "tipos_explorar": {
+   "casa": 37,
+   "cheiro": 22,
+   "continuar": 6,
+   "onde_comeu": 22,
+   "seguir": 14,
+   "vagar": 37
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|padrao|atencioso|101": {
+  "candidatos": "cd117001c4bbf85d9a0ef10d813f00fd3db76c0cfdb0213344d6c9c946dbe9d4",
+  "impressao": "e999cc0922502e4a2332fb4a30df241917742e9b3216c290d8d0a1cd275a3a78",
+  "n": {
+   "brincar": 77,
+   "comer": 43,
+   "explorar": 41
+  },
+  "tipos_explorar": {
+   "casa": 41,
+   "cheiro": 23,
+   "continuar": 6,
+   "onde_comeu": 30,
+   "seguir": 19,
+   "vagar": 41
+  }
+ },
+ "sentidos_direto|direto|lobos|drives|B1|padrao|atencioso|202": {
+  "candidatos": "af408b7baa7d00892e0a3fba0cbb2427115134bb8e94b96da9b7f38e8c8092ef",
+  "impressao": "58fee600a27ebadea8c81cfd367420c8f3cd8fdcf1839da287d136bf28b16b0f",
+  "n": {
+   "brincar": 64,
+   "comer": 38,
+   "explorar": 63
+  },
+  "tipos_explorar": {
+   "casa": 63,
+   "cheiro": 34,
+   "continuar": 14,
+   "onde_comeu": 30,
+   "seguir": 13,
+   "vagar": 63
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|afastado|aleatorio|101": {
+  "candidatos": "62f49360302844e99763adca46dce03ef2755dd3fb29a025f8871e82adf219c6",
+  "impressao": "2f9c3852ee2de0d75a5dbce1141188144fea0725ee37d5e2b994c6564fcb96f4",
+  "n": {
+   "brincar": 41,
+   "comer": 70,
+   "explorar": 34
+  },
+  "tipos_explorar": {
+   "casa": 34,
+   "cheiro": 8,
+   "continuar": 5,
+   "onde_comeu": 17,
+   "seguir": 19,
+   "vagar": 34
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|afastado|aleatorio|202": {
+  "candidatos": "95036240ef97edab945d168de346fcd4430c104144c0a1f8c6a1483b87cc622e",
+  "impressao": "520c1eb64b4abb8332fca5eecc359e92d04095e7eeaf7da6e22fdc01d774eb39",
+  "n": {
+   "brincar": 43,
+   "comer": 68,
+   "explorar": 48
+  },
+  "tipos_explorar": {
+   "casa": 48,
+   "cheiro": 28,
+   "continuar": 8,
+   "onde_comeu": 36,
+   "seguir": 9,
+   "vagar": 48
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|afastado|atencioso|101": {
+  "candidatos": "ed5e65ebe7e40f106b98aaf62fd3893a326902d6fdf9e738b06cfbb2a9f97a7f",
+  "impressao": "b844aa1fb6fe631848336e16287e7ec15d453ba3023b761aa1e15cd2d45fa153",
+  "n": {
+   "brincar": 94,
+   "comer": 44,
+   "explorar": 55
+  },
+  "tipos_explorar": {
+   "casa": 55,
+   "cheiro": 22,
+   "continuar": 11,
+   "onde_comeu": 37,
+   "seguir": 24,
+   "vagar": 55
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|afastado|atencioso|202": {
+  "candidatos": "7259b4f6d7b6ffb027bcfae4c31d913100ad13894b32c054b82a90bb4b2e2a26",
+  "impressao": "1d6ac0c294f0a9289e0e81d56c865bf54a1a736425efca8e8ff91623c59fe22b",
+  "n": {
+   "brincar": 62,
+   "comer": 42,
+   "explorar": 60
+  },
+  "tipos_explorar": {
+   "casa": 60,
+   "cheiro": 23,
+   "continuar": 15,
+   "onde_comeu": 41,
+   "seguir": 21,
+   "vagar": 60
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|padrao|aleatorio|101": {
+  "candidatos": "1e15fde2770895a69bfb341fc86b898169c0f32d2a00451cfcebd3e752bd5bf1",
+  "impressao": "01bce1f6ca0d89a2b963251262f813d46809f4938e678a3899da86e44c2eb6e4",
+  "n": {
+   "brincar": 43,
+   "comer": 61,
+   "explorar": 41
+  },
+  "tipos_explorar": {
+   "casa": 41,
+   "cheiro": 21,
+   "continuar": 7,
+   "onde_comeu": 29,
+   "seguir": 5,
+   "vagar": 41
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|padrao|aleatorio|202": {
+  "candidatos": "924c7c36f6b01a7b23b2a8bd875d49e72f3fdf0fcb1896124ff837decd1c07cf",
+  "impressao": "eb9977439f8a6ab21d8cf48706ba344be1bb8bfa49e4a17b5d63c431aeb48326",
+  "n": {
+   "brincar": 41,
+   "comer": 88,
+   "explorar": 39
+  },
+  "tipos_explorar": {
+   "casa": 39,
+   "cheiro": 20,
+   "continuar": 5,
+   "onde_comeu": 27,
+   "seguir": 13,
+   "vagar": 39
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|padrao|atencioso|101": {
+  "candidatos": "9abeb722f1004fc93b4fa96a6d5f8f148f478acaef8ff80bc71bab4c0282578b",
+  "impressao": "708bb0efea7e4763109e90607e7ded792ad767e6d7cf50a602b227440d2fec15",
+  "n": {
+   "brincar": 95,
+   "comer": 45,
+   "explorar": 55
+  },
+  "tipos_explorar": {
+   "casa": 55,
+   "cheiro": 27,
+   "continuar": 11,
+   "onde_comeu": 37,
+   "seguir": 27,
+   "vagar": 55
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B0|padrao|atencioso|202": {
+  "candidatos": "c0a261707691ea25ad9079c15df7db0efe3a34a430ccb678a29af0ee9098b32f",
+  "impressao": "664006c8a409ee82e7383a6d7502023e160b069ce84695b69746d4bfec2dafd1",
+  "n": {
+   "brincar": 95,
+   "comer": 51,
+   "explorar": 75
+  },
+  "tipos_explorar": {
+   "casa": 75,
+   "cheiro": 41,
+   "continuar": 17,
+   "onde_comeu": 56,
+   "seguir": 27,
+   "vagar": 75
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|afastado|aleatorio|101": {
+  "candidatos": "3167d5366090c56b4b342269bc063f8fbea75a5c38f49160ad1100ad458fad8c",
+  "impressao": "be9ea404b8f505f489ea4d334da5487d2b0536671dad0b13e3c79c83495e1837",
+  "n": {
+   "brincar": 27,
+   "comer": 28,
+   "explorar": 17
+  },
+  "tipos_explorar": {
+   "casa": 17,
+   "cheiro": 4,
+   "continuar": 2,
+   "onde_comeu": 12,
+   "seguir": 9,
+   "vagar": 17
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|afastado|aleatorio|202": {
+  "candidatos": "43a7b4a15811d12066606bee4deea76afc769309811c6172e522b5c2b79f0ba6",
+  "impressao": "02a29b7ce1c678c338810d3ed6f2f813c2fce779debbc68f792fd44d47bf5134",
+  "n": {
+   "brincar": 57,
+   "comer": 38,
+   "explorar": 57
+  },
+  "tipos_explorar": {
+   "casa": 57,
+   "cheiro": 42,
+   "continuar": 9,
+   "onde_comeu": 43,
+   "seguir": 16,
+   "vagar": 57
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|afastado|atencioso|101": {
+  "candidatos": "0545d4a85a0966e2bc4da129e2829e9a8a3e0e290ea41ca89fff59383cb3d4cc",
+  "impressao": "cae43e626aa3ed04ce34b82a4f15db3c35a4a693d2c177951e0dbeeec09d3cbb",
+  "n": {
+   "brincar": 54,
+   "comer": 36,
+   "explorar": 47
+  },
+  "tipos_explorar": {
+   "casa": 47,
+   "cheiro": 17,
+   "continuar": 9,
+   "onde_comeu": 40,
+   "seguir": 30,
+   "vagar": 47
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|afastado|atencioso|202": {
+  "candidatos": "5474cb99643baa0fd2787a87762a12aaded27840edafc54064d784e46f768163",
+  "impressao": "b22ea5277c038f3226c98dbdc71e2832fd84e7e2b5d8e443ff9f876f1cb246e8",
+  "n": {
+   "brincar": 57,
+   "comer": 34,
+   "explorar": 70
+  },
+  "tipos_explorar": {
+   "casa": 70,
+   "cheiro": 40,
+   "continuar": 14,
+   "onde_comeu": 58,
+   "seguir": 32,
+   "vagar": 70
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|padrao|aleatorio|101": {
+  "candidatos": "9a07803890c854b339c7ab299ccdf1194de93a94882997094475ed030379c02c",
+  "impressao": "4a1e353cbccaed7d0f3ea7dc7d564a76c27e69ea87f7300b8eacc73ed89f393b",
+  "n": {
+   "brincar": 32,
+   "comer": 49,
+   "explorar": 29
+  },
+  "tipos_explorar": {
+   "casa": 29,
+   "cheiro": 14,
+   "continuar": 6,
+   "onde_comeu": 24,
+   "seguir": 5,
+   "vagar": 29
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|padrao|aleatorio|202": {
+  "candidatos": "31ff87357c6b5bccf068babf976c076842e7505f59c9c9d07974c909d53ca438",
+  "impressao": "b357460d8e56e3d03065d0583866ae8ddd86a4253435b85193a2374767a3618f",
+  "n": {
+   "brincar": 48,
+   "comer": 46,
+   "explorar": 46
+  },
+  "tipos_explorar": {
+   "casa": 46,
+   "cheiro": 16,
+   "continuar": 10,
+   "onde_comeu": 33,
+   "seguir": 21,
+   "vagar": 46
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|padrao|atencioso|101": {
+  "candidatos": "306c07ecb707f5fa89c10ef760abe988c608dfaf68eb052ee7e08fb9a7c6c246",
+  "impressao": "edec29847ab3cc3b0168a3d6432ef936c3123db16ab62c6ecf27fb49b1b28ac4",
+  "n": {
+   "brincar": 54,
+   "comer": 36,
+   "explorar": 47
+  },
+  "tipos_explorar": {
+   "casa": 47,
+   "cheiro": 22,
+   "continuar": 9,
+   "onde_comeu": 40,
+   "seguir": 30,
+   "vagar": 47
+  }
+ },
+ "sentidos_direto|direto|lobos|sem|B1|padrao|atencioso|202": {
+  "candidatos": "88aedf23a9b5a42ff9f905143b413905faea39e323dd71344015dcd4a0f4ca01",
+  "impressao": "5b292f3eebf07be141d69bd8a352ab0017a83ee01348b98be3f3eea3abe5d938",
+  "n": {
+   "brincar": 54,
+   "comer": 37,
+   "explorar": 70
+  },
+  "tipos_explorar": {
+   "casa": 70,
+   "cheiro": 45,
+   "continuar": 14,
+   "onde_comeu": 58,
+   "seguir": 32,
+   "vagar": 70
+  }
+ }
+}

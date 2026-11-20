@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca da BANCADA-K4-CANAIS (docs/TAREFA_V2_BANCADA_K4_CANAIS.md). NAO canonica: unidades derivadas das sementes dos testes, vida curta, ganho da memoria S/2 so para a memoria agir (o ganho e calibrado na K2); confere o encanamento (o P3 com o julgamento da fruta fora do orcamento, o so cuidado dele, o P1 e as ablacoes da K-7 no descasado e no mutavel, no ponto T3), nunca como resultado.",
+  "bracos": ["P0", "P1", "P1c", "P1c-mem", "P1c-can", "P3"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1},
+  "mundos": ["descasado", "mutavel"],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "lobos": {"memoria_ganho": 512},
+  "julgamento_fruta": true,
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P3", "destino": "P0", "filtro": "sem_ensino"}]
+}

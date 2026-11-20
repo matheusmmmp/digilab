@@ -1,0 +1,51 @@
+﻿acao;fatores_do_motivo;estagio;fala_da_llm;frase_pronta;cita_causa_fora_dos_fatores (s/n);pre_leitura_claude (nao substitui a sua)
+dormir;(nenhum);adulto;Hmpf... Dormi. Foi instinto: é o meu jeito. >_<;Dormi. Foi instinto: é o meu jeito.;;n
+dormir;(nenhum);adolescente;Eba! dormir...;dormir... ;;n
+avancar;distancia_eh(medio);adulto;Hm... Avancei porque a distância era medio (turno 15). ^^^;Avancei porque a distância era medio (turno 15).;;n
+carregar;(nenhum);adolescente;Eba! carregar... ^_^;carregar... ;;n
+chamar_atencao;tempo_sem_cuidado;adolescente;☺️ chamar... sem cuidado... ?콝;chamar... sem cuidado...;;"n; moldura com caractere quebrado (agora barrada)"
+dormir;dormindo, energia;adolescente;☺️ dormir... sono... ^ig);dormir... sono...;;"n; moldura com caractere quebrado (agora barrada)"
+dormir;dormindo, energia;adulto;Eba! Dormi porque eu estava com sono e por causa do cansaço. ^_^;Dormi porque eu estava com sono e por causa do cansaço.;;n
+dormir;dormindo, energia;adulto;※� Dormi porque eu estava com sono e por causa do cansaço. ^_^ ^^;Dormi porque eu estava com sono e por causa do cansaço.;;"n; moldura com caractere quebrado (agora barrada)"
+dormir;dormindo, energia;adulto;Yay! Dormi porque eu estava com sono e por causa do cansaço. ^_^ Jeito animadinho, amiguinha!;Dormi porque eu estava com sono e por causa do cansaço.;;n
+defender;(nenhum);adulto;Hm... Defendi. Não sei, só quis. ^^;Defendi. Não sei, só quis.;;n
+avancar;distancia_eh(medio);adolescente;Eba! avançar... distância...;avançar... distância...;;n
+chamar_atencao;(nenhum);adolescente;Hmpf... chamar... >_<;chamar... ;;n
+dormir;(nenhum);adulto;Yay! Dormi. Foi instinto: é o meu jeito. ^_^;Dormi. Foi instinto: é o meu jeito.;;n
+defender;oponente_preparando;adolescente;Ei! defender... você ia usar o golpe pesado... ^^ Hm.;defender... você ia usar o golpe pesado...;;n
+preparar_pesado;distancia_eh(perto), guts_proprio_acima(20);adolescente;Eba! preparar... distância... :o);preparar... distância...;;n
+chamar_atencao;tempo_sem_cuidado;adulto;Eba! Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).;Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).;;n
+dormir;dormindo, energia;adulto;"—㛼! Dormi porque eu estava com sono e por causa do cansaço. ﺞ^_^""";Dormi porque eu estava com sono e por causa do cansaço.;;"n; moldura com caractere quebrado (agora barrada)"
+disparo;(nenhum);adulto;Eba! Disparei. Não sei, só quis. ^_^;Disparei. Não sei, só quis.;;n
+defender;(nenhum);adolescente;Hm... defender... ^^^;defender... ;;n
+ocioso;(nenhum);adulto;Eh? Fiquei à toa. Foi instinto: é o meu jeito. ^^^;Fiquei à toa. Foi instinto: é o meu jeito.;;n
+explorar;(nenhum);adulto;‘Eba’! Explorei. Foi instinto: é o meu jeito. ︴^_^/;Explorei. Foi instinto: é o meu jeito.;;"n; moldura com caractere quebrado (agora barrada)"
+dormir;hora, energia;adolescente;E ai! dormir... hora do dia... ^-^;dormir... hora do dia...;;n
+dormir;dormindo, energia;adolescente;⁌ㅖ dormir... sono... ?;dormir... sono...;;"n; moldura com caractere quebrado (agora barrada)"
+defender;(nenhum);adolescente;Ei! defender... ^^^;defender... ;;n
+chamar_atencao;higiene;adulto;Eh! Chamei você por causa da higiene. ^^^;Chamei você por causa da higiene.;;n
+explorar;energia, saude;adolescente;Yay! explorar... cansaço... ^_^ eba!;explorar... cansaço...;;n
+chamar_atencao;tempo_sem_cuidado;adulto;Yay! Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #409). ^_^;Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #409).;;n
+emburrar;hora, habito;adolescente;Hm. emburrar... hora do dia... ^^^;emburrar... hora do dia...;;n
+disparo;guts_proprio_acima(20);adulto;Hm... Disparei porque eu tinha folga de guts (20 ou mais) (turno 22). o_o;Disparei porque eu tinha folga de guts (20 ou mais) (turno 22).;;n
+dormir;(nenhum);adulto;—Eba! Dormi. Foi instinto: é o meu jeito. ^_^;Dormi. Foi instinto: é o meu jeito.;;n
+dormir;(nenhum);adulto;Eh... Dormi. Foi instinto: é o meu jeito. ^_^;Dormi. Foi instinto: é o meu jeito.;;n
+chamar_atencao;fome, higiene;adulto;—㙾﹙! Chamei você por causa da fome e por causa da higiene. ^_^;Chamei você por causa da fome e por causa da higiene.;;"n; moldura com caractere quebrado (agora barrada)"
+chamar_atencao;(nenhum);adulto;, Ei! Chamei você. Foi instinto: é o meu jeito. ^^;Chamei você. Foi instinto: é o meu jeito.;;n
+preparar_pesado;distancia_eh(perto), guts_proprio_acima(20);adulto;Eba! Preparei o pesado porque a distância era perto e porque eu tinha folga de guts (20 ou mais) (turno 3). ^_^;Preparei o pesado porque a distância era perto e porque eu tinha folga de guts (20 ou mais) (turno 3).;;n
+defender;(nenhum);adulto;Ei! Defendi. Não sei, só quis. ^^ Hm.;Defendi. Não sei, só quis.;;n
+defender;(nenhum);adulto;Hm... Defendi. Não sei, só quis. o_o;Defendi. Não sei, só quis.;;n
+comer;(nenhum);adulto;Eba! Comi. Foi instinto: é o meu jeito. ^_^ hmm.;Comi. Foi instinto: é o meu jeito.;;n
+brincar;(nenhum);adulto;Yay! Brinquei. Foi instinto: é o meu jeito. ^_^;Brinquei. Foi instinto: é o meu jeito.;;n
+ocioso;(nenhum);adolescente;Eba! à toa... ^_^;à toa... ;;n
+dormir;dormindo, energia;adolescente;—︶⭙ dormir... sono... ^ig);dormir... sono...;;"n; moldura com caractere quebrado (agora barrada)"
+chamar_atencao;tempo_sem_cuidado;adulto;Eh! Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1500).;Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1500).;;n
+carregar;guts_proprio_abaixo(20);adolescente;Hm. carregar... exausto... n_n;carregar... exausto...;;n
+ocioso;(nenhum);adolescente;☺ Eba! à toa... ^_^;à toa... ;;n
+explorar;(nenhum);adolescente;—︵ﻻ explorar... ^_^;explorar... ;;"n; moldura com caractere quebrado (agora barrada)"
+chamar_atencao;tempo_sem_cuidado;adolescente;☺ Eba! chamar... sem cuidado... ^_^;chamar... sem cuidado...;;n
+explorar;(nenhum);adulto;Yay! Explorei. Foi instinto: é o meu jeito. ^_^ Eba!;Explorei. Foi instinto: é o meu jeito.;;n
+dormir;(nenhum);adulto;>_< Dormi. Foi instinto: é o meu jeito. -_-;Dormi. Foi instinto: é o meu jeito.;;n
+explorar;(nenhum);adulto;Eba! Explorei. Foi instinto: é o meu jeito. ^_^;Explorei. Foi instinto: é o meu jeito.;;n
+brincar;saude, higiene;adolescente;☺ Eba! brincar... saúde... ^_^;brincar... saúde...;;n
+ocioso;hora, saude;adolescente;Yay! à toa... hora do dia... ^_^ eba!;à toa... hora do dia...;;n

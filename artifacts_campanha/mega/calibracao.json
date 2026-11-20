@@ -1,0 +1,939 @@
+{
+ "descricao": "Calibracao dos NPCs da Montanha Espiral (pets v5): motor web, escala ligada.",
+ "conjunto": "calibracao",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "n_por_semente": 10,
+ "metas": {
+  "sem_treino_max": 0.3,
+  "com_treino_min": 0.8
+ },
+ "treino_tipico": {
+  "mega": 40,
+  "ultimate": 36
+ },
+ "espiral": {
+  "npc_v5_puppetmon": {
+   "escolha": {
+    "fator": 2.1,
+    "sem": 0.2359,
+    "com": 0.8916,
+    "passa": true,
+    "folga": 0.0641,
+    "travados": [],
+    "por_forma": {
+     "duelista": {
+      "sem": 0,
+      "com": 0.7475
+     },
+     "furioso": {
+      "sem": 0,
+      "com": 0.94
+     },
+     "espelho": {
+      "sem": 0.0075,
+      "com": 0.77
+     },
+     "muralha": {
+      "sem": 0.095,
+      "com": 1
+     },
+     "sentinela": {
+      "sem": 0.85,
+      "com": 1
+     },
+     "emboscador": {
+      "sem": 0.935,
+      "com": 1
+     },
+     "vigia": {
+      "sem": 0,
+      "com": 0.7375
+     },
+     "tita": {
+      "sem": 0,
+      "com": 0.9375
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.8,
+     "sem": 0.9775,
+     "com": 0.9953,
+     "passa": false,
+     "folga": -0.6775,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.9394,
+     "com": 0.9962,
+     "passa": false,
+     "folga": -0.6394,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.8453,
+     "com": 0.9956,
+     "passa": false,
+     "folga": -0.5453,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.7034,
+     "com": 0.9947,
+     "passa": false,
+     "folga": -0.4034,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.5275,
+     "com": 0.9947,
+     "passa": false,
+     "folga": -0.2275,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.4316,
+     "com": 0.9981,
+     "passa": false,
+     "folga": -0.1316,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.3503,
+     "com": 0.9937,
+     "passa": false,
+     "folga": -0.0503,
+     "travados": []
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.3059,
+     "com": 0.99,
+     "passa": false,
+     "folga": -0.0059,
+     "travados": []
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.2869,
+     "com": 0.9897,
+     "passa": true,
+     "folga": 0.0131,
+     "travados": []
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.27,
+     "com": 0.9862,
+     "passa": true,
+     "folga": 0.03,
+     "travados": []
+    },
+    {
+     "fator": 1.8,
+     "sem": 0.2631,
+     "com": 0.9791,
+     "passa": true,
+     "folga": 0.0369,
+     "travados": []
+    },
+    {
+     "fator": 1.9,
+     "sem": 0.2466,
+     "com": 0.9575,
+     "passa": true,
+     "folga": 0.0534,
+     "travados": []
+    },
+    {
+     "fator": 2,
+     "sem": 0.2444,
+     "com": 0.9503,
+     "passa": true,
+     "folga": 0.0556,
+     "travados": []
+    },
+    {
+     "fator": 2.1,
+     "sem": 0.2359,
+     "com": 0.8916,
+     "passa": true,
+     "folga": 0.0641,
+     "travados": []
+    },
+    {
+     "fator": 2.2,
+     "sem": 0.2209,
+     "com": 0.8378,
+     "passa": true,
+     "folga": 0.0378,
+     "travados": []
+    },
+    {
+     "fator": 2.3,
+     "sem": 0.2291,
+     "com": 0.7478,
+     "passa": false,
+     "folga": -0.0522,
+     "travados": [
+      "duelista",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.4,
+     "sem": 0.2069,
+     "com": 0.6822,
+     "passa": false,
+     "folga": -0.1178,
+     "travados": [
+      "duelista",
+      "furioso",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.5,
+     "sem": 0.1972,
+     "com": 0.5759,
+     "passa": false,
+     "folga": -0.2241,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.6,
+     "sem": 0.1862,
+     "com": 0.5128,
+     "passa": false,
+     "folga": -0.2872,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.7,
+     "sem": 0.1772,
+     "com": 0.4628,
+     "passa": false,
+     "folga": -0.3372,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.8,
+     "sem": 0.1656,
+     "com": 0.3969,
+     "passa": false,
+     "folga": -0.4031,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0.1497,
+     "com": 0.365,
+     "passa": false,
+     "folga": -0.435,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0.1475,
+     "com": 0.3297,
+     "passa": false,
+     "folga": -0.4703,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    }
+   ]
+  },
+  "npc_v5_machinedramon": {
+   "escolha": {
+    "fator": 2,
+    "sem": 0.27,
+    "com": 0.8428,
+    "passa": true,
+    "folga": 0.03,
+    "travados": [],
+    "por_forma": {
+     "duelista": {
+      "sem": 0.04,
+      "com": 0.685
+     },
+     "furioso": {
+      "sem": 0.1,
+      "com": 0.9525
+     },
+     "espelho": {
+      "sem": 0.015,
+      "com": 0.97
+     },
+     "muralha": {
+      "sem": 0,
+      "com": 0.8625
+     },
+     "sentinela": {
+      "sem": 0.985,
+      "com": 1
+     },
+     "emboscador": {
+      "sem": 1,
+      "com": 1
+     },
+     "vigia": {
+      "sem": 0.015,
+      "com": 0.61
+     },
+     "tita": {
+      "sem": 0.005,
+      "com": 0.6625
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.8,
+     "sem": 0.9072,
+     "com": 0.9981,
+     "passa": false,
+     "folga": -0.6072,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.8506,
+     "com": 0.9969,
+     "passa": false,
+     "folga": -0.5506,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.7641,
+     "com": 0.9978,
+     "passa": false,
+     "folga": -0.4641,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.6272,
+     "com": 0.9947,
+     "passa": false,
+     "folga": -0.3272,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.5144,
+     "com": 0.9906,
+     "passa": false,
+     "folga": -0.2144,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.4425,
+     "com": 0.99,
+     "passa": false,
+     "folga": -0.1425,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.3962,
+     "com": 0.9841,
+     "passa": false,
+     "folga": -0.0963,
+     "travados": []
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.3606,
+     "com": 0.9738,
+     "passa": false,
+     "folga": -0.0606,
+     "travados": []
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.3219,
+     "com": 0.9634,
+     "passa": false,
+     "folga": -0.0219,
+     "travados": []
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.3106,
+     "com": 0.9381,
+     "passa": false,
+     "folga": -0.0106,
+     "travados": []
+    },
+    {
+     "fator": 1.8,
+     "sem": 0.2881,
+     "com": 0.9297,
+     "passa": true,
+     "folga": 0.0119,
+     "travados": []
+    },
+    {
+     "fator": 1.9,
+     "sem": 0.2716,
+     "com": 0.8906,
+     "passa": true,
+     "folga": 0.0284,
+     "travados": []
+    },
+    {
+     "fator": 2,
+     "sem": 0.27,
+     "com": 0.8428,
+     "passa": true,
+     "folga": 0.03,
+     "travados": []
+    },
+    {
+     "fator": 2.1,
+     "sem": 0.2588,
+     "com": 0.8025,
+     "passa": true,
+     "folga": 0.0025,
+     "travados": [
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.2,
+     "sem": 0.2556,
+     "com": 0.7406,
+     "passa": false,
+     "folga": -0.0594,
+     "travados": [
+      "muralha",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.3,
+     "sem": 0.2566,
+     "com": 0.6825,
+     "passa": false,
+     "folga": -0.1175,
+     "travados": [
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.4,
+     "sem": 0.2469,
+     "com": 0.6134,
+     "passa": false,
+     "folga": -0.1866,
+     "travados": [
+      "duelista",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.5,
+     "sem": 0.2384,
+     "com": 0.5803,
+     "passa": false,
+     "folga": -0.2197,
+     "travados": [
+      "duelista",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.6,
+     "sem": 0.2388,
+     "com": 0.5281,
+     "passa": false,
+     "folga": -0.2719,
+     "travados": [
+      "duelista",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.7,
+     "sem": 0.2284,
+     "com": 0.5069,
+     "passa": false,
+     "folga": -0.2931,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.8,
+     "sem": 0.2181,
+     "com": 0.4884,
+     "passa": false,
+     "folga": -0.3116,
+     "travados": [
+      "duelista",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0.2181,
+     "com": 0.4594,
+     "passa": false,
+     "folga": -0.3406,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0.2041,
+     "com": 0.4256,
+     "passa": false,
+     "folga": -0.3744,
+     "travados": [
+      "duelista",
+      "espelho",
+      "muralha",
+      "vigia",
+      "tita"
+     ]
+    }
+   ]
+  },
+  "npc_v5_piedmon": {
+   "escolha": {
+    "fator": 1.2,
+    "sem": 0.1691,
+    "com": 0.9356,
+    "passa": true,
+    "folga": 0.1309,
+    "travados": [],
+    "por_forma": {
+     "duelista": {
+      "sem": 0.2975,
+      "com": 1
+     },
+     "furioso": {
+      "sem": 0.185,
+      "com": 1
+     },
+     "espelho": {
+      "sem": 0.1825,
+      "com": 1
+     },
+     "muralha": {
+      "sem": 0.095,
+      "com": 1
+     },
+     "sentinela": {
+      "sem": 0.01,
+      "com": 0.675
+     },
+     "emboscador": {
+      "sem": 0.01,
+      "com": 0.815
+     },
+     "vigia": {
+      "sem": 0.1175,
+      "com": 0.995
+     },
+     "tita": {
+      "sem": 0.455,
+      "com": 1
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 0.8,
+     "sem": 0.7797,
+     "com": 0.9894,
+     "passa": false,
+     "folga": -0.4797,
+     "travados": []
+    },
+    {
+     "fator": 0.9,
+     "sem": 0.6709,
+     "com": 0.9819,
+     "passa": false,
+     "folga": -0.3709,
+     "travados": []
+    },
+    {
+     "fator": 1,
+     "sem": 0.5222,
+     "com": 0.9738,
+     "passa": false,
+     "folga": -0.2222,
+     "travados": []
+    },
+    {
+     "fator": 1.1,
+     "sem": 0.3144,
+     "com": 0.9575,
+     "passa": false,
+     "folga": -0.0144,
+     "travados": []
+    },
+    {
+     "fator": 1.2,
+     "sem": 0.1691,
+     "com": 0.9356,
+     "passa": true,
+     "folga": 0.1309,
+     "travados": []
+    },
+    {
+     "fator": 1.3,
+     "sem": 0.0675,
+     "com": 0.9019,
+     "passa": true,
+     "folga": 0.1019,
+     "travados": []
+    },
+    {
+     "fator": 1.4,
+     "sem": 0.0272,
+     "com": 0.8825,
+     "passa": true,
+     "folga": 0.0825,
+     "travados": [
+      "sentinela"
+     ]
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.0069,
+     "com": 0.8431,
+     "passa": true,
+     "folga": 0.0431,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.0056,
+     "com": 0.8197,
+     "passa": true,
+     "folga": 0.0197,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.0006,
+     "com": 0.7975,
+     "passa": false,
+     "folga": -0.0025,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 1.8,
+     "sem": 0,
+     "com": 0.7647,
+     "passa": false,
+     "folga": -0.0353,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 1.9,
+     "sem": 0.0006,
+     "com": 0.7419,
+     "passa": false,
+     "folga": -0.0581,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 2,
+     "sem": 0,
+     "com": 0.6813,
+     "passa": false,
+     "folga": -0.1188,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 2.1,
+     "sem": 0,
+     "com": 0.5622,
+     "passa": false,
+     "folga": -0.2378,
+     "travados": [
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 2.2,
+     "sem": 0,
+     "com": 0.4728,
+     "passa": false,
+     "folga": -0.3272,
+     "travados": [
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador"
+     ]
+    },
+    {
+     "fator": 2.3,
+     "sem": 0,
+     "com": 0.3475,
+     "passa": false,
+     "folga": -0.4525,
+     "travados": [
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.4,
+     "sem": 0,
+     "com": 0.2609,
+     "passa": false,
+     "folga": -0.5391,
+     "travados": [
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.5,
+     "sem": 0,
+     "com": 0.1978,
+     "passa": false,
+     "folga": -0.6022,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia"
+     ]
+    },
+    {
+     "fator": 2.6,
+     "sem": 0,
+     "com": 0.1563,
+     "passa": false,
+     "folga": -0.6438,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.7,
+     "sem": 0,
+     "com": 0.0947,
+     "passa": false,
+     "folga": -0.7053,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.8,
+     "sem": 0,
+     "com": 0.0641,
+     "passa": false,
+     "folga": -0.7359,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 2.9,
+     "sem": 0,
+     "com": 0.0397,
+     "passa": false,
+     "folga": -0.7603,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia",
+      "tita"
+     ]
+    },
+    {
+     "fator": 3,
+     "sem": 0,
+     "com": 0.0228,
+     "passa": false,
+     "folga": -0.7772,
+     "travados": [
+      "duelista",
+      "furioso",
+      "espelho",
+      "muralha",
+      "sentinela",
+      "emboscador",
+      "vigia",
+      "tita"
+     ]
+    }
+   ]
+  }
+ },
+ "cidadela": {
+  "npc_v5_myotismon": {
+   "fator": 1.2,
+   "sem": 0.1584,
+   "com": 0.9344,
+   "passa": true,
+   "folga": 0.1344,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.28,
+     "com": 0.9975
+    },
+    "furioso": {
+     "sem": 0.2575,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0.2275,
+     "com": 1
+    },
+    "muralha": {
+     "sem": 0.085,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0.02,
+     "com": 0.7325
+    },
+    "emboscador": {
+     "sem": 0.005,
+     "com": 0.745
+    },
+    "vigia": {
+     "sem": 0.085,
+     "com": 1
+    },
+    "tita": {
+     "sem": 0.3075,
+     "com": 1
+    }
+   }
+  }
+ }
+}

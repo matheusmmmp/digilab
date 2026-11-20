@@ -1,0 +1,778 @@
+{
+  "escolha": {
+    "desvio": 0.0,
+    "fechou": true,
+    "g_plano": 1024,
+    "media": 0.11550618284998763
+  },
+  "parede_s": 42.742756605148315,
+  "pontos": [
+    {
+      "cpu_s_por_vida": 0.4953125,
+      "g_plano": 256,
+      "media": 0.044697319678115625,
+      "n_unidades": 20,
+      "parede_s": 41.14886999130249,
+      "por_unidade": [
+        {
+          "com_alvo": 65,
+          "decidiu": 6,
+          "fracao": 0.09230769230769231,
+          "g_plano": 256,
+          "semente": 1047149085993756058,
+          "unidade": {
+            "base": 49101,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@1047149085993756058"
+        },
+        {
+          "com_alvo": 52,
+          "decidiu": 1,
+          "fracao": 0.019230769230769232,
+          "g_plano": 256,
+          "semente": 12134498648781927561,
+          "unidade": {
+            "base": 49505,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@12134498648781927561"
+        },
+        {
+          "com_alvo": 63,
+          "decidiu": 2,
+          "fracao": 0.031746031746031744,
+          "g_plano": 256,
+          "semente": 12312363044171157364,
+          "unidade": {
+            "base": 49101,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@12312363044171157364"
+        },
+        {
+          "com_alvo": 56,
+          "decidiu": 3,
+          "fracao": 0.05357142857142857,
+          "g_plano": 256,
+          "semente": 12672596517416738679,
+          "unidade": {
+            "base": 49404,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@12672596517416738679"
+        },
+        {
+          "com_alvo": 49,
+          "decidiu": 2,
+          "fracao": 0.04081632653061224,
+          "g_plano": 256,
+          "semente": 12762141220961228589,
+          "unidade": {
+            "base": 49303,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@12762141220961228589"
+        },
+        {
+          "com_alvo": 51,
+          "decidiu": 2,
+          "fracao": 0.0392156862745098,
+          "g_plano": 256,
+          "semente": 1431882899902232122,
+          "unidade": {
+            "base": 49101,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@1431882899902232122"
+        },
+        {
+          "com_alvo": 42,
+          "decidiu": 1,
+          "fracao": 0.023809523809523808,
+          "g_plano": 256,
+          "semente": 15643314928035146507,
+          "unidade": {
+            "base": 49303,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@15643314928035146507"
+        },
+        {
+          "com_alvo": 54,
+          "decidiu": 3,
+          "fracao": 0.05555555555555555,
+          "g_plano": 256,
+          "semente": 15902673151359557822,
+          "unidade": {
+            "base": 49101,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@15902673151359557822"
+        },
+        {
+          "com_alvo": 62,
+          "decidiu": 4,
+          "fracao": 0.06451612903225806,
+          "g_plano": 256,
+          "semente": 16933846431706313690,
+          "unidade": {
+            "base": 49404,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@16933846431706313690"
+        },
+        {
+          "com_alvo": 49,
+          "decidiu": 4,
+          "fracao": 0.08163265306122448,
+          "g_plano": 256,
+          "semente": 17526301384336782145,
+          "unidade": {
+            "base": 49202,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@17526301384336782145"
+        },
+        {
+          "com_alvo": 51,
+          "decidiu": 0,
+          "fracao": 0.0,
+          "g_plano": 256,
+          "semente": 17956467753391548864,
+          "unidade": {
+            "base": 49404,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@17956467753391548864"
+        },
+        {
+          "com_alvo": 64,
+          "decidiu": 3,
+          "fracao": 0.046875,
+          "g_plano": 256,
+          "semente": 18438281797531832026,
+          "unidade": {
+            "base": 49202,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@18438281797531832026"
+        },
+        {
+          "com_alvo": 66,
+          "decidiu": 2,
+          "fracao": 0.030303030303030304,
+          "g_plano": 256,
+          "semente": 3062838520703593601,
+          "unidade": {
+            "base": 49505,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@3062838520703593601"
+        },
+        {
+          "com_alvo": 50,
+          "decidiu": 4,
+          "fracao": 0.08,
+          "g_plano": 256,
+          "semente": 3707460293088002948,
+          "unidade": {
+            "base": 49505,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@3707460293088002948"
+        },
+        {
+          "com_alvo": 42,
+          "decidiu": 3,
+          "fracao": 0.07142857142857142,
+          "g_plano": 256,
+          "semente": 4352338562264537519,
+          "unidade": {
+            "base": 49404,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@4352338562264537519"
+        },
+        {
+          "com_alvo": 45,
+          "decidiu": 2,
+          "fracao": 0.044444444444444446,
+          "g_plano": 256,
+          "semente": 5168481706938228291,
+          "unidade": {
+            "base": 49303,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@5168481706938228291"
+        },
+        {
+          "com_alvo": 51,
+          "decidiu": 2,
+          "fracao": 0.0392156862745098,
+          "g_plano": 256,
+          "semente": 5294362214878943491,
+          "unidade": {
+            "base": 49505,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@5294362214878943491"
+        },
+        {
+          "com_alvo": 52,
+          "decidiu": 2,
+          "fracao": 0.038461538461538464,
+          "g_plano": 256,
+          "semente": 5604431573502442819,
+          "unidade": {
+            "base": 49202,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@5604431573502442819"
+        },
+        {
+          "com_alvo": 49,
+          "decidiu": 0,
+          "fracao": 0.0,
+          "g_plano": 256,
+          "semente": 7929452959552342399,
+          "unidade": {
+            "base": 49303,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@7929452959552342399"
+        },
+        {
+          "com_alvo": 49,
+          "decidiu": 2,
+          "fracao": 0.04081632653061224,
+          "g_plano": 256,
+          "semente": 9693600204647473419,
+          "unidade": {
+            "base": 49202,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@9693600204647473419"
+        }
+      ],
+      "sem_alvo": 0
+    },
+    {
+      "cpu_s_por_vida": 0.49375,
+      "g_plano": 512,
+      "media": 0.08010554209188678,
+      "n_unidades": 20,
+      "parede_s": 41.211137533187866,
+      "por_unidade": [
+        {
+          "com_alvo": 72,
+          "decidiu": 7,
+          "fracao": 0.09722222222222222,
+          "g_plano": 512,
+          "semente": 1047149085993756058,
+          "unidade": {
+            "base": 49101,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@1047149085993756058"
+        },
+        {
+          "com_alvo": 51,
+          "decidiu": 2,
+          "fracao": 0.0392156862745098,
+          "g_plano": 512,
+          "semente": 12134498648781927561,
+          "unidade": {
+            "base": 49505,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@12134498648781927561"
+        },
+        {
+          "com_alvo": 53,
+          "decidiu": 8,
+          "fracao": 0.1509433962264151,
+          "g_plano": 512,
+          "semente": 12312363044171157364,
+          "unidade": {
+            "base": 49101,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@12312363044171157364"
+        },
+        {
+          "com_alvo": 48,
+          "decidiu": 3,
+          "fracao": 0.0625,
+          "g_plano": 512,
+          "semente": 12672596517416738679,
+          "unidade": {
+            "base": 49404,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@12672596517416738679"
+        },
+        {
+          "com_alvo": 43,
+          "decidiu": 2,
+          "fracao": 0.046511627906976744,
+          "g_plano": 512,
+          "semente": 12762141220961228589,
+          "unidade": {
+            "base": 49303,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@12762141220961228589"
+        },
+        {
+          "com_alvo": 54,
+          "decidiu": 5,
+          "fracao": 0.09259259259259259,
+          "g_plano": 512,
+          "semente": 1431882899902232122,
+          "unidade": {
+            "base": 49101,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@1431882899902232122"
+        },
+        {
+          "com_alvo": 46,
+          "decidiu": 3,
+          "fracao": 0.06521739130434782,
+          "g_plano": 512,
+          "semente": 15643314928035146507,
+          "unidade": {
+            "base": 49303,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@15643314928035146507"
+        },
+        {
+          "com_alvo": 66,
+          "decidiu": 5,
+          "fracao": 0.07575757575757576,
+          "g_plano": 512,
+          "semente": 15902673151359557822,
+          "unidade": {
+            "base": 49101,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@15902673151359557822"
+        },
+        {
+          "com_alvo": 60,
+          "decidiu": 7,
+          "fracao": 0.11666666666666667,
+          "g_plano": 512,
+          "semente": 16933846431706313690,
+          "unidade": {
+            "base": 49404,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@16933846431706313690"
+        },
+        {
+          "com_alvo": 38,
+          "decidiu": 2,
+          "fracao": 0.05263157894736842,
+          "g_plano": 512,
+          "semente": 17526301384336782145,
+          "unidade": {
+            "base": 49202,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@17526301384336782145"
+        },
+        {
+          "com_alvo": 60,
+          "decidiu": 3,
+          "fracao": 0.05,
+          "g_plano": 512,
+          "semente": 17956467753391548864,
+          "unidade": {
+            "base": 49404,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@17956467753391548864"
+        },
+        {
+          "com_alvo": 54,
+          "decidiu": 5,
+          "fracao": 0.09259259259259259,
+          "g_plano": 512,
+          "semente": 18438281797531832026,
+          "unidade": {
+            "base": 49202,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@18438281797531832026"
+        },
+        {
+          "com_alvo": 74,
+          "decidiu": 6,
+          "fracao": 0.08108108108108109,
+          "g_plano": 512,
+          "semente": 3062838520703593601,
+          "unidade": {
+            "base": 49505,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@3062838520703593601"
+        },
+        {
+          "com_alvo": 56,
+          "decidiu": 7,
+          "fracao": 0.125,
+          "g_plano": 512,
+          "semente": 3707460293088002948,
+          "unidade": {
+            "base": 49505,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@3707460293088002948"
+        },
+        {
+          "com_alvo": 44,
+          "decidiu": 4,
+          "fracao": 0.09090909090909091,
+          "g_plano": 512,
+          "semente": 4352338562264537519,
+          "unidade": {
+            "base": 49404,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@4352338562264537519"
+        },
+        {
+          "com_alvo": 50,
+          "decidiu": 5,
+          "fracao": 0.1,
+          "g_plano": 512,
+          "semente": 5168481706938228291,
+          "unidade": {
+            "base": 49303,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@5168481706938228291"
+        },
+        {
+          "com_alvo": 28,
+          "decidiu": 1,
+          "fracao": 0.03571428571428571,
+          "g_plano": 512,
+          "semente": 5294362214878943491,
+          "unidade": {
+            "base": 49505,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@5294362214878943491"
+        },
+        {
+          "com_alvo": 44,
+          "decidiu": 4,
+          "fracao": 0.09090909090909091,
+          "g_plano": 512,
+          "semente": 5604431573502442819,
+          "unidade": {
+            "base": 49202,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@5604431573502442819"
+        },
+        {
+          "com_alvo": 42,
+          "decidiu": 3,
+          "fracao": 0.07142857142857142,
+          "g_plano": 512,
+          "semente": 7929452959552342399,
+          "unidade": {
+            "base": 49303,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@7929452959552342399"
+        },
+        {
+          "com_alvo": 46,
+          "decidiu": 3,
+          "fracao": 0.06521739130434782,
+          "g_plano": 512,
+          "semente": 9693600204647473419,
+          "unidade": {
+            "base": 49202,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@9693600204647473419"
+        }
+      ],
+      "sem_alvo": 0
+    },
+    {
+      "cpu_s_por_vida": 0.50546875,
+      "g_plano": 1024,
+      "media": 0.11550618284998763,
+      "n_unidades": 20,
+      "parede_s": 41.914379358291626,
+      "por_unidade": [
+        {
+          "com_alvo": 38,
+          "decidiu": 11,
+          "fracao": 0.2894736842105263,
+          "g_plano": 1024,
+          "semente": 1047149085993756058,
+          "unidade": {
+            "base": 49101,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@1047149085993756058"
+        },
+        {
+          "com_alvo": 38,
+          "decidiu": 2,
+          "fracao": 0.05263157894736842,
+          "g_plano": 1024,
+          "semente": 12134498648781927561,
+          "unidade": {
+            "base": 49505,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@12134498648781927561"
+        },
+        {
+          "com_alvo": 38,
+          "decidiu": 0,
+          "fracao": 0.0,
+          "g_plano": 1024,
+          "semente": 12312363044171157364,
+          "unidade": {
+            "base": 49101,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@12312363044171157364"
+        },
+        {
+          "com_alvo": 58,
+          "decidiu": 5,
+          "fracao": 0.08620689655172414,
+          "g_plano": 1024,
+          "semente": 12672596517416738679,
+          "unidade": {
+            "base": 49404,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@12672596517416738679"
+        },
+        {
+          "com_alvo": 58,
+          "decidiu": 5,
+          "fracao": 0.08620689655172414,
+          "g_plano": 1024,
+          "semente": 12762141220961228589,
+          "unidade": {
+            "base": 49303,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@12762141220961228589"
+        },
+        {
+          "com_alvo": 54,
+          "decidiu": 7,
+          "fracao": 0.12962962962962962,
+          "g_plano": 1024,
+          "semente": 1431882899902232122,
+          "unidade": {
+            "base": 49101,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@1431882899902232122"
+        },
+        {
+          "com_alvo": 50,
+          "decidiu": 6,
+          "fracao": 0.12,
+          "g_plano": 1024,
+          "semente": 15643314928035146507,
+          "unidade": {
+            "base": 49303,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@15643314928035146507"
+        },
+        {
+          "com_alvo": 52,
+          "decidiu": 7,
+          "fracao": 0.1346153846153846,
+          "g_plano": 1024,
+          "semente": 15902673151359557822,
+          "unidade": {
+            "base": 49101,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@15902673151359557822"
+        },
+        {
+          "com_alvo": 60,
+          "decidiu": 5,
+          "fracao": 0.08333333333333333,
+          "g_plano": 1024,
+          "semente": 16933846431706313690,
+          "unidade": {
+            "base": 49404,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@16933846431706313690"
+        },
+        {
+          "com_alvo": 57,
+          "decidiu": 9,
+          "fracao": 0.15789473684210525,
+          "g_plano": 1024,
+          "semente": 17526301384336782145,
+          "unidade": {
+            "base": 49202,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@17526301384336782145"
+        },
+        {
+          "com_alvo": 52,
+          "decidiu": 4,
+          "fracao": 0.07692307692307693,
+          "g_plano": 1024,
+          "semente": 17956467753391548864,
+          "unidade": {
+            "base": 49404,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@17956467753391548864"
+        },
+        {
+          "com_alvo": 64,
+          "decidiu": 8,
+          "fracao": 0.125,
+          "g_plano": 1024,
+          "semente": 18438281797531832026,
+          "unidade": {
+            "base": 49202,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@18438281797531832026"
+        },
+        {
+          "com_alvo": 59,
+          "decidiu": 2,
+          "fracao": 0.03389830508474576,
+          "g_plano": 1024,
+          "semente": 3062838520703593601,
+          "unidade": {
+            "base": 49505,
+            "k": 1
+          },
+          "vida": "P1-plan~fase1@3062838520703593601"
+        },
+        {
+          "com_alvo": 65,
+          "decidiu": 11,
+          "fracao": 0.16923076923076924,
+          "g_plano": 1024,
+          "semente": 3707460293088002948,
+          "unidade": {
+            "base": 49505,
+            "k": 2
+          },
+          "vida": "P1-plan~fase1@3707460293088002948"
+        },
+        {
+          "com_alvo": 63,
+          "decidiu": 9,
+          "fracao": 0.14285714285714285,
+          "g_plano": 1024,
+          "semente": 4352338562264537519,
+          "unidade": {
+            "base": 49404,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@4352338562264537519"
+        },
+        {
+          "com_alvo": 50,
+          "decidiu": 6,
+          "fracao": 0.12,
+          "g_plano": 1024,
+          "semente": 5168481706938228291,
+          "unidade": {
+            "base": 49303,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@5168481706938228291"
+        },
+        {
+          "com_alvo": 35,
+          "decidiu": 7,
+          "fracao": 0.2,
+          "g_plano": 1024,
+          "semente": 5294362214878943491,
+          "unidade": {
+            "base": 49505,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@5294362214878943491"
+        },
+        {
+          "com_alvo": 50,
+          "decidiu": 9,
+          "fracao": 0.18,
+          "g_plano": 1024,
+          "semente": 5604431573502442819,
+          "unidade": {
+            "base": 49202,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@5604431573502442819"
+        },
+        {
+          "com_alvo": 45,
+          "decidiu": 3,
+          "fracao": 0.06666666666666667,
+          "g_plano": 1024,
+          "semente": 7929452959552342399,
+          "unidade": {
+            "base": 49303,
+            "k": 0
+          },
+          "vida": "P1-plan~fase1@7929452959552342399"
+        },
+        {
+          "com_alvo": 54,
+          "decidiu": 3,
+          "fracao": 0.05555555555555555,
+          "g_plano": 1024,
+          "semente": 9693600204647473419,
+          "unidade": {
+            "base": 49202,
+            "k": 3
+          },
+          "vida": "P1-plan~fase1@9693600204647473419"
+        }
+      ],
+      "sem_alvo": 0
+    }
+  ],
+  "regra": {
+    "dias": [
+      4,
+      6
+    ],
+    "faixa": [
+      0.1,
+      0.4
+    ],
+    "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, secao 5 (PP-6, R-3)",
+    "grade": [
+      256,
+      512,
+      1024
+    ],
+    "medida": "fracao das decisoes com alvo em que a sonda do plano muda a escolha (acao ou alvo), media sobre as unidades"
+  }
+}

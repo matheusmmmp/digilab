@@ -1,0 +1,22 @@
+{
+  "exposicao": {
+    "p_comer_base_descasado_P1": 0.28333294672608333,
+    "pontos_que_sobem": [],
+    "segura": false
+  },
+  "janela": {
+    "pontos_que_sobem": [],
+    "segura": false
+  },
+  "nenhuma_segura": false,
+  "piora_cuidado": [],
+  "teto": {
+    "metade_no_teto_na_base": true,
+    "pontos_que_sobem": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "segura": true
+  }
+}

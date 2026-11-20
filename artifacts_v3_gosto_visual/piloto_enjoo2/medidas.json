@@ -1,0 +1,5474 @@
+{
+  "proprio|agitado|13275263315191977486": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 31.75,
+      "vida_parede": 138.74685850000242
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.01,
+      "diferenca": 0.020891980360065468,
+      "estavel": true,
+      "ultimos": 0.030891980360065466
+    },
+    "fracoes_olhando": [
+      0.01639344262295082,
+      0.016666666666666666,
+      0.031746031746031744,
+      0.02,
+      0.0,
+      0.0425531914893617,
+      0.019230769230769232,
+      0.0196078431372549,
+      0.017241379310344827,
+      0.05555555555555555,
+      0.01694915254237288,
+      0.0,
+      0.0425531914893617,
+      0.0
+    ],
+    "genoma_tipo": "proprio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": 121,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 121,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 121,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 114,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 114,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 114,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 107,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 107,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 107,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 102,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 102,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 102,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 93,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 93,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 93,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.25,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 3,
+    "replicas_sem_lugar": [],
+    "semente": 13275263315191977486,
+    "vida": "proprio|agitado|13275263315191977486"
+  },
+  "proprio|agitado|15390641955983687702": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 32.90625,
+      "vida_parede": 128.8305420000106
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.00909090909090909,
+      "diferenca": 0.01806833517359833,
+      "estavel": true,
+      "ultimos": 0.027159244264507422
+    },
+    "fracoes_olhando": [
+      0.031746031746031744,
+      0.0,
+      0.02,
+      0.0,
+      0.01818181818181818,
+      0.03508771929824561,
+      0.019230769230769232,
+      0.0,
+      0.044444444444444446,
+      0.01818181818181818,
+      0.020833333333333332,
+      0.0,
+      0.0,
+      0.017543859649122806
+    ],
+    "genoma_tipo": "proprio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 50,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 50,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 50,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 15390641955983687702,
+    "vida": "proprio|agitado|15390641955983687702"
+  },
+  "proprio|agitado|2012776603881281905": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 32.390625,
+      "vida_parede": 136.32205169997178
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.01906318082788671,
+      "diferenca": 0.006798888137630531,
+      "estavel": true,
+      "ultimos": 0.02586206896551724
+    },
+    "fracoes_olhando": [
+      0.015625,
+      0.016666666666666666,
+      0.0,
+      0.0196078431372549,
+      0.018518518518518517,
+      0.0,
+      0.05172413793103448,
+      0.018518518518518517,
+      0.0,
+      0.01818181818181818,
+      0.022727272727272728,
+      0.0,
+      0.09090909090909091,
+      0.01818181818181818
+    ],
+    "genoma_tipo": "proprio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": 240,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 240,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.75,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 240,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 237,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 237,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 237,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 219,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 219,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 219,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 200,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 200,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 200,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 198,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 198,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 198,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 2012776603881281905,
+    "vida": "proprio|agitado|2012776603881281905"
+  },
+  "proprio|agitado|2684188112817357879": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 31.59375,
+      "vida_parede": 138.72835659998236
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.028620689655172414,
+      "diferenca": -0.008620689655172414,
+      "estavel": true,
+      "ultimos": 0.02
+    },
+    "fracoes_olhando": [
+      0.03125,
+      0.0,
+      0.038461538461538464,
+      0.017241379310344827,
+      0.04,
+      0.04,
+      0.0,
+      0.03773584905660377,
+      0.05357142857142857,
+      0.02,
+      0.0,
+      0.018518518518518517,
+      0.0,
+      0.0
+    ],
+    "genoma_tipo": "proprio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": -50,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -50,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -50,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": null,
+        "replica": 2,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -43,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -43,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -43,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -51,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -51,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -51,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -51,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -51,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -51,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": 3,
+    "replicas_sem_lugar": [],
+    "semente": 2684188112817357879,
+    "vida": "proprio|agitado|2684188112817357879"
+  },
+  "proprio|calmo|13275263315191977486": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 32.453125,
+      "vida_parede": 141.3638942000107
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.03787878787878788,
+      "diferenca": -0.03787878787878788,
+      "estavel": true,
+      "ultimos": 0.0
+    },
+    "fracoes_olhando": [
+      0.01639344262295082,
+      0.06451612903225806,
+      0.03636363636363636,
+      0.07575757575757576,
+      0.0,
+      0.0,
+      0.0,
+      0.0392156862745098,
+      0.0,
+      0.03508771929824561,
+      0.017241379310344827,
+      0.03773584905660377,
+      0.03636363636363636,
+      0.03508771929824561
+    ],
+    "genoma_tipo": "proprio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": 139,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 139,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 139,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 131,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 131,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 131,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 115,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 115,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 115,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 115,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 115,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 115,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 105,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 105,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 105,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 101,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 101,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 101,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 85,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 85,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 85,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 13275263315191977486,
+    "vida": "proprio|calmo|13275263315191977486"
+  },
+  "proprio|calmo|15390641955983687702": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 32.453125,
+      "vida_parede": 140.82777590001933
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.00909090909090909,
+      "diferenca": 0.01806833517359833,
+      "estavel": true,
+      "ultimos": 0.027159244264507422
+    },
+    "fracoes_olhando": [
+      0.031746031746031744,
+      0.0,
+      0.02,
+      0.0,
+      0.01818181818181818,
+      0.03508771929824561,
+      0.019230769230769232,
+      0.0,
+      0.044444444444444446,
+      0.01818181818181818,
+      0.020833333333333332,
+      0.0,
+      0.0,
+      0.017543859649122806
+    ],
+    "genoma_tipo": "proprio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 61,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 50,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 50,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 50,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 40,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 15390641955983687702,
+    "vida": "proprio|calmo|15390641955983687702"
+  },
+  "proprio|calmo|2012776603881281905": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 33.265625,
+      "vida_parede": 143.23609349998878
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.02601330913490623,
+      "diferenca": -0.01601330913490623,
+      "estavel": true,
+      "ultimos": 0.01
+    },
+    "fracoes_olhando": [
+      0.015625,
+      0.03278688524590164,
+      0.05454545454545454,
+      0.017543859649122806,
+      0.034482758620689655,
+      0.0,
+      0.02,
+      0.037037037037037035,
+      0.0,
+      0.038461538461538464,
+      0.0,
+      0.0625,
+      0.019230769230769232,
+      0.03773584905660377
+    ],
+    "genoma_tipo": "proprio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": 248,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 248,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 248,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 246,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 246,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 246,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 246,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 246,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 246,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 234,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 234,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 234,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 228,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 229,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 229,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 229,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 224,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 224,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 224,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": 3,
+    "replicas_sem_lugar": [],
+    "semente": 2012776603881281905,
+    "vida": "proprio|calmo|2012776603881281905"
+  },
+  "proprio|calmo|2684188112817357879": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 31.328125,
+      "vida_parede": 141.36259749997407
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.024963924963924963,
+      "diferenca": -0.0071067821067821065,
+      "estavel": true,
+      "ultimos": 0.017857142857142856
+    },
+    "fracoes_olhando": [
+      0.0625,
+      0.0,
+      0.05084745762711865,
+      0.031746031746031744,
+      0.01818181818181818,
+      0.03571428571428571,
+      0.0,
+      0.03333333333333333,
+      0.017857142857142856,
+      0.017543859649122806,
+      0.06,
+      0.0,
+      0.03278688524590164,
+      0.04
+    ],
+    "genoma_tipo": "proprio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": -35,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -35,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -35,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -31,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -31,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -31,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": 1,
+    "replicas_sem_lugar": [],
+    "semente": 2684188112817357879,
+    "vida": "proprio|calmo|2684188112817357879"
+  },
+  "proprio|nenhum|13275263315191977486": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 29.21875,
+      "vida_parede": 124.47238180000568
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.009259259259259259,
+      "diferenca": -0.009259259259259259,
+      "estavel": true,
+      "ultimos": 0.0
+    },
+    "fracoes_olhando": [
+      0.01639344262295082,
+      0.016666666666666666,
+      0.034482758620689655,
+      0.018518518518518517,
+      0.0,
+      0.0,
+      0.0,
+      0.05660377358490566,
+      0.03389830508474576,
+      0.02040816326530612,
+      0.021739130434782608,
+      0.0425531914893617,
+      0.04,
+      0.041666666666666664
+    ],
+    "genoma_tipo": "proprio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": 135,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 135,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 135,
+        "agrado_inato": 188,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 109,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 109,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 109,
+        "agrado_inato": 188,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 101,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.375
+      },
+      {
+        "agrado_agora": 101,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 101,
+        "agrado_inato": 188,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 90,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 90,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 90,
+        "agrado_inato": 188,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 81,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 81,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 81,
+        "agrado_inato": 188,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 67,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 67,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 67,
+        "agrado_inato": 188,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 55,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 55,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 55,
+        "agrado_inato": 188,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 13275263315191977486,
+    "vida": "proprio|nenhum|13275263315191977486"
+  },
+  "proprio|nenhum|15390641955983687702": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 31.109375,
+      "vida_parede": 124.96436209999956
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.03773584905660377,
+      "diferenca": -0.018867924528301886,
+      "estavel": true,
+      "ultimos": 0.018867924528301886
+    },
+    "fracoes_olhando": [
+      0.03278688524590164,
+      0.03125,
+      0.0,
+      0.0,
+      0.07547169811320754,
+      0.0,
+      0.03773584905660377,
+      0.01818181818181818,
+      0.0,
+      0.041666666666666664,
+      0.02,
+      0.02127659574468085,
+      0.04081632653061224,
+      0.020833333333333332
+    ],
+    "genoma_tipo": "proprio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 81,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 81,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 81,
+        "agrado_inato": 104,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 104,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 83,
+        "agrado_inato": 104,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 74,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 74,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 74,
+        "agrado_inato": 104,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 66,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 66,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 66,
+        "agrado_inato": 104,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 66,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 66,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 66,
+        "agrado_inato": 104,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 52,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 52,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 52,
+        "agrado_inato": 104,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 15390641955983687702,
+    "vida": "proprio|nenhum|15390641955983687702"
+  },
+  "proprio|nenhum|2012776603881281905": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 29.96875,
+      "vida_parede": 124.96457349997945
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.01906318082788671,
+      "diferenca": -0.010442491172714296,
+      "estavel": true,
+      "ultimos": 0.008620689655172414
+    },
+    "fracoes_olhando": [
+      0.015625,
+      0.016666666666666666,
+      0.0,
+      0.0196078431372549,
+      0.018518518518518517,
+      0.0,
+      0.017241379310344827,
+      0.0,
+      0.01694915254237288,
+      0.0425531914893617,
+      0.038461538461538464,
+      0.0,
+      0.07547169811320754,
+      0.0
+    ],
+    "genoma_tipo": "proprio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": 249,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 249,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 249,
+        "agrado_inato": 287,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 249,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 249,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 249,
+        "agrado_inato": 287,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 243,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6,
+        "tempo_total": 0.3125
+      },
+      {
+        "agrado_agora": 243,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 243,
+        "agrado_inato": 287,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 222,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 222,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 222,
+        "agrado_inato": 287,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 218,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 218,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 218,
+        "agrado_inato": 287,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 208,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 208,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 208,
+        "agrado_inato": 287,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 201,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 201,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 201,
+        "agrado_inato": 287,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 2012776603881281905,
+    "vida": "proprio|nenhum|2012776603881281905"
+  },
+  "proprio|nenhum|2684188112817357879": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 30.953125,
+      "vida_parede": 124.44942259998061
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.034493012191495684,
+      "diferenca": 0.0032428368651080883,
+      "estavel": true,
+      "ultimos": 0.03773584905660377
+    },
+    "fracoes_olhando": [
+      0.0625,
+      0.0,
+      0.01639344262295082,
+      0.03389830508474576,
+      0.03508771929824561,
+      0.0,
+      0.07547169811320754,
+      0.017857142857142856,
+      0.018867924528301886,
+      0.0196078431372549,
+      0.0625,
+      0.03636363636363636,
+      0.0,
+      0.0
+    ],
+    "genoma_tipo": "proprio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 0,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": -59,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 6,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 6,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 6,
+        "agrado_inato": -59,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 12,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 12,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 12,
+        "agrado_inato": -59,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 17,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.75,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 17,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 17,
+        "agrado_inato": -59,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.75,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": 12,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 12,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 12,
+        "agrado_inato": -59,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 16,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 16,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 16,
+        "agrado_inato": -59,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 16,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 16,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 16,
+        "agrado_inato": -59,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 2684188112817357879,
+    "vida": "proprio|nenhum|2684188112817357879"
+  },
+  "vazio|agitado|13275263315191977486": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 30.75,
+      "vida_parede": 108.72419080004329
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.009259259259259259,
+      "diferenca": -0.00016835016835016828,
+      "estavel": true,
+      "ultimos": 0.00909090909090909
+    },
+    "fracoes_olhando": [
+      0.016666666666666666,
+      0.017241379310344827,
+      0.03278688524590164,
+      0.018518518518518517,
+      0.0,
+      0.01818181818181818,
+      0.0,
+      0.06,
+      0.0,
+      0.017857142857142856,
+      0.0,
+      0.05357142857142857,
+      0.06,
+      0.0196078431372549
+    ],
+    "genoma_tipo": "vazio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -40,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -46,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -46,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -46,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -54,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -54,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -54,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.8,
+        "tempo_total": 0.3125
+      },
+      {
+        "agrado_agora": -58,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.75,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -58,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -58,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 3,
+    "replicas_sem_lugar": [],
+    "semente": 13275263315191977486,
+    "vida": "vazio|agitado|13275263315191977486"
+  },
+  "vazio|agitado|15390641955983687702": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 30.59375,
+      "vida_parede": 109.02572660002625
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.0,
+      "diferenca": 0.018867924528301886,
+      "estavel": true,
+      "ultimos": 0.018867924528301886
+    },
+    "fracoes_olhando": [
+      0.03389830508474576,
+      0.03389830508474576,
+      0.03508771929824561,
+      0.0,
+      0.0,
+      0.0,
+      0.03773584905660377,
+      0.05172413793103448,
+      0.016666666666666666,
+      0.06451612903225806,
+      0.0,
+      0.0,
+      0.03571428571428571,
+      0.0196078431372549
+    ],
+    "genoma_tipo": "vazio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 15390641955983687702,
+    "vida": "vazio|agitado|15390641955983687702"
+  },
+  "vazio|agitado|2012776603881281905": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 32.125,
+      "vida_parede": 109.10333589999937
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.01906318082788671,
+      "diferenca": 0.006798888137630531,
+      "estavel": true,
+      "ultimos": 0.02586206896551724
+    },
+    "fracoes_olhando": [
+      0.015625,
+      0.016666666666666666,
+      0.0,
+      0.0196078431372549,
+      0.018518518518518517,
+      0.0,
+      0.05172413793103448,
+      0.018518518518518517,
+      0.0,
+      0.01818181818181818,
+      0.022727272727272728,
+      0.0,
+      0.09090909090909091,
+      0.0
+    ],
+    "genoma_tipo": "vazio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": -22,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -22,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.75,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -22,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -30,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -33,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -33,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -33,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -41,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -41,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -41,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -42,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -42,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -42,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 2012776603881281905,
+    "vida": "vazio|agitado|2012776603881281905"
+  },
+  "vazio|agitado|2684188112817357879": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 31.515625,
+      "vida_parede": 108.48416449996876
+    },
+    "dias_sem_sonda": 0,
+    "dono": "agitado",
+    "familiarizacao": {
+      "antes": 0.027777777777777776,
+      "diferenca": -0.027777777777777776,
+      "estavel": true,
+      "ultimos": 0.0
+    },
+    "fracoes_olhando": [
+      0.03125,
+      0.0,
+      0.057692307692307696,
+      0.018518518518518517,
+      0.037037037037037035,
+      0.0,
+      0.0,
+      0.038461538461538464,
+      0.0425531914893617,
+      0.0,
+      0.037037037037037035,
+      0.0,
+      0.0,
+      0.020833333333333332
+    ],
+    "genoma_tipo": "vazio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": -6,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -6,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -6,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -4,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -4,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -4,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -16,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": 3,
+    "replicas_sem_lugar": [],
+    "semente": 2684188112817357879,
+    "vida": "vazio|agitado|2684188112817357879"
+  },
+  "vazio|calmo|13275263315191977486": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 32.640625,
+      "vida_parede": 163.491108599992
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.035606060606060606,
+      "diferenca": -0.035606060606060606,
+      "estavel": true,
+      "ultimos": 0.0
+    },
+    "fracoes_olhando": [
+      0.016666666666666666,
+      0.05172413793103448,
+      0.0,
+      0.05454545454545454,
+      0.016666666666666666,
+      0.0,
+      0.0,
+      0.03278688524590164,
+      0.05660377358490566,
+      0.03333333333333333,
+      0.01818181818181818,
+      0.05660377358490566,
+      0.03389830508474576,
+      0.0
+    ],
+    "genoma_tipo": "vazio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -6,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -6,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -6,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -10,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -10,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -10,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -11,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 13275263315191977486,
+    "vida": "vazio|calmo|13275263315191977486"
+  },
+  "vazio|calmo|15390641955983687702": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 32.734375,
+      "vida_parede": 165.64125210000202
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.0,
+      "diferenca": 0.018867924528301886,
+      "estavel": true,
+      "ultimos": 0.018867924528301886
+    },
+    "fracoes_olhando": [
+      0.03389830508474576,
+      0.03389830508474576,
+      0.03508771929824561,
+      0.0,
+      0.0,
+      0.0,
+      0.03773584905660377,
+      0.05172413793103448,
+      0.016666666666666666,
+      0.06451612903225806,
+      0.0,
+      0.0,
+      0.03571428571428571,
+      0.0196078431372549
+    ],
+    "genoma_tipo": "vazio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -2,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -1,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 0,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 0,
+    "replicas_sem_lugar": [],
+    "semente": 15390641955983687702,
+    "vida": "vazio|calmo|15390641955983687702"
+  },
+  "vazio|calmo|2012776603881281905": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 33.1875,
+      "vida_parede": 164.97255620005308
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.0752361673414305,
+      "diferenca": -0.057692307692307696,
+      "estavel": false,
+      "ultimos": 0.017543859649122806
+    },
+    "fracoes_olhando": [
+      0.015625,
+      0.03278688524590164,
+      0.05454545454545454,
+      0.03508771929824561,
+      0.11538461538461539,
+      0.0,
+      0.03508771929824561,
+      0.0,
+      0.05555555555555555,
+      0.0,
+      0.019230769230769232,
+      0.02127659574468085,
+      0.021739130434782608,
+      0.0
+    ],
+    "genoma_tipo": "vazio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.25,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.25,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -20,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": 3,
+    "replicas_sem_lugar": [],
+    "semente": 2012776603881281905,
+    "vida": "vazio|calmo|2012776603881281905"
+  },
+  "vazio|calmo|2684188112817357879": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 33.890625,
+      "vida_parede": 165.27471359999618
+    },
+    "dias_sem_sonda": 0,
+    "dono": "calmo",
+    "familiarizacao": {
+      "antes": 0.015549662487945998,
+      "diferenca": 0.02569150012006657,
+      "estavel": true,
+      "ultimos": 0.04124116260801257
+    },
+    "fracoes_olhando": [
+      0.0625,
+      0.0,
+      0.06896551724137931,
+      0.014705882352941176,
+      0.01639344262295082,
+      0.029850746268656716,
+      0.05263157894736842,
+      0.03389830508474576,
+      0.05660377358490566,
+      0.0,
+      0.022222222222222223,
+      0.08163265306122448,
+      0.0,
+      0.019230769230769232
+    ],
+    "genoma_tipo": "vazio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 32,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 32,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 32,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 39,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 39,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 39,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 45,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 45,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 45,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 52,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 52,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 52,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 59,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": null,
+        "replica": 2,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      }
+    ],
+    "programa_do_dono": 1,
+    "replicas_sem_lugar": [],
+    "semente": 2684188112817357879,
+    "vida": "vazio|calmo|2684188112817357879"
+  },
+  "vazio|nenhum|13275263315191977486": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 31.3125,
+      "vida_parede": 156.24279099999694
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.0423728813559322,
+      "diferenca": -0.0423728813559322,
+      "estavel": true,
+      "ultimos": 0.0
+    },
+    "fracoes_olhando": [
+      0.01639344262295082,
+      0.06451612903225806,
+      0.0,
+      0.0847457627118644,
+      0.0,
+      0.0,
+      0.0,
+      0.03571428571428571,
+      0.0,
+      0.08333333333333333,
+      0.020833333333333332,
+      0.0,
+      0.05454545454545454,
+      0.022222222222222223
+    ],
+    "genoma_tipo": "vazio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": -15,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -15,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -15,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.25,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -12,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.4,
+        "tempo_total": 0.3125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -24,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.8,
+        "tempo_total": 0.3125
+      },
+      {
+        "agrado_agora": -32,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -32,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -32,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 13275263315191977486,
+    "vida": "vazio|nenhum|13275263315191977486"
+  },
+  "vazio|nenhum|15390641955983687702": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 33.0,
+      "vida_parede": 163.8233331000083
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.009433962264150943,
+      "diferenca": 0.028671450841262165,
+      "estavel": true,
+      "ultimos": 0.038105413105413107
+    },
+    "fracoes_olhando": [
+      0.03389830508474576,
+      0.03389830508474576,
+      0.03278688524590164,
+      0.0,
+      0.018867924528301886,
+      0.057692307692307696,
+      0.018518518518518517,
+      0.01818181818181818,
+      0.0,
+      0.0,
+      0.0,
+      0.018518518518518517,
+      0.0,
+      0.05172413793103448
+    ],
+    "genoma_tipo": "vazio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 8,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 15390641955983687702,
+    "vida": "vazio|nenhum|15390641955983687702"
+  },
+  "vazio|nenhum|2012776603881281905": {
+    "base": 91202,
+    "custo": {
+      "vida_cpu": 33.40625,
+      "vida_parede": 156.31296999996994
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.01906318082788671,
+      "diferenca": -0.010442491172714296,
+      "estavel": true,
+      "ultimos": 0.008620689655172414
+    },
+    "fracoes_olhando": [
+      0.015625,
+      0.016666666666666666,
+      0.0,
+      0.0196078431372549,
+      0.018518518518518517,
+      0.0,
+      0.017241379310344827,
+      0.0,
+      0.01694915254237288,
+      0.0425531914893617,
+      0.038461538461538464,
+      0.0,
+      0.057692307692307696,
+      0.018518518518518517
+    ],
+    "genoma_tipo": "vazio",
+    "k": 0,
+    "medidas": [
+      {
+        "agrado_agora": -21,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -21,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -21,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -21,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -21,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -21,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -26,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.6,
+        "tempo_total": 0.3125
+      },
+      {
+        "agrado_agora": -26,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.25
+      },
+      {
+        "agrado_agora": -26,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": -38,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -38,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -38,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -41,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -41,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -41,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": -47,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": -55,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": null,
+        "replica": 0,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -55,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": -55,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 2012776603881281905,
+    "vida": "vazio|nenhum|2012776603881281905"
+  },
+  "vazio|nenhum|2684188112817357879": {
+    "base": 91101,
+    "custo": {
+      "vida_cpu": 32.890625,
+      "vida_parede": 156.28001340001356
+    },
+    "dias_sem_sonda": 0,
+    "dono": "nenhum",
+    "familiarizacao": {
+      "antes": 0.026803118908382065,
+      "diferenca": -0.017369156644231123,
+      "estavel": true,
+      "ultimos": 0.009433962264150943
+    },
+    "fracoes_olhando": [
+      0.0625,
+      0.0,
+      0.03389830508474576,
+      0.03508771929824561,
+      0.018518518518518517,
+      0.018867924528301886,
+      0.0,
+      0.02040816326530612,
+      0.0392156862745098,
+      0.0,
+      0.020833333333333332,
+      0.0,
+      0.0,
+      0.038461538461538464
+    ],
+    "genoma_tipo": "vazio",
+    "k": 1,
+    "medidas": [
+      {
+        "agrado_agora": 26,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 26,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 26,
+        "agrado_inato": 0,
+        "dia": 7,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 35,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 0.6666666666666666,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 35,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": null,
+        "replica": 1,
+        "tempo_relativo": null,
+        "tempo_total": 0.0
+      },
+      {
+        "agrado_agora": 35,
+        "agrado_inato": 0,
+        "dia": 8,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 32,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 32,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 32,
+        "agrado_inato": 0,
+        "dia": 9,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 1.0,
+        "replica": 0,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 10,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 0.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 11,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 12,
+        "escolha": 0.0,
+        "replica": 2,
+        "tempo_relativo": 0.0,
+        "tempo_total": 0.125
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 0.0,
+        "replica": 0,
+        "tempo_relativo": 0.3333333333333333,
+        "tempo_total": 0.1875
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 1,
+        "tempo_relativo": 1.0,
+        "tempo_total": 0.0625
+      },
+      {
+        "agrado_agora": 37,
+        "agrado_inato": 0,
+        "dia": 13,
+        "escolha": 1.0,
+        "replica": 2,
+        "tempo_relativo": 0.5,
+        "tempo_total": 0.125
+      }
+    ],
+    "programa_do_dono": null,
+    "replicas_sem_lugar": [],
+    "semente": 2684188112817357879,
+    "vida": "vazio|nenhum|2684188112817357879"
+  }
+}

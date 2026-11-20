@@ -1,0 +1,586 @@
+{
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "fase 1 da rodada de equilibrio geral: so sementes de calibracao; chaves da ConfigCombateV21E desligadas por padrao",
+    "config": "experiments/configs/v21e/calibracao.json",
+    "config_sha256": "f0d5b4c0bfc8093a1a1cb93b68252daec06c3ff75d4d8d826ee2aa16ee8391c0",
+    "epsilon_bots_canonico": 0.05,
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "fase": 1,
+    "metodo": "run_bateria_sombria: 12 formas (8 normais + 4 sombrias), mesma especie, rotulo 'sombria|<especie>'; S1 = nenhuma sombria vence (> 0,5) as 8 normais",
+    "partidas_por_par_por_semente": 100,
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      3101,
+      3202,
+      3303,
+      3404,
+      3505
+    ],
+    "variantes": {
+      "v21d": {
+        "base": {},
+        "descricao": "V21D validada (a_c_e2v_v): o combate dos pets v6-v8",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "76ef7389f38585c03b3d3a1562f3397dc9329d0af34764d2af944db09d60ebbc",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_duelista": {
+        "base": {},
+        "descricao": "V21D + listas: duelista defende do golpe",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "cfdceb25811c398d413e50712789588ca64f8785e042cd8ebf8da48d35c13af8",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": false,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": false,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": false,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_duelista_tita": {
+        "base": {},
+        "descricao": "V21D + listas: duelista e tita defendem do golpe",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "3afb702b284becffff043e7e9980076a0f77ad8fbe939df0a2366cc0de48d2e6",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": false,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": false,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": false,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_duelista_tita_guardias": {
+        "base": {},
+        "descricao": "V21D + listas: duelista e tita defendem do golpe; espelho e muralha sem carregar",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "5caed21bee7b2eedec1e7629ab3dcba2fd371440e8b1e69b42b2595c1efab584",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": true,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": false,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_golpe12": {
+        "base": {
+          "custo_golpe_rapido": 12
+        },
+        "descricao": "V21D + base: custo do golpe rapido 10 -> 12",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "5005694daa059f5ffe18208e5fa537559a61fbca3a3223f4fd01f4b31917c164",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_golpe15": {
+        "base": {
+          "custo_golpe_rapido": 15
+        },
+        "descricao": "V21D + base: custo do golpe rapido 10 -> 15",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "30225fda4439f5da99561ac5cda9740ee82287982e0154a87d6b5fc0af693669",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_golpe20": {
+        "base": {
+          "custo_golpe_rapido": 20
+        },
+        "descricao": "V21D + base: custo do golpe rapido 10 -> 20",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "80391ee0c5da63c56ff71b40ea7c06ca9de0012501afe3890c67f45dfc609029",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_parry12": {
+        "base": {
+          "dano_parry": 12.0
+        },
+        "descricao": "V21D + base: dano do parry 5 -> 12",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "bdfad47101ca4d75f52444a0122dac887ca1530502db836a927c362a581a7325",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_parry8": {
+        "base": {
+          "dano_parry": 8.0
+        },
+        "descricao": "V21D + base: dano do parry 5 -> 8",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "8bb4bcb4ed066d690b9154a205ecf1a40b51ad56c3051812bf1815553db8fc96",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_sem_c3": {
+        "base": {
+          "fuga_condicionada": false
+        },
+        "descricao": "V21D + base: sem a fuga condicionada (C3)",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "97582e37ff6fd7cac9cdfe268ec434f99c206107574c6f3e8c0405f170cea4b4",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21d_tita": {
+        "base": {},
+        "descricao": "V21D + listas: tita defende do golpe",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "87ffb87d31a680952b401b8869afa90fad8841c414ef769b05d818ac773a8635",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": false,
+          "espelho_sem_carregar": false,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": false,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": false,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21e": {
+        "base": {},
+        "descricao": "V21E escolhida (experiments/configs/v21e/calibracao.json): as cinco chaves da V21E",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "d08010297ae1f40051bfe9bf3b311328d1645d34c898023102fa66195058a36c",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": true,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": true,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21e_espelho_disparo_08": {
+        "base": {},
+        "descricao": "V21E + passiva do espelho: devolve 0,8 do disparo (era 1,0; o E3 do contra-golpe)",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "898fd278300052e5514a5ed1180eb619d46648eb49536f3b92d17e1f30ef01c5",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": true,
+          "fracao_espelho_disparo": 0.8,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": true,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      }
+    }
+  },
+  "por_variante": {
+    "v21d": {
+      "S1_ok": true,
+      "media_sombria_contra_normais": {
+        "bastiao_rachado": 0.14728125,
+        "colosso_partido": 0.2336875,
+        "devastador": 0.3710625,
+        "predador": 0.33165625
+      },
+      "sombria_x_normais": {
+        "bastiao_rachado": {
+          "duelista": 0.2825,
+          "emboscador": 0.0,
+          "espelho": 0.325,
+          "furioso": 0.04825,
+          "muralha": 0.22225,
+          "sentinela": 0.0,
+          "tita": 0.069,
+          "vigia": 0.23125
+        },
+        "colosso_partido": {
+          "duelista": 0.33875,
+          "emboscador": 0.003,
+          "espelho": 0.64025,
+          "furioso": 0.02125,
+          "muralha": 0.5805,
+          "sentinela": 0.005,
+          "tita": 0.18575,
+          "vigia": 0.095
+        },
+        "devastador": {
+          "duelista": 0.7345,
+          "emboscador": 0.033,
+          "espelho": 0.306,
+          "furioso": 0.3135,
+          "muralha": 0.1275,
+          "sentinela": 0.03825,
+          "tita": 0.7995,
+          "vigia": 0.61625
+        },
+        "predador": {
+          "duelista": 0.10725,
+          "emboscador": 0.93925,
+          "espelho": 0.171,
+          "furioso": 0.0085,
+          "muralha": 0.0575,
+          "sentinela": 0.95375,
+          "tita": 0.0785,
+          "vigia": 0.3375
+        }
+      },
+      "suporte_com_sombrias": [
+        "furioso",
+        "muralha",
+        "sentinela"
+      ],
+      "vence_todos_os_normais": {
+        "bastiao_rachado": false,
+        "colosso_partido": false,
+        "devastador": false,
+        "predador": false
+      },
+      "vitorias_contra_normais": {
+        "bastiao_rachado": [],
+        "colosso_partido": [
+          "espelho",
+          "muralha"
+        ],
+        "devastador": [
+          "duelista",
+          "tita",
+          "vigia"
+        ],
+        "predador": [
+          "emboscador",
+          "sentinela"
+        ]
+      }
+    },
+    "v21e": {
+      "S1_ok": true,
+      "media_sombria_contra_normais": {
+        "bastiao_rachado": 0.07325,
+        "colosso_partido": 0.22459375,
+        "devastador": 0.31890625,
+        "predador": 0.28096875
+      },
+      "sombria_x_normais": {
+        "bastiao_rachado": {
+          "duelista": 0.017,
+          "emboscador": 0.0,
+          "espelho": 0.153,
+          "furioso": 0.04825,
+          "muralha": 0.13325,
+          "sentinela": 0.0,
+          "tita": 0.00325,
+          "vigia": 0.23125
+        },
+        "colosso_partido": {
+          "duelista": 0.3025,
+          "emboscador": 0.003,
+          "espelho": 0.6395,
+          "furioso": 0.02125,
+          "muralha": 0.51975,
+          "sentinela": 0.005,
+          "tita": 0.21075,
+          "vigia": 0.095
+        },
+        "devastador": {
+          "duelista": 0.58175,
+          "emboscador": 0.033,
+          "espelho": 0.19375,
+          "furioso": 0.3135,
+          "muralha": 0.077,
+          "sentinela": 0.03825,
+          "tita": 0.69775,
+          "vigia": 0.61625
+        },
+        "predador": {
+          "duelista": 0.001,
+          "emboscador": 0.93925,
+          "espelho": 0.00525,
+          "furioso": 0.0085,
+          "muralha": 0.002,
+          "sentinela": 0.95375,
+          "tita": 0.0005,
+          "vigia": 0.3375
+        }
+      },
+      "suporte_com_sombrias": [
+        "espelho",
+        "furioso",
+        "sentinela",
+        "tita",
+        "vigia"
+      ],
+      "vence_todos_os_normais": {
+        "bastiao_rachado": false,
+        "colosso_partido": false,
+        "devastador": false,
+        "predador": false
+      },
+      "vitorias_contra_normais": {
+        "bastiao_rachado": [],
+        "colosso_partido": [
+          "espelho",
+          "muralha"
+        ],
+        "devastador": [
+          "duelista",
+          "tita",
+          "vigia"
+        ],
+        "predador": [
+          "emboscador",
+          "sentinela"
+        ]
+      }
+    }
+  },
+  "v21d_igual_equilibrio_rodada2": true
+}

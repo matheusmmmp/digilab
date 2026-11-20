@@ -1,0 +1,7 @@
+{
+  "descricao": "V2, N4 (docs/PLANO_ANALISE_V2_N4.md, secao 5): validacao UNICA no ponto escolhido pela calibracao (artifacts_v2_n4/calibracao/resultado.json, escolha: w_fruta 6, k_saciedade 1,0, duracao 120; a calibracao NAO fechou: p(comer | fruta) ficou abaixo de 0,30 em todos os pontos e o G-SEP(ii) nao passou no ponto).",
+  "conjunto": "validacao",
+  "sementes": [11101, 11202, 11303, 11404, 11505],
+  "saida": "artifacts_v2_n4/validacao",
+  "ponto": {"w_fruta": 6.0, "k_saciedade": 1.0, "duracao_min": 120}
+}

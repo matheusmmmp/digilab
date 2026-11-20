@@ -1,0 +1,157 @@
+{
+ "bases_validacao": [
+  15101,
+  15202,
+  15303,
+  15404,
+  15505
+ ],
+ "cabe_no_teto_K10": false,
+ "delta": 0.1986268570547561,
+ "delta_n6": 0.19351650222105618,
+ "delta_n7": 0.20229166666666668,
+ "equivalencia": {
+  "n_ic90": 5,
+  "sigma_d": 0.13514527339022417
+ },
+ "horas_validacao_estimadas": 28760.001276205254,
+ "k_validacao_por_base": 38363,
+ "n_validacao": 191815,
+ "parametros": {
+  "A1": {
+   "escolhido": 512,
+   "fechou": true,
+   "parametro": "memoria_ganho",
+   "regra": "menor valor com IC95 inferior > 0.069"
+  },
+  "A2": {
+   "escolhido": 256,
+   "fechou": false,
+   "parametro": "w0_pedido",
+   "regra": "reserva: nenhum ponto com IC; o menor valor"
+  },
+  "B": {
+   "escolhido": 4,
+   "fechou": false,
+   "parametro": "ganho",
+   "regra": "reserva: menos vidas no teto, depois menor razao, depois menor ganho"
+  },
+  "C": {
+   "escolhido": 256,
+   "fechou": true,
+   "parametro": "w0_info",
+   "regra": "menor valor com IC95 inferior > 0.069"
+  }
+ },
+ "primarios": {
+  "p1_casado": {
+   "n": 5,
+   "poder_simulado": 0.993,
+   "sigma2_d": 0.0037255481990373664,
+   "sigma_d": 0.06103726893494962
+  },
+  "p2_descasado": {
+   "n": 5,
+   "poder_simulado": 0.7415,
+   "sigma2_d": 0.00848299964317206,
+   "sigma_d": 0.09210320104736892
+  },
+  "p2_mutavel": {
+   "n": 5,
+   "poder_simulado": 0.733,
+   "sigma2_d": 0.009389322114184282,
+   "sigma_d": 0.09689851450968834
+  },
+  "p3_consumos": {
+   "n": 191815,
+   "poder_simulado": 0.826,
+   "sigma2_d": 722.8421052631579,
+   "sigma_d": 26.885723074954818
+  },
+  "p4a_piora": {
+   "n": 5,
+   "poder_simulado": 1.0,
+   "sigma2_d": 0.0012195951706492293,
+   "sigma_d": 0.03492270279702345
+  },
+  "p4b_recupera": {
+   "n": 5,
+   "poder_simulado": 0.7705,
+   "sigma2_d": 0.00905144828681753,
+   "sigma_d": 0.09513909967420088
+  }
+ },
+ "secundarios": {
+  "G-CAUSAL": {
+   "familia": "N6",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.06955114242482947,
+   "subpotenciado": false
+  },
+  "G-EMB": {
+   "familia": "N6",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.059238909357426886,
+   "subpotenciado": false
+  },
+  "G-EROSAO": {
+   "familia": "N7",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.0633247053315291,
+   "subpotenciado": false
+  },
+  "G-MARCA": {
+   "familia": "N7",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.6495540968166994,
+   "subpotenciado": false
+  },
+  "G-MARCA-E": {
+   "familia": "N7",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.6040628901932662,
+   "subpotenciado": false
+  },
+  "G-REC": {
+   "familia": "N6",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.06622644984744283,
+   "subpotenciado": false
+  },
+  "ablacao_canais_descasado": {
+   "familia": "ablacoes",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.027874146449555603,
+   "subpotenciado": false
+  },
+  "ablacao_canais_mutavel": {
+   "familia": "ablacoes",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.03304831924161481,
+   "subpotenciado": false
+  },
+  "ablacao_memoria_descasado": {
+   "familia": "ablacoes",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.021167330927092824,
+   "subpotenciado": false
+  },
+  "ablacao_memoria_mutavel": {
+   "familia": "ablacoes",
+   "leitura": null,
+   "poder_com_n": 1.0,
+   "sigma_d": 0.032722936422351946,
+   "subpotenciado": false
+  }
+ },
+ "unidades_calibracao": 20
+}

@@ -1,0 +1,205 @@
+{
+ "descricao": "Validacao das instalacoes da Fronteira dos pets v9 (fase 4, meta M-E1): tudo congelado, nas sementes de validacao",
+ "motor": "web/app/motor (escala CESC_V9 ligada, regras V21E, limite do desafiado = o rival)",
+ "conjunto": "validacao",
+ "fator": 1,
+ "teto_de_lutas": 100,
+ "treino_tipico_mega": 40,
+ "sementes": [
+  4101,
+  4202,
+  4303,
+  4404,
+  4505
+ ],
+ "tentativas_por_semente_especie_forma": 20,
+ "metas": {
+  "melhor_forma_vence_a_primeira_min": 0.7,
+  "pior_forma_vence_a_primeira_min": 0.4
+ },
+ "nota_palacio": "com a lista canonica (sem trava, veto nem chip de regra) o Palacio do pet de referencia e a Torre; muda so a semente das tentativas",
+ "meta_e1": {
+  "passa": true,
+  "menor_folga": 0.18
+ },
+ "por_instalacao": {
+  "torre_batalha": {
+   "nome": "Torre de Batalha",
+   "melhor": {
+    "forma": "furioso",
+    "vence_a_primeira": 1
+   },
+   "pior": {
+    "forma": "muralha",
+    "vence_a_primeira": 0.6475
+   },
+   "meta_e1": {
+    "passa": true,
+    "folga": 0.2475
+   },
+   "por_forma": {
+    "duelista": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.935,
+     "media": 5.005,
+     "mediana": 5,
+     "p90": 8,
+     "maximo": 11,
+     "no_teto": 0
+    },
+    "furioso": {
+     "tentativas": 400,
+     "vence_a_primeira": 1,
+     "media": 7.57,
+     "mediana": 7,
+     "p90": 10,
+     "maximo": 14,
+     "no_teto": 0
+    },
+    "espelho": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.905,
+     "media": 3.7775,
+     "mediana": 4,
+     "p90": 6,
+     "maximo": 9,
+     "no_teto": 0
+    },
+    "muralha": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.6475,
+     "media": 1.5175,
+     "mediana": 1,
+     "p90": 4,
+     "maximo": 8,
+     "no_teto": 0
+    },
+    "sentinela": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.7775,
+     "media": 3.545,
+     "mediana": 3,
+     "p90": 9,
+     "maximo": 13,
+     "no_teto": 0
+    },
+    "emboscador": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.8625,
+     "media": 3.45,
+     "mediana": 3,
+     "p90": 8,
+     "maximo": 16,
+     "no_teto": 0
+    },
+    "vigia": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.8,
+     "media": 3.5125,
+     "mediana": 3,
+     "p90": 7,
+     "maximo": 12,
+     "no_teto": 0
+    },
+    "tita": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.7675,
+     "media": 2.445,
+     "mediana": 2,
+     "p90": 6,
+     "maximo": 9,
+     "no_teto": 0
+    }
+   }
+  },
+  "palacio": {
+   "nome": "Palácio",
+   "melhor": {
+    "forma": "furioso",
+    "vence_a_primeira": 1
+   },
+   "pior": {
+    "forma": "muralha",
+    "vence_a_primeira": 0.58
+   },
+   "meta_e1": {
+    "passa": true,
+    "folga": 0.18
+   },
+   "por_forma": {
+    "duelista": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.945,
+     "media": 5.2225,
+     "mediana": 5,
+     "p90": 8,
+     "maximo": 12,
+     "no_teto": 0
+    },
+    "furioso": {
+     "tentativas": 400,
+     "vence_a_primeira": 1,
+     "media": 7.535,
+     "mediana": 7,
+     "p90": 10,
+     "maximo": 16,
+     "no_teto": 0
+    },
+    "espelho": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.885,
+     "media": 3.7975,
+     "mediana": 4,
+     "p90": 6,
+     "maximo": 8,
+     "no_teto": 0
+    },
+    "muralha": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.58,
+     "media": 1.47,
+     "mediana": 1,
+     "p90": 4,
+     "maximo": 8,
+     "no_teto": 0
+    },
+    "sentinela": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.76,
+     "media": 3.44,
+     "mediana": 3,
+     "p90": 8,
+     "maximo": 19,
+     "no_teto": 0
+    },
+    "emboscador": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.835,
+     "media": 3.535,
+     "mediana": 3,
+     "p90": 8,
+     "maximo": 16,
+     "no_teto": 0
+    },
+    "vigia": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.795,
+     "media": 3.3,
+     "mediana": 3,
+     "p90": 7,
+     "maximo": 11,
+     "no_teto": 0
+    },
+    "tita": {
+     "tentativas": 400,
+     "vence_a_primeira": 0.7575,
+     "media": 2.4025,
+     "mediana": 2,
+     "p90": 6,
+     "maximo": 8,
+     "no_teto": 0
+    }
+   }
+  }
+ }
+}

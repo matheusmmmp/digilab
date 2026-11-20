@@ -1,0 +1,115 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-10-30",
+ "commit": "24bf93a1",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p34",
+ "metas": {
+  "P-3": {
+   "champion": {
+    "media": 0.5731,
+    "formas": {
+     "brigao": 0.7125,
+     "guardiao": 0.645,
+     "cacador": 0.3975,
+     "colosso": 0.5375
+    },
+    "trocas_por_pet": {
+     "brigao": 0.11,
+     "guardiao": 0.5,
+     "cacador": 0.04,
+     "colosso": 0.56
+    }
+   },
+   "ultimate": {
+    "media": 0.3906,
+    "formas": {
+     "duelista": 0.0325,
+     "furioso": 0.8525,
+     "espelho": 0.065,
+     "muralha": 0.04,
+     "sentinela": 0.595,
+     "emboscador": 0.4975,
+     "vigia": 0.4975,
+     "tita": 0.545
+    },
+    "trocas_por_pet": {
+     "duelista": 0,
+     "furioso": 0,
+     "espelho": 0,
+     "muralha": 0,
+     "sentinela": 0.1,
+     "emboscador": 0.04,
+     "vigia": 0,
+     "tita": 0
+    }
+   },
+   "passa": false
+  },
+  "P-4": {
+   "champion": {
+    "rival": "npc_tier2_sentinela",
+    "lutas_por_serie": 1,
+    "qualificados": 0.7475,
+    "taxa_media": 0.8438,
+    "formas": {
+     "brigao": 0.9,
+     "guardiao": 0.51,
+     "cacador": 1,
+     "colosso": 0.58
+    }
+   },
+   "ultimate": {
+    "rival": "npc_v5_myotismon",
+    "lutas_por_serie": 3,
+    "qualificados": 1,
+    "taxa_media": 0.9732,
+    "formas": {
+     "duelista": 1,
+     "furioso": 1,
+     "espelho": 1,
+     "muralha": 1,
+     "sentinela": 1,
+     "emboscador": 1,
+     "vigia": 1,
+     "tita": 1
+    }
+   },
+   "passa": false
+  }
+ },
+ "custo_s": 9.8351
+}

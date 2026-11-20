@@ -1,0 +1,5 @@
+{
+ "fonte": "as regioes do concept 1 (menta) e as cores dominantes da textura da Meshy (mediana em 10 cores): o menta da geladeira, o musgo em dois verdes, o vaso de barro, o cinza do puxador e o rosa das flores; PROPOSTO",
+ "paleta": [[150, 236, 186], [116, 162, 60], [86, 128, 52], [214, 124, 96], [196, 196, 182], [240, 150, 176]],
+ "nomes": ["menta", "musgo", "musgo escuro", "barro", "puxador", "flor"]
+}

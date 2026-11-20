@@ -1,0 +1,54 @@
+{
+  "descricao": "Calibracao dos valores de partida, rodada 1 (secao 6.1): so o M3, bases 63101 e 63202, K = 2. Nao rodada na etapa 1a.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "dias": 14,
+  "orcamento_por_dia": 16,
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "reamostragens_internas": 1000,
+    "alvo": 0.8,
+    "alfa_abla": 0.0125,
+    "alfa_mod": 0.025,
+    "semente": 4242,
+    "n_bases": 5
+  },
+  "holm": {
+    "alfa": 0.05
+  },
+  "g_mvp": {
+    "w_decisoes": 8,
+    "fome_elegivel": 0.5,
+    "taxa_vida": 0.5,
+    "limiar": 0.8
+  },
+  "g_elegivel": {
+    "frac_vidas": 0.8,
+    "racoes": 3
+  },
+  "g_pesa": {
+    "limiar": 0.01,
+    "bracos": {
+      "incentivo": "M1",
+      "habito": "M2",
+      "memoria": "M3",
+      "persistencia": "M3"
+    }
+  },
+  "fase": "calibracao",
+  "rodada": 1,
+  "unidades": {
+    "bases": [
+      63101,
+      63202
+    ],
+    "k": 2,
+    "prefixo": "digibrain_prototipo"
+  }
+}

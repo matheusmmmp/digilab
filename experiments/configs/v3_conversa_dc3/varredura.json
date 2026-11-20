@@ -1,0 +1,18 @@
+{
+  "descricao": "A varredura da DC3 antes da run (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 11): o orquestrador inteiro com as cinco sementes dos testes (bases 101 a 505, K = 1), os 2 bracos, as 8 celulas e 14 dias (80 vidas). Nenhuma semente da faixa 79101...79505; nao e dado da DC3.",
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC3.md",
+  "fase": "conversa_dc3",
+  "unidades": {
+    "bases": [
+      101,
+      202,
+      303,
+      404,
+      505
+    ],
+    "k": 1,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

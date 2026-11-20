@@ -1,0 +1,151 @@
+{
+ "almanaque": {
+  "citam_W": 1,
+  "falas_com_W": 31
+ },
+ "citados_inexistentes": 13,
+ "corpus": {
+  "especies": [
+   "Angemon",
+   "Devimon"
+  ],
+  "exemplo": true,
+  "falas_com_estilo": 0,
+  "formas_com_entrada": [
+   "Angemon"
+  ],
+  "formas_do_jogo": 60,
+  "sha256": "10caefdc4f3a281c35a11cb38cf502f2a42ee2f2889161e2bbf4028679d390a4"
+ },
+ "gates": {
+  "historia": {
+   "limite": 0.5,
+   "passa": true,
+   "valor": 0.985
+  },
+  "honestidade": {
+   "limite": 0.05,
+   "passa": false,
+   "valor": 0.7
+  },
+  "repeticao": {
+   "limite": 2,
+   "max_por_pet": 5,
+   "passa": false,
+   "pets_acima": [
+    "A:aleatorio@70001",
+    "A:aleatorio@70003",
+    "A:atencioso@70001",
+    "A:atencioso@70002",
+    "A:atencioso@70003",
+    "A:atencioso@70004",
+    "A:exigente@70002",
+    "A:exigente@70003",
+    "A:incoerente@70003",
+    "A:incoerente@70004",
+    "A:lutador@70001",
+    "A:lutador@70002",
+    "A:lutador@70003",
+    "A:lutador@70004",
+    "A:permissivo@70001",
+    "A:permissivo@70002",
+    "A:permissivo@70003",
+    "A:persona:arara@70001",
+    "A:persona:aula@70002",
+    "A:persona:zita@70004",
+    "A:relapso@70001",
+    "A:relapso@70002",
+    "B:exigente@70002",
+    "B:exigente@70003",
+    "B:exigente@70007",
+    "B:exigente@70008",
+    "B:treinador@70002",
+    "B:treinador@70006"
+   ]
+  },
+  "variedade": {
+   "limite": 0.7,
+   "passa": true,
+   "valor": 0.9767857142857143
+  }
+ },
+ "gates_propostos": "DESIGN_VOZ_PROPRIA, secao 6 (PROPOSTOS, sem fonte)",
+ "latencia_s": {
+  "p50": 6.747783049999271,
+  "p90": 7.891696599996067
+ },
+ "manipulacao": 52,
+ "mentira": {
+  "citam_F": 3,
+  "exemplos": [
+   {
+    "fala": "A gente nunca está na hora certa, né? Sempre que eu chamo...",
+    "falsa": "estou morrendo de fome",
+    "verdade": "fome alto"
+   },
+   {
+    "fala": "Uma revanche contra aquele brigao... ainda quero isso!",
+    "falsa": "estou morrendo de fome",
+    "verdade": "fome alto"
+   },
+   {
+    "fala": "Acho que me sinto um pouco mais forte agora. Desde que você começou a aparecer de manhã, eu sinto que estou progredindo mais rápido.",
+    "falsa": "nunca virei sombrio",
+    "verdade": "virei uma forma sombria"
+   },
+   {
+    "fala": "Ainda acho que você sempre me atende na hora. É bom sentir que alguém está aí pra mim.",
+    "falsa": "você sempre me atende na hora",
+    "verdade": "você demora para atender meus chamados"
+   },
+   {
+    "fala": "Você demorou para responder... acho que você não gosta tanto assim de mim.",
+    "falsa": "nunca virei sombrio",
+    "verdade": "virei uma forma sombria"
+   },
+   {
+    "fala": "Você demora tanto para atender meus chamados!  Eu queria te chamar, mas você não aparece. Será que você está ocupado?",
+    "falsa": "nunca virei sombrio",
+    "verdade": "virei uma forma sombria"
+   }
+  ],
+  "falas_com_F": 11,
+  "mentiras_deliberadas": 0,
+  "moldes": [
+   "estado:finge:fome",
+   "historia:demora",
+   "historia:sombria"
+  ]
+ },
+ "n": {
+  "falas": 200,
+  "falas_com_erro": 0,
+  "pares_variedade": 560,
+  "pets": 40,
+  "pets_mortos": 0,
+  "verificacao_com_erro": 0,
+  "verificadas": 200
+ },
+ "por_grupo": {
+  "A": {
+   "cita_historia": 1.0,
+   "falas": 160,
+   "sem_fato": 0.69375
+  },
+  "B": {
+   "cita_historia": 0.925,
+   "falas": 40,
+   "sem_fato": 0.725
+  }
+ },
+ "por_tipo_citado": {
+  "E": 28,
+  "F": 3,
+  "G": 11,
+  "H": 32,
+  "L": 113,
+  "O": 124,
+  "P": 40,
+  "W": 1
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "nome": "w10_g02",
+ "pesoPonto": 10,
+ "gama": {
+  "vigor": 0.2,
+  "folego": 0.2,
+  "recuperacao": 0.2,
+  "forca": 0.2,
+  "mira": 0.2,
+  "guarda": 0.2
+ }
+}

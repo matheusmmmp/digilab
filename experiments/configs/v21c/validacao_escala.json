@@ -1,0 +1,35 @@
+{
+  "descricao": "COMBATE_V21C com a ESCALA de stats ligada (TAREFA_PLANILHA_PROGRESSAO, Parte C): mesma validacao (com E5), 100 partidas por par por semente; E4 substituido por E4' (adulto sem treino x adolescente com +22) e E4'' (os dois sem treino).",
+  "saida": "artifacts_combate_v21c/validacao_escala",
+  "conjunto": "validacao",
+  "sementes_calibracao": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sementes_validacao": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "partidas_por_par_por_semente": 100,
+  "regras_base": {
+    "finta": true,
+    "dano_parry": 5.0,
+    "fuga_condicionada": true,
+    "turno_morte_subita": 25,
+    "mult_morte_subita": 1.5
+  },
+  "regras_v21": {
+    "hp_por_vigor": 2.5,
+    "hp_base": 75.0,
+    "marca_fragil": true
+  },
+  "respostas_v21c": true,
+  "gates_v2c": true,
+  "escala": true
+}

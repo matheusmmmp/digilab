@@ -1,0 +1,1369 @@
+{
+ "tarefa": "LUTA_POC, LP5-2, a leitura da vida (D-LP5-18)",
+ "candidato": "lp5_2",
+ "commit": "463d9f6e02b3b4a7e2dc3a6fee1fb4576598eaa1",
+ "faixa": "calibracao",
+ "bases": [
+  86101,
+  86202,
+  86303,
+  86404,
+  86505
+ ],
+ "vidas_por_base": 20,
+ "dias": 4,
+ "lutas_champion": 1000,
+ "conferem_com_o_motor": 1000,
+ "taxa": {
+  "n": 1000,
+  "motor": 0.67,
+  "real": 0.67,
+  "cond1": 0.644,
+  "sem_car": 0.666,
+  "tipico": 0.714,
+  "forma_guardiao": 0.898,
+  "forma_cacador": 0.885,
+  "forma_colosso": 0.712,
+  "forma_brigao": 0.899
+ },
+ "por_forma": {
+  "ferrugem_adolescente_colosso": {
+   "n": 220,
+   "motor": 0.759,
+   "real": 0.759,
+   "cond1": 0.718,
+   "sem_car": 0.741,
+   "tipico": 0.791,
+   "forma_guardiao": 0.959,
+   "forma_cacador": 0.795,
+   "forma_colosso": 0.786,
+   "forma_brigao": 0.973
+  },
+  "brasa_adolescente_colosso": {
+   "n": 270,
+   "motor": 0.519,
+   "real": 0.519,
+   "cond1": 0.496,
+   "sem_car": 0.481,
+   "tipico": 0.522,
+   "forma_guardiao": 0.896,
+   "forma_cacador": 0.852,
+   "forma_colosso": 0.519,
+   "forma_brigao": 0.852
+  },
+  "cirro_adolescente_colosso": {
+   "n": 240,
+   "motor": 0.633,
+   "real": 0.633,
+   "cond1": 0.6,
+   "sem_car": 0.708,
+   "tipico": 0.754,
+   "forma_guardiao": 0.808,
+   "forma_cacador": 0.938,
+   "forma_colosso": 0.75,
+   "forma_brigao": 0.804
+  },
+  "limo_adolescente_colosso": {
+   "n": 270,
+   "motor": 0.781,
+   "real": 0.781,
+   "cond1": 0.77,
+   "sem_car": 0.752,
+   "tipico": 0.807,
+   "forma_guardiao": 0.93,
+   "forma_cacador": 0.944,
+   "forma_colosso": 0.811,
+   "forma_brigao": 0.97
+  }
+ },
+ "por_ramo": {
+  "colosso": {
+   "n": 1000,
+   "motor": 0.67,
+   "real": 0.67,
+   "cond1": 0.644,
+   "sem_car": 0.666,
+   "tipico": 0.714,
+   "forma_guardiao": 0.898,
+   "forma_cacador": 0.885,
+   "forma_colosso": 0.712,
+   "forma_brigao": 0.899
+  }
+ },
+ "por_especie": {
+  "ferrugem": {
+   "n": 220,
+   "motor": 0.759,
+   "real": 0.759,
+   "cond1": 0.718,
+   "sem_car": 0.741,
+   "tipico": 0.791,
+   "forma_guardiao": 0.959,
+   "forma_cacador": 0.795,
+   "forma_colosso": 0.786,
+   "forma_brigao": 0.973
+  },
+  "brasa": {
+   "n": 270,
+   "motor": 0.519,
+   "real": 0.519,
+   "cond1": 0.496,
+   "sem_car": 0.481,
+   "tipico": 0.522,
+   "forma_guardiao": 0.896,
+   "forma_cacador": 0.852,
+   "forma_colosso": 0.519,
+   "forma_brigao": 0.852
+  },
+  "cirro": {
+   "n": 240,
+   "motor": 0.633,
+   "real": 0.633,
+   "cond1": 0.6,
+   "sem_car": 0.708,
+   "tipico": 0.754,
+   "forma_guardiao": 0.808,
+   "forma_cacador": 0.938,
+   "forma_colosso": 0.75,
+   "forma_brigao": 0.804
+  },
+  "limo": {
+   "n": 270,
+   "motor": 0.781,
+   "real": 0.781,
+   "cond1": 0.77,
+   "sem_car": 0.752,
+   "tipico": 0.807,
+   "forma_guardiao": 0.93,
+   "forma_cacador": 0.944,
+   "forma_colosso": 0.811,
+   "forma_brigao": 0.97
+  }
+ },
+ "condicao": {
+  "min": 1.05,
+  "mediana": 1.05,
+  "max": 1.05,
+  "abaixo_de_1": 0
+ },
+ "atento": {
+  "mediana": -0.09503333333333341
+ },
+ "treino": {
+  "mediana": 13.949277499999996
+ },
+ "passar_no_champion": {
+  "regra": ">= 8 de 10",
+  "real": 0.307,
+  "cond1": 0.249,
+  "sem_car": 0.298,
+  "tipico": 0.421,
+  "forma_guardiao": 0.926,
+  "forma_cacador": 0.902,
+  "forma_colosso": 0.415,
+  "forma_brigao": 0.928,
+  "com_p_0_85": 0.82
+ },
+ "vidas": [
+  {
+   "base": 86101,
+   "i": 0,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86101,
+   "i": 1,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86101,
+   "i": 2,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86101,
+   "i": 3,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 4
+   },
+   "taxa_do_motor": 0.4
+  },
+  {
+   "base": 86101,
+   "i": 4,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86101,
+   "i": 5,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86101,
+   "i": 6,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86101,
+   "i": 7,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86101,
+   "i": 8,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86101,
+   "i": 9,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86101,
+   "i": 10,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86101,
+   "i": 11,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 10
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86101,
+   "i": 12,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86101,
+   "i": 13,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86101,
+   "i": 14,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 4
+   },
+   "taxa_do_motor": 0.4
+  },
+  {
+   "base": 86101,
+   "i": 15,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 4
+   },
+   "taxa_do_motor": 0.4
+  },
+  {
+   "base": 86101,
+   "i": 16,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86101,
+   "i": 17,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86101,
+   "i": 18,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86101,
+   "i": 19,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 0,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86202,
+   "i": 1,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 2,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 3,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86202,
+   "i": 4,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": 0.75
+  },
+  {
+   "base": 86202,
+   "i": 5,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86202,
+   "i": 6,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": 0.6666666666666666
+  },
+  {
+   "base": 86202,
+   "i": 7,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86202,
+   "i": 8,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86202,
+   "i": 9,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86202,
+   "i": 10,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": 0.9
+  },
+  {
+   "base": 86202,
+   "i": 11,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 12,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 13,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 14,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 10
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86202,
+   "i": 15,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86202,
+   "i": 16,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86202,
+   "i": 17,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86202,
+   "i": 18,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86202,
+   "i": 19,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86303,
+   "i": 0,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 1,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86303,
+   "i": 2,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 3,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 4,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 5,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86303,
+   "i": 6,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 3
+   },
+   "taxa_do_motor": 0.3
+  },
+  {
+   "base": 86303,
+   "i": 7,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 8,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86303,
+   "i": 9,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86303,
+   "i": 10,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 11,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 10
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86303,
+   "i": 12,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 13,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86303,
+   "i": 14,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86303,
+   "i": 15,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": 0.75
+  },
+  {
+   "base": 86303,
+   "i": 16,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86303,
+   "i": 17,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86303,
+   "i": 18,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86303,
+   "i": 19,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 0,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86404,
+   "i": 1,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 2,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86404,
+   "i": 3,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 4,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": 0.75
+  },
+  {
+   "base": 86404,
+   "i": 5,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86404,
+   "i": 6,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86404,
+   "i": 7,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 8,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86404,
+   "i": 9,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": 0.75
+  },
+  {
+   "base": 86404,
+   "i": 10,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86404,
+   "i": 11,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86404,
+   "i": 12,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 13,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86404,
+   "i": 14,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 10
+   },
+   "taxa_do_motor": 0.75
+  },
+  {
+   "base": 86404,
+   "i": 15,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 16,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86404,
+   "i": 17,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86404,
+   "i": 18,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86404,
+   "i": 19,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86505,
+   "i": 0,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 4
+   },
+   "taxa_do_motor": 0.4
+  },
+  {
+   "base": 86505,
+   "i": 1,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86505,
+   "i": 2,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86505,
+   "i": 3,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86505,
+   "i": 4,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86505,
+   "i": 5,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86505,
+   "i": 6,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86505,
+   "i": 7,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86505,
+   "i": 8,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86505,
+   "i": 9,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86505,
+   "i": 10,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86505,
+   "i": 11,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86505,
+   "i": 12,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": 0.75
+  },
+  {
+   "base": 86505,
+   "i": 13,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 6
+   },
+   "taxa_do_motor": 0.6
+  },
+  {
+   "base": 86505,
+   "i": 14,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 3
+   },
+   "taxa_do_motor": 0.3
+  },
+  {
+   "base": 86505,
+   "i": 15,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": 0.9
+  },
+  {
+   "base": 86505,
+   "i": 16,
+   "especie": "limo",
+   "forma_champion": "limo_adolescente_colosso",
+   "estagio": "mega",
+   "champion": {
+    "n": 10,
+    "v": 9
+   },
+   "taxa_do_motor": null
+  },
+  {
+   "base": 86505,
+   "i": 17,
+   "especie": "cirro",
+   "forma_champion": "cirro_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 7
+   },
+   "taxa_do_motor": 0.7
+  },
+  {
+   "base": 86505,
+   "i": 18,
+   "especie": "brasa",
+   "forma_champion": "brasa_adolescente_colosso",
+   "estagio": "adolescente",
+   "champion": {
+    "n": 10,
+    "v": 5
+   },
+   "taxa_do_motor": 0.5
+  },
+  {
+   "base": 86505,
+   "i": 19,
+   "especie": "ferrugem",
+   "forma_champion": "ferrugem_adolescente_colosso",
+   "estagio": "adulto",
+   "champion": {
+    "n": 10,
+    "v": 8
+   },
+   "taxa_do_motor": 0.8333333333333334
+  }
+ ]
+}

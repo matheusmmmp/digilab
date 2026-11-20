@@ -1,0 +1,22 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": [
+  "ref_maquete_b.png",
+  "ref_geladeira_gerada.png"
+ ],
+ "prompt_base": "Concept sketch of a single small pier, a dock at the island shore where friends arrive by boat, as a landmark building for a cozy low-poly 3D island game for children with an anime digital-world look, cute, friendly and inviting, nothing scary, broken or dirty. Match the art style of the reference images: simple chunky rounded shapes, toy-like proportions, flat cel shading with two tones, soft saturated colors, clean flat color areas. Big enough for a small creature to walk in. No text, no letters, no numbers, no logo, no brand, no flags with symbols, no characters, no creatures. Show only the object, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow.",
+ "variantes": [
+  {
+   "nome": "concept_1_madeira",
+   "prompt": "A short wooden pier on round posts with a small moored rowing boat, a rope coiled on the planks, a lamp post and a signpost with blank arrows."
+  },
+  {
+   "nome": "concept_2_sino",
+   "prompt": "A wooden pier with a small roofed waiting booth, a brass bell on a frame, a life ring on a post and colorful buoys floating beside it."
+  },
+  {
+   "nome": "concept_3_digital",
+   "prompt": "A pier with a floating platform and a small glowing cyan data buoy and a little round ferry boat with a light on top, wooden planks with soft cyan light lines between them."
+  }
+ ]
+}

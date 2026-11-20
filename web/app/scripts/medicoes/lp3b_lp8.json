@@ -1,0 +1,107 @@
+{
+  "fonte": "web/app/scripts/medir_lp3b.ts",
+  "sementes": [
+    101,
+    102,
+    103,
+    104
+  ],
+  "mapas": [
+    "campo",
+    "coliseu",
+    "floresta",
+    "praia",
+    "deserto",
+    "castelo",
+    "caverna",
+    "ringue"
+  ],
+  "regra": "LP-8: projetil de velocidade 30 (Guide), PROPOSTO, SEM FONTE",
+  "formas": [
+    {
+      "chave": "cirro_crianca_arisco",
+      "digimon": "Gabumon",
+      "nivel": "Rookie",
+      "poc": {
+        "lutas": 448,
+        "vitorias": 0.32142857142857145,
+        "empates": 0,
+        "relogioMedioS": 10.687285714285714
+      },
+      "jogo": {
+        "lutas": 448,
+        "vitorias": 0.3169642857142857,
+        "empates": 0.0625,
+        "relogioMedioS": 10.960857142857144
+      }
+    },
+    {
+      "chave": "cirro_adolescente_brigao",
+      "digimon": "Garurumon",
+      "nivel": "Champion",
+      "poc": {
+        "lutas": 960,
+        "vitorias": 0.28020833333333334,
+        "empates": 0,
+        "relogioMedioS": 12.14555
+      },
+      "jogo": {
+        "lutas": 960,
+        "vitorias": 0.2833333333333333,
+        "empates": 0.00625,
+        "relogioMedioS": 12.889899999999999
+      }
+    },
+    {
+      "chave": "cirro_adulto_furioso",
+      "digimon": "MetalGarurumon",
+      "nivel": "Mega",
+      "poc": {
+        "lutas": 960,
+        "vitorias": 0.7375,
+        "empates": 0.0010416666666666667,
+        "relogioMedioS": 13.1938
+      },
+      "jogo": {
+        "lutas": 960,
+        "vitorias": 0.7552083333333334,
+        "empates": 0.0010416666666666667,
+        "relogioMedioS": 13.956766666666667
+      }
+    },
+    {
+      "chave": "cirro_adolescente_guardiao",
+      "digimon": "Angemon",
+      "nivel": "Champion",
+      "poc": {
+        "lutas": 960,
+        "vitorias": 0.07708333333333334,
+        "empates": 0.0010416666666666667,
+        "relogioMedioS": 15.573033333333333
+      },
+      "jogo": {
+        "lutas": 960,
+        "vitorias": 0.08541666666666667,
+        "empates": 0.003125,
+        "relogioMedioS": 15.838566666666667
+      }
+    },
+    {
+      "chave": "ferrugem_adolescente_cacador",
+      "digimon": "Gargomon",
+      "nivel": "Champion",
+      "poc": {
+        "lutas": 960,
+        "vitorias": 0.42916666666666664,
+        "empates": 0,
+        "relogioMedioS": 20.995366666666666
+      },
+      "jogo": {
+        "lutas": 960,
+        "vitorias": 0.4635416666666667,
+        "empates": 0.008333333333333333,
+        "relogioMedioS": 22.295633333333335
+      }
+    }
+  ]
+}

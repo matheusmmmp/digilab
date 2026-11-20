@@ -1,0 +1,113 @@
+/* Tailwind 4 (docs/TAREFA_V2_FRONT_REACT.md, etapa 2): só o tema e as utilidades, sem o preflight (o reset do Tailwind mudaria
+   todas as telas; o reset do jogo continua o de base.css). As utilidades saem só das pastas listadas em @source, nunca do resto
+   de src/: um className do jogo que por acaso tem nome de utilidade (hidden, flex, grid...) não ganha CSS novo. Uma tela que
+   passar a usar Tailwind entra na lista. Os tokens --dl-* e --ui-* (tokens.css) viram cores, fontes, cantos e sombra do tema. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+/* os componentes no estilo shadcn (src/componentes/ui) */
+@source "../componentes/ui";
+
+@theme inline {
+  /* cores: bg-dl-surface, text-ui-text, border-ui-border... (o valor segue o tema claro/escuro, porque aponta para a variável) */
+  --color-dl-action: var(--dl-action);
+  --color-dl-action-ink: var(--dl-action-ink);
+  --color-dl-action-lite: var(--dl-action-lite);
+  --color-dl-action-press: var(--dl-action-press);
+  --color-dl-bg: var(--dl-bg);
+  --color-dl-border: var(--dl-border);
+  --color-dl-border-shadow: var(--dl-border-shadow);
+  --color-dl-dano: var(--dl-dano);
+  --color-dl-dark: var(--dl-dark);
+  --color-dl-dark-bg: var(--dl-dark-bg);
+  --color-dl-dark-ink: var(--dl-dark-ink);
+  --color-dl-disabled: var(--dl-disabled);
+  --color-dl-disabled-ink: var(--dl-disabled-ink);
+  --color-dl-erro: var(--dl-erro);
+  --color-dl-force: var(--dl-force);
+  --color-dl-force-ink: var(--dl-force-ink);
+  --color-dl-hex: var(--dl-hex);
+  --color-dl-highlight: var(--dl-highlight);
+  --color-dl-highlight-ink: var(--dl-highlight-ink);
+  --color-dl-highlight-press: var(--dl-highlight-press);
+  --color-dl-learned: var(--dl-learned);
+  --color-dl-learned-bg: var(--dl-learned-bg);
+  --color-dl-learned-ink: var(--dl-learned-ink);
+  --color-dl-learned-sub: var(--dl-learned-sub);
+  --color-dl-muted: var(--dl-muted);
+  --color-dl-nav-circ: var(--dl-nav-circ);
+  --color-dl-nav-circ-edge: var(--dl-nav-circ-edge);
+  --color-dl-nav-ink: var(--dl-nav-ink);
+  --color-dl-navy: var(--dl-navy);
+  --color-dl-navy-deep: var(--dl-navy-deep);
+  --color-dl-need: var(--dl-need);
+  --color-dl-need-hi: var(--dl-need-hi);
+  --color-dl-need-ink: var(--dl-need-ink);
+  --color-dl-none-bg: var(--dl-none-bg);
+  --color-dl-none-edge: var(--dl-none-edge);
+  --color-dl-none-ink: var(--dl-none-ink);
+  --color-dl-ok: var(--dl-ok);
+  --color-dl-ok-edge: var(--dl-ok-edge);
+  --color-dl-ok-ink: var(--dl-ok-ink);
+  --color-dl-palco-tit: var(--dl-palco-tit);
+  --color-dl-plate: var(--dl-plate);
+  --color-dl-plate-hi: var(--dl-plate-hi);
+  --color-dl-rim: var(--dl-rim);
+  --color-dl-rival: var(--dl-rival);
+  --color-dl-rival-bg: var(--dl-rival-bg);
+  --color-dl-sec-bg: var(--dl-sec-bg);
+  --color-dl-sec-edge: var(--dl-sec-edge);
+  --color-dl-sec-ink: var(--dl-sec-ink);
+  --color-dl-sec-press: var(--dl-sec-press);
+  --color-dl-sec-shadow: var(--dl-sec-shadow);
+  --color-dl-surface: var(--dl-surface);
+  --color-dl-surface-2: var(--dl-surface-2);
+  --color-dl-text: var(--dl-text);
+  --color-dl-text-2: var(--dl-text-2);
+  --color-ui-bar-track: var(--ui-bar-track);
+  --color-ui-bg: var(--ui-bg);
+  --color-ui-border: var(--ui-border);
+  --color-ui-danger: var(--ui-danger);
+  --color-ui-navy: var(--ui-navy);
+  --color-ui-navy-2: var(--ui-navy-2);
+  --color-ui-navy-ink: var(--ui-navy-ink);
+  --color-ui-primary: var(--ui-primary);
+  --color-ui-primary-forte: var(--ui-primary-forte);
+  --color-ui-primary-forte-hover: var(--ui-primary-forte-hover);
+  --color-ui-primary-hover: var(--ui-primary-hover);
+  --color-ui-primary-ink: var(--ui-primary-ink);
+  --color-ui-primary-soft: var(--ui-primary-soft);
+  --color-ui-success: var(--ui-success);
+  --color-ui-surface: var(--ui-surface);
+  --color-ui-surface-2: var(--ui-surface-2);
+  --color-ui-text: var(--ui-text);
+  --color-ui-text-2: var(--ui-text-2);
+  --color-ui-warning: var(--ui-warning);
+  /* os nomes do shadcn (bg-primary, text-muted-foreground, border-border...), nos tokens da casca do desktop */
+  --color-background: var(--ui-bg);
+  --color-foreground: var(--ui-text);
+  --color-card: var(--ui-surface);
+  --color-card-foreground: var(--ui-text);
+  --color-popover: var(--ui-surface);
+  --color-popover-foreground: var(--ui-text);
+  --color-primary: var(--ui-primary);
+  --color-primary-foreground: var(--ui-primary-ink);
+  --color-secondary: var(--ui-primary-soft);
+  --color-secondary-foreground: var(--ui-text);
+  --color-muted: var(--ui-surface-2);
+  --color-muted-foreground: var(--ui-text-2);
+  --color-accent: var(--ui-primary-soft);
+  --color-accent-foreground: var(--ui-text);
+  --color-destructive: var(--ui-danger);
+  --color-border: var(--ui-border);
+  --color-input: var(--ui-border);
+  --color-ring: var(--ui-primary);
+  /* fontes, cantos e sombra */
+  --font-dl-num: var(--dl-f-num);
+  --font-dl-texto: var(--dl-f-texto);
+  --font-dl-lcd: var(--dl-f-lcd);
+  --radius-ui: var(--ui-raio);
+  --radius-ui-p: var(--ui-raio-p);
+  --shadow-ui: var(--ui-sombra);
+}

@@ -1,0 +1,789 @@
+{
+  "A11_refeicoes_por_dia": 0.9123809523809524,
+  "D-2_curvas": {
+    "por_lugar": {
+      "comedouro": {
+        "habito": [
+          0.00328125,
+          0.02015625,
+          0.04479166666666667,
+          0.06604166666666667,
+          0.08645833333333335,
+          0.10338541666666666,
+          0.12270833333333334,
+          0.1503125,
+          0.16041666666666668,
+          0.18890625,
+          0.1955208333333333,
+          0.21890625,
+          0.21046875,
+          0.17385416666666667
+        ],
+        "memoria": [
+          0.014375,
+          0.0346875,
+          0.03536458333333334,
+          0.03526041666666666,
+          0.04645833333333333,
+          0.0515625,
+          0.06760416666666667,
+          0.06458333333333333,
+          0.07125,
+          0.07317708333333334,
+          0.08348958333333334,
+          0.07697916666666667,
+          0.08609375,
+          0.11765625
+        ]
+      },
+      "longe": {
+        "habito": [
+          0.00484375,
+          0.02890625,
+          0.06854166666666667,
+          0.10994791666666666,
+          0.15046875,
+          0.16927083333333331,
+          0.19890625,
+          0.2115625,
+          0.20859375,
+          0.19333333333333333,
+          0.1626041666666667,
+          0.14953125,
+          0.1465625,
+          0.13958333333333334
+        ],
+        "memoria": [
+          0.0209375,
+          0.06703125,
+          0.08546875,
+          0.09692708333333334,
+          0.115,
+          0.13947916666666665,
+          0.1428125,
+          0.15473958333333335,
+          0.15348958333333335,
+          0.1655208333333333,
+          0.19567708333333333,
+          0.21802083333333333,
+          0.2368229166666667,
+          0.2483854166666667
+        ]
+      },
+      "perto": {
+        "habito": [
+          0.0010416666666666667,
+          0.008489583333333333,
+          0.020677083333333336,
+          0.033541666666666664,
+          0.04395833333333333,
+          0.055,
+          0.06364583333333333,
+          0.07442708333333332,
+          0.08776041666666666,
+          0.10078125,
+          0.11,
+          0.11671875,
+          0.1209375,
+          0.12755208333333334
+        ],
+        "memoria": [
+          0.010989583333333332,
+          0.03380208333333334,
+          0.045625,
+          0.05901041666666667,
+          0.08296875,
+          0.08359375,
+          0.09223958333333333,
+          0.09239583333333334,
+          0.09046875,
+          0.08671875,
+          0.09145833333333334,
+          0.08604166666666666,
+          0.09,
+          0.10260416666666666
+        ]
+      }
+    },
+    "total": {
+      "habito": [
+        0.0030555555555555553,
+        0.019184027777777776,
+        0.044670138888888884,
+        0.06984375,
+        0.09362847222222223,
+        0.10921875,
+        0.12842013888888887,
+        0.14543402777777778,
+        0.15225694444444446,
+        0.16100694444444444,
+        0.15604166666666666,
+        0.16171875,
+        0.15932291666666668,
+        0.14699652777777777
+      ],
+      "memoria": [
+        0.015434027777777777,
+        0.045173611111111116,
+        0.055486111111111104,
+        0.06373263888888889,
+        0.08147569444444444,
+        0.09154513888888889,
+        0.10088541666666667,
+        0.10390625,
+        0.10506944444444444,
+        0.10847222222222222,
+        0.12354166666666666,
+        0.12701388888888887,
+        0.1376388888888889,
+        0.15621527777777777
+      ]
+    }
+  },
+  "PE": {
+    "M0": {
+      "episodios_sairam_por_vida": 0.0,
+      "episodios_sairam_r_pos_por_vida": 0.0,
+      "fins_por_motivo": {
+        "meta": 20948,
+        "trocou": 1792
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    },
+    "M1": {
+      "episodios_sairam_por_vida": 0.0,
+      "episodios_sairam_r_pos_por_vida": 0.0,
+      "fins_por_motivo": {
+        "meta": 23386,
+        "trocou": 1659
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    },
+    "M2": {
+      "episodios_sairam_por_vida": 0.0,
+      "episodios_sairam_r_pos_por_vida": 0.0,
+      "fins_por_motivo": {
+        "meta": 29720,
+        "trocou": 2044
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    },
+    "M3": {
+      "episodios_sairam_por_vida": 65.49666666666667,
+      "episodios_sairam_r_pos_por_vida": 32.575,
+      "fins_por_motivo": {
+        "meta": 48667,
+        "trocou": 17243
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    },
+    "M3-sp": {
+      "episodios_sairam_por_vida": 64.96333333333334,
+      "episodios_sairam_r_pos_por_vida": 32.28333333333333,
+      "fins_por_motivo": {
+        "meta": 48366,
+        "trocou": 17901
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    },
+    "M4": {
+      "episodios_sairam_por_vida": 69.83166666666666,
+      "episodios_sairam_r_pos_por_vida": 34.66833333333334,
+      "fins_por_motivo": {
+        "meta": 51503,
+        "trocou": 16986
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 1
+    },
+    "M4-con": {
+      "episodios_sairam_por_vida": 69.645,
+      "episodios_sairam_r_pos_por_vida": 35.12166666666667,
+      "fins_por_motivo": {
+        "meta": 51420,
+        "trocou": 16984
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    },
+    "M4-emb": {
+      "episodios_sairam_por_vida": 70.97666666666667,
+      "episodios_sairam_r_pos_por_vida": 35.035,
+      "fins_por_motivo": {
+        "meta": 52166,
+        "trocou": 16451
+      },
+      "vidas": 600,
+      "vidas_com_h_no_teto": 0
+    }
+  },
+  "aviso": "so descritivo (secoes 7 e 8): nenhuma medida nova, nenhum gate",
+  "cadeia_por_celula": {
+    "A11": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.007402432176073942,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.0030980392156862747,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.023367089335809485,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.0020828604644418255,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.022822594576179446,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.10030793737334483,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.0020828604644418255,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.016896903301804905,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.10073227857548588,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.00747869203966765,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.0038803716608594658,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.018412266595193426,
+        "vidas": 50
+      }
+    },
+    "M0": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.2,
+        "taxa_media": 0.4049275349207708,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.13415624269140125,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8139153386547047,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.07174827875463667,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.02738725272463746,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.2918320587099265,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.07174827875463667,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.03405021016152962,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.2864879296417135,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.16,
+        "taxa_media": 0.3662195778946468,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.09900738241399132,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.7931404649840988,
+        "vidas": 50
+      }
+    },
+    "M1": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.42,
+        "taxa_media": 0.4489008638261972,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.12152588363028279,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8889354072585688,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.08839534796941777,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.03547966826753291,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 0.02,
+        "taxa_media": 0.41222482973191665,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.08839534796941777,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.03676534614401728,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 0.08,
+        "taxa_media": 0.41759469910809677,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.26,
+        "taxa_media": 0.4112274454546248,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.10659726760476239,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8916299749438333,
+        "vidas": 50
+      }
+    },
+    "M2": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.4,
+        "taxa_media": 0.4608357129798735,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.12823961547055934,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.9145593059802105,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.13963135221673637,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.038322241961340625,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6059593846483233,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.13963135221673637,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.0412596955416903,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 0.92,
+        "taxa_media": 0.597278680997136,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.14,
+        "taxa_media": 0.3905078854214514,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.11622921626135904,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8868306686828897,
+        "vidas": 50
+      }
+    },
+    "M3": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6858787357498178,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.1320726662903514,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8983933376460194,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.1958453069917848,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.04435834877988417,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6065891724147258,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.1958453069917848,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.046719292738572074,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6040826426184569,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.94,
+        "taxa_media": 0.6540862911199952,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.1060650145688643,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8587950182348384,
+        "vidas": 50
+      }
+    },
+    "M3-sp": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.9,
+        "taxa_media": 0.6617847136080086,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.13157874352585547,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.9189619377625937,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.19995272429229932,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.04154634156632638,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6090889957722222,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.19995272429229932,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.042122958525598324,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6041406049324111,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.98,
+        "taxa_media": 0.6662017956874574,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.10167526614497291,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8774324207840044,
+        "vidas": 50
+      }
+    },
+    "M4": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.94,
+        "taxa_media": 0.7188683898127509,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.1175221126591252,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.933542616237454,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.244044920856319,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.04572732432886064,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.7202374164125847,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.244044920856319,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.05087457606235004,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.7092319030581541,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.96,
+        "taxa_media": 0.6586872081187749,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.11276910191204582,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8931235257982351,
+        "vidas": 50
+      }
+    },
+    "M4-con": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.94,
+        "taxa_media": 0.694910868621166,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.1347380341630283,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.9215885999847906,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.2369809710014317,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.04777478141557743,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.729375308800356,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.2369809710014317,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.0458914208198911,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.7234818086674417,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.94,
+        "taxa_media": 0.6592241247732687,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.10559142303562746,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.9001335155039222,
+        "vidas": 50
+      }
+    },
+    "M4-emb": {
+      "aleatorio/comedouro": {
+        "frac_com_cadeia": 0.98,
+        "taxa_media": 0.7143987142917267,
+        "vidas": 50
+      },
+      "aleatorio/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.137208062658839,
+        "vidas": 50
+      },
+      "aleatorio/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.9339068559514649,
+        "vidas": 50
+      },
+      "atencioso/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.24700719642541555,
+        "vidas": 50
+      },
+      "atencioso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.04957235583859156,
+        "vidas": 50
+      },
+      "atencioso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.7161888453104414,
+        "vidas": 50
+      },
+      "incoerente/comedouro": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.24700719642541555,
+        "vidas": 50
+      },
+      "incoerente/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.04839511383251609,
+        "vidas": 50
+      },
+      "incoerente/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.7108837857017951,
+        "vidas": 50
+      },
+      "relapso/comedouro": {
+        "frac_com_cadeia": 0.94,
+        "taxa_media": 0.6608979058059924,
+        "vidas": 50
+      },
+      "relapso/longe": {
+        "frac_com_cadeia": 0.0,
+        "taxa_media": 0.10557448876081248,
+        "vidas": 50
+      },
+      "relapso/perto": {
+        "frac_com_cadeia": 1.0,
+        "taxa_media": 0.8983121756806963,
+        "vidas": 50
+      }
+    }
+  },
+  "git_head_da_run": "5fc89430c80b9e0e6e948aacc204840c8a3517b7",
+  "pasta": "artifacts_v2_digibrain_prototipo/avaliacao",
+  "vidas": 5400
+}

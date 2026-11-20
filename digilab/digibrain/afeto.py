@@ -1,0 +1,171 @@
+"""M-AFETO, os afetos e os moduladores (docs/ESPEC_DIGIBRAIN_MODULAR.md, secao 4.3).
+
+Na decisao (`ler`), da interocepcao do M-SENS:
+  - a urgencia de cada receptor, `u_r = clamp(mul(a_r, falta) + mul(b_r, max(0, falta - lambda_r)), 0, S)`, a curva inata;
+  - o ganho da aprendizagem `g_apr` (PE-4, a D-1: a excitacao no `g_apr` e HIPOTESE EXPERIMENTAL), pela `ConfigDigibrain`:
+      sem `modula_g_apr`:                    g0 (o primeiro braco);
+      com `modula_g_apr`:                    clamp(g0 + mul(beta_E, E), g_min, g_max), com E a excitacao desta vida;
+      com o controle "embaralhado":          a mesma conta com a E da vida doadora na mesma decisao (a serie dada ao construir);
+      com o controle "constante":            o `g_apr_constante`;
+  - o ganho da exploracao `g_exp = clamp(e0 + mul(beta_T, falta do tedio) - mul(beta_U, max_r u_r), 0, e_max)`.
+Na consequencia (`consequencia`), dos receptores de antes e de depois:
+  - o sinal homeostatico `r = sinal_corpo(antes, depois, drives, ganho, S)` do A (lobos.py), sobre os receptores presentes menos os de
+    `fora_do_r` (o susto, como no A), com os canais por drive (`canais_do_sinal`: a soma telescopica e o escalar, K-6);
+  - `r_n = clamp(div_arred(r, R_n), -S, S)`;
+  - a valencia `V <- V + mul(k_V, r_n - V)` e a excitacao `E <- E + mul(k_E, max(|r_n|, dor, susto, estresse) - E)` (forma I).
+A serie da excitacao lida em cada decisao fica em `serie_e` (a doadora do M4-emb e a serie de uma vida M4).
+**O canal `gosto_visual`** (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 5.2; so com a subchave `olhar`): na consequencia de
+uma opcao de olhar, o M-ADAPT passa o termo pronto (`gosto_visual`, o agrado do que o pet olhou, centrado); ele soma ao r antes do r_n,
+como o canal `gosto` do paladar no A, e entra em `canais` (a soma dos canais segue sendo o r). Sem ele, a conta de hoje. Sem rng.
+**O mito** (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md, secao 6; so com a ConfigOrgao.mito, `ligar_mito`): a especie vista na TV cujo
+patrono e o do brasao do proprio pet (o parentesco, OV1-5) soma `div_arred(peso_mito x a_e x nov_e, S x S)` so a valencia desta decisao
+(o V que o M-IMPULSO le), sem mexer no V guardado, na excitacao nem no corpo (a D-MM-10 por analogia, como a culpa e a inveja da CO7). As
+outras especies e os conceitos genericos somam 0."""
+from __future__ import annotations
+
+from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
+from .base import contribuicoes_corpo, div_arred, falta_receptor, sinal_corpo
+from .. import orgao as _orgao
+from . import dever as _dever
+from ._comum import clamp, ganho_de_tau, integrar, mul
+
+EXCITANTES = ("dor", "susto", "estresse")
+
+
+def canais_do_sinal(antes, depois, drives: tuple, ganho: int, S: int) -> dict[str, int]:
+    """o r separado por drive, na ordem de `drives`: f_d = div_arred(ganho x (c_1 + ... + c_d), S) - div_arred(ganho x (c_1 + ... +
+    c_(d-1)), S), com c_d a contribuicao do drive (`contribuicoes_corpo` do A). A soma e o `sinal_corpo` (a soma telescopa). E a conta
+    do `sinal_corpo_canais` do A, refeita aqui porque a do A nao tem canal para a saude."""
+    canais: dict[str, int] = {}
+    acumulado, anterior = 0, 0
+    for d, c in contribuicoes_corpo(antes, depois, drives, S).items():
+        acumulado += c
+        parcial = div_arred(ganho * acumulado, S)
+        canais[d] = parcial - anterior
+        anterior = parcial
+    return canais
+
+
+class Afeto:
+    """o M-AFETO (docstring do modulo)"""
+
+    def __init__(self, cfg: Config, cfg_digibrain: ConfigDigibrain, inatos: ConfigDigibrainInatos | None = None,
+                 serie_e_doadora: tuple | None = None) -> None:
+        self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.cd = cfg_digibrain
+        self.S = self.p.escala
+        delta = cfg.intervalo_decisao_ticks
+        self.k_v = ganho_de_tau(self.p.tau_v, delta, self.S)
+        self.k_e = ganho_de_tau(self.p.tau_e, delta, self.S)
+        embaralhado = self.cd.controle_g_apr == "embaralhado"
+        if embaralhado != (serie_e_doadora is not None):
+            raise ValueError("a serie E da vida doadora vem so com o controle embaralhado (e e obrigatoria nele)")
+        if serie_e_doadora is not None and any(type(e) is not int or not 0 <= e <= self.S for e in serie_e_doadora):
+            raise ValueError("a serie E da vida doadora: inteiros em [0, S]")
+        self.doadora = None if serie_e_doadora is None else tuple(serie_e_doadora)
+        self.V = 0
+        self.E = 0
+        self.decisoes = 0
+        self.serie_e: list[int] = []
+        self.ultimo: dict | None = None
+        self.dever = None                             # a CO7 (`ligar_dever`): a ConfigCooperacao; None desligada
+        self.mito: tuple | None = None                # o mito (OV2, `ligar_mito`): (peso, brasao do pet); None desligado
+
+    def ligar_dever(self, cfg) -> None:
+        """a CO7 (4; CO7-6): a culpa e a inveja tiram da valencia da decisao (o V que o M-IMPULSO le), sem mexer no V guardado nem no corpo"""
+        if not cfg.co7:
+            raise ValueError("M-AFETO: os deveres so com a subchave co7")
+        self.dever = cfg
+
+    def ligar_mito(self, cfg, brasao: str) -> None:
+        """o mito (a docstring do modulo): o termo das especies do mesmo brasao do pet, so na valencia da decisao"""
+        if not cfg.mito:
+            raise ValueError("M-AFETO: ligar_mito com a ConfigOrgao.mito desligada")
+        if brasao not in _orgao.BRASOES:
+            raise ValueError(f"M-AFETO: o brasao do pet em {_orgao.BRASOES}: {brasao!r}")
+        self.mito = (cfg.peso_mito, brasao)
+
+    def termo_mito(self, sens: dict) -> int:
+        """o termo do mito na valencia desta decisao (a docstring do modulo)"""
+        peso, brasao = self.mito
+        S = self.S
+        return sum(div_arred(peso * a * sens["nov_conceito"][c], S * S) for c, a in sens["conceitos"].items()
+                   if _orgao.BRASAO.get(c) == brasao)
+
+    def urgencia(self, falta: int) -> int:
+        p, S = self.p, self.S
+        return clamp(mul(p.urgencia_a, falta, S) + mul(p.urgencia_b, max(0, falta - p.urgencia_lambda), S), 0, S)
+
+    def g_apr_de(self, e: int) -> int:
+        """o g_apr modulado por uma excitacao e"""
+        p = self.p
+        return clamp(p.g0 + mul(p.beta_e, e, self.S), p.g_min, p.g_max)
+
+    def ler(self, sens: dict) -> dict:
+        p, S, cd = self.p, self.S, self.cd
+        falta = sens["falta"]
+        urg = {r: self.urgencia(f) for r, f in falta.items()}
+        e_usada = None
+        if cd.controle_g_apr == "constante":
+            g_apr = cd.g_apr_constante
+        elif cd.modula_g_apr:
+            if cd.controle_g_apr == "embaralhado":
+                if self.decisoes >= len(self.doadora):
+                    raise RuntimeError(f"M-AFETO: a serie E da vida doadora tem {len(self.doadora)} decisoes; esta e a {self.decisoes + 1}")
+                e_usada = self.doadora[self.decisoes]
+            else:
+                e_usada = self.E
+            g_apr = self.g_apr_de(e_usada)
+        else:
+            g_apr = p.g0
+        g_exp = clamp(p.e0 + mul(p.beta_t, falta.get("tedio", 0), S) - mul(p.beta_u, max(urg.values()), S), 0, p.e_max)
+        self.serie_e.append(self.E)
+        self.decisoes += 1
+        out = {"urgencias": urg, "V": self.V, "E": self.E, "e_usada": e_usada, "g_apr": g_apr, "g_exp": g_exp}
+        if self.dever is not None:                    # a CO7: a culpa e a inveja so na valencia desta decisao (desligada, a de hoje)
+            culpa, inveja = _dever.culpa_inveja(sens, self.dever)
+            out.update(V=clamp(self.V - culpa - inveja, -S, S), culpa=culpa, inveja=inveja)
+        if self.mito is not None:                     # o mito (OV2): so na valencia desta decisao (desligado, a de hoje)
+            termo = self.termo_mito(sens)
+            out.update(V=clamp(out["V"] + termo, -S, S), mito=termo)
+        return out
+
+    def drives(self, receptores: tuple) -> tuple:
+        return tuple(r for r in receptores if r not in self.p.fora_do_r)
+
+    def consequencia(self, pc_antes, pc_depois, receptores: tuple, gosto_visual: int | None = None) -> dict:
+        p, S = self.p, self.S
+        drives = self.drives(receptores)
+        r = sinal_corpo(pc_antes, pc_depois, drives, p.ganho_r, S)
+        canais = canais_do_sinal(pc_antes, pc_depois, drives, p.ganho_r, S)
+        if gosto_visual is not None:                  # o canal `gosto_visual` (P1d): so na opcao de olhar, com a subchave
+            if type(gosto_visual) is not int:
+                raise TypeError(f"M-AFETO: gosto_visual e inteiro: {gosto_visual!r}")
+            r += gosto_visual
+            canais["gosto_visual"] = gosto_visual
+        r_n = clamp(div_arred(r, p.r_norm), -S, S)
+        self.V = integrar(self.V, r_n, self.k_v, S)
+        exc = max([abs(r_n)] + [falta_receptor(pc_depois, x, S) for x in EXCITANTES if x in receptores])
+        self.E = integrar(self.E, exc, self.k_e, S)
+        self.ultimo = {"r": r, "r_n": r_n, "canais": canais, "V": self.V, "E": self.E}
+        return self.ultimo
+
+    def sigma_luta(self, pc_antes, pc_depois, receptores: tuple) -> dict:
+        """a variacao do corpo da luta (ponte da luta, PE2): o mesmo r e r_n da `consequencia`, SEM mexer em V nem em E (a luta chega
+        pelo corpo, nunca como recompensa direta: TAREFA_V3_PONTE_LUTA, 3.1 e 7)"""
+        p, S = self.p, self.S
+        r = sinal_corpo(pc_antes, pc_depois, self.drives(receptores), p.ganho_r, S)
+        return {"r": r, "r_n": clamp(div_arred(r, p.r_norm), -S, S)}
+
+    def r_intervalo(self, pc_depois, pc_seguinte, receptores: tuple) -> dict:
+        """o r do intervalo (o rastro da cadeia, docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2): o corpo logo depois dos estimulos da acao
+        contra o corpo da decisao seguinte, com os mesmos drives, o mesmo ganho e a mesma normalizacao do r. So calculo, como a
+        `sigma_luta`: nao mexe em V, em E nem em `ultimo`, e nada o credita."""
+        p, S = self.p, self.S
+        drives = self.drives(receptores)
+        r = sinal_corpo(pc_depois, pc_seguinte, drives, p.ganho_r, S)
+        return {"r": r, "r_n": clamp(div_arred(r, p.r_norm), -S, S),
+                "canais": canais_do_sinal(pc_depois, pc_seguinte, drives, p.ganho_r, S)}
+
+    def estado_interno(self) -> dict:
+        return {"V": self.V, "E": self.E, "decisoes": self.decisoes, "ultimo": self.ultimo}

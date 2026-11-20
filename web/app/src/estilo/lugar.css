@@ -1,0 +1,199 @@
+/* O painel de um lugar da ilha e as pecas que a regra do texto da L2 pede (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Lugares da ilha: menus (L2/L3)";
+   prancha em docs/pranchas/ux-lugares-menus/lugares.css e movel.css). So tokens --hx-* e --hud-*; nenhuma cor nova (a sobrecarga e a forma sombria
+   usam --hx-sombrio). Tudo sob .painel-tela--lugar ou nas classes novas (Crescer); os outros destinos nao passam por aqui. */
+:root{
+  --lugar-painel-ms:180ms;            /* PAINEL_MS (viagem.ts): o card entrando, guia secao 11. PROPOSTO, SEM FONTE (numero de interface) */
+  --lugar-folha-alt:52.5dvh;          /* a folha do celular: de y 400 a 390x844 e de y 380 a 360x800. PROPOSTO, SEM FONTE (pergunta 13) */
+}
+/* a ilha viva em volta: o habitat ocupa a tela toda, sem o espaco do painel nem o veu */
+.app--painel.app--lugar .habitat{ right:0 }
+
+/* ---------- de 900 px em diante: ao lado do saco */
+.painel-tela--lugar-lado{ position:fixed; z-index:10; top:calc(var(--casca-topo) + 20px); left:46vw; width:min(600px,calc(54vw - 12px)); max-height:calc(100dvh - var(--casca-topo) - 32px);
+  display:flex; outline:none; animation:lugar-entra var(--lugar-painel-ms) ease-out }
+:root[data-pele="vidro"] .painel-tela--lugar{ box-shadow:var(--hx-sombra) }
+@keyframes lugar-entra{ from{ opacity:0; transform:translateX(12px) } to{ opacity:1; transform:none } }
+.lugar__hx{ flex:1; min-width:0; min-height:0; width:100% }
+.lugar__hx .hx-painel__corpo{ padding:0; overflow-x:hidden }
+.painel-tela--lugar .hx-painel__cab{ align-items:center; row-gap:0; padding-top:6px }
+.hx-painel__tit{ display:flex; align-items:center; gap:10px; padding:6px 56px 0 14px; flex:1 1 100%; color:var(--hx-rotulo) }
+.hx-painel__tit-txt{ display:flex; flex-direction:column; line-height:1.1; color:var(--hx-texto) }
+.hx-painel__tit-txt .hx-painel__titulo{ padding:0 }
+.hx-painel__tit-txt small{ font:500 12px/1.2 var(--hx-f); color:var(--hx-sec); letter-spacing:.02em }
+.painel-tela--lugar .hx-painel__cab > .hx-abas.lugar-abas{ flex:1 1 100%; align-self:stretch; flex-wrap:nowrap; gap:6px; padding:8px 14px }
+
+/* ---------- as abas em icone: so a escolhida mostra o rotulo; as outras, a dica no foco e no hover */
+.lugar-abas .hx-aba{ position:relative; display:inline-flex; align-items:center; justify-content:center; gap:8px; min-width:44px; height:44px; padding:0 10px;
+  border:1px solid var(--hx-borda); background:var(--hx-tecla) }
+.lugar-abas .hx-aba svg{ width:20px; height:20px; flex:none }
+.lugar-abas .hx-aba[aria-selected="true"]{ padding:0 14px; background:var(--hx-escolhido); border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.hx-aba__dica{ display:none; position:absolute; z-index:3; left:50%; top:50px; transform:translateX(-50%); padding:6px 10px; white-space:nowrap;
+  background:var(--hud-fundo-1); border:1px solid var(--hx-rotulo); color:var(--hx-texto); font:600 13px/1.25 var(--hx-f); letter-spacing:0; text-transform:none; pointer-events:none }
+.lugar-abas .hx-aba:hover .hx-aba__dica, .lugar-abas .hx-aba:focus-visible .hx-aba__dica{ display:block }
+
+/* ---------- abaixo de 900 px: a folha que sobe da base */
+.painel-tela--lugar-folha{ position:fixed; inset:auto 0 0 0; margin:0; width:100%; max-width:none; height:var(--lugar-folha-alt); max-height:none; padding:0; border:0; background:none;
+  color:inherit; overflow:visible; display:flex; flex-direction:column; animation:lugar-sobe var(--lugar-painel-ms) ease-out }
+.painel-tela--lugar-folha:not([open]){ display:none }
+.painel-tela--lugar-folha::backdrop{ background:transparent }
+@keyframes lugar-sobe{ from{ transform:translateY(40px); opacity:.7 } to{ transform:none; opacity:1 } }
+.lugar-alca{ position:absolute; z-index:3; top:7px; left:50%; width:48px; height:5px; margin-left:-24px; background:var(--hx-texto-2); pointer-events:none }
+.painel-tela--lugar-folha .hx-painel__cab{ padding-top:14px }
+/* no celular o icone de Crescer na coluna fica em destaque (o escolhido do minimo) enquanto o lugar esta aberto */
+:root[data-pele] body .mm-destinos .mm-bt[aria-current="page"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.painel-tela--lugar-folha .hx-painel__tit{ padding-top:2px }
+.painel-tela--lugar-folha .hx-painel__cab > .hx-abas.lugar-abas{ padding:6px 10px }
+@media (prefers-reduced-motion:reduce){ .painel-tela--lugar-lado, .painel-tela--lugar-folha{ animation:none } }
+
+/* ---------- pecas do corpo (regra do texto: icone, numero, rotulo curto; a frase vai para o balao) */
+.lg{ display:flex; flex-direction:column; gap:12px; padding:14px 16px 16px; min-width:0 }
+.painel-tela--lugar-folha .lg{ padding:12px 10px 14px; gap:10px }
+.lg-linha{ display:flex; align-items:center; gap:10px; min-width:0 }
+.lg-rot{ font:700 12px/1.1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo) }
+.lg-sec{ color:var(--hx-sec); font:500 13px/1.3 var(--hx-f) }
+.lg-num{ font:700 22px/1 var(--hx-f-num); color:var(--hx-num); font-variant-numeric:tabular-nums }
+.lg-num--p{ font-size:18px }
+.lg small{ font:600 12px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; color:var(--hx-sec) }
+.lg-destaque{ position:relative; border:1px solid var(--hx-alerta); border-left-width:4px; background:var(--hx-tecla); padding:10px 12px 10px 14px }
+.lg-etq{ display:inline-flex; align-items:center; min-height:20px; padding:1px 7px; border:1px solid var(--hx-borda); font:700 11px/1.1 var(--hx-f); letter-spacing:.08em;
+  text-transform:uppercase; color:var(--hx-texto-2); white-space:nowrap }
+.lg-etq--alerta{ border-color:var(--hx-alerta); color:var(--hx-alerta) }
+.lg-como{ border-top:1px solid var(--hx-borda); padding-top:4px }
+.lg-como summary{ display:flex; align-items:center; gap:8px; min-height:44px; color:var(--hx-sec); font:600 13px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; cursor:pointer; list-style:none }
+.lg-como summary::-webkit-details-marker{ display:none }
+.lg-como summary svg{ width:16px; height:16px; flex:none }
+.lg-como summary .lg-seta{ margin-left:auto }
+.lg-como[open] summary .lg-seta{ transform:rotate(90deg) }
+.lg-como p{ color:var(--hx-texto-2); font:500 14px/1.4 var(--hx-f); padding:0 0 8px 0; margin:0 }
+.lg svg{ flex:none }
+
+/* o balao (a dica de uma frase no foco e no hover; fora da vista, fica so no textContent e no aria-describedby) */
+.dica-alvo{ position:relative }
+.dica-alvo:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.balao{ display:none; position:absolute; z-index:50; left:0; top:calc(100% + 6px); width:max-content; max-width:min(300px,72vw); padding:8px 12px; background:var(--hud-fundo-1);
+  border:1px solid var(--hx-rotulo); color:var(--hx-texto); font:500 13px/1.35 var(--hx-f); letter-spacing:0; text-transform:none; text-align:left; white-space:normal }
+.balao b{ font-weight:700 }
+.dica-alvo:hover > .balao, .dica-alvo:focus > .balao, .dica-alvo:focus-within > .balao{ display:block }
+/* o Esc fechou o balao (atalhosLugar.ts): ele volta quando o ponteiro ou o foco saem do alvo */
+.dica-alvo[data-oculto] > .balao{ display:none !important }
+/* a area de toque do alvo de um balao: 44 px, o desenho de dentro pode ficar menor */
+:where(.dica-alvo:not(.it2):not(.dica-alvo--sem-foco)){ min-width:44px; min-height:44px; justify-content:center }
+/* so para o leitor de tela (visualmente oculto, mas nao hidden: o role="status" anuncia) */
+.sr-so{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0 }
+.balao--dir{ left:auto; right:0 }
+.balao--cima{ top:auto; bottom:calc(100% + 6px) }
+
+/* ---------- Treinar */
+.trn2-grade{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px }
+.trn2-grade .treino-ex{ position:relative; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:4px; min-height:92px; padding:10px 10px 8px;
+  text-align:left; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto) }
+.trn2-grade .treino-ex:hover:not(:disabled){ background:var(--hx-tecla-hover) }
+.trn2-grade .treino-ex b{ font:700 15px/1.1 var(--hx-f) }
+.trn2-grade .treino-ex small{ font:500 12px/1.2 var(--hx-f); color:var(--hx-sec); text-transform:none; letter-spacing:0 }
+.trn2-grade .treino-ex .treino-ic{ width:34px; height:auto; max-height:38px; object-fit:contain }
+.trn2-grade .lg-etq{ position:absolute; right:6px; top:6px; padding:1px 3px }
+.trn2-grade .lg-etq svg{ width:12px; height:12px }
+.trn2-med{ display:grid; grid-template-columns:92px 1fr 40px; align-items:center; gap:10px }
+.trn2-med .lg-rot{ color:var(--hx-texto-2) }
+.trn2-med em{ font:700 13px/1 var(--hx-f-num); font-style:normal; color:var(--hx-num); text-align:right }
+.trn2-barra{ position:relative; height:var(--hx-medidor-alt); background:var(--hx-medidor-trilho); border:1px solid var(--hx-borda) }
+.trn2-barra i{ position:absolute; inset:0 auto 0 0; background:var(--hx-medidor) }
+.trn2-barra--sombrio i{ background:var(--hx-sombrio) }
+.trn2-barra .lim{ position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--hx-texto-2) }
+.trn2-marcas{ position:relative; height:12px; margin-left:102px; margin-right:50px; font:600 11px/1 var(--hx-f-num); color:var(--hx-sec) }
+.trn2-marcas span{ position:absolute; transform:translateX(-50%) }
+.trn2-status{ font:700 20px/1.15 var(--hx-f) }
+
+/* ---------- Itens */
+.it2-topo{ display:flex; align-items:center; gap:14px; flex-wrap:wrap }
+.it2-conta{ display:inline-flex; align-items:center; gap:6px }
+.it2-conta svg, .evl-req svg{ color:var(--hx-rotulo); width:20px; height:20px }
+.it2-aviso{ display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:0 10px; border:1px dashed var(--hx-sec); color:var(--hx-texto-2); font:600 13px/1 var(--hx-f) }
+.it2-aviso b{ font:700 15px/1 var(--hx-f-num); color:var(--hx-num) }
+.it2-aviso svg{ width:16px; height:16px }
+.it2-vagas{ display:inline-flex; align-items:center; gap:6px; margin-left:auto }
+.it2-vaga{ position:relative; width:34px; height:34px; display:grid; place-items:center; border:1px solid var(--hx-borda-topo); border-radius:50%; color:var(--hx-sec) }
+:root[data-pele="xcom"] .it2-vaga{ border-radius:0 }
+.it2-vaga--livre{ border-style:dashed }
+.it2-vaga--ocupada{ background:var(--hx-escolhido); border-color:var(--hx-escolhido-borda); color:var(--hx-escolhido-ink) }
+.it2-vaga--trancada{ border-style:dotted }
+.it2-vaga svg{ width:14px; height:14px }
+.it2-vaga small{ position:absolute; right:-6px; bottom:-6px; min-width:16px; height:16px; display:grid; place-items:center; background:var(--hx-chao); border:1px solid var(--hx-sec);
+  border-radius:50%; font:700 10px/1 var(--hx-f-num); color:var(--hx-texto-2); letter-spacing:0 }
+.it2-grade{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; list-style:none; margin:0; padding:0 }
+.painel-tela--lugar-folha .it2-grade{ gap:6px }
+.it2-card{ position:relative; min-width:0; display:block; padding:0; margin:0; list-style:none }
+.it2{ position:relative; width:100%; display:flex; flex-direction:column; align-items:flex-start; gap:3px; min-height:86px; padding:9px 10px 8px; border:1px solid var(--hx-borda);
+  background:var(--hx-tecla); color:var(--hx-texto); text-align:left; cursor:pointer }
+.painel-tela--lugar-folha .it2{ min-height:80px; padding:8px }
+.it2 > svg{ width:24px; height:24px; color:var(--hx-rotulo); stroke-width:1.8 }
+.it2 b{ font:700 15px/1.1 var(--hx-f) }
+.it2 small{ font:500 12px/1.2 var(--hx-f); color:var(--hx-sec); text-transform:none; letter-spacing:0 }
+.it2--falta .it2{ border-style:dashed; border-color:var(--hx-borda-topo); background:transparent; cursor:default }
+.it2--falta .it2 > svg, .it2--falta .it2 b{ color:var(--hx-sec) }
+.it2--eq .it2{ background:var(--hx-escolhido); border-color:var(--hx-escolhido-borda); color:var(--hx-escolhido-ink) }
+.it2--eq .it2 > svg, .it2--eq .it2 small{ color:inherit }
+.it2--proximo .it2{ border-color:var(--hx-alerta); border-left-width:4px }
+.it2-canto{ position:absolute; right:6px; top:6px; display:flex; gap:4px; align-items:center }
+.painel-tela--lugar-folha .it2-canto{ position:static; align-self:flex-end; margin:-2px -2px 2px 0 }
+.it2-canto svg{ width:14px; height:14px; color:var(--hx-sec) }
+.it2-qtd{ font:700 13px/1 var(--hx-f-num); color:var(--hx-num) }
+.it2-grade > li:nth-child(3n) .balao{ left:auto; right:0 }
+.it2-msg{ margin:0; color:var(--hx-perigo); font:600 14px/1.3 var(--hx-f) }
+
+/* ---------- Evolucao */
+.evl-topo{ display:grid; grid-template-columns:132px 1fr auto; align-items:center; gap:14px }
+.evl-palco{ position:relative; width:132px; height:100px; display:grid; place-items:center; border:1px solid var(--hx-borda); background:var(--hx-tecla); overflow:hidden }
+.painel-tela--lugar-folha .evl-topo{ grid-template-columns:96px 1fr; gap:10px }
+.painel-tela--lugar-folha .evl-palco{ width:96px; height:80px }
+.evl-nome b{ display:block; font:700 26px/1.1 var(--hx-f) }
+.evl-nome .lg-linha{ margin-top:4px; gap:8px; flex-wrap:wrap }
+.evl-prazo{ display:flex; flex-direction:column; align-items:flex-end; gap:4px }
+.evl-prazo .lg-linha{ gap:6px }
+.painel-tela--lugar-folha .evl-prazo{ grid-column:1 / -1; flex-direction:row; align-items:center; justify-content:flex-start }
+.evl-reqs{ display:flex; align-items:center; gap:22px; flex-wrap:wrap }
+.evl-req{ display:inline-flex; align-items:center; gap:8px }
+.evl-selos{ display:flex; align-items:center; gap:8px }
+.evl-selo{ position:relative; width:30px; height:30px; display:grid; place-items:center; flex:none; background:var(--hx-escolhido-borda);
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%) }
+.evl-selo i{ display:grid; place-items:center; width:26px; height:26px; clip-path:inherit; background:var(--hx-miolo); font:700 13px/1 var(--hx-f-num); font-style:normal; color:var(--hx-escolhido-borda) }
+.evl-selo--falta{ background:var(--hx-borda-topo) }
+.evl-selo--falta i{ color:var(--hx-sec) }
+.evl-selo i svg{ width:14px; height:14px }
+.evl-arv{ display:flex; flex-direction:column; gap:6px }
+.evl-fila{ display:grid; grid-template-columns:92px 1fr; align-items:center; gap:8px }
+.painel-tela--lugar-folha .evl-fila{ grid-template-columns:80px 1fr }
+.evl-nos{ display:flex; gap:6px; align-items:center; flex-wrap:wrap }
+.evl-no{ position:relative; width:48px; height:48px; display:grid; place-items:center; border:1px solid var(--hx-borda); background:transparent; color:var(--hx-texto); padding:0; font:700 16px/1 var(--hx-f); cursor:default }
+.evl-no img{ max-width:42px; max-height:42px; image-rendering:pixelated }
+.evl-no--percorrido{ border-color:var(--hx-ok) }
+.evl-no--agora{ border:2px solid var(--hx-escolhido-borda); background:var(--hx-escolhido); box-shadow:var(--hx-escolhido-brilho) }
+.evl-no--possivel{ border-style:dashed; border-color:var(--hx-borda-topo); color:var(--hx-texto-2) }
+.evl-no--fechado{ border-style:dotted; border-color:var(--hx-borda-topo); color:var(--hx-sec); width:34px; height:34px }
+.evl-no--sombria{ border:1px dotted var(--hx-sombrio); color:var(--hx-sombrio); background-image:var(--hx-hachura); opacity:1 }
+.evl-no--sombria.evl-no--agora{ border:2px solid var(--hx-sombrio); background-color:var(--hx-miolo) }
+.evl-bts{ display:flex; flex-direction:column; gap:8px }
+.evl-det{ border:1px solid var(--hx-borda); padding:0 12px }
+.evl-det > summary{ display:flex; align-items:center; gap:10px; min-height:44px; cursor:pointer; list-style:none; font:600 14px/1.2 var(--hx-f); color:var(--hx-texto) }
+.evl-det > summary::-webkit-details-marker{ display:none }
+.evl-det > summary svg{ width:18px; height:18px; flex:none }
+.evl-det[open]{ padding-bottom:10px }
+.evl-hist{ list-style:none; margin:0; padding:0; display:grid; gap:6px; font:500 14px/1.3 var(--hx-f) }
+.evl-hist li{ display:grid; gap:2px }
+.evl-hist .t{ color:var(--hx-sec); font-size:12px }
+.evl-rever{ justify-self:start; min-height:44px; padding:0 10px; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); font:600 13px/1 var(--hx-f) }
+.evl-palco{ display:flex; align-items:flex-end; justify-content:center }
+
+/* ---------- o minimapa, a placa do lugar e o conector (so de 900 px em diante; MarcasDoLugar.tsx) */
+.lugar-mini{ position:fixed; inset:0; z-index:6; pointer-events:none }
+.lugar-mini .minimapa-caixa{ pointer-events:none }
+.lugar-placa{ position:fixed; left:0; top:0; z-index:9; display:inline-flex; align-items:center; gap:6px; padding:5px 12px 5px 8px; white-space:nowrap; pointer-events:none;
+  background:var(--hud-fundo-1); border:1px solid var(--hx-borda-topo); color:var(--hx-texto); font:700 13px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase }
+.lugar-placa svg{ width:16px; height:16px; color:var(--hx-rotulo) }
+.lugar-conector{ position:fixed; inset:0; width:100%; height:100%; z-index:8; pointer-events:none }
+.lugar-conector path{ fill:none; stroke:var(--hx-rotulo); stroke-width:1.5; stroke-dasharray:6 5 }
+.lugar-conector circle{ fill:var(--hx-rotulo) }
+:root[data-pele="vidro"] .lugar-conector path{ stroke:var(--hx-luz) }
+
+/* abaixo de 360 px as abas quebram de linha em vez de sair do painel */
+@media (max-width:359px){ .painel-tela--lugar .hx-painel__cab > .hx-abas.lugar-abas{ flex-wrap:wrap } }

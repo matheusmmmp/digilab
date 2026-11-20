@@ -1,0 +1,367 @@
+{
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "diagnostico, so sementes de calibracao; nenhuma regra mudou",
+    "config_regras": "experiments/configs/v21c/validacao.json",
+    "epsilon_bots": 0.05,
+    "epsilon_pet": [
+      0.05,
+      0.15
+    ],
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "metodo": "pet = bot canonico da forma (lutador_adulto, carater canonico, condicao 1,0, sem treino); painel = os 32 bots canonicos (8 formas x 4 especies), inclusive o espelho da propria forma; sementes derivar_semente('diag-arquetipos|B|<semente>', bot, k), lados trocados na metade, como run_educacao._painel_do_ovo. epsilon 0,15 = pet sem disciplina (epsilon_disciplina com disciplina 0)",
+    "partidas_por_bot_por_semente": 50,
+    "regras": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "552a1a30f898b26add89f3366f2f2ce5852ac3ef3c62753ebd2f2c0b53bafa4e"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      3101,
+      3202,
+      3303,
+      3404,
+      3505
+    ]
+  },
+  "por_epsilon_do_pet": {
+    "0.05": {
+      "duelista": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.502375,
+          "emboscador": 0.87075,
+          "espelho": 0.278875,
+          "furioso": 0.21,
+          "muralha": 0.29375,
+          "sentinela": 0.78625,
+          "tita": 0.424625,
+          "vigia": 0.888625
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.6415625,
+          "cirro": 0.439125,
+          "ferrugem": 0.692375,
+          "limo": 0.3545625
+        },
+        "taxa_painel": 0.53190625
+      },
+      "emboscador": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.1395,
+          "emboscador": 0.512875,
+          "espelho": 0.994625,
+          "furioso": 0.0,
+          "muralha": 0.91325,
+          "sentinela": 0.37725,
+          "tita": 0.9875,
+          "vigia": 0.967
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.5528125,
+          "cirro": 0.671375,
+          "ferrugem": 0.631,
+          "limo": 0.5908125
+        },
+        "taxa_painel": 0.6115
+      },
+      "espelho": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.715125,
+          "emboscador": 0.005875,
+          "espelho": 0.481125,
+          "furioso": 0.707625,
+          "muralha": 0.718,
+          "sentinela": 0.343375,
+          "tita": 0.910875,
+          "vigia": 0.98525
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.550625,
+          "cirro": 0.5239375,
+          "ferrugem": 0.6764375,
+          "limo": 0.682625
+        },
+        "taxa_painel": 0.60840625
+      },
+      "furioso": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.793875,
+          "emboscador": 1.0,
+          "espelho": 0.3055,
+          "furioso": 0.4905,
+          "muralha": 0.0755,
+          "sentinela": 0.99975,
+          "tita": 0.979125,
+          "vigia": 0.973625
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.7479375,
+          "cirro": 0.6356875,
+          "ferrugem": 0.770125,
+          "limo": 0.6551875
+        },
+        "taxa_painel": 0.702234375
+      },
+      "muralha": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.698875,
+          "emboscador": 0.084125,
+          "espelho": 0.265375,
+          "furioso": 0.920625,
+          "muralha": 0.498625,
+          "sentinela": 0.02425,
+          "tita": 0.365375,
+          "vigia": 0.390375
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.45725,
+          "cirro": 0.292,
+          "ferrugem": 0.53925,
+          "limo": 0.3353125
+        },
+        "taxa_painel": 0.405953125
+      },
+      "sentinela": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.221375,
+          "emboscador": 0.632125,
+          "espelho": 0.649,
+          "furioso": 0.0,
+          "muralha": 0.97275,
+          "sentinela": 0.48975,
+          "tita": 0.986,
+          "vigia": 0.969
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.5185625,
+          "cirro": 0.7084375,
+          "ferrugem": 0.589875,
+          "limo": 0.643125
+        },
+        "taxa_painel": 0.615
+      },
+      "tita": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.58425,
+          "emboscador": 0.00825,
+          "espelho": 0.07325,
+          "furioso": 0.01825,
+          "muralha": 0.648625,
+          "sentinela": 0.01125,
+          "tita": 0.51025,
+          "vigia": 0.027
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.251,
+          "cirro": 0.1721875,
+          "ferrugem": 0.25,
+          "limo": 0.267375
+        },
+        "taxa_painel": 0.235140625
+      },
+      "vigia": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.113875,
+          "emboscador": 0.03375,
+          "espelho": 0.01375,
+          "furioso": 0.024625,
+          "muralha": 0.6055,
+          "sentinela": 0.031375,
+          "tita": 0.968625,
+          "vigia": 0.501875
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.2820625,
+          "cirro": 0.2235625,
+          "ferrugem": 0.273125,
+          "limo": 0.3679375
+        },
+        "taxa_painel": 0.286671875
+      }
+    },
+    "0.15": {
+      "duelista": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.42025,
+          "emboscador": 0.7675,
+          "espelho": 0.222125,
+          "furioso": 0.1345,
+          "muralha": 0.3105,
+          "sentinela": 0.76775,
+          "tita": 0.385375,
+          "vigia": 0.65725
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.590625,
+          "cirro": 0.357875,
+          "ferrugem": 0.595875,
+          "limo": 0.28825
+        },
+        "taxa_painel": 0.45815625
+      },
+      "emboscador": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.135875,
+          "emboscador": 0.408375,
+          "espelho": 0.993875,
+          "furioso": 0.0,
+          "muralha": 0.823125,
+          "sentinela": 0.3895,
+          "tita": 0.978875,
+          "vigia": 0.979375
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.5351875,
+          "cirro": 0.649875,
+          "ferrugem": 0.6014375,
+          "limo": 0.568
+        },
+        "taxa_painel": 0.588625
+      },
+      "espelho": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.548625,
+          "emboscador": 0.01075,
+          "espelho": 0.486375,
+          "furioso": 0.472875,
+          "muralha": 0.549625,
+          "sentinela": 0.2875,
+          "tita": 0.81275,
+          "vigia": 0.932125
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.463375,
+          "cirro": 0.4145625,
+          "ferrugem": 0.58625,
+          "limo": 0.586125
+        },
+        "taxa_painel": 0.512578125
+      },
+      "furioso": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.72875,
+          "emboscador": 0.999125,
+          "espelho": 0.314,
+          "furioso": 0.38275,
+          "muralha": 0.118875,
+          "sentinela": 0.997125,
+          "tita": 0.927125,
+          "vigia": 0.95
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.7156875,
+          "cirro": 0.608625,
+          "ferrugem": 0.7438125,
+          "limo": 0.64075
+        },
+        "taxa_painel": 0.67721875
+      },
+      "muralha": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.50575,
+          "emboscador": 0.044875,
+          "espelho": 0.353125,
+          "furioso": 0.6905,
+          "muralha": 0.47025,
+          "sentinela": 0.011375,
+          "tita": 0.26575,
+          "vigia": 0.268
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.361375,
+          "cirro": 0.2154375,
+          "ferrugem": 0.4616875,
+          "limo": 0.2663125
+        },
+        "taxa_painel": 0.326203125
+      },
+      "sentinela": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.119,
+          "emboscador": 0.492375,
+          "espelho": 0.797375,
+          "furioso": 0.0,
+          "muralha": 0.926,
+          "sentinela": 0.452375,
+          "tita": 0.9625,
+          "vigia": 0.976625
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.5109375,
+          "cirro": 0.67325,
+          "ferrugem": 0.5715,
+          "limo": 0.6074375
+        },
+        "taxa_painel": 0.59078125
+      },
+      "tita": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.476625,
+          "emboscador": 0.00775,
+          "espelho": 0.065,
+          "furioso": 0.017875,
+          "muralha": 0.572,
+          "sentinela": 0.01075,
+          "tita": 0.43875,
+          "vigia": 0.027625
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.2236875,
+          "cirro": 0.1478125,
+          "ferrugem": 0.216625,
+          "limo": 0.2200625
+        },
+        "taxa_painel": 0.20204687500000001
+      },
+      "vigia": {
+        "contra_cada_forma_do_painel": {
+          "duelista": 0.168625,
+          "emboscador": 0.01275,
+          "espelho": 0.015875,
+          "furioso": 0.020125,
+          "muralha": 0.553125,
+          "sentinela": 0.016125,
+          "tita": 0.86575,
+          "vigia": 0.542125
+        },
+        "por_especie_do_pet": {
+          "brasa": 0.26725,
+          "cirro": 0.229125,
+          "ferrugem": 0.271,
+          "limo": 0.329875
+        },
+        "taxa_painel": 0.2743125
+      }
+    }
+  }
+}

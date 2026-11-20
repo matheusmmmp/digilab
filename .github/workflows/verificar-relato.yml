@@ -1,0 +1,34 @@
+# Confere o relato de volta do PR (docs/infra/GUIA_OPERACIONAL.md, seção "O que o CI confere"). Saiu do verificar-pr.yml na PI0
+# (docs/PLANO_V3_CONTA_PROTECAO.md, PI-2): roda também na edição do corpo do PR, e assim a edição não roda de novo os testes do mesmo commit.
+# Sem secrets, sem chave de API, sem escrita: só lê o repositório e escreve o resumo do job.
+name: verificar-relato
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verificar-relato-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  relato:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # O corpo e o nome do branch entram por env, nunca interpolados no script (contra injeção).
+      - name: Relato do PR
+        env:
+          CORPO_PR: ${{ github.event.pull_request.body }}
+          BASE_REF: ${{ github.base_ref }}
+        run: python tools/verificar_relato.py --env CORPO_PR --base "origin/$BASE_REF"

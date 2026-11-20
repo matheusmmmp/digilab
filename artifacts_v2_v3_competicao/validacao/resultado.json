@@ -1,0 +1,350 @@
+{
+  "G-ABRE": {
+    "ic90": {
+      "ic_inferior": 0.11277529761904762,
+      "ic_superior": 0.12400297619047619,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": 0.11160714285714285,
+      "ic_superior": 0.12509672619047618,
+      "nivel": 0.95
+    },
+    "limiar": 0.05,
+    "media": 0.11827380952380953,
+    "medida": "a fracao de abertas no R1 (dias 8 a 14), media por unidade",
+    "motivo": null,
+    "n": 50,
+    "n_grupos": 50,
+    "p_unilateral": 0.0,
+    "passa": true,
+    "t_pareado": {
+      "gl": 49,
+      "p_unilateral": 4.7761074254686316e-36,
+      "t": 34.01464322053966
+    }
+  },
+  "G-R1": {
+    "categoria": "a disputa ajuda",
+    "contraste": "D_FE(R0) - D_FE(R1)",
+    "delta_r1": 0.0021851528914517216,
+    "ic90": {
+      "ic_inferior": 0.009719839203042323,
+      "ic_superior": 0.015057606853505285,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": 0.009269848503637563,
+      "ic_superior": 0.01557871507109788,
+      "nivel": 0.95
+    },
+    "media": 0.01240609499007936,
+    "motivo": null,
+    "n": 50,
+    "n_grupos": 50,
+    "p_unilateral": 0.0,
+    "t_pareado": {
+      "gl": 49,
+      "p_unilateral": 4.767734257100681e-10,
+      "t": 7.54513726520906
+    }
+  },
+  "custo": {
+    "cpu_por_unidade": 45.6625,
+    "cpu_por_vida": {
+      "P0": 2.62484375,
+      "R0": 3.066015625,
+      "R1": 3.0915625,
+      "R1-cong": 2.633203125
+    },
+    "validacao_estimada": null
+  },
+  "descritivos": {
+    "P0": {
+      "d_fe": 0.3823887194113757,
+      "exaustao": 0.020691964285714282,
+      "frac_abertas": 0.0,
+      "frac_abertura_decidiu": null,
+      "frac_aprendido_decidiu": null,
+      "frac_forcadas": 0.5515550595238095,
+      "por_dono": {
+        "aleatorio": {
+          "d_fe": 0.4269631572420635,
+          "frac_abertas": 0.0
+        },
+        "atencioso": {
+          "d_fe": 0.334696626984127,
+          "frac_abertas": 0.0
+        },
+        "incoerente": {
+          "d_fe": 0.33523386656746035,
+          "frac_abertas": 0.0
+        },
+        "relapso": {
+          "d_fe": 0.4326612268518519,
+          "frac_abertas": 0.0
+        }
+      },
+      "privacao": 0.10098214285714287,
+      "saude": 0.9123832824900794
+    },
+    "R0": {
+      "d_fe": 0.3819757523148148,
+      "exaustao": 0.02234375,
+      "frac_abertas": 0.0,
+      "frac_abertura_decidiu": null,
+      "frac_aprendido_decidiu": null,
+      "frac_forcadas": 0.5706547619047619,
+      "por_dono": {
+        "aleatorio": {
+          "d_fe": 0.4268251736111111,
+          "frac_abertas": 0.0
+        },
+        "atencioso": {
+          "d_fe": 0.33444854910714283,
+          "frac_abertas": 0.0
+        },
+        "incoerente": {
+          "d_fe": 0.3353176504629629,
+          "frac_abertas": 0.0
+        },
+        "relapso": {
+          "d_fe": 0.43131163607804235,
+          "frac_abertas": 0.0
+        }
+      },
+      "privacao": 0.10052083333333334,
+      "saude": 0.9114277492559524
+    },
+    "R1": {
+      "d_fe": 0.3695696573247354,
+      "exaustao": 0.03125744047619047,
+      "frac_abertas": 0.11827380952380953,
+      "frac_abertura_decidiu": 0.256504745378293,
+      "frac_aprendido_decidiu": 0.22708162538017893,
+      "frac_forcadas": 0.4540327380952381,
+      "por_dono": {
+        "aleatorio": {
+          "d_fe": 0.412240980489418,
+          "frac_abertas": 0.22339285714285714
+        },
+        "atencioso": {
+          "d_fe": 0.3344988260582011,
+          "frac_abertas": 0.002113095238095238
+        },
+        "incoerente": {
+          "d_fe": 0.33572014715608467,
+          "frac_abertas": 0.0033928571428571423
+        },
+        "relapso": {
+          "d_fe": 0.3958186755952381,
+          "frac_abertas": 0.24419642857142856
+        }
+      },
+      "privacao": 0.07891369047619047,
+      "saude": 0.943136759672619
+    },
+    "R1-cong": {
+      "d_fe": 0.38091788917824076,
+      "exaustao": 0.02246279761904762,
+      "frac_abertas": 0.16311011904761905,
+      "frac_abertura_decidiu": 0.06275352838287485,
+      "frac_aprendido_decidiu": 0.0,
+      "frac_forcadas": 0.39133928571428567,
+      "por_dono": {
+        "aleatorio": {
+          "d_fe": 0.43069351851851856,
+          "frac_abertas": 0.30196428571428574
+        },
+        "atencioso": {
+          "d_fe": 0.33508121279761904,
+          "frac_abertas": 0.0019345238095238094
+        },
+        "incoerente": {
+          "d_fe": 0.3348747933201058,
+          "frac_abertas": 0.0024404761904761904
+        },
+        "relapso": {
+          "d_fe": 0.42302203207671957,
+          "frac_abertas": 0.34610119047619053
+        }
+      },
+      "privacao": 0.09476934523809524,
+      "saude": 0.9218858816964286
+    },
+    "r0_menos_r1_por_dono": {
+      "aleatorio": 0.014584193121693107,
+      "atencioso": -5.027695105820351e-05,
+      "incoerente": -0.0004024966931216922,
+      "relapso": 0.03549296048280423
+    }
+  },
+  "fase": "validacao",
+  "holm_alfa": 0.05,
+  "holm_familia": [
+    "G-R1-CONG",
+    "G-NI-PRIV",
+    "G-NI-SAUDE"
+  ],
+  "leitura": "a disputa ajuda, e o aprendido usa a abertura",
+  "margens": {
+    "delta_priv": 0.02814360119047619,
+    "delta_r1": 0.0021851528914517216,
+    "delta_saude": 0.021865130518353176,
+    "ganho_r0_sobre_p0": 0.004370305782903443,
+    "referencias": {
+      "privacao_p0": 0.11257440476190476,
+      "saude_p0": 0.9125394779265873
+    },
+    "volta_ao_matheus": false
+  },
+  "modo": "validacao",
+  "plano": "docs/PLANO_ANALISE_V2_V3_COMPETICAO.md",
+  "secundarios": {
+    "G-NI-PRIV": {
+      "contraste": "privacao(R1) - privacao(R0)",
+      "delta": 0.02814360119047619,
+      "holm": {
+        "limiar": 0.016666666666666666,
+        "ordem": 1,
+        "p": 0.0,
+        "p_ajustado": 0.0,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": -0.027790178571428573,
+        "ic_superior": -0.015922619047619047,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.029107142857142856,
+        "ic_superior": -0.014903273809523809,
+        "nivel": 0.95
+      },
+      "media": -0.021607142857142856,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 50,
+      "orientado": {
+        "ic90": {
+          "ic_inferior": 0.044066220238095234,
+          "ic_superior": 0.055933779761904764,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.043046875,
+          "ic_superior": 0.057250744047619054,
+          "nivel": 0.95
+        },
+        "media": 0.049750744047619054,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 50,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.125817330600215e-18,
+          "t": 13.472244117352428
+        }
+      },
+      "p_unilateral": 1.0,
+      "passa": true,
+      "passa_ic": true,
+      "regra": "superior do IC95 < Delta_priv",
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 0.9999998017064913,
+        "t": -5.85110250755873
+      }
+    },
+    "G-NI-SAUDE": {
+      "contraste": "saude(R0) - saude(R1)",
+      "delta": 0.021865130518353176,
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 2,
+        "p": 0.0,
+        "p_ajustado": 0.0,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": -0.04034583705357142,
+        "ic_superior": -0.023832034970238086,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.042287193700396825,
+        "ic_superior": -0.022640755208333325,
+        "nivel": 0.95
+      },
+      "media": -0.03170901041666666,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 50,
+      "orientado": {
+        "ic90": {
+          "ic_inferior": 0.04569716548859127,
+          "ic_superior": 0.0622109675719246,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.0445058857266865,
+          "ic_superior": 0.06415232421875,
+          "nivel": 0.95
+        },
+        "media": 0.05357414093501983,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 50,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.1517012448346733e-14,
+          "t": 10.468794510841148
+        }
+      },
+      "p_unilateral": 1.0,
+      "passa": true,
+      "passa_ic": true,
+      "regra": "superior do IC95 < Delta_saude",
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 0.9999999417101156,
+        "t": -6.196181747399994
+      }
+    },
+    "G-R1-CONG": {
+      "contraste": "D_FE(R1-cong) - D_FE(R1)",
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 3,
+        "p": 0.0,
+        "p_ajustado": 0.0,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": 0.009073575975529097,
+        "ic_superior": 0.013596996941137567,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.008583139054232802,
+        "ic_superior": 0.0140239417989418,
+        "nivel": 0.95
+      },
+      "media": 0.011348231853505291,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 50,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "passa_ic": true,
+      "regra": "limite inferior do IC95 > 0",
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 6.396948113120659e-11,
+        "t": 8.114064453794192
+      }
+    }
+  }
+}

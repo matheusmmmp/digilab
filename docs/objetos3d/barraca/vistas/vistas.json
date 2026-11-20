@@ -1,0 +1,14 @@
+{
+ "id": "01a1b8a8-f13c-717d-b893-5f50c8039339",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same teal canvas dome camping tent: front, side and back, same style, same colors, same hand-painted detail, plain light grey background. Keep the visible stitched seams, the few sewn patches, the painted canvas texture with soft brush strokes, the rolled-up entrance flap and the deep dark opening of the doorway clearly visible in the front view, the orange guy ropes with wooden stakes, the ground tarp under the tent, the small satellite dish antenna on top, and the folding stool with a stack of books beside the door. Cel shading with dark ink outlines.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794099442206,
+ "finished_at": 1794099464620,
+ "saldo": {
+  "antes": 224,
+  "depois": 212
+ }
+}

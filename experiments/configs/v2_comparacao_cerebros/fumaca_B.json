@@ -1,0 +1,11 @@
+{
+  "descricao": "Fumaca do orquestrador da calibracao do B. NAO canonica: so as sementes dos testes, vida curta, sondas pequenas; confere o encanamento das etapas e do piloto, nunca como resultado.",
+  "sementes": [101, 202],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "ganho": 4,
+  "sonda": {"estados": 12, "amostras": 30, "semente": 9001},
+  "bootstrap": {"reamostragens": 500, "semente": 4242, "nivel": 0.95},
+  "saida": "artifacts_v2_comparacao_cerebros/fumaca_B_nao_canonica"
+}

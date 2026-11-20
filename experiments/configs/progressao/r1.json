@@ -1,0 +1,125 @@
+{
+  "descricao": "rodada 1: tier 1 como NPC crianca (gambits de crianca) ou adolescente, totais 48-72",
+  "npcs": {
+    "crianca|crianca:sereno@54": {
+      "total": 54,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:sereno@60": {
+      "total": 60,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:sereno@66": {
+      "total": 66,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:sereno@72": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:arisco@54": {
+      "total": 54,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:arisco@60": {
+      "total": 60,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:arisco@66": {
+      "total": 66,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca"
+    },
+    "crianca|crianca:arisco@72": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca"
+    },
+    "adolescente|crianca:sereno@48": {
+      "total": 48,
+      "estilo": "crianca:sereno",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:sereno@54": {
+      "total": 54,
+      "estilo": "crianca:sereno",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:sereno@60": {
+      "total": 60,
+      "estilo": "crianca:sereno",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:sereno@72": {
+      "total": 72,
+      "estilo": "crianca:sereno",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:arisco@48": {
+      "total": 48,
+      "estilo": "crianca:arisco",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:arisco@54": {
+      "total": 54,
+      "estilo": "crianca:arisco",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:arisco@60": {
+      "total": 60,
+      "estilo": "crianca:arisco",
+      "estagio": "adolescente"
+    },
+    "adolescente|crianca:arisco@72": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:agressivo@48": {
+      "total": 48,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:agressivo@54": {
+      "total": 54,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:agressivo@60": {
+      "total": 60,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:agressivo@72": {
+      "total": 72,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:tartaruga@48": {
+      "total": 48,
+      "estilo": "v2:tartaruga",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:tartaruga@54": {
+      "total": 54,
+      "estilo": "v2:tartaruga",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:tartaruga@60": {
+      "total": 60,
+      "estilo": "v2:tartaruga",
+      "estagio": "adolescente"
+    },
+    "adolescente|v2:tartaruga@72": {
+      "total": 72,
+      "estilo": "v2:tartaruga",
+      "estagio": "adolescente"
+    }
+  }
+}

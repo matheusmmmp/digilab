@@ -1,0 +1,47 @@
+{
+  "fechou": true,
+  "passo": 64,
+  "pontos": {
+    "16": {
+      "fora_pelo_teto": false,
+      "mae_rede_1": 18.16969246031746,
+      "vidas_no_teto": 0
+    },
+    "256": {
+      "fora_pelo_teto": false,
+      "mae_rede_1": 13.887276785714286,
+      "vidas_no_teto": 6
+    },
+    "64": {
+      "fora_pelo_teto": false,
+      "mae_rede_1": 10.422156084656084,
+      "vidas_no_teto": 0
+    }
+  },
+  "regra": "o menor MAE_rede(1) nos dias 1 a 7, sem o passo que prende pesos no teto em mais da metade das vidas; sem nenhum, o menor (secao 5)",
+  "taxa_lenta": {
+    "fechou": false,
+    "fome_p1c": 738.1057291666667,
+    "limiar": 64,
+    "pontos": {
+      "112500": {
+        "diferenca": 6.272569444444457,
+        "fome_lenta": 731.8331597222223,
+        "passa": false
+      },
+      "225000": {
+        "diferenca": 0.0,
+        "fome_lenta": 738.1057291666667,
+        "passa": false
+      },
+      "56250": {
+        "diferenca": 10.188194444444434,
+        "fome_lenta": 727.9175347222223,
+        "passa": false
+      }
+    },
+    "registro": "nenhuma taxa da grade muda o receptor da fome por mais de S/16: fica a menor (a que mais muda o corpo)",
+    "regra": "a MAIOR taxa em que o receptor da fome, na media dos dias 8 a 10, difere do P1-c por mais de S/16 (secao 5); sem nenhuma, a menor",
+    "taxa": 56250
+  }
+}

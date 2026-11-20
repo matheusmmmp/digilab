@@ -1,0 +1,15 @@
+{
+ "input_task_id": "01a1b8a8-b524-75ba-90d6-f1936a6f63f1",
+ "ai_model": "latest",
+ "should_texture": true,
+ "enable_pbr": false,
+ "texture_resolution": "2k",
+ "should_remesh": true,
+ "topology": "triangle",
+ "target_polycount": 2300,
+ "save_pre_remeshed_model": false,
+ "target_formats": [
+  "glb"
+ ],
+ "multi_view_thumbnails": true
+}

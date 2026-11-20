@@ -1,0 +1,815 @@
+{
+ "10.1145/1597735.1597738": {
+  "doi": "10.1145/1597735.1597738",
+  "title": "Interactively shaping agents via human reinforcement",
+  "type": "proceedings-article",
+  "year": 2009,
+  "cont": "Proceedings of the fifth international conference on Knowledge capture",
+  "pub": "ACM",
+  "au": [
+   "Knox",
+   "Stone"
+  ],
+  "page": "9-16",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1609/aaai.v32i1.11485": {
+  "doi": "10.1609/aaai.v32i1.11485",
+  "title": "Deep TAMER: Interactive Agent Shaping in High-Dimensional State Spaces",
+  "type": "journal-article",
+  "year": 2018,
+  "cont": "Proceedings of the AAAI Conference on Artificial Intelligence",
+  "pub": "Association for the Advancement of Artificial Intelligence (AAAI)",
+  "au": [
+   "Warnell",
+   "Waytowich",
+   "Lawhern"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "While recent advances in deep reinforcement learning have allowed autonomous learning agents to succeed at a variety of complex tasks, existing algorithms generally require a lot oftraining data. One way to increase the speed at which agent sare able to learn to perform tasks is by leveraging the input of human trainers. Although such input can take many forms, real-time, scalar-valued feedback is especially useful in situations where it proves difficult or impossible for humans to provide expert demonstrations. Previous approaches have shown the usefulness of human input provided in this fashion (e.g., the TAMER framework), but they have thus far not considered high-dimensional state spaces",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.65109/pajo3896": {
+  "doi": "10.65109/pajo3896",
+  "title": "Reinforcement learning from simultaneous human and MDP reward",
+  "type": "proceedings-article",
+  "year": 2012,
+  "cont": "International Joint Conference on Autonomous Agents and Multiagent Systems",
+  "pub": "IEEE Computer Society",
+  "au": [
+   "Knox",
+   "Stone"
+  ],
+  "page": "475-482",
+  "upd": [],
+  "abs": "As computational agents are increasingly used beyond research labs, their success will depend on their ability to learn new skills and adapt to their dynamic, complex environments. If human users---without programming skills---can transfer their task knowledge to agents, learning can accelerate dramatically, reducing costly trials. The tamer framework guides the design of agents whose behavior can be shaped through signals of approval and disapproval, a natural form of human feedback. More recently, tamer+rl was introduced to enable human feedback to augment a traditional reinforcement learning (RL) agent that learns from a Markov decision process's (MDP) reward signal. We address limitation",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1016/j.artint.2015.03.009": {
+  "doi": "10.1016/j.artint.2015.03.009",
+  "title": "Framing reinforcement learning from human reward: Reward positivity, temporal discounting, episodicity, and performance",
+  "type": "journal-article",
+  "year": 2015,
+  "cont": "Artificial Intelligence",
+  "pub": "Elsevier BV",
+  "au": [
+   "Knox",
+   "Stone"
+  ],
+  "page": "24-50",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1109/roman.2012.6343862": {
+  "doi": "10.1109/roman.2012.6343862",
+  "title": "Reinforcement learning from human reward: Discounting in episodic tasks",
+  "type": "proceedings-article",
+  "year": 2012,
+  "cont": "2012 IEEE RO-MAN: The 21st IEEE International Symposium on Robot and Human Interactive Communication",
+  "pub": "IEEE",
+  "au": [
+   "Knox",
+   "Stone"
+  ],
+  "page": "878-885",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1007/s10458-015-9283-7": {
+  "doi": "10.1007/s10458-015-9283-7",
+  "title": "Learning behaviors via human-delivered discrete feedback: modeling implicit feedback strategies to speed up learning",
+  "type": "journal-article",
+  "year": 2015,
+  "cont": "Autonomous Agents and Multi-Agent Systems",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Loftin",
+   "Peng",
+   "MacGlashan"
+  ],
+  "page": "30-59",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1145/3357236.3395525": {
+  "doi": "10.1145/3357236.3395525",
+  "title": "A Survey on Interactive Reinforcement Learning",
+  "type": "proceedings-article",
+  "year": 2020,
+  "cont": "Proceedings of the 2020 ACM Designing Interactive Systems Conference",
+  "pub": "ACM",
+  "au": [
+   "Arzate Cruz",
+   "Igarashi"
+  ],
+  "page": "1195-1209",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1613/jair.1.15348": {
+  "doi": "10.1613/jair.1.15348",
+  "title": "Human-in-the-Loop Reinforcement Learning: A Survey and Position on Requirements, Challenges, and Opportunities",
+  "type": "journal-article",
+  "year": 2024,
+  "cont": "Journal of Artificial Intelligence Research",
+  "pub": "AI Access Foundation",
+  "au": [
+   "Retzlaff",
+   "Das",
+   "Wayllace"
+  ],
+  "page": "359-415",
+  "upd": [],
+  "abs": "Artificial intelligence (AI) and especially reinforcement learning (RL) have the potential to enable agents to learn and perform tasks autonomously with superhuman performance. However, we consider RL as fundamentally a Human-in-the-Loop (HITL) paradigm, even when an agent eventually performs its task autonomously. In cases where the reward function is challenging or impossible to define, HITL approaches are considered particularly advantageous. The application of Reinforcement Learning from Human Feedback (RLHF) in systems such as ChatGPT demonstrates the effectiveness of optimizing for user experience and integrating their feedback into the training loop. In HITL RL, human input is integra",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1016/j.artint.2007.09.009": {
+  "doi": "10.1016/j.artint.2007.09.009",
+  "title": "Teachable robots: Understanding human teaching behavior to build more effective robot learners",
+  "type": "journal-article",
+  "year": 2008,
+  "cont": "Artificial Intelligence",
+  "pub": "Elsevier BV",
+  "au": [
+   "Thomaz",
+   "Breazeal"
+  ],
+  "page": "716-737",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q1"
+ },
+ "10.1109/jra.1986.1087032": {
+  "doi": "10.1109/jra.1986.1087032",
+  "title": "A robust layered control system for a mobile robot",
+  "type": "journal-article",
+  "year": 1986,
+  "cont": "IEEE Journal on Robotics and Automation",
+  "pub": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "au": [
+   "Brooks"
+  ],
+  "page": "14-23",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.1016/0004-3702(91)90053-m": {
+  "doi": "10.1016/0004-3702(91)90053-m",
+  "title": "Intelligence without representation",
+  "type": "journal-article",
+  "year": 1991,
+  "cont": "Artificial Intelligence",
+  "pub": "Elsevier BV",
+  "au": [
+   "Brooks"
+  ],
+  "page": "139-159",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.1016/s0004-3702(99)00052-1": {
+  "doi": "10.1016/s0004-3702(99)00052-1",
+  "title": "Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning",
+  "type": "journal-article",
+  "year": 1999,
+  "cont": "Artificial Intelligence",
+  "pub": "Elsevier BV",
+  "au": [
+   "Sutton",
+   "Precup",
+   "Singh"
+  ],
+  "page": "181-211",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.1007/3-540-36559-1_7": {
+  "doi": "10.1007/3-540-36559-1_7",
+  "title": "The Behavior-Oriented Design of Modular Agent Intelligence",
+  "type": "book-chapter",
+  "year": 2003,
+  "cont": "Lecture Notes in Computer Science",
+  "pub": "Springer Berlin Heidelberg",
+  "au": [
+   "Bryson"
+  ],
+  "page": "61-76",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.1162/neco.1991.3.1.79": {
+  "doi": "10.1162/neco.1991.3.1.79",
+  "title": "Adaptive Mixtures of Local Experts",
+  "type": "journal-article",
+  "year": 1991,
+  "cont": "Neural Computation",
+  "pub": "MIT Press",
+  "au": [
+   "Jacobs",
+   "Jordan",
+   "Nowlan"
+  ],
+  "page": "79-87",
+  "upd": [],
+  "abs": "We present a new supervised learning procedure for systems composed of many separate networks, each of which learns to handle a subset of the complete set of training cases. The new procedure can be viewed either as a modular version of a multilayer supervised network, or as an associative version of competitive learning. It therefore provides a new link between these two apparently different approaches. We demonstrate that the learning procedure divides up a vowel discrimination task into appropriate subtasks, each of which can be solved by a very simple expert network.",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.1023/A:1010042522104": {
+  "doi": "10.1023/A:1010042522104",
+  "title": "Creatures: Entertainment Software Agents with Artificial Life",
+  "type": "journal-article",
+  "year": 1998,
+  "cont": "Autonomous Agents and Multi-Agent Systems",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Grand",
+   "Cliff"
+  ],
+  "page": "39-57",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.4018/jse.2013010102": {
+  "doi": "10.4018/jse.2013010102",
+  "title": "A Scene-Based Episodic Memory System for a Simulated Autonomous Creature",
+  "type": "journal-article",
+  "year": 2013,
+  "cont": "International Journal of Synthetic Emotions",
+  "pub": "IGI Global Scientific Publishing",
+  "au": [
+   "Castro",
+   "Gudwin"
+  ],
+  "page": "32-64",
+  "upd": [],
+  "abs": "In this paper the authors present the development of a scene-based episodic memory module for the cognitive architecture controlling an autonomous virtual creature, in a simulated 3D environment. The scene-based episodic memory has the role of improving the creature’s navigation system, by evoking the objects to be considered in planning, according to episodic remembrance of earlier scenes testified by the creature where these objects were present in the past. They introduce the main background on human memory systems and episodic memory study, and provide the main ideas behind the experiment.",
+  "status": 200,
+  "trilha": "Q2"
+ },
+ "10.1371/journal.pone.0225023": {
+  "doi": "10.1371/journal.pone.0225023",
+  "title": "Does training method matter? Evidence for the negative impact of aversive-based methods on companion dog welfare",
+  "type": "journal-article",
+  "year": 2020,
+  "cont": "PLOS ONE",
+  "pub": "Public Library of Science (PLoS)",
+  "au": [
+   "Vieira de Castro",
+   "Fuchs",
+   "Morello"
+  ],
+  "page": "e0225023",
+  "upd": [],
+  "abs": "Dog training methods range broadly from those using mostly positive punishment and negative reinforcement (aversive-based) to those using primarily positive reinforcement (reward-based). Although aversive-based training has been strongly criticized for negatively affecting dog welfare, there is no comprehensive research focusing on companion dogs and mainstream techniques, and most studies rely on owner-reported assessment of training methods and dog behavior. The aim of the present study was to evaluate the effects of aversive- and reward-based training methods on companion dog welfare within and outside the training context. Ninety-two companion dogs were recruited from three reward-based ",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1016/j.jveb.2017.02.004": {
+  "doi": "10.1016/j.jveb.2017.02.004",
+  "title": "The effects of using aversive training methods in dogs—A review",
+  "type": "journal-article",
+  "year": 2017,
+  "cont": "Journal of Veterinary Behavior",
+  "pub": "Elsevier BV",
+  "au": [
+   "Ziv"
+  ],
+  "page": "50-60",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1038/s41598-021-97743-0": {
+  "doi": "10.1038/s41598-021-97743-0",
+  "title": "Dogs are more pessimistic if their owners use two or more aversive training methods",
+  "type": "journal-article",
+  "year": 2021,
+  "cont": "Scientific Reports",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Casey",
+   "Naj-Oleari",
+   "Campbell"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "Abstract Domestic dogs are trained using a range of different methods, broadly categorised as reward based (positive reinforcement/negative punishment) and aversive based (positive punishment/negative reinforcement). Previous research has suggested associations between use of positive punishment-based techniques and undesired behaviours, but there is little research investigating the relative welfare consequences of these different approaches. This study used a judgement bias task to compare the underlying mood state of dogs whose owners reported using two or more positive punishment/negative reinforcement based techniques, with those trained using only positive reinforcement/negative punish",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1016/j.applanim.2017.07.001": {
+  "doi": "10.1016/j.applanim.2017.07.001",
+  "title": "Do aversive-based training methods actually compromise dog welfare?: A literature review",
+  "type": "journal-article",
+  "year": 2017,
+  "cont": "Applied Animal Behaviour Science",
+  "pub": "Elsevier BV",
+  "au": [
+   "Guilherme Fernandes",
+   "Olsson",
+   "Vieira de Castro"
+  ],
+  "page": "1-12",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.3389/fvets.2020.00508": {
+  "doi": "10.3389/fvets.2020.00508",
+  "title": "Efficacy of Dog Training With and Without Remote Electronic Collars vs. a Focus on Positive Reinforcement",
+  "type": "journal-article",
+  "year": 2020,
+  "cont": "Frontiers in Veterinary Science",
+  "pub": "Frontiers Media SA",
+  "au": [
+   "China",
+   "Mills",
+   "Cooper"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "We assessed the efficacy of dog training with and without remote electronic collars compared to training with positive reinforcement. A total of 63 dogs with known off-lead behavioral problems such as poor recall were allocated to one of three training groups (each n = 21), receiving up to 150 min of training over 5 days to improve recall and general obedience. The 3 groups were: E-collar-manufacturer-nominated trainers who used electronic stimuli as part of their training program; Control 1-the same trainers following practices they would apply when not using electronic stimuli; and Control 2-independent, professional trainers who focused primarily on positive reinforcement for their training. Data collection focused on dogs' response to two commands: \"Come\" (recall to trainer) and \"Sit\" (place hindquarters on ground). These were the two most common commands used during training, with improving recall being the target behavior for the subject dogs. Measures of training efficacy included number of commands given to elicit the response and response latency. Control 2 achieved significantly better responses to both \"Sit\" and \"Come\" commands after a single instruction in the allocated",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1017/s0962728600026683": {
+  "doi": "10.1017/s0962728600026683",
+  "title": "Dog training methods: their use, effectiveness and interaction with behaviour and welfare",
+  "type": "journal-article",
+  "year": 2004,
+  "cont": "Animal Welfare",
+  "pub": "Cambridge University Press (CUP)",
+  "au": [
+   "Hiby",
+   "Rooney",
+   "Bradshaw"
+  ],
+  "page": "63-69",
+  "upd": [],
+  "abs": "Abstract Historically, pet dogs were trained using mainly negative reinforcement or punishment, but positive reinforcement using rewards has recently become more popular. The methods used may have different impacts on the dogs’ welfare. We distributed a questionnaire to 364 dog owners in order to examine the relative effectiveness of different training methods and their effects upon a pet dog's behaviour. When asked how they trained their dog on seven basic tasks, 66% reported using vocal punishment, 12% used physical punishment, 60% praise (social reward), 51% food rewards and II% play. The owner's ratings for their dog's obedience during eight tasks correlated positively with the number of",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1037/0033-2909.113.3.487": {
+  "doi": "10.1037/0033-2909.113.3.487",
+  "title": "Parenting style as context: An integrative model.",
+  "type": "journal-article",
+  "year": 1993,
+  "cont": "Psychological Bulletin",
+  "pub": "American Psychological Association (APA)",
+  "au": [
+   "Darling",
+   "Steinberg"
+  ],
+  "page": "487-496",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1038/nn1276": {
+  "doi": "10.1038/nn1276",
+  "title": "Epigenetic programming by maternal behavior",
+  "type": "journal-article",
+  "year": 2004,
+  "cont": "Nature Neuroscience",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Weaver",
+   "Cervoni",
+   "Champagne"
+  ],
+  "page": "847-854",
+  "upd": [],
+  "abs": "Here we report that increased pup licking and grooming (LG) and arched-back nursing (ABN) by rat mothers altered the offspring epigenome at a glucocorticoid receptor (GR) gene promoter in the hippocampus. Offspring of mothers that showed high levels of LG and ABN were found to have differences in DNA methylation, as compared to offspring of 'low-LG-ABN' mothers. These differences emerged over the first week of life, were reversed with cross-fostering, persisted into adulthood and were associated with altered histone acetylation and transcription factor (NGFI-A) binding to the GR promoter. Central infusion of a histone deacetylase inhibitor removed the group differences in histone acetylation, DNA methylation, NGFI-A binding, GR expression and hypothalamic-pituitary-adrenal (HPA) responses to stress, suggesting a causal relation among epigenomic state, GR expression and the maternal effect on stress responses in the offspring. Thus we show that an epigenomic state of a gene can be established through behavioral programming, and it is potentially reversible.",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1098/rspb.2014.2201": {
+  "doi": "10.1098/rspb.2014.2201",
+  "title": "The contribution of additive genetic variation to personality variation: heritability of personality",
+  "type": "journal-article",
+  "year": 2015,
+  "cont": "Proceedings of the Royal Society B: Biological Sciences",
+  "pub": "The Royal Society",
+  "au": [
+   "Dochtermann",
+   "Schwab",
+   "Sih"
+  ],
+  "page": "20142201",
+  "upd": [],
+  "abs": "Individual animals frequently exhibit repeatable differences from other members of their population, differences now commonly referred to as ‘animal personality’. Personality differences can arise, for example, from differences in permanent environmental effects―including parental and epigenetic contributors―and the effect of additive genetic variation. Although several studies have evaluated the heritability of behaviour, less is known about general patterns of heritability and additive genetic variation in animal personality . As overall variation in behaviour includes both the among-individual differences that reflect different personalities and temporary environmental effects, it is poss",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1016/j.tree.2009.07.013": {
+  "doi": "10.1016/j.tree.2009.07.013",
+  "title": "Behavioural reaction norms: animal personality meets individual plasticity",
+  "type": "journal-article",
+  "year": 2010,
+  "cont": "Trends in Ecology & Evolution",
+  "pub": "Elsevier BV",
+  "au": [
+   "Dingemanse",
+   "Kazem",
+   "Réale"
+  ],
+  "page": "81-89",
+  "upd": [],
+  "abs": "Recent studies in the field of behavioural ecology have revealed intriguing variation in behaviour within single populations. Increasing evidence suggests that individual animals differ in their average level of behaviour displayed across a range of contexts (animal 'personality'), and in their responsiveness to environmental variation (plasticity), and that these phenomena can be considered complementary aspects of the individual phenotype. How should this complex variation be studied? Here, we outline how central ideas in behavioural ecology and quantitative genetics can be combined within a single framework based on the concept of 'behavioural reaction norms'. This integrative approach facilitates analysis of phenomena usually studied separately in terms of personality and plasticity, thereby enhancing understanding of their adaptive nature.",
+  "status": 200,
+  "trilha": "Q3"
+ },
+ "10.1006/appe.2000.0370": {
+  "doi": "10.1006/appe.2000.0370",
+  "title": "Post-ingestive positive controls of ingestive behavior",
+  "type": "journal-article",
+  "year": 2001,
+  "cont": "Appetite",
+  "pub": "Elsevier BV",
+  "au": [
+   "Sclafani"
+  ],
+  "page": "79-83",
+  "upd": [],
+  "abs": "Post-ingestive negative controls of ingestive behavior are well characterized. Nutrients act in the gut to inhibit meal size by direct actions on feeding and by conditioning a satiation response to orosensory (flavor) stimuli. Accumulating evidence indicates that there are also post-ingestive positive controls of ingestion that operate by conditioning flavor preference and increased acceptance. In several experiments rats trained to consume a flavored solution paired with intragastric carbohydrate infusions significantly increased their solution intake. Drinking bout size and number, and lick rates and burst size were also increased by carbohydrate infusions. Whether intake is stimulated or inhibited by post-ingestive nutrient actions depends upon several factors, including most notably nutrient concentration. Post-ingestive positive controls need to be incorporated into theoretical models of ingestive behavior.",
+  "status": 200,
+  "trilha": "Q4"
+ },
+ "10.1016/j.neuron.2008.04.003": {
+  "doi": "10.1016/j.neuron.2008.04.003",
+  "title": "Food Reward in the Absence of Taste Receptor Signaling",
+  "type": "journal-article",
+  "year": 2008,
+  "cont": "Neuron",
+  "pub": "Elsevier BV",
+  "au": [
+   "de Araujo",
+   "Oliveira-Maia",
+   "Sotnikova"
+  ],
+  "page": "295",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q4"
+ },
+ "10.1016/0195-6663(92)90038-8": {
+  "doi": "10.1016/0195-6663(92)90038-8",
+  "title": "Flavor preference produced by intragastric nutrient infusions using a concurrent conditioning procedure",
+  "type": "journal-article",
+  "year": 1992,
+  "cont": "Appetite",
+  "pub": "Elsevier BV",
+  "au": [
+   "Blusk",
+   "Ackroff",
+   "Sclafani"
+  ],
+  "page": "168",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q4"
+ },
+ "10.1177/105971230601400207": {
+  "doi": "10.1177/105971230601400207",
+  "title": "Principles of Minimal Cognition: Casting Cognition as Sensorimotor Coordination",
+  "type": "journal-article",
+  "year": 2006,
+  "cont": "Adaptive Behavior",
+  "pub": "SAGE Publications",
+  "au": [
+   "van Duijn",
+   "Keijzer",
+   "Franken"
+  ],
+  "page": "157-170",
+  "upd": [],
+  "abs": "Within the cognitive sciences, cognition tends to be interpreted from an anthropocentric perspective, involving a stringent set of human capabilities. Instead, we suggest that cognition is better explicated as a much more general biological phenomenon, allowing the lower bound of cognition to extend much further down the phylogenetic scale. We argue that elementary forms of cognition can already be witnessed in prokaryotes possessing a functional sensorimotor analogue of the nervous system. Building on a case-study of the Escherichia coli bacterium and its sensorimotor system, the TCST-system, we home in on the characteristics of minimal cognition, and distinguish it from more basic forms of",
+  "status": 200,
+  "trilha": "Q4"
+ },
+ "10.1016/j.appet.2016.12.015": {
+  "doi": "10.1016/j.appet.2016.12.015",
+  "title": "Conditioned flavor preferences in animals: Merging pharmacology, brain sites and genetic variance",
+  "type": "journal-article",
+  "year": 2018,
+  "cont": "Appetite",
+  "pub": "Elsevier BV",
+  "au": [
+   "Bodnar"
+  ],
+  "page": "17-25",
+  "upd": [],
+  "abs": "The elucidation of the behavioral, neurochemical, neuroanatomical and genetic substrates mediating the development of conditioned flavor preferences (CFP) is one of the multi-faceted scientific contributions that Dr. Anthony Sclafani has made to the study of food intake. This review summarizes the results of thirty-five publications over nearly twenty years of collaborations between the Sclafani and Bodnar laboratories. This includes the different approaches employed to study the orosensory (flavor-flavor) and post-ingestive (flavor-nutrient) processes underlying CFP including its acquisition (learning) and expression. It describes how CFP is elicited by different sugars (sucrose, glucose, fructose) and fats (corn oil) in rats, and how strain-specific CFP effects can be observed through the use of inbred mouse strains to evaluate genetic variance. The roles of pharmacological substrates (dopamine, glutamate, opioids, acetylcholine, GABA, cannabinoids) mediating sugar- and fat-CFP acquisition and expression are elucidated. Finally, neuroanatomical sites of action (nucleus accumbens, amygdala, medial prefrontal and orbital frontal cortices, lateral hypothalamus) are evaluated at whic",
+  "status": 200,
+  "trilha": "Q4"
+ },
+ "10.1037/0033-295x.107.2.261": {
+  "doi": "10.1037/0033-295x.107.2.261",
+  "title": "The construction of autobiographical memories in the self-memory system.",
+  "type": "journal-article",
+  "year": 2000,
+  "cont": "Psychological Review",
+  "pub": "American Psychological Association (APA)",
+  "au": [
+   "Conway",
+   "Pleydell-Pearce"
+  ],
+  "page": "261-288",
+  "upd": [],
+  "abs": "The authors describe a model of autobiographical memory in which memories are transitory mental constructions within a self-memory system (SMS). The SMS contains an autobiographical knowledge base and current goals of the working self. Within the SMS, control processes modulate access to the knowledge base by successively shaping cues used to activate autobiographical memory knowledge structures and, in this way, form specific memories. The relation of the knowledge base to active goals is reciprocal, and the knowledge base \"grounds\" the goals of the working self. It is shown how this model can be used to draw together a wide range of diverse data from cognitive, social, developmental, personality, clinical, and neuropsychological autobiographical memory research.",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1038/35021052": {
+  "doi": "10.1038/35021052",
+  "title": "Fear memories require protein synthesis in the amygdala for reconsolidation after retrieval",
+  "type": "journal-article",
+  "year": 2000,
+  "cont": "Nature",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Nader",
+   "Schafe",
+   "Le Doux"
+  ],
+  "page": "722-726",
+  "upd": [],
+  "abs": "'New' memories are initially labile and sensitive to disruption before being consolidated into stable long-term memories. Much evidence indicates that this consolidation involves the synthesis of new proteins in neurons. The lateral and basal nuclei of the amygdala (LBA) are believed to be a site of memory storage in fear learning. Infusion of the protein synthesis inhibitor anisomycin into the LBA shortly after training prevents consolidation of fear memories. Here we show that consolidated fear memories, when reactivated during retrieval, return to a labile state in which infusion of anisomycin shortly after memory reactivation produces amnesia on later tests, regardless of whether reactivation was performed 1 or 14 days after conditioning. The same treatment with anisomycin, in the absence of memory reactivation, left memory intact. Consistent with a time-limited role for protein synthesis production in consolidation, delay of the infusion until six hours after memory reactivation produced no amnesia. Our data show that consolidated fear memories, when reactivated, return to a labile state that requires de novo protein synthesis for reconsolidation. These findings are not predic",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1001/archinte.1993.00410180039004": {
+  "doi": "10.1001/archinte.1993.00410180039004",
+  "title": "Stress and the Individual",
+  "type": "journal-article",
+  "year": 1993,
+  "cont": "Archives of Internal Medicine",
+  "pub": "American Medical Association (AMA)",
+  "au": [
+   "McEwen"
+  ],
+  "page": "2093",
+  "upd": [],
+  "abs": "Objective This article presents a new formulation of the relationship between stress and the processes leading to disease. It emphasizes the hidden cost of chronic stress to the body over long time periods, which act as a predisposing factor for the effects of acute, stressful life events. It also presents a model showing how individual differences in the susceptibility to stress are tied to individual behavioral responses to environmental challenges that are coupled to physiologic and pathophysiologic responses. Data sources Published original articles from human and animal studies and selected reviews. Literature was surveyed using MEDLINE. Data extraction Independent extraction and cross-referencing by us. Data synthesis Stress is frequently seen as a significant contributor to disease, and clinical evidence is mounting for specific effects of stress on immune and cardiovascular systems. Yet, until recently, aspects of stress that precipitate disease have been obscure. The concept of homeostasis has failed to help us understand the hidden toll of chronic stress on the body. Rather than maintaining constancy, the physiologic systems within the body fluctuate to meet demands from ",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1056/NEJM199801153380706": {
+  "doi": "10.1056/NEJM199801153380706",
+  "status": 404,
+  "trilha": "Q5"
+ },
+ "10.1101/lm.93405": {
+  "doi": "10.1101/lm.93405",
+  "title": "Emotional arousal and enhanced amygdala activity: New evidence for the old perseveration-consolidation hypothesis",
+  "type": "journal-article",
+  "year": 2005,
+  "cont": "Learning & Memory",
+  "pub": "Cold Spring Harbor Laboratory",
+  "au": [
+   "McGaugh"
+  ],
+  "page": "77-79",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.3758/s13421-011-0131-y": {
+  "doi": "10.3758/s13421-011-0131-y",
+  "title": "Retrieval-induced forgetting without competition: Testing the retrieval specificity assumption of the inhibition theory",
+  "type": "journal-article",
+  "year": 2011,
+  "cont": "Memory & Cognition",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Raaijmakers",
+   "Jakab"
+  ],
+  "page": "19-27",
+  "upd": [],
+  "abs": "According to the inhibition theory of forgetting (Anderson, Journal of Memory and Language 49:415-445, 2003; Anderson, Bjork, & Bjork, Psychonomic Bulletin & Review 7:522-530, 2000), retrieval practice on a subset of target items leads to forgetting for the other, nontarget items, due to the fact that these other items interfere during the retrieval process and have to be inhibited in order to resolve the interference. In this account, retrieval-induced forgetting occurs only when competition takes place between target and nontarget items during target item practice, since only in such a case is inhibition of the nontarget items necessary. Strengthening of the target item without active retrieval should not lead to such an impairment. In two experiments, we investigated this assumption by using noncompetitive retrieval during the practice phase. We strengthened the cue-target item association during practice by recall of the category name instead of the target item, and thus eliminated competition between the different item types (as in Anderson et al., Psychonomic Bulletin & Review 7:522-530 2000). In contrast to the expectations of the inhibition theory, retrieval-induced forgett",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1037/a0024950": {
+  "doi": "10.1037/a0024950",
+  "title": "Stability and change of personality across the life course: The impact of age and major life events on mean-level and rank-order stability of the Big Five.",
+  "type": "journal-article",
+  "year": 2011,
+  "cont": "Journal of Personality and Social Psychology",
+  "pub": "American Psychological Association (APA)",
+  "au": [
+   "Specht",
+   "Egloff",
+   "Schmukle"
+  ],
+  "page": "862-882",
+  "upd": [],
+  "abs": "Does personality change across the entire life course, and are those changes due to intrinsic maturation or major life experiences? This longitudinal study investigated changes in the mean levels and rank order of the Big Five personality traits in a heterogeneous sample of 14,718 Germans across all of adulthood. Latent change and latent moderated regression models provided 4 main findings: First, age had a complex curvilinear influence on mean levels of personality. Second, the rank-order stability of Emotional Stability, Extraversion, Openness, and Agreeableness all followed an inverted U-shaped function, reaching a peak between the ages of 40 and 60 and decreasing afterward, whereas Conscientiousness showed a continuously increasing rank-order stability across adulthood. Third, personality predicted the occurrence of several objective major life events (selection effects) and changed in reaction to experiencing these events (socialization effects), suggesting that personality can change due to factors other than intrinsic maturation. Fourth, when events were clustered according to their valence, as is commonly done, effects of the environment on changes in personality were eithe",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1007/s11031-006-9028-7": {
+  "doi": "10.1007/s11031-006-9028-7",
+  "title": "The Hierarchical Model of Approach-Avoidance Motivation",
+  "type": "journal-article",
+  "year": 2006,
+  "cont": "Motivation and Emotion",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Elliot"
+  ],
+  "page": "111-116",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1080/02699930902928969": {
+  "doi": "10.1080/02699930902928969",
+  "title": "The dynamic architecture of emotion: Evidence for the component process model",
+  "type": "journal-article",
+  "year": 2009,
+  "cont": "Cognition and Emotion",
+  "pub": "Informa UK Limited",
+  "au": [
+   "Scherer"
+  ],
+  "page": "1307-1351",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1111/j.1469-185x.2009.00103.x": {
+  "doi": "10.1111/j.1469-185x.2009.00103.x",
+  "title": "The development of animal personality: relevance, concepts and perspectives",
+  "type": "journal-article",
+  "year": 2010,
+  "cont": "Biological Reviews",
+  "pub": "Wiley",
+  "au": [
+   "Stamps",
+   "Groothuis"
+  ],
+  "page": "301-325",
+  "upd": [],
+  "abs": "Recent studies of animal personality have focused on its proximate causation and its ecological and evolutionary significance, but have mostly ignored questions about its development, although an understanding of the latter is highly relevant to these other questions. One possible reason for this neglect is confusion about many of the concepts and terms that are necessary to study the development of animal personality. Here, we provide a framework for studying personality development that focuses on the properties of animal personality, and considers how and why these properties may change over time. We specifically focus on three dimensions of personality: (1) contextual generality at a giv",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1515/9783839453452-007": {
+  "doi": "10.1515/9783839453452-007",
+  "title": "Characterization and Emergent Narrative in Dwarf Fortress",
+  "type": "book-chapter",
+  "year": 2021,
+  "cont": "Edition Medienwissenschaft",
+  "pub": "transcript Verlag",
+  "au": [
+   "Adams"
+  ],
+  "page": "151-160",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1145/103162.103163": {
+  "doi": "10.1145/103162.103163",
+  "title": "What every computer scientist should know about floating-point arithmetic",
+  "type": "journal-article",
+  "year": 1991,
+  "cont": "ACM Computing Surveys",
+  "pub": "Association for Computing Machinery (ACM)",
+  "au": [
+   "Goldberg"
+  ],
+  "page": "5-48",
+  "upd": [],
+  "abs": "Floating-point arithmetic is considered as esoteric subject by many people. This is rather surprising, because floating-point is ubiquitous in computer systems: Almost every language has a floating-point datatype; computers from PCs to supercomputers have floating-point accelerators; most compilers will be called upon to compile floating-point algorithms from time to time; and virtually every operating system must respond to floating-point exceptions such as overflow. This paper presents a tutorial on the aspects of floating-point that have a direct impact on designers of computer systems. It begins with background on floating-point representation and rounding error, continues with a discuss",
+  "status": 200,
+  "trilha": "Q6"
+ },
+ "10.1016/j.envsoft.2004.10.011": {
+  "doi": "10.1016/j.envsoft.2004.10.011",
+  "title": "What every agent-based modeller should know about floating point arithmetic",
+  "type": "journal-article",
+  "year": 2006,
+  "cont": "Environmental Modelling & Software",
+  "pub": "Elsevier BV",
+  "au": [
+   "Polhill",
+   "Izquierdo",
+   "Gotts"
+  ],
+  "page": "283-309",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q6"
+ },
+ "10.1145/2790077": {
+  "doi": "10.1145/2790077",
+  "title": "Deterministic Replay",
+  "type": "journal-article",
+  "year": 2015,
+  "cont": "ACM Computing Surveys",
+  "pub": "Association for Computing Machinery (ACM)",
+  "au": [
+   "Chen",
+   "Zhang",
+   "Guo"
+  ],
+  "page": "1-47",
+  "upd": [],
+  "abs": "Deterministic replay is a type of emerging technique dedicated to providing deterministic executions of computer programs in the presence of nondeterministic factors. The application scopes of deterministic replay are very broad, making it an important research topic in domains such as computer architecture, operating systems, parallel computing, distributed computing, programming languages, verification, and hardware testing. In this survey, we comprehensively review existing studies on deterministic replay by introducing a taxonomy. Basically, existing deterministic replay schemes can be classified into two categories, single-processor (SP) schemes and multiprocessor (MP) schemes. By revie",
+  "status": 200,
+  "trilha": "Q6"
+ },
+ "10.1109/cvpr.2018.00286": {
+  "doi": "10.1109/cvpr.2018.00286",
+  "title": "Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference",
+  "type": "proceedings-article",
+  "year": 2018,
+  "cont": "2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition",
+  "pub": "IEEE",
+  "au": [
+   "Jacob",
+   "Kligys",
+   "Chen"
+  ],
+  "page": "2704-2713",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q6"
+ },
+ "10.1056/nejm199801153380307": {
+  "doi": "10.1056/nejm199801153380307",
+  "title": "Protective and Damaging Effects of Stress Mediators",
+  "type": "journal-article",
+  "year": 1998,
+  "cont": "New England Journal of Medicine",
+  "pub": "Massachusetts Medical Society",
+  "au": [
+   "McEwen"
+  ],
+  "page": "171-179",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q5"
+ },
+ "10.1109/tamd.2013.2277589": {
+  "doi": "10.1109/tamd.2013.2277589",
+  "title": "LIDA: A Systems-level Architecture for Cognition, Emotion, and Learning",
+  "type": "journal-article",
+  "year": 2014,
+  "cont": "IEEE Transactions on Autonomous Mental Development",
+  "pub": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "au": [
+   "Franklin",
+   "Madl",
+   "D'Mello"
+  ],
+  "page": "19-41",
+  "upd": [],
+  "abs": "",
+  "status": 200,
+  "trilha": "Q2"
+ }
+}

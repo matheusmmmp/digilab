@@ -1,0 +1,52 @@
+{
+  "bootstrap": {
+    "nivel": 0.95,
+    "reamostragens": 10000,
+    "semente": 20261001
+  },
+  "config": "experiments\\configs\\v2_l1\\calibracao.json",
+  "config_lobos_base": {
+    "bits_ponto_fixo": 10,
+    "escala_ticks_desde_cuidado": 480.0,
+    "janela_latencia_ticks": 120,
+    "piso_peso": 64,
+    "recompensa_elogio": 1.0,
+    "recompensa_pedido_ignorado": -0.5,
+    "recompensa_repreensao": -1.0
+  },
+  "config_sha256": "028c4543575512d26b960d02ea3197854c47eb246b1ba1356584a6272c85d990",
+  "conjunto": "calibracao",
+  "descricao": "V2, L1 (docs/PLANO_ANALISE_V2_L1.md, secao 5): grade passo x teto nas sementes de calibracao; instinto e bandit como base.",
+  "dias": 14,
+  "gates": {
+    "g3_ic_min": 0.02,
+    "g3_media_min": 0.1,
+    "g4_min": 0.5,
+    "g6_razao_max": 1.5
+  },
+  "n_ambientes": 4,
+  "orcamento": 224,
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0",
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sha256": {
+    "digilab/config.py": "3b73a6c2b49461ef21fd6fcc6c7328b718fbb2a50e6786677e8b88ffba991cdd",
+    "digilab/engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "digilab/metrics.py": "05bc86582e75716064ea7a387b39a094e4857cd7b57a1bdb12fc8134852d32bf",
+    "digilab/motivo.py": "009f6693e412ae84671352e175bc48fface5239dfbff2121fb333f1a874a5ef5",
+    "digilab/policies/camada_unica.py": "873983bbb20aa6e7a62bf59c4e44c700a386c6ca52c6f55dee682ab6b365d6a4",
+    "digilab/policies/lobos.py": "16a2d7b85a71c0d9bfee5d9a0542005f1ca3c37f4aef637bef4df56e4c17c97d",
+    "engine_congelado": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630"
+  },
+  "sonda": {
+    "amostras": 200,
+    "estados": 64,
+    "semente": 9001
+  }
+}

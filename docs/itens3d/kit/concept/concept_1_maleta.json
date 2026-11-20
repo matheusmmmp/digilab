@@ -1,0 +1,9 @@
+{
+ "id": "01a1b0dd-fcde-7437-9bec-16a701a2243f",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single small first aid kit prop for a cozy low-poly 3D island game. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. The kit is a small closed case with a carrying handle on top and a clear first aid cross, readable from far away. Show only the kit, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters. A white rounded plastic case with a red cross on the lid and on the front, a dark grey handle and two small grey latches.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793968700703,
+ "finished_at": 1793968714680
+}

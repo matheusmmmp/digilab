@@ -1,0 +1,59 @@
+{
+  "descricao": "Fumaca da calibracao do J5 com o paladar, NAO canonica: a mesma config, nas sementes dos testes, com 3 dias de fase 1, 1 de janela e a janela das regras nos dias 1 e 2; confere o encanamento dos quatro passos (o ganho_gosto, o g_plano, a G-REVAL-POSSIVEL e o piloto), nunca como resultado.",
+  "tipo": "pet_que_pensa",
+  "d_a": 3,
+  "janela": 1,
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "sementes": [
+    101,
+    202
+  ],
+  "paladar": true,
+  "calibracao_ganho_gosto": {
+    "grade": [
+      512,
+      1024,
+      2048
+    ],
+    "dias": [
+      1,
+      2
+    ],
+    "faixa": [
+      0.25,
+      0.6
+    ]
+  },
+  "calibracao_g_plano": {
+    "grade": [
+      256,
+      512,
+      1024
+    ],
+    "dias": [
+      1,
+      2
+    ],
+    "faixa": [
+      0.1,
+      0.4
+    ]
+  }
+}

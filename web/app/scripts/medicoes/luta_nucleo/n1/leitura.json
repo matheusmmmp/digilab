@@ -1,0 +1,4807 @@
+{
+ "tarefa": "LUTA_POC, investigacao do nucleo, N1",
+ "commit": "87e1384aeb63bd96b5c8ae389f82494dc6cecdd0",
+ "fases": [
+  "lp5_0/calibracao",
+  "lp5_1_r2/calibracao",
+  "lp5_3/calibracao",
+  "lp6_3_u120/calibracao",
+  "lp5_4/conferencia"
+ ],
+ "formas": {
+  "lp5_0/calibracao": {
+   "crianca": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.496,
+      "empates": 0.008,
+      "lutas": 34000
+     },
+     "+": {
+      "taxa": 0.822,
+      "empates": 0.046,
+      "lutas": 11000
+     },
+     "-": {
+      "taxa": 0.118,
+      "empates": 0.046,
+      "lutas": 11000
+     }
+    },
+    "fracao_pares_decididos": 0.554,
+    "pares_mapa": 448,
+    "v1": {
+     "formas": {
+      "brasa_crianca_sereno": {
+       "medida": 0.507,
+       "prevista": 0.381,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_crianca_arisco": {
+       "medida": 0.487,
+       "prevista": 0.528,
+       "mais": 3,
+       "menos": 2
+      },
+      "cirro_crianca_sereno": {
+       "medida": 0.104,
+       "prevista": 0.535,
+       "mais": 2,
+       "menos": 1
+      },
+      "cirro_crianca_arisco": {
+       "medida": 0.388,
+       "prevista": 0.535,
+       "mais": 2,
+       "menos": 1
+      },
+      "ferrugem_crianca_sereno": {
+       "medida": 0.717,
+       "prevista": 0.496,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_crianca_arisco": {
+       "medida": 0.773,
+       "prevista": 0.496,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_crianca_sereno": {
+       "medida": 0.521,
+       "prevista": 0.535,
+       "mais": 2,
+       "menos": 1
+      },
+      "limo_crianca_arisco": {
+       "medida": 0.411,
+       "prevista": 0.381,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": -0.178,
+     "maior_erro": 0.431
+    },
+    "a1": {
+     "longe": 5,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.283,
+       "neutros": 0.271,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "coliseu": {
+       "todos": 0.276,
+       "neutros": 0.261,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "floresta": {
+       "todos": 0.206,
+       "neutros": 0.173,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "praia": {
+       "todos": 0.277,
+       "neutros": 0.262,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "deserto": {
+       "todos": 0.285,
+       "neutros": 0.269,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "castelo": {
+       "todos": 0.188,
+       "neutros": 0.151,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "caverna": {
+       "todos": 0.309,
+       "neutros": 0.295,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "ringue": {
+       "todos": 0.263,
+       "neutros": 0.245,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "soma": {
+       "todos": 0.261,
+       "neutros": 0.241,
+       "pares_neutros": 12,
+       "pares": 15
+      }
+     }
+    }
+   },
+   "adolescente": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.496,
+      "empates": 0.006,
+      "lutas": 170000
+     },
+     "+": {
+      "taxa": 0.972,
+      "empates": 0.003,
+      "lutas": 35000
+     },
+     "-": {
+      "taxa": 0.024,
+      "empates": 0.003,
+      "lutas": 35000
+     }
+    },
+    "fracao_pares_decididos": 0.771,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adolescente_brigao": {
+       "medida": 0.635,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_guardiao": {
+       "medida": 0.79,
+       "prevista": 0.719,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adolescente_cacador": {
+       "medida": 0.362,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_colosso": {
+       "medida": 0.351,
+       "prevista": 0.339,
+       "mais": 3,
+       "menos": 8
+      },
+      "cirro_adolescente_brigao": {
+       "medida": 0.27,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_guardiao": {
+       "medida": 0.08,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_cacador": {
+       "medida": 0.009,
+       "prevista": 0.496,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adolescente_colosso": {
+       "medida": 0.234,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_brigao": {
+       "medida": 0.918,
+       "prevista": 0.496,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_guardiao": {
+       "medida": 0.706,
+       "prevista": 0.496,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_cacador": {
+       "medida": 0.469,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_colosso": {
+       "medida": 0.51,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      },
+      "limo_adolescente_brigao": {
+       "medida": 0.92,
+       "prevista": 0.496,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adolescente_guardiao": {
+       "medida": 0.616,
+       "prevista": 0.719,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_cacador": {
+       "medida": 0.635,
+       "prevista": 0.719,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_colosso": {
+       "medida": 0.456,
+       "prevista": 0.434,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.185,
+     "maior_erro": 0.487
+    },
+    "a1": {
+     "longe": 13,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.372,
+       "neutros": 0.329,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "coliseu": {
+       "todos": 0.371,
+       "neutros": 0.327,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "floresta": {
+       "todos": 0.309,
+       "neutros": 0.259,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "praia": {
+       "todos": 0.38,
+       "neutros": 0.338,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "deserto": {
+       "todos": 0.375,
+       "neutros": 0.332,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "castelo": {
+       "todos": 0.311,
+       "neutros": 0.261,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "caverna": {
+       "todos": 0.414,
+       "neutros": 0.374,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "ringue": {
+       "todos": 0.356,
+       "neutros": 0.311,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "soma": {
+       "todos": 0.361,
+       "neutros": 0.316,
+       "pares_neutros": 35,
+       "pares": 39
+      }
+     }
+    }
+   },
+   "adulto": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.497,
+      "empates": 0.004,
+      "lutas": 192000
+     },
+     "+": {
+      "taxa": 0.986,
+      "empates": 0.002,
+      "lutas": 24000
+     },
+     "-": {
+      "taxa": 0.011,
+      "empates": 0.002,
+      "lutas": 24000
+     }
+    },
+    "fracao_pares_decididos": 0.801,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_duelista": {
+       "medida": 0.569,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_espelho": {
+       "medida": 0.76,
+       "prevista": 0.758,
+       "mais": 8,
+       "menos": 0
+      },
+      "brasa_adulto_sentinela": {
+       "medida": 0.327,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_vigia": {
+       "medida": 0.828,
+       "prevista": 0.497,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_duelista": {
+       "medida": 0.184,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_espelho": {
+       "medida": 0.062,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_sentinela": {
+       "medida": 0.005,
+       "prevista": 0.497,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_vigia": {
+       "medida": 0.183,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_duelista": {
+       "medida": 0.969,
+       "prevista": 0.497,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_espelho": {
+       "medida": 0.634,
+       "prevista": 0.497,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_sentinela": {
+       "medida": 0.38,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_vigia": {
+       "medida": 0.561,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      },
+      "limo_adulto_duelista": {
+       "medida": 0.88,
+       "prevista": 0.497,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_espelho": {
+       "medida": 0.659,
+       "prevista": 0.758,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_sentinela": {
+       "medida": 0.591,
+       "prevista": 0.758,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_vigia": {
+       "medida": 0.381,
+       "prevista": 0.4,
+       "mais": 0,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.192,
+     "maior_erro": 0.492
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.435,
+       "neutros": 0.366,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.434,
+       "neutros": 0.364,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.394,
+       "neutros": 0.32,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.441,
+       "neutros": 0.373,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.453,
+       "neutros": 0.386,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.398,
+       "neutros": 0.325,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.479,
+       "neutros": 0.415,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.461,
+       "neutros": 0.395,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.437,
+       "neutros": 0.368,
+       "pares_neutros": 49,
+       "pares": 55
+      }
+     }
+    }
+   },
+   "mega": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.5,
+      "empates": 0.002,
+      "lutas": 152000
+     },
+     "+": {
+      "taxa": 0.888,
+      "empates": 0,
+      "lutas": 44000
+     },
+     "-": {
+      "taxa": 0.114,
+      "empates": 0,
+      "lutas": 44000
+     }
+    },
+    "fracao_pares_decididos": 0.884,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_furioso": {
+       "medida": 0.647,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_muralha": {
+       "medida": 0.778,
+       "prevista": 0.681,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adulto_emboscador": {
+       "medida": 0.125,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_tita": {
+       "medida": 0.421,
+       "prevista": 0.397,
+       "mais": 4,
+       "menos": 8
+      },
+      "cirro_adulto_furioso": {
+       "medida": 0.748,
+       "prevista": 0.681,
+       "mais": 8,
+       "menos": 1
+      },
+      "cirro_adulto_muralha": {
+       "medida": 0.128,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "cirro_adulto_emboscador": {
+       "medida": 0.001,
+       "prevista": 0.5,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_tita": {
+       "medida": 0.476,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_furioso": {
+       "medida": 0.94,
+       "prevista": 0.5,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_muralha": {
+       "medida": 0.279,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_emboscador": {
+       "medida": 0.32,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_tita": {
+       "medida": 0.56,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      },
+      "limo_adulto_furioso": {
+       "medida": 0.962,
+       "prevista": 0.5,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_muralha": {
+       "medida": 0.662,
+       "prevista": 0.681,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_emboscador": {
+       "medida": 0.373,
+       "prevista": 0.681,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_tita": {
+       "medida": 0.568,
+       "prevista": 0.423,
+       "mais": 1,
+       "menos": 4
+      }
+     },
+     "r2_atributo": 0.136,
+     "maior_erro": 0.499
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.381,
+       "neutros": 0.348,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.383,
+       "neutros": 0.35,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.351,
+       "neutros": 0.318,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.376,
+       "neutros": 0.35,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.385,
+       "neutros": 0.351,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.333,
+       "neutros": 0.298,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.375,
+       "neutros": 0.343,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.37,
+       "neutros": 0.338,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.369,
+       "neutros": 0.337,
+       "pares_neutros": 30,
+       "pares": 55
+      }
+     }
+    }
+   }
+  },
+  "lp5_1_r2/calibracao": {
+   "crianca": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.484,
+      "empates": 0.02,
+      "lutas": 34000
+     },
+     "+": {
+      "taxa": 0.993,
+      "empates": 0,
+      "lutas": 11000
+     },
+     "-": {
+      "taxa": 0.006,
+      "empates": 0,
+      "lutas": 11000
+     }
+    },
+    "fracao_pares_decididos": 0.446,
+    "pares_mapa": 448,
+    "v1": {
+     "formas": {
+      "brasa_crianca_sereno": {
+       "medida": 0.349,
+       "prevista": 0.352,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_crianca_arisco": {
+       "medida": 0.561,
+       "prevista": 0.566,
+       "mais": 3,
+       "menos": 2
+      },
+      "cirro_crianca_sereno": {
+       "medida": 0.576,
+       "prevista": 0.561,
+       "mais": 2,
+       "menos": 1
+      },
+      "cirro_crianca_arisco": {
+       "medida": 0.582,
+       "prevista": 0.561,
+       "mais": 2,
+       "menos": 1
+      },
+      "ferrugem_crianca_sereno": {
+       "medida": 0.441,
+       "prevista": 0.484,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_crianca_arisco": {
+       "medida": 0.587,
+       "prevista": 0.484,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_crianca_sereno": {
+       "medida": 0.571,
+       "prevista": 0.561,
+       "mais": 2,
+       "menos": 1
+      },
+      "limo_crianca_arisco": {
+       "medida": 0.286,
+       "prevista": 0.352,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.825,
+     "maior_erro": 0.103
+    },
+    "a1": {
+     "longe": 5,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.61,
+       "neutros": 0.669,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "coliseu": {
+       "todos": 0.403,
+       "neutros": 0.42,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "floresta": {
+       "todos": 0.41,
+       "neutros": 0.429,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "praia": {
+       "todos": 0.596,
+       "neutros": 0.662,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "deserto": {
+       "todos": 0.616,
+       "neutros": 0.685,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "castelo": {
+       "todos": 0.22,
+       "neutros": 0.192,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "caverna": {
+       "todos": 0.654,
+       "neutros": 0.728,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "ringue": {
+       "todos": 0.114,
+       "neutros": 0.084,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "soma": {
+       "todos": 0.453,
+       "neutros": 0.484,
+       "pares_neutros": 12,
+       "pares": 15
+      }
+     }
+    }
+   },
+   "adolescente": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.449,
+      "empates": 0.072,
+      "lutas": 170000
+     },
+     "+": {
+      "taxa": 0.996,
+      "empates": 0,
+      "lutas": 35000
+     },
+     "-": {
+      "taxa": 0.003,
+      "empates": 0,
+      "lutas": 35000
+     }
+    },
+    "fracao_pares_decididos": 0.335,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adolescente_brigao": {
+       "medida": 0.402,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_guardiao": {
+       "medida": 0.713,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adolescente_cacador": {
+       "medida": 0.398,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_colosso": {
+       "medida": 0.326,
+       "prevista": 0.321,
+       "mais": 3,
+       "menos": 8
+      },
+      "cirro_adolescente_brigao": {
+       "medida": 0.429,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_guardiao": {
+       "medida": 0.394,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_cacador": {
+       "medida": 0.363,
+       "prevista": 0.449,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adolescente_colosso": {
+       "medida": 0.314,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_brigao": {
+       "medida": 0.473,
+       "prevista": 0.449,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_guardiao": {
+       "medida": 0.555,
+       "prevista": 0.449,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_cacador": {
+       "medida": 0.418,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_colosso": {
+       "medida": 0.408,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      },
+      "limo_adolescente_brigao": {
+       "medida": 0.562,
+       "prevista": 0.449,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adolescente_guardiao": {
+       "medida": 0.704,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_cacador": {
+       "medida": 0.716,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_colosso": {
+       "medida": 0.42,
+       "prevista": 0.396,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.849,
+     "maior_erro": 0.113
+    },
+    "a1": {
+     "longe": 13,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.707,
+       "neutros": 0.7,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "coliseu": {
+       "todos": 0.45,
+       "neutros": 0.415,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "floresta": {
+       "todos": 0.5,
+       "neutros": 0.472,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "praia": {
+       "todos": 0.687,
+       "neutros": 0.679,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "deserto": {
+       "todos": 0.704,
+       "neutros": 0.698,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "castelo": {
+       "todos": 0.247,
+       "neutros": 0.189,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "caverna": {
+       "todos": 0.761,
+       "neutros": 0.76,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "ringue": {
+       "todos": 0.144,
+       "neutros": 0.097,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "soma": {
+       "todos": 0.525,
+       "neutros": 0.501,
+       "pares_neutros": 35,
+       "pares": 39
+      }
+     }
+    }
+   },
+   "adulto": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.466,
+      "empates": 0.044,
+      "lutas": 192000
+     },
+     "+": {
+      "taxa": 0.992,
+      "empates": 0,
+      "lutas": 24000
+     },
+     "-": {
+      "taxa": 0.007,
+      "empates": 0,
+      "lutas": 24000
+     }
+    },
+    "fracao_pares_decididos": 0.267,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_duelista": {
+       "medida": 0.404,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_espelho": {
+       "medida": 0.784,
+       "prevista": 0.747,
+       "mais": 8,
+       "menos": 0
+      },
+      "brasa_adulto_sentinela": {
+       "medida": 0.398,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_vigia": {
+       "medida": 0.362,
+       "prevista": 0.466,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_duelista": {
+       "medida": 0.396,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_espelho": {
+       "medida": 0.416,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_sentinela": {
+       "medida": 0.392,
+       "prevista": 0.466,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_vigia": {
+       "medida": 0.385,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_duelista": {
+       "medida": 0.563,
+       "prevista": 0.466,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_espelho": {
+       "medida": 0.536,
+       "prevista": 0.466,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_sentinela": {
+       "medida": 0.41,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_vigia": {
+       "medida": 0.393,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "limo_adulto_duelista": {
+       "medida": 0.349,
+       "prevista": 0.466,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_espelho": {
+       "medida": 0.764,
+       "prevista": 0.747,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_sentinela": {
+       "medida": 0.759,
+       "prevista": 0.747,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_vigia": {
+       "medida": 0.406,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.851,
+     "maior_erro": 0.117
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.677,
+       "neutros": 0.637,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.52,
+       "neutros": 0.461,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.548,
+       "neutros": 0.493,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.691,
+       "neutros": 0.653,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.771,
+       "neutros": 0.743,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.395,
+       "neutros": 0.321,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.756,
+       "neutros": 0.726,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.156,
+       "neutros": 0.08,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.564,
+       "neutros": 0.514,
+       "pares_neutros": 49,
+       "pares": 55
+      }
+     }
+    }
+   },
+   "mega": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.441,
+      "empates": 0.082,
+      "lutas": 152000
+     },
+     "+": {
+      "taxa": 0.992,
+      "empates": 0,
+      "lutas": 44000
+     },
+     "-": {
+      "taxa": 0.006,
+      "empates": 0,
+      "lutas": 44000
+     }
+    },
+    "fracao_pares_decididos": 0.385,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_furioso": {
+       "medida": 0.385,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_muralha": {
+       "medida": 0.735,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adulto_emboscador": {
+       "medida": 0.365,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_tita": {
+       "medida": 0.353,
+       "prevista": 0.356,
+       "mais": 4,
+       "menos": 8
+      },
+      "cirro_adulto_furioso": {
+       "medida": 0.74,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "cirro_adulto_muralha": {
+       "medida": 0.342,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "cirro_adulto_emboscador": {
+       "medida": 0.404,
+       "prevista": 0.441,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_tita": {
+       "medida": 0.386,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_furioso": {
+       "medida": 0.502,
+       "prevista": 0.441,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_muralha": {
+       "medida": 0.366,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_emboscador": {
+       "medida": 0.387,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_tita": {
+       "medida": 0.363,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "limo_adulto_furioso": {
+       "medida": 0.47,
+       "prevista": 0.441,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_muralha": {
+       "medida": 0.714,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_emboscador": {
+       "medida": 0.711,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_tita": {
+       "medida": 0.362,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      }
+     },
+     "r2_atributo": 0.972,
+     "maior_erro": 0.061
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.598,
+       "neutros": 0.789,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.409,
+       "neutros": 0.449,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.466,
+       "neutros": 0.552,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.552,
+       "neutros": 0.708,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.594,
+       "neutros": 0.783,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.319,
+       "neutros": 0.286,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.611,
+       "neutros": 0.805,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.198,
+       "neutros": 0.104,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.468,
+       "neutros": 0.559,
+       "pares_neutros": 30,
+       "pares": 55
+      }
+     }
+    }
+   }
+  },
+  "lp5_3/calibracao": {
+   "crianca": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.485,
+      "empates": 0.02,
+      "lutas": 34000
+     },
+     "+": {
+      "taxa": 0.994,
+      "empates": 0,
+      "lutas": 11000
+     },
+     "-": {
+      "taxa": 0.005,
+      "empates": 0,
+      "lutas": 11000
+     }
+    },
+    "fracao_pares_decididos": 0.478,
+    "pares_mapa": 448,
+    "v1": {
+     "formas": {
+      "brasa_crianca_sereno": {
+       "medida": 0.355,
+       "prevista": 0.352,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_crianca_arisco": {
+       "medida": 0.567,
+       "prevista": 0.566,
+       "mais": 3,
+       "menos": 2
+      },
+      "cirro_crianca_sereno": {
+       "medida": 0.587,
+       "prevista": 0.562,
+       "mais": 2,
+       "menos": 1
+      },
+      "cirro_crianca_arisco": {
+       "medida": 0.59,
+       "prevista": 0.562,
+       "mais": 2,
+       "menos": 1
+      },
+      "ferrugem_crianca_sereno": {
+       "medida": 0.423,
+       "prevista": 0.485,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_crianca_arisco": {
+       "medida": 0.575,
+       "prevista": 0.485,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_crianca_sereno": {
+       "medida": 0.561,
+       "prevista": 0.562,
+       "mais": 2,
+       "menos": 1
+      },
+      "limo_crianca_arisco": {
+       "medida": 0.293,
+       "prevista": 0.352,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.83,
+     "maior_erro": 0.09
+    },
+    "a1": {
+     "longe": 5,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.662,
+       "neutros": 0.735,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "coliseu": {
+       "todos": 0.437,
+       "neutros": 0.462,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "floresta": {
+       "todos": 0.471,
+       "neutros": 0.505,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "praia": {
+       "todos": 0.62,
+       "neutros": 0.691,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "deserto": {
+       "todos": 0.648,
+       "neutros": 0.726,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "castelo": {
+       "todos": 0.162,
+       "neutros": 0.12,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "caverna": {
+       "todos": 0.682,
+       "neutros": 0.761,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "ringue": {
+       "todos": 0.088,
+       "neutros": 0.044,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "soma": {
+       "todos": 0.471,
+       "neutros": 0.505,
+       "pares_neutros": 12,
+       "pares": 15
+      }
+     }
+    }
+   },
+   "adolescente": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.446,
+      "empates": 0.072,
+      "lutas": 170000
+     },
+     "+": {
+      "taxa": 0.997,
+      "empates": 0,
+      "lutas": 35000
+     },
+     "-": {
+      "taxa": 0.003,
+      "empates": 0,
+      "lutas": 35000
+     }
+    },
+    "fracao_pares_decididos": 0.344,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adolescente_brigao": {
+       "medida": 0.418,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_guardiao": {
+       "medida": 0.718,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adolescente_cacador": {
+       "medida": 0.402,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_colosso": {
+       "medida": 0.327,
+       "prevista": 0.32,
+       "mais": 3,
+       "menos": 8
+      },
+      "cirro_adolescente_brigao": {
+       "medida": 0.413,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_guardiao": {
+       "medida": 0.398,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_cacador": {
+       "medida": 0.367,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adolescente_colosso": {
+       "medida": 0.32,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_brigao": {
+       "medida": 0.478,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_guardiao": {
+       "medida": 0.503,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_cacador": {
+       "medida": 0.408,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_colosso": {
+       "medida": 0.417,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "limo_adolescente_brigao": {
+       "medida": 0.553,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adolescente_guardiao": {
+       "medida": 0.714,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_cacador": {
+       "medida": 0.72,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_colosso": {
+       "medida": 0.437,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.883,
+     "maior_erro": 0.107
+    },
+    "a1": {
+     "longe": 13,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.76,
+       "neutros": 0.76,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "coliseu": {
+       "todos": 0.466,
+       "neutros": 0.434,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "floresta": {
+       "todos": 0.544,
+       "neutros": 0.521,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "praia": {
+       "todos": 0.714,
+       "neutros": 0.709,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "deserto": {
+       "todos": 0.744,
+       "neutros": 0.743,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "castelo": {
+       "todos": 0.234,
+       "neutros": 0.175,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "caverna": {
+       "todos": 0.78,
+       "neutros": 0.782,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "ringue": {
+       "todos": 0.127,
+       "neutros": 0.071,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "soma": {
+       "todos": 0.546,
+       "neutros": 0.525,
+       "pares_neutros": 35,
+       "pares": 39
+      }
+     }
+    }
+   },
+   "adulto": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.467,
+      "empates": 0.045,
+      "lutas": 192000
+     },
+     "+": {
+      "taxa": 0.993,
+      "empates": 0,
+      "lutas": 24000
+     },
+     "-": {
+      "taxa": 0.006,
+      "empates": 0,
+      "lutas": 24000
+     }
+    },
+    "fracao_pares_decididos": 0.271,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_duelista": {
+       "medida": 0.401,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_espelho": {
+       "medida": 0.784,
+       "prevista": 0.748,
+       "mais": 8,
+       "menos": 0
+      },
+      "brasa_adulto_sentinela": {
+       "medida": 0.4,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_vigia": {
+       "medida": 0.356,
+       "prevista": 0.467,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_duelista": {
+       "medida": 0.396,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_espelho": {
+       "medida": 0.415,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_sentinela": {
+       "medida": 0.446,
+       "prevista": 0.467,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_vigia": {
+       "medida": 0.39,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_duelista": {
+       "medida": 0.537,
+       "prevista": 0.467,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_espelho": {
+       "medida": 0.498,
+       "prevista": 0.467,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_sentinela": {
+       "medida": 0.406,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_vigia": {
+       "medida": 0.395,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      },
+      "limo_adulto_duelista": {
+       "medida": 0.346,
+       "prevista": 0.467,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_espelho": {
+       "medida": 0.763,
+       "prevista": 0.748,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_sentinela": {
+       "medida": 0.772,
+       "prevista": 0.748,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_vigia": {
+       "medida": 0.409,
+       "prevista": 0.375,
+       "mais": 0,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.88,
+     "maior_erro": 0.121
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.713,
+       "neutros": 0.678,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.534,
+       "neutros": 0.477,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.579,
+       "neutros": 0.528,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.726,
+       "neutros": 0.693,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.793,
+       "neutros": 0.767,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.387,
+       "neutros": 0.312,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.781,
+       "neutros": 0.754,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.149,
+       "neutros": 0.068,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.583,
+       "neutros": 0.535,
+       "pares_neutros": 49,
+       "pares": 55
+      }
+     }
+    }
+   },
+   "mega": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.443,
+      "empates": 0.083,
+      "lutas": 152000
+     },
+     "+": {
+      "taxa": 0.991,
+      "empates": 0,
+      "lutas": 44000
+     },
+     "-": {
+      "taxa": 0.008,
+      "empates": 0,
+      "lutas": 44000
+     }
+    },
+    "fracao_pares_decididos": 0.407,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_furioso": {
+       "medida": 0.375,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_muralha": {
+       "medida": 0.723,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adulto_emboscador": {
+       "medida": 0.38,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_tita": {
+       "medida": 0.343,
+       "prevista": 0.357,
+       "mais": 4,
+       "menos": 8
+      },
+      "cirro_adulto_furioso": {
+       "medida": 0.728,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "cirro_adulto_muralha": {
+       "medida": 0.338,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "cirro_adulto_emboscador": {
+       "medida": 0.486,
+       "prevista": 0.443,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_tita": {
+       "medida": 0.379,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_furioso": {
+       "medida": 0.515,
+       "prevista": 0.443,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_muralha": {
+       "medida": 0.347,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_emboscador": {
+       "medida": 0.394,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_tita": {
+       "medida": 0.328,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      },
+      "limo_adulto_furioso": {
+       "medida": 0.458,
+       "prevista": 0.443,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_muralha": {
+       "medida": 0.705,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_emboscador": {
+       "medida": 0.72,
+       "prevista": 0.706,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_tita": {
+       "medida": 0.36,
+       "prevista": 0.363,
+       "mais": 1,
+       "menos": 4
+      }
+     },
+     "r2_atributo": 0.966,
+     "maior_erro": 0.072
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.626,
+       "neutros": 0.832,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.425,
+       "neutros": 0.479,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.496,
+       "neutros": 0.609,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.57,
+       "neutros": 0.739,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.613,
+       "neutros": 0.812,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.301,
+       "neutros": 0.251,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.63,
+       "neutros": 0.836,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.213,
+       "neutros": 0.103,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.484,
+       "neutros": 0.583,
+       "pares_neutros": 30,
+       "pares": 55
+      }
+     }
+    }
+   }
+  },
+  "lp6_3_u120/calibracao": {
+   "crianca": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.485,
+      "empates": 0.02,
+      "lutas": 34000
+     },
+     "+": {
+      "taxa": 0.994,
+      "empates": 0,
+      "lutas": 11000
+     },
+     "-": {
+      "taxa": 0.005,
+      "empates": 0,
+      "lutas": 11000
+     }
+    },
+    "fracao_pares_decididos": 0.478,
+    "pares_mapa": 448,
+    "v1": {
+     "formas": {
+      "brasa_crianca_sereno": {
+       "medida": 0.355,
+       "prevista": 0.352,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_crianca_arisco": {
+       "medida": 0.567,
+       "prevista": 0.566,
+       "mais": 3,
+       "menos": 2
+      },
+      "cirro_crianca_sereno": {
+       "medida": 0.587,
+       "prevista": 0.562,
+       "mais": 2,
+       "menos": 1
+      },
+      "cirro_crianca_arisco": {
+       "medida": 0.59,
+       "prevista": 0.562,
+       "mais": 2,
+       "menos": 1
+      },
+      "ferrugem_crianca_sereno": {
+       "medida": 0.423,
+       "prevista": 0.485,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_crianca_arisco": {
+       "medida": 0.575,
+       "prevista": 0.485,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_crianca_sereno": {
+       "medida": 0.561,
+       "prevista": 0.562,
+       "mais": 2,
+       "menos": 1
+      },
+      "limo_crianca_arisco": {
+       "medida": 0.293,
+       "prevista": 0.352,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.83,
+     "maior_erro": 0.09
+    },
+    "a1": {
+     "longe": 5,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.662,
+       "neutros": 0.735,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "coliseu": {
+       "todos": 0.437,
+       "neutros": 0.462,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "floresta": {
+       "todos": 0.471,
+       "neutros": 0.505,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "praia": {
+       "todos": 0.62,
+       "neutros": 0.691,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "deserto": {
+       "todos": 0.648,
+       "neutros": 0.726,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "castelo": {
+       "todos": 0.162,
+       "neutros": 0.12,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "caverna": {
+       "todos": 0.682,
+       "neutros": 0.761,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "ringue": {
+       "todos": 0.088,
+       "neutros": 0.044,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "soma": {
+       "todos": 0.471,
+       "neutros": 0.505,
+       "pares_neutros": 12,
+       "pares": 15
+      }
+     }
+    }
+   },
+   "adolescente": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.446,
+      "empates": 0.072,
+      "lutas": 170000
+     },
+     "+": {
+      "taxa": 0.997,
+      "empates": 0,
+      "lutas": 35000
+     },
+     "-": {
+      "taxa": 0.003,
+      "empates": 0,
+      "lutas": 35000
+     }
+    },
+    "fracao_pares_decididos": 0.344,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adolescente_brigao": {
+       "medida": 0.418,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_guardiao": {
+       "medida": 0.718,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adolescente_cacador": {
+       "medida": 0.402,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_colosso": {
+       "medida": 0.327,
+       "prevista": 0.32,
+       "mais": 3,
+       "menos": 8
+      },
+      "cirro_adolescente_brigao": {
+       "medida": 0.413,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_guardiao": {
+       "medida": 0.398,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_cacador": {
+       "medida": 0.367,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adolescente_colosso": {
+       "medida": 0.32,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_brigao": {
+       "medida": 0.478,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_guardiao": {
+       "medida": 0.503,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_cacador": {
+       "medida": 0.408,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_colosso": {
+       "medida": 0.417,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      },
+      "limo_adolescente_brigao": {
+       "medida": 0.553,
+       "prevista": 0.446,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adolescente_guardiao": {
+       "medida": 0.714,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_cacador": {
+       "medida": 0.72,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_colosso": {
+       "medida": 0.437,
+       "prevista": 0.394,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.883,
+     "maior_erro": 0.107
+    },
+    "a1": {
+     "longe": 13,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.76,
+       "neutros": 0.76,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "coliseu": {
+       "todos": 0.466,
+       "neutros": 0.434,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "floresta": {
+       "todos": 0.544,
+       "neutros": 0.521,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "praia": {
+       "todos": 0.714,
+       "neutros": 0.709,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "deserto": {
+       "todos": 0.744,
+       "neutros": 0.743,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "castelo": {
+       "todos": 0.234,
+       "neutros": 0.175,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "caverna": {
+       "todos": 0.78,
+       "neutros": 0.782,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "ringue": {
+       "todos": 0.127,
+       "neutros": 0.071,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "soma": {
+       "todos": 0.546,
+       "neutros": 0.525,
+       "pares_neutros": 35,
+       "pares": 39
+      }
+     }
+    }
+   },
+   "adulto": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.47,
+      "empates": 0.048,
+      "lutas": 192000
+     },
+     "+": {
+      "taxa": 0.998,
+      "empates": 0,
+      "lutas": 24000
+     },
+     "-": {
+      "taxa": 0.002,
+      "empates": 0,
+      "lutas": 24000
+     }
+    },
+    "fracao_pares_decididos": 0.249,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_duelista": {
+       "medida": 0.371,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_espelho": {
+       "medida": 0.778,
+       "prevista": 0.752,
+       "mais": 8,
+       "menos": 0
+      },
+      "brasa_adulto_sentinela": {
+       "medida": 0.403,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_vigia": {
+       "medida": 0.34,
+       "prevista": 0.47,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_duelista": {
+       "medida": 0.396,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_espelho": {
+       "medida": 0.432,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_sentinela": {
+       "medida": 0.419,
+       "prevista": 0.47,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_vigia": {
+       "medida": 0.391,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_duelista": {
+       "medida": 0.571,
+       "prevista": 0.47,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_espelho": {
+       "medida": 0.554,
+       "prevista": 0.47,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_sentinela": {
+       "medida": 0.378,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_vigia": {
+       "medida": 0.37,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      },
+      "limo_adulto_duelista": {
+       "medida": 0.43,
+       "prevista": 0.47,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_espelho": {
+       "medida": 0.733,
+       "prevista": 0.752,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_sentinela": {
+       "medida": 0.741,
+       "prevista": 0.752,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_vigia": {
+       "medida": 0.389,
+       "prevista": 0.377,
+       "mais": 0,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.865,
+     "maior_erro": 0.13
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.644,
+       "neutros": 0.6,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.513,
+       "neutros": 0.454,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.495,
+       "neutros": 0.433,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.557,
+       "neutros": 0.503,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.701,
+       "neutros": 0.664,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.433,
+       "neutros": 0.364,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.691,
+       "neutros": 0.653,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.193,
+       "neutros": 0.1,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.528,
+       "neutros": 0.471,
+       "pares_neutros": 49,
+       "pares": 55
+      }
+     }
+    }
+   },
+   "mega": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.443,
+      "empates": 0.097,
+      "lutas": 152000
+     },
+     "+": {
+      "taxa": 0.999,
+      "empates": 0,
+      "lutas": 44000
+     },
+     "-": {
+      "taxa": 0.001,
+      "empates": 0,
+      "lutas": 44000
+     }
+    },
+    "fracao_pares_decididos": 0.374,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_furioso": {
+       "medida": 0.349,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_muralha": {
+       "medida": 0.729,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adulto_emboscador": {
+       "medida": 0.352,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_tita": {
+       "medida": 0.34,
+       "prevista": 0.355,
+       "mais": 4,
+       "menos": 8
+      },
+      "cirro_adulto_furioso": {
+       "medida": 0.716,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "cirro_adulto_muralha": {
+       "medida": 0.343,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "cirro_adulto_emboscador": {
+       "medida": 0.474,
+       "prevista": 0.443,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_tita": {
+       "medida": 0.378,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_furioso": {
+       "medida": 0.517,
+       "prevista": 0.443,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_muralha": {
+       "medida": 0.331,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_emboscador": {
+       "medida": 0.366,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_tita": {
+       "medida": 0.347,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      },
+      "limo_adulto_furioso": {
+       "medida": 0.46,
+       "prevista": 0.443,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_muralha": {
+       "medida": 0.729,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_emboscador": {
+       "medida": 0.721,
+       "prevista": 0.71,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_tita": {
+       "medida": 0.357,
+       "prevista": 0.362,
+       "mais": 1,
+       "menos": 4
+      }
+     },
+     "r2_atributo": 0.974,
+     "maior_erro": 0.074
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.536,
+       "neutros": 0.683,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.457,
+       "neutros": 0.538,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.487,
+       "neutros": 0.593,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.512,
+       "neutros": 0.639,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.539,
+       "neutros": 0.688,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.419,
+       "neutros": 0.468,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.562,
+       "neutros": 0.729,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.256,
+       "neutros": 0.169,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.471,
+       "neutros": 0.563,
+       "pares_neutros": 30,
+       "pares": 55
+      }
+     }
+    }
+   }
+  },
+  "lp5_4/conferencia": {
+   "crianca": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.489,
+      "empates": 0.021,
+      "lutas": 34000
+     },
+     "+": {
+      "taxa": 0.994,
+      "empates": 0,
+      "lutas": 11000
+     },
+     "-": {
+      "taxa": 0.006,
+      "empates": 0,
+      "lutas": 11000
+     }
+    },
+    "fracao_pares_decididos": 0.489,
+    "pares_mapa": 448,
+    "v1": {
+     "formas": {
+      "brasa_crianca_sereno": {
+       "medida": 0.354,
+       "prevista": 0.354,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_crianca_arisco": {
+       "medida": 0.568,
+       "prevista": 0.568,
+       "mais": 3,
+       "menos": 2
+      },
+      "cirro_crianca_sereno": {
+       "medida": 0.586,
+       "prevista": 0.564,
+       "mais": 2,
+       "menos": 1
+      },
+      "cirro_crianca_arisco": {
+       "medida": 0.594,
+       "prevista": 0.564,
+       "mais": 2,
+       "menos": 1
+      },
+      "ferrugem_crianca_sereno": {
+       "medida": 0.419,
+       "prevista": 0.489,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_crianca_arisco": {
+       "medida": 0.584,
+       "prevista": 0.489,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_crianca_sereno": {
+       "medida": 0.55,
+       "prevista": 0.564,
+       "mais": 2,
+       "menos": 1
+      },
+      "limo_crianca_arisco": {
+       "medida": 0.294,
+       "prevista": 0.354,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.81,
+     "maior_erro": 0.095
+    },
+    "a1": {
+     "longe": 5,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.667,
+       "neutros": 0.741,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "coliseu": {
+       "todos": 0.437,
+       "neutros": 0.463,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "floresta": {
+       "todos": 0.487,
+       "neutros": 0.526,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "praia": {
+       "todos": 0.606,
+       "neutros": 0.673,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "deserto": {
+       "todos": 0.646,
+       "neutros": 0.723,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "castelo": {
+       "todos": 0.181,
+       "neutros": 0.144,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "caverna": {
+       "todos": 0.683,
+       "neutros": 0.764,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "ringue": {
+       "todos": 0.082,
+       "neutros": 0.042,
+       "pares_neutros": 12,
+       "pares": 15
+      },
+      "soma": {
+       "todos": 0.474,
+       "neutros": 0.51,
+       "pares_neutros": 12,
+       "pares": 15
+      }
+     }
+    }
+   },
+   "adolescente": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.453,
+      "empates": 0.076,
+      "lutas": 170000
+     },
+     "+": {
+      "taxa": 0.997,
+      "empates": 0,
+      "lutas": 35000
+     },
+     "-": {
+      "taxa": 0.003,
+      "empates": 0,
+      "lutas": 35000
+     }
+    },
+    "fracao_pares_decididos": 0.344,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adolescente_brigao": {
+       "medida": 0.42,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_guardiao": {
+       "medida": 0.716,
+       "prevista": 0.713,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adolescente_cacador": {
+       "medida": 0.401,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "brasa_adolescente_colosso": {
+       "medida": 0.327,
+       "prevista": 0.322,
+       "mais": 3,
+       "menos": 8
+      },
+      "cirro_adolescente_brigao": {
+       "medida": 0.403,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_guardiao": {
+       "medida": 0.397,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "cirro_adolescente_cacador": {
+       "medida": 0.374,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adolescente_colosso": {
+       "medida": 0.319,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_brigao": {
+       "medida": 0.476,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_guardiao": {
+       "medida": 0.504,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adolescente_cacador": {
+       "medida": 0.403,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "ferrugem_adolescente_colosso": {
+       "medida": 0.419,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      },
+      "limo_adolescente_brigao": {
+       "medida": 0.556,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adolescente_guardiao": {
+       "medida": 0.709,
+       "prevista": 0.713,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_cacador": {
+       "medida": 0.716,
+       "prevista": 0.713,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adolescente_colosso": {
+       "medida": 0.433,
+       "prevista": 0.4,
+       "mais": 1,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.892,
+     "maior_erro": 0.103
+    },
+    "a1": {
+     "longe": 13,
+     "perto": 3,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.766,
+       "neutros": 0.767,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "coliseu": {
+       "todos": 0.456,
+       "neutros": 0.423,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "floresta": {
+       "todos": 0.563,
+       "neutros": 0.541,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "praia": {
+       "todos": 0.7,
+       "neutros": 0.694,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "deserto": {
+       "todos": 0.726,
+       "neutros": 0.723,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "castelo": {
+       "todos": 0.233,
+       "neutros": 0.174,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "caverna": {
+       "todos": 0.79,
+       "neutros": 0.793,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "ringue": {
+       "todos": 0.131,
+       "neutros": 0.076,
+       "pares_neutros": 35,
+       "pares": 39
+      },
+      "soma": {
+       "todos": 0.546,
+       "neutros": 0.524,
+       "pares_neutros": 35,
+       "pares": 39
+      }
+     }
+    }
+   },
+   "adulto": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.472,
+      "empates": 0.047,
+      "lutas": 192000
+     },
+     "+": {
+      "taxa": 0.993,
+      "empates": 0,
+      "lutas": 24000
+     },
+     "-": {
+      "taxa": 0.005,
+      "empates": 0,
+      "lutas": 24000
+     }
+    },
+    "fracao_pares_decididos": 0.273,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_duelista": {
+       "medida": 0.395,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_espelho": {
+       "medida": 0.78,
+       "prevista": 0.75,
+       "mais": 8,
+       "menos": 0
+      },
+      "brasa_adulto_sentinela": {
+       "medida": 0.396,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "brasa_adulto_vigia": {
+       "medida": 0.34,
+       "prevista": 0.472,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_duelista": {
+       "medida": 0.41,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_espelho": {
+       "medida": 0.418,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "cirro_adulto_sentinela": {
+       "medida": 0.447,
+       "prevista": 0.472,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_vigia": {
+       "medida": 0.389,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_duelista": {
+       "medida": 0.542,
+       "prevista": 0.472,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_espelho": {
+       "medida": 0.502,
+       "prevista": 0.472,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_sentinela": {
+       "medida": 0.408,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "ferrugem_adulto_vigia": {
+       "medida": 0.393,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      },
+      "limo_adulto_duelista": {
+       "medida": 0.341,
+       "prevista": 0.472,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_espelho": {
+       "medida": 0.762,
+       "prevista": 0.75,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_sentinela": {
+       "medida": 0.774,
+       "prevista": 0.75,
+       "mais": 8,
+       "menos": 0
+      },
+      "limo_adulto_vigia": {
+       "medida": 0.399,
+       "prevista": 0.378,
+       "mais": 0,
+       "menos": 3
+      }
+     },
+     "r2_atributo": 0.864,
+     "maior_erro": 0.132
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.705,
+       "neutros": 0.669,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.533,
+       "neutros": 0.475,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.574,
+       "neutros": 0.522,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.71,
+       "neutros": 0.675,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.788,
+       "neutros": 0.762,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.386,
+       "neutros": 0.31,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.776,
+       "neutros": 0.748,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.146,
+       "neutros": 0.063,
+       "pares_neutros": 49,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.577,
+       "neutros": 0.528,
+       "pares_neutros": 49,
+       "pares": 55
+      }
+     }
+    }
+   },
+   "mega": {
+    "por_atributo": {
+     "0": {
+      "taxa": 0.453,
+      "empates": 0.087,
+      "lutas": 152000
+     },
+     "+": {
+      "taxa": 0.991,
+      "empates": 0,
+      "lutas": 44000
+     },
+     "-": {
+      "taxa": 0.009,
+      "empates": 0,
+      "lutas": 44000
+     }
+    },
+    "fracao_pares_decididos": 0.406,
+    "pares_mapa": 1920,
+    "v1": {
+     "formas": {
+      "brasa_adulto_furioso": {
+       "medida": 0.36,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_muralha": {
+       "medida": 0.719,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "brasa_adulto_emboscador": {
+       "medida": 0.373,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "brasa_adulto_tita": {
+       "medida": 0.342,
+       "prevista": 0.36,
+       "mais": 4,
+       "menos": 8
+      },
+      "cirro_adulto_furioso": {
+       "medida": 0.722,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "cirro_adulto_muralha": {
+       "medida": 0.339,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "cirro_adulto_emboscador": {
+       "medida": 0.497,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "cirro_adulto_tita": {
+       "medida": 0.375,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_furioso": {
+       "medida": 0.502,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "ferrugem_adulto_muralha": {
+       "medida": 0.343,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_emboscador": {
+       "medida": 0.385,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "ferrugem_adulto_tita": {
+       "medida": 0.33,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      },
+      "limo_adulto_furioso": {
+       "medida": 0.476,
+       "prevista": 0.453,
+       "mais": 0,
+       "menos": 0
+      },
+      "limo_adulto_muralha": {
+       "medida": 0.707,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_emboscador": {
+       "medida": 0.724,
+       "prevista": 0.711,
+       "mais": 8,
+       "menos": 1
+      },
+      "limo_adulto_tita": {
+       "medida": 0.368,
+       "prevista": 0.371,
+       "mais": 1,
+       "menos": 4
+      }
+     },
+     "r2_atributo": 0.974,
+     "maior_erro": 0.049
+    },
+    "a1": {
+     "longe": 11,
+     "perto": 5,
+     "por_mapa": {
+      "campo": {
+       "todos": 0.621,
+       "neutros": 0.825,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "coliseu": {
+       "todos": 0.407,
+       "neutros": 0.446,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "floresta": {
+       "todos": 0.5,
+       "neutros": 0.616,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "praia": {
+       "todos": 0.555,
+       "neutros": 0.71,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "deserto": {
+       "todos": 0.599,
+       "neutros": 0.785,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "castelo": {
+       "todos": 0.304,
+       "neutros": 0.257,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "caverna": {
+       "todos": 0.629,
+       "neutros": 0.833,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "ringue": {
+       "todos": 0.204,
+       "neutros": 0.092,
+       "pares_neutros": 30,
+       "pares": 55
+      },
+      "soma": {
+       "todos": 0.477,
+       "neutros": 0.571,
+       "pares_neutros": 30,
+       "pares": 55
+      }
+     }
+    }
+   }
+  }
+ },
+ "lideres": {
+  "lp5_3/calibracao": {
+   "npc_tier1_brutamontes": {
+    "nome": "Gazimon",
+    "estagio": "crianca",
+    "mapa": "campo",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.41,
+     "tip": 0.59
+    },
+    "fracao_mais": 0.3,
+    "fracao_menos": 0.32,
+    "piso_sem_treino": 0.3,
+    "teto_tipico": 0.68,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.38,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.213,
+       "lutas": 760
+      },
+      "+": {
+       "taxa": 0.997,
+       "lutas": 600
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 640
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.627,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.849,
+       "lutas": 760
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 600
+      },
+      "-": {
+       "taxa": 0.013,
+       "lutas": 640
+      }
+     }
+    }
+   },
+   "npc_tier2_carcereiro": {
+    "nome": "Guardromon",
+    "estagio": "adolescente",
+    "mapa": "coliseu",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.35,
+     "tip": 0.65
+    },
+    "fracao_mais": 0.42,
+    "fracao_menos": 0.24,
+    "piso_sem_treino": 0.42,
+    "teto_tipico": 0.76,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.564,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.424,
+       "lutas": 680
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 840
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 480
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.755,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.965,
+       "lutas": 680
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 840
+      },
+      "-": {
+       "taxa": 0.029,
+       "lutas": 480
+      }
+     }
+    }
+   },
+   "npc_v6_youkomon": {
+    "nome": "Youkomon",
+    "estagio": "adolescente",
+    "mapa": "floresta",
+    "lutas_serie": 1,
+    "atributo": "Data",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.35,
+     "tip": 0.65
+    },
+    "fracao_mais": 0.09,
+    "fracao_menos": 0.42,
+    "piso_sem_treino": 0.09,
+    "teto_tipico": 0.58,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.234,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.293,
+       "lutas": 980
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 180
+      },
+      "-": {
+       "taxa": 0.001,
+       "lutas": 840
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.571,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.951,
+       "lutas": 980
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 180
+      },
+      "-": {
+       "taxa": 0.036,
+       "lutas": 840
+      }
+     }
+    }
+   },
+   "npc_v5_myotismon": {
+    "nome": "Myotismon",
+    "estagio": "adulto",
+    "mapa": "castelo",
+    "lutas_serie": 3,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.3,
+     "tip": 0.7
+    },
+    "fracao_mais": 0.49,
+    "fracao_menos": 0.21,
+    "piso_sem_treino": 0.49,
+    "teto_tipico": 0.79,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.002,
+     "por_atributo": {
+      "0": {
+       "taxa": 0,
+       "lutas": 600
+      },
+      "+": {
+       "taxa": 0.003,
+       "lutas": 980
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 420
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.255,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.007,
+       "lutas": 600
+      },
+      "+": {
+       "taxa": 0.515,
+       "lutas": 980
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 420
+      }
+     }
+    }
+   },
+   "npc_v6_marinbullmon": {
+    "nome": "MarinBullmon",
+    "estagio": "adulto",
+    "mapa": "praia",
+    "lutas_serie": 1,
+    "atributo": "None",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.3,
+     "tip": 0.7
+    },
+    "fracao_mais": 0,
+    "fracao_menos": 0,
+    "piso_sem_treino": 0,
+    "teto_tipico": 1,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.263,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.263,
+       "lutas": 2000
+      },
+      "+": {
+       "taxa": null,
+       "lutas": 0
+      },
+      "-": {
+       "taxa": null,
+       "lutas": 0
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.821,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.821,
+       "lutas": 2000
+      },
+      "+": {
+       "taxa": null,
+       "lutas": 0
+      },
+      "-": {
+       "taxa": null,
+       "lutas": 0
+      }
+     }
+    }
+   },
+   "npc_v5_piedmon": {
+    "nome": "Piedmon",
+    "estagio": "mega",
+    "mapa": "caverna",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.27,
+     "tip": 0.73
+    },
+    "fracao_mais": 0.48,
+    "fracao_menos": 0.31,
+    "piso_sem_treino": 0.48,
+    "teto_tipico": 0.69,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.507,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.145,
+       "lutas": 420
+      },
+      "+": {
+       "taxa": 0.994,
+       "lutas": 960
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 620
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.668,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.798,
+       "lutas": 420
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 960
+      },
+      "-": {
+       "taxa": 0.066,
+       "lutas": 620
+      }
+     }
+    }
+   },
+   "npc_tier2_sentinela": {
+    "nome": "Tortomon",
+    "estagio": "adolescente",
+    "mapa": "coliseu",
+    "lutas_serie": 1,
+    "atributo": "Vaccine",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.5,
+     "tip": 0.7
+    },
+    "fracao_mais": 0.24,
+    "fracao_menos": 0.09,
+    "piso_sem_treino": 0.24,
+    "teto_tipico": 0.91,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.467,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.338,
+       "lutas": 1340
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 480
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 180
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.905,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.99,
+       "lutas": 1340
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 480
+      },
+      "-": {
+       "taxa": 0.022,
+       "lutas": 180
+      }
+     }
+    }
+   },
+   "npc_tier2_porteiro": {
+    "nome": "Devidramon",
+    "estagio": "adolescente",
+    "mapa": "coliseu",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.5,
+     "tip": 0.7
+    },
+    "fracao_mais": 0.42,
+    "fracao_menos": 0.24,
+    "piso_sem_treino": 0.42,
+    "teto_tipico": 0.76,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.481,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.178,
+       "lutas": 680
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 840
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 480
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.645,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.662,
+       "lutas": 680
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 840
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 480
+      }
+     }
+    }
+   },
+   "npc_v5_puppetmon": {
+    "nome": "Puppetmon",
+    "estagio": "mega",
+    "mapa": "caverna",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.42,
+     "tip": 0.78
+    },
+    "fracao_mais": 0.48,
+    "fracao_menos": 0.31,
+    "piso_sem_treino": 0.48,
+    "teto_tipico": 0.69,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.543,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.3,
+       "lutas": 420
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 960
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 620
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.662,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.86,
+       "lutas": 420
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 960
+      },
+      "-": {
+       "taxa": 0.003,
+       "lutas": 620
+      }
+     }
+    }
+   },
+   "npc_v5_machinedramon": {
+    "nome": "Machinedramon",
+    "estagio": "mega",
+    "mapa": "caverna",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.42,
+     "tip": 0.78
+    },
+    "fracao_mais": 0.48,
+    "fracao_menos": 0.31,
+    "piso_sem_treino": 0.48,
+    "teto_tipico": 0.69,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.517,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.205,
+       "lutas": 420
+      },
+      "+": {
+       "taxa": 0.986,
+       "lutas": 960
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 620
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.704,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.94,
+       "lutas": 420
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 960
+      },
+      "-": {
+       "taxa": 0.084,
+       "lutas": 620
+      }
+     }
+    }
+   }
+  },
+  "lp5_4/conferencia": {
+   "npc_tier1_brutamontes": {
+    "nome": "Gazimon",
+    "estagio": "crianca",
+    "mapa": "campo",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.41,
+     "tip": 0.59
+    },
+    "fracao_mais": 0.32,
+    "fracao_menos": 0.32,
+    "piso_sem_treino": 0.32,
+    "teto_tipico": 0.68,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.391,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.2,
+       "lutas": 720
+      },
+      "+": {
+       "taxa": 0.997,
+       "lutas": 640
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 640
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.611,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.785,
+       "lutas": 720
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 640
+      },
+      "-": {
+       "taxa": 0.025,
+       "lutas": 640
+      }
+     }
+    }
+   },
+   "npc_tier2_carcereiro": {
+    "nome": "Guardromon",
+    "estagio": "adolescente",
+    "mapa": "coliseu",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.35,
+     "tip": 0.65
+    },
+    "fracao_mais": 0.56,
+    "fracao_menos": 0.17,
+    "piso_sem_treino": 0.56,
+    "teto_tipico": 0.83,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.684,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.459,
+       "lutas": 540
+      },
+      "+": {
+       "taxa": 0.999,
+       "lutas": 1120
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 340
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.822,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.963,
+       "lutas": 540
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 1120
+      },
+      "-": {
+       "taxa": 0.012,
+       "lutas": 340
+      }
+     }
+    }
+   },
+   "npc_v6_youkomon": {
+    "nome": "Youkomon",
+    "estagio": "adolescente",
+    "mapa": "floresta",
+    "lutas_serie": 1,
+    "atributo": "Data",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.35,
+     "tip": 0.65
+    },
+    "fracao_mais": 0.05,
+    "fracao_menos": 0.56,
+    "piso_sem_treino": 0.05,
+    "teto_tipico": 0.44,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.168,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.303,
+       "lutas": 780
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 100
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 1120
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.46,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.938,
+       "lutas": 780
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 100
+      },
+      "-": {
+       "taxa": 0.079,
+       "lutas": 1120
+      }
+     }
+    }
+   },
+   "npc_v5_myotismon": {
+    "nome": "Myotismon",
+    "estagio": "adulto",
+    "mapa": "castelo",
+    "lutas_serie": 3,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.3,
+     "tip": 0.7
+    },
+    "fracao_mais": 0.53,
+    "fracao_menos": 0.19,
+    "piso_sem_treino": 0.53,
+    "teto_tipico": 0.81,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.003,
+     "por_atributo": {
+      "0": {
+       "taxa": 0,
+       "lutas": 560
+      },
+      "+": {
+       "taxa": 0.006,
+       "lutas": 1060
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 380
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.255,
+     "por_atributo": {
+      "0": {
+       "taxa": 0,
+       "lutas": 560
+      },
+      "+": {
+       "taxa": 0.48,
+       "lutas": 1060
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 380
+      }
+     }
+    }
+   },
+   "npc_v6_marinbullmon": {
+    "nome": "MarinBullmon",
+    "estagio": "adulto",
+    "mapa": "praia",
+    "lutas_serie": 1,
+    "atributo": "None",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.3,
+     "tip": 0.7
+    },
+    "fracao_mais": 0,
+    "fracao_menos": 0,
+    "piso_sem_treino": 0,
+    "teto_tipico": 1,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.239,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.239,
+       "lutas": 2000
+      },
+      "+": {
+       "taxa": null,
+       "lutas": 0
+      },
+      "-": {
+       "taxa": null,
+       "lutas": 0
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.789,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.789,
+       "lutas": 2000
+      },
+      "+": {
+       "taxa": null,
+       "lutas": 0
+      },
+      "-": {
+       "taxa": null,
+       "lutas": 0
+      }
+     }
+    }
+   },
+   "npc_v5_piedmon": {
+    "nome": "Piedmon",
+    "estagio": "mega",
+    "mapa": "caverna",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": false,
+    "limites": {
+     "sem": 0.27,
+     "tip": 0.73
+    },
+    "fracao_mais": 0.46,
+    "fracao_menos": 0.21,
+    "piso_sem_treino": 0.46,
+    "teto_tipico": 0.79,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.506,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.147,
+       "lutas": 660
+      },
+      "+": {
+       "taxa": 0.996,
+       "lutas": 920
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 420
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.74,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.803,
+       "lutas": 660
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 920
+      },
+      "-": {
+       "taxa": 0.071,
+       "lutas": 420
+      }
+     }
+    }
+   },
+   "npc_tier2_sentinela": {
+    "nome": "Tortomon",
+    "estagio": "adolescente",
+    "mapa": "coliseu",
+    "lutas_serie": 1,
+    "atributo": "Vaccine",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.5,
+     "tip": 0.7
+    },
+    "fracao_mais": 0.17,
+    "fracao_menos": 0.05,
+    "piso_sem_treino": 0.17,
+    "teto_tipico": 0.95,
+    "cabe_pelo_atributo": true,
+    "sem_treino": {
+     "taxa": 0.454,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.363,
+       "lutas": 1560
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 340
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 100
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.94,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.986,
+       "lutas": 1560
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 340
+      },
+      "-": {
+       "taxa": 0.01,
+       "lutas": 100
+      }
+     }
+    }
+   },
+   "npc_tier2_porteiro": {
+    "nome": "Devidramon",
+    "estagio": "adolescente",
+    "mapa": "coliseu",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.5,
+     "tip": 0.7
+    },
+    "fracao_mais": 0.56,
+    "fracao_menos": 0.17,
+    "piso_sem_treino": 0.56,
+    "teto_tipico": 0.83,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.608,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.178,
+       "lutas": 540
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 1120
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 340
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.762,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.746,
+       "lutas": 540
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 1120
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 340
+      }
+     }
+    }
+   },
+   "npc_v5_puppetmon": {
+    "nome": "Puppetmon",
+    "estagio": "mega",
+    "mapa": "caverna",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.42,
+     "tip": 0.78
+    },
+    "fracao_mais": 0.46,
+    "fracao_menos": 0.21,
+    "piso_sem_treino": 0.46,
+    "teto_tipico": 0.79,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.564,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.315,
+       "lutas": 660
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 920
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 420
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.736,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.832,
+       "lutas": 660
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 920
+      },
+      "-": {
+       "taxa": 0.007,
+       "lutas": 420
+      }
+     }
+    }
+   },
+   "npc_v5_machinedramon": {
+    "nome": "Machinedramon",
+    "estagio": "mega",
+    "mapa": "caverna",
+    "lutas_serie": 1,
+    "atributo": "Virus",
+    "desafiante": true,
+    "limites": {
+     "sem": 0.42,
+     "tip": 0.78
+    },
+    "fracao_mais": 0.46,
+    "fracao_menos": 0.21,
+    "piso_sem_treino": 0.46,
+    "teto_tipico": 0.79,
+    "cabe_pelo_atributo": false,
+    "sem_treino": {
+     "taxa": 0.549,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.28,
+       "lutas": 660
+      },
+      "+": {
+       "taxa": 0.992,
+       "lutas": 920
+      },
+      "-": {
+       "taxa": 0,
+       "lutas": 420
+      }
+     }
+    },
+    "tipico": {
+     "taxa": 0.798,
+     "por_atributo": {
+      "0": {
+       "taxa": 0.952,
+       "lutas": 660
+      },
+      "+": {
+       "taxa": 1,
+       "lutas": 920
+      },
+      "-": {
+       "taxa": 0.112,
+       "lutas": 420
+      }
+     }
+    }
+   }
+  }
+ },
+ "especie_lp5_3": {
+  "crianca": {
+   "brasa": {
+    "pets": 26,
+    "fracao_mais": 0.24,
+    "fracao_menos": 0.317,
+    "taxa": 0.648
+   },
+   "cirro": {
+    "pets": 14,
+    "fracao_mais": 0.25,
+    "fracao_menos": 0.125,
+    "taxa": 0.839
+   },
+   "limo": {
+    "pets": 34,
+    "fracao_mais": 0.191,
+    "fracao_menos": 0.243,
+    "taxa": 0.592
+   },
+   "ferrugem": {
+    "pets": 26,
+    "fracao_mais": 0,
+    "fracao_menos": 0,
+    "taxa": 0.833
+   }
+  },
+  "adolescente": {
+   "brasa": {
+    "pets": 21,
+    "fracao_mais": 0.262,
+    "fracao_menos": 0.28,
+    "taxa": 0.726
+   },
+   "limo": {
+    "pets": 27,
+    "fracao_mais": 0.329,
+    "fracao_menos": 0.081,
+    "taxa": 0.912
+   },
+   "ferrugem": {
+    "pets": 29,
+    "fracao_mais": 0.039,
+    "fracao_menos": 0.116,
+    "taxa": 0.877
+   },
+   "cirro": {
+    "pets": 23,
+    "fracao_mais": 0.035,
+    "fracao_menos": 0.106,
+    "taxa": 0.864
+   }
+  },
+  "adulto": {
+   "brasa": {
+    "pets": 25,
+    "fracao_mais": 0.2,
+    "fracao_menos": 0.09,
+    "taxa": 0.921
+   },
+   "limo": {
+    "pets": 25,
+    "fracao_mais": 0.22,
+    "fracao_menos": 0.053,
+    "taxa": 0.933
+   },
+   "cirro": {
+    "pets": 23,
+    "fracao_mais": 0,
+    "fracao_menos": 0.147,
+    "taxa": 0.864
+   },
+   "ferrugem": {
+    "pets": 27,
+    "fracao_mais": 0,
+    "fracao_menos": 0.083,
+    "taxa": 0.921
+   }
+  },
+  "mega": {
+   "limo": {
+    "pets": 35,
+    "fracao_mais": 0.338,
+    "fracao_menos": 0.077,
+    "taxa": 0.921
+   },
+   "brasa": {
+    "pets": 20,
+    "fracao_mais": 0.163,
+    "fracao_menos": 0.306,
+    "taxa": 0.724
+   },
+   "cirro": {
+    "pets": 26,
+    "fracao_mais": 0.149,
+    "fracao_menos": 0.149,
+    "taxa": 0.879
+   },
+   "ferrugem": {
+    "pets": 19,
+    "fracao_mais": 0.056,
+    "fracao_menos": 0.224,
+    "taxa": 0.803
+   }
+  }
+ },
+ "colosso_lp5_2": {
+  "ferrugem_adolescente_colosso": {
+   "digimon": "Kabuterimon",
+   "atributo": "Vaccine",
+   "de_perto": false,
+   "taxa_sparring": 0.759,
+   "n": 220,
+   "fracao_mais": 0.063,
+   "fracao_menos": 0.188
+  },
+  "brasa_adolescente_colosso": {
+   "digimon": "Growlmon",
+   "atributo": "Virus",
+   "de_perto": false,
+   "taxa_sparring": 0.519,
+   "n": 270,
+   "fracao_mais": 0.188,
+   "fracao_menos": 0.5
+  },
+  "cirro_adolescente_colosso": {
+   "digimon": "Gatomon",
+   "atributo": "Vaccine",
+   "de_perto": true,
+   "taxa_sparring": 0.633,
+   "n": 240,
+   "fracao_mais": 0.063,
+   "fracao_menos": 0.188
+  },
+  "limo_adolescente_colosso": {
+   "digimon": "Ikkakumon",
+   "atributo": "Vaccine",
+   "de_perto": false,
+   "taxa_sparring": 0.781,
+   "n": 270,
+   "fracao_mais": 0.063,
+   "fracao_menos": 0.188
+  }
+ },
+ "liga_atributo": {
+  "rivais": [
+   {
+    "chave": "brasa_adulto_furioso",
+    "digimon": "WarGreymon",
+    "atributo": "Vaccine"
+   },
+   {
+    "chave": "cirro_adulto_muralha",
+    "digimon": "Seraphimon",
+    "atributo": "Vaccine"
+   },
+   {
+    "chave": "ferrugem_adulto_emboscador",
+    "digimon": "MegaGargomon",
+    "atributo": "Vaccine"
+   },
+   {
+    "chave": "limo_adulto_tita",
+    "digimon": "Vikemon",
+    "atributo": "Vaccine"
+   },
+   {
+    "chave": "limo_adulto_muralha",
+    "digimon": "Rosemon",
+    "atributo": "Data"
+   },
+   {
+    "chave": "ferrugem_adulto_furioso",
+    "digimon": "Imperialdramon_DragonMode",
+    "atributo": "Free"
+   }
+  ],
+  "por_forma_do_pet": {
+   "brasa_adulto_furioso": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "brasa_adulto_muralha": {
+    "atributo": "Data",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 4
+   },
+   "brasa_adulto_emboscador": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "brasa_adulto_tita": {
+    "atributo": "Virus",
+    "rivais_com_desvantagem": 4,
+    "rivais_com_vantagem": 1
+   },
+   "cirro_adulto_furioso": {
+    "atributo": "Data",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 4
+   },
+   "cirro_adulto_muralha": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "cirro_adulto_emboscador": {
+    "atributo": "Free",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 0
+   },
+   "cirro_adulto_tita": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "ferrugem_adulto_furioso": {
+    "atributo": "Free",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 0
+   },
+   "ferrugem_adulto_muralha": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "ferrugem_adulto_emboscador": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "ferrugem_adulto_tita": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   },
+   "limo_adulto_furioso": {
+    "atributo": "Free",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 0
+   },
+   "limo_adulto_muralha": {
+    "atributo": "Data",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 4
+   },
+   "limo_adulto_emboscador": {
+    "atributo": "Data",
+    "rivais_com_desvantagem": 0,
+    "rivais_com_vantagem": 4
+   },
+   "limo_adulto_tita": {
+    "atributo": "Vaccine",
+    "rivais_com_desvantagem": 1,
+    "rivais_com_vantagem": 0
+   }
+  },
+  "fracao_formas_sem_rival_mais_forte": 0.438
+ },
+ "torneios_lp5_3": {
+  "liga_vitorias": {
+   "0": 121,
+   "1": 821,
+   "2": 446,
+   "3": 266,
+   "4": 346
+  },
+  "torre_vitorias": {
+   "0": 1275,
+   "1": 706,
+   "2": 19
+  },
+  "fabrica_series": {
+   "0": 1997,
+   "1": 3
+  }
+ },
+ "contas_v23": {
+  "gama": {
+   "vigor": 0.02,
+   "folego": 0.14,
+   "recuperacao": 0.02,
+   "forca": 0.02,
+   "mira": 0.14,
+   "guarda": 0.06
+  },
+  "fator_no_stat": {
+   "2": {
+    "vigor": 1.014,
+    "folego": 1.102,
+    "recuperacao": 1.014,
+    "forca": 1.014,
+    "mira": 1.102,
+    "guarda": 1.042
+   },
+   "8": {
+    "vigor": 1.042,
+    "folego": 1.338,
+    "recuperacao": 1.042,
+    "forca": 1.042,
+    "mira": 1.338,
+    "guarda": 1.133
+   },
+   "0.1": {
+    "vigor": 0.955,
+    "folego": 0.724,
+    "recuperacao": 0.955,
+    "forca": 0.955,
+    "mira": 0.724,
+    "guarda": 0.871
+   },
+   "0.5": {
+    "vigor": 0.986,
+    "folego": 0.908,
+    "recuperacao": 0.986,
+    "forca": 0.986,
+    "mira": 0.908,
+    "guarda": 0.959
+   }
+  },
+  "tipico_mega_stat_medio": 110,
+  "tipico_mega_razao": {
+   "vigor": 1.049,
+   "folego": 1.399,
+   "recuperacao": 1.049,
+   "forca": 1.049,
+   "mira": 1.399,
+   "guarda": 1.155
+  },
+  "atributo_razao_do_dano": 2.25,
+  "folego_com_8_pontos": 130,
+  "agilidade_com_8_pontos": 4.66,
+  "pulo_px_neutro": 68.4,
+  "pulo_px_8_pontos": 318.729,
+  "fabrica_com_cura_a_0_5": 0.125
+ }
+}

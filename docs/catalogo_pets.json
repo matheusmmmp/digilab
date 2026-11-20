@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "versao": "catalogo-v0-PROPOSTO",
+    "nota": "Todos os numeros sao PROPOSTOS ate passarem na bateria de bots por especie. Especies e nomes sao originais; arte continua placeholder.",
+    "formula": "stat = clamp(base_especie + soma(temperamento[eixo] * valor_eixo) + soma(carater[eixo] * valor_eixo), min, max); depois aplica estagio e condicao",
+    "stat_neutro": 10,
+    "stat_min": 3,
+    "stat_max": 20,
+    "orcamento_especie": 60
+  },
+  "stats": {
+    "vigor":       {"descricao": "vida maxima",                  "conversao": "hp_max = 70 + 3 * vigor"},
+    "folego":      {"descricao": "guts inicial e maximo",        "conversao": "guts_inicial = 30 + 2 * folego; guts_max = 80 + 2 * folego"},
+    "recuperacao": {"descricao": "regeneracao de guts por turno", "conversao": "regen_guts = 4 + 0.4 * recuperacao"},
+    "forca":       {"descricao": "dano corpo a corpo",           "conversao": "mult_dano_perto = 0.7 + 0.03 * forca"},
+    "mira":        {"descricao": "dano a distancia",             "conversao": "mult_dano_disparo = 0.7 + 0.03 * mira"},
+    "guarda":      {"descricao": "eficiencia de defender",       "conversao": "mult_dano_defendendo = DEF_MULT * (1.3 - 0.03 * guarda)"}
+  },
+  "especies": {
+    "brasa":    {"conceito": "lagarto de brasas; pressao de perto",      "vigor": 9,  "folego": 10, "recuperacao": 7,  "forca": 14, "mira": 8,  "guarda": 12},
+    "cirro":    {"conceito": "ave de nuvem; luta de longe",              "vigor": 7,  "folego": 11, "recuperacao": 11, "forca": 7,  "mira": 15, "guarda": 9},
+    "ferrugem": {"conceito": "tatu de placas metalicas; aguenta pancada", "vigor": 13, "folego": 8,  "recuperacao": 8,  "forca": 9,  "mira": 7,  "guarda": 15},
+    "limo":     {"conceito": "lesma de musgo; guerra de desgaste",       "vigor": 11, "folego": 12, "recuperacao": 15, "forca": 6,  "mira": 7,  "guarda": 9},
+    "faisca":   {"conceito": "besouro eletrico; ritmo alto",             "vigor": 8,  "folego": 13, "recuperacao": 9,  "forca": 11, "mira": 11, "guarda": 8},
+    "seixo":    {"conceito": "golem de seixos; lento e pesado",          "vigor": 15, "folego": 7,  "recuperacao": 7,  "forca": 12, "mira": 7,  "guarda": 12}
+  },
+  "temperamento": {
+    "_nota": "Inato, sorteado no ovo (rng_ovo), fixo na vida. Eixos em [-1, 1]; valor 0 = neutro. Modificador = coeficiente * valor do eixo. Cada eixo soma zero.",
+    "curiosidade":   {"mira": 2,  "folego": 1,      "guarda": -2,      "vigor": -1},
+    "teimosia":      {"guarda": 2, "vigor": 1,      "recuperacao": -2, "mira": -1},
+    "sensibilidade": {"recuperacao": 2, "folego": 1, "forca": -2,      "guarda": -1},
+    "rancor":        {"forca": 2,  "mira": 1,       "recuperacao": -2, "folego": -1}
+  },
+  "carater": {
+    "_nota": "Aprendido. Eixos em [-1, 1] calculados pelo DESVIO da politica aprendida em relacao ao instinto, avaliado num conjunto FIXO de contextos-sonda (igual para todos os pets). Nunca pela frequencia bruta de acoes na vida, que carrega o estado de cuidado. Cada eixo soma zero. Coeficientes maiores que os do temperamento de proposito: o treino deve pesar mais que o nascimento.",
+    "impetuoso":  {"forca": 3, "folego": 1,  "guarda": -3,      "recuperacao": -1},
+    "paciente":   {"guarda": 3, "recuperacao": 1, "forca": -3,  "folego": -1},
+    "atento":     {"mira": 3,  "recuperacao": 1, "vigor": -3,   "forca": -1},
+    "resistente": {"vigor": 3, "guarda": 1,  "mira": -3,        "folego": -1}
+  },
+  "estagio": {
+    "_nota": "Multiplicador sobre hp_max e guts. Na pesquisa, a arena so usa adultos.",
+    "bebe": 0.4, "crianca": 0.6, "adolescente": 0.8, "adulto": 1.0
+  },
+  "condicao": {
+    "_nota": "Vem do cuidado (estado de vida). Faixa estreita de proposito: na simulacao do combate V2, +-10% de condicao ja decidia espelhos. Multiplica hp_max e guts_inicial.",
+    "mult_min": 0.95,
+    "mult_max": 1.05
+  }
+}

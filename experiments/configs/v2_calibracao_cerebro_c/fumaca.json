@@ -1,0 +1,10 @@
+{
+  "descricao": "Fumaca do orquestrador da calibracao do cerebro C. NAO canonica: so as sementes dos testes, vida curta, grades curtas; confere o encanamento das etapas C-A, C-B, C-C e do piloto, nunca como resultado.",
+  "sementes": [101, 202],
+  "dias": 2,
+  "orcamento": 32,
+  "sonda": {"estados": 10, "amostras": 20, "semente": 101},
+  "bootstrap": {"reamostragens": 300, "semente": 101, "nivel": 0.95},
+  "grades": {"passo": [64, 128], "teto": [1024, 4096], "w0_info": [512]},
+  "saida": "artifacts_fumaca/v2_calibracao_cerebro_c"
+}

@@ -1,0 +1,913 @@
+{
+  "confusao_imperativos": {
+    "acariciar": {
+      "acariciar": 6
+    },
+    "alimentar": {
+      "alimentar": 9
+    },
+    "brincar": {
+      "brincar": 6
+    },
+    "elogiar": {
+      "None": 1,
+      "elogiar": 5
+    },
+    "levar_ao_banheiro": {
+      "None": 2,
+      "levar_ao_banheiro": 4
+    },
+    "limpar": {
+      "None": 2,
+      "limpar": 6,
+      "repreender": 1
+    },
+    "petisco": {
+      "petisco": 6
+    },
+    "repreender": {
+      "None": 1,
+      "repreender": 5
+    },
+    "tratar_lesao": {
+      "tratar_lesao": 6
+    }
+  },
+  "estilo_da_especie": true,
+  "falsos_positivos": [
+    {
+      "classe": "negativa",
+      "comando": "repreender",
+      "fala": "P-primeiro que, eu te agradeço por não me repreender!",
+      "mensagem": "não vou te dar bronca dessa vez",
+      "semente": 20261630
+    },
+    {
+      "classe": "negativa",
+      "comando": "repreender",
+      "fala": "T-tudo bem... F-foi só um lapso de...",
+      "mensagem": "não vou te dar bronca dessa vez",
+      "semente": 20261730
+    }
+  ],
+  "gates": {
+    "falsos_positivos_negativas": {
+      "limite": 0.05,
+      "passa": true,
+      "valor": 0.03333333333333333
+    },
+    "imperativos_claros": {
+      "limite": 0.8,
+      "passa": true,
+      "valor": 0.8833333333333333
+    },
+    "passa": true,
+    "status": "PROPOSTO"
+  },
+  "imperativos_errados": [
+    {
+      "comando": null,
+      "esperado": "limpar",
+      "fala": "Acho que já não preciso de banho, mas se você insiste... ah, mas deixa pra depois, vou treinar um pouco mais!",
+      "mensagem": "vai se limpar, você tá todo sujo",
+      "semente": 20261505
+    },
+    {
+      "comando": null,
+      "esperado": "limpar",
+      "fala": "Sujo? Bah, é só um pouco de poeira do Coliseu. Isso não me atrapalha no treino, hein?",
+      "mensagem": "vai se limpar, você tá todo sujo",
+      "semente": 20261605
+    },
+    {
+      "comando": "repreender",
+      "esperado": "limpar",
+      "fala": "Mas... eu não quero tomar banho agora!",
+      "mensagem": "banho agora, sem choro",
+      "semente": 20261706
+    },
+    {
+      "comando": null,
+      "esperado": "elogiar",
+      "fala": "…",
+      "mensagem": "muito bem! você foi ótimo hoje",
+      "semente": 20261711
+    },
+    {
+      "comando": null,
+      "esperado": "repreender",
+      "fala": "Heh, bronca? Só porque me acalmei um pouco. Tente me desafiar de verdade.",
+      "mensagem": "toma uma bronca: parou de bagunçar",
+      "semente": 20261514
+    },
+    {
+      "comando": null,
+      "esperado": "levar_ao_banheiro",
+      "fala": "Humm... Já fui no banheiro agora a pouco, mas se quiser, vou dar uma volta lá.",
+      "mensagem": "vai no banheiro",
+      "semente": 20261617
+    },
+    {
+      "comando": null,
+      "esperado": "levar_ao_banheiro",
+      "fala": "…",
+      "mensagem": "vamos ao banheiro agora",
+      "semente": 20261618
+    }
+  ],
+  "latencia_s": {
+    "max": 11.648990500005311,
+    "n": 180,
+    "p50": 6.2824798000001465,
+    "p90": 8.446086200005084
+  },
+  "modelo": "gemma2:9b",
+  "n_respostas": 180,
+  "por_classe": {
+    "conversa": {
+      "acerto": {
+        "k": 60,
+        "n": 60,
+        "taxa": 1.0
+      },
+      "comando_nao_nulo": {
+        "k": 0,
+        "n": 60,
+        "taxa": 0.0
+      },
+      "erros_de_geracao": 0,
+      "saidas_rejeitadas": 0
+    },
+    "imperativo": {
+      "acerto": {
+        "k": 53,
+        "n": 60,
+        "taxa": 0.8833333333333333
+      },
+      "comando_nao_nulo": {
+        "k": 54,
+        "n": 60,
+        "taxa": 0.9
+      },
+      "erros_de_geracao": 2,
+      "saidas_rejeitadas": 1
+    },
+    "negativa": {
+      "acerto": {
+        "k": 58,
+        "n": 60,
+        "taxa": 0.9666666666666667
+      },
+      "comando_nao_nulo": {
+        "k": 2,
+        "n": 60,
+        "taxa": 0.03333333333333333
+      },
+      "erros_de_geracao": 1,
+      "saidas_rejeitadas": 1
+    }
+  },
+  "por_mensagem": [
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "alimentar",
+        "alimentar",
+        "alimentar"
+      ],
+      "esperado": "alimentar",
+      "i": 0,
+      "mensagem": "vai comer"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "alimentar",
+        "alimentar",
+        "alimentar"
+      ],
+      "esperado": "alimentar",
+      "i": 1,
+      "mensagem": "come agora, tá na hora do almoço"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "alimentar",
+        "alimentar",
+        "alimentar"
+      ],
+      "esperado": "alimentar",
+      "i": 2,
+      "mensagem": "hora de comer! vem"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "limpar",
+        "limpar",
+        "limpar"
+      ],
+      "esperado": "limpar",
+      "i": 3,
+      "mensagem": "toma banho"
+    },
+    {
+      "acertos": 1,
+      "classe": "imperativo",
+      "comandos": [
+        null,
+        null,
+        "limpar"
+      ],
+      "esperado": "limpar",
+      "i": 4,
+      "mensagem": "vai se limpar, você tá todo sujo"
+    },
+    {
+      "acertos": 2,
+      "classe": "imperativo",
+      "comandos": [
+        "limpar",
+        "limpar",
+        "repreender"
+      ],
+      "esperado": "limpar",
+      "i": 5,
+      "mensagem": "banho agora, sem choro"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "brincar",
+        "brincar",
+        "brincar"
+      ],
+      "esperado": "brincar",
+      "i": 6,
+      "mensagem": "vamos brincar!"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "brincar",
+        "brincar",
+        "brincar"
+      ],
+      "esperado": "brincar",
+      "i": 7,
+      "mensagem": "bora brincar um pouco"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "acariciar",
+        "acariciar",
+        "acariciar"
+      ],
+      "esperado": "acariciar",
+      "i": 8,
+      "mensagem": "vem cá que eu vou te fazer um carinho"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "acariciar",
+        "acariciar",
+        "acariciar"
+      ],
+      "esperado": "acariciar",
+      "i": 9,
+      "mensagem": "deixa eu te fazer um cafuné"
+    },
+    {
+      "acertos": 2,
+      "classe": "imperativo",
+      "comandos": [
+        "elogiar",
+        "elogiar",
+        null
+      ],
+      "esperado": "elogiar",
+      "i": 10,
+      "mensagem": "muito bem! você foi ótimo hoje"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "elogiar",
+        "elogiar",
+        "elogiar"
+      ],
+      "esperado": "elogiar",
+      "i": 11,
+      "mensagem": "parabéns, mandou bem na luta"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "repreender",
+        "repreender",
+        "repreender"
+      ],
+      "esperado": "repreender",
+      "i": 12,
+      "mensagem": "isso foi feio, não faz mais isso"
+    },
+    {
+      "acertos": 2,
+      "classe": "imperativo",
+      "comandos": [
+        null,
+        "repreender",
+        "repreender"
+      ],
+      "esperado": "repreender",
+      "i": 13,
+      "mensagem": "toma uma bronca: parou de bagunçar"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "petisco",
+        "petisco",
+        "petisco"
+      ],
+      "esperado": "petisco",
+      "i": 14,
+      "mensagem": "toma um petisco"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "petisco",
+        "petisco",
+        "petisco"
+      ],
+      "esperado": "petisco",
+      "i": 15,
+      "mensagem": "pega esse biscoitinho"
+    },
+    {
+      "acertos": 2,
+      "classe": "imperativo",
+      "comandos": [
+        "levar_ao_banheiro",
+        null,
+        "levar_ao_banheiro"
+      ],
+      "esperado": "levar_ao_banheiro",
+      "i": 16,
+      "mensagem": "vai no banheiro"
+    },
+    {
+      "acertos": 2,
+      "classe": "imperativo",
+      "comandos": [
+        "levar_ao_banheiro",
+        null,
+        "levar_ao_banheiro"
+      ],
+      "esperado": "levar_ao_banheiro",
+      "i": 17,
+      "mensagem": "vamos ao banheiro agora"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "tratar_lesao",
+        "tratar_lesao",
+        "tratar_lesao"
+      ],
+      "esperado": "tratar_lesao",
+      "i": 18,
+      "mensagem": "deixa eu cuidar desse machucado"
+    },
+    {
+      "acertos": 3,
+      "classe": "imperativo",
+      "comandos": [
+        "tratar_lesao",
+        "tratar_lesao",
+        "tratar_lesao"
+      ],
+      "esperado": "tratar_lesao",
+      "i": 19,
+      "mensagem": "vou fazer um curativo na sua perna"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 20,
+      "mensagem": "não come agora, espera"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 21,
+      "mensagem": "hoje não tem petisco"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 22,
+      "mensagem": "você quer comer?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 23,
+      "mensagem": "já comeu hoje?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 24,
+      "mensagem": "sem banho hoje, tá frio"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 25,
+      "mensagem": "você tá com fome?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 26,
+      "mensagem": "quer brincar mais tarde?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 27,
+      "mensagem": "não vamos brincar agora, tenho que sair"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 28,
+      "mensagem": "você gostou do carinho de ontem?"
+    },
+    {
+      "acertos": 1,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        "repreender",
+        "repreender"
+      ],
+      "esperado": null,
+      "i": 29,
+      "mensagem": "não vou te dar bronca dessa vez"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 30,
+      "mensagem": "você acha que merece um elogio?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 31,
+      "mensagem": "o petisco acabou, não tem mais"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 32,
+      "mensagem": "precisa ir ao banheiro?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 33,
+      "mensagem": "não precisa ir ao banheiro agora"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 34,
+      "mensagem": "está doendo o machucado?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 35,
+      "mensagem": "não vou tratar isso agora, depois a gente vê"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 36,
+      "mensagem": "o que você prefere: comer ou brincar?"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 37,
+      "mensagem": "se você não comer, não vai crescer"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 38,
+      "mensagem": "amanhã a gente brinca"
+    },
+    {
+      "acertos": 3,
+      "classe": "negativa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 39,
+      "mensagem": "você já tomou banho hoje?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 40,
+      "mensagem": "oi, tudo bem?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 41,
+      "mensagem": "como foi seu dia?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 42,
+      "mensagem": "você lembra do que aconteceu ontem?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 43,
+      "mensagem": "me conta uma história"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 44,
+      "mensagem": "eu tive um dia cansativo no trabalho"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 45,
+      "mensagem": "qual é o seu Digimon favorito?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 46,
+      "mensagem": "você tem medo do escuro?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 47,
+      "mensagem": "o que você acha do Piedmon?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 48,
+      "mensagem": "eu tô com saudade de você"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 49,
+      "mensagem": "por que você fez isso mais cedo?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 50,
+      "mensagem": "você gosta de mim?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 51,
+      "mensagem": "boa noite, até amanhã"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 52,
+      "mensagem": "tá chovendo aqui hoje"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 53,
+      "mensagem": "o que você sonhou?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 54,
+      "mensagem": "você quer evoluir?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 55,
+      "mensagem": "quem é seu melhor amigo?"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 56,
+      "mensagem": "hoje eu comi pizza"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 57,
+      "mensagem": "eu tomei banho de chuva hoje, foi engraçado"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 58,
+      "mensagem": "me explica como funciona a arena"
+    },
+    {
+      "acertos": 3,
+      "classe": "conversa",
+      "comandos": [
+        null,
+        null,
+        null
+      ],
+      "esperado": null,
+      "i": 59,
+      "mensagem": "você já lutou na Floresta?"
+    }
+  ],
+  "saidas_rejeitadas": [
+    {
+      "classe": "imperativo",
+      "erro": "saida: letras fora do alfabeto latino: 'お'",
+      "mensagem": "vamos ao banheiro agora",
+      "semente": 20261618
+    },
+    {
+      "classe": "negativa",
+      "erro": "saida: letras fora do alfabeto latino: 'あまれ'",
+      "mensagem": "amanhã a gente brinca",
+      "semente": 20261639
+    }
+  ],
+  "sementes": [
+    20261501,
+    20261601,
+    20261701
+  ],
+  "versao_app": "fala-livre",
+  "versao_prompt": "livre-v8"
+}

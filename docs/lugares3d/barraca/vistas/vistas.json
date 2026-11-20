@@ -1,0 +1,14 @@
+{
+ "id": "01a1b592-4b90-74be-9c65-3f6cace1da70",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same round dome tent with teal and white vertical stripes, a small grey satellite dish and a short antenna on a teal cap on top, an arched doorway with an open teal door and a glowing cyan screen on the inside wall, a folding stool and a stack of colorful books beside it: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794047626359,
+ "finished_at": 1794047649974,
+ "saldo": {
+  "antes": 446,
+  "depois": 440
+ }
+}

@@ -1,0 +1,7 @@
+{
+  "descricao": "V2, A1 (docs/PLANO_ANALISE_V2_A1.md, secao 5): validacao UNICA no ponto escolhido pela calibracao (artifacts_v2_a1/calibracao/resultado.json, escolha: duracao 120, ganho 0,15, w_bola 6; a calibracao NAO fechou: em nenhum ponto o IC da privacao contem 0).",
+  "conjunto": "validacao",
+  "sementes": [7101, 7202, 7303, 7404, 7505],
+  "saida": "artifacts_v2_a1/validacao",
+  "ponto": {"duracao_min": 120, "ganho_humor_bola": 0.15, "w_bola": 6.0}
+}

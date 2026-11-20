@@ -1,0 +1,10 @@
+DigiLab: o poste de luz da praca e do caminho do cais (poste.gltf, poste.bin, poste_cor.png, poste_luz.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/poste.py no repositorio do DigiLab).
+A malha (o pe, a coluna, a lanterna, o chapeu, a hera, o musgo) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
+
+O poste de antes (os blocos, feito por script em 2026-11-08) saiu do jogo; o historico esta em docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 14.
+
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.

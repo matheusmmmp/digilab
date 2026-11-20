@@ -1,0 +1,215 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-10-30",
+ "commit": "cd14efcd",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.5,
+   "floresta": 1.5,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.1,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.1,
+   "npc_v5_machinedramon": 1.1
+  },
+  "liga": {
+   "campina": 0.4,
+   "torre": 0.3,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.15,
+   "adolescente": 1,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "parte": "g2",
+ "metas": {
+  "G-2": {
+   "desafiantes": {
+    "npc_tier2_sentinela": {
+     "nome": "Tortomon",
+     "estagio": "adolescente",
+     "fator": 1.1,
+     "sem": 0.375,
+     "com": 0.9775,
+     "pior": 0.95,
+     "pior_forma": "brigao",
+     "passa": false,
+     "formas": {
+      "brigao": {
+       "sem": 0.22,
+       "com": 0.95
+      },
+      "guardiao": {
+       "sem": 0,
+       "com": 1
+      },
+      "cacador": {
+       "sem": 0.97,
+       "com": 1
+      },
+      "colosso": {
+       "sem": 0.31,
+       "com": 0.96
+      }
+     }
+    },
+    "npc_tier2_porteiro": {
+     "nome": "Devidramon",
+     "estagio": "adolescente",
+     "fator": 1.1,
+     "sem": 0.19,
+     "com": 0.9675,
+     "pior": 0.87,
+     "pior_forma": "colosso",
+     "passa": true,
+     "formas": {
+      "brigao": {
+       "sem": 0.15,
+       "com": 1
+      },
+      "guardiao": {
+       "sem": 0.03,
+       "com": 1
+      },
+      "cacador": {
+       "sem": 0.55,
+       "com": 1
+      },
+      "colosso": {
+       "sem": 0.03,
+       "com": 0.87
+      }
+     }
+    },
+    "npc_v5_puppetmon": {
+     "nome": "Puppetmon",
+     "estagio": "mega",
+     "fator": 1.1,
+     "sem": 0.5663,
+     "com": 0.9975,
+     "pior": 0.99,
+     "pior_forma": "sentinela",
+     "passa": false,
+     "formas": {
+      "duelista": {
+       "sem": 0.07,
+       "com": 1
+      },
+      "furioso": {
+       "sem": 0.44,
+       "com": 1
+      },
+      "espelho": {
+       "sem": 0.75,
+       "com": 1
+      },
+      "muralha": {
+       "sem": 0.78,
+       "com": 1
+      },
+      "sentinela": {
+       "sem": 0.88,
+       "com": 0.99
+      },
+      "emboscador": {
+       "sem": 0.91,
+       "com": 0.99
+      },
+      "vigia": {
+       "sem": 0.29,
+       "com": 1
+      },
+      "tita": {
+       "sem": 0.41,
+       "com": 1
+      }
+     }
+    },
+    "npc_v5_machinedramon": {
+     "nome": "Machinedramon",
+     "estagio": "mega",
+     "fator": 1.1,
+     "sem": 0.5013,
+     "com": 0.9988,
+     "pior": 0.99,
+     "pior_forma": "tita",
+     "passa": false,
+     "formas": {
+      "duelista": {
+       "sem": 0.34,
+       "com": 1
+      },
+      "furioso": {
+       "sem": 0.17,
+       "com": 1
+      },
+      "espelho": {
+       "sem": 0.18,
+       "com": 1
+      },
+      "muralha": {
+       "sem": 0.18,
+       "com": 1
+      },
+      "sentinela": {
+       "sem": 1,
+       "com": 1
+      },
+      "emboscador": {
+       "sem": 1,
+       "com": 1
+      },
+      "vigia": {
+       "sem": 0.62,
+       "com": 1
+      },
+      "tita": {
+       "sem": 0.52,
+       "com": 0.99
+      }
+     }
+    }
+   },
+   "passa": false
+  }
+ },
+ "custo_s": 4.625
+}

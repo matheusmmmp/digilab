@@ -1,0 +1,179 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-10-30",
+ "commit": "cd14efcd",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.5,
+   "floresta": 1.5,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.53,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.2,
+   "torre": 0.8,
+   "floresta": 0.1,
+   "cidadela": 1.8,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.15,
+   "adolescente": 1,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "cartas": {},
+ "parte": "g3",
+ "metas": {
+  "G-3": {
+   "fatores": {
+    "campina": 0.2,
+    "torre": 0.8,
+    "floresta": 0.1,
+    "cidadela": 1.8,
+    "lago": 1.7,
+    "espiral": 0.9
+   },
+   "cura": 0,
+   "formas": {
+    "duelista": {
+     "titulos": 0.05,
+     "por_luta": [
+      1,
+      1,
+      1,
+      1,
+      0.25,
+      0.05
+     ]
+    },
+    "furioso": {
+     "titulos": 0.05,
+     "por_luta": [
+      1,
+      1,
+      1,
+      0.88,
+      0.09,
+      0.05
+     ]
+    },
+    "espelho": {
+     "titulos": 0.09,
+     "por_luta": [
+      1,
+      1,
+      1,
+      1,
+      0.29,
+      0.09
+     ]
+    },
+    "muralha": {
+     "titulos": 0.12,
+     "por_luta": [
+      1,
+      1,
+      0.98,
+      0.97,
+      0.38,
+      0.12
+     ]
+    },
+    "sentinela": {
+     "titulos": 0.08,
+     "por_luta": [
+      1,
+      1,
+      1,
+      0.08,
+      0.08,
+      0.08
+     ]
+    },
+    "emboscador": {
+     "titulos": 0.34,
+     "por_luta": [
+      1,
+      1,
+      1,
+      0.49,
+      0.49,
+      0.34
+     ]
+    },
+    "vigia": {
+     "titulos": 0.27,
+     "por_luta": [
+      1,
+      1,
+      1,
+      0.95,
+      0.44,
+      0.27
+     ]
+    },
+    "tita": {
+     "titulos": 0.15,
+     "por_luta": [
+      1,
+      1,
+      1,
+      0.99,
+      0.32,
+      0.15
+     ]
+    }
+   },
+   "min": 0.05,
+   "max": 0.34,
+   "fora": [
+    "duelista",
+    "furioso",
+    "espelho",
+    "muralha",
+    "sentinela",
+    "tita"
+   ],
+   "passa": false
+  }
+ },
+ "custo_s": 2.3666
+}

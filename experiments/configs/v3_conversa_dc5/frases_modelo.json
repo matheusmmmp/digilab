@@ -1,0 +1,17 @@
+{
+ "descricao": "A lista das frases-modelo da Q6 (docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, 4.6): em `jogo`, as falas dos exemplos que a voz do jogo recebe (EXEMPLOS_VOZ_V1 a _V3) e a frase da regra 3 da voz-v2; em `v3b`, as da regra do pedido da voz-v3b, que nenhuma voz da DC5 recebe e que se relatam a parte. O corte em trechos e o tamanho minimo (CONFIG_VOZ_V4.min_palavras_frase_modelo) sao do digilab/metrics.py (trechos_de_frases_modelo). O sha256 vai ao registro da rodada.",
+ "jogo": [
+  "Tô com fome! Tem ração?",
+  "Acho que tô meio sozinho... você fica um pouco?",
+  "Disso eu não lembro. Por que você acha que lutei?",
+  "Acho que lembro de brincar com a bola... foi bom!",
+  "Oi! Me dá um banho?",
+  "lembro que comi ração e foi bom"
+ ],
+ "v3b": [
+  "me dá comida?",
+  "quero comer",
+  "me limpa?",
+  "fica comigo?"
+ ]
+}

@@ -1,0 +1,245 @@
+{
+  "M3_menos_M2_por_episodio": {
+    "comedouro": {
+      "dp": 0.08051649514587574,
+      "g1": 0.5213112189883646,
+      "ic95_t": [
+        0.1141168513956689,
+        0.15988192086765907
+      ],
+      "media": 0.13699938613166399,
+      "unidades": 50
+    },
+    "longe": {
+      "dp": 0.06834879630788747,
+      "g1": 0.14981677005605776,
+      "ic95_t": [
+        -0.050731355478634076,
+        -0.011882329503394552
+      ],
+      "media": -0.031306842491014314,
+      "unidades": 50
+    }
+  },
+  "M3_menos_M2_por_racao_comedouro": {
+    "dp": 0.07239312751027095,
+    "g1": 0.07127209110114581,
+    "ic95_t": [
+      0.1150184318981495,
+      0.15616623029399032
+    ],
+    "media": 0.1355923310960699,
+    "unidades": 50
+  },
+  "custo_por_lugar": {
+    "comedouro": {
+      "cpu": 1925.5625,
+      "cpu_por_vida": 3.2092708333333335,
+      "parede": 2311.681103399951,
+      "parede_por_vida_1_processo": 3.8528018389999183,
+      "vidas": 600
+    },
+    "longe": {
+      "cpu": 1945.96875,
+      "cpu_por_vida": 3.24328125,
+      "parede": 2331.640434700019,
+      "parede_por_vida_1_processo": 3.8860673911666983,
+      "vidas": 600
+    },
+    "perto": {
+      "cpu": 1872.46875,
+      "cpu_por_vida": 3.12078125,
+      "parede": 2256.4664936000045,
+      "parede_por_vida_1_processo": 3.760777489333341,
+      "vidas": 600
+    }
+  },
+  "folga": 1.2,
+  "fonte": {
+    "artifacts_v2_digibrain_prototipo/reavaliacao/medidas.json": "73ae8a8a1659f880bc4516ed06fcbdd441a5a9b187c833dace06fad5476ddf01"
+  },
+  "g_pesa_memoria_M3_longe": {
+    "dp": 0.023477902128342436,
+    "g1": 0.15642470005099646,
+    "ic95_t": [
+      0.18055979689863141,
+      0.19390448881565428
+    ],
+    "media": 0.18723214285714285,
+    "unidades": 50
+  },
+  "longe_por_d0": {
+    "M0": {
+      "alem_do_cheiro": {
+        "fechados": 69,
+        "n": 459,
+        "taxa": 0.1503267973856209
+      },
+      "na_visao": {
+        "fechados": 650,
+        "n": 797,
+        "taxa": 0.8155583437892095
+      },
+      "no_cheiro": {
+        "fechados": 730,
+        "n": 1763,
+        "taxa": 0.4140669313669881
+      }
+    },
+    "M2": {
+      "alem_do_cheiro": {
+        "fechados": 106,
+        "n": 530,
+        "taxa": 0.2
+      },
+      "na_visao": {
+        "fechados": 403,
+        "n": 445,
+        "taxa": 0.9056179775280899
+      },
+      "no_cheiro": {
+        "fechados": 786,
+        "n": 1791,
+        "taxa": 0.4388609715242881
+      }
+    },
+    "M3": {
+      "alem_do_cheiro": {
+        "fechados": 92,
+        "n": 441,
+        "taxa": 0.20861678004535147
+      },
+      "na_visao": {
+        "fechados": 364,
+        "n": 433,
+        "taxa": 0.8406466512702079
+      },
+      "no_cheiro": {
+        "fechados": 664,
+        "n": 1629,
+        "taxa": 0.4076120319214242
+      }
+    }
+  },
+  "poder_alvo": 0.8,
+  "por_k": {
+    "K=100": {
+      "margem": 0.02730319038220946,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.8165,
+      "sorteado": {
+        "verdadeiro_0": {
+          "ic_abaixo_de_0": 0.026,
+          "ic_acima_de_0": 0.026,
+          "ic_dentro_da_margem": 0.9585
+        },
+        "verdadeiro_observado": {
+          "ic_abaixo_de_0": 0.9955,
+          "ic_acima_de_0": 0.0,
+          "ic_dentro_da_margem": 0.005
+        }
+      },
+      "vidas": 2400
+    },
+    "K=150": {
+      "margem": 0.022228242243411838,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.812,
+      "sorteado": {
+        "verdadeiro_0": {
+          "ic_abaixo_de_0": 0.027,
+          "ic_acima_de_0": 0.027,
+          "ic_dentro_da_margem": 0.9505
+        },
+        "verdadeiro_observado": {
+          "ic_abaixo_de_0": 1.0,
+          "ic_acima_de_0": 0.0,
+          "ic_dentro_da_margem": 0.0
+        }
+      },
+      "vidas": 3600
+    },
+    "K=200": {
+      "margem": 0.01922250733706351,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.8105,
+      "sorteado": {
+        "verdadeiro_0": {
+          "ic_abaixo_de_0": 0.0255,
+          "ic_acima_de_0": 0.0225,
+          "ic_dentro_da_margem": 0.9595
+        },
+        "verdadeiro_observado": {
+          "ic_abaixo_de_0": 1.0,
+          "ic_acima_de_0": 0.0,
+          "ic_dentro_da_margem": 0.0
+        }
+      },
+      "vidas": 4800
+    },
+    "K=300": {
+      "margem": 0.015672648212802193,
+      "poder_normal_na_margem": 0.8000000000000003,
+      "poder_simulado_na_margem": 0.805,
+      "sorteado": {
+        "verdadeiro_0": {
+          "ic_abaixo_de_0": 0.028,
+          "ic_acima_de_0": 0.025,
+          "ic_dentro_da_margem": 0.9555
+        },
+        "verdadeiro_observado": {
+          "ic_abaixo_de_0": 1.0,
+          "ic_acima_de_0": 0.0,
+          "ic_dentro_da_margem": 0.0
+        }
+      },
+      "vidas": 7200
+    },
+    "K=450": {
+      "margem": 0.01278451082278018,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.7965,
+      "sorteado": {
+        "verdadeiro_0": {
+          "ic_abaixo_de_0": 0.0255,
+          "ic_acima_de_0": 0.023,
+          "ic_dentro_da_margem": 0.9635
+        },
+        "verdadeiro_observado": {
+          "ic_abaixo_de_0": 1.0,
+          "ic_acima_de_0": 0.0,
+          "ic_dentro_da_margem": 0.0
+        }
+      },
+      "vidas": 10800
+    },
+    "K=50": {
+      "margem": 0.038959040343186355,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.8075,
+      "sorteado": {
+        "verdadeiro_0": {
+          "ic_abaixo_de_0": 0.026,
+          "ic_acima_de_0": 0.018,
+          "ic_dentro_da_margem": 0.9575
+        },
+        "verdadeiro_observado": {
+          "ic_abaixo_de_0": 0.891,
+          "ic_acima_de_0": 0.0,
+          "ic_dentro_da_margem": 0.1195
+        }
+      },
+      "vidas": 1200
+    }
+  },
+  "replicas": 2000,
+  "rotulo": "o poder e a margem do contraste primario da C1 (M3* - M2, por episodio, so no longe_fixo), PROPOSTOS para o adendo 6; aproximacao normal do t nao central, com a conferencia por simulacao; sem gate",
+  "script": {
+    "arquivo": "experiments/adendo6_poder_longe_regular.py",
+    "sha256": "4d64f79be947ae3ed46604e90678eb8a8f89cb9674f59304ecb37d6863626dcb"
+  },
+  "semente": 4242,
+  "sigma_planejamento": 0.09661979417505089,
+  "unidade": "a media das 4 celulas do lugar (uma vida por dono) da diferenca M3 - M2, por unidade (base, k)",
+  "vidas_por_unidade_c1": 24
+}

@@ -1,0 +1,72 @@
+{
+  "braco": "incoerente",
+  "carater_adulto": {
+    "atento": 0.63125,
+    "impetuoso": -0.08828125000000006,
+    "paciente": -0.6187500000000001,
+    "resistente": 0.16406249999999997
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 21,
+    "treino": 53
+  },
+  "enroladas": 7,
+  "especie": "cirro",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "sentinela",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/cacador/sentinela"
+  },
+  "obediencia_cuidado": 0.9,
+  "ovo": 202,
+  "sessoes": 53,
+  "sombria": false,
+  "treino": {
+    "enroladas": 7,
+    "especie": "cirro",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 14,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.39230996425,
+      "forca": 5.956317593308801,
+      "guarda": 4.89571074,
+      "mira": 4.24432512,
+      "recuperacao": 4.4001333293636415,
+      "vigor": 6.184329309327556
+    },
+    "pontos_estagio": {
+      "adolescente": 6.07312605625,
+      "adulto": 14.0,
+      "crianca": 10.0
+    },
+    "sessoes": 53,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 30.073126056249997,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.43235321120749914
+}

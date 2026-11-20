@@ -1,0 +1,142 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": false,
+   "gerador": "Blender 4.5 LTS por script (docs/itens3d/bola/fazer_bola.py), sem IA e sem Meshy",
+   "pipeline": "esfera UV de 24 x 12 com sombreado suave, polos inclinados 32 graus; UVs em faixa e dois discos; textura pintada por numpy (6 gomos em 4 tons, emendas, tampas, um brilho)",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "bola"
+  }
+ ],
+ "materials": [
+  {
+   "doubleSided": true,
+   "name": "bola",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "bola",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "bola_cor",
+   "uri": "bola_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 327,
+   "max": [
+    0.9154950976371765,
+    0.9212384819984436,
+    0.921411395072937
+   ],
+   "min": [
+    -0.9154950976371765,
+    -0.9212384819984436,
+    -0.9214115142822266
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 327,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 327,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 1584,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 3924,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 3924,
+   "byteOffset": 3924,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 2616,
+   "byteOffset": 7848,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 3168,
+   "byteOffset": 10464,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 13632,
+   "uri": "bola.bin"
+  }
+ ]
+}

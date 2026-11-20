@@ -1,0 +1,95 @@
+{
+ "descricao": "Validacao da escala dos pets v9 (a do motor, versao 9; regras V21E): metas de estagio.",
+ "conjunto": "validacao",
+ "limite": "desafiado",
+ "sementes": [
+  4101,
+  4202,
+  4303,
+  4404,
+  4505
+ ],
+ "n_por_semente": 10,
+ "regras": "v21e",
+ "versao_pet": 9,
+ "treino_tipico": {
+  "crianca": 8,
+  "adolescente": 22,
+  "adulto": 36,
+  "mega": 40
+ },
+ "metas": {
+  "vizinho_pontos_max": 0.1,
+  "dois_estagios_vitorias_max": 0,
+  "lider_sem_max": 0.05,
+  "lider_com_min": 0.8,
+  "lider_pior_forma_min": 0.5
+ },
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "vizinhos": {
+  "crianca x adolescente": {
+   "razao_E": 0.3886,
+   "pontos": 0.0008,
+   "vitorias": 0.0008,
+   "partidas": 6400,
+   "vitorias_por_par": {
+    "arisco x cacador": 5
+   },
+   "passa": true
+  },
+  "adolescente x adulto": {
+   "razao_E": 0.5572,
+   "pontos": 0.011,
+   "vitorias": 0.0095,
+   "partidas": 25600,
+   "vitorias_por_par": {
+    "brigao x sentinela": 157,
+    "brigao x emboscador": 30,
+    "brigao x vigia": 16,
+    "guardiao x tita": 7,
+    "cacador x espelho": 1,
+    "cacador x muralha": 30,
+    "colosso x tita": 1
+   },
+   "passa": true
+  },
+  "adulto x mega": {
+   "razao_E": 0.2848,
+   "pontos": 0.0041,
+   "vitorias": 0.004,
+   "partidas": 51200,
+   "vitorias_por_par": {
+    "furioso x sentinela": 47,
+    "furioso x emboscador": 159
+   },
+   "passa": true
+  }
+ },
+ "dois_estagios": {
+  "crianca x adulto": {
+   "razao_E": 0.1088,
+   "pontos": 0,
+   "vitorias": 0,
+   "partidas": 12800,
+   "vitorias_por_par": {},
+   "passa": true
+  },
+  "adolescente x mega": {
+   "razao_E": 0.0606,
+   "pontos": 0,
+   "vitorias": 0,
+   "partidas": 25600,
+   "vitorias_por_par": {},
+   "passa": true
+  }
+ }
+}

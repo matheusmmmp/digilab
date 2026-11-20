@@ -1,0 +1,122 @@
+{
+  "descricao": "rodada 1: devastador pesado com mais dano; bastiao sem uma regra de cada vez ou com contra-golpe menor; colosso com corte de regeneracao menor",
+  "candidatos": {
+    "dev_pesado_mult1.5": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      }
+    },
+    "dev_pesado_mult1.7": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 1.7
+        }
+      }
+    },
+    "dev_pesado_mult2.0": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      }
+    },
+    "dev_pesado_forca6": {
+      "devastador": {
+        "gambits": "pesado",
+        "stats": {
+          "forca": 6,
+          "folego": 1,
+          "recuperacao": -4,
+          "guarda": -3
+        }
+      }
+    },
+    "dev_pesado_forca6_mult1.5": {
+      "devastador": {
+        "gambits": "pesado",
+        "stats": {
+          "forca": 6,
+          "folego": 1,
+          "recuperacao": -4,
+          "guarda": -3
+        },
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      }
+    },
+    "bast_base-0": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      }
+    },
+    "bast_base-1": {
+      "bastiao_rachado": {
+        "gambits": "base-1"
+      }
+    },
+    "bast_base-2": {
+      "bastiao_rachado": {
+        "gambits": "base-2"
+      }
+    },
+    "bast_base-3": {
+      "bastiao_rachado": {
+        "gambits": "base-3"
+      }
+    },
+    "bast_base-4": {
+      "bastiao_rachado": {
+        "gambits": "base-4"
+      }
+    },
+    "bast_base-5": {
+      "bastiao_rachado": {
+        "gambits": "base-5"
+      }
+    },
+    "bast_base-6": {
+      "bastiao_rachado": {
+        "gambits": "base-6"
+      }
+    },
+    "bast_base-7": {
+      "bastiao_rachado": {
+        "gambits": "base-7"
+      }
+    },
+    "bast_fracao0.8": {
+      "bastiao_rachado": {
+        "passiva": {
+          "fracao_contra_golpe_bastiao": 0.8
+        }
+      }
+    },
+    "bast_fracao0.6": {
+      "bastiao_rachado": {
+        "passiva": {
+          "fracao_contra_golpe_bastiao": 0.6
+        }
+      }
+    },
+    "col_regen0.75": {
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.75
+        }
+      }
+    },
+    "col_regen0.85": {
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    }
+  }
+}

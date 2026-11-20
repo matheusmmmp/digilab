@@ -1,0 +1,868 @@
+{
+  "falham": 0,
+  "fracao_falha": 0.0,
+  "ganho_gosto": 512,
+  "limiar": 0.25,
+  "meta": {
+    "bancada_sha256": "c08c208c5a2ae744cc2eaef850ee3e2ecc0d8044432b2c19a35542afa0788e70",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "alvo_por_arvore": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "g_plano": 0,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "paladar": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "teto_plano": 2048,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 256,
+      "w0_pedido": 256
+    },
+    "config": {
+      "adendo_7": true,
+      "adendo_8": true,
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4,
+        "ganho_gosto": 512
+      },
+      "corpo": {
+        "gasto_atividades_den": 5,
+        "gasto_atividades_num": 4,
+        "gasto_basal_acordado": 300,
+        "gasto_basal_dormindo": 150
+      },
+      "d_a": 7,
+      "descricao": "Piloto do adendo 8 do pet que pensa (PLANO_ANALISE_V2_PET_QUE_PENSA, A8.3 a A8.5 e A8.9; PJ8-1 a PJ8-6), SEM recalibrar: o ganho_gosto S/2 e o g_plano S do adendo 6. O mesmo piloto do adendo 7 (o run_v2_piloto_pet_que_pensa_adendo7.py, os passos reval e piloto), com o adendo 8 por cima: no T1, em T_m as arvores do tipo x param de dar x e as x caidas delas saem; no T2, a busca pelas arvores (o alvo na arvore ou a x caida dela, pela origem), com ou sem a x a vista, e sem o corte. As 20 unidades das bases 54101...54505 (K_u = 4). NAO rodado: precisa do sim do Matheus.",
+      "dono": "atencioso",
+      "fruta_ao_lado": true,
+      "g_plano": 1024,
+      "janela": 5,
+      "lobos": {
+        "memoria_ganho": 512,
+        "w0_info": 256,
+        "w0_pedido": 256
+      },
+      "lugar": "comedouro",
+      "montagem": "completa",
+      "mundo": {
+        "mult_queda": 1.0
+      },
+      "n_mao": 2,
+      "orcamento_por_dia": 16,
+      "paladar": true,
+      "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+      "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+      "ponto": "T3",
+      "tipo": "pet_que_pensa",
+      "unidades": {
+        "bases": [
+          54101,
+          54202,
+          54303,
+          54404,
+          54505
+        ],
+        "k": 4,
+        "prefixo": "pet_que_pensa"
+      }
+    },
+    "config_sha256": "e7c50018deaf58d4ad0c14280cd035eb58a39f34c0f4e191ab1e98dd28e781f7",
+    "corpo_sha256": "bcd67b305b3de7a252b260bf0404cd3dfe079e8e5f14fec1ecdbda12878eaef9",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "a0fd44981cdf2a622a5f3563a81c112f6bd76825a2c882edf0b27ddb4e18e6c8",
+    "metrics_sha256": "5c2b1e5b35745939152e58f972abcb69d1f8bf56ce06fe5fbdf4175788aed25c",
+    "motor_corpo_sha256": "998d5e6f42918f2de4ce49007922a405305277ea9ff32ba6a79a26460fd405bd",
+    "mundo_sha256": "7274a0fb1fa18881f023cc6d37f0578bbfd1597b310801eb1fda446ef4746df9",
+    "orquestrador_sha256": "7f40ab4c8b5ed03faf33fc813cebc44f979b7a79d01a20b5a994872adcc7d20f",
+    "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "python": "3.13.0"
+  },
+  "n": 20,
+  "passa": true,
+  "por_unidade": [
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 5571814074665554125,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 240,
+          "total": 763
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 296,
+          "total": 819
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 361,
+          "total": 436
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54101,
+        "k": 0
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 6950680920288708811,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 26,
+          "total": 549
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 100,
+          "total": 623
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 361,
+          "total": 436
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54101,
+        "k": 1
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 2376341278398237357,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -46,
+          "total": 477
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 232,
+          "total": 755
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 235,
+          "total": 310
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54101,
+        "k": 2
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 6431786723983390577,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 339,
+          "total": 414
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 206,
+          "total": 729
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 261,
+          "total": 784
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54101,
+        "k": 3
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 6274730267761220890,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 198,
+          "total": 273
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -100,
+          "total": 423
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 12,
+          "total": 535
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54202,
+        "k": 0
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 11234086881198476109,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 109,
+          "total": 632
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 227,
+          "total": 302
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 183,
+          "total": 706
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54202,
+        "k": 1
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 9795685972438582094,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 113,
+          "total": 636
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 246,
+          "total": 769
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 407,
+          "total": 482
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54202,
+        "k": 2
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 6348828773216559439,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 410,
+          "total": 485
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 270,
+          "total": 793
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 348,
+          "total": 871
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54202,
+        "k": 3
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 1641240143940925695,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": -22,
+          "total": 53
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -224,
+          "total": 299
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -89,
+          "total": 434
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54303,
+        "k": 0
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 11535912236200472308,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": -118,
+          "total": -43
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -195,
+          "total": 328
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -161,
+          "total": 362
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54303,
+        "k": 1
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 16374026845050084420,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 33,
+          "total": 556
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -99,
+          "total": 424
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 108,
+          "total": 183
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54303,
+        "k": 2
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 994049818298031494,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -221,
+          "total": 302
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -28,
+          "total": 495
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 156,
+          "total": 231
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54303,
+        "k": 3
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 3551322695454876214,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 0,
+          "total": 75
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -65,
+          "total": 458
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -89,
+          "total": 434
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54404,
+        "k": 0
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 6033878868557977554,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 216,
+          "total": 739
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 142,
+          "total": 665
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 443,
+          "total": 518
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54404,
+        "k": 1
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 5773331937266051453,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -89,
+          "total": 434
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -211,
+          "total": 312
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": -77,
+          "total": -2
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54404,
+        "k": 2
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 268167809049707728,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -15,
+          "total": 508
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 265,
+          "total": 340
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -216,
+          "total": 307
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54404,
+        "k": 3
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 15975307574566679331,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 81,
+          "total": 604
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 24,
+          "total": 547
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 294,
+          "total": 369
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54505,
+        "k": 0
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 17943987509414494203,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 271,
+          "total": 794
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 358,
+          "total": 433
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 200,
+          "total": 723
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54505,
+        "k": 1
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 9069265217098221213,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -19,
+          "total": 504
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 98,
+          "total": 173
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 23,
+          "total": 546
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54505,
+        "k": 2
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 7772775302596582013,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 204,
+          "total": 279
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -139,
+          "total": 384
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 171,
+          "total": 694
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 54505,
+        "k": 3
+      },
+      "x": "a"
+    }
+  ],
+  "regra": "PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 3, A3.2 (PJ-6): a unidade passa se o sinal da x depois da mudanca for menor que o da racao ou o de outra fruta; a premissa, com no maximo 25% das unidades falhando"
+}

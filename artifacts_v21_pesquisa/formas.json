@@ -1,0 +1,1642 @@
+[
+  {
+    "carater_adolescente": {
+      "atento": -0.04375000000000004,
+      "impetuoso": 0.05078124999999996,
+      "paciente": -0.056250000000000015,
+      "resistente": -0.001562500000000005
+    },
+    "carater_adulto": {
+      "atento": 0.06406249999999997,
+      "impetuoso": -0.11484375000000008,
+      "paciente": 0.2140624999999999,
+      "resistente": -0.04843750000000002
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.0075,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0032031249999999985,
+      "impetuoso": -0.005742187500000004,
+      "paciente": 0.010703124999999996,
+      "resistente": -0.0024218750000000013
+    },
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/brigao/duelista"
+    },
+    "politica": "bandit",
+    "saude_final": 0.5750000000000005,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.23124999999999998,
+      "impetuoso": 0.031249999999999924,
+      "paciente": -0.4046875000000001,
+      "resistente": 0.11093750000000001
+    },
+    "carater_adulto": {
+      "atento": 0.14687499999999998,
+      "impetuoso": 0.1765624999999999,
+      "paciente": -0.18281250000000027,
+      "resistente": -0.31718749999999996
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.0419500000000008,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.007343749999999999,
+      "impetuoso": 0.008828124999999996,
+      "paciente": -0.009140625000000013,
+      "resistente": -0.015859375
+    },
+    "dono": "aleatorio",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/emboscador"
+    },
+    "politica": "bandit",
+    "saude_final": 0.9195000000000089,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.04843750000000002,
+      "impetuoso": 0.10078124999999996,
+      "paciente": -2.3418766925686896e-16,
+      "resistente": -0.153125
+    },
+    "carater_adulto": {
+      "atento": 0.021874999999999967,
+      "impetuoso": -0.014843750000000017,
+      "paciente": 0.25937499999999974,
+      "resistente": -0.25156249999999997
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 0.9515000000000055,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0010937499999999984,
+      "impetuoso": -0.0007421875000000009,
+      "paciente": 0.012968749999999989,
+      "resistente": -0.012578124999999999
+    },
+    "dono": "aleatorio",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "bandit",
+    "saude_final": 0.015000000000054636,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.05468750000000005,
+      "impetuoso": 0.13671874999999992,
+      "paciente": 0.007812499999999903,
+      "resistente": -0.22656249999999997
+    },
+    "carater_adulto": {
+      "atento": -0.43906249999999997,
+      "impetuoso": 0.2929687499999999,
+      "paciente": -0.02031250000000019,
+      "resistente": -0.1265625
+    },
+    "chamados": 10,
+    "chamados_atendidos": 1,
+    "condicao": 1.0281500000000023,
+    "cuidado": 0.1,
+    "desvio_bruto_adulto": {
+      "atento": -0.021953125,
+      "impetuoso": 0.014648437499999995,
+      "paciente": -0.0010156250000000096,
+      "resistente": -0.0063281249999999995
+    },
+    "dono": "aleatorio",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/furioso"
+    },
+    "politica": "bandit",
+    "saude_final": 0.7815000000000241,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.27499999999999997,
+      "impetuoso": -0.17968750000000006,
+      "paciente": 0.18437499999999987,
+      "resistente": -0.10000000000000002
+    },
+    "carater_adulto": {
+      "atento": 0.22343749999999996,
+      "impetuoso": -0.17265625000000007,
+      "paciente": 0.18593749999999984,
+      "resistente": -0.06406250000000004
+    },
+    "chamados": 10,
+    "chamados_atendidos": 1,
+    "condicao": 0.9758333333333338,
+    "cuidado": 0.1,
+    "desvio_bruto_adulto": {
+      "atento": 0.011171874999999998,
+      "impetuoso": -0.008632812500000003,
+      "paciente": 0.009296874999999993,
+      "resistente": -0.003203125000000002
+    },
+    "dono": "aleatorio",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/emboscador"
+    },
+    "politica": "bandit",
+    "saude_final": 0.25833333333333774,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.0102000000000044,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 0.6020000000000438,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.0362000000000016,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "aleatorio",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 0.8620000000000152,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 0.9513000000000055,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "aleatorio",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 0.013000000000054635,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 1,
+    "condicao": 1.0256000000000027,
+    "cuidado": 0.1,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "aleatorio",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 0.7560000000000269,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 1,
+    "condicao": 0.9812500000000008,
+    "cuidado": 0.1,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "aleatorio",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 0.3125000000000088,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.33281249999999996,
+      "impetuoso": -0.19062500000000002,
+      "paciente": -0.009375000000000208,
+      "resistente": 0.05781250000000002
+    },
+    "carater_adulto": {
+      "atento": -0.02656250000000003,
+      "impetuoso": -0.11250000000000003,
+      "paciente": 0.28437499999999977,
+      "resistente": -0.03281249999999998
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.0013281250000000016,
+      "impetuoso": -0.0056250000000000015,
+      "paciente": 0.01421874999999999,
+      "resistente": -0.0016406249999999993
+    },
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.26874999999999993,
+      "impetuoso": -0.15000000000000002,
+      "paciente": 0.26406249999999976,
+      "resistente": -0.23281250000000003
+    },
+    "carater_adulto": {
+      "atento": 0.396875,
+      "impetuoso": -0.20234375000000002,
+      "paciente": 0.15468749999999978,
+      "resistente": -0.146875
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.01984375,
+      "impetuoso": -0.010117187500000001,
+      "paciente": 0.0077343749999999895,
+      "resistente": -0.007343750000000001
+    },
+    "dono": "atencioso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/emboscador"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.29687499999999994,
+      "impetuoso": -0.0023437500000000194,
+      "paciente": -0.2328125000000003,
+      "resistente": -0.059375000000000004
+    },
+    "carater_adulto": {
+      "atento": 0.54375,
+      "impetuoso": -0.20234375000000004,
+      "paciente": -0.007812500000000345,
+      "resistente": -0.13124999999999998
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0271875,
+      "impetuoso": -0.010117187500000003,
+      "paciente": -0.00039062500000001726,
+      "resistente": -0.0065625
+    },
+    "dono": "atencioso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/emboscador"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.2984374999999999,
+      "impetuoso": -0.29375,
+      "paciente": 0.37499999999999983,
+      "resistente": -0.08593749999999999
+    },
+    "carater_adulto": {
+      "atento": 0.08437499999999995,
+      "impetuoso": -0.17734375000000005,
+      "paciente": 0.3999999999999996,
+      "resistente": -0.12968749999999998
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.004218749999999998,
+      "impetuoso": -0.008867187500000004,
+      "paciente": 0.01999999999999998,
+      "resistente": -0.006484375
+    },
+    "dono": "atencioso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.31718749999999996,
+      "impetuoso": -0.08203125000000006,
+      "paciente": -0.10156250000000017,
+      "resistente": -0.051562499999999976
+    },
+    "carater_adulto": {
+      "atento": 0.5093749999999999,
+      "impetuoso": -0.21562500000000004,
+      "paciente": -0.10625000000000026,
+      "resistente": 0.028125
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.02546875,
+      "impetuoso": -0.010781250000000003,
+      "paciente": -0.005312500000000013,
+      "resistente": 0.0014062500000000002
+    },
+    "dono": "atencioso",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/sentinela"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "atencioso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "atencioso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "atencioso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "atencioso",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.13437500000000002,
+      "impetuoso": -0.07812499999999997,
+      "paciente": 0.3390624999999996,
+      "resistente": -0.048437499999999974
+    },
+    "carater_adulto": {
+      "atento": -0.3671875,
+      "impetuoso": 0.036718749999999946,
+      "paciente": 0.24687499999999965,
+      "resistente": 0.04687500000000005
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.018359375,
+      "impetuoso": 0.0018359374999999975,
+      "paciente": 0.012343749999999983,
+      "resistente": 0.0023437500000000025
+    },
+    "dono": "incoerente",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/espelho"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.41875,
+      "impetuoso": 0.17187499999999994,
+      "paciente": 0.23437499999999986,
+      "resistente": -0.15937499999999996
+    },
+    "carater_adulto": {
+      "atento": -0.03437500000000003,
+      "impetuoso": -0.09140625000000002,
+      "paciente": 0.45312499999999967,
+      "resistente": -0.2359375
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.0017187500000000017,
+      "impetuoso": -0.0045703125000000015,
+      "paciente": 0.022656249999999985,
+      "resistente": -0.011796875
+    },
+    "dono": "incoerente",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.4375,
+      "impetuoso": -0.171875,
+      "paciente": 0.8999999999999994,
+      "resistente": -0.11875
+    },
+    "carater_adulto": {
+      "atento": -0.39375000000000004,
+      "impetuoso": -0.035156250000000035,
+      "paciente": 0.7031249999999996,
+      "resistente": -0.23906249999999996
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.019687500000000004,
+      "impetuoso": -0.001757812500000002,
+      "paciente": 0.03515624999999998,
+      "resistente": -0.011953124999999998
+    },
+    "dono": "incoerente",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.08281250000000001,
+      "impetuoso": -0.33828125,
+      "paciente": 0.6703125000000001,
+      "resistente": 0.0890625
+    },
+    "carater_adulto": {
+      "atento": -0.278125,
+      "impetuoso": -0.22890625000000003,
+      "paciente": 0.6640624999999997,
+      "resistente": 0.071875
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.013906250000000002,
+      "impetuoso": -0.011445312500000002,
+      "paciente": 0.033203124999999986,
+      "resistente": 0.0035937499999999997
+    },
+    "dono": "incoerente",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.07500000000000004,
+      "impetuoso": -0.06406250000000002,
+      "paciente": 0.03593749999999972,
+      "resistente": 0.1671875
+    },
+    "carater_adulto": {
+      "atento": -0.3203125,
+      "impetuoso": -0.17343750000000005,
+      "paciente": 0.6031249999999997,
+      "resistente": 0.06406250000000004
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.016015625000000002,
+      "impetuoso": -0.008671875000000002,
+      "paciente": 0.03015624999999999,
+      "resistente": 0.003203125000000002
+    },
+    "dono": "incoerente",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/tita"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "incoerente",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "incoerente",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "incoerente",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "incoerente",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "incoerente",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.13124999999999998,
+      "impetuoso": -0.08906250000000004,
+      "paciente": -0.17812500000000028,
+      "resistente": 0.22499999999999998
+    },
+    "carater_adulto": {
+      "atento": 0.21093749999999997,
+      "impetuoso": -0.22421875,
+      "paciente": 0.01874999999999981,
+      "resistente": 0.21874999999999997
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.010546874999999999,
+      "impetuoso": -0.0112109375,
+      "paciente": 0.0009374999999999904,
+      "resistente": 0.0109375
+    },
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "vigia",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/colosso/vigia"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.23281249999999998,
+      "impetuoso": 0.034374999999999926,
+      "paciente": -0.2078125000000001,
+      "resistente": -0.09374999999999997
+    },
+    "carater_adulto": {
+      "atento": 0.20156249999999995,
+      "impetuoso": -0.15781250000000002,
+      "paciente": 0.2968749999999996,
+      "resistente": -0.1828125
+    },
+    "chamados": 10,
+    "chamados_atendidos": 2,
+    "condicao": 1.05,
+    "cuidado": 0.2,
+    "desvio_bruto_adulto": {
+      "atento": 0.010078124999999999,
+      "impetuoso": -0.007890625000000002,
+      "paciente": 0.014843749999999982,
+      "resistente": -0.009140625
+    },
+    "dono": "relapso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/emboscador"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.03281250000000003,
+      "impetuoso": -0.20078125000000002,
+      "paciente": 0.5328124999999997,
+      "resistente": -0.09843749999999998
+    },
+    "carater_adulto": {
+      "atento": 0.23906249999999998,
+      "impetuoso": -0.19453125000000004,
+      "paciente": 0.31406249999999974,
+      "resistente": -0.1640625
+    },
+    "chamados": 10,
+    "chamados_atendidos": 3,
+    "condicao": 1.05,
+    "cuidado": 0.3,
+    "desvio_bruto_adulto": {
+      "atento": 0.011953125,
+      "impetuoso": -0.009726562500000003,
+      "paciente": 0.015703124999999988,
+      "resistente": -0.008203125
+    },
+    "dono": "relapso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.0734375,
+      "impetuoso": 0.08828124999999996,
+      "paciente": -0.07187500000000002,
+      "resistente": -0.03125
+    },
+    "carater_adulto": {
+      "atento": 0.15312499999999993,
+      "impetuoso": -0.05781250000000002,
+      "paciente": 0.19531249999999978,
+      "resistente": -0.23281249999999998
+    },
+    "chamados": 10,
+    "chamados_atendidos": 3,
+    "condicao": 1.05,
+    "cuidado": 0.3,
+    "desvio_bruto_adulto": {
+      "atento": 0.007656249999999997,
+      "impetuoso": -0.002890625000000001,
+      "paciente": 0.00976562499999999,
+      "resistente": -0.011640625
+    },
+    "dono": "relapso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "bandit",
+    "saude_final": 1.0,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": -0.014062500000000021,
+      "impetuoso": 0.07421875000000001,
+      "paciente": 0.025000000000000043,
+      "resistente": -0.159375
+    },
+    "carater_adulto": {
+      "atento": -0.12343750000000002,
+      "impetuoso": 0.010156249999999957,
+      "paciente": 0.42031249999999976,
+      "resistente": -0.31718749999999996
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.0480000000000003,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": -0.006171875000000001,
+      "impetuoso": 0.0005078124999999978,
+      "paciente": 0.02101562499999999,
+      "resistente": -0.015859375
+    },
+    "dono": "relapso",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "politica": "bandit",
+    "saude_final": 0.9800000000000022,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.05,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 101,
+    "temperamento": {
+      "curiosidade": 0.7790378824695883,
+      "rancor": 0.1283558408705201,
+      "sensibilidade": 0.37375476897572657,
+      "teimosia": -0.01297440787600701
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 2,
+    "condicao": 1.05,
+    "cuidado": 0.2,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "relapso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 202,
+    "temperamento": {
+      "curiosidade": -0.3301741228984083,
+      "rancor": -0.8970370740269669,
+      "sensibilidade": -0.5048588858389926,
+      "teimosia": -0.408634118346048
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 3,
+    "condicao": 1.05,
+    "cuidado": 0.3,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "relapso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 303,
+    "temperamento": {
+      "curiosidade": -0.5878038332836935,
+      "rancor": 0.8753022726244533,
+      "sensibilidade": 0.1698499062810872,
+      "teimosia": -0.4974982719426557
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 3,
+    "condicao": 1.05,
+    "cuidado": 0.3,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "relapso",
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 1.0,
+    "semente": 404,
+    "temperamento": {
+      "curiosidade": -0.18908302149000455,
+      "rancor": -0.720709401083309,
+      "sensibilidade": -0.07106648011972361,
+      "teimosia": -0.3798683947324877
+    }
+  },
+  {
+    "carater_adolescente": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "carater_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "chamados": 10,
+    "chamados_atendidos": 0,
+    "condicao": 1.0486000000000002,
+    "cuidado": 0.0,
+    "desvio_bruto_adulto": {
+      "atento": 0.0,
+      "impetuoso": 0.0,
+      "paciente": 0.0,
+      "resistente": 0.0
+    },
+    "dono": "relapso",
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "politica": "instinto",
+    "saude_final": 0.9860000000000015,
+    "semente": 505,
+    "temperamento": {
+      "curiosidade": -0.48160671065131555,
+      "rancor": -0.808988129497624,
+      "sensibilidade": -0.3384689610572671,
+      "teimosia": -0.06320988198908539
+    }
+  }
+]

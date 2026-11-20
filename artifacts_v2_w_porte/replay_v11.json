@@ -1,0 +1,21 @@
+{
+  "descricao": "replay de uma vida longa do v11 pelo laco do corpo em TS (etapa 4, item 7); descritivo, so o Node desta maquina",
+  "dias": 60,
+  "semente": 101,
+  "repeticoes": 5,
+  "eventos": 6719,
+  "decisoes": 5760,
+  "contatos": 959,
+  "log_json_bytes": 293924,
+  "replay_ms": [
+    204,
+    206,
+    217,
+    224,
+    225
+  ],
+  "replay_ms_mediana": 217,
+  "replay_ms_por_dia": 3.6,
+  "node": "v24.19.0",
+  "cpu": "Intel(R) Core(TM) i7-14700KF"
+}

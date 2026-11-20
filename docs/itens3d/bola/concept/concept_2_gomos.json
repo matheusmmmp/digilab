@@ -1,0 +1,9 @@
+{
+ "id": "01a1aef5-afde-7109-8f0c-fd8e99b6dccc",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single toy ball prop for a cozy low-poly 3D island game. Match exactly the art style of the reference screenshots: simple rounded shapes, flat toon shading with three tones, soft saturated pastel colors, no outlines, no realistic texture. Show only the ball, centered, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters. The ball has six curved panels like a beach ball, alternating white, sky blue and sunny yellow.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793936699561,
+ "finished_at": 1793936725791
+}

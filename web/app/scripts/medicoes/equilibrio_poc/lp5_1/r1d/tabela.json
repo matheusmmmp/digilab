@@ -1,0 +1,853 @@
+{
+ "tarefa": "LUTA_POC, LP5, a grade",
+ "fase": "lp5_1",
+ "bases": 1,
+ "tam": {
+  "pets": 10,
+  "lutas": 5,
+  "lutasT2": 4,
+  "lutasGrade": 3,
+  "lutasE1": 4,
+  "lutasFormas": 5
+ },
+ "grupos": [
+  "treino",
+  "estagio",
+  "sparring",
+  "formas_crianca",
+  "formas_adolescente",
+  "formas_adulto",
+  "formas_mega"
+ ],
+ "segundos": 133.796,
+ "tabela": [
+  {
+   "nome": "w10_g02",
+   "troca": {
+    "nome": "w10_g02",
+    "pesoPonto": 10,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.67/0.82/0.83/0.79"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.71/0.86/0.93/0.94"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.48-0.62 0.44-0.58"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.72/0.79/0.84/0.8; degrau 0.11/0.09/0.12/0.1; r10x8 0.49"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.18/0.19/0.17; 2x 0/0; teto 0.19/0.19/0.16"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.85|19.65 16.85|19.75 17.15|19.95 16.55|19.75; min forma 12.95"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.136; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.53/0.6/0.54/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.34-0.64 0.32-0.79 0.29-0.82 0.28-0.76"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.21/0.18/0.19/0.26"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.28-0.64 0.17-0.67 0.23-0.62 0.21-0.57"
+    }
+   }
+  },
+  {
+   "nome": "w10_g027",
+   "troca": {
+    "nome": "w10_g027",
+    "pesoPonto": 10,
+    "gama": {
+     "vigor": 0.027,
+     "recuperacao": 0.027,
+     "guarda": 0.081,
+     "forca": 0.027,
+     "mira": 0.189,
+     "folego": 0.189
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.71/0.84/0.88/0.82"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.77/0.89/0.95/0.98"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.49-0.66 0.46-0.59"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.73/0.84/0.88/0.82; degrau 0.18/0.1/0.18/0.19; r10x8 0.56"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.2/0.21/0.18; 2x 0/0; teto 0.22/0.2/0.17"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.85|19.65 16.75|19.85 17.05|19.95 16.35|19.75; min forma 13.05"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.142; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.5/0.56/0.53/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.37-0.65 0.31-0.77 0.29-0.81 0.28-0.77"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.25/0.18/0.18/0.25"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.23-0.6 0.15-0.64 0.22-0.63 0.21-0.61"
+    }
+   }
+  },
+  {
+   "nome": "w10_g035",
+   "troca": {
+    "nome": "w10_g035",
+    "pesoPonto": 10,
+    "gama": {
+     "vigor": 0.035,
+     "recuperacao": 0.035,
+     "guarda": 0.105,
+     "forca": 0.035,
+     "mira": 0.245,
+     "folego": 0.245
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.74/0.84/0.9/0.82"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.86/0.94/0.98/0.99"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.46-0.7 0.5-0.65"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.79/0.85/0.89/0.83; degrau 0.23/0.16/0.2/0.18; r10x8 0.63"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.22/0.21/0.18; 2x 0/0; teto 0.24/0.21/0.18"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.65|19.65 16.75|19.95 16.95|19.95 16.05|19.75; min forma 13.15"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.086; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.51/0.55/0.55/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.37-0.64 0.31-0.77 0.3-0.8 0.29-0.76"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.22/0.18/0.19/0.25"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.21-0.57 0.2-0.62 0.17-0.61 0.22-0.57"
+    }
+   }
+  },
+  {
+   "nome": "w15_g02",
+   "troca": {
+    "nome": "w15_g02",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.7/0.83/0.85/0.8"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.79/0.89/0.94/0.95"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.5-0.65 0.48-0.56"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.73/0.81/0.86/0.81; degrau 0.13/0.14/0.17/0.15; r10x8 0.55"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.19/0.2/0.16; 2x 0/0; teto 0.22/0.19/0.17"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.85|19.65 16.75|19.85 17.05|19.85 16.45|19.75; min forma 12.95"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.129; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.53/0.6/0.54/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.34-0.64 0.32-0.79 0.29-0.82 0.28-0.76"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.2/0.18/0.18/0.26"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.28-0.64 0.17-0.67 0.23-0.62 0.21-0.57"
+    }
+   }
+  },
+  {
+   "nome": "w15_g027",
+   "troca": {
+    "nome": "w15_g027",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.027,
+     "recuperacao": 0.027,
+     "guarda": 0.081,
+     "forca": 0.027,
+     "mira": 0.189,
+     "folego": 0.189
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.74/0.84/0.89/0.82"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.86/0.92/0.97/0.97"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.54-0.69 0.5-0.62"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.78/0.84/0.89/0.82; degrau 0.19/0.14/0.22/0.23; r10x8 0.63"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.23/0.21/0.18; 2x 0/0; teto 0.23/0.2/0.18"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.75|19.65 16.75|19.85 16.95|19.95 16.15|19.75; min forma 13.05"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.142; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.5/0.56/0.53/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.37-0.65 0.31-0.77 0.29-0.81 0.28-0.77"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.19/0.18/0.21/0.26"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.23-0.6 0.15-0.64 0.22-0.63 0.21-0.61"
+    }
+   }
+  },
+  {
+   "nome": "w15_g035",
+   "troca": {
+    "nome": "w15_g035",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.035,
+     "recuperacao": 0.035,
+     "guarda": 0.105,
+     "forca": 0.035,
+     "mira": 0.245,
+     "folego": 0.245
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.76/0.85/0.91/0.83"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.89/0.96/1/1"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.44-0.74 0.5-0.68"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.8/0.86/0.91/0.83; degrau 0.25/0.17/0.24/0.23; r10x8 0.68"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.24/0.22/0.18; 2x 0/0; teto 0.24/0.22/0.18"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.55|19.65 16.65|19.85 16.85|19.95 15.85|19.65; min forma 13.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.085; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.51/0.55/0.55/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.37-0.64 0.31-0.77 0.3-0.8 0.29-0.76"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.22/0.17/0.19/0.25"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.21-0.57 0.2-0.62 0.17-0.61 0.22-0.57"
+    }
+   }
+  },
+  {
+   "nome": "w25_g02",
+   "troca": {
+    "nome": "w25_g02",
+    "pesoPonto": 25,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "T3",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.74/0.83/0.88/0.82"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.85/0.9/0.94/0.98"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.49-0.68 0.46-0.59"
+    },
+    "T3": {
+     "passa": true,
+     "curto": "teto 0.77/0.84/0.89/0.81; degrau 0.16/0.17/0.21/0.2; r10x8 0.58"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.22/0.21/0.17; 2x 0/0; teto 0.23/0.21/0.17"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.75|19.55 16.65|19.85 16.95|19.85 16.25|19.75; min forma 12.95"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.129; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.53/0.6/0.54/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.34-0.64 0.32-0.79 0.29-0.82 0.28-0.76"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.21/0.19/0.18/0.25"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.28-0.64 0.17-0.67 0.23-0.62 0.21-0.57"
+    }
+   }
+  },
+  {
+   "nome": "w25_g027",
+   "troca": {
+    "nome": "w25_g027",
+    "pesoPonto": 25,
+    "gama": {
+     "vigor": 0.027,
+     "recuperacao": 0.027,
+     "guarda": 0.081,
+     "forca": 0.027,
+     "mira": 0.189,
+     "folego": 0.189
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "P4",
+    "T1",
+    "T2",
+    "T3",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": false,
+     "curto": "0.77/0.85/0.9/0.82"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.9/0.96/0.99/1"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.44-0.73 0.51-0.67"
+    },
+    "T3": {
+     "passa": false,
+     "curto": "teto 0.79/0.86/0.9/0.83; degrau 0.23/0.2/0.26/0.29; r10x8 0.66"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.24/0.22/0.18; 2x 0/0; teto 0.24/0.21/0.18"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.45|19.65 16.65|19.85 16.85|19.85 15.95|19.65; min forma 13.05"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.135; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.5/0.56/0.53/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.37-0.65 0.31-0.77 0.29-0.81 0.28-0.77"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.31/0.18/0.19/0.25"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.23-0.6 0.15-0.64 0.22-0.63 0.21-0.61"
+    }
+   }
+  },
+  {
+   "nome": "w25_g035",
+   "troca": {
+    "nome": "w25_g035",
+    "pesoPonto": 25,
+    "gama": {
+     "vigor": 0.035,
+     "recuperacao": 0.035,
+     "guarda": 0.105,
+     "forca": 0.035,
+     "mira": 0.245,
+     "folego": 0.245
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    }
+   },
+   "passam": [
+    "P4",
+    "E1",
+    "D1"
+   ],
+   "falham": [
+    "T1",
+    "T2",
+    "T3",
+    "D2",
+    "A1",
+    "V1",
+    "V2",
+    "S1"
+   ],
+   "metas": {
+    "P4": {
+     "passa": true,
+     "curto": "0.82/0.87/0.91/0.84"
+    },
+    "T1": {
+     "passa": false,
+     "curto": "0.97/1/1/1"
+    },
+    "T2": {
+     "passa": false,
+     "curto": "0.43-0.77 0.48-0.73"
+    },
+    "T3": {
+     "passa": false,
+     "curto": "teto 0.83/0.86/0.91/0.84; degrau 0.28/0.23/0.28/0.31; r10x8 0.7"
+    },
+    "E1": {
+     "passa": true,
+     "curto": "0.24/0.23/0.19; 2x 0/0; teto 0.24/0.22/0.19"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "16.25|19.55 16.65|19.85 16.75|19.95 15.55|19.65; min forma 13.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.083; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.51/0.55/0.55/0.43"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.37-0.64 0.31-0.77 0.3-0.8 0.29-0.76"
+    },
+    "V2": {
+     "passa": false,
+     "curto": "0.27/0.18/0.18/0.24"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.21-0.57 0.2-0.62 0.17-0.61 0.22-0.57"
+    }
+   }
+  }
+ ]
+}

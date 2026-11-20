@@ -1,0 +1,138 @@
+{
+  "alfa_holm_primeiro": 0.0125,
+  "alfa_unilateral": 0.025,
+  "custo_por_fonte": {
+    "c1": {
+      "cpu_por_vida": 3.392986111111111,
+      "parede_por_vida_1_processo": 4.2209195438889235,
+      "vidas": 3600
+    },
+    "c4": {
+      "cpu_por_vida": 3.1531532118055554,
+      "parede_por_vida_1_processo": 3.2101091585069965,
+      "vidas": 14400
+    }
+  },
+  "folga": 1.2,
+  "fonte": {
+    "artifacts_v2_digibrain_prototipo/longe_regular/run/medidas.json": {
+      "sha256_arquivo": "5a4fb207eaa11750ba40ffc80da1879febd822a5305545356fb091b664a4722d",
+      "sha256_json": "5a4fb207eaa11750ba40ffc80da1879febd822a5305545356fb091b664a4722d"
+    },
+    "artifacts_v2_digibrain_prototipo/memoria_autobio/run/medidas.json.gz": {
+      "sha256_arquivo": "8b48d0a234afc69adfaf72d150d0d4317d4f7dd9abfa7fc2e49908a6758fd93b",
+      "sha256_json": "869ff3971b91e6d848f3f9e16d1798049105442bde1968a6852daa852c153023"
+    }
+  },
+  "poder_alvo": 0.8,
+  "por_k": {
+    "K=100": {
+      "margem": 0.0443126656299444,
+      "margem_holm_primeiro": 0.04888824207456633,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.79,
+      "vidas": 6400
+    },
+    "K=150": {
+      "margem": 0.03607610144767285,
+      "margem_holm_primeiro": 0.03976696694167798,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.809,
+      "vidas": 9600
+    },
+    "K=200": {
+      "margem": 0.031197839090316516,
+      "margem_holm_primeiro": 0.034375004103098364,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.805,
+      "vidas": 12800
+    },
+    "K=300": {
+      "margem": 0.025436471345201394,
+      "margem_holm_primeiro": 0.028015084874304475,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.807,
+      "vidas": 19200
+    }
+  },
+  "proxies": {
+    "c1": {
+      "contraste": "(M3 - M2) no longe_fixo - (M3 - M2) no longe, por unidade",
+      "correlacao_fixo_sorteado": 0.14856075333688054,
+      "ganho_no_longe": {
+        "dp": 0.0805010203075695,
+        "g1": -0.1400410352661892,
+        "ic95_t": [
+          -0.023623850835173363,
+          0.0023523472548731775
+        ],
+        "media": -0.010635751790150092,
+        "unidades": 150
+      },
+      "ganho_no_longe_fixo": {
+        "dp": 0.08321616328771547,
+        "g1": 0.11476613171844921,
+        "ic95_t": [
+          0.03551525122124272,
+          0.06236757599422572
+        ],
+        "media": 0.04894141360773422,
+        "unidades": 150
+      },
+      "interacao": {
+        "dp": 0.1068406817382983,
+        "g1": 0.11638855859328975,
+        "ic95_t": [
+          0.04233940429680736,
+          0.07681492649896127
+        ],
+        "media": 0.05957716539788431,
+        "unidades": 150
+      }
+    },
+    "c4": {
+      "contraste": "(REL - SEM) no longe_fixo - (REL - SEM) no longe, por unidade",
+      "correlacao_fixo_sorteado": -0.013195885907931037,
+      "ganho_no_longe": {
+        "dp": 0.08927974087869898,
+        "g1": -0.19884925126796307,
+        "ic95_t": [
+          -0.03471004290751467,
+          -0.009811997240434075
+        ],
+        "media": -0.022261020073974375,
+        "unidades": 200
+      },
+      "ganho_no_longe_fixo": {
+        "dp": 0.09425252338155175,
+        "g1": 0.08650374075593265,
+        "ic95_t": [
+          0.05147299666726536,
+          0.0777578358513288
+        ],
+        "media": 0.06461541625929708,
+        "unidades": 200
+      },
+      "interacao": {
+        "dp": 0.1306770555802537,
+        "g1": 0.0215278517435213,
+        "ic95_t": [
+          0.06865503881657539,
+          0.10509783384996751
+        ],
+        "media": 0.08687643633327145,
+        "unidades": 200
+      }
+    }
+  },
+  "replicas": 2000,
+  "rotulo": "o poder e a margem dos primarios da LONGE_GEOMETRIA (I-M3 e I-PAD), PROPOSTOS para a secao 6 do plano; a dispersao pela proxy fixo - sorteado da C1 e da C4; aproximacao normal do t nao central, com a conferencia por simulacao; sem gate",
+  "script": {
+    "arquivo": "experiments/poder_longe_geometria.py",
+    "sha256": "91b4bc087ac3146349ac93d5fa601df5a004bef1765553f06d1e74fe232ed549"
+  },
+  "semente": 4242,
+  "sigma_planejamento": 0.15681246669630441,
+  "unidade": "a media das 4 celulas do lugar (uma vida por dono) da diferenca entre os bracos, por unidade (base, k); a interacao e a diferenca de duas dessas medias, na mesma unidade",
+  "vidas_por_unidade": 64
+}

@@ -1,0 +1,14 @@
+{
+ "id": "01a1bb74-b87f-71fa-999a-ea623e63a194",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same short wooden pier and boat: weathered brown wooden plank deck with wood grain, knots and patches of green moss with tiny flowers, round wooden posts wrapped with beige rope, and a small fishing boat with a blue hull, a yellow rim, chipped paint, a wooden floor and a tiny blue cabin with white window frames and a beige canvas roof, tied to the pier with a rope. Remove the water: the posts simply end at the bottom, no water, no ground. Front, side and back, same style, same colors, same hand-painted detail, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794146351453,
+ "finished_at": 1794146367156,
+ "saldo": {
+  "antes": 86,
+  "depois": 80
+ }
+}

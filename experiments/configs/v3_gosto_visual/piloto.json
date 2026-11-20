@@ -1,0 +1,7 @@
+{
+  "descricao": "GOSTO_VISUAL, GV3: o piloto (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secao 6): so o custo e a conferencia de que o pet olha nas sondas; nada se ajusta. Nao roda antes do plano APROVADO pelo Matheus.",
+  "fase": "gosto_visual",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+  "unidades": {"bases": [89101, 89202], "k": 2},
+  "dias": 14
+}

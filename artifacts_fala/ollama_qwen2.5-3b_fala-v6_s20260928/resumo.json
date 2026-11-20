@@ -1,0 +1,30 @@
+{
+  "n": 200,
+  "aprovadas": 191,
+  "fracao_aprovada": 0.955,
+  "fracao_aprovada_com_fator": 0.96,
+  "fracao_aprovada_sem_fator": 0.95,
+  "quedas_por_tipo": {
+    "reprovada": 9
+  },
+  "tempo_medio_s": 3.0447602794993145,
+  "tempo_max_s": 4.396410300018033,
+  "barradas_fator_fora_da_lista": 0,
+  "por_estagio": {
+    "adolescente": {
+      "n": 100,
+      "aprovadas": 95,
+      "aprovadas_iguais_ao_template": 0
+    },
+    "adulto": {
+      "n": 100,
+      "aprovadas": 96,
+      "aprovadas_iguais_ao_template": 0
+    }
+  },
+  "provedor": "ollama",
+  "modelo": "qwen2.5:3b",
+  "versao_prompt": "fala-v6",
+  "semente_amostra": 20260928,
+  "gasto": null
+}

@@ -1,0 +1,402 @@
+{
+ "A|afastado|quimica|lobos|longe|101": {
+  "log": "ad73cedd9bfa06365a892b4d1d5f2f321eaf8926c529c739d6569ca86be02e6f",
+  "partes": {
+   "decisoes": "7f9656d4e4f1d2a2231c60e995449bb760e1b7f2fae76ca9ef3f5ba1f9329e5f",
+   "estados": "b3692d7be633f17163f75d3ff0dbf9748f8803320c4988f1ef9cc4b22ee38664",
+   "resumo": "f684696408dc57a8c06fafc1243eb5558625922744abc5bfe9af6ea7e7bbc30d"
+  },
+  "passos": 192,
+  "trajetoria": "b9e02829b76e1cb5a413e578a6d8ed92c7f29786601a7d50132add16add8652d"
+ },
+ "A|afastado|quimica|lobos|longe|202": {
+  "log": "50a29a7af5d45bbe2aba9858aada7fd7ffebb16416c9b0dc19f59674d7bbd649",
+  "partes": {
+   "decisoes": "c462f10baa19a6193e0b0acb8f6959ce9d1068dc2d6261e7abc17c785c4f195c",
+   "estados": "ce49b4f5d5ed27c07e913c3cacdc2497b4511a946a9db095f3850cf8b3f67bdf",
+   "resumo": "8ae0ce530dffc81eab4ba42ff781d580915bb5dfac77a0d96a919df695d6032b"
+  },
+  "passos": 192,
+  "trajetoria": "1fc952e15677ce1a19aa2942e3335545946a3195c03d607de4dd1161085d1187"
+ },
+ "A|afastado|quimica|lobos|longe|303": {
+  "log": "8f5d030489347a93b196d3d713e69ce519030dfcee39df6fb6e9c386b572142c",
+  "partes": {
+   "decisoes": "f03158be86bdfc4c22bf3f574d4279b38a82b3f89532afbc3e065a391f1568a7",
+   "estados": "bb7d839f47fc5ef27bab7eceb779c93be87465fffe748c942490c3c6f376736a",
+   "resumo": "672ddd307d5d6ea166ed9c0643292e5e20cdd0c62626fae5a7815199502b1dc0"
+  },
+  "passos": 192,
+  "trajetoria": "313cbb7ac9a282af6aae354e48b6941405fce1d4c359d395355f2598cd017fca"
+ },
+ "A|afastado|quimica|lobos|longe|404": {
+  "log": "b90f8ef76aefaab71afcce220a82cb153ce40c5c630524d3d4ae1fb333241fd0",
+  "partes": {
+   "decisoes": "bdbcce1b4c0e932beebe397dc5da70758159c39bf0024e24c38d9bd5a9572ee7",
+   "estados": "1e9a381851767e7c6e92cd954728dd4254a2632344dc55934f95f75eacf552f5",
+   "resumo": "1235bbc350a3e3782caf9e17b46cac47b9aeaabdc68573041a17c9dd89ea2a9a"
+  },
+  "passos": 192,
+  "trajetoria": "b99302692b6236ee1c8510b7a8e987ab419bcb01a99d2e6304d1585e3e81bd87"
+ },
+ "A|afastado|quimica|lobos|longe|505": {
+  "log": "14a7032c8c1579e61254d8055614918dffaaeab70713baf3b752fd4487823baf",
+  "partes": {
+   "decisoes": "52099596d7be1662f8a656a5c40000cc563054abe4e7eb2f4ccc73fe2fc4a4bb",
+   "estados": "4fcc785f9cd0799d091492975383eb28b2eb0f3cb98445050f85f958598f6a95",
+   "resumo": "63a2884f7ae5eadd6797ea3f8ca3a43d801db7cf1af77ee53833f18756b9161a"
+  },
+  "passos": 192,
+  "trajetoria": "fccd88c74e8fca2cc43bb54b62e72d16826fa5f4b05f11559f9743962501ab5a"
+ },
+ "A|afastado|quimica|lobos|perto|101": {
+  "log": "3d4f3f63d788f4cb184aa077cb751caf81cba80fdaa1c374ae57d6878477a5d1",
+  "partes": {
+   "decisoes": "41e6ee953535f818cdbacdee5a5f443b6a92535f244dfab5e1eafdfc94444091",
+   "estados": "11d52db0c7ec5f1d792bde9592bf50bfb0f1f50a6169fbe6889e6a41d8a0a6ba",
+   "resumo": "218e81e1701ee708315852029086cf3c956f3a0dcd896a960209d688be5a2595"
+  },
+  "passos": 192,
+  "trajetoria": "5f2b9cd62f84096dc8f15fdb004e7657c350f2c2878fbb14619be87968e289aa"
+ },
+ "A|afastado|quimica|lobos|perto|202": {
+  "log": "8e8b0fe485dec9441ed70466cfbd86669d056ca81dbe3f6871641300543d2297",
+  "partes": {
+   "decisoes": "c01286446863a7b61363b0b3ee6166392d0aae7fbba6fe81ca4ffbad1fc96c4e",
+   "estados": "5e209ade728916fadb17b566904c788cfd9f770bec6843396bc007d163abe194",
+   "resumo": "7e412b5b70230089326553a574e98bdb6ff47fdb4f5bf2d7128fc2ca8769bbd6"
+  },
+  "passos": 192,
+  "trajetoria": "bf4a6956a4a79ffcd1754851711153e5df3fd09efe844e25a0df0db9eccac6ad"
+ },
+ "A|afastado|quimica|lobos|perto|303": {
+  "log": "8bab02cba4784065c9b07091e83e03a836e115a14bf476789567794aa243c472",
+  "partes": {
+   "decisoes": "7810721022180ea6beb4b9262b44f11bb1c0d6279d5a045572e9e2802ec0f07d",
+   "estados": "57e80d1ff3a7cab5434571fb9b7baf31858f09b71aac641e59d662843c000eae",
+   "resumo": "f68176f0fdc7a88de36194b1c63f012fe334efa519b2f07d54048662bf72b72a"
+  },
+  "passos": 192,
+  "trajetoria": "fec586103304884cc5c9e1f0694325430c15fc53698344f4e790b4b60703cd5a"
+ },
+ "A|afastado|quimica|lobos|perto|404": {
+  "log": "d06503aa445241fbfb6cf23a114110ae751db5f4511ea0f784f94a3aae214d4d",
+  "partes": {
+   "decisoes": "571c849ae80830b86f36a5231bf5dad72b318b672980d44dede70b89740db8ca",
+   "estados": "0f35f9c6e8567f88e1bb7962ee968f6e5dbc9fa10a9a33e3370d0150443e89e6",
+   "resumo": "c0ca8eb73664e1c3692c64e545c092082537e56c58a7638e725656e11c11dd66"
+  },
+  "passos": 192,
+  "trajetoria": "ef8e0b89010b45a8c69f42d91036fde0f93e0b5598c341e064ee6cf0cc9d3ff4"
+ },
+ "A|afastado|quimica|lobos|perto|505": {
+  "log": "bd35c5ac865731c9d38b1867f50b23c864400c50ab849f996e18f7cabdd02ecb",
+  "partes": {
+   "decisoes": "f7029e2d176d6270fe3d4a13fce64833e213ed3789ebbbc1ed37ea604168c91d",
+   "estados": "f773c968a27a5f28542359b954f104d63c090564b5c63495dfc593035561f559",
+   "resumo": "afe607fbb3282077d0aa23eef34722ea635a1a70aff4ae1f4e63ba284c3eaa79"
+  },
+  "passos": 192,
+  "trajetoria": "dc63970cf8d46c42ac2a937d306658041648b23332749bbf27695dbb5b33e575"
+ },
+ "A|padrao|quimica|lobos|longe|101": {
+  "log": "ad73cedd9bfa06365a892b4d1d5f2f321eaf8926c529c739d6569ca86be02e6f",
+  "partes": {
+   "decisoes": "bc8811c655f45da5d6395788efcb0df9ff4267a78d3fdeab2d549119399f3f51",
+   "estados": "58184a04bb783a47a42ddc11538792fd5b5476d3ad459e98a2331e30b56aa49b",
+   "resumo": "046f34c7ef8baa4119a68493e05ff5a40a6a9ba0c595423c875e4c8fb1e85e96"
+  },
+  "passos": 192,
+  "trajetoria": "71a273e683ef0889318be398fb7ff5309e89a06ab0aaa5259c6dcac06c0fb9d3"
+ },
+ "A|padrao|quimica|lobos|longe|202": {
+  "log": "e1fe8c1b2c36c043cc9b36be4eddd4a08d4e9ab1149431df0205e37d0ffaffc1",
+  "partes": {
+   "decisoes": "b6a9563fcd3d37e16444a3d5ec8e3cfd29d15b5801fa4343393e46e8ea1e30ee",
+   "estados": "2b6815dedd8d9199489875166977bfdba9086bae0e1b525790ab56abb99d85f2",
+   "resumo": "7e69d2bff0bd3332d37c4cb224e04a00a611f14c96c1c5f95c4f1fef46cf8c42"
+  },
+  "passos": 192,
+  "trajetoria": "8a5a8eb5fe65a917b8bab005df98adcddbc31ea8b6a81b70c62af1b5b3b7d46d"
+ },
+ "A|padrao|quimica|lobos|longe|303": {
+  "log": "8f5d030489347a93b196d3d713e69ce519030dfcee39df6fb6e9c386b572142c",
+  "partes": {
+   "decisoes": "f03158be86bdfc4c22bf3f574d4279b38a82b3f89532afbc3e065a391f1568a7",
+   "estados": "bb7d839f47fc5ef27bab7eceb779c93be87465fffe748c942490c3c6f376736a",
+   "resumo": "ede877d56a97c92099d9bc5a2cfc5e1d8d49ba685d8bcc6917e24d2b43a4567d"
+  },
+  "passos": 192,
+  "trajetoria": "1134141289ae4ee6c15cfe29eb7ce0383a6aab7d131cc7c38e9412698de850c6"
+ },
+ "A|padrao|quimica|lobos|longe|404": {
+  "log": "6e0f46765be00f10e0a9657580921a6478029c3084c18a13e2a2671f78491552",
+  "partes": {
+   "decisoes": "343cd9e2c3307d93329255be7e9a400445a1700faf1d20a575e3b478617f9151",
+   "estados": "9137b145fccd174c558137ec420ec6f467922e47403f868502ed9e048688e212",
+   "resumo": "3fb2cf52711aa04621ea14d0cb050467dc30d1793d3c3b519eb63dee44b1ad2b"
+  },
+  "passos": 192,
+  "trajetoria": "dcc6110697307c5b2b375cbb95b9c0b18760d081ff8f2260c49f67ab1c416b4d"
+ },
+ "A|padrao|quimica|lobos|longe|505": {
+  "log": "acebe3549b6bfe386727567f95e71bd67974f3a2dd84452920b52f2ec0e50322",
+  "partes": {
+   "decisoes": "f680c04da0461860214c86557566a3b2a1347f526d12a65f329b94a0b1514c6c",
+   "estados": "254bf0464d659331dca11c575ec3302cd9bc599e09ccd9cc21c792aa4ec2f7ba",
+   "resumo": "e59c477123caf3262bfcdd9dc82611702ecf30ec21882b554370f9d463ab53de"
+  },
+  "passos": 192,
+  "trajetoria": "4167cb5ae7e423a17ce8268730bdc5434c097a4a14b21d655e8e04e2549ebc00"
+ },
+ "A|padrao|quimica|lobos|perto|101": {
+  "log": "b35225b76583c516fad91199d3648acf4e94853434b652e96f6febbf47e75dc4",
+  "partes": {
+   "decisoes": "f6ed27eb0a315f52fbdf2f62053a1a472774c77cb9e0a2c5444703ce004310c3",
+   "estados": "e910c17b4e27b9065b03f8c3e1bf1d88ca8bec041c8fc3b555b01d50c46d5b22",
+   "resumo": "b0d67689f71b2ff36635f35438d695a1289eac4ad6490e50e0556952ef20b280"
+  },
+  "passos": 192,
+  "trajetoria": "f464b9452c6f9beef80381949e253346b687ae2014c732d0a96b70c32d3ad5c6"
+ },
+ "A|padrao|quimica|lobos|perto|202": {
+  "log": "3201616226a17f4e8d49d6dabf9190a04935dac618ceace049a83ff0d870b66e",
+  "partes": {
+   "decisoes": "7c4611cfe0c70ccc7c6290bfdca94688686c6596bcadb548267daba75fdd26de",
+   "estados": "ea20eb2038cec9688131504b5d6bd37d718cbda26753d782b00b316b12270269",
+   "resumo": "ecca48656430a385a191cb07464ae5fc13973dee858dbf3e4a1171c77630bca6"
+  },
+  "passos": 192,
+  "trajetoria": "94b3a3c6e9943292a71ad2a9bc1030da7bba183560718d28aa485801b597ed2e"
+ },
+ "A|padrao|quimica|lobos|perto|303": {
+  "log": "8bab02cba4784065c9b07091e83e03a836e115a14bf476789567794aa243c472",
+  "partes": {
+   "decisoes": "7810721022180ea6beb4b9262b44f11bb1c0d6279d5a045572e9e2802ec0f07d",
+   "estados": "57e80d1ff3a7cab5434571fb9b7baf31858f09b71aac641e59d662843c000eae",
+   "resumo": "6bcf5268af99b29189822eabd8e776876f0d72337ceb37830148eb91e6df50c7"
+  },
+  "passos": 192,
+  "trajetoria": "a1b7f5ca541d8ef36e5be6023677b7dd3e09a3a8299673ef08ea3363871b85f8"
+ },
+ "A|padrao|quimica|lobos|perto|404": {
+  "log": "d06503aa445241fbfb6cf23a114110ae751db5f4511ea0f784f94a3aae214d4d",
+  "partes": {
+   "decisoes": "571c849ae80830b86f36a5231bf5dad72b318b672980d44dede70b89740db8ca",
+   "estados": "0f35f9c6e8567f88e1bb7962ee968f6e5dbc9fa10a9a33e3370d0150443e89e6",
+   "resumo": "f973349c978f8fe261d2f6bcfec2b6cbac1082d53687ad5dcf82841a9da5042b"
+  },
+  "passos": 192,
+  "trajetoria": "48cab314f656425291c04bb8d55c7337b6c082e4d7eb2b5cc2db51d0384f0039"
+ },
+ "A|padrao|quimica|lobos|perto|505": {
+  "log": "dfaa64efafd03d186d17fc55b33944010fe16adb5aa8821e3d4fa6c30848e8af",
+  "partes": {
+   "decisoes": "7a3b6265a4de82a968108fb723293ce50df5b0accf711163f0e8e61ae54fd81c",
+   "estados": "a514d67c982f752b83d41a1213e915ee23fe3a02f5e4a2a1c4b7e82a26e9348d",
+   "resumo": "a3cd2013355bae902e2fbb1c17b9d8e59d1fbf203b2280604219b5a50daf6ebd"
+  },
+  "passos": 192,
+  "trajetoria": "03b9e19c436d4a0e1ab13935600a084a4fc0d0247eefdb95aa79771a017cbbf8"
+ },
+ "PAL|P1-plan|T2|101": {
+  "log": "6b9656fd76fb880b61d7804a47f99387ff1ec22ee142253b52d6824d5e049dc9",
+  "partes": {
+   "decisoes": "f023343736d65176979bbb68d109345907959cf13b232b2ecc4584dd9564ff8d",
+   "estados": "ac481678cf73451e52d0be8e7ae9f44ba41b721d882fb9926cff8cf887685d14",
+   "resumo": "1bf9b562a112cc1ecdf74cb4820897b4b1186791efdf991ff1a61ea078f125de"
+  },
+  "passos": 288,
+  "trajetoria": "da3f2be482c347ff08a62cc59211326db4760ac9b43f5c611fd019607652e796"
+ },
+ "PAL|P1-plan|T2|202": {
+  "log": "cb40c46ba1f820638ed68ca7d6601d728ca9baf8153369ab1f4c75481e26a6d7",
+  "partes": {
+   "decisoes": "f5e11795af1f9f0f54e80e2eddf04cc246b400a16c42c1abb359135f6c219cfd",
+   "estados": "e817d241857ddcf184742ba52d2cc92ae6c1fbc9c9cc9e0595238915c8b836b9",
+   "resumo": "47f1aac56813e8530d5a20b4c3f87b8bb88bd977d2d5c914a98f7706683480a4"
+  },
+  "passos": 288,
+  "trajetoria": "4d4c12c2b652416c11f740115c841831a151ccd645f5348ec37285ce23e85935"
+ },
+ "PAL|P1-plan|T2|303": {
+  "log": "4a7f0b4f330ca1c50aa78529ac8a4b0eb67947e0a41b866963b7ee8a837b08f9",
+  "partes": {
+   "decisoes": "8416f7b1510b67114142b874aa6bda41242dcb6aa13efbd559475869a24e1fb5",
+   "estados": "418af9e15eefa710fa21e867bb02b5b4113936be043d08378298c1a5f81999db",
+   "resumo": "f9dcf9f8507843a9496e8464667aedb9a0d492eb98f25ce7565d62ed412bb807"
+  },
+  "passos": 288,
+  "trajetoria": "c9e797d7b0976f2252b3da7c11213b65adc52d075352dfae7002abe376f822a3"
+ },
+ "PAL|P1-plan|T2|404": {
+  "log": "87fa1d77d968f704d8ed6c8432034fe9ac0780bb5386f8455bf14fb16983dd71",
+  "partes": {
+   "decisoes": "02fea345da191c06bfaef31158e1e8c573393ba5b956805d867d06665ce2963f",
+   "estados": "bfc49cde34ac8e7e39752f8e98de4b078e31be8854c27bdb5f94b2c1e92e2de4",
+   "resumo": "ff8a420ef1a4cc2f6be5ea11b6d41a9def6043e508eb1df14e064118a63c93fb"
+  },
+  "passos": 288,
+  "trajetoria": "52b5cc14a8ccb5dd8dd83b729c4ae1c0a93e93b5d89618cd21d2ff595cabb958"
+ },
+ "PAL|P1-plan|T2|505": {
+  "log": "91192cf44cdbcf8a1d12a32da9db6fc0a2a2d147cb87c2712bdd5f4cb3643f7a",
+  "partes": {
+   "decisoes": "167d3c23834d3343ab704da00bd758dc78b902867a1283a2e49fec718bd48067",
+   "estados": "43a229679be67f21af4bc481df64d8d1f618695880753982aee0e14172fc605e",
+   "resumo": "ec23a1508930c5116977f1ab2c8ade03235ddf71f9ba3fde233c740b3a73aff7"
+  },
+  "passos": 288,
+  "trajetoria": "19d5669d8ef44b2823cd30a8cd43087bab13f95dd8dd86320cf7dec11e0bfcc3"
+ },
+ "PAL|P1|T1|101": {
+  "log": "cde35f0c26103f4183d6f8c6ac51d0e3acb61be894aea5045894d29a833f8e92",
+  "partes": {
+   "decisoes": "c37d92323029a4c8ac29750b7fd85501d430bbd8fedeee490c29348515251a5b",
+   "estados": "32873373331e59023e43a0a898b0624fe34ba5713ad7daed627977359d034117",
+   "resumo": "dc70e01ada0c9e076f8e9443e26b76f8add21569a35a665c1734c68082fcf470"
+  },
+  "passos": 288,
+  "trajetoria": "7e333af363ed7e22878064ccf06227cd7797961d7b758a50260c87fbb60c1c92"
+ },
+ "PAL|P1|T1|202": {
+  "log": "48b38f4306151664789a53622a7872b9cd7e7ed1aec8c38591803ba84a53f8a9",
+  "partes": {
+   "decisoes": "55cac90ad5fed65cc51c664a53e9e6bc7ee796e42fe433bde7a61bb64d528d12",
+   "estados": "5eaed55394a729fc7f2594e9ae23958e1064b6e85e75119f168aff66983f151e",
+   "resumo": "aa9a74b87361fdb9367a88ee456a715491ec28f86e163b0972e0c31272ecbfc7"
+  },
+  "passos": 288,
+  "trajetoria": "6df8522be5d97e51dd1e67c116114d8dee712557b13ffd50a083166b7941c919"
+ },
+ "PAL|P1|T1|303": {
+  "log": "68b0f1d7efabccb7f72438942e933d07d83bdb90ab699bb0d5a50c49312c33a2",
+  "partes": {
+   "decisoes": "e05324c20b56c23f93ae1ac85ce197e4b26019b8b264a1ef28089e3192d0eb2b",
+   "estados": "b3d4c25cb3636c77154fdb37c6039111c1b422c6d81333bdd2dec13abc440ef8",
+   "resumo": "510dbd30cd5d8507227e9ac6802605c6a38df41667cc33bb72be46fe422ff76f"
+  },
+  "passos": 288,
+  "trajetoria": "b5555ac0f28751c798dbbe41aeb84b21ca61dd4fe5922ff2effb18b9bb3fcf55"
+ },
+ "PAL|P1|T1|404": {
+  "log": "92c3a4c74e37b19961bd69aa67d1738031614564dd99881f5a9a270c6822604e",
+  "partes": {
+   "decisoes": "2c5ea391d4495bf85dd007fa06cd52c4e3b5dd8186d8bd5b3f8bd6961f670b82",
+   "estados": "04b3bd3f1ed6f98681391984027ba9fdae0c40bcfd3223136c5b7286c7490258",
+   "resumo": "fc84a95a33f665b95cd9319b103d7ba630d325b736e86a8304a2dcc80bc18eba"
+  },
+  "passos": 288,
+  "trajetoria": "8c89a3a1b7c02593ad51fd32fd7898e38801f90a40f9257991143cbeac69f292"
+ },
+ "PAL|P1|T1|505": {
+  "log": "402aa655b2fdb2eae9056b4c7b20ec4eac18980b62bc1887b489655d53711bff",
+  "partes": {
+   "decisoes": "98b4a63d481e3e92474d9d890535842d45798e95dd9b5cd554e9033f294fa0c3",
+   "estados": "2f4156407136f887671110b4494132bffe93748a13baae44b83a72855d154734",
+   "resumo": "6210e513e183c26b0eea6d12136bc5e28815c75b2bee145e416db45b35506274"
+  },
+  "passos": 288,
+  "trajetoria": "dc6d294129d109fe89bed43fd4085a6945223ca72fcac8eb3aedab3c15e73d42"
+ },
+ "REL|atencioso|comedouro|101": {
+  "log": "c1ee04f557f186a6d7480c45bd3d58508e4d2c1dc53dd6b77f3b9632054e8a75",
+  "partes": {
+   "decisoes": "79aa4aecbde3123c05da2f2125d55a19ed2282abb5a100a6c78b0ee6ad412ac1",
+   "estados": "5a770f95f417968188e5e474cd77359775519d25186ddc6d83a0435f63fad6b3",
+   "resumo": "9624039f0c7719693e623e621532f0faf601082d767a85abd9e5e3798f1d0e4a"
+  },
+  "passos": 288,
+  "trajetoria": "d6125e9169bb9c2d8f6ed2d3fc440e2338001817c85f9bd20a63f97096749c45"
+ },
+ "REL|atencioso|comedouro|202": {
+  "log": "f11a294cb4f594bef36c28ca606ed494b90f53b362b7f3a1eec6e9286a79701a",
+  "partes": {
+   "decisoes": "213d8820376163844d3ad4f632dda94e389ca4bfbc810a02194b360fe398f412",
+   "estados": "44e874af806057589a763ac55480afc10d916419231fc57f9fa63e22ff35e634",
+   "resumo": "0238dffc5d901720d9a83100b72d36c8e1e64d9e43ce36e9f59275a8b42a4f11"
+  },
+  "passos": 288,
+  "trajetoria": "7017783b5004bb89041b0f03c05be2b86b10a75d8f8c74352011573a8b50d966"
+ },
+ "REL|atencioso|comedouro|303": {
+  "log": "d18fe940e5e42a35db3db8d39d232071bcfd8865e950f6530c9f689d20d109b7",
+  "partes": {
+   "decisoes": "1362aa511d5b80a05edf85124f320f2faec0c0bf2dc21e9f04223123f26b80b0",
+   "estados": "457a8e6cba4366a6e6a5e5d500b6a591797d7854161845b560b904c48725eeeb",
+   "resumo": "370e89421ca68ffd64151a76fdb2412f45740a4f4cbd865d61e91fcde9a80c26"
+  },
+  "passos": 288,
+  "trajetoria": "5e782a248ef59bb07b563377acd59c07c723fdada68bdc5917893e503ea57e58"
+ },
+ "REL|atencioso|comedouro|404": {
+  "log": "4b75ca12e606a156ee1c33520eb789dddff9ffade8feb2e3ab2ed8665897347c",
+  "partes": {
+   "decisoes": "ae025f4c00bb00710150e717538f8f9c342a193787ddb361327c7c44d0a63b86",
+   "estados": "0699e998e1f8b3b1cefefe41dcec380c7021ffcca830f32bf461774f1500b9c4",
+   "resumo": "98253ad945a1c854bf1f3d7636b22966bedcd217b452e3059aff4453836d9dd6"
+  },
+  "passos": 288,
+  "trajetoria": "3a20b6df85376a7a52eda4cd2494bf30694347476a180f20eba45d4e0b166f50"
+ },
+ "REL|atencioso|comedouro|505": {
+  "log": "b5e9ccd7fa1d8d5a76f1e0b07b494d7203345d4c4bdea3ee18372f4f568de3d3",
+  "partes": {
+   "decisoes": "dae6aa53c4ebae55ff2c56e95fedd0ca9959cee509426c1ede6cf6128d2d3178",
+   "estados": "4ce1c81c7e1f708c1b1cf568315895ec146e66b167c3c109391ee9deae968055",
+   "resumo": "ca0b5a69d7b49f9edce80d18281adfe84b07ad3aec62060b7c597bcca0ae71a3"
+  },
+  "passos": 288,
+  "trajetoria": "8b9da0d5211026803e82c92e0b28536b1f9d419f70bcde46d51dc604e673acdd"
+ },
+ "REL|atencioso|longe_fixo|101": {
+  "log": "7fe3e2dc4ed9a39888d469a6887551ca687776251cdc10ab7ce8eae604b94a6f",
+  "partes": {
+   "decisoes": "2d3303cbe38a83005ed98feff4587f8ab7c88bbfa6ab23e3052b1f88a0418e0d",
+   "estados": "27534b3bc1cdb4e94338bc7eaa39da6a764f5360eb99050613a451fdf887d5cb",
+   "resumo": "b446732203b236ad1b55efc8121a2dd85341b85fe571cb01da3fc3541227c4cf"
+  },
+  "passos": 288,
+  "trajetoria": "f2b5f689613027ed48f64d8fba1b13c710c04bd929f2801e16985fa208ae7963"
+ },
+ "REL|atencioso|longe_fixo|202": {
+  "log": "a501083a9b16429341278e6149d01bb639d359dfdaba1daaeea5f51734d3588f",
+  "partes": {
+   "decisoes": "a78ba637fefbf2170d129005467d661e31434404c0b59bbc81ebac350526b0e5",
+   "estados": "c55f339fa6b1be66b51f99822215ea0fd82093389018666c94fbfb207b9a18d8",
+   "resumo": "cfcec9826db49aaedeb2eb9d3c718ee4605a734c6a6548261d9a106534bb627c"
+  },
+  "passos": 288,
+  "trajetoria": "9af4f72a9a03ce3b1905e855964e4557ec854c1061572b05b7a69e1f32907c95"
+ },
+ "REL|atencioso|longe_fixo|303": {
+  "log": "32d99c80ab83ea120fc9005dcfc219c1887d602bcda7a5a8379ee3048bc56d4c",
+  "partes": {
+   "decisoes": "cbad458b441e070fab2a652e8e0c5676be7caac983fb2b4eb21ba271ad05df9d",
+   "estados": "bbac96b91f0a2beaefe02451b3afb6d55608f06da2272d865ff0c4de240edb35",
+   "resumo": "e2b2d2460f176a1c755113e0bf68ddabd4c18fbf26db4e86aa98c512fe52c9e9"
+  },
+  "passos": 288,
+  "trajetoria": "a5c2ec324ef917c7961c6d174f9d87c83679ebf6cf6f67c579962c9fc615635e"
+ },
+ "REL|atencioso|longe_fixo|404": {
+  "log": "bcfae75ce50c58454b28ce6fc48b32ab32e77909008d6070e7254411e9354cb0",
+  "partes": {
+   "decisoes": "3fa22fd560edac0b6cbc08c4eeca46baefe758fc67eb8356af18dc104560f4b4",
+   "estados": "7c093d619714bc4780f7abc7e319e755dafa55a8e3922f00a546ce99aadd823b",
+   "resumo": "28b2645a7e4fee3ab969940395fbae59f11bbd0e73f2a77506a2e0e59069bd57"
+  },
+  "passos": 288,
+  "trajetoria": "8d2223ac962ae44f718fcc8b0242d5e9635f19cf829f3407546ae9f5a94e49ff"
+ },
+ "REL|atencioso|longe_fixo|505": {
+  "log": "8d54d1e4cde39f2b127d19def111c12692a45d491d406e482919f6bcd0922000",
+  "partes": {
+   "decisoes": "167c474e378064a5f4bcadd5c44ba714b024ce5a8110cd000c40799454454e26",
+   "estados": "70e0ed2007360679e9073b2a5534fe115cab84949777169198c018f7fc8d0628",
+   "resumo": "d5a01bfd201fc0b4cd0c56a44836b8a23449b95e27f6b6b74fcd478b15e495ec"
+  },
+  "passos": 288,
+  "trajetoria": "6ee81498177ef9647f71ce117c233111f36fe482122b9e22a54b87478de20e31"
+ }
+}

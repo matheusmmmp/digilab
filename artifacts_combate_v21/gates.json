@@ -1,0 +1,732 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "amostra_replay.jsonl": "07e04b747d78ffd88a67da500c9ae93dd7f5baa281e318b285cbb2025cee0fec",
+    "equilibrio.json": "853be38ce0bd5016acdee0c78dadac35513d0b3b9a7b4b36247f6b33e4262d6e",
+    "matriz_arquetipos.json": "78903cd87323e1dcae31a9424ed9a3e7cf4894d2a86a92e31154caa58eab2a63",
+    "matriz_especie_arquetipo.json": "96125134bcc220e82b01d597dab93246df13060cfa57fe7792c43f4a0fe7e600",
+    "partidas.csv": "5bdc5a95586a77a3088cafa6e49f8fa00f6748f8b2875a941c92a2eb7cc3b659",
+    "robustez_e5.json": "f0e660e41940a3d6986196aaf5c2966a930f5417c031b3284475c8215a155c53",
+    "uso_tecnicas.json": "d424903505b8bfa13e9f3f249ccbef4c1993fb0309320cca22d931a4713a3757"
+  },
+  "avisos": [
+    "todos os numeros de ConfigCombateV21, ConfigCatalogo e ConfigBateriaV21 sao PROPOSTOS",
+    "pre-condicoes da especificacao nao cumpridas: ver docs/REGISTRO_DESVIOS.md"
+  ],
+  "config_bateria_v21": {
+    "fracao_min_tecnica": 0.05,
+    "iteracoes_fictitious_play": 20000,
+    "partidas_e3_por_semente": 40,
+    "partidas_e4_por_semente": 100,
+    "partidas_e5_por_semente": 20,
+    "perturbacao_e5": 0.1,
+    "peso_minimo_suporte": 0.05,
+    "suporte_minimo_e1": 4,
+    "taxa_max_e4": 0.85,
+    "taxa_min_e4": 0.6
+  },
+  "config_combate_v21": {
+    "carater_bot_complementar": 0.25,
+    "carater_bot_linha": 0.5,
+    "custo_contra_golpe": 15,
+    "custo_investida": 20,
+    "custo_marcar": 10,
+    "custo_pele_dura": 20,
+    "dano_extra_duelista": 4.0,
+    "dano_investida": 8.0,
+    "fracao_contra_golpe": 0.5,
+    "fracao_espelho_disparo": 1.0,
+    "guarda_base": 1.3,
+    "guarda_por_ponto": 0.03,
+    "guts_extra_muralha": 3,
+    "guts_inicial_base": 30.0,
+    "guts_inicial_por_folego": 2.0,
+    "guts_max_base": 80.0,
+    "guts_max_por_folego": 2.0,
+    "hp_base": 70.0,
+    "hp_por_vigor": 3.0,
+    "limiar_hp_furioso": 0.5,
+    "max_regras_adolescente": 5,
+    "max_regras_adulto": 8,
+    "max_regras_crianca": 3,
+    "mult_base": 0.7,
+    "mult_emboscador": 2.0,
+    "mult_furioso": 1.25,
+    "mult_marcar": 2.0,
+    "mult_parry_investida": 0.0,
+    "mult_pele_dura": 0.5,
+    "mult_por_ponto": 0.03,
+    "mult_tita": 1.3,
+    "recarga_sentinela": 4,
+    "regen_base": 4.0,
+    "regen_por_recuperacao": 0.4,
+    "turnos_execucao": [
+      5,
+      10,
+      20
+    ],
+    "turnos_marcar": 3,
+    "turnos_pele_dura": 2
+  },
+  "conjunto": "validacao",
+  "especies": [
+    "brasa",
+    "cirro",
+    "ferrugem",
+    "limo"
+  ],
+  "falharam": [
+    "E1_sem_arquetipo_dominante",
+    "E2_sem_especie_dominante",
+    "E3_tecnica_usada_e_respondivel",
+    "E4_estagio_importa_sem_esmagar",
+    "E5_robustez"
+  ],
+  "gates": [
+    {
+      "gate": "E1_sem_arquetipo_dominante",
+      "mensagem": "FALHOU: dominantes []; suporte ['emboscador', 'espelho', 'furioso'] (precisa >= 4)",
+      "ok": false,
+      "valores": {
+        "dominantes": [],
+        "estrategia": {
+          "duelista": 5e-05,
+          "emboscador": 0.12005,
+          "espelho": 0.44295,
+          "furioso": 0.435,
+          "muralha": 0.00195,
+          "sentinela": 0.0,
+          "tita": 0.0,
+          "vigia": 0.0
+        },
+        "suporte": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ]
+      }
+    },
+    {
+      "gate": "E2_sem_especie_dominante",
+      "mensagem": "especie que vence todas as outras (agregado sobre arquetipos): ['ferrugem']; por arquetipo (informativo): {'duelista': ['ferrugem'], 'furioso': ['ferrugem'], 'espelho': ['ferrugem'], 'muralha': ['ferrugem'], 'sentinela': ['cirro'], 'emboscador': ['ferrugem'], 'vigia': ['limo'], 'tita': ['brasa']}",
+      "ok": false,
+      "valores": {
+        "dominante_por_arquetipo": {
+          "duelista": [
+            "ferrugem"
+          ],
+          "emboscador": [
+            "ferrugem"
+          ],
+          "espelho": [
+            "ferrugem"
+          ],
+          "furioso": [
+            "ferrugem"
+          ],
+          "muralha": [
+            "ferrugem"
+          ],
+          "sentinela": [
+            "cirro"
+          ],
+          "tita": [
+            "brasa"
+          ],
+          "vigia": [
+            "limo"
+          ]
+        },
+        "dominantes": [
+          "ferrugem"
+        ]
+      }
+    },
+    {
+      "gate": "E3_tecnica_usada_e_respondivel",
+      "mensagem": "tecnica abaixo de 0.05 das decisoes: nenhuma; resposta que NAO reduz a taxa do usuario: ['marcar']; investida 0.625->0.606, contra_golpe 0.485->0.467, marcar 0.625->0.953, pele_dura 0.259->0.003",
+      "ok": false,
+      "valores": {
+        "fracao_tecnica": {
+          "duelista": 0.20123029129242329,
+          "emboscador": 0.29624842988767797,
+          "espelho": 0.4294029767722761,
+          "furioso": 0.1600200867562862,
+          "muralha": 0.212122247158503,
+          "sentinela": 0.21644924621190353,
+          "tita": 0.2614591635494174,
+          "vigia": 0.24267042704102035
+        },
+        "pouco_usadas": [],
+        "resposta": {
+          "contra_golpe": {
+            "reducao": 0.01832031249999999,
+            "taxa_com_resposta": 0.466875,
+            "taxa_sem_resposta": 0.4851953125
+          },
+          "investida": {
+            "reducao": 0.018749999999999933,
+            "taxa_com_resposta": 0.6058203125,
+            "taxa_sem_resposta": 0.6245703125
+          },
+          "marcar": {
+            "reducao": -0.32843750000000005,
+            "taxa_com_resposta": 0.9532421875,
+            "taxa_sem_resposta": 0.6248046875
+          },
+          "pele_dura": {
+            "reducao": 0.2553125,
+            "taxa_com_resposta": 0.0033203125,
+            "taxa_sem_resposta": 0.2586328125
+          }
+        },
+        "sem_resposta_efetiva": [
+          "marcar"
+        ]
+      }
+    },
+    {
+      "gate": "E4_estagio_importa_sem_esmagar",
+      "mensagem": "adulto x adolescente da mesma linha: fora de [0.6, 0.85]: {'furioso': 0.952, 'muralha': 0.985, 'sentinela': 0.996, 'vigia': 1.0, 'tita': 0.991}",
+      "ok": false,
+      "valores": {
+        "fora": {
+          "furioso": 0.9515,
+          "muralha": 0.98525,
+          "sentinela": 0.99625,
+          "tita": 0.991,
+          "vigia": 1.0
+        },
+        "taxa_por_forma": {
+          "duelista": 0.7845,
+          "emboscador": 0.78825,
+          "espelho": 0.62925,
+          "furioso": 0.9515,
+          "muralha": 0.98525,
+          "sentinela": 0.99625,
+          "tita": 0.991,
+          "vigia": 1.0
+        }
+      }
+    },
+    {
+      "gate": "E5_robustez",
+      "mensagem": "E1 mantido em 2/36 perturbacoes de +-10%; falham: ['custo_investida-', 'dano_investida-', 'dano_investida+', 'custo_contra_golpe-', 'fracao_contra_golpe-', 'fracao_contra_golpe+', 'custo_marcar-', 'custo_marcar+', 'turnos_marcar-', 'turnos_marcar+', 'mult_marcar-', 'mult_marcar+', 'custo_pele_dura-', 'custo_pele_dura+', 'turnos_pele_dura-', 'turnos_pele_dura+', 'mult_pele_dura-', 'mult_pele_dura+', 'dano_extra_duelista-', 'dano_extra_duelista+', 'limiar_hp_furioso-', 'limiar_hp_furioso+', 'mult_furioso-', 'mult_furioso+', 'fracao_espelho_disparo-', 'fracao_espelho_disparo+', 'guts_extra_muralha-', 'guts_extra_muralha+', 'recarga_sentinela-', 'recarga_sentinela+', 'mult_emboscador-', 'mult_emboscador+', 'mult_tita-', 'mult_tita+']",
+      "ok": false,
+      "valores": {
+        "passaram": 2,
+        "por_perturbacao": {
+          "custo_contra_golpe+": {
+            "de": 15,
+            "dominantes": [],
+            "e1_ok": true,
+            "para": 16,
+            "suporte": [
+              "espelho",
+              "furioso",
+              "muralha",
+              "sentinela"
+            ]
+          },
+          "custo_contra_golpe-": {
+            "de": 15,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 14,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "custo_investida+": {
+            "de": 20,
+            "dominantes": [],
+            "e1_ok": true,
+            "para": 22,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso",
+              "muralha",
+              "sentinela"
+            ]
+          },
+          "custo_investida-": {
+            "de": 20,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 18,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "custo_marcar+": {
+            "de": 10,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 11,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "custo_marcar-": {
+            "de": 10,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 9,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "custo_pele_dura+": {
+            "de": 20,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 22,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "custo_pele_dura-": {
+            "de": 20,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 18,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "dano_extra_duelista+": {
+            "de": 4.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 4.4,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "dano_extra_duelista-": {
+            "de": 4.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 3.6,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "dano_investida+": {
+            "de": 8.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 8.8,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "dano_investida-": {
+            "de": 8.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 7.2,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "fracao_contra_golpe+": {
+            "de": 0.5,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.55,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "fracao_contra_golpe-": {
+            "de": 0.5,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.45,
+            "suporte": [
+              "espelho",
+              "furioso"
+            ]
+          },
+          "fracao_espelho_disparo+": {
+            "de": 1.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.1,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "fracao_espelho_disparo-": {
+            "de": 1.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.9,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "guts_extra_muralha+": {
+            "de": 3,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 4,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "guts_extra_muralha-": {
+            "de": 3,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 2,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "limiar_hp_furioso+": {
+            "de": 0.5,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.55,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "limiar_hp_furioso-": {
+            "de": 0.5,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.45,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_emboscador+": {
+            "de": 2.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 2.2,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_emboscador-": {
+            "de": 2.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.8,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_furioso+": {
+            "de": 1.25,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.375,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_furioso-": {
+            "de": 1.25,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.125,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_marcar+": {
+            "de": 2.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 2.2,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_marcar-": {
+            "de": 2.0,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.8,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_pele_dura+": {
+            "de": 0.5,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.55,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_pele_dura-": {
+            "de": 0.5,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 0.45,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_tita+": {
+            "de": 1.3,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.4300000000000002,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "mult_tita-": {
+            "de": 1.3,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1.1700000000000002,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "recarga_sentinela+": {
+            "de": 4,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 5,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "recarga_sentinela-": {
+            "de": 4,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 3,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "turnos_marcar+": {
+            "de": 3,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 4,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "turnos_marcar-": {
+            "de": 3,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 2,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "turnos_pele_dura+": {
+            "de": 2,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 3,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          },
+          "turnos_pele_dura-": {
+            "de": 2,
+            "dominantes": [],
+            "e1_ok": false,
+            "para": 1,
+            "suporte": [
+              "emboscador",
+              "espelho",
+              "furioso"
+            ]
+          }
+        },
+        "total": 36
+      }
+    },
+    {
+      "gate": "sanidade_informativo",
+      "mensagem": "200 partidas rejogadas do disco bit a bit; pontos do lado 0 nos espelhos {'duelista': 0.503, 'furioso': 0.5, 'espelho': 0.512, 'muralha': 0.505, 'sentinela': 0.501, 'emboscador': 0.503, 'vigia': 0.499, 'tita': 0.503}; mediana de turnos 24.0; 0.185 no limite de turnos",
+      "ok": true,
+      "valores": {
+        "fins": {
+          "ko": 58652,
+          "limite": 13348
+        },
+        "fracao_limite": 0.18538888888888888,
+        "mediana_turnos": 24.0,
+        "pontos_lado0_espelho": {
+          "duelista": 0.5035,
+          "emboscador": 0.50325,
+          "espelho": 0.51225,
+          "furioso": 0.50025,
+          "muralha": 0.50525,
+          "sentinela": 0.5015,
+          "tita": 0.503,
+          "vigia": 0.4995
+        },
+        "replay_partidas": 200
+      }
+    },
+    {
+      "gate": "G1_G7_base",
+      "mensagem": "fontes da base INTACTOS (hash igual ao de artifacts_combate_v2); status gravado da base: REPROVADA (falharam ['G4_ritmo', 'G5_sem_acao_morta']; reprovacao registrada em docs/REGISTRO_DESVIOS.md, nao reavaliada aqui)",
+      "ok": true,
+      "valores": {
+        "falharam_base": [
+          "G4_ritmo",
+          "G5_sem_acao_morta"
+        ],
+        "fontes_intactos": true,
+        "status_base": "REPROVADA"
+      }
+    }
+  ],
+  "hashes": {
+    "arquivos_regras": [
+      "__init__.py",
+      "bots.py",
+      "catalogo.py",
+      "gambits.py",
+      "partida.py",
+      "regras.py"
+    ],
+    "config_sha256": "b860ec4acaf7d0cebeda3fd6c8221ac63cda1e9dc96f377662e8ebbbb437fde6",
+    "regras_sha256": "ced93970738068dddc82c9186e3050ce2014780938b21be0fd3bf24e8ab55785"
+  },
+  "partidas_por_par_por_semente": 100,
+  "registro_calibracao": {
+    "ajustes": [
+      {
+        "campo": "fracao_espelho_disparo",
+        "de": 0.5,
+        "motivo": "com 0.5 o espelho recebe ~12 do disparo marcado e devolve ~6; a passiva nao vale contra o cacador. Com 1.0 o espelho entra no suporte do E1.",
+        "para": 1.0
+      }
+    ],
+    "data": "2026-09-24",
+    "descricao": "Registro da calibracao do combate V2.1. Feita SO com as sementes de calibracao [3101, 3202, 3303, 3404, 3505]; as de validacao nao foram usadas antes de congelar.",
+    "evidencia": "artifacts_combate_v21/calibracao_varredura.jsonl (10 variantes, N=20 por par por semente; experiments/calibrar_v21.py com experiments/configs/calibracao/variantes_v21.json) e artifacts_combate_v21/calibracao/ (bateria rapida, N=40, sem E5)",
+    "nao_resolvido_por_numeros": [
+      "E2: com as especies do catalogo, uma especie de corpo a corpo (ferrugem ou brasa) vence as outras; 6 dos 8 arquetipos lutam de perto e a soma de stats nao gera ciclo entre especies",
+      "E1: o suporte oscila entre 3 e 4 conforme a amostra (ciclo furioso > cacador > espelho > furioso; o resto entra com peso pequeno)",
+      "E4: varia de ~0.6 a 1.0 por forma; vigia, tita, muralha e sentinela esmagam o adolescente da propria linha"
+    ],
+    "procedimento": "Rodada 1 (bots e regras, olhando a matriz e partidas rastreadas): os bots do colosso preparavam o pesado sem pele_dura e eram interrompidos; a resposta declarada por oponente_frequente quase nunca disparava; o parry nao punia a investida; o disparo marcado anulava o contra_golpe do espelho. Rodada 2 (numeros): 10 variantes de conversao de stats, custo de pele_dura, reflexo do espelho e multiplicador do adolescente. Parou apos 2 rodadas para nao sobreajustar.",
+    "revisoes_de_bot": [
+      "vigia: oponente_vai_preparar -> golpe_rapido (interrompe) no lugar de recuar; pele_dura com guts >= 40 (era 60, nunca alcancado)",
+      "tita e colosso adolescente: pele_dura com guts >= 40 (era 60)",
+      "muralha: reescrito como parede contra corpo a corpo (contra_golpe contra golpe rapido, parry contra investida)",
+      "respostas declaradas do E3: regras incondicionais que o oponente poe no topo quando sabe que enfrenta a tecnica (antes: oponente_frequente, quase nunca verdadeiro)"
+    ],
+    "revisoes_de_regra": [
+      "parry: defender contra investida anula o dano E o avanco (o investidor fica em medio com o guts gasto); antes so anulava o dano e a investida chegava perto de graca",
+      "disparo marcado ignora a REDUCAO de defender/contra_golpe, mas o contra_golpe do espelho ainda devolve o dano"
+    ],
+    "testado_e_nao_adotado": [
+      "hp 80+2*vigor e 85+1.5*vigor: estreitam as especies (0.34-0.64 -> 0.43-0.57) mas trocam a dominante (ferrugem ou brasa) e derrubam o suporte do E1",
+      "guarda 1.2-0.02*guarda, regen 2+0.6*rec, forca/mira 0.8+0.02*stat: nao tiram a especie dominante",
+      "custo_pele_dura 12: colosso continua fraco (media ~0.3)",
+      "multiplicador do adolescente 0.9 e 1.0: menos formas dentro da faixa do E4 (a diferenca adulto x adolescente vem mais dos gambits e da passiva que do estagio)"
+    ]
+  },
+  "sementes": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "sementes_calibracao": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sementes_validacao": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "status": "REPROVADA"
+}

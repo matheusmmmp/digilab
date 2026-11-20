@@ -1,0 +1,58 @@
+{
+ "descricao": "Megas (de 6 vidas) por dono simulado e limiar de vinculo; o resto como em vinculo_donos.json.",
+ "limiar_adotado": 0.4,
+ "dias": 3,
+ "interacoes_por_dia": 16,
+ "sementes": [
+  2001,
+  2002,
+  2003,
+  2004,
+  2005,
+  2006
+ ],
+ "megas_por_limiar": {
+  "0.7": {
+   "atencioso": 0,
+   "incoerente": 0,
+   "relapso": 0,
+   "aleatorio": 4
+  },
+  "0.6": {
+   "atencioso": 0,
+   "incoerente": 0,
+   "relapso": 1,
+   "aleatorio": 5
+  },
+  "0.5": {
+   "atencioso": 0,
+   "incoerente": 1,
+   "relapso": 3,
+   "aleatorio": 5
+  },
+  "0.45": {
+   "atencioso": 0,
+   "incoerente": 1,
+   "relapso": 3,
+   "aleatorio": 5
+  },
+  "0.4": {
+   "atencioso": 3,
+   "incoerente": 3,
+   "relapso": 4,
+   "aleatorio": 5
+  },
+  "0.35": {
+   "atencioso": 3,
+   "incoerente": 5,
+   "relapso": 4,
+   "aleatorio": 5
+  },
+  "0.3": {
+   "atencioso": 3,
+   "incoerente": 6,
+   "relapso": 4,
+   "aleatorio": 5
+  }
+ }
+}

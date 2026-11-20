@@ -1,0 +1,74 @@
+{
+  "bancada_sha256": "586e524bcd2b98e7f41da1e85702777da6319e8bef73980c13b50fdf945e764c",
+  "cfg_lobos": {
+    "aprendizado_ligado": true,
+    "bits_ponto_fixo": 10,
+    "escala_ticks_desde_cuidado": 480.0,
+    "janela_latencia_ticks": 120,
+    "maximo_pesos": 1000,
+    "memoria_ganho": 0,
+    "memoria_janela_recencia_ticks": 240,
+    "memoria_ligada": false,
+    "memoria_modo": "relevante",
+    "memoria_permutacao": [],
+    "passo": 512,
+    "piso_peso": 64,
+    "recompensa_elogio": 1.0,
+    "recompensa_pedido_ignorado": -0.5,
+    "recompensa_repreensao": -1.0,
+    "teto": 16384,
+    "traco_decisoes": 0,
+    "traco_fator": 0,
+    "w0_info": 0,
+    "w0_pedido": 256
+  },
+  "config": {
+    "acoplados": [],
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "bracos": [
+      "P0+ped"
+    ],
+    "descricao": "K2 A2 w0_pedido=256: Calibracao conjunta do cerebro A (etapa K2): etapas A1, A2, B, C e D do plano, unidades derivadas das bases 14101...14505 com K = 4 (20 unidades), 14 dias, o dono atencioso, o ponto T3.",
+    "dias": 14,
+    "donos": [
+      "atencioso"
+    ],
+    "julgamento_fruta": true,
+    "lobos": {
+      "w0_pedido": 256
+    },
+    "montagem": "completa",
+    "mundos": [
+      "iguais_frutas"
+    ],
+    "orcamento": 224,
+    "plano": "docs/PLANO_CALIBRACAO_CONJUNTA_V2.md",
+    "ponto": "T3",
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    },
+    "unidades": {
+      "bases": [
+        14101,
+        14202,
+        14303,
+        14404,
+        14505
+      ],
+      "k": 4
+    }
+  },
+  "config_sha256": "1e0a9b2e1a2b43d13315c3ca01abe4581420a85d09ce44907c27f8807acc2d69",
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "lobos_sha256": "94e78011c72d44d779711998114f2fc6413460f37f25fb8912361d99aafb73ab",
+  "metrics_sha256": "0ec4e53dce42f3ea901bea06d194cbd86e458003378ac05bb64497589d520ad4",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "ponto": "T3",
+  "python": "3.13.0"
+}

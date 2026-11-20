@@ -1,0 +1,12 @@
+{
+  "descricao": "Fumaca dos bracos do N5 na bancada (docs/TAREFA_V2_BANCADA_N5.md). NAO canonica: unidades derivadas das sementes dos testes, sem plano de analise; confere o encanamento (lobos vendo as frutas, P0, P1, P2, P2e, P2a no descasado, o so cuidado do P2, as medidas do N5 na tabela), nunca como resultado.",
+  "bracos": ["P0", "P1", "P2", "P2e", "P2a"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1},
+  "mundos": ["descasado"],
+  "dias": 4,
+  "orcamento": 64,
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P2", "destino": "P2", "filtro": "sem_ensino"}, {"origem": "P2e", "destino": "P2e", "filtro": "sem_ensino"}]
+}

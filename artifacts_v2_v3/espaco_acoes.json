@@ -1,0 +1,961 @@
+{
+ "braco": "P1-c-tapa",
+ "dias": 14,
+ "donos": [
+  "atencioso",
+  "relapso",
+  "aleatorio",
+  "incoerente"
+ ],
+ "inventario": {
+  "acoes_com_alvo_no_mundo": [
+   "explorar",
+   "comer",
+   "brincar",
+   "aliviar"
+  ],
+  "acoes_pet_hoje": [
+   "ocioso",
+   "dormir",
+   "comer",
+   "brincar",
+   "chamar_atencao",
+   "explorar",
+   "emburrar"
+  ],
+  "alvos_do_alivio": [
+   "banheiro",
+   "aqui"
+  ],
+  "classes_do_alvo": {
+   "brincar": [
+    "bola",
+    "continuar"
+   ],
+   "comer": [
+    "comida",
+    "comida_podre",
+    "cheiro",
+    "continuar"
+   ],
+   "explorar": [
+    "cheiro",
+    "vagar",
+    "casa",
+    "continuar",
+    "seguir",
+    "onde_comeu"
+   ]
+  },
+  "mundo_fisico_com_banheiro": {
+   "abandono": [
+    "chamar_atencao",
+    "emburrar"
+   ],
+   "alivio_urgente": [
+    "aliviar"
+   ],
+   "bola_no_cenario": [
+    "ocioso",
+    "brincar",
+    "chamar_atencao",
+    "explorar",
+    "aliviar"
+   ],
+   "fome_moderada": [
+    "comer",
+    "chamar_atencao"
+   ],
+   "fruta_no_cenario": [
+    "ocioso",
+    "comer",
+    "brincar",
+    "chamar_atencao",
+    "explorar",
+    "aliviar"
+   ],
+   "pedido_necessidade": [
+    "comer",
+    "chamar_atencao"
+   ],
+   "sono_continuar": [
+    "dormir"
+   ],
+   "sono_exaustao": [
+    "dormir"
+   ],
+   "sono_noite": [
+    "dormir"
+   ],
+   "tempo_livre": [
+    "ocioso",
+    "brincar",
+    "chamar_atencao",
+    "explorar",
+    "aliviar"
+   ]
+  },
+  "regras_com_alvo": {
+   "bola_no_cenario": [
+    "explorar",
+    "brincar"
+   ],
+   "fome_moderada": [
+    "comer"
+   ],
+   "fruta_no_cenario": [
+    "explorar",
+    "brincar",
+    "comer"
+   ],
+   "pedido_necessidade": [
+    "comer"
+   ],
+   "tempo_livre": [
+    "explorar",
+    "brincar"
+   ]
+  },
+  "v11": {
+   "abandono": [
+    "chamar_atencao",
+    "emburrar"
+   ],
+   "fome_moderada": [
+    "comer",
+    "chamar_atencao"
+   ],
+   "pedido_necessidade": [
+    "chamar_atencao"
+   ],
+   "sono_continuar": [
+    "dormir"
+   ],
+   "sono_exaustao": [
+    "dormir"
+   ],
+   "sono_noite": [
+    "dormir"
+   ],
+   "tempo_livre": [
+    "ocioso",
+    "brincar",
+    "chamar_atencao",
+    "explorar"
+   ]
+  },
+  "v11_acoes_so_em_regras_forcadas": [
+   "dormir"
+  ],
+  "v11_regras_forcadas": [
+   "pedido_necessidade",
+   "sono_continuar",
+   "sono_exaustao",
+   "sono_noite"
+  ]
+ },
+ "j5": {
+  "analise": {
+   "P1": {
+    "classe_x_desceu": 4,
+    "humor_previsto_desceu": 0,
+    "sinal_x_proprio_depois": {
+     "f_drives_medio": -86.58333333333333,
+     "frac_gosto_maior_que_perda": 0.0,
+     "frac_total_positivo": 0.3611111111111111,
+     "gosto_medio": 65.94444444444444,
+     "n": 36
+    },
+    "vidas": [
+     {
+      "braco": "P1",
+      "classe_x_na_mudanca": -594,
+      "classe_x_no_fim": -607,
+      "humor_previsto_x_na_mudanca": null,
+      "humor_previsto_x_no_fim": null,
+      "semente": 101,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -373,
+        "gosto": 4,
+        "humor": -96084
+       },
+       {
+        "f_drives": -173,
+        "gosto": 47,
+        "humor": -40188
+       },
+       {
+        "f_drives": -412,
+        "gosto": 92,
+        "humor": -97104
+       },
+       {
+        "f_drives": -105,
+        "gosto": 33,
+        "humor": -79356
+       },
+       {
+        "f_drives": -417,
+        "gosto": 111,
+        "humor": -100776
+       },
+       {
+        "f_drives": -476,
+        "gosto": 131,
+        "humor": -120156
+       },
+       {
+        "f_drives": -410,
+        "gosto": 94,
+        "humor": -96084
+       },
+       {
+        "f_drives": -565,
+        "gosto": 82,
+        "humor": -141831
+       },
+       {
+        "f_drives": 855,
+        "gosto": 169,
+        "humor": 0
+       }
+      ],
+      "tick_mudanca": 10560,
+      "x": "c",
+      "x_na_mao": 2,
+      "x_proprio_antes": 9,
+      "x_proprio_depois": 9
+     },
+     {
+      "braco": "P1",
+      "classe_x_na_mudanca": 2694,
+      "classe_x_no_fim": 2547,
+      "humor_previsto_x_na_mudanca": null,
+      "humor_previsto_x_no_fim": null,
+      "semente": 202,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": 257,
+        "gosto": 89,
+        "humor": -40067
+       },
+       {
+        "f_drives": -166,
+        "gosto": 106,
+        "humor": -111792
+       },
+       {
+        "f_drives": -113,
+        "gosto": 112,
+        "humor": -113832
+       },
+       {
+        "f_drives": 1030,
+        "gosto": 181,
+        "humor": 0
+       },
+       {
+        "f_drives": 1116,
+        "gosto": 221,
+        "humor": 0
+       }
+      ],
+      "tick_mudanca": 10560,
+      "x": "b",
+      "x_na_mao": 2,
+      "x_proprio_antes": 7,
+      "x_proprio_depois": 5
+     },
+     {
+      "braco": "P1",
+      "classe_x_na_mudanca": 212,
+      "classe_x_no_fim": 1520,
+      "humor_previsto_x_na_mudanca": null,
+      "humor_previsto_x_no_fim": null,
+      "semente": 303,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": 87,
+        "gosto": 8,
+        "humor": -34476
+       },
+       {
+        "f_drives": 407,
+        "gosto": 96,
+        "humor": -36516
+       },
+       {
+        "f_drives": -318,
+        "gosto": 0,
+        "humor": -95481
+       },
+       {
+        "f_drives": -469,
+        "gosto": 0,
+        "humor": -119171
+       },
+       {
+        "f_drives": -163,
+        "gosto": 13,
+        "humor": -94044
+       },
+       {
+        "f_drives": 108,
+        "gosto": 75,
+        "humor": -108665
+       },
+       {
+        "f_drives": -495,
+        "gosto": 65,
+        "humor": -124848
+       },
+       {
+        "f_drives": 340,
+        "gosto": 114,
+        "humor": -107017
+       },
+       {
+        "f_drives": 90,
+        "gosto": 9,
+        "humor": -129540
+       },
+       {
+        "f_drives": 143,
+        "gosto": 136,
+        "humor": -86700
+       },
+       {
+        "f_drives": -127,
+        "gosto": 10,
+        "humor": -110160
+       },
+       {
+        "f_drives": -111,
+        "gosto": 0,
+        "humor": -84660
+       },
+       {
+        "f_drives": 101,
+        "gosto": 72,
+        "humor": -149247
+       }
+      ],
+      "tick_mudanca": 10590,
+      "x": "c",
+      "x_na_mao": 2,
+      "x_proprio_antes": 10,
+      "x_proprio_depois": 13
+     },
+     {
+      "braco": "P1",
+      "classe_x_na_mudanca": 1154,
+      "classe_x_no_fim": 907,
+      "humor_previsto_x_na_mudanca": null,
+      "humor_previsto_x_no_fim": null,
+      "semente": 404,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -352,
+        "gosto": 3,
+        "humor": -84660
+       },
+       {
+        "f_drives": -276,
+        "gosto": 4,
+        "humor": -91773
+       },
+       {
+        "f_drives": 55,
+        "gosto": 3,
+        "humor": -119544
+       },
+       {
+        "f_drives": -427,
+        "gosto": 3,
+        "humor": -108120
+       },
+       {
+        "f_drives": 193,
+        "gosto": 3,
+        "humor": -88740
+       },
+       {
+        "f_drives": -457,
+        "gosto": 3,
+        "humor": -115464
+       },
+       {
+        "f_drives": -412,
+        "gosto": 5,
+        "humor": -109140
+       }
+      ],
+      "tick_mudanca": 10590,
+      "x": "b",
+      "x_na_mao": 2,
+      "x_proprio_antes": 8,
+      "x_proprio_depois": 7
+     },
+     {
+      "braco": "P1",
+      "classe_x_na_mudanca": -240,
+      "classe_x_no_fim": -383,
+      "humor_previsto_x_na_mudanca": null,
+      "humor_previsto_x_no_fim": null,
+      "semente": 505,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -514,
+        "gosto": 91,
+        "humor": -130295
+       },
+       {
+        "f_drives": -568,
+        "gosto": 189,
+        "humor": -143479
+       }
+      ],
+      "tick_mudanca": 10560,
+      "x": "b",
+      "x_na_mao": 2,
+      "x_proprio_antes": 5,
+      "x_proprio_depois": 2
+     }
+    ],
+    "vidas_sem_x_proprio_depois": 0,
+    "x_na_mao_total": 10,
+    "x_proprio_depois_total": 36
+   },
+   "P1-plan": {
+    "classe_x_desceu": 3,
+    "humor_previsto_desceu": 5,
+    "sinal_x_proprio_depois": {
+     "f_drives_medio": 110.96774193548387,
+     "frac_gosto_maior_que_perda": 0.0,
+     "frac_total_positivo": 0.45161290322580644,
+     "gosto_medio": 82.80645161290323,
+     "n": 31
+    },
+    "vidas": [
+     {
+      "braco": "P1-plan",
+      "classe_x_na_mudanca": 998,
+      "classe_x_no_fim": 520,
+      "humor_previsto_x_na_mudanca": 10,
+      "humor_previsto_x_no_fim": -32,
+      "semente": 101,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -271,
+        "gosto": 140,
+        "humor": -67932
+       },
+       {
+        "f_drives": -82,
+        "gosto": 81,
+        "humor": -89095
+       },
+       {
+        "f_drives": -276,
+        "gosto": 151,
+        "humor": -84048
+       },
+       {
+        "f_drives": -451,
+        "gosto": 164,
+        "humor": -130295
+       },
+       {
+        "f_drives": -379,
+        "gosto": 145,
+        "humor": -119544
+       },
+       {
+        "f_drives": 967,
+        "gosto": 201,
+        "humor": 0
+       },
+       {
+        "f_drives": 827,
+        "gosto": 38,
+        "humor": 0
+       },
+       {
+        "f_drives": 1057,
+        "gosto": 29,
+        "humor": 0
+       }
+      ],
+      "tick_mudanca": 10560,
+      "x": "c",
+      "x_na_mao": 2,
+      "x_proprio_antes": 12,
+      "x_proprio_depois": 8
+     },
+     {
+      "braco": "P1-plan",
+      "classe_x_na_mudanca": 3334,
+      "classe_x_no_fim": 3345,
+      "humor_previsto_x_na_mudanca": 4,
+      "humor_previsto_x_no_fim": -13,
+      "semente": 202,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": 299,
+        "gosto": 173,
+        "humor": -66300
+       },
+       {
+        "f_drives": 1119,
+        "gosto": 291,
+        "humor": 0
+       },
+       {
+        "f_drives": 1106,
+        "gosto": 253,
+        "humor": 0
+       }
+      ],
+      "tick_mudanca": 10575,
+      "x": "b",
+      "x_na_mao": 2,
+      "x_proprio_antes": 13,
+      "x_proprio_depois": 3
+     },
+     {
+      "braco": "P1-plan",
+      "classe_x_na_mudanca": 1332,
+      "classe_x_no_fim": 1402,
+      "humor_previsto_x_na_mudanca": 0,
+      "humor_previsto_x_no_fim": -36,
+      "semente": 303,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -458,
+        "gosto": 1,
+        "humor": -104957
+       },
+       {
+        "f_drives": -532,
+        "gosto": 0,
+        "humor": -128647
+       },
+       {
+        "f_drives": 270,
+        "gosto": 157,
+        "humor": -95481
+       },
+       {
+        "f_drives": 218,
+        "gosto": 58,
+        "humor": -124236
+       },
+       {
+        "f_drives": 273,
+        "gosto": 0,
+        "humor": -122879
+       },
+       {
+        "f_drives": 276,
+        "gosto": 0,
+        "humor": -93833
+       },
+       {
+        "f_drives": 1090,
+        "gosto": 257,
+        "humor": 0
+       },
+       {
+        "f_drives": 932,
+        "gosto": 101,
+        "humor": 0
+       },
+       {
+        "f_drives": 830,
+        "gosto": 0,
+        "humor": 0
+       }
+      ],
+      "tick_mudanca": 10560,
+      "x": "c",
+      "x_na_mao": 2,
+      "x_proprio_antes": 13,
+      "x_proprio_depois": 9
+     },
+     {
+      "braco": "P1-plan",
+      "classe_x_na_mudanca": 607,
+      "classe_x_no_fim": -360,
+      "humor_previsto_x_na_mudanca": 9,
+      "humor_previsto_x_no_fim": -88,
+      "semente": 404,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -199,
+        "gosto": 1,
+        "humor": -123909
+       },
+       {
+        "f_drives": -367,
+        "gosto": -1,
+        "humor": -92412
+       },
+       {
+        "f_drives": -118,
+        "gosto": 1,
+        "humor": -93833
+       },
+       {
+        "f_drives": -20,
+        "gosto": 3,
+        "humor": -132600
+       },
+       {
+        "f_drives": 358,
+        "gosto": 1,
+        "humor": -85680
+       },
+       {
+        "f_drives": -491,
+        "gosto": 0,
+        "humor": -122196
+       },
+       {
+        "f_drives": -490,
+        "gosto": -2,
+        "humor": -128647
+       }
+      ],
+      "tick_mudanca": 10605,
+      "x": "b",
+      "x_na_mao": 2,
+      "x_proprio_antes": 9,
+      "x_proprio_depois": 7
+     },
+     {
+      "braco": "P1-plan",
+      "classe_x_na_mudanca": 2482,
+      "classe_x_no_fim": 1822,
+      "humor_previsto_x_na_mudanca": -5,
+      "humor_previsto_x_no_fim": -72,
+      "semente": 505,
+      "sinal_x_proprio_depois": [
+       {
+        "f_drives": -538,
+        "gosto": 0,
+        "humor": -135033
+       },
+       {
+        "f_drives": -569,
+        "gosto": 76,
+        "humor": -135033
+       },
+       {
+        "f_drives": -422,
+        "gosto": 111,
+        "humor": -102408
+       },
+       {
+        "f_drives": -519,
+        "gosto": 137,
+        "humor": -131325
+       }
+      ],
+      "tick_mudanca": 10560,
+      "x": "b",
+      "x_na_mao": 2,
+      "x_proprio_antes": 7,
+      "x_proprio_depois": 4
+     }
+    ],
+    "vidas_sem_x_proprio_depois": 0,
+    "x_na_mao_total": 10,
+    "x_proprio_depois_total": 31
+   }
+  },
+  "config": "experiments/configs/v2_pet_que_pensa/fumaca_piloto_adendo7.json",
+  "duracao": {
+   "d_a": 7,
+   "janela": 5
+  },
+  "protocolo": "T1"
+ },
+ "mundo_fisico": {
+  "braco": "P1-alvo",
+  "config": "experiments/configs/v2_mundo_alvo/fumaca_piloto.json",
+  "dias": 4,
+  "subdecisoes": {
+   "brincar": {
+    "candidatos_medio": 0.0014727540500736377,
+    "classes_medio": 0.0014727540500736377,
+    "frac_alvo_fora_do_padrao": 0.0,
+    "frac_mais_de_uma_classe": 0.0,
+    "n": 679
+   },
+   "comer": {
+    "candidatos_medio": 3.2867132867132867,
+    "classes_medio": 1.6503496503496504,
+    "frac_alvo_fora_do_padrao": 0.013986013986013986,
+    "frac_mais_de_uma_classe": 0.5559440559440559,
+    "n": 858
+   },
+   "explorar": {
+    "candidatos_medio": 2.7476635514018692,
+    "classes_medio": 2.7476635514018692,
+    "frac_alvo_fora_do_padrao": 0.1806853582554517,
+    "frac_mais_de_uma_classe": 1.0,
+    "n": 642
+   }
+  }
+ },
+ "orcamento": 224,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "v11": {
+  "acoes_por_frequencia": {
+   "brincar": 3765,
+   "chamar_atencao": 4969,
+   "comer": 423,
+   "dormir": 10604,
+   "emburrar": 157,
+   "explorar": 4556,
+   "ocioso": 2406
+  },
+  "credito": {
+   "com_escolha": {
+    "abs_f": 3918648,
+    "aplicacoes": 19402,
+    "com_peso_mudado": 18156,
+    "frac_mudou": 0.9357798165137615
+   },
+   "forcadas": {
+    "abs_f": 3320804,
+    "aplicacoes": 2658,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0
+   },
+   "frac_abs_f_nas_forcadas": 0.4587093056214752,
+   "por_regra": {
+    "abandono": {
+     "abs_f": 429804,
+     "aplicacoes": 338,
+     "com_peso_mudado": 0,
+     "frac_mudou": 0.0
+    },
+    "fome_moderada": {
+     "abs_f": 331094,
+     "aplicacoes": 968,
+     "com_peso_mudado": 966,
+     "frac_mudou": 0.9979338842975206
+    },
+    "pedido_necessidade": {
+     "abs_f": 899886,
+     "aplicacoes": 382,
+     "com_peso_mudado": 0,
+     "frac_mudou": 0.0
+    },
+    "sono_continuar": {
+     "abs_f": 1686060,
+     "aplicacoes": 1666,
+     "com_peso_mudado": 0,
+     "frac_mudou": 0.0
+    },
+    "sono_exaustao": {
+     "abs_f": 161016,
+     "aplicacoes": 130,
+     "com_peso_mudado": 0,
+     "frac_mudou": 0.0
+    },
+    "sono_noite": {
+     "abs_f": 144038,
+     "aplicacoes": 142,
+     "com_peso_mudado": 0,
+     "frac_mudou": 0.0
+    },
+    "tempo_livre": {
+     "abs_f": 3587554,
+     "aplicacoes": 18434,
+     "com_peso_mudado": 17190,
+     "frac_mudou": 0.9325160030378649
+    }
+   }
+  },
+  "forcadas_com_outra_regra_urgente": 0.3446673848639914,
+  "forcadas_com_uniao_so_urgentes_maior_que_1": 0.3211688661459736,
+  "forcadas_uniao_media_com_tempo_livre": 5.024306490708322,
+  "forcadas_uniao_media_so_urgentes": 1.4737409103151091,
+  "frac_forcadas": 0.5525297619047619,
+  "n_decisoes": 26880,
+  "por_dono": {
+   "aleatorio": {
+    "frac_abs_f_nas_forcadas": 0.45789415825693114,
+    "frac_forcadas": 0.6157738095238096
+   },
+   "atencioso": {
+    "frac_abs_f_nas_forcadas": 0.45098952582505214,
+    "frac_forcadas": 0.4355654761904762
+   },
+   "incoerente": {
+    "frac_abs_f_nas_forcadas": 0.34934318255364394,
+    "frac_forcadas": 0.41651785714285716
+   },
+   "relapso": {
+    "frac_abs_f_nas_forcadas": 0.5419866496106649,
+    "frac_forcadas": 0.7422619047619048
+   }
+  },
+  "por_regra": {
+   "abandono": {
+    "acoes": {
+     "chamar_atencao": 2217,
+     "emburrar": 157
+    },
+    "candidatos": [
+     1
+    ],
+    "frac_com_outra_regra_urgente": 0.4022746419545072,
+    "frac_do_total": 0.08831845238095239,
+    "h_empirica": 0.3513245818083745,
+    "h_politica_media": 0.0,
+    "h_prior_media": 0.0,
+    "n": 2374,
+    "outras_regras_que_valem": {
+     "fome_moderada": 0.4022746419545072
+    },
+    "uniao_media_com_tempo_livre": 4.468407750631845,
+    "uniao_media_so_urgentes": 1.441027801179444
+   },
+   "fome_moderada": {
+    "acoes": {
+     "chamar_atencao": 178,
+     "comer": 423
+    },
+    "candidatos": [
+     2
+    ],
+    "frac_com_outra_regra_urgente": 0.0,
+    "frac_do_total": 0.022358630952380953,
+    "h_empirica": 0.8765624276633359,
+    "h_politica_media": 0.27043369982037263,
+    "h_prior_media": 1.0,
+    "n": 601,
+    "outras_regras_que_valem": {},
+    "uniao_media_com_tempo_livre": 5.0,
+    "uniao_media_so_urgentes": 2.0
+   },
+   "pedido_necessidade": {
+    "acoes": {
+     "chamar_atencao": 1874
+    },
+    "candidatos": [
+     1
+    ],
+    "frac_com_outra_regra_urgente": 0.7091782283884739,
+    "frac_do_total": 0.0697172619047619,
+    "h_empirica": -0.0,
+    "h_politica_media": 0.0,
+    "h_prior_media": 0.0,
+    "n": 1874,
+    "outras_regras_que_valem": {
+     "abandono": 0.3591248665955176,
+     "fome_moderada": 0.6926360725720384
+    },
+    "uniao_media_com_tempo_livre": 4.828708644610459,
+    "uniao_media_so_urgentes": 1.828708644610459
+   },
+   "sono_continuar": {
+    "acoes": {
+     "dormir": 9291
+    },
+    "candidatos": [
+     1
+    ],
+    "frac_com_outra_regra_urgente": 0.2728446884081369,
+    "frac_do_total": 0.3456473214285714,
+    "h_empirica": -0.0,
+    "h_politica_media": 0.0,
+    "h_prior_media": 0.0,
+    "n": 9291,
+    "outras_regras_que_valem": {
+     "abandono": 0.10407921644602303,
+     "fome_moderada": 0.1723172963082553,
+     "pedido_necessidade": 0.10623183726186632,
+     "sono_noite": 0.04412872672478743
+    },
+    "uniao_media_com_tempo_livre": 5.188677214508664,
+    "uniao_media_so_urgentes": 1.4290173285975676
+   },
+   "sono_exaustao": {
+    "acoes": {
+     "dormir": 586
+    },
+    "candidatos": [
+     1
+    ],
+    "frac_com_outra_regra_urgente": 0.22525597269624573,
+    "frac_do_total": 0.021800595238095237,
+    "h_empirica": -0.0,
+    "h_politica_media": 0.0,
+    "h_prior_media": 0.0,
+    "n": 586,
+    "outras_regras_que_valem": {
+     "abandono": 0.06484641638225255,
+     "fome_moderada": 0.13139931740614336,
+     "pedido_necessidade": 0.1075085324232082,
+     "sono_continuar": 0.051194539249146756,
+     "sono_noite": 0.025597269624573378
+    },
+    "uniao_media_com_tempo_livre": 5.148464163822526,
+    "uniao_media_so_urgentes": 1.3122866894197953
+   },
+   "sono_noite": {
+    "acoes": {
+     "dormir": 727
+    },
+    "candidatos": [
+     1
+    ],
+    "frac_com_outra_regra_urgente": 0.2310866574965612,
+    "frac_do_total": 0.027046130952380953,
+    "h_empirica": -0.0,
+    "h_politica_media": 0.0,
+    "h_prior_media": 0.0,
+    "n": 727,
+    "outras_regras_que_valem": {
+     "abandono": 0.13067400275103164,
+     "fome_moderada": 0.12517193947730398,
+     "pedido_necessidade": 0.09628610729023383
+    },
+    "uniao_media_com_tempo_livre": 5.143053645116919,
+    "uniao_media_so_urgentes": 1.3672627235213204
+   },
+   "tempo_livre": {
+    "acoes": {
+     "brincar": 3765,
+     "chamar_atencao": 700,
+     "explorar": 4556,
+     "ocioso": 2406
+    },
+    "candidatos": [
+     4
+    ],
+    "frac_com_outra_regra_urgente": 0.0,
+    "frac_do_total": 0.4251116071428571,
+    "h_empirica": 1.7767425896386437,
+    "h_politica_media": 1.462863068523542,
+    "h_prior_media": 1.8709561649497237,
+    "n": 11427,
+    "outras_regras_que_valem": {},
+    "uniao_media_com_tempo_livre": 4.0,
+    "uniao_media_so_urgentes": 0.0
+   }
+  }
+ },
+ "versao": 1
+}

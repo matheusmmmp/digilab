@@ -1,0 +1,352 @@
+{
+ "descricao": "Conferencia da Liga dos Lideres dos pets v9 (rodada de equilibrio geral, fase 3, meta M-C1): a Liga do motor, o Mega de referencia com o treino tipico",
+ "motor": "web/app/motor (escala CESC_V9 ligada, regras V21E, limite do desafiado = o lider; liga.jogarLiga com FATOR_LIGA_V9 e CURA_LIGA_V9)",
+ "conjunto": "calibracao",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "treino_tipico_mega": 40,
+ "partidas_por_semente_especie_forma": 20,
+ "metas": {
+  "titulo_min": 0.25,
+  "titulo_max": 0.85
+ },
+ "fatores": {
+  "campina": 0.4,
+  "torre": 0.3,
+  "floresta": 0.1,
+  "cidadela": 1,
+  "lago": 1.7,
+  "espiral": 0.9
+ },
+ "cura_entre_lutas": 0,
+ "meta_c1": {
+  "min": 0.085,
+  "forma_min": "muralha",
+  "max": 0.725,
+  "forma_max": "furioso",
+  "na_faixa": 7,
+  "falta_ate_a_faixa": 0.165,
+  "folga": -0.165,
+  "passa": false
+ },
+ "titulos": {
+  "duelista": 0.485,
+  "furioso": 0.725,
+  "espelho": 0.255,
+  "muralha": 0.085,
+  "sentinela": 0.2725,
+  "emboscador": 0.435,
+  "vigia": 0.3975,
+  "tita": 0.2625
+ },
+ "relato_fator_de_antes": {
+  "descricao": "a mesma Liga dos v9 (regras V21E) com o fator de antes (FATOR_LIGA nos 6, sem cura)",
+  "titulos": {
+   "duelista": 0.315,
+   "furioso": 0.6275,
+   "espelho": 0.31,
+   "muralha": 0,
+   "sentinela": 0.0525,
+   "emboscador": 0.0825,
+   "vigia": 0.4275,
+   "tita": 0.0075
+  },
+  "meta_c1": {
+   "min": 0,
+   "forma_min": "muralha",
+   "max": 0.6275,
+   "forma_max": "furioso",
+   "na_faixa": 4,
+   "falta_ate_a_faixa": 0.8575,
+   "folga": -0.25,
+   "passa": false
+  }
+ },
+ "liga_inteira": {
+  "duelista": {
+   "titulos": 0.485,
+   "chegou_na_luta": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0.6
+   ],
+   "venceu_dado_que_chegou": [
+    1,
+    1,
+    1,
+    1,
+    0.6,
+    0.8083
+   ]
+  },
+  "furioso": {
+   "titulos": 0.725,
+   "chegou_na_luta": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0.9
+   ],
+   "venceu_dado_que_chegou": [
+    1,
+    1,
+    1,
+    1,
+    0.9,
+    0.8056
+   ]
+  },
+  "espelho": {
+   "titulos": 0.255,
+   "chegou_na_luta": [
+    1,
+    1,
+    0.64,
+    0.64,
+    0.64,
+    0.26
+   ],
+   "venceu_dado_que_chegou": [
+    1,
+    0.64,
+    1,
+    1,
+    0.4063,
+    0.9808
+   ]
+  },
+  "muralha": {
+   "titulos": 0.085,
+   "chegou_na_luta": [
+    1,
+    1,
+    0.67,
+    0.26,
+    0.26,
+    0.125
+   ],
+   "venceu_dado_que_chegou": [
+    1,
+    0.67,
+    0.3881,
+    1,
+    0.4808,
+    0.68
+   ]
+  },
+  "sentinela": {
+   "titulos": 0.2725,
+   "chegou_na_luta": [
+    1,
+    0.735,
+    0.735,
+    0.735,
+    0.275,
+    0.275
+   ],
+   "venceu_dado_que_chegou": [
+    0.735,
+    1,
+    1,
+    0.3741,
+    1,
+    0.9909
+   ]
+  },
+  "emboscador": {
+   "titulos": 0.435,
+   "chegou_na_luta": [
+    1,
+    0.95,
+    0.95,
+    0.95,
+    0.435,
+    0.435
+   ],
+   "venceu_dado_que_chegou": [
+    0.95,
+    1,
+    1,
+    0.4579,
+    1,
+    1
+   ]
+  },
+  "vigia": {
+   "titulos": 0.3975,
+   "chegou_na_luta": [
+    1,
+    1,
+    1,
+    0.895,
+    0.89,
+    0.71
+   ],
+   "venceu_dado_que_chegou": [
+    1,
+    1,
+    0.895,
+    0.9944,
+    0.7978,
+    0.5599
+   ]
+  },
+  "tita": {
+   "titulos": 0.2625,
+   "chegou_na_luta": [
+    1,
+    1,
+    1,
+    0.2975,
+    0.2975,
+    0.29
+   ],
+   "venceu_dado_que_chegou": [
+    1,
+    1,
+    0.2975,
+    1,
+    0.9748,
+    0.9052
+   ]
+  }
+ },
+ "por_luta": [
+  {
+   "luta": 1,
+   "lider": "Gazimon",
+   "mega": "WarGreymon",
+   "arquetipo": "Furioso",
+   "fator": 0.4,
+   "melhor_forma": "duelista",
+   "melhor_taxa": 1,
+   "pior_forma": "sentinela",
+   "pior_taxa": 0.675,
+   "por_forma": {
+    "duelista": 1,
+    "furioso": 1,
+    "espelho": 1,
+    "muralha": 1,
+    "sentinela": 0.675,
+    "emboscador": 0.95,
+    "vigia": 1,
+    "tita": 0.995
+   }
+  },
+  {
+   "luta": 2,
+   "lider": "Guardromon",
+   "mega": "Seraphimon",
+   "arquetipo": "Espelho",
+   "fator": 0.3,
+   "melhor_forma": "duelista",
+   "melhor_taxa": 1,
+   "pior_forma": "espelho",
+   "pior_taxa": 0.6375,
+   "por_forma": {
+    "duelista": 1,
+    "furioso": 1,
+    "espelho": 0.6375,
+    "muralha": 0.6975,
+    "sentinela": 1,
+    "emboscador": 1,
+    "vigia": 1,
+    "tita": 1
+   }
+  },
+  {
+   "luta": 3,
+   "lider": "Youkomon",
+   "mega": "MegaGargomon",
+   "arquetipo": "Sentinela",
+   "fator": 0.1,
+   "melhor_forma": "duelista",
+   "melhor_taxa": 1,
+   "pior_forma": "tita",
+   "pior_taxa": 0.275,
+   "por_forma": {
+    "duelista": 1,
+    "furioso": 1,
+    "espelho": 1,
+    "muralha": 0.475,
+    "sentinela": 1,
+    "emboscador": 1,
+    "vigia": 0.885,
+    "tita": 0.275
+   }
+  },
+  {
+   "luta": 4,
+   "lider": "Myotismon",
+   "mega": "Vikemon",
+   "arquetipo": "Titã",
+   "fator": 1,
+   "melhor_forma": "duelista",
+   "melhor_taxa": 1,
+   "pior_forma": "sentinela",
+   "pior_taxa": 0.2775,
+   "por_forma": {
+    "duelista": 1,
+    "furioso": 1,
+    "espelho": 1,
+    "muralha": 1,
+    "sentinela": 0.2775,
+    "emboscador": 0.52,
+    "vigia": 0.9825,
+    "tita": 1
+   }
+  },
+  {
+   "luta": 5,
+   "lider": "MarinBullmon",
+   "mega": "Rosemon",
+   "arquetipo": "Muralha",
+   "fator": 1.7,
+   "melhor_forma": "furioso",
+   "melhor_taxa": 1,
+   "pior_forma": "espelho",
+   "pior_taxa": 0.4025,
+   "por_forma": {
+    "duelista": 0.57,
+    "furioso": 1,
+    "espelho": 0.4025,
+    "muralha": 0.43,
+    "sentinela": 1,
+    "emboscador": 1,
+    "vigia": 0.995,
+    "tita": 1
+   }
+  },
+  {
+   "luta": 6,
+   "lider": "Piedmon",
+   "mega": "Imperialdramon Dragon Mode",
+   "arquetipo": "Duelista",
+   "fator": 0.9,
+   "melhor_forma": "duelista",
+   "melhor_taxa": 1,
+   "pior_forma": "muralha",
+   "pior_taxa": 0.7525,
+   "por_forma": {
+    "duelista": 1,
+    "furioso": 1,
+    "espelho": 1,
+    "muralha": 0.7525,
+    "sentinela": 1,
+    "emboscador": 0.9975,
+    "vigia": 1,
+    "tita": 0.9925
+   }
+  }
+ ]
+}

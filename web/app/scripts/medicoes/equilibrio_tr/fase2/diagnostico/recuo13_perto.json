@@ -1,0 +1,292 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase2_formas.ts",
+ "data": "2026-10-30",
+ "commit": "33888366",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 1.3,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0
+ },
+ "listas": "v13",
+ "variante": "perto",
+ "listas_trocadas": [
+  "sentinela",
+  "emboscador",
+  "cacador"
+ ],
+ "metas": {
+  "F-1": {
+   "forca": {
+    "duelista": 0.546,
+    "furioso": 0.587,
+    "espelho": 0.512,
+    "muralha": 0.876,
+    "sentinela": 0.143,
+    "emboscador": 0.069,
+    "vigia": 0.537,
+    "tita": 0.731
+   },
+   "fora": [
+    "muralha",
+    "sentinela",
+    "emboscador",
+    "tita"
+   ],
+   "passa": false
+  },
+  "F-2": {
+   "distancia": 0.807,
+   "passa": false
+  },
+  "F-3": {
+   "vence": {
+    "duelista": 4,
+    "furioso": 4,
+    "espelho": 4,
+    "muralha": 7,
+    "sentinela": 1,
+    "emboscador": 0,
+    "vigia": 3,
+    "tita": 5
+   },
+   "passa": false
+  },
+  "F-4": {
+   "champion": {
+    "brigao": 0.488,
+    "guardiao": 0.513,
+    "cacador": 0.489,
+    "colosso": 0.511
+   },
+   "rookie_sereno_x_arisco": 0.133,
+   "passa": false
+  },
+  "F-5": {
+   "champion_cacador_x_perto": 0.347,
+   "ultimate_longe_x_perto": 0.022,
+   "passa": false
+  },
+  "F-6": {
+   "passivas": {
+    "duelista": {
+     "com": 0.546,
+     "sem": 0.546,
+     "efeito": 0
+    },
+    "furioso": {
+     "com": 0.587,
+     "sem": 0.506,
+     "efeito": 0.081
+    },
+    "espelho": {
+     "com": 0.512,
+     "sem": 0.467,
+     "efeito": 0.045
+    },
+    "muralha": {
+     "com": 0.876,
+     "sem": 0.784,
+     "efeito": 0.092
+    },
+    "sentinela": {
+     "com": 0.143,
+     "sem": 0.14,
+     "efeito": 0.003
+    },
+    "emboscador": {
+     "com": 0.069,
+     "sem": 0.042,
+     "efeito": 0.027
+    },
+    "vigia": {
+     "com": 0.537,
+     "sem": 0.476,
+     "efeito": 0.061
+    },
+    "tita": {
+     "com": 0.731,
+     "sem": 0.645,
+     "efeito": 0.086
+    }
+   },
+   "passa": true
+  },
+  "F-7": {
+   "forca": {
+    "devastador": 0.656,
+    "bastiao_rachado": 0.18,
+    "predador": 0.156,
+    "colosso_partido": 0.619
+   },
+   "passa": false
+  }
+ },
+ "matriz_adultos": {
+  "duelista": {
+   "furioso": 0.113,
+   "espelho": 0.218,
+   "muralha": 0.075,
+   "sentinela": 1,
+   "emboscador": 0.99,
+   "vigia": 0.675,
+   "tita": 0.753
+  },
+  "furioso": {
+   "duelista": 0.888,
+   "espelho": 0.228,
+   "muralha": 0.03,
+   "sentinela": 0.96,
+   "emboscador": 0.883,
+   "vigia": 0.88,
+   "tita": 0.24
+  },
+  "espelho": {
+   "duelista": 0.783,
+   "furioso": 0.773,
+   "muralha": 0.05,
+   "sentinela": 0.995,
+   "emboscador": 0.97,
+   "vigia": 0,
+   "tita": 0.01
+  },
+  "muralha": {
+   "duelista": 0.925,
+   "furioso": 0.97,
+   "espelho": 0.95,
+   "sentinela": 0.88,
+   "emboscador": 0.85,
+   "vigia": 0.725,
+   "tita": 0.83
+  },
+  "sentinela": {
+   "duelista": 0,
+   "furioso": 0.04,
+   "espelho": 0.005,
+   "muralha": 0.12,
+   "emboscador": 0.828,
+   "vigia": 0.005,
+   "tita": 0
+  },
+  "emboscador": {
+   "duelista": 0.01,
+   "furioso": 0.118,
+   "espelho": 0.03,
+   "muralha": 0.15,
+   "sentinela": 0.173,
+   "vigia": 0.005,
+   "tita": 0
+  },
+  "vigia": {
+   "duelista": 0.325,
+   "furioso": 0.12,
+   "espelho": 1,
+   "muralha": 0.275,
+   "sentinela": 0.995,
+   "emboscador": 0.995,
+   "tita": 0.05
+  },
+  "tita": {
+   "duelista": 0.248,
+   "furioso": 0.76,
+   "espelho": 0.99,
+   "muralha": 0.17,
+   "sentinela": 1,
+   "emboscador": 1,
+   "vigia": 0.95
+  }
+ },
+ "matriz_champion": {
+  "brigao": {
+   "guardiao": 0.153,
+   "cacador": 0.56,
+   "colosso": 0.75
+  },
+  "guardiao": {
+   "brigao": 0.848,
+   "cacador": 0.225,
+   "colosso": 0.465
+  },
+  "cacador": {
+   "brigao": 0.44,
+   "guardiao": 0.775,
+   "colosso": 0.253
+  },
+  "colosso": {
+   "brigao": 0.25,
+   "guardiao": 0.535,
+   "cacador": 0.748
+  }
+ },
+ "sombrias": {
+  "devastador": {
+   "forca": 0.656,
+   "contra": {
+    "duelista": 0.848,
+    "furioso": 0.755,
+    "espelho": 0.338,
+    "muralha": 0.07,
+    "sentinela": 0.915,
+    "emboscador": 0.875,
+    "vigia": 0.895,
+    "tita": 0.555
+   }
+  },
+  "bastiao_rachado": {
+   "forca": 0.18,
+   "contra": {
+    "duelista": 0.008,
+    "furioso": 0.013,
+    "espelho": 0.073,
+    "muralha": 0.005,
+    "sentinela": 0.57,
+    "emboscador": 0.673,
+    "vigia": 0.1,
+    "tita": 0
+   }
+  },
+  "predador": {
+   "forca": 0.156,
+   "contra": {
+    "duelista": 0,
+    "furioso": 0.01,
+    "espelho": 0,
+    "muralha": 0,
+    "sentinela": 0.495,
+    "emboscador": 0.683,
+    "vigia": 0.06,
+    "tita": 0
+   }
+  },
+  "colosso_partido": {
+   "forca": 0.619,
+   "contra": {
+    "duelista": 0.343,
+    "furioso": 0.098,
+    "espelho": 0.908,
+    "muralha": 0.675,
+    "sentinela": 0.87,
+    "emboscador": 0.873,
+    "vigia": 0.828,
+    "tita": 0.353
+   }
+  }
+ },
+ "custo_s": 18.327
+}

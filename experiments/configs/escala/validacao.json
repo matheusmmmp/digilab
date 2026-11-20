@@ -1,0 +1,181 @@
+{
+  "beta_treino": 0.03,
+  "conjunto": "validacao",
+  "descricao": "Campanha na escala de stats (TAREFA_PLANILHA_PROGRESSAO, Parte C): calibra o fator de escala de cada NPC.",
+  "epsilon_npc": 0.2,
+  "fator_npc": {
+    "tier1_brutamontes": 1.1,
+    "tier2_carcereiro": 1.5,
+    "tier2_porteiro": 1.1,
+    "tier2_sentinela": 1.6,
+    "tier3_soberano": 1.2
+  },
+  "metas": {
+    "com_treino_min": 0.8,
+    "sem_treino_max": 0.3
+  },
+  "n_por_semente": 10,
+  "ok": false,
+  "resultado": {
+    "tier1_brutamontes": {
+      "com": 0.9688,
+      "estagio": "crianca",
+      "folga": 0.0787,
+      "nivel_tipico": 8,
+      "passa": true,
+      "por_forma": {
+        "arisco": {
+          "0": 0.31,
+          "8": 0.98
+        },
+        "sereno": {
+          "0": 0.1325,
+          "8": 0.9575
+        }
+      },
+      "sem": 0.2213,
+      "travados": []
+    },
+    "tier2_carcereiro": {
+      "com": 0.8413,
+      "estagio": "adolescente",
+      "folga": 0.0394,
+      "nivel_tipico": 22,
+      "passa": true,
+      "por_forma": {
+        "brigao": {
+          "0": 0.0125,
+          "22": 0.9575
+        },
+        "cacador": {
+          "0": 0.995,
+          "22": 1.0
+        },
+        "colosso": {
+          "0": 0.005,
+          "22": 0.475
+        },
+        "guardiao": {
+          "0": 0.03,
+          "22": 0.9325
+        }
+      },
+      "sem": 0.2606,
+      "travados": [
+        "colosso"
+      ]
+    },
+    "tier2_porteiro": {
+      "com": 0.8938,
+      "estagio": "adolescente",
+      "folga": 0.0938,
+      "nivel_tipico": 22,
+      "passa": true,
+      "por_forma": {
+        "brigao": {
+          "0": 0.4575,
+          "22": 1.0
+        },
+        "cacador": {
+          "0": 0.025,
+          "22": 0.585
+        },
+        "colosso": {
+          "0": 0.205,
+          "22": 0.99
+        },
+        "guardiao": {
+          "0": 0.1,
+          "22": 1.0
+        }
+      },
+      "sem": 0.1969,
+      "travados": []
+    },
+    "tier2_sentinela": {
+      "com": 0.7025,
+      "estagio": "adolescente",
+      "folga": -0.1125,
+      "nivel_tipico": 22,
+      "passa": false,
+      "por_forma": {
+        "brigao": {
+          "0": 0.6,
+          "22": 0.97
+        },
+        "cacador": {
+          "0": 1.0,
+          "22": 1.0
+        },
+        "colosso": {
+          "0": 0.015,
+          "22": 0.105
+        },
+        "guardiao": {
+          "0": 0.035,
+          "22": 0.735
+        }
+      },
+      "sem": 0.4125,
+      "travados": [
+        "colosso"
+      ]
+    },
+    "tier3_soberano": {
+      "com": 0.9116,
+      "estagio": "adulto",
+      "folga": 0.1116,
+      "nivel_tipico": 36,
+      "passa": true,
+      "por_forma": {
+        "duelista": {
+          "0": 0.32,
+          "36": 1.0
+        },
+        "emboscador": {
+          "0": 0.0,
+          "36": 0.71
+        },
+        "espelho": {
+          "0": 0.225,
+          "36": 1.0
+        },
+        "furioso": {
+          "0": 0.2575,
+          "36": 1.0
+        },
+        "muralha": {
+          "0": 0.13,
+          "36": 1.0
+        },
+        "sentinela": {
+          "0": 0.015,
+          "36": 0.59
+        },
+        "tita": {
+          "0": 0.31,
+          "36": 1.0
+        },
+        "vigia": {
+          "0": 0.0925,
+          "36": 0.9925
+        }
+      },
+      "sem": 0.1688,
+      "travados": []
+    }
+  },
+  "sementes": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "vida_por_estagio": {
+    "adolescente": 600,
+    "adulto": 1500,
+    "bebe": 50,
+    "crianca": 200
+  }
+}

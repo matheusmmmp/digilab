@@ -1,0 +1,141 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "digilab",
+  "homepage": "https://github.com/matheusmmmp/digilab/blob/main/docs/TAREFA_V3_UX_TELA_PET.md",
+  "items": [
+    {
+      "name": "hx-painel",
+      "type": "registry:ui",
+      "title": "PainelHx",
+      "description": "Painel da pele XCOM: título condensado com hachura, botão × opcional e abas no cabeçalho.",
+      "files": [
+        {
+          "path": "src/componentes/hx/PainelHx.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "clsx"
+      ]
+    },
+    {
+      "name": "hx-abas",
+      "type": "registry:ui",
+      "title": "AbasHx",
+      "description": "Abas da pele XCOM no padrão WAI-ARIA tablist (setas, Home, End).",
+      "files": [
+        {
+          "path": "src/componentes/hx/AbasHx.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "clsx"
+      ]
+    },
+    {
+      "name": "hx-linha",
+      "type": "registry:ui",
+      "title": "LinhaHx",
+      "description": "Linha de lista da pele XCOM; vira <button> com onClick (aria-pressed com escolhida).",
+      "files": [
+        {
+          "path": "src/componentes/hx/LinhaHx.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "clsx"
+      ]
+    },
+    {
+      "name": "hx-botao",
+      "type": "registry:ui",
+      "title": "BotaoHx",
+      "description": "BotaoHx (normal/perigo) e BotaoContinuar, sempre <button type=button> com alvo de 44 px.",
+      "files": [
+        {
+          "path": "src/componentes/hx/BotaoHx.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "clsx"
+      ]
+    },
+    {
+      "name": "hx-chip",
+      "type": "registry:ui",
+      "title": "ChipHx",
+      "description": "Chip com o tom do UI_GUIDELINES §3, com sentido também pela forma (tracejado, cheio, borda dupla).",
+      "files": [
+        {
+          "path": "src/componentes/hx/ChipHx.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "clsx"
+      ]
+    },
+    {
+      "name": "hx-medidor",
+      "type": "registry:ui",
+      "title": "MedidorHx",
+      "description": "Medidor segmentado role=meter, com o número junto do tom.",
+      "files": [
+        {
+          "path": "src/componentes/hx/MedidorHx.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "clsx"
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "O button do shadcn com <button> nativo e alvo de 44 px; cores do tema (src/estilo/tailwind.css).",
+      "files": [
+        {
+          "path": "src/componentes/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority"
+      ]
+    },
+    {
+      "name": "peles",
+      "type": "registry:style",
+      "title": "Peles e tokens",
+      "description": "Os tokens --dl-*, --hx-*, --hud-* e as classes hx-*, hud-*, dl-* (UI_GUIDELINES §3 e §4). Nenhum hex novo fora daqui.",
+      "files": [
+        {
+          "path": "src/estilo/tokens.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "src/estilo/pele-xcom.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "src/estilo/pele-vidro.css",
+          "type": "registry:style"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    }
+  ]
+}

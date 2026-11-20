@@ -1,0 +1,29 @@
+{
+  "combinacao": null,
+  "mudanca_recomendada": {
+    "lobos": {
+      "teto": 16384
+    }
+  },
+  "ponto_recomendado": {
+    "pontos": [
+      "T3"
+    ]
+  },
+  "por_alavanca": {
+    "exposicao": {
+      "ponto": "base",
+      "por": null
+    },
+    "janela": {
+      "ponto": "base",
+      "por": null
+    },
+    "teto": {
+      "ponto": "T3",
+      "por": "m1"
+    }
+  },
+  "regra": "plano, secao 7",
+  "segundos_total": 6569.634762100002
+}

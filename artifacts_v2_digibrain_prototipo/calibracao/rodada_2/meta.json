@@ -1,0 +1,369 @@
+{
+  "bracos": {
+    "M3": {}
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "descricao": "Calibracao dos valores de partida, rodada 2 (secao 6.1): so o M3, bases 63101 e 63202, K = 2; os valores da rodada 2 (o adendo 1).",
+    "dias": 14,
+    "fase": "calibracao",
+    "g_elegivel": {
+      "frac_vidas": 0.8,
+      "racoes": 3
+    },
+    "g_mvp": {
+      "fome_elegivel": 0.5,
+      "limiar": 0.8,
+      "taxa_vida": 0.5,
+      "w_decisoes": 8
+    },
+    "g_pesa": {
+      "bracos": {
+        "habito": "M2",
+        "incentivo": "M1",
+        "memoria": "M3",
+        "persistencia": "M3"
+      },
+      "limiar": 0.01
+    },
+    "holm": {
+      "alfa": 0.05
+    },
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+    "poder": {
+      "alfa_abla": 0.0125,
+      "alfa_mod": 0.025,
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "n_bases": 5,
+      "reamostragens_internas": 1000,
+      "replicas": 2000,
+      "semente": 4242
+    },
+    "rodada": 2,
+    "unidades": {
+      "bases": [
+        63101,
+        63202
+      ],
+      "k": 2,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_digibrain_prototipo/calibracao_rodada2.json",
+  "config_sha256": "0d6236a49bab0ae4406d860c6ecfc604e50caa1068b593de4d66fa94ffcecdc4",
+  "duracao_s": 24.103940725326538,
+  "fase": "calibracao",
+  "fim": "2026-10-25T20:37:43",
+  "git_head": "c9db542e21b1658e106d511a631250e6633812c3",
+  "git_limpo": true,
+  "inatos": {
+    "a_max": 4096,
+    "beta_e": 1024,
+    "beta_t": 512,
+    "beta_u": 512,
+    "c_g": 1024,
+    "d_max": 1024,
+    "e0": 512,
+    "e_max": 1024,
+    "epsilon": 128,
+    "escala": 1024,
+    "escala_cuidado": 480,
+    "eta_d": 256,
+    "eta_h": 8,
+    "fora_do_r": [
+      "susto"
+    ],
+    "g0": 1024,
+    "g_max": 2048,
+    "g_max_incentivo": 1024,
+    "g_min": 512,
+    "ganho_r": 4,
+    "h_max": 512,
+    "lambda_busca": 256,
+    "lambda_sono": 256,
+    "n_desiste": 3,
+    "n_ep": 16,
+    "r_norm": 2,
+    "s_v": 1024,
+    "tau_c": 30,
+    "tau_e": 120,
+    "tau_f_desce": 480,
+    "tau_f_sobe": 60,
+    "tau_hab": 120,
+    "tau_v": 240,
+    "urgencia_a": 512,
+    "urgencia_b": 1536,
+    "urgencia_lambda": 512,
+    "w0": [
+      [
+        "ocioso",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_fome",
+            -256
+          ],
+          [
+            "u_higiene",
+            -256
+          ],
+          [
+            "u_energia",
+            -256
+          ],
+          [
+            "u_tedio",
+            -256
+          ]
+        ]
+      ],
+      [
+        "dormir",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_fome",
+            -512
+          ],
+          [
+            "u_energia",
+            3072
+          ],
+          [
+            "noite",
+            512
+          ],
+          [
+            "dormindo",
+            512
+          ]
+        ]
+      ],
+      [
+        "comer",
+        [
+          [
+            "vies",
+            -1024
+          ],
+          [
+            "u_fome",
+            2048
+          ]
+        ]
+      ],
+      [
+        "brincar",
+        [
+          [
+            "vies",
+            -256
+          ],
+          [
+            "u_fome",
+            -512
+          ],
+          [
+            "u_energia",
+            -512
+          ],
+          [
+            "u_humor",
+            512
+          ],
+          [
+            "u_tedio",
+            512
+          ],
+          [
+            "bola_vista",
+            1024
+          ]
+        ]
+      ],
+      [
+        "chamar_atencao",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_higiene",
+            1024
+          ],
+          [
+            "u_solidao",
+            512
+          ],
+          [
+            "u_estresse",
+            256
+          ],
+          [
+            "sem_cuidado",
+            256
+          ],
+          [
+            "comida_vista",
+            -1024
+          ],
+          [
+            "fome_sem_comida",
+            2048
+          ]
+        ]
+      ],
+      [
+        "explorar",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_energia",
+            -2048
+          ],
+          [
+            "u_tedio",
+            1024
+          ],
+          [
+            "u_curiosidade",
+            1024
+          ],
+          [
+            "fome_sem_comida",
+            512
+          ],
+          [
+            "F",
+            512
+          ]
+        ]
+      ],
+      [
+        "emburrar",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "cuidado_humor",
+            2048
+          ]
+        ]
+      ]
+    ],
+    "w0_nov": [
+      [
+        "brincar",
+        128
+      ]
+    ],
+    "w0_prox": [
+      [
+        "comer",
+        512
+      ],
+      [
+        "brincar",
+        256
+      ]
+    ],
+    "w0_tipo": [
+      [
+        "comer",
+        [
+          [
+            "racao",
+            256
+          ],
+          [
+            "a",
+            256
+          ],
+          [
+            "b",
+            256
+          ],
+          [
+            "c",
+            256
+          ],
+          [
+            "podre",
+            -2048
+          ]
+        ]
+      ]
+    ],
+    "w_mem": 1024,
+    "w_pers": 2048
+  },
+  "inicio": "2026-10-25T20:37:19",
+  "modo": "calibracao",
+  "orquestrador_sha256": "fd514dddb782c823e08da3a18130940c2ae7e06e43c57e8ce1574e1abbb2b052",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "plano_sha256": "f1524468b367a5110005e1de9561a217ad8e49348a8932b4bb41910991cb45a3",
+  "processos": 8,
+  "python": "3.13.0",
+  "sha256": {
+    "config.py": "35e1352cbb762b52b8579f8e4139a7dd0101f62ef78a6d192945330d418b2652",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "784eaec51cc8abc8c9e4b306014bceb64eae33ba922c5a5869c33a750b654a8d",
+    "digibrain/afeto.py": "e890523b5239b6b12818997a5d82ff5f722f390ecf3f69ebcfd60324c43c525f",
+    "digibrain/arb.py": "5f30c965bca799b2a6c63be2efd83f873e2341f8b6815b744922caa0725d427f",
+    "digibrain/estado.py": "91b534da704ccd8db966a3e57e55562eaa5e0978e6df40240ae71c13680606dd",
+    "digibrain/ganchos.py": "c7bc4c7512c2a138c02cd19371416d9004d172aa3f6b551d300828e065c66678",
+    "digibrain/impulso.py": "aec41ec61084d3b01c1a9d1e8eafb50b4303ad1c92135d042643121863f41f25",
+    "digibrain/mem.py": "97f5653b908db18a9ff4932795b6e82ee3d720e646aa7593e9d97e58508139fa",
+    "digibrain/plast.py": "6739a7032a7a45328b251916c54e81b91755c34168409b12b5ba3044c681b0b8",
+    "digibrain/sens.py": "fa58b1e6161ca6388027a5ce6cc8a111b25f1cc7ab0eb9fe9ca6a1e135872d8a",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "1a5791e0765f4b2c6110a75e0ee0aaafaaee85dcb9074a6e504be2b45ce15d64"
+  },
+  "unidades": [
+    {
+      "base": 63101,
+      "genoma": 4767628267638145898,
+      "k": 0,
+      "semente": 7116682125055519325
+    },
+    {
+      "base": 63101,
+      "genoma": 7833963282984382781,
+      "k": 1,
+      "semente": 5913232227209478761
+    },
+    {
+      "base": 63202,
+      "genoma": 668627318991447543,
+      "k": 0,
+      "semente": 2279353734932467592
+    },
+    {
+      "base": 63202,
+      "genoma": 9817361070976154845,
+      "k": 1,
+      "semente": 13549051705069494197
+    }
+  ],
+  "vidas_parede_s": 24.037019499985036
+}

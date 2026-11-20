@@ -1,0 +1,101 @@
+{
+  "descricao": "Validacao do mundo com o alvo aprendido, uma vez (PLANO_ANALISE_V2_MUNDO_ALVO, secoes 8 e 9, desvio D1 e adendo 1; autorizada pelo Matheus em 2026-10-13): K = 4 por base (N = 20) do piloto, nas bases 48101...48505. Os 6 bracos (P0, P0z, P1, P1-alvo, P1^ac e P1-alvo^ac, acoplados ao P0z da mesma celula) nas 12 celulas, mais o P1 e o P1-alvo no layout afastado: 96 vidas por unidade. O mundo, o cerebro, o m e o Delta_MF sao os do J1; nada calibrado.",
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_ALVO.md",
+  "fase": "validacao",
+  "unidades": {
+    "bases": [
+      48101,
+      48202,
+      48303,
+      48404,
+      48505
+    ],
+    "k": 4,
+    "prefixo": "mundo"
+  },
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "lugares": [
+    "comedouro",
+    "perto",
+    "longe"
+  ],
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 64,
+    "amostras": 200,
+    "semente": 9001
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "chaves_desligadas": {
+    "banheiro": "ConfigBanheiro desligada: nenhum braco do plano tem o banheiro (secao 3)",
+    "corpo": "sem regime: o corpo fica desligado, como no J1 (PMA-4)",
+    "metabolismo": "desligado: so existe com o corpo",
+    "gestos": "desligados: os donos so cuidam (PMF-3)",
+    "grupo": "desligado: um pet por mundo",
+    "alvo_aprendido": "ligado SO no P1-alvo e no P1-alvo^ac (PMA-1, PMA-3: o w0_alvo padrao S/16); desligado no P0, no P0z e no P1, como no J1",
+    "entradas_sociais": "desligadas: sem grupo",
+    "modelo_outros": "desligado: sem grupo",
+    "presenca_fruta_mundo": "desligada: o plano nao a pede; no mundo iguais o humor da fruta e zero e os canais rodam sem ela (#269)",
+    "pesos_janela": "desligada: e o P1-cw do corpo",
+    "rede_de_si": "desligada: so observa e nao e do plano",
+    "julgamento_fruta": "desligado (secao 2)",
+    "calendario_informacao_pedido": "desligados (secao 2)"
+  },
+  "mundo": "fisico",
+  "mundo_afastado": "fisico_afastado",
+  "m": 1.0,
+  "delta_mf": 0.007675785900293976,
+  "acoplados": [
+    {
+      "origem": "P0z",
+      "destino": "P1",
+      "filtro": "nenhum"
+    },
+    {
+      "origem": "P0z",
+      "destino": "P1-alvo",
+      "filtro": "nenhum"
+    }
+  ],
+  "bracos_afastado": [
+    "P1",
+    "P1-alvo"
+  ],
+  "holm": {
+    "alfa": 0.05
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8,
+    "alfa": 0.025,
+    "semente": 4242,
+    "alfas_relato": [
+      0.025,
+      0.0125
+    ]
+  },
+  "g_uso": {
+    "limiar": 0.05
+  }
+}

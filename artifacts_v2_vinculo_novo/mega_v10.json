@@ -1,0 +1,311 @@
+{
+ "descricao": "Pets v10 com os donos simulados da web: quantos viram Mega (vinculo >= 0.4). Pets v10 com as medalhas liberadas no ovo; o limiar do Mega nao muda (so relato).",
+ "versao_pet": 10,
+ "dias": 3,
+ "interacoes_por_dia": 16,
+ "sementes": [
+  2001,
+  2002,
+  2003,
+  2004,
+  2005,
+  2006
+ ],
+ "donos": {
+  "atencioso": {
+   "megas": 1,
+   "vidas": [
+    {
+     "semente": 2001,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.125,
+     "vinculo_max_no_ultimate": 0.349,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2002,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.132,
+     "vinculo_max_no_ultimate": 0.285,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2003,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.132,
+     "vinculo_max_no_ultimate": 0.232,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2004,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.299,
+     "vinculo_max_no_ultimate": 0.451,
+     "vinculo_na_evolucao": 0.407
+    },
+    {
+     "semente": 2005,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.368,
+     "vinculo_max_no_ultimate": 0.475,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2006,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.331,
+     "vinculo_max_no_ultimate": 0.428,
+     "vinculo_na_evolucao": null
+    }
+   ]
+  },
+  "incoerente": {
+   "megas": 2,
+   "vidas": [
+    {
+     "semente": 2001,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.367,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2002,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.284,
+     "vinculo_max_no_ultimate": 0.45,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2003,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.406,
+     "vinculo_max_no_ultimate": 0.474,
+     "vinculo_na_evolucao": 0.406
+    },
+    {
+     "semente": 2004,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.284,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2005,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.434,
+     "vinculo_max_no_ultimate": 0.506,
+     "vinculo_na_evolucao": 0.506
+    },
+    {
+     "semente": 2006,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.45,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    }
+   ]
+  },
+  "relapso": {
+   "megas": 3,
+   "vidas": [
+    {
+     "semente": 2001,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.541,
+     "vinculo_max_no_ultimate": 0.549,
+     "vinculo_na_evolucao": 0.521
+    },
+    {
+     "semente": 2002,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.401,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2003,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.427,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2004,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.505,
+     "vinculo_max_no_ultimate": 0.505,
+     "vinculo_na_evolucao": 0.505
+    },
+    {
+     "semente": 2005,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.501,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2006,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.475,
+     "vinculo_max_no_ultimate": 0.486,
+     "vinculo_na_evolucao": 0.475
+    }
+   ]
+  },
+  "aleatorio": {
+   "megas": 3,
+   "vidas": [
+    {
+     "semente": 2001,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.16,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2002,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.463,
+     "vinculo_max_no_ultimate": 0.489,
+     "vinculo_na_evolucao": 0.44
+    },
+    {
+     "semente": 2003,
+     "estagio": "adulto",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.36,
+     "vinculo_max_no_ultimate": 0.36,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2004,
+     "estagio": "adolescente",
+     "mega": false,
+     "sombria": false,
+     "vinculo_final": 0.485,
+     "vinculo_max_no_ultimate": null,
+     "vinculo_na_evolucao": null
+    },
+    {
+     "semente": 2005,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.357,
+     "vinculo_max_no_ultimate": 0.527,
+     "vinculo_na_evolucao": 0.451
+    },
+    {
+     "semente": 2006,
+     "estagio": "mega",
+     "mega": true,
+     "sombria": false,
+     "vinculo_final": 0.468,
+     "vinculo_max_no_ultimate": 0.524,
+     "vinculo_na_evolucao": 0.434
+    }
+   ]
+  }
+ },
+ "plano": "docs/PLANO_ANALISE_V2_VINCULO.md",
+ "varredura_de_limiar": {
+  "descricao": "Megas (de 6 vidas) por dono simulado e limiar de vinculo; o resto como em vinculo_donos.json.",
+  "limiar_adotado": 0.4,
+  "dias": 3,
+  "interacoes_por_dia": 16,
+  "sementes": [
+   2001,
+   2002,
+   2003,
+   2004,
+   2005,
+   2006
+  ],
+  "megas_por_limiar": {
+   "0.7": {
+    "atencioso": 0,
+    "incoerente": 0,
+    "relapso": 0,
+    "aleatorio": 0
+   },
+   "0.6": {
+    "atencioso": 0,
+    "incoerente": 0,
+    "relapso": 0,
+    "aleatorio": 0
+   },
+   "0.5": {
+    "atencioso": 0,
+    "incoerente": 1,
+    "relapso": 2,
+    "aleatorio": 0
+   },
+   "0.45": {
+    "atencioso": 0,
+    "incoerente": 1,
+    "relapso": 3,
+    "aleatorio": 3
+   },
+   "0.4": {
+    "atencioso": 1,
+    "incoerente": 2,
+    "relapso": 3,
+    "aleatorio": 3
+   },
+   "0.35": {
+    "atencioso": 2,
+    "incoerente": 2,
+    "relapso": 3,
+    "aleatorio": 4
+   },
+   "0.3": {
+    "atencioso": 3,
+    "incoerente": 3,
+    "relapso": 3,
+    "aleatorio": 4
+   }
+  }
+ }
+}

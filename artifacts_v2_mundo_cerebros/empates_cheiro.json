@@ -1,0 +1,512 @@
+{
+ "comer": {
+  "fruta": {
+   "dois": {
+    "caminho_a_mais": {
+     "max": 65,
+     "media": 14.672301304863582,
+     "n": 6744,
+     "p50": 14,
+     "p95": 39
+    },
+    "decisoes_a_mais": {
+     "max": 1,
+     "media": 0.24836892052194542,
+     "n": 6744,
+     "p50": 0,
+     "p95": 1
+    },
+    "decisoes_a_mais_por_rumo": {
+     "L": 0.24613555291319858,
+     "N": 0.26872770511296074,
+     "NE": 0.22366863905325443,
+     "NO": 0.22366863905325443,
+     "O": 0.26872770511296074,
+     "S": 0.2699167657550535,
+     "SE": 0.26272189349112424,
+     "SO": 0.22366863905325443
+    },
+    "energia_a_mais_media": 0.002445383550810597,
+    "frac_travou": 0.0
+   },
+   "oraculo": {
+    "caminho_a_mais": {
+     "max": 45,
+     "media": 10.577698695136418,
+     "n": 6744,
+     "p50": 9,
+     "p95": 28
+    },
+    "decisoes_a_mais": {
+     "max": 1,
+     "media": 0.17022538552787664,
+     "n": 6744,
+     "p50": 0,
+     "p95": 1
+    },
+    "decisoes_a_mais_por_rumo": {
+     "L": 0.187871581450654,
+     "N": 0.187871581450654,
+     "NE": 0.15266272189349112,
+     "NO": 0.15266272189349112,
+     "O": 0.187871581450654,
+     "S": 0.187871581450654,
+     "SE": 0.15266272189349112,
+     "SO": 0.15266272189349112
+    },
+    "energia_a_mais_media": 0.0017629497825227363,
+    "frac_travou": 0.0
+   },
+   "ordem": {
+    "caminho_a_mais": {
+     "max": 268,
+     "media": 49.4120699881376,
+     "n": 6744,
+     "p50": 38,
+     "p95": 137
+    },
+    "decisoes_a_mais": {
+     "max": 5,
+     "media": 0.8405990510083037,
+     "n": 6744,
+     "p50": 1,
+     "p95": 2
+    },
+    "decisoes_a_mais_por_rumo": {
+     "L": 0.356718192627824,
+     "N": 0.8406658739595719,
+     "NE": 0.8094674556213017,
+     "NO": 0.8603550295857988,
+     "O": 0.8406658739595719,
+     "S": 0.9690844233055886,
+     "SE": 1.1822485207100593,
+     "SO": 0.863905325443787
+    },
+    "energia_a_mais_media": 0.008235344998022934,
+    "frac_travou": 0.0
+   },
+   "partidas": 6744,
+   "reta": {
+    "caminho": {
+     "max": 382,
+     "media": 264.1204033214709,
+     "n": 6744,
+     "p50": 278,
+     "p95": 360
+    },
+    "decisoes": {
+     "max": 7,
+     "media": 4.667259786476868,
+     "n": 6744,
+     "p50": 5,
+     "p95": 6
+    }
+   }
+  },
+  "racao": {
+   "dois": {
+    "caminho_a_mais": {
+     "max": 56,
+     "media": 11.149762752075919,
+     "n": 6744,
+     "p50": 10,
+     "p95": 30
+    },
+    "decisoes_a_mais": {
+     "max": 1,
+     "media": 0.18030842230130487,
+     "n": 6744,
+     "p50": 0,
+     "p95": 1
+    },
+    "decisoes_a_mais_por_rumo": {
+     "L": 0.19738406658739596,
+     "N": 0.1985731272294887,
+     "NE": 0.16094674556213018,
+     "NO": 0.16094674556213018,
+     "O": 0.1985731272294887,
+     "S": 0.1985731272294887,
+     "SE": 0.1668639053254438,
+     "SO": 0.16094674556213018
+    },
+    "energia_a_mais_media": 0.0018582937920126532,
+    "frac_travou": 0.0
+   },
+   "oraculo": {
+    "caminho_a_mais": {
+     "max": 45,
+     "media": 10.577698695136418,
+     "n": 6744,
+     "p50": 9,
+     "p95": 28
+    },
+    "decisoes_a_mais": {
+     "max": 1,
+     "media": 0.17022538552787664,
+     "n": 6744,
+     "p50": 0,
+     "p95": 1
+    },
+    "decisoes_a_mais_por_rumo": {
+     "L": 0.187871581450654,
+     "N": 0.187871581450654,
+     "NE": 0.15266272189349112,
+     "NO": 0.15266272189349112,
+     "O": 0.187871581450654,
+     "S": 0.187871581450654,
+     "SE": 0.15266272189349112,
+     "SO": 0.15266272189349112
+    },
+    "energia_a_mais_media": 0.0017629497825227363,
+    "frac_travou": 0.0
+   },
+   "ordem": {
+    "caminho_a_mais": {
+     "max": 123,
+     "media": 18.526393831553975,
+     "n": 6744,
+     "p50": 17,
+     "p95": 50
+    },
+    "decisoes_a_mais": {
+     "max": 2,
+     "media": 0.31465005931198103,
+     "n": 6744,
+     "p50": 0,
+     "p95": 1
+    },
+    "decisoes_a_mais_por_rumo": {
+     "L": 0.2699167657550535,
+     "N": 0.27586206896551724,
+     "NE": 0.30532544378698223,
+     "NO": 0.30532544378698223,
+     "O": 0.27586206896551724,
+     "S": 0.28299643281807374,
+     "SE": 0.4958579881656805,
+     "SO": 0.30532544378698223
+    },
+    "energia_a_mais_media": 0.0030877323052589957,
+    "frac_travou": 0.0
+   },
+   "partidas": 6744,
+   "reta": {
+    "caminho": {
+     "max": 382,
+     "media": 264.1204033214709,
+     "n": 6744,
+     "p50": 278,
+     "p95": 360
+    },
+    "decisoes": {
+     "max": 7,
+     "media": 4.667259786476868,
+     "n": 6744,
+     "p50": 5,
+     "p95": 6
+    }
+   }
+  }
+ },
+ "direcao": {
+  "fruta": {
+   "dois": {
+    "erro_abs_graus": {
+     "max": 49.51398845800128,
+     "media": 15.428632507987395,
+     "n": 433672,
+     "p50": 13.554777662088128,
+     "p95": 36.82801477354309
+    },
+    "erro_assinado_medio_graus": -8.441287424597391,
+    "erro_assinado_medio_no_empate_graus": -10.65981200642952,
+    "escolhidas_no_empate": {
+     "L": 67126,
+     "N": 39913,
+     "NE": 45941,
+     "NO": 45941,
+     "O": 39913,
+     "S": 39624,
+     "SE": 19017,
+     "SO": 45941
+    },
+    "frac_empate": 0.7918795771919792,
+    "frac_sem_direcao": 0.0,
+    "posicoes": 433672
+   },
+   "oraculo": {
+    "erro_abs_graus": {
+     "max": 24.249204410401376,
+     "media": 11.251507258349479,
+     "n": 433672,
+     "p50": 11.249874026925568,
+     "p95": 21.379814597118184
+    },
+    "erro_assinado_medio_graus": 2.352790515761921e-17,
+    "erro_assinado_medio_no_empate_graus": 2.813899528949543e-17,
+    "escolhidas_no_empate": {
+     "L": 41160,
+     "N": 41160,
+     "NE": 44694,
+     "NO": 44694,
+     "O": 41160,
+     "S": 41160,
+     "SE": 44694,
+     "SO": 44694
+    },
+    "frac_empate": 0.7918795771919792,
+    "frac_sem_direcao": 0.0,
+    "posicoes": 433672
+   },
+   "ordem": {
+    "erro_abs_graus": {
+     "max": 76.88465176227076,
+     "media": 27.815025085207974,
+     "n": 433672,
+     "p50": 25.722526916337586,
+     "p95": 61.432415691095144
+    },
+    "erro_assinado_medio_graus": -18.244802523566197,
+    "erro_assinado_medio_no_empate_graus": -23.039870011880634,
+    "escolhidas_no_empate": {
+     "L": 112388,
+     "N": 44064,
+     "NE": 41790,
+     "NO": 41790,
+     "O": 44064,
+     "S": 20140,
+     "SE": 0,
+     "SO": 39180
+    },
+    "frac_empate": 0.7918795771919792,
+    "frac_sem_direcao": 0.0,
+    "posicoes": 433672
+   }
+  },
+  "racao": {
+   "dois": {
+    "erro_abs_graus": {
+     "max": 31.77693234729867,
+     "media": 11.788517271134262,
+     "n": 433672,
+     "p50": 11.249874026925568,
+     "p95": 24.809408375459554
+    },
+    "erro_assinado_medio_graus": -3.1216679887103616,
+    "erro_assinado_medio_no_empate_graus": -5.391140208353245,
+    "escolhidas_no_empate": {
+     "L": 37408,
+     "N": 27380,
+     "NE": 35398,
+     "NO": 35398,
+     "O": 27380,
+     "S": 27380,
+     "SE": 25370,
+     "SO": 35398
+    },
+    "frac_empate": 0.5790366913243188,
+    "frac_sem_direcao": 0.0,
+    "posicoes": 433672
+   },
+   "oraculo": {
+    "erro_abs_graus": {
+     "max": 24.249204410401376,
+     "media": 11.252477530713682,
+     "n": 433672,
+     "p50": 11.249874026925568,
+     "p95": 21.38205170855187
+    },
+    "erro_assinado_medio_graus": 2.352790515761921e-17,
+    "erro_assinado_medio_no_empate_graus": 2.2976229787393728e-17,
+    "escolhidas_no_empate": {
+     "L": 27772,
+     "N": 27772,
+     "NE": 35006,
+     "NO": 35006,
+     "O": 27772,
+     "S": 27772,
+     "SE": 35006,
+     "SO": 35006
+    },
+    "frac_empate": 0.5790366913243188,
+    "frac_sem_direcao": 0.0,
+    "posicoes": 433672
+   },
+   "ordem": {
+    "erro_abs_graus": {
+     "max": 52.93826452354551,
+     "media": 16.93941656255533,
+     "n": 433672,
+     "p50": 14.913495445999757,
+     "p95": 39.03166780248307
+    },
+    "erro_assinado_medio_graus": -10.034807412053349,
+    "erro_assinado_medio_no_empate_graus": -17.33017537991016,
+    "escolhidas_no_empate": {
+     "L": 64942,
+     "N": 31985,
+     "NE": 30793,
+     "NO": 30793,
+     "O": 31985,
+     "S": 29821,
+     "SE": 0,
+     "SO": 30793
+    },
+    "frac_empate": 0.5790366913243188,
+    "frac_sem_direcao": 0.0,
+    "posicoes": 433672
+   }
+  }
+ },
+ "exemplo_do_a": {
+  "centro": 24,
+  "dois": "N",
+  "oraculo": "N",
+  "ordem": "NE",
+  "vizinhos": {
+   "L": 24,
+   "N": 25,
+   "NE": 25,
+   "NO": 25,
+   "O": 24,
+   "S": 23,
+   "SE": 23,
+   "SO": 23
+  }
+ },
+ "explorar": {
+  "fruta": {
+   "dois": {
+    "decisoes_ate_a_visao": {
+     "max": 3,
+     "media": 1.4307017543859648,
+     "n": 1140,
+     "p50": 1,
+     "p95": 2
+    },
+    "fins": {
+     "achou": 99,
+     "limite": 1041,
+     "vagar": 0
+    },
+    "frac_achou_e_comeu": 0.0868421052631579,
+    "frac_chega_a_visao": 1.0
+   },
+   "oraculo": {
+    "decisoes_ate_a_visao": {
+     "max": 2,
+     "media": 1.3754385964912281,
+     "n": 1140,
+     "p50": 1,
+     "p95": 2
+    },
+    "fins": {
+     "achou": 104,
+     "limite": 1036,
+     "vagar": 0
+    },
+    "frac_achou_e_comeu": 0.0912280701754386,
+    "frac_chega_a_visao": 1.0
+   },
+   "ordem": {
+    "decisoes_ate_a_visao": {
+     "max": 7,
+     "media": 1.7535211267605635,
+     "n": 1136,
+     "p50": 2,
+     "p95": 3
+    },
+    "fins": {
+     "achou": 104,
+     "limite": 1036,
+     "vagar": 0
+    },
+    "frac_achou_e_comeu": 0.0912280701754386,
+    "frac_chega_a_visao": 0.9964912280701754
+   },
+   "partidas": 1140
+  },
+  "racao": {
+   "dois": {
+    "decisoes_ate_a_visao": {
+     "max": 4,
+     "media": 2.4182027649769586,
+     "n": 3472,
+     "p50": 3,
+     "p95": 4
+    },
+    "fins": {
+     "achou": 324,
+     "limite": 3148,
+     "vagar": 0
+    },
+    "frac_achou_e_comeu": 0.09331797235023041,
+    "frac_chega_a_visao": 1.0
+   },
+   "oraculo": {
+    "decisoes_ate_a_visao": {
+     "max": 4,
+     "media": 2.403225806451613,
+     "n": 3472,
+     "p50": 3,
+     "p95": 4
+    },
+    "fins": {
+     "achou": 324,
+     "limite": 3148,
+     "vagar": 0
+    },
+    "frac_achou_e_comeu": 0.09331797235023041,
+    "frac_chega_a_visao": 1.0
+   },
+   "ordem": {
+    "decisoes_ate_a_visao": {
+     "max": 5,
+     "media": 2.5475230414746544,
+     "n": 3472,
+     "p50": 3,
+     "p95": 4
+    },
+    "fins": {
+     "achou": 270,
+     "limite": 3202,
+     "vagar": 0
+    },
+    "frac_achou_e_comeu": 0.07776497695852534,
+    "frac_chega_a_visao": 1.0
+   },
+   "partidas": 3472
+  }
+ },
+ "parametros": {
+  "A": {
+   "fruta": 32,
+   "racao": 64
+  },
+  "alcance_por_decisao": 60,
+  "limiar_cheiro_explorar": 16,
+  "max_decisoes": 60,
+  "passo_cheiro": 128,
+  "passo_grade_a": 1,
+  "passo_grade_bc": 8,
+  "raio_cheiro": 384,
+  "raio_pegar": 16,
+  "raio_visao": 96,
+  "sub": 16
+ },
+ "vidas": {
+  "cheiro_sem_direcao_nada_visto": 133,
+  "com_direcao": 11732,
+  "decisoes": 16128,
+  "dias": 7,
+  "dois_muda": 1844,
+  "empate": 4773,
+  "fome_urgente_acordado": 1185,
+  "fome_urgente_sem_direcao_nada_visto": 31,
+  "orcamento_por_dia": 16,
+  "sementes": [
+   101,
+   202
+  ],
+  "vidas": 24
+ }
+}

@@ -1,0 +1,21 @@
+{
+  "descricao": "TAREFA_CORRECAO_COMBATE Etapa 3, v0: V2.1 original (linha de base). CALIBRACAO, sem E5.",
+  "saida": "artifacts_combate_v21c/calibracao/v0",
+  "conjunto": "calibracao",
+  "sementes_calibracao": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sementes_validacao": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "partidas_por_par_por_semente": 40,
+  "pular_e5": true
+}

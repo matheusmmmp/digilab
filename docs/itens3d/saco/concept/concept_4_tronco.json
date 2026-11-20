@@ -1,0 +1,9 @@
+{
+ "id": "01a1af2c-caba-7586-971b-e7edc75a57b9",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single punching bag training stand prop for a cozy low-poly 3D island game. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. The stand is an upside-down L: a flat round base on the ground, one vertical post, a short horizontal arm at the top; the bag hangs from the end of the arm by a short visible chain, clearly separated from the post with empty space between bag and post. Show only the stand and the bag, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters. The post is a thick natural log with a branch as the arm, a round tree stump as the base, and a brown leather bag patched with lighter leather, stitched seams.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793940310932,
+ "finished_at": 1793940327236
+}

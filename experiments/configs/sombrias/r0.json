@@ -1,0 +1,76 @@
+{
+  "descricao": "rodada 0: gambits da sombra (base, sem leitura do oponente, pesado) e variantes do colosso partido",
+  "candidatos": {
+    "atual": {},
+    "sem_leitura": {
+      "devastador": {
+        "gambits": "sem_leitura"
+      },
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "predador": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "gambits": "sem_leitura"
+      }
+    },
+    "pesado": {
+      "devastador": {
+        "gambits": "pesado"
+      },
+      "bastiao_rachado": {
+        "gambits": "pesado"
+      },
+      "predador": {
+        "gambits": "pesado"
+      },
+      "colosso_partido": {
+        "gambits": "pesado"
+      }
+    },
+    "pesado_esquiva": {
+      "devastador": {
+        "gambits": "pesado_esquiva"
+      },
+      "bastiao_rachado": {
+        "gambits": "pesado_esquiva"
+      },
+      "predador": {
+        "gambits": "pesado_esquiva"
+      },
+      "colosso_partido": {
+        "gambits": "pesado_esquiva"
+      }
+    },
+    "colosso_forca_pesado": {
+      "colosso_partido": {
+        "gambits": "pesado",
+        "stats": {
+          "vigor": 4,
+          "forca": 2,
+          "folego": -3,
+          "mira": -3
+        }
+      }
+    },
+    "colosso_forca2": {
+      "colosso_partido": {
+        "stats": {
+          "forca": 4,
+          "vigor": 1,
+          "folego": -3,
+          "mira": -2
+        }
+      }
+    },
+    "colosso_sem_regen": {
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 1.0
+        }
+      }
+    }
+  }
+}

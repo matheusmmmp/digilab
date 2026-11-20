@@ -1,0 +1,20 @@
+{
+ "teto_da_sessao": 36,
+ "gasto": {
+  "vistas": 6,
+  "malha": 30
+ },
+ "gasto_total": 36,
+ "tarefas": {
+  "esboco": "01a1b889-ba67-766e-bf66-76b8d84a6f33",
+  "vistas": "01a1b8a8-f3fc-736a-a7f2-6145e08d4907",
+  "malha": "01a1b8a9-ba5b-743b-b0dc-7512531d16bf"
+ },
+ "saldo_lido": {
+  "antes_das_vistas": 224,
+  "depois_das_vistas": 212,
+  "antes_da_malha": 182,
+  "depois_da_malha": 122
+ },
+ "nota": "o saldo e da conta inteira; as sessoes da barraca, do carro e do trem gastaram ao mesmo tempo, entao a queda do saldo entre as leituras passa do gasto desta sessao (consumed_credits das tarefas: 6 e 30)"
+}

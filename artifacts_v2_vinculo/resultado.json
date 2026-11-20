@@ -1,0 +1,741 @@
+{
+ "config_vinculo": {
+  "alfa": 0.1,
+  "inicial": 0.5,
+  "janela_coerencia_ticks": 1440,
+  "janela_desejo_ticks": 60,
+  "janela_latencia_ticks": 240,
+  "peso_atendimento": 1.0,
+  "peso_coerencia": 1.0,
+  "peso_desejo": 0.5
+ },
+ "contexto_coerencia_contextual": {
+  "cansado": "energia < 0.25 (regra do instinto)",
+  "necessidade_baixa": "min(fome, higiene) < 0.5 (limiar do pedido)",
+  "noite": "ConfigPadrao.e_noite"
+ },
+ "e1": {
+  "artefato": "artifacts_linhagem/natureza_criacao/especie_fixa (vidas em arquivo/)",
+  "baseline_aleatorio_por_componente": {
+   "atendimento": 0.560992828645256,
+   "coerencia": 0.4528992224315837,
+   "desejo": 0.06602787388685558,
+   "pausa": 0.46206682595977294
+  },
+  "conferencia": {
+   "hash_parametros_educacao_igual": true,
+   "replays_iguais_ao_pets_json_do_e1": 640
+  },
+  "contrafactuais": {
+   "atendimento_por_resposta": {
+    "aleatorio": 0.7338720241881791,
+    "atencioso": 0.31704476129925013,
+    "atencioso-aleatorio": -0.41682726288892896,
+    "permissivo": 0.27602242629270946,
+    "relapso": 0.6257783333840851
+   },
+   "atendimento_por_resposta_ampla": {
+    "aleatorio": 0.7490765952764273,
+    "atencioso": 0.31911254907327574,
+    "atencioso-aleatorio": -0.4299640462031516,
+    "permissivo": 0.27602242629270946,
+    "relapso": 0.660719877875417
+   },
+   "atendimento_por_resposta_ampla_e_coerencia_contextual": {
+    "aleatorio": 0.7685509931507428,
+    "atencioso": 0.32138835310207575,
+    "atencioso-aleatorio": -0.44716264004866707,
+    "permissivo": 0.259866999417966,
+    "relapso": 0.6707201441068735
+   },
+   "coerencia_contextual_no_lugar_da_coerencia": {
+    "aleatorio": 0.6036989121970985,
+    "atencioso": 0.44595917891538894,
+    "atencioso-aleatorio": -0.15773973328170954,
+    "permissivo": 0.7035387734759244,
+    "relapso": 0.4704597610271848
+   },
+   "coerencia_contextual_sem_atendimento": {
+    "aleatorio": 0.4015152335533226,
+    "atencioso": 0.45295734207667493,
+    "atencioso-aleatorio": 0.05144210852335235,
+    "permissivo": 0.7026177587177265,
+    "relapso": 0.5725525877124349
+   },
+   "hoje (conferencia: igual ao replay)": {
+    "aleatorio": 0.5998327588806575,
+    "atencioso": 0.42407393885962996,
+    "atencioso-aleatorio": -0.1757588200210275,
+    "permissivo": 0.7293349093384159,
+    "relapso": 0.46854245237953107
+   },
+   "normalizado_pela_media_do_aleatorio": {
+    "aleatorio": 0.5711399806468611,
+    "atencioso": 0.6174690091039569,
+    "atencioso-aleatorio": 0.046329028457095744,
+    "permissivo": 0.839378254677098,
+    "relapso": 0.4490336953885419
+   },
+   "sem_atendimento": {
+    "aleatorio": 0.4101169707083418,
+    "atencioso": 0.43102527926271766,
+    "atencioso-aleatorio": 0.020908308554375865,
+    "permissivo": 0.7285448598258144,
+    "relapso": 0.5292860492300685
+   },
+   "so_atendimento": {
+    "aleatorio": 0.6271430706902026,
+    "atencioso": 0.49916336300903935,
+    "atencioso-aleatorio": -0.12797970768116324,
+    "permissivo": 0.503713203125,
+    "relapso": 0.46963548039561226
+   },
+   "so_coerencia": {
+    "aleatorio": 0.4379882936907292,
+    "atencioso": 0.5604767718356071,
+    "atencioso-aleatorio": 0.12248847814487784,
+    "permissivo": 0.810692213577596,
+    "relapso": 0.6011813610512988
+   },
+   "so_coerencia_contextual": {
+    "aleatorio": 0.4344412884456954,
+    "atencioso": 0.6437656230862407,
+    "atencioso-aleatorio": 0.20932433464054534,
+    "permissivo": 0.7614150902655025,
+    "relapso": 0.6755048596051643
+   },
+   "so_desejo": {
+    "aleatorio": 0.29487898988181327,
+    "atencioso": 0.11841296419312719,
+    "atencioso-aleatorio": -0.17646602568868608,
+    "permissivo": 0.2259675186002219,
+    "relapso": 0.2697548221963283
+   }
+  },
+  "donos": [
+   "aleatorio",
+   "atencioso",
+   "permissivo",
+   "relapso"
+  ],
+  "n_vidas": 640,
+  "por_dono": {
+   "aleatorio": {
+    "acoes_do_dono_por_vida": {
+     "acariciar": 24.36875,
+     "alimentar": 18.35625,
+     "brincar": 22.775,
+     "elogiar": 22.275,
+     "levar_ao_banheiro": 19.34375,
+     "limpar": 18.44375,
+     "petisco": 18.9875,
+     "repreender": 20.88125,
+     "tratar_lesao": 21.7,
+     "treinar_alvo": 10.4375,
+     "treinar_corrida": 10.2625,
+     "treinar_esquiva": 8.525,
+     "treinar_levantar_pedra": 9.03125,
+     "treinar_meditar": 8.725,
+     "treinar_resistencia": 9.13125
+    },
+    "ajustes_por_vida": {
+     "bronca_sem_motivo": 0.51875,
+     "forcar": 1.53125
+    },
+    "amostras_coerencia_contextual_por_vida": 19.53125,
+    "amostras_coerencia_hoje_por_vida": 29.09375,
+    "coerencia_contextual_media": 0.4631675992086264,
+    "coerencia_hoje_media": 0.4528992224315837,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.560992828645256,
+      "empurrao_medio": 0.9760923343248601,
+      "n_atendido_medio_por_vida": 489.3,
+      "n_medio_por_vida": 563.73125,
+      "vidas_com_amostra": 152
+     },
+     "coerencia": {
+      "amostra_media": 0.4528992224315837,
+      "empurrao_medio": -0.37157754219257655,
+      "n_atendido_medio_por_vida": 16.5875,
+      "n_medio_por_vida": 29.09375,
+      "vidas_com_amostra": 139
+     },
+     "desejo": {
+      "amostra_media": 0.06602787388685558,
+      "empurrao_medio": -0.1830129408200477,
+      "n_atendido_medio_por_vida": 0.45625,
+      "n_medio_por_vida": 6.975,
+      "vidas_com_amostra": 160
+     },
+     "pausa": {
+      "amostra_media": 0.46206682595977294,
+      "empurrao_medio": -0.21590377982705347,
+      "n_atendido_medio_por_vida": 3.71875,
+      "n_medio_por_vida": 9.55625,
+      "vidas_com_amostra": 160
+     }
+    },
+    "cuidados_por_vida": 143.975,
+    "feedbacks_por_vida": 43.15625,
+    "fracao_avancos_necessidade_baixa": 0.8147968846629562,
+    "fracao_cuidados_com_necessidade_baixa": 0.8281040203186592,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.8430459411042722,
+    "fracao_cuidados_com_pedido_pendente": 0.6113048453867344,
+    "n_vidas": 160,
+    "necessidade_minima_media": 0.21806828060257835,
+    "vinculo_final_medio": 0.5998327588806575,
+    "vinculo_final_min_max": [
+     0.21999044080683905,
+     0.8020662179341642
+    ]
+   },
+   "atencioso": {
+    "acoes_do_dono_por_vida": {
+     "acariciar": 21.60625,
+     "alimentar": 39.7125,
+     "brincar": 0.31875,
+     "elogiar": 14.25,
+     "levar_ao_banheiro": 104.11875,
+     "limpar": 52.5875,
+     "repreender": 12.85,
+     "tratar_lesao": 0.1625,
+     "treinar_alvo": 8.80625,
+     "treinar_corrida": 8.98125,
+     "treinar_esquiva": 8.64375,
+     "treinar_levantar_pedra": 9.1625,
+     "treinar_meditar": 8.475,
+     "treinar_resistencia": 8.325
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 7.2,
+    "amostras_coerencia_hoje_por_vida": 12.40625,
+    "coerencia_contextual_media": 0.7636735591910114,
+    "coerencia_hoje_media": 0.5673938438189396,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.7975115725203369,
+      "empurrao_medio": 0.014615828662050532,
+      "n_atendido_medio_por_vida": 0.65,
+      "n_medio_por_vida": 2.6625,
+      "vidas_com_amostra": 74
+     },
+     "coerencia": {
+      "amostra_media": 0.5673938438189396,
+      "empurrao_medio": 0.08028471046792066,
+      "n_atendido_medio_por_vida": 8.1125,
+      "n_medio_por_vida": 12.40625,
+      "vidas_com_amostra": 160
+     },
+     "desejo": {
+      "amostra_media": 0.022749091387531277,
+      "empurrao_medio": -0.8722163016019439,
+      "n_atendido_medio_por_vida": 0.96875,
+      "n_medio_por_vida": 39.30625,
+      "vidas_com_amostra": 159
+     },
+     "pausa": {
+      "amostra_media": 1.0,
+      "empurrao_medio": 0.7013897013316026,
+      "n_atendido_medio_por_vida": 14.15,
+      "n_medio_por_vida": 14.15,
+      "vidas_com_amostra": 160
+     }
+    },
+    "cuidados_por_vida": 218.50625,
+    "feedbacks_por_vida": 27.1,
+    "fracao_avancos_necessidade_baixa": 0.04751209077380952,
+    "fracao_cuidados_com_necessidade_baixa": 0.2745160132817438,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.2779543157085849,
+    "fracao_cuidados_com_pedido_pendente": 0.0029674228039970893,
+    "n_vidas": 160,
+    "necessidade_minima_media": 0.671696362723081,
+    "vinculo_final_medio": 0.42407393885962996,
+    "vinculo_final_min_max": [
+     2.847950611748247e-07,
+     0.9740837067593171
+    ]
+   },
+   "permissivo": {
+    "acoes_do_dono_por_vida": {
+     "acariciar": 34.06875,
+     "alimentar": 15.49375,
+     "elogiar": 23.58125,
+     "levar_ao_banheiro": 78.28125,
+     "limpar": 44.325,
+     "petisco": 52.0625,
+     "tratar_lesao": 0.05,
+     "treinar_alvo": 8.5,
+     "treinar_corrida": 8.625,
+     "treinar_esquiva": 8.26875,
+     "treinar_levantar_pedra": 8.7375,
+     "treinar_meditar": 8.09375,
+     "treinar_resistencia": 7.9125
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 7.825,
+    "amostras_coerencia_hoje_por_vida": 10.64375,
+    "coerencia_contextual_media": 1.0,
+    "coerencia_hoje_media": 1.0,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.875,
+      "empurrao_medio": 0.002737877445183271,
+      "n_atendido_medio_por_vida": 0.1125,
+      "n_medio_por_vida": 0.1375,
+      "vidas_com_amostra": 15
+     },
+     "coerencia": {
+      "amostra_media": 1.0,
+      "empurrao_medio": 0.3304699528153065,
+      "n_atendido_medio_por_vida": 10.64375,
+      "n_medio_por_vida": 10.64375,
+      "vidas_com_amostra": 156
+     },
+     "desejo": {
+      "amostra_media": 0.030671832413583865,
+      "empurrao_medio": -0.6102214369918679,
+      "n_atendido_medio_por_vida": 0.525,
+      "n_medio_por_vida": 21.25,
+      "vidas_com_amostra": 150
+     },
+     "pausa": {
+      "amostra_media": 1.0,
+      "empurrao_medio": 0.5063485160697941,
+      "n_atendido_medio_por_vida": 14.5,
+      "n_medio_por_vida": 14.5,
+      "vidas_com_amostra": 160
+     }
+    },
+    "cuidados_por_vida": 224.28125,
+    "feedbacks_por_vida": 23.58125,
+    "fracao_avancos_necessidade_baixa": 0.02699497767857143,
+    "fracao_cuidados_com_necessidade_baixa": 0.1773031284608912,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.1773031284608912,
+    "fracao_cuidados_com_pedido_pendente": 0.0005002281238300405,
+    "n_vidas": 160,
+    "necessidade_minima_media": 0.6988781848958172,
+    "vinculo_final_medio": 0.7293349093384159,
+    "vinculo_final_min_max": [
+     0.26106632824122106,
+     0.9926095585292827
+    ]
+   },
+   "relapso": {
+    "acoes_do_dono_por_vida": {
+     "acariciar": 61.8625,
+     "alimentar": 40.8875,
+     "brincar": 40.05,
+     "elogiar": 27.1625,
+     "levar_ao_banheiro": 5.86875,
+     "limpar": 40.05,
+     "repreender": 11.90625,
+     "tratar_lesao": 0.08125,
+     "treinar_alvo": 9.54375,
+     "treinar_corrida": 9.74375,
+     "treinar_esquiva": 9.30625,
+     "treinar_levantar_pedra": 9.825,
+     "treinar_meditar": 9.1625,
+     "treinar_resistencia": 9.0
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 9.0875,
+    "amostras_coerencia_hoje_por_vida": 23.8,
+    "coerencia_contextual_media": 0.785719027625191,
+    "coerencia_hoje_media": 0.5850701516651291,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.2962450811500936,
+      "empurrao_medio": -0.2579961025717243,
+      "n_atendido_medio_por_vida": 250.63125,
+      "n_medio_por_vida": 455.05,
+      "vidas_com_amostra": 152
+     },
+     "coerencia": {
+      "amostra_media": 0.5850701516651291,
+      "empurrao_medio": 0.2043105649010289,
+      "n_atendido_medio_por_vida": 15.94375,
+      "n_medio_por_vida": 23.8,
+      "vidas_com_amostra": 160
+     },
+     "desejo": {
+      "amostra_media": 0.10785581339886943,
+      "empurrao_medio": -0.4452029957904037,
+      "n_atendido_medio_por_vida": 2.2,
+      "n_medio_por_vida": 20.7375,
+      "vidas_com_amostra": 160
+     },
+     "pausa": {
+      "amostra_media": 1.0,
+      "empurrao_medio": 0.4674309858406301,
+      "n_atendido_medio_por_vida": 10.25625,
+      "n_medio_por_vida": 10.25625,
+      "vidas_com_amostra": 160
+     }
+    },
+    "cuidados_por_vida": 188.8,
+    "feedbacks_por_vida": 39.06875,
+    "fracao_avancos_necessidade_baixa": 0.6464471726190476,
+    "fracao_cuidados_com_necessidade_baixa": 0.5628846698828417,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.6050059451708842,
+    "fracao_cuidados_com_pedido_pendente": 0.1647743834471318,
+    "n_vidas": 160,
+    "necessidade_minima_media": 0.37845383193823756,
+    "vinculo_final_medio": 0.46854245237953107,
+    "vinculo_final_min_max": [
+     0.17518831448677863,
+     0.7128509341888768
+    ]
+   }
+  },
+  "vidas": "D:\\Trab\\digilab\\arquivo\\artifacts_linhagem_E1_vidas\\natureza_criacao\\especie_fixa\\vidas"
+ },
+ "meta": {
+  "ambiente": {
+   "plataforma": "Windows-11-10.0.26200-SP0",
+   "python": "3.13.0"
+  },
+  "fontes_sha256": "b90c1635c68720800a9dbd74117524b7864dcd4e0d58ae56a63eb174b7dc4ec3",
+  "processos": 8,
+  "tempo_s": 350.0409268000003
+ },
+ "personalidade": {
+  "artefato": "artifacts_v1_personalidade/completa",
+  "baseline_aleatorio_por_componente": {
+   "atendimento": 0.5175295971033864,
+   "coerencia": 0.5244628443187389,
+   "desejo": 0.10559884559884561,
+   "pausa": null
+  },
+  "conferencia": {
+   "replays_iguais_ao_personalidade_json": 40
+  },
+  "contrafactuais": {
+   "atendimento_por_resposta": {
+    "aleatorio": 0.7120092155247282,
+    "atencioso": 0.5196639938687093,
+    "atencioso-aleatorio": -0.19234522165601886,
+    "incoerente": 0.45653897744931105,
+    "relapso": 0.5162733865222714
+   },
+   "atendimento_por_resposta_ampla": {
+    "aleatorio": 0.7285038257925184,
+    "atencioso": 0.5199172659793541,
+    "atencioso-aleatorio": -0.20858655981316432,
+    "incoerente": 0.4565888248513438,
+    "relapso": 0.564264074786182
+   },
+   "atendimento_por_resposta_ampla_e_coerencia_contextual": {
+    "aleatorio": 0.7226304548553785,
+    "atencioso": 0.5890159776176379,
+    "atencioso-aleatorio": -0.13361447723774056,
+    "incoerente": 0.4448593820542303,
+    "relapso": 0.5702859265810627
+   },
+   "coerencia_contextual_no_lugar_da_coerencia": {
+    "aleatorio": 0.603229831766917,
+    "atencioso": 0.6416975998244108,
+    "atencioso-aleatorio": 0.038467768057493745,
+    "incoerente": 0.3977255202055983,
+    "relapso": 0.49126357627966194
+   },
+   "coerencia_contextual_sem_atendimento": {
+    "aleatorio": 0.4516590957750289,
+    "atencioso": 0.6381211142820313,
+    "atencioso-aleatorio": 0.18646201850700245,
+    "incoerente": 0.3938529534863023,
+    "relapso": 0.4308639254544314
+   },
+   "hoje (conferencia: igual ao replay)": {
+    "aleatorio": 0.607483402386137,
+    "atencioso": 0.5387505870269217,
+    "atencioso-aleatorio": -0.06873281535921527,
+    "incoerente": 0.419302117376603,
+    "relapso": 0.5000182754700033
+   },
+   "normalizado_pela_media_do_aleatorio": {
+    "aleatorio": 0.6041454445620735,
+    "atencioso": 0.5721820460938494,
+    "atencioso-aleatorio": -0.03196339846822416,
+    "incoerente": 0.4720762845312553,
+    "relapso": 0.5104047536694305
+   },
+   "sem_atendimento": {
+    "aleatorio": 0.4903035609751326,
+    "atencioso": 0.5351478080854374,
+    "atencioso-aleatorio": 0.04484424711030477,
+    "incoerente": 0.4156844628199097,
+    "relapso": 0.475838610999123
+   },
+   "so_atendimento": {
+    "aleatorio": 0.6479619854885306,
+    "atencioso": 0.5214375,
+    "atencioso-aleatorio": -0.12652448548853057,
+    "incoerente": 0.5170625,
+    "relapso": 0.5089281791094797
+   },
+   "so_coerencia": {
+    "aleatorio": 0.5467928270005132,
+    "atencioso": 0.6119457835089654,
+    "atencioso-aleatorio": 0.06515295650845221,
+    "incoerente": 0.5071969972206515,
+    "relapso": 0.6534859216591594
+   },
+   "so_coerencia_contextual": {
+    "aleatorio": 0.5286153583754942,
+    "atencioso": 0.7518213667863752,
+    "atencioso-aleatorio": 0.223206008410881,
+    "incoerente": 0.5053346423852949,
+    "relapso": 0.673205460053855
+   },
+   "so_desejo": {
+    "aleatorio": 0.3258357669363074,
+    "atencioso": 0.12409664541170069,
+    "atencioso-aleatorio": -0.2017391215246067,
+    "incoerente": 0.13527031510701384,
+    "relapso": 0.2529799901349564
+   }
+  },
+  "donos": [
+   "aleatorio",
+   "atencioso",
+   "incoerente",
+   "relapso"
+  ],
+  "n_vidas": 40,
+  "por_dono": {
+   "aleatorio": {
+    "acoes_do_dono_por_vida": {
+     "acariciar": 38.2,
+     "alimentar": 35.6,
+     "brincar": 37.6,
+     "elogiar": 38.3,
+     "limpar": 35.0,
+     "repreender": 39.3
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 35.5,
+    "amostras_coerencia_hoje_por_vida": 55.2,
+    "coerencia_contextual_media": 0.5266499491500611,
+    "coerencia_hoje_media": 0.5244628443187389,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.5175295971033864,
+      "empurrao_medio": 0.732573750841184,
+      "n_atendido_medio_por_vida": 456.1,
+      "n_medio_por_vida": 539.5,
+      "vidas_com_amostra": 10
+     },
+     "coerencia": {
+      "amostra_media": 0.5244628443187389,
+      "empurrao_medio": -0.31607838053789605,
+      "n_atendido_medio_por_vida": 33.6,
+      "n_medio_por_vida": 55.2,
+      "vidas_com_amostra": 10
+     },
+     "desejo": {
+      "amostra_media": 0.10559884559884561,
+      "empurrao_medio": -0.309011967917151,
+      "n_atendido_medio_por_vida": 1.3,
+      "n_medio_por_vida": 12.5,
+      "vidas_com_amostra": 10
+     },
+     "pausa": {
+      "amostra_media": null,
+      "empurrao_medio": 0.0,
+      "n_atendido_medio_por_vida": 0.0,
+      "n_medio_por_vida": 0.0,
+      "vidas_com_amostra": 0
+     }
+    },
+    "cuidados_por_vida": 146.4,
+    "feedbacks_por_vida": 77.6,
+    "fracao_avancos_necessidade_baixa": 0.8145089285714286,
+    "fracao_cuidados_com_necessidade_baixa": 0.8143723713164521,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.8400561039795656,
+    "fracao_cuidados_com_pedido_pendente": 0.5987378987490193,
+    "n_vidas": 10,
+    "necessidade_minima_media": 0.2590343258928488,
+    "vinculo_final_medio": 0.607483402386137,
+    "vinculo_final_min_max": [
+     0.35657285244819936,
+     0.8562568550717448
+    ]
+   },
+   "atencioso": {
+    "acoes_do_dono_por_vida": {
+     "alimentar": 37.5,
+     "brincar": 0.2,
+     "elogiar": 93.7,
+     "limpar": 49.5,
+     "repreender": 43.1
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 102.9,
+    "amostras_coerencia_hoje_por_vida": 123.7,
+    "coerencia_contextual_media": 0.7399350503352485,
+    "coerencia_hoje_media": 0.6233962253945133,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.9375,
+      "empurrao_medio": 0.021464597694953992,
+      "n_atendido_medio_por_vida": 0.5,
+      "n_medio_por_vida": 0.5,
+      "vidas_com_amostra": 4
+     },
+     "coerencia": {
+      "amostra_media": 0.6233962253945133,
+      "empurrao_medio": 0.8683998927137253,
+      "n_atendido_medio_por_vida": 89.9,
+      "n_medio_por_vida": 123.7,
+      "vidas_com_amostra": 10
+     },
+     "desejo": {
+      "amostra_media": 0.0,
+      "empurrao_medio": -0.8511139033817576,
+      "n_atendido_medio_por_vida": 0.0,
+      "n_medio_por_vida": 31.8,
+      "vidas_com_amostra": 10
+     },
+     "pausa": {
+      "amostra_media": null,
+      "empurrao_medio": 0.0,
+      "n_atendido_medio_por_vida": 0.0,
+      "n_medio_por_vida": 0.0,
+      "vidas_com_amostra": 0
+     }
+    },
+    "cuidados_por_vida": 87.2,
+    "feedbacks_por_vida": 136.8,
+    "fracao_avancos_necessidade_baixa": 0.04136904761904762,
+    "fracao_cuidados_com_necessidade_baixa": 0.6401879148413909,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.6467001265192271,
+    "fracao_cuidados_com_pedido_pendente": 0.005636652704353597,
+    "n_vidas": 10,
+    "necessidade_minima_media": 0.6698553883927226,
+    "vinculo_final_medio": 0.5387505870269217,
+    "vinculo_final_min_max": [
+     0.3764766460264356,
+     0.7996674878894012
+    ]
+   },
+   "incoerente": {
+    "acoes_do_dono_por_vida": {
+     "alimentar": 39.7,
+     "brincar": 1.9,
+     "elogiar": 67.3,
+     "limpar": 51.9,
+     "repreender": 63.2
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 79.9,
+    "amostras_coerencia_hoje_por_vida": 106.9,
+    "coerencia_contextual_media": 0.5023503747225713,
+    "coerencia_hoje_media": 0.5106688358758309,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.9375,
+      "empurrao_medio": 0.018922068141876074,
+      "n_atendido_medio_por_vida": 0.4,
+      "n_medio_por_vida": 0.4,
+      "vidas_com_amostra": 3
+     },
+     "coerencia": {
+      "amostra_media": 0.5106688358758309,
+      "empurrao_medio": 0.5789786780344045,
+      "n_atendido_medio_por_vida": 64.4,
+      "n_medio_por_vida": 106.9,
+      "vidas_com_amostra": 10
+     },
+     "desejo": {
+      "amostra_media": 0.012465928032160015,
+      "empurrao_medio": -0.6785986287996776,
+      "n_atendido_medio_por_vida": 0.5,
+      "n_medio_por_vida": 31.9,
+      "vidas_com_amostra": 10
+     },
+     "pausa": {
+      "amostra_media": null,
+      "empurrao_medio": 0.0,
+      "n_atendido_medio_por_vida": 0.0,
+      "n_medio_por_vida": 0.0,
+      "vidas_com_amostra": 0
+     }
+    },
+    "cuidados_por_vida": 93.5,
+    "feedbacks_por_vida": 130.5,
+    "fracao_avancos_necessidade_baixa": 0.042782738095238096,
+    "fracao_cuidados_com_necessidade_baixa": 0.6053957901992331,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.6292525534264812,
+    "fracao_cuidados_com_pedido_pendente": 0.003988321318760819,
+    "n_vidas": 10,
+    "necessidade_minima_media": 0.6731900238093856,
+    "vinculo_final_medio": 0.419302117376603,
+    "vinculo_final_min_max": [
+     0.2678382877465393,
+     0.6938297416385826
+    ]
+   },
+   "relapso": {
+    "acoes_do_dono_por_vida": {
+     "acariciar": 57.8,
+     "alimentar": 42.0,
+     "brincar": 42.0,
+     "elogiar": 26.1,
+     "limpar": 42.0,
+     "repreender": 14.1
+    },
+    "ajustes_por_vida": {},
+    "amostras_coerencia_contextual_por_vida": 8.4,
+    "amostras_coerencia_hoje_por_vida": 24.0,
+    "coerencia_contextual_media": 0.805554168054168,
+    "coerencia_hoje_media": 0.6515127995262404,
+    "componentes": {
+     "atendimento": {
+      "amostra_media": 0.28909429262836184,
+      "empurrao_medio": 0.08569717793448496,
+      "n_atendido_medio_por_vida": 231.6,
+      "n_medio_por_vida": 426.2,
+      "vidas_com_amostra": 10
+     },
+     "coerencia": {
+      "amostra_media": 0.6515127995262404,
+      "empurrao_medio": 0.3508967630818608,
+      "n_atendido_medio_por_vida": 16.8,
+      "n_medio_por_vida": 24.0,
+      "vidas_com_amostra": 10
+     },
+     "desejo": {
+      "amostra_media": 0.08800426328889327,
+      "empurrao_medio": -0.4365756655463424,
+      "n_atendido_medio_por_vida": 1.5,
+      "n_medio_por_vida": 20.6,
+      "vidas_com_amostra": 10
+     },
+     "pausa": {
+      "amostra_media": null,
+      "empurrao_medio": 0.0,
+      "n_atendido_medio_por_vida": 0.0,
+      "n_medio_por_vida": 0.0,
+      "vidas_com_amostra": 0
+     }
+    },
+    "cuidados_por_vida": 183.8,
+    "feedbacks_por_vida": 40.2,
+    "fracao_avancos_necessidade_baixa": 0.6107886904761906,
+    "fracao_cuidados_com_necessidade_baixa": 0.5109159853468024,
+    "fracao_cuidados_com_necessidade_baixa_ampla": 0.548854966526711,
+    "fracao_cuidados_com_pedido_pendente": 0.16008620913562452,
+    "n_vidas": 10,
+    "necessidade_minima_media": 0.4120775178571341,
+    "vinculo_final_medio": 0.5000182754700033,
+    "vinculo_final_min_max": [
+     0.13931182439108866,
+     0.6137496076558324
+    ]
+   }
+  },
+  "protocolo": "arena-v1-personalidade"
+ },
+ "tarefa": "docs/TAREFA_V2_F0_VINCULO.md"
+}

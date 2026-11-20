@@ -1,0 +1,524 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "arena": {
+    "bandit": {
+      "atencioso_vs_aleatorio": {
+        "ic_inferior": 0.13,
+        "ic_superior": 0.6380000000000001,
+        "media": 0.379,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "media_de_cada_braco_contra_os_outros": {
+        "aleatorio": 0.6106666666666667,
+        "atencioso": 0.604,
+        "incoerente": 0.3716666666666667,
+        "relapso": 0.4136666666666667
+      },
+      "pares_por_semente": {
+        "101": {
+          "aleatorio|incoerente": 0.535,
+          "atencioso|aleatorio": 0.015,
+          "atencioso|incoerente": 0.995,
+          "atencioso|relapso": 1.0,
+          "relapso|aleatorio": 0.24,
+          "relapso|incoerente": 0.145
+        },
+        "202": {
+          "aleatorio|incoerente": 0.77,
+          "atencioso|aleatorio": 0.475,
+          "atencioso|incoerente": 0.725,
+          "atencioso|relapso": 0.51,
+          "relapso|aleatorio": 0.465,
+          "relapso|incoerente": 0.77
+        },
+        "303": {
+          "aleatorio|incoerente": 0.56,
+          "atencioso|aleatorio": 0.075,
+          "atencioso|incoerente": 0.955,
+          "atencioso|relapso": 0.96,
+          "relapso|aleatorio": 0.24,
+          "relapso|incoerente": 0.37
+        },
+        "404": {
+          "aleatorio|incoerente": 0.125,
+          "atencioso|aleatorio": 0.8,
+          "atencioso|incoerente": 0.35,
+          "atencioso|relapso": 0.66,
+          "relapso|aleatorio": 0.0,
+          "relapso|incoerente": 0.225
+        },
+        "505": {
+          "aleatorio|incoerente": 1.0,
+          "atencioso|aleatorio": 0.53,
+          "atencioso|incoerente": 1.0,
+          "atencioso|relapso": 0.01,
+          "relapso|aleatorio": 0.99,
+          "relapso|incoerente": 0.9
+        }
+      },
+      "por_semente": [
+        0.015,
+        0.475,
+        0.075,
+        0.8,
+        0.53
+      ]
+    },
+    "bandit_sem_tecnicas_passivas": {
+      "atencioso_vs_aleatorio": {
+        "ic_inferior": 0.341,
+        "ic_superior": 1.0,
+        "media": 0.741,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "media_de_cada_braco_contra_os_outros": {
+        "aleatorio": 0.5630000000000001,
+        "atencioso": 0.7963333333333333,
+        "incoerente": 0.22733333333333333,
+        "relapso": 0.41333333333333333
+      },
+      "pares_por_semente": {
+        "101": {
+          "aleatorio|incoerente": 0.215,
+          "atencioso|aleatorio": 1.0,
+          "atencioso|incoerente": 1.0,
+          "atencioso|relapso": 1.0,
+          "relapso|aleatorio": 0.515,
+          "relapso|incoerente": 0.515
+        },
+        "202": {
+          "aleatorio|incoerente": 1.0,
+          "atencioso|aleatorio": 0.705,
+          "atencioso|incoerente": 0.99,
+          "atencioso|relapso": 0.515,
+          "relapso|aleatorio": 0.71,
+          "relapso|incoerente": 1.0
+        },
+        "303": {
+          "aleatorio|incoerente": 0.59,
+          "atencioso|aleatorio": 1.0,
+          "atencioso|incoerente": 0.98,
+          "atencioso|relapso": 0.97,
+          "relapso|aleatorio": 0.43,
+          "relapso|incoerente": 0.73
+        },
+        "404": {
+          "aleatorio|incoerente": 1.0,
+          "atencioso|aleatorio": 0.0,
+          "atencioso|incoerente": 0.415,
+          "atencioso|relapso": 0.37,
+          "relapso|aleatorio": 0.0,
+          "relapso|incoerente": 0.63
+        },
+        "505": {
+          "aleatorio|incoerente": 1.0,
+          "atencioso|aleatorio": 1.0,
+          "atencioso|incoerente": 1.0,
+          "atencioso|relapso": 1.0,
+          "relapso|aleatorio": 0.0,
+          "relapso|incoerente": 0.525
+        }
+      },
+      "por_semente": [
+        1.0,
+        0.705,
+        1.0,
+        0.0,
+        1.0
+      ]
+    },
+    "instinto": {
+      "atencioso_vs_aleatorio": {
+        "ic_inferior": 0.41100000000000003,
+        "ic_superior": 0.77,
+        "media": 0.585,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "media_de_cada_braco_contra_os_outros": {
+        "aleatorio": 0.4086666666666667,
+        "atencioso": 0.5436666666666667,
+        "incoerente": 0.517,
+        "relapso": 0.5306666666666666
+      },
+      "pares_por_semente": {
+        "101": {
+          "aleatorio|incoerente": 0.775,
+          "atencioso|aleatorio": 0.26,
+          "atencioso|incoerente": 0.525,
+          "atencioso|relapso": 0.54,
+          "relapso|aleatorio": 0.305,
+          "relapso|incoerente": 0.485
+        },
+        "202": {
+          "aleatorio|incoerente": 0.475,
+          "atencioso|aleatorio": 0.515,
+          "atencioso|incoerente": 0.49,
+          "atencioso|relapso": 0.515,
+          "relapso|aleatorio": 0.495,
+          "relapso|incoerente": 0.53
+        },
+        "303": {
+          "aleatorio|incoerente": 0.175,
+          "atencioso|aleatorio": 0.85,
+          "atencioso|incoerente": 0.56,
+          "atencioso|relapso": 0.52,
+          "relapso|aleatorio": 0.79,
+          "relapso|incoerente": 0.505
+        },
+        "404": {
+          "aleatorio|incoerente": 0.505,
+          "atencioso|aleatorio": 0.51,
+          "atencioso|incoerente": 0.5,
+          "atencioso|relapso": 0.49,
+          "relapso|aleatorio": 0.54,
+          "relapso|incoerente": 0.52
+        },
+        "505": {
+          "aleatorio|incoerente": 0.13,
+          "atencioso|aleatorio": 0.79,
+          "atencioso|incoerente": 0.555,
+          "atencioso|relapso": 0.535,
+          "relapso|aleatorio": 0.875,
+          "relapso|incoerente": 0.515
+        }
+      },
+      "por_semente": [
+        0.26,
+        0.515,
+        0.85,
+        0.51,
+        0.79
+      ]
+    },
+    "instinto_sem_tecnicas_passivas": {
+      "atencioso_vs_aleatorio": {
+        "ic_inferior": 0.549,
+        "ic_superior": 0.7849999999999999,
+        "media": 0.665,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "media_de_cada_braco_contra_os_outros": {
+        "aleatorio": 0.33566666666666667,
+        "atencioso": 0.5589999999999999,
+        "incoerente": 0.5523333333333333,
+        "relapso": 0.553
+      },
+      "pares_por_semente": {
+        "101": {
+          "aleatorio|incoerente": 0.2,
+          "atencioso|aleatorio": 0.855,
+          "atencioso|incoerente": 0.515,
+          "atencioso|relapso": 0.47,
+          "relapso|aleatorio": 0.805,
+          "relapso|incoerente": 0.485
+        },
+        "202": {
+          "aleatorio|incoerente": 0.465,
+          "atencioso|aleatorio": 0.535,
+          "atencioso|incoerente": 0.5,
+          "atencioso|relapso": 0.5,
+          "relapso|aleatorio": 0.53,
+          "relapso|incoerente": 0.5
+        },
+        "303": {
+          "aleatorio|incoerente": 0.395,
+          "atencioso|aleatorio": 0.55,
+          "atencioso|incoerente": 0.505,
+          "atencioso|relapso": 0.5,
+          "relapso|aleatorio": 0.59,
+          "relapso|incoerente": 0.535
+        },
+        "404": {
+          "aleatorio|incoerente": 0.47,
+          "atencioso|aleatorio": 0.575,
+          "atencioso|incoerente": 0.525,
+          "atencioso|relapso": 0.505,
+          "relapso|aleatorio": 0.545,
+          "relapso|incoerente": 0.485
+        },
+        "505": {
+          "aleatorio|incoerente": 0.175,
+          "atencioso|aleatorio": 0.81,
+          "atencioso|incoerente": 0.52,
+          "atencioso|relapso": 0.52,
+          "relapso|aleatorio": 0.875,
+          "relapso|incoerente": 0.44
+        }
+      },
+      "por_semente": [
+        0.855,
+        0.535,
+        0.55,
+        0.575,
+        0.81
+      ]
+    }
+  },
+  "avisos": [
+    "todos os numeros de ConfigEvolucaoPesquisa sao PROPOSTOS",
+    "bateria V2.1 REPROVADA (artifacts_combate_v21/gates.json): a arena herda isso",
+    "interpretacoes em docs/REGISTRO_DESVIOS.md"
+  ],
+  "config_combate_v21": {
+    "carater_bot_complementar": 0.25,
+    "carater_bot_linha": 0.5,
+    "custo_contra_golpe": 15,
+    "custo_investida": 20,
+    "custo_marcar": 10,
+    "custo_pele_dura": 20,
+    "dano_extra_duelista": 4.0,
+    "dano_investida": 8.0,
+    "fracao_contra_golpe": 0.5,
+    "fracao_espelho_disparo": 1.0,
+    "guarda_base": 1.3,
+    "guarda_por_ponto": 0.03,
+    "guts_extra_muralha": 3,
+    "guts_inicial_base": 30.0,
+    "guts_inicial_por_folego": 2.0,
+    "guts_max_base": 80.0,
+    "guts_max_por_folego": 2.0,
+    "hp_base": 70.0,
+    "hp_por_vigor": 3.0,
+    "limiar_hp_furioso": 0.5,
+    "max_regras_adolescente": 5,
+    "max_regras_adulto": 8,
+    "max_regras_crianca": 3,
+    "mult_base": 0.7,
+    "mult_emboscador": 2.0,
+    "mult_furioso": 1.25,
+    "mult_marcar": 2.0,
+    "mult_parry_investida": 0.0,
+    "mult_pele_dura": 0.5,
+    "mult_por_ponto": 0.03,
+    "mult_tita": 1.3,
+    "recarga_sentinela": 4,
+    "regen_base": 4.0,
+    "regen_por_recuperacao": 0.4,
+    "turnos_execucao": [
+      5,
+      10,
+      20
+    ],
+    "turnos_marcar": 3,
+    "turnos_pele_dura": 2
+  },
+  "config_evolucao": {
+    "amplitude_temperamento": 1.0,
+    "atende": {
+      "carinho": [
+        "acariciar",
+        "brincar"
+      ],
+      "fome": [
+        "alimentar"
+      ],
+      "higiene": [
+        "limpar"
+      ]
+    },
+    "chamados_bebe_min": {
+      "carinho": 45,
+      "fome": 30,
+      "higiene": 60
+    },
+    "dur_adolescente_min": 1080,
+    "dur_bebe_min": 180,
+    "dur_crianca_min": 720,
+    "eixo_traco": {
+      "atento": [
+        "finta"
+      ],
+      "impetuoso": [
+        "golpe",
+        "carga"
+      ],
+      "paciente": [
+        "bloqueio"
+      ],
+      "resistente": [
+        "agarrao"
+      ]
+    },
+    "escala_carater": 0.05,
+    "janela_chamado_min": 15,
+    "sparring_simulado": 10
+  },
+  "descricao": "Pesquisa do combate V2.1 (docs/ESPEC_EVOLUCAO_COMBATE.md, secao Pesquisa).",
+  "distribuicao_formas": {
+    "bandit": {
+      "aleatorio": {
+        "adulta": {
+          "duelista": 2,
+          "emboscador": 2,
+          "furioso": 1
+        },
+        "carater_adulto_medio": {
+          "atento": 0.00343749999999998,
+          "impetuoso": 0.033437499999999926,
+          "paciente": 0.0912499999999998,
+          "resistente": -0.1615625
+        },
+        "cuidado_medio": 0.04,
+        "linha": {
+          "brigao": 3,
+          "cacador": 2
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      },
+      "atencioso": {
+        "adulta": {
+          "emboscador": 3,
+          "muralha": 1,
+          "sentinela": 1
+        },
+        "carater_adulto_medio": {
+          "atento": 0.30156249999999996,
+          "impetuoso": -0.18203125000000003,
+          "paciente": 0.1449999999999997,
+          "resistente": -0.08249999999999999
+        },
+        "cuidado_medio": 0.0,
+        "linha": {
+          "cacador": 4,
+          "guardiao": 1
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      },
+      "incoerente": {
+        "adulta": {
+          "espelho": 1,
+          "muralha": 3,
+          "tita": 1
+        },
+        "carater_adulto_medio": {
+          "atento": -0.27875,
+          "impetuoso": -0.09843750000000004,
+          "paciente": 0.5340624999999997,
+          "resistente": -0.058437499999999976
+        },
+        "cuidado_medio": 0.0,
+        "linha": {
+          "colosso": 1,
+          "guardiao": 4
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      },
+      "relapso": {
+        "adulta": {
+          "duelista": 2,
+          "emboscador": 1,
+          "muralha": 1,
+          "vigia": 1
+        },
+        "carater_adulto_medio": {
+          "atento": 0.13624999999999995,
+          "impetuoso": -0.12484375000000003,
+          "paciente": 0.24906249999999974,
+          "resistente": -0.135625
+        },
+        "cuidado_medio": 0.16,
+        "linha": {
+          "brigao": 2,
+          "cacador": 1,
+          "colosso": 1,
+          "guardiao": 1
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      }
+    },
+    "instinto": {
+      "aleatorio": {
+        "adulta": {
+          "duelista": 5
+        },
+        "carater_adulto_medio": {
+          "atento": 0.0,
+          "impetuoso": 0.0,
+          "paciente": 0.0,
+          "resistente": 0.0
+        },
+        "cuidado_medio": 0.04,
+        "linha": {
+          "brigao": 5
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      },
+      "atencioso": {
+        "adulta": {
+          "duelista": 5
+        },
+        "carater_adulto_medio": {
+          "atento": 0.0,
+          "impetuoso": 0.0,
+          "paciente": 0.0,
+          "resistente": 0.0
+        },
+        "cuidado_medio": 0.0,
+        "linha": {
+          "brigao": 5
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      },
+      "incoerente": {
+        "adulta": {
+          "duelista": 5
+        },
+        "carater_adulto_medio": {
+          "atento": 0.0,
+          "impetuoso": 0.0,
+          "paciente": 0.0,
+          "resistente": 0.0
+        },
+        "cuidado_medio": 0.0,
+        "linha": {
+          "brigao": 5
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      },
+      "relapso": {
+        "adulta": {
+          "duelista": 5
+        },
+        "carater_adulto_medio": {
+          "atento": 0.0,
+          "impetuoso": 0.0,
+          "paciente": 0.0,
+          "resistente": 0.0
+        },
+        "cuidado_medio": 0.16,
+        "linha": {
+          "brigao": 5
+        },
+        "ramo": {
+          "arisco": 5
+        }
+      }
+    }
+  },
+  "fontes_sha256": "21daa891f7c8527e06700af5e7fa1d14b58f3dfd348ab10d27d3f2291f701db0",
+  "partidas_por_par_por_semente": 100,
+  "replay_amostra_bit_a_bit": 120,
+  "sementes_com_a_mesma_linha_nos_4_donos_bandit": 0,
+  "vidas": "artifacts_ablacao/vidas (protocolo arena-v1-ablacao)"
+}

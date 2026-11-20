@@ -1,0 +1,71 @@
+{
+ "descricao": "a medicao pontual do A v11 no navegador (G-CUSTO, AF-4): so desempenho, uma vez; o pet v12 do jogo (o Motor, o mundo do produto e o A v11), o dono do botao Alimentar; a decisao inteira (o avancar / as decisoes), o cerebro (o tempo dentro dos metodos do braco do A, embrulhados so nesta medida) e o replay de 14 dias pelo log (Motor.reproduzir); as medianas de 7 repeticoes",
+ "data": "2026-10-25",
+ "aparelho": {
+  "cpu": "Intel(R) Core(TM) i7-14700KF",
+  "nucleos": 20,
+  "memoria_gb": 32,
+  "sistema": "win32 10.0.26300"
+ },
+ "navegador": {
+  "nome": "Google Chrome (o instalado, sem janela, pelo Playwright)",
+  "versao": "155.0.8059.85"
+ },
+ "semente": 101,
+ "dias": 14,
+ "repeticoes": 7,
+ "decisoes": 1344,
+ "eventos": 883,
+ "log_json_bytes": 23759,
+ "chamadas_do_cerebro": {
+  "agir": 1344,
+  "observar": 1344,
+  "consequenciaCorpo": 1344,
+  "receberAcaoDono": 353,
+  "mudancaNoCorpo": 135
+ },
+ "decisao_us": {
+  "mediana": 37.19,
+  "todas": [
+   44.55,
+   39.19,
+   39.45,
+   36.57,
+   36.1,
+   37.19,
+   36.81
+  ]
+ },
+ "cerebro_us": {
+  "mediana": 5.65,
+  "todas": [
+   6.61,
+   5.82,
+   6.09,
+   5.65,
+   4.95,
+   5.42,
+   5.47
+  ]
+ },
+ "replay_ms": {
+  "mediana": 49.47,
+  "todas": [
+   57.63,
+   52.12,
+   49.47,
+   48.03,
+   49.39,
+   49.4,
+   51.91
+  ]
+ },
+ "crossOriginIsolated": true,
+ "agente": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+ "conferencia_node": {
+  "versao": "v24.19.0",
+  "decisao_us": 48.14,
+  "cerebro_us": 6.79,
+  "replay_ms": 63.99
+ }
+}

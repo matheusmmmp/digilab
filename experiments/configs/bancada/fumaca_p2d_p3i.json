@@ -1,0 +1,17 @@
+{
+  "descricao": "Fumaca da bancada do P2d e do P3i (docs/TAREFA_V2_P2D_P3I.md, parte D). NAO canonica: unidades derivadas das sementes dos testes, vida curta, montagem completa com o K4 e o w0_info S/4 (o da K2); confere o encanamento (P2 x P2d, P3 x P3i, o so cuidado dos novos), nunca como resultado.",
+  "bracos": ["P0", "P2", "P2d", "P3", "P3i"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1},
+  "mundos": ["descasado", "mutavel"],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "lobos": {"memoria_ganho": 512, "w0_info": 256},
+  "consequencia": {"canais_ligados": true},
+  "julgamento_fruta": true,
+  "montagem": "completa",
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P2d", "destino": "P0", "filtro": "sem_ensino"}, {"origem": "P3i", "destino": "P0", "filtro": "sem_ensino"}]
+}

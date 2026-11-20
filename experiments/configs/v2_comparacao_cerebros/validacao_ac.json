@@ -1,0 +1,12 @@
+{
+  "descricao": "Validacao da comparacao A x C, uma vez (adendo 2 do plano, 2026-10-07): N = 5 (K = 1) nas bases 29101...29505, prefixo comparacao-cerebros, 14 dias, o dono atencioso; o mesmo desenho do piloto. Nada se ajusta olhando a validacao.",
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "adendo": 2,
+  "unidades": {"bases": [29101, 29202, 29303, 29404, 29505], "k": 1, "prefixo": "comparacao-cerebros"},
+  "dias": 14,
+  "orcamento": 224,
+  "sonda": {"estados": 64, "amostras": 200, "semente": 9001},
+  "bootstrap": {"reamostragens": 10000, "semente": 4242, "nivel": 0.95},
+  "delta": 0.1986268570547561,
+  "saida": "artifacts_v2_comparacao_cerebros/validacao"
+}

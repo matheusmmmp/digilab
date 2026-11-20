@@ -1,0 +1,14 @@
+{
+ "id": "01a1af01-464b-7377-83a4-ce49a7e79b3c",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "The same beach ball from the reference, exactly the same six panels and colors (white, sky blue, sunny yellow) and the same flat three-tone toon style, shown as separate clean views of the whole ball: front, side and back. No shadow, no ground, no text.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793937459020,
+ "finished_at": 1793937476450,
+ "saldo": {
+  "antes": 1076,
+  "depois": 1070
+ }
+}

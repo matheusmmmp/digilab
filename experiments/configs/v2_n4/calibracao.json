@@ -1,0 +1,7 @@
+{
+  "descricao": "V2, N4 (docs/PLANO_ANALISE_V2_N4.md, secao 4): grade w_fruta x k_saciedade x duracao_min nas sementes de calibracao; so o braco frutas (descasado) e o acoplado; semfrutas uma vez.",
+  "conjunto": "calibracao",
+  "sementes": [10101, 10202, 10303, 10404, 10505],
+  "saida": "artifacts_v2_n4/calibracao",
+  "grade": {"w_fruta": [1.0, 3.0, 6.0], "k_saciedade": [0.2, 0.5, 1.0], "duracao_min": [60, 120]}
+}

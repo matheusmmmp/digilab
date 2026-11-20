@@ -1,0 +1,35 @@
+{
+  "versao": 1,
+  "fonte": "sintetico, para o teste de unidade das acoes novas (TAREFA_V3_SPRITES_ACOES, M2); arte propria, sem PNG da Bandai",
+  "atlas": "sintetico_acoes.png",
+  "sprites": {
+    "forma_a": {
+      "digimon": "SinteticoA", "caixa": [20, 10],
+      "clipes": {
+        "Idle": { "quadros": [[0, 0, 4, 4, 1, 6], [5, 0, 4, 4, 1, 6]], "ms": [100, 100], "loop": true },
+        "Comer": { "quadros": [[0, 5, 4, 4, 1, 6], [5, 5, 4, 4, 1, 6], [10, 5, 4, 4, 1, 6]], "ms": [133, 100, 67], "loop": true },
+        "Comer_objeto": { "quadros": [[15, 0, 2, 2, 6, 7], [0, 0, 0, 0, 0, 0], [15, 3, 1, 1, 6, 8]], "ms": [133, 100, 67], "loop": true }
+      }
+    },
+    "forma_b": {
+      "digimon": "SinteticoB", "caixa": [20, 10],
+      "clipes": {
+        "Idle": { "quadros": [[0, 10, 4, 4, 2, 6]], "ms": [200], "loop": true },
+        "Comer": { "quadros": [[5, 10, 4, 4, 2, 6], [10, 10, 4, 4, 2, 6]], "ms": [150, 150], "loop": true },
+        "Comer_objeto": { "quadros": [[15, 10, 2, 2, 7, 7], [15, 13, 2, 2, 7, 7]], "ms": [150, 150], "loop": true }
+      }
+    },
+    "npc_sintetico": {
+      "digimon": "SinteticoNpc", "caixa": [20, 10],
+      "clipes": {
+        "Idle": { "quadros": [[0, 15, 4, 4, 1, 6]], "ms": [120], "loop": true }
+      }
+    },
+    "bot_sintetico": {
+      "digimon": "SinteticoBot", "caixa": [20, 10],
+      "clipes": {
+        "Idle": { "quadros": [[5, 15, 4, 4, 1, 6]], "ms": [120], "loop": true }
+      }
+    }
+  }
+}

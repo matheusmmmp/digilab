@@ -1,0 +1,363 @@
+{
+  "aviso": "o piloto so serve para a regra do K (A5.8): nenhum criterio e lido nele, e os numeros dele nao sao evidencia",
+  "comparacoes": {
+    "episodio|comedouro": {
+      "margem": -0.03,
+      "media_M3": 0.8556897062868931,
+      "media_M3+S": 0.8550920334601011,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 0.9998850576045725,
+        "201": 1.0,
+        "21": 0.999999993964686,
+        "30": 0.9999999999998054,
+        "51": 1.0
+      },
+      "rho": 0.9557669886702992,
+      "sigma_M3": 0.05946426429893388,
+      "sigma_M3+S": 0.05927871194158613,
+      "sigma_d": 0.01765995647580583,
+      "unidades": 10
+    },
+    "episodio|perto": {
+      "margem": -0.03,
+      "media_M3": 0.9528111463817985,
+      "media_M3+S": 0.9531072723572723,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 1.0,
+        "201": 1.0,
+        "21": 1.0,
+        "30": 1.0,
+        "51": 1.0
+      },
+      "rho": 0.8563456852376324,
+      "sigma_M3": 0.019159571325313467,
+      "sigma_M3+S": 0.016123933559192862,
+      "sigma_d": 0.009898114863352302,
+      "unidades": 10
+    },
+    "exaustao|comedouro": {
+      "margem": 0.02,
+      "media_M3": 0.17072172619047618,
+      "media_M3+S": 0.1706845238095238,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 0.9999972784886412,
+        "201": 1.0,
+        "21": 0.9999999999960598,
+        "30": 1.0,
+        "51": 1.0
+      },
+      "rho": 0.9495923991213548,
+      "sigma_M3": 0.026468912345530667,
+      "sigma_M3+S": 0.031181425137741206,
+      "sigma_d": 0.010267153208942793,
+      "unidades": 10
+    },
+    "exaustao|longe": {
+      "margem": 0.02,
+      "media_M3": 0.3144717261904762,
+      "media_M3+S": 0.3005952380952381,
+      "motivo": null,
+      "poder": {
+        "102": 0.9760730303326506,
+        "12": 0.19992331920538808,
+        "201": 0.9998349267915484,
+        "21": 0.3866517925460847,
+        "30": 0.5412884802902913,
+        "51": 0.786191684286742
+      },
+      "rho": 0.29653784219528956,
+      "sigma_M3": 0.025164171298742623,
+      "sigma_M3+S": 0.05241855227814993,
+      "sigma_d": 0.05097678035997754,
+      "unidades": 10
+    },
+    "exaustao|perto": {
+      "margem": 0.02,
+      "media_M3": 0.15584077380952382,
+      "media_M3+S": 0.15554315476190478,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 1.0,
+        "201": 1.0,
+        "21": 1.0,
+        "30": 1.0,
+        "51": 1.0
+      },
+      "rho": 0.9952053017247984,
+      "sigma_M3": 0.027255494449567076,
+      "sigma_M3+S": 0.02767208692068621,
+      "sigma_d": 0.002721402127846273,
+      "unidades": 10
+    },
+    "privacao|comedouro": {
+      "margem": 0.02,
+      "media_M3": 0.13950892857142858,
+      "media_M3+S": 0.13649553571428572,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 0.9869827254627324,
+        "201": 1.0,
+        "21": 0.9999183714282351,
+        "30": 0.9999996364239097,
+        "51": 0.9999999999994496
+      },
+      "rho": 0.9646005569020213,
+      "sigma_M3": 0.05890207286611542,
+      "sigma_M3+S": 0.05873224556650812,
+      "sigma_d": 0.015651010175831054,
+      "unidades": 10
+    },
+    "privacao|longe": {
+      "margem": 0.02,
+      "media_M3": 0.5441592261904762,
+      "media_M3+S": 0.5003720238095238,
+      "motivo": null,
+      "poder": {
+        "102": 0.36861589523488403,
+        "12": 0.050956017575944146,
+        "201": 0.6337573951488696,
+        "21": 0.09043183329712634,
+        "30": 0.12479156874175035,
+        "51": 0.19958655628315802
+      },
+      "rho": 0.14008480793123393,
+      "sigma_M3": 0.07562329944701646,
+      "sigma_M3+S": 0.10760988312463629,
+      "sigma_d": 0.12255122205323948,
+      "unidades": 10
+    },
+    "privacao|perto": {
+      "margem": 0.02,
+      "media_M3": 0.13430059523809523,
+      "media_M3+S": 0.13463541666666667,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 1.0,
+        "201": 1.0,
+        "21": 1.0,
+        "30": 1.0,
+        "51": 1.0
+      },
+      "rho": 0.9995679900302715,
+      "sigma_M3": 0.06019713622876294,
+      "sigma_M3+S": 0.06094897356550596,
+      "sigma_d": 0.0019326946225901092,
+      "unidades": 10
+    },
+    "racao|comedouro": {
+      "margem": -0.03,
+      "media_M3": 0.4380634206896191,
+      "media_M3+S": 0.43807808539135024,
+      "motivo": null,
+      "poder": {
+        "102": 0.9999999976628087,
+        "12": 0.6875198803299636,
+        "201": 1.0,
+        "21": 0.9295342341900883,
+        "30": 0.9863689943478287,
+        "51": 0.9997973758542709
+      },
+      "rho": 0.5536753368329307,
+      "sigma_M3": 0.044539415398004774,
+      "sigma_M3+S": 0.03548135468277214,
+      "sigma_d": 0.0386357214473856,
+      "unidades": 10
+    },
+    "racao|perto": {
+      "margem": -0.03,
+      "media_M3": 0.696379684212557,
+      "media_M3+S": 0.6980745381104478,
+      "motivo": null,
+      "poder": {
+        "102": 1.0,
+        "12": 1.0,
+        "201": 1.0,
+        "21": 1.0,
+        "30": 1.0,
+        "51": 1.0
+      },
+      "rho": 0.9912878681596733,
+      "sigma_M3": 0.029848176576149087,
+      "sigma_M3+S": 0.028220914726723213,
+      "sigma_d": 0.004162353298692293,
+      "unidades": 10
+    }
+  },
+  "fase": "l2_piloto",
+  "mecanismo": {
+    "M0+S|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 2.825,
+      "buscas_trocadas_por_vida": 2.825,
+      "c_l2_1_por_vida": 2.825,
+      "intencoes_suspensas_que_acabaram_por_vida": 5.125,
+      "retomadas_por_vida": 5.5,
+      "vidas": 40
+    },
+    "M0+S|longe": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 14.875,
+      "buscas_trocadas_por_vida": 14.9,
+      "c_l2_1_por_vida": 14.9,
+      "intencoes_suspensas_que_acabaram_por_vida": 15.825,
+      "retomadas_por_vida": 19.675,
+      "vidas": 40
+    },
+    "M0+S|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.175,
+      "buscas_trocadas_por_vida": 0.175,
+      "c_l2_1_por_vida": 0.175,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.9,
+      "retomadas_por_vida": 0.65,
+      "vidas": 40
+    },
+    "M0|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 2.675,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.85,
+      "buscas_trocadas_por_vida": 3.525,
+      "c_l2_1_por_vida": 3.525,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 40
+    },
+    "M0|longe": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 17.325,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 5.025,
+      "buscas_trocadas_por_vida": 22.35,
+      "c_l2_1_por_vida": 22.35,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 40
+    },
+    "M0|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.2,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.075,
+      "buscas_trocadas_por_vida": 0.275,
+      "c_l2_1_por_vida": 0.275,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 40
+    },
+    "M3+S|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 1.525,
+      "buscas_trocadas_por_vida": 1.525,
+      "c_l2_1_por_vida": 1.525,
+      "intencoes_suspensas_que_acabaram_por_vida": 3.175,
+      "retomadas_por_vida": 3.225,
+      "vidas": 40
+    },
+    "M3+S|longe": {
+      "buscas_expiradas_por_vida": 0.025,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 17.625,
+      "buscas_trocadas_por_vida": 17.625,
+      "c_l2_1_por_vida": 17.65,
+      "intencoes_suspensas_que_acabaram_por_vida": 19.3,
+      "retomadas_por_vida": 22.625,
+      "vidas": 40
+    },
+    "M3+S|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.1,
+      "buscas_trocadas_por_vida": 0.1,
+      "c_l2_1_por_vida": 0.1,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.375,
+      "retomadas_por_vida": 0.15,
+      "vidas": 40
+    },
+    "M3|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 1.825,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.5,
+      "buscas_trocadas_por_vida": 2.325,
+      "c_l2_1_por_vida": 2.325,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 40
+    },
+    "M3|longe": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 20.925,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 5.225,
+      "buscas_trocadas_por_vida": 26.15,
+      "c_l2_1_por_vida": 26.15,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 40
+    },
+    "M3|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.025,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.1,
+      "buscas_trocadas_por_vida": 0.125,
+      "c_l2_1_por_vida": 0.125,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 40
+    }
+  },
+  "modo": "l2_piloto",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "regra_do_k": {
+    "alvo": 0.8,
+    "conjuncao": {
+      "102": 0.35979603304978397,
+      "12": 0.0069119826747184275,
+      "201": 0.6336527787822724,
+      "21": 0.03249909725330355,
+      "30": 0.06662746395097532,
+      "51": 0.15688149642364924
+    },
+    "custo": {
+      "102": {
+        "vidas": 4896
+      },
+      "12": {
+        "vidas": 576
+      },
+      "201": {
+        "vidas": 9648
+      },
+      "21": {
+        "vidas": 1008
+      },
+      "30": {
+        "vidas": 1440
+      },
+      "51": {
+        "vidas": 2448
+      }
+    },
+    "grade": [
+      12,
+      21,
+      30,
+      51,
+      102,
+      201
+    ],
+    "k": null,
+    "k_por_base": null,
+    "motivo": "nenhum K da grade chega a 0.8",
+    "volta_ao_matheus": true
+  }
+}

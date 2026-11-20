@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "vida": "pqp",
+    "semente": 101,
+    "nome": "P1-plan~T1@101",
+    "dias": 10,
+    "config": "experiments\\configs\\v2_pet_que_pensa\\fumaca_calibracao_paladar.json",
+    "troca": {
+      "braco": "P1-plan",
+      "protocolo": "T1",
+      "d_a": 7,
+      "janela": 3,
+      "g_plano": 1024,
+      "ganho_gosto": 512
+    },
+    "x": "c",
+    "tick_mudanca": 10560,
+    "pet": "A",
+    "corpo": {
+      "quimicos": 17,
+      "quimicos_com_receptor": 9,
+      "receptores": [
+        "energia",
+        "fome",
+        "higiene",
+        "humor",
+        "paladar_amargo",
+        "paladar_azedo",
+        "paladar_doce",
+        "paladar_salgado",
+        "saude"
+      ],
+      "reacoes": 3,
+      "emissores": 32,
+      "orgaos": 0,
+      "arestas_efeito": 45,
+      "arestas_leitura": 8,
+      "arestas_reacao": 7
+    },
+    "escala": 1024,
+    "teto": 16384,
+    "g_plano": 1024,
+    "lobos": [
+      "percepcao",
+      "memoria_emocao",
+      "impulsos",
+      "decisao",
+      "planejamento"
+    ],
+    "rotulo_lobo": null,
+    "entradas": [
+      "vies",
+      "fome",
+      "higiene",
+      "energia",
+      "humor",
+      "saude",
+      "sujeira",
+      "dormindo",
+      "hora",
+      "ticks_sem_cuidado",
+      "bola",
+      "fruta"
+    ],
+    "receptores_novos": [],
+    "sociais": [],
+    "n_decisoes": 960
+  },
+  "nos": 54,
+  "nos_por_grupo": {
+    "entrada:estado": 5,
+    "entrada:receptor": 5,
+    "entrada:mundo": 2,
+    "entrada:presenca": 3,
+    "regra": 9,
+    "acao": 7,
+    "classe": 21,
+    "lobo": 2
+  },
+  "pesos_por_tipo": {
+    "f": {
+      "pesos": 3,
+      "nao_nulos_prior": 0,
+      "nao_nulos_fim": 1,
+      "nao_nulos_na_vida": 1,
+      "aprendidos_fim": 1
+    },
+    "m": {
+      "pesos": 72,
+      "nao_nulos_prior": 72,
+      "nao_nulos_fim": 72,
+      "nao_nulos_na_vida": 72,
+      "aprendidos_fim": 22
+    },
+    "t": {
+      "pesos": 756,
+      "nao_nulos_prior": 30,
+      "nao_nulos_fim": 130,
+      "nao_nulos_na_vida": 131,
+      "aprendidos_fim": 115
+    }
+  },
+  "pesos_total": {
+    "pesos": 831,
+    "nao_nulos_prior": 102,
+    "nao_nulos_fim": 203,
+    "nao_nulos_na_vida": 204,
+    "aprendidos_fim": 138
+  },
+  "n_pesos_do_cerebro": 831,
+  "arestas_t_acesas_na_vida": 122,
+  "decisoes": 960,
+  "comparacao_flywire": {
+    "neuronios": "cerca de 139 mil",
+    "sinapses": "54,5 milhões",
+    "fonte": "Dorkenwald et al. 2024, 10.1038/s41586-024-07558-y (CORPUS; docs/research/digibrain/sources/drosophila.md)"
+  }
+}

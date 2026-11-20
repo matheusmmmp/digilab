@@ -1,0 +1,72 @@
+{
+  "braco": "incoerente",
+  "carater_adulto": {
+    "atento": 0.2875,
+    "impetuoso": -0.11718750000000001,
+    "paciente": 0.09999999999999974,
+    "resistente": -0.15312500000000007
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 28,
+    "treino": 46
+  },
+  "enroladas": 1,
+  "especie": "brasa",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "muralha",
+    "linha": "guardiao",
+    "ramo": "arisco",
+    "rotulo": "brasa/arisco/guardiao/muralha"
+  },
+  "obediencia_cuidado": 0.9572649572649573,
+  "ovo": 606,
+  "sessoes": 46,
+  "sombria": false,
+  "treino": {
+    "enroladas": 1,
+    "especie": "brasa",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 16,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.87993518475,
+      "forca": 6.26833526016,
+      "guarda": 4.97014083775,
+      "mira": 2.516105142142484,
+      "recuperacao": 4.233600567006255,
+      "vigor": 5.134490008191261
+    },
+    "pontos_estagio": {
+      "adolescente": 6.666606999999999,
+      "adulto": 14.0,
+      "crianca": 7.336
+    },
+    "sessoes": 46,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 28.002606999999998,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.7275249079367273
+}

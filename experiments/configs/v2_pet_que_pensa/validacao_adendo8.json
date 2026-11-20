@@ -1,0 +1,75 @@
+{
+  "descricao": "Validacao do pet que pensa com o adendo 8 (PLANO_ANALISE_V2_PET_QUE_PENSA, secao 7, com o desenho dos adendos 5, 7 e 8 e os numeros do adendo 9): os 4 bracos x T1 e T2 nas bases 55101...55505 com K_u = 10 (N = 50), o T1 como primario (decisao do Matheus, 2026-10-19), as margens do piloto do adendo 8 e a G-APRENDEU pelo acaso medio. Roda uma vez.",
+  "adendo_7": true,
+  "adendo_8": true,
+  "bracos": [
+    "P1",
+    "P1-plan",
+    "P1-plan-desfecho",
+    "P1-plan-cong"
+  ],
+  "consequencia": {
+    "canais_ligados": true,
+    "ganho": 4,
+    "ganho_gosto": 512
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "d_a": 7,
+  "dono": "atencioso",
+  "fruta_ao_lado": true,
+  "g_plano": 1024,
+  "janela": 5,
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_info": 256,
+    "w0_pedido": 256
+  },
+  "lugar": "comedouro",
+  "montagem": "completa",
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "paladar": true,
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+  "ponto": "T3",
+  "protocolos": [
+    "T1",
+    "T2"
+  ],
+  "tipo": "pet_que_pensa",
+  "unidades": {
+    "bases": [
+      55101,
+      55202,
+      55303,
+      55404,
+      55505
+    ],
+    "k": 10,
+    "prefixo": "pet_que_pensa"
+  },
+  "validacao": {
+    "calibracao": "artifacts_v2_pet_que_pensa/calibracao_ao_lado",
+    "piloto": "artifacts_v2_pet_que_pensa/piloto_adendo8",
+    "margens": {
+      "delta_t1": 0.2583333333333333,
+      "delta_t2": 0.3229166666666667
+    },
+    "limiar_aprendeu": "acaso_medio",
+    "bootstrap": {
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "holm": {
+      "alfa": 0.05
+    }
+  }
+}

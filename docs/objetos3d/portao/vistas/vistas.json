@@ -1,0 +1,14 @@
+{
+ "id": "01a1b8a8-f3fc-736a-a7f2-6145e08d4907",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same thick stone arch gate built from big carved grey stone blocks with green moss and tiny flowers, two square block pillars, a red cloth banner with gold stripes hanging from a metal rod on each pillar, and a glowing cyan digital portal with a subtle swirling grid filling the arch: front, side and back, same hand-painted style, same colors, keep the painted stone texture and moss detail, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794099442933,
+ "finished_at": 1794099462056,
+ "saldo": {
+  "antes": 224,
+  "depois": 212
+ }
+}

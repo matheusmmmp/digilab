@@ -1,0 +1,175 @@
+{
+  "fonte": "artifacts_combate_v2/partidas.csv (validacao, so leitura)",
+  "fracao_limite_total": 0.3126785714285714,
+  "limites_com_tartaruga_ou_contragolpe": 0.9291833238149628,
+  "pares": {
+    "adaptativo|adaptativo": {
+      "fracao": 0.059,
+      "limite": 59,
+      "parte_dos_limites": 0.0067390062821245005,
+      "partidas": 1000
+    },
+    "adaptativo|agressivo": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "adaptativo|aleatorio": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "adaptativo|atirador": {
+      "fracao": 0.013,
+      "limite": 13,
+      "parte_dos_limites": 0.0014848657909765847,
+      "partidas": 1000
+    },
+    "adaptativo|contragolpe": {
+      "fracao": 0.735,
+      "limite": 735,
+      "parte_dos_limites": 0.08395202741290692,
+      "partidas": 1000
+    },
+    "adaptativo|oraculo": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "adaptativo|tartaruga": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "agressivo|agressivo": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "agressivo|aleatorio": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "agressivo|atirador": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "agressivo|contragolpe": {
+      "fracao": 0.941,
+      "limite": 941,
+      "parte_dos_limites": 0.1074814391776128,
+      "partidas": 1000
+    },
+    "agressivo|oraculo": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "agressivo|tartaruga": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "aleatorio|aleatorio": {
+      "fracao": 0.436,
+      "limite": 436,
+      "parte_dos_limites": 0.04980011422044546,
+      "partidas": 1000
+    },
+    "aleatorio|atirador": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "aleatorio|contragolpe": {
+      "fracao": 0.991,
+      "limite": 991,
+      "parte_dos_limites": 0.11319246145059966,
+      "partidas": 1000
+    },
+    "aleatorio|oraculo": {
+      "fracao": 0.002,
+      "limite": 2,
+      "parte_dos_limites": 0.0002284408909194746,
+      "partidas": 1000
+    },
+    "aleatorio|tartaruga": {
+      "fracao": 0.864,
+      "limite": 864,
+      "parte_dos_limites": 0.09868646487721303,
+      "partidas": 1000
+    },
+    "atirador|atirador": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "atirador|contragolpe": {
+      "fracao": 0.001,
+      "limite": 1,
+      "parte_dos_limites": 0.0001142204454597373,
+      "partidas": 1000
+    },
+    "atirador|oraculo": {
+      "fracao": 0.0,
+      "limite": 0,
+      "parte_dos_limites": 0.0,
+      "partidas": 1000
+    },
+    "atirador|tartaruga": {
+      "fracao": 0.086,
+      "limite": 86,
+      "parte_dos_limites": 0.009822958309537408,
+      "partidas": 1000
+    },
+    "contragolpe|contragolpe": {
+      "fracao": 1.0,
+      "limite": 1000,
+      "parte_dos_limites": 0.1142204454597373,
+      "partidas": 1000
+    },
+    "contragolpe|oraculo": {
+      "fracao": 0.947,
+      "limite": 947,
+      "parte_dos_limites": 0.10816676185037122,
+      "partidas": 1000
+    },
+    "contragolpe|tartaruga": {
+      "fracao": 1.0,
+      "limite": 1000,
+      "parte_dos_limites": 0.1142204454597373,
+      "partidas": 1000
+    },
+    "oraculo|oraculo": {
+      "fracao": 0.11,
+      "limite": 110,
+      "parte_dos_limites": 0.012564249000571102,
+      "partidas": 1000
+    },
+    "oraculo|tartaruga": {
+      "fracao": 0.57,
+      "limite": 570,
+      "parte_dos_limites": 0.06510565391205025,
+      "partidas": 1000
+    },
+    "tartaruga|tartaruga": {
+      "fracao": 1.0,
+      "limite": 1000,
+      "parte_dos_limites": 0.1142204454597373,
+      "partidas": 1000
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "descricao": "rodada 3: sombrias contra a escada de progressao (peso 3); devastador com golpe rapido em vez do pesado; colosso partido",
+  "candidatos": {
+    "dev_pesado_x1.5": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      }
+    },
+    "dev_pesado_x2.0": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      }
+    },
+    "dev_golpe_x1.5": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "golpe",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      }
+    },
+    "dev_golpe_x2.0": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "golpe",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      }
+    },
+    "dev_golpe_pesado_x1.5": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      }
+    },
+    "dev_golpe_pesado_x2.0": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      }
+    },
+    "dev_sem_leitura_x1.5": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "sem_leitura",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      }
+    },
+    "dev_sem_leitura_x2.0": {
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      },
+      "devastador": {
+        "gambits": "sem_leitura",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      }
+    },
+    "atual_col_regen0.5": {
+      "devastador": {
+        "gambits": "golpe",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.5
+        }
+      }
+    },
+    "atual_col_regen0.7": {
+      "devastador": {
+        "gambits": "golpe",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.7
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "descricao": "Fumaca da validacao do mundo fisico, NAO canonica: a mesma config de experiments/configs/v2_mundo/validacao.json, nas sementes dos testes (bases 101...505, K = 1, prefixo mundo). Confere o encanamento antes da run; nenhum numero dela e resultado.",
+  "unidades": {
+    "bases": [
+      101,
+      202,
+      303,
+      404,
+      505
+    ],
+    "k": 1,
+    "prefixo": "mundo"
+  },
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "lugares": [
+    "comedouro",
+    "perto",
+    "longe"
+  ],
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 64,
+    "amostras": 200,
+    "semente": 9001
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "chaves_desligadas": {
+    "banheiro": "ConfigBanheiro desligada: nenhum braco do plano tem o banheiro (secao 3)",
+    "corpo": "sem regime: o corpo (W-TAREFA-CORPO) e outra frente; o plano usa o Estado de hoje (secao 2, R-7)",
+    "metabolismo": "desligado: so existe com o corpo",
+    "gestos": "desligados: os donos so cuidam (PMF-3)",
+    "grupo": "desligado: um pet por mundo",
+    "alvo_aprendido": "desligado: o P1 usa os alvos padrao do motor (secao 3)",
+    "entradas_sociais": "desligadas: sem grupo",
+    "modelo_outros": "desligado: sem grupo",
+    "presenca_fruta_mundo": "desligada: o plano nao a pede; no mundo iguais o humor da fruta e zero e os canais rodam sem ela (#269)",
+    "pesos_janela": "desligada: e o P1-cw do corpo",
+    "rede_de_si": "desligada: so observa e nao e do plano",
+    "julgamento_fruta": "desligado (secao 2)",
+    "calendario_informacao_pedido": "desligados (secao 2)"
+  },
+  "mundo": "fisico",
+  "mundo_afastado": "fisico_afastado",
+  "m": 1.0,
+  "delta_mf": 0.007675785900293976,
+  "acoplados": [
+    {
+      "origem": "P0z",
+      "destino": "P0",
+      "filtro": "nenhum"
+    },
+    {
+      "origem": "P0z",
+      "destino": "P1",
+      "filtro": "nenhum"
+    }
+  ],
+  "bracos_afastado": [
+    "P0",
+    "P1"
+  ],
+  "holm": {
+    "alfa": 0.05
+  }
+}

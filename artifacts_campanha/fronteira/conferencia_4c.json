@@ -1,0 +1,345 @@
+{
+  "descricao": "Conferencia da Fabrica e do Salao da Fronteira (sem calibracao): jogaveis? Politicas simples na Fabrica; pets de referencia no Salao",
+  "motor": "web/app/motor (escala CESC_V6 ligada, regras V21D, limite do desafiado = o rival)",
+  "fator_fabrica": 1,
+  "fator_salao": 1,
+  "tentativas_fabrica": 2000,
+  "sementes_salao": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "lutas_por_semente_especie_forma_salao": 20,
+  "ordem_dos_arquetipos_da_politica": [
+    "furioso",
+    "duelista",
+    "espelho",
+    "emboscador",
+    "vigia",
+    "sentinela",
+    "tita",
+    "muralha"
+  ],
+  "criterio_de_jogavel": "Fabrica: a politica do melhor arquetipo vence a 1a luta em >= 0,3 das tentativas e vence ao menos uma serie as vezes; Salao: todo nivel com media >= 0,5 com o treino tipico e o time medio vence os 4 as vezes",
+  "jogavel": {
+    "fabrica": true,
+    "salao": true
+  },
+  "fabrica": {
+    "primeiro_sem_troca": {
+      "tentativas": 2000,
+      "vence_a_primeira": 0.3625,
+      "vitorias_media": 0.4295,
+      "series_media": 0.008,
+      "pelo_menos_uma_serie": 0.008,
+      "maximo_de_series": 1,
+      "vence_por_luta_da_serie": [
+        {
+          "lutas": 2016,
+          "vence": 0.3641
+        },
+        {
+          "lutas": 734,
+          "vence": 0.1485
+        },
+        {
+          "lutas": 109,
+          "vence": 0.1468
+        }
+      ],
+      "lutas_no_limite": 0.1529
+    },
+    "melhor_arquetipo_sem_troca": {
+      "tentativas": 2000,
+      "vence_a_primeira": 0.442,
+      "vitorias_media": 0.567,
+      "series_media": 0.0185,
+      "pelo_menos_uma_serie": 0.018,
+      "maximo_de_series": 2,
+      "vence_por_luta_da_serie": [
+        {
+          "lutas": 2037,
+          "vence": 0.4443
+        },
+        {
+          "lutas": 905,
+          "vence": 0.2122
+        },
+        {
+          "lutas": 192,
+          "vence": 0.1927
+        }
+      ],
+      "lutas_no_limite": 0.0728
+    },
+    "melhor_arquetipo_troca_por_melhor": {
+      "tentativas": 2000,
+      "vence_a_primeira": 0.442,
+      "vitorias_media": 0.5695,
+      "series_media": 0.0195,
+      "pelo_menos_uma_serie": 0.019,
+      "maximo_de_series": 2,
+      "vence_por_luta_da_serie": [
+        {
+          "lutas": 2039,
+          "vence": 0.4443
+        },
+        {
+          "lutas": 906,
+          "vence": 0.2141
+        },
+        {
+          "lutas": 194,
+          "vence": 0.201
+        }
+      ],
+      "lutas_no_limite": 0.0701
+    },
+    "variante_nao_adotada_troca_inteira_por_melhor": {
+      "tentativas": 2000,
+      "vence_a_primeira": 0.442,
+      "vitorias_media": 0.6045,
+      "series_media": 0.029,
+      "pelo_menos_uma_serie": 0.028,
+      "maximo_de_series": 2,
+      "vence_por_luta_da_serie": [
+        {
+          "lutas": 2058,
+          "vence": 0.4441
+        },
+        {
+          "lutas": 914,
+          "vence": 0.2593
+        },
+        {
+          "lutas": 237,
+          "vence": 0.2447
+        }
+      ],
+      "lutas_no_limite": 0.0689
+    },
+    "variante_nao_adotada_troca_inteira_sempre": {
+      "tentativas": 2000,
+      "vence_a_primeira": 0.442,
+      "vitorias_media": 0.6885,
+      "series_media": 0.056,
+      "pelo_menos_uma_serie": 0.054,
+      "maximo_de_series": 2,
+      "vence_por_luta_da_serie": [
+        {
+          "lutas": 2112,
+          "vence": 0.4361
+        },
+        {
+          "lutas": 921,
+          "vence": 0.3735
+        },
+        {
+          "lutas": 344,
+          "vence": 0.3256
+        }
+      ],
+      "lutas_no_limite": 0.1282
+    }
+  },
+  "salao": {
+    "com_o_treino_tipico": {
+      "crianca": {
+        "treino": 8,
+        "media": 0.895,
+        "melhor": {
+          "forma": "arisco",
+          "vence": 1
+        },
+        "pior": {
+          "forma": "sereno",
+          "vence": 0.79
+        },
+        "por_forma": {
+          "sereno": 0.79,
+          "arisco": 1
+        }
+      },
+      "adolescente": {
+        "treino": 22,
+        "media": 0.76,
+        "melhor": {
+          "forma": "brigao",
+          "vence": 0.9925
+        },
+        "pior": {
+          "forma": "guardiao",
+          "vence": 0.5625
+        },
+        "por_forma": {
+          "brigao": 0.9925,
+          "guardiao": 0.5625,
+          "cacador": 0.875,
+          "colosso": 0.61
+        }
+      },
+      "adulto": {
+        "treino": 36,
+        "media": 0.8153,
+        "melhor": {
+          "forma": "furioso",
+          "vence": 1
+        },
+        "pior": {
+          "forma": "muralha",
+          "vence": 0.5925
+        },
+        "por_forma": {
+          "duelista": 0.9775,
+          "furioso": 1,
+          "espelho": 0.8525,
+          "muralha": 0.5925,
+          "sentinela": 0.7625,
+          "emboscador": 0.765,
+          "vigia": 0.82,
+          "tita": 0.7525
+        }
+      },
+      "mega": {
+        "treino": 40,
+        "media": 0.8309,
+        "melhor": {
+          "forma": "furioso",
+          "vence": 1
+        },
+        "pior": {
+          "forma": "muralha",
+          "vence": 0.61
+        },
+        "por_forma": {
+          "duelista": 0.9725,
+          "furioso": 1,
+          "espelho": 0.8975,
+          "muralha": 0.61,
+          "sentinela": 0.795,
+          "emboscador": 0.8375,
+          "vigia": 0.7775,
+          "tita": 0.7575
+        }
+      }
+    },
+    "sem_treino": {
+      "crianca": {
+        "treino": 0,
+        "media": 0.3812,
+        "melhor": {
+          "forma": "arisco",
+          "vence": 0.5775
+        },
+        "pior": {
+          "forma": "sereno",
+          "vence": 0.185
+        },
+        "por_forma": {
+          "sereno": 0.185,
+          "arisco": 0.5775
+        }
+      },
+      "adolescente": {
+        "treino": 0,
+        "media": 0.3481,
+        "melhor": {
+          "forma": "brigao",
+          "vence": 0.695
+        },
+        "pior": {
+          "forma": "colosso",
+          "vence": 0.115
+        },
+        "por_forma": {
+          "brigao": 0.695,
+          "guardiao": 0.185,
+          "cacador": 0.3975,
+          "colosso": 0.115
+        }
+      },
+      "adulto": {
+        "treino": 0,
+        "media": 0.3831,
+        "melhor": {
+          "forma": "furioso",
+          "vence": 0.6375
+        },
+        "pior": {
+          "forma": "vigia",
+          "vence": 0.255
+        },
+        "por_forma": {
+          "duelista": 0.4375,
+          "furioso": 0.6375,
+          "espelho": 0.3075,
+          "muralha": 0.2725,
+          "sentinela": 0.355,
+          "emboscador": 0.4225,
+          "vigia": 0.255,
+          "tita": 0.3775
+        }
+      },
+      "mega": {
+        "treino": 0,
+        "media": 0.3688,
+        "melhor": {
+          "forma": "furioso",
+          "vence": 0.645
+        },
+        "pior": {
+          "forma": "espelho",
+          "vence": 0.265
+        },
+        "por_forma": {
+          "duelista": 0.2975,
+          "furioso": 0.645,
+          "espelho": 0.265,
+          "muralha": 0.2975,
+          "sentinela": 0.37,
+          "emboscador": 0.4175,
+          "vigia": 0.2925,
+          "tita": 0.365
+        }
+      }
+    },
+    "vence_os_4_time_medio": 0.4608,
+    "vence_os_4_melhores_formas": 0.9925,
+    "vence_os_4_piores_formas": 0.1606,
+    "chega_ao_nivel_time_medio": [
+      0.895,
+      0.6802,
+      0.5546,
+      0.4608
+    ],
+    "vence_os_4_sem_treino_time_medio": 0.0187,
+    "pets_do_e2e": [
+      {
+        "pet": "Patamon",
+        "nivel": "Rookie",
+        "treino": 10,
+        "vence": 0.86
+      },
+      {
+        "pet": "Growlmon",
+        "nivel": "Champion",
+        "treino": 22,
+        "vence": 0.76
+      },
+      {
+        "pet": "MegaSeadramon",
+        "nivel": "Ultimate",
+        "treino": 32.5323,
+        "vence": 1
+      },
+      {
+        "pet": "Valkyrimon",
+        "nivel": "Mega",
+        "treino": 40,
+        "vence": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "celulas": {
+    "casado_frutas/P0/duas_ou_mais": {
+      "consumos": 455,
+      "ruim": 101
+    },
+    "casado_frutas/P0/uma": {
+      "consumos": 395,
+      "ruim": 126
+    },
+    "casado_frutas/P1/duas_ou_mais": {
+      "consumos": 650,
+      "ruim": 95
+    },
+    "casado_frutas/P1/uma": {
+      "consumos": 785,
+      "ruim": 351
+    },
+    "descasado/P0/duas_ou_mais": {
+      "consumos": 459,
+      "ruim": 200
+    },
+    "descasado/P0/uma": {
+      "consumos": 365,
+      "ruim": 146
+    },
+    "descasado/P1/duas_ou_mais": {
+      "consumos": 646,
+      "ruim": 189
+    },
+    "descasado/P1/uma": {
+      "consumos": 804,
+      "ruim": 299
+    }
+  },
+  "descricao": "POS HOC (fora do plano): consumos de fruta e da fruta ruim na base, por numero de frutas no cenario na decisao (uma x duas ou mais); vidas rejogadas do disco"
+}

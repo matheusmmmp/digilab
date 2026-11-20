@@ -1,0 +1,80 @@
+turno  1   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  1    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno  2   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  2    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno  3   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  3    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno  4   tartaruga adulto      disparo         [oponente_guts_abaixo(20) | ref 4]  Disparei porque você estava sem guts (abaixo de 20) (turno 4).
+turno  4    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno  5   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  5    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno  6   tartaruga adulto      avancar         [exploracao | ref -]  Avancei. Não sei, só quis.
+turno  6    atirador adulto      disparo         [exploracao | ref -]  Disparei. Não sei, só quis.
+turno  7   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  7    atirador adulto      recuar          [distancia_eh(perto) | ref 7]  Recuei porque a distância era perto (turno 7).
+turno  8   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  8    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno  9   tartaruga adulto      esquivar        [exploracao | ref -]  Esquivei. Não sei, só quis.
+turno  9    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 10   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 10    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 11   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 11    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 12   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 12    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 13   tartaruga adulto      disparo         [oponente_guts_abaixo(20) | ref 13]  Disparei porque você estava sem guts (abaixo de 20) (turno 13).
+turno 13    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 14   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 14    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 15   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 15    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 16   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 16    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 17   tartaruga adulto      disparo         [oponente_guts_abaixo(20) | ref 17]  Disparei porque você estava sem guts (abaixo de 20) (turno 17).
+turno 17    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 18   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 18    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 19   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 19    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 20   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 20    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 21   tartaruga adulto      carregar        [exploracao | ref -]  Carreguei guts. Não sei, só quis.
+turno 21    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 22   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 22    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 23   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 23    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 24   tartaruga adulto      disparo         [oponente_guts_abaixo(20) | ref 24]  Disparei porque você estava sem guts (abaixo de 20) (turno 24).
+turno 24    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 25   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 25    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 26   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 26    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 27   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 27    atirador adulto      recuar          [exploracao | ref -]  Recuei. Não sei, só quis.
+turno 28   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 28    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 29   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 29    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 30   tartaruga adulto      disparo         [oponente_guts_abaixo(20) | ref 30]  Disparei porque você estava sem guts (abaixo de 20) (turno 30).
+turno 30    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 31   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 31    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 32   tartaruga adulto      avancar         [exploracao | ref -]  Avancei. Não sei, só quis.
+turno 32    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 33   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 33    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 34   tartaruga adulto      recuar          [exploracao | ref -]  Recuei. Não sei, só quis.
+turno 34    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 35   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 35    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 36   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 36    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 37   tartaruga adulto      disparo         [oponente_guts_abaixo(20) | ref 37]  Disparei porque você estava sem guts (abaixo de 20) (turno 37).
+turno 37    atirador adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno 38   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 38    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 39   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 39    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.
+turno 40   tartaruga adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 40    atirador adulto      disparo         [- | ref -]  Disparei. Não sei, só quis.

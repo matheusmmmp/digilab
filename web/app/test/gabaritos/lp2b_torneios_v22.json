@@ -1,0 +1,104 @@
+{
+ "versao": 1,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "vidas": [
+  {
+   "semente": 101,
+   "eventos": 3246,
+   "lutas": 15,
+   "liga": 1,
+   "torre": 1,
+   "salao": 1,
+   "log_sha": "c8d9a3d5efdcd6cc0dba1cd34380adbd8d3a10c59b4287f9f1dda26174b7f4ed",
+   "assinatura": "19f8c231f72cdf6522e4c16f524b70ce145ca1d978221426db84ed54a5f07899",
+   "resultados": "b5a4d77ce75b732fe8eee7f201fb9be99c00f63c4930125f23a56f23e2e8da21"
+  },
+  {
+   "semente": 202,
+   "eventos": 3232,
+   "lutas": 11,
+   "liga": 1,
+   "torre": 1,
+   "salao": 1,
+   "log_sha": "905d6f265c66bdb35f09b124dd31fd928bc452d775b99f90861d5cf168a2d9a1",
+   "assinatura": "7433a092196445099b07b62ebc1479d344858b06079fbdc07a59bf2c2280b681",
+   "resultados": "496c5c3a52dca2f65dfb371014c384d1f068b2435c0583bb2387e8199a0e6320"
+  },
+  {
+   "semente": 303,
+   "eventos": 3226,
+   "lutas": 13,
+   "liga": 1,
+   "torre": 1,
+   "salao": 1,
+   "log_sha": "2a9dba168b63e2187b4e32f8626b7d28d173fe81dfe0162f834e1a0bef87ebf0",
+   "assinatura": "925fbd8063cd24d8ecd7db0ebcd7fe390621c9d239e2644d7d0077dbbc627b3b",
+   "resultados": "42ddcb9f7e86447af81cf221f62aae0d03fcb9ccb04b5bb673d8dcabf635640f"
+  },
+  {
+   "semente": 404,
+   "eventos": 3228,
+   "lutas": 11,
+   "liga": 1,
+   "torre": 1,
+   "salao": 1,
+   "log_sha": "2ff5b0143d071f532f6e42328f424ba954308fc69393c1ee3c809ff1135a0b58",
+   "assinatura": "8fb1211e8256c25081af2787411ebf4815e0c34c3b774a146a27cf74260e38f8",
+   "resultados": "04fff08f714f7d03e1c5dbbadd3b27a637f28c1ea97bb25b5a4b4b485cc02e67"
+  },
+  {
+   "semente": 505,
+   "eventos": 3227,
+   "lutas": 13,
+   "liga": 1,
+   "torre": 1,
+   "salao": 1,
+   "log_sha": "322fe9a1cc474d0fa9b1a433437c44f2fc53d9ab6b0d19ffa70207e433034d32",
+   "assinatura": "b4a550affc711332a1b08df2d5e14dd37f3187c21db8d4cb0c4a794a78779e0b",
+   "resultados": "a5362482cb335b636596846f4f3a0ff468911d7ea6dc8c9b773868e17d3e7e19"
+  }
+ ],
+ "fabrica": [
+  {
+   "n": 1,
+   "s": 1014651936,
+   "series": 0,
+   "lutas": 2,
+   "resumo": "c2014aa6fea3b601b6ae0f6678d4258bfba8ac0ec457d975150d33e94ae7b319"
+  },
+  {
+   "n": 2,
+   "s": 1064984793,
+   "series": 0,
+   "lutas": 1,
+   "resumo": "4757cdee7ec26e8c372ab9e86dd192be45cf5e03f755c49d47ded6634deac9bb"
+  },
+  {
+   "n": 3,
+   "s": 1048207174,
+   "series": 0,
+   "lutas": 1,
+   "resumo": "219a67d36e6bdf86339b4505e7c8313bc92a7c8d927780e40142243ac568b845"
+  },
+  {
+   "n": 4,
+   "s": 1098540031,
+   "series": 0,
+   "lutas": 2,
+   "resumo": "28f9469394deb7c362ea20177d30e69706a009c067ad1d29454c1b7884b2c57d"
+  },
+  {
+   "n": 5,
+   "s": 1081762412,
+   "series": 0,
+   "lutas": 2,
+   "resumo": "f21f78d0b5181f9bbaad48ab88fae51aa365944b4b0e2ac1b6607e5b3ac1e6e6"
+  }
+ ]
+}

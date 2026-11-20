@@ -1,0 +1,5029 @@
+{
+ "_nota": "C0 da V3, recomendacao R6: as quatro strings que faltaram na triagem de 2026-10-30. Consultas feitas em 2026-10-30 nas APIs do OpenAlex (/works?search=, ate 200 itens por relevancia), do Semantic Scholar (/paper/search/bulk, todos os itens devolvidos) e do arXiv (/api/query, ate 100). Contagens n = total informado pela API. Nada aqui esta verificado: sao pistas. Sem captcha contornado, sem site pago. O dblp.org recusou com desafio antibot e nao foi usado.",
+ "_consultas_parciais_s2": {
+  "animat memory": 53,
+  "animat homeostasis": 5,
+  "animat survival": 25,
+  "_nota": "a forma booleana da Q2 devolveu 0 no Semantic Scholar; estas parciais mostram que o 0 vem da sintaxe, nao da falta de registros"
+ },
+ "_consultas_parciais_arxiv": {
+  "all:animat AND all:memory": 10,
+  "all:animat AND all:survival": 3,
+  "all:animat AND all:homeostasis": 2,
+  "all:\"artificial creature\"": 8,
+  "all:emotion AND all:reinforcement AND all:robot": 25,
+  "abs:\"autobiographic\"": 84
+ },
+ "Q1": {
+  "openalex": {
+   "consulta": "\"autobiographic agent\"",
+   "n": 67,
+   "itens": [
+    {
+     "ano": 2004,
+     "titulo": "The Web as an Autobiographical Agent",
+     "id": "https://openalex.org/W2790284785",
+     "autores": [
+      "Maya Dimitrova",
+      "Emilia Ivanova Barakova"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "The Web as an Autobiographical Agent",
+     "doi": "https://doi.org/10.1007/978-3-540-30106-6_52",
+     "id": "https://openalex.org/W2121789329",
+     "autores": [
+      "Maya Dimitrova",
+      "Emilia Ivanova Barakova"
+     ]
+    },
+    {
+     "ano": 1997,
+     "titulo": "What's Your Story? --Irreversibility, Algebra, Autobiographic Agents",
+     "id": "https://openalex.org/W2340703071",
+     "autores": [
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "AMIA: A knowledge representation model for computational autobiographic agents",
+     "doi": "https://doi.org/10.1109/devlrn.2007.4354039",
+     "id": "https://openalex.org/W2013728194",
+     "autores": [
+      "Wan Ching Ho",
+      "Scott Watson"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "Sharing memories: an experimental investigation with multiple autonomous autobiographic agents",
+     "id": "https://openalex.org/W2283859551",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Comparing Different Control Architectures for Autobiographic Agents in Static Virtual Environments",
+     "doi": "https://doi.org/10.1007/978-3-540-39396-2_30",
+     "id": "https://openalex.org/W1571412859",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "A study of episodic memory-based learning and narrative structure for autobiographic agents",
+     "id": "https://openalex.org/W1833950827",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Computational memory architectures for autobiographic agents interacting in a complex virtual environment: a working model",
+     "doi": "https://doi.org/10.1080/09540090801889469",
+     "id": "https://openalex.org/W2059687835",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Supporting narrative understanding of children with autism: A story interface with autonomous autobiographic agents",
+     "doi": "https://doi.org/10.1109/icorr.2009.5209580",
+     "id": "https://openalex.org/W2141745897",
+     "autores": [
+      "Wan Ching Ho",
+      "Megan Davis"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Autobiographic Agents in Dynamic Virtual Environments - Performance Comparison for Different Memory Control Architectures",
+     "doi": "https://doi.org/10.1109/cec.2005.1554734",
+     "id": "https://openalex.org/W1591160143",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Narrative Intelligence from the Bottom Up: A Computational Framework for the Study of Story-Telling in Autonomous Agents",
+     "id": "https://openalex.org/W1536752130",
+     "autores": [
+      "Kerstin Dautenhahn",
+      "Steven Coles"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "Autobiographic Knowledge for Believable Virtual Characters",
+     "doi": "https://doi.org/10.1007/11821830_31",
+     "id": "https://openalex.org/W1590215252",
+     "autores": [
+      "Wan Ching Ho",
+      "Scott Watson"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "Autobiographic Knowledge for Believable Virtual Characters",
+     "id": "https://openalex.org/W2584311342",
+     "autores": [
+      "Wan Ching Ho",
+      "Scott Watson"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Go Underground, Young Women",
+     "doi": "https://doi.org/10.1215/15525864-3861334",
+     "id": "https://openalex.org/W2735783361",
+     "autores": [
+      "Diya M. Abdo"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Using Computational Patients to Evaluate Illness Mechanisms in Schizophrenia",
+     "doi": "https://doi.org/10.1016/j.biopsych.2010.12.036",
+     "id": "https://openalex.org/W1973196171",
+     "autores": [
+      "Ralph E. Hoffman",
+      "Uli Grasemann"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Architecture Saturated with Free-Thinking Machines",
+     "id": "https://openalex.org/W2217716178",
+     "autores": [
+      "Vincent Pape"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Autobiographical Genre in the Age of Complexity: A Case Study of Neuro-Autobiographies",
+     "id": "https://openalex.org/W2749005046",
+     "autores": [
+      "Andrea C. Valente"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Faculty Opinions recommendation of Using computational patients to evaluate illness mechanisms in schizophrenia.",
+     "doi": "https://doi.org/10.3410/f.10752956.11646054",
+     "id": "https://openalex.org/W4214895483",
+     "autores": [
+      "Driss Moussaoui",
+      "Adil Khoubila"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Being Jacob: Young Children, Automedial Subjectivity, and Child Social Media Influencers",
+     "doi": "https://doi.org/10.5204/mcj.1352",
+     "id": "https://openalex.org/W2800676294",
+     "autores": [
+      "Isabel Pedersen",
+      "Kristen Antonia Harris Aspevig"
+     ]
+    },
+    {
+     "ano": 1998,
+     "titulo": "THE ART OF DESIGNING SOCIALLY INTELLIGENT AGENTS: SCIENCE, FICTION, AND THE HUMAN IN THE LOOP",
+     "doi": "https://doi.org/10.1080/088395198117550",
+     "id": "https://openalex.org/W2086105103",
+     "autores": [
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 1999,
+     "titulo": "Narrative for artifacts: transcending context and self",
+     "id": "https://openalex.org/W1920427539",
+     "autores": [
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Computational memory architectures for autobiographic and narrative virtual agents",
+     "doi": "https://doi.org/10.18745/th.14271",
+     "id": "https://openalex.org/W1584396711",
+     "autores": [
+      "Wan Ching Ho"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Intelligent Virtual Agents",
+     "doi": "https://doi.org/10.1007/978-3-540-85483-8",
+     "id": "https://openalex.org/W2484941428",
+     "autores": [
+      "Carbonell, Jaime G",
+      "Siekmann, JÃ¶rg"
+     ]
+    },
+    {
+     "ano": 1999,
+     "titulo": "Story-telling and emotion : cognitive technology considerations in networking temporally and affectively grounded minds",
+     "id": "https://openalex.org/W2279486331",
+     "autores": [
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Assessing the Performance of Different Behavior Selection Architectures in a Large and Complex Virtual Environment",
+     "doi": "https://doi.org/10.1109/cec.2005.1554706",
+     "id": "https://openalex.org/W1885274932",
+     "autores": [
+      "Wan Ching Ho",
+      "Orlando Avila-García"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Using Sensory-Motor Phase-plots to Characterise Robot-Environment Interactions",
+     "doi": "https://doi.org/10.1109/cira.2005.1554339",
+     "id": "https://openalex.org/W2129641727",
+     "autores": [
+      "Naeem Assif Mirza",
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "An initial memory model for virtual and robot companions supporting migration and long-term interaction",
+     "doi": "https://doi.org/10.1109/roman.2009.5326204",
+     "id": "https://openalex.org/W2134595137",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 1997,
+     "titulo": "Ants don't have Friends- Thoughts on Socially Intelligent Agents",
+     "id": "https://openalex.org/W1539869021",
+     "autores": [
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Using Temporal Information Distance to Locate Sensorimotor Experience in a Metric Space",
+     "doi": "https://doi.org/10.1109/cec.2005.1554679",
+     "id": "https://openalex.org/W1480707941",
+     "autores": [
+      "Naeem Assif Mirza",
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Juke Joint: Characters Who Are Moved By Music",
+     "doi": "https://doi.org/10.1609/aiide.v12i2.12901",
+     "id": "https://openalex.org/W4312804233",
+     "autores": [
+      "James Ryan",
+      "Tyler Brothers"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Towards the Mind of a Humanoid: Does a Cognitive Robot Need a Self? - Lessons from Neuroscience",
+     "doi": "https://doi.org/10.1162/isal_a_00079",
+     "id": "https://openalex.org/W2884990769",
+     "autores": [
+      "Elena Antonova",
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "EEG Signals During Epileptic Seizure as a Semigroup of Upper Triangular Matrices",
+     "doi": "https://doi.org/10.3844/ajassp.2010.540.544",
+     "id": "https://openalex.org/W1601300915",
+     "autores": [
+      "Faisal Abdurabu Mubarak Binjadhnan"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Tales of Health-TEA: Uma Proposta de Storytelling Digital para Conscientização do Transtorno do Espectro do Autismo",
+     "doi": "https://doi.org/10.5753/sbcas.2019.6260",
+     "id": "https://openalex.org/W2967654100",
+     "autores": [
+      "Ellen Chalegre Aguiar",
+      "Victória Oliveira Gomes"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "What has happened today? Memory visualisation of a robot companion to assist user’s memory",
+     "doi": "https://doi.org/10.1108/jat-02-2015-0004",
+     "id": "https://openalex.org/W2119120634",
+     "autores": [
+      "Joan Sàez-Pons",
+      "Dag Sverre Syrdal"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Modeling Autobiographical Memory for Believable Agents",
+     "doi": "https://doi.org/10.1609/aiide.v9i1.12686",
+     "id": "https://openalex.org/W2192953843",
+     "autores": [
+      "Andrew B Kope",
+      "Caroline Rose"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Sensorimotor Experience and Its Metrics: Informational Geometry and the Temporal Horizon",
+     "doi": "https://doi.org/10.1109/cec.2005.1554678",
+     "id": "https://openalex.org/W1972737521",
+     "autores": [
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Encoding and Recall of Spatio-Temporal Episodic Memory in Real Time",
+     "doi": "https://doi.org/10.24963/ijcai.2017/206",
+     "id": "https://openalex.org/W2740574988",
+     "autores": [
+      "Poo-Hee Chang",
+      "Ah‐Hwee Tan"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Technology-enhanced role-play for social and emotional learning context – Intercultural empathy",
+     "doi": "https://doi.org/10.1016/j.entcom.2011.02.004",
+     "id": "https://openalex.org/W2157701606",
+     "autores": [
+      "Mei Yii Lim",
+      "Karin Leichtenstern"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Technologies as Support Tools for Persons with Autistic Spectrum Disorder: A Systematic Review",
+     "doi": "https://doi.org/10.3390/ijerph110807767",
+     "id": "https://openalex.org/W2001491100",
+     "autores": [
+      "Nuria Aresti Bartolomé",
+      "Begonya García-Zapirain"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "How influencer ‘mumpreneur’ bloggers and ‘everyday’ mums frame presenting their children online",
+     "doi": "https://doi.org/10.1177/1329878x19828365",
+     "id": "https://openalex.org/W2915205796",
+     "autores": [
+      "Catherine J. Archer"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Partition as Memory: Constructing Women Narratives in Amrita Pritams Pinjar",
+     "doi": "https://doi.org/10.22214/ijraset.2025.66755",
+     "id": "https://openalex.org/W4407076295",
+     "autores": [
+      "Shabnum Ahad",
+      "Dr Firdous Dar"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Grounded Sensorimotor Interaction Histories in an Information Theoretic Metric Space for Robot Ontogeny",
+     "doi": "https://doi.org/10.1177/1059712307078662",
+     "id": "https://openalex.org/W2083149880",
+     "autores": [
+      "Naeem Assif Mirza",
+      "Chrystopher L. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "The Correspondence Problem in Social Learning:--What Does it Mean for Behaviors to Match Anyway",
+     "id": "https://openalex.org/W647837449",
+     "autores": [
+      "Chrystopher L. Nehaniv",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Narrative Intelligence and Sustainability Reporting: A Stakeholder Approach",
+     "doi": "https://doi.org/10.33146/2518-1181-2026-1(111)-5-17",
+     "id": "https://openalex.org/W7147333291",
+     "autores": [
+      "Serhii Lehenchuk"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Ordering of Transformed Recorded Electroencephalography (EEG) Signals by a Novel Precede Operator",
+     "doi": "https://doi.org/10.1155/2021/6651445",
+     "id": "https://openalex.org/W3160122833",
+     "autores": [
+      "Amirul Aizad Ahmad Fuad",
+      "Tahir Ahmad"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Neural modeling of multiple memory systems and learning",
+     "doi": "https://doi.org/10.32657/10356/62219",
+     "id": "https://openalex.org/W2341886083",
+     "autores": [
+      "Wenwen Wang"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Decomposing the Krohn-Rhodes Form of Electroencephalography (EEG) Signals Using Jordan-Chevalley Decomposition Technique",
+     "doi": "https://doi.org/10.3390/axioms10010010",
+     "id": "https://openalex.org/W3122124183",
+     "autores": [
+      "Amirul Aizad Ahmad Fuad",
+      "Tahir Ahmad"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Once upon a team: the impact of personal storytelling types on desire to collaborate",
+     "id": "https://openalex.org/W3127611117",
+     "autores": [
+      "Matthew Ebeling"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "The lived political economy of occupational overuse syndrome among New Zealand workers",
+     "doi": "https://doi.org/10.1111/j.1467-9566.2010.01259.x",
+     "id": "https://openalex.org/W1593965018",
+     "autores": [
+      "Chrystal Jaye",
+      "Ruth Patricia Fitzgerald"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "BEE: Belief-Value-Aligned, Explainable, and Extensible Cognitive Framework for Conversational Agents",
+     "doi": "https://doi.org/10.1145/3717511.3747067",
+     "id": "https://openalex.org/W4414937829",
+     "autores": [
+      "Chen Yang",
+      "Markus H. Groß"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Recognizing and enhancing sapient agency within AIs: a free will perspective",
+     "doi": "https://doi.org/10.1007/s44202-025-00425-5",
+     "id": "https://openalex.org/W4413862385",
+     "autores": [
+      "Kennon M. Sheldon"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Children as concealed commodities: Ethnographic nuances and legal implications of kidfluencers’ monetisation on TikTok",
+     "doi": "https://doi.org/10.1177/14614448241304657",
+     "id": "https://openalex.org/W4406628369",
+     "autores": [
+      "Tom Divon",
+      "Taylor Annabell"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Towards expressive mobile robots",
+     "id": "https://openalex.org/W2905656095",
+     "autores": [
+      "Ishaan Pakrasi"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Enhancing Intelligent Agents with Episodic Memory",
+     "id": "https://openalex.org/W4301666800",
+     "autores": [
+      "Andrew M. Nuxoll"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Grounded Sensorimotor Interaction Histories for Ontogenetic Development in Robots",
+     "id": "https://openalex.org/W2118612946",
+     "autores": [
+      "Naeem Assif Mirza"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Autonomous motion learning for near optimal control",
+     "id": "https://openalex.org/W2525089570",
+     "autores": [
+      "Alan L. Jennings"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Modeling affective system and episodic memory for social companions",
+     "doi": "https://doi.org/10.32657/10356/72385",
+     "id": "https://openalex.org/W2734142941",
+     "autores": [
+      "Juzheng Zhang"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "An embodied conversational agent with autistic behaviour",
+     "id": "https://openalex.org/W1931491430",
+     "autores": [
+      "Wessel Venter"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "An Exploration Of The Potentials And Limitations Of Adapting Traditional Text-based Narrative To Interactive Technology",
+     "id": "https://openalex.org/W2787644108",
+     "autores": [
+      "Said Jardaneh"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Contemporary Arab women's life writing and the politics of resistance",
+     "doi": "https://doi.org/10.17635/lancaster/thesis/910",
+     "id": "https://openalex.org/W3011637820",
+     "autores": [
+      "Hiyem Cheurfa"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "The Vernacularisation of Modern Neurosciences: A Case Study of Neuro-Autobiographies in The Age of Complexity",
+     "id": "https://openalex.org/W3156776293",
+     "autores": [
+      "Andrea C. Valente"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Human-Inspired Perspectives: A Survey on AI Long-Term Memory",
+     "doi": "https://doi.org/10.1109/jproc.2026.3713201",
+     "id": "https://openalex.org/W4404345212",
+     "autores": [
+      "Zihong He",
+      "Weizhe Lin"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Effective and Efficient Memory for Generally Intelligent Agents.",
+     "id": "https://openalex.org/W82231037",
+     "autores": [
+      "Nathaniel Leonard Derbinsky"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Proceedings of the 2013 Annual Conference on Advances in Cognitive Systems: Workshop on Metacognition about Artificial Situated Agents",
+     "id": "https://openalex.org/W192892646",
+     "autores": [
+      "Darsana P. Josyula",
+      "Paul Robertson"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Imulating storyteller-audience interactions in digital storytelling: questions, exchange structures & story objects",
+     "id": "https://openalex.org/W2887062743",
+     "autores": [
+      "Ilda Ladeira"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "THEORIZING NATURE: SEEKING MIDDLE GROUND",
+     "id": "https://openalex.org/W165790446",
+     "autores": [
+      "Dahlia Louise. Voss"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Saberes y aprendizajes en la construcción de la identidad y la subjetividad de una educadora de museos: El caso del proyecto “Cartografiem-nos” en el museo Es Baluard",
+     "id": "https://openalex.org/W179010238",
+     "autores": [
+      "Irene Amengual Quevedo"
+     ]
+    }
+   ]
+  },
+  "semantic_scholar": {
+   "consulta": "\"autobiographic agent\"",
+   "n": 24,
+   "itens": [
+    {
+     "ano": 1998,
+     "titulo": "Arti(cid:12)cial Life and Natural Stories",
+     "autores": [
+      "K. Dautenhahn",
+      "C. Nehaniv"
+     ]
+    },
+    {
+     "ano": 1996,
+     "titulo": "Embodied Cognition in Animals and Artifacts",
+     "autores": [
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 1997,
+     "titulo": "Semigroup Expansions for Autobiographic Agents",
+     "autores": [
+      "C. Nehaniv",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Autobiographic Agents inDynamicVirtual Environments - Performance Comparison forDifferent MemoryControl Architectures",
+     "autores": [
+      "K. Dautenhahn",
+      "C. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "The Web as an Autobiographical Agent",
+     "doi": "10.1007/978-3-540-30106-6_52",
+     "autores": [
+      "M. Dimitrova",
+      "E. Barakova"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Comparing Different Control Architectures for Autobiographic Agents in Static Virtual Environments",
+     "doi": "10.1007/978-3-540-39396-2_30",
+     "autores": [
+      "W. Ho",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Supporting narrative understanding of children with autism: A story interface with autonomous autobiographic agents",
+     "doi": "10.1109/ICORR.2009.5209580",
+     "autores": [
+      "W. Ho",
+      "Megan Davis"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "Artificial intelligence : methodology, systems, and applications : 11th International Conference, AIMSA 2004, Varna, Bulgaria, September 2-4, 2004 : proceedings",
+     "autores": [
+      "C. Bussler",
+      "D. Fensel"
+     ]
+    },
+    {
+     "ano": 1998,
+     "titulo": "Meaning and Embodiment in Life-like Agents 1 Histories and Autobiographic Agents",
+     "autores": [
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 1997,
+     "titulo": "What's Your Story? --Irreversibility, Algebra, Autobiographic Agents",
+     "autores": [
+      "C. Nehaniv"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "USING COMPUTATIONAL PATIENTS TO EVALUATE ILLNESS MECHANISMS IN SCHIZOPHRENIA",
+     "doi": "10.1016/j.biopsych.2010.12.036",
+     "autores": [
+      "R. Hoffman",
+      "Uli Grasemann"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Go Underground, Young Women: Writing Selves in Miral al-Tahawy’s The Tent",
+     "doi": "10.1215/15525864-3861334",
+     "autores": [
+      "Diya Abdo"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Autobiographic agents in dynamic virtual environments - performance comparison for different memory control architectures",
+     "doi": "10.1109/CEC.2005.1554734",
+     "autores": [
+      "W. Ho",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Editorial - socially intelligent agents - the human in the loop",
+     "doi": "10.1109/TSMCA.2001.952709",
+     "autores": [
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "Sharing memories: an experimental investigation with multiple autonomous autobiographic agents",
+     "autores": [
+      "W. Ho",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "A study of episodic memory-based learning and narrative structure for autobiographic agents",
+     "autores": [
+      "W. Ho",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 1998,
+     "titulo": "Embodiment and Memories | Algebras of Time and Historyfor Autobiographic",
+     "autores": [
+      "C. Nehaniv",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Computational memory architectures for autobiographic agents interacting in a complex virtual environment: a working model",
+     "doi": "10.1080/09540090801889469",
+     "autores": [
+      "W. Ho",
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Narrative Intelligence from the Bottom Up: A Computational Framework for the Study of Story-Telling in Autonomous Agents",
+     "autores": [
+      "K. Dautenhahn",
+      "S. Coles"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Socially Intelligent Agents and The Primate Social Brain - Towards a Science of Social Minds",
+     "autores": [
+      "K. Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Intelligent virtual agents : 4th International Workshop, IVA 2003, Kloster Irsee, Germany, September 15-17, 2003 : proceedings",
+     "autores": [
+      "Iva",
+      "T. Rist"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "Autobiographic Knowledge for Believable Virtual Characters",
+     "doi": "10.1007/11821830_31",
+     "autores": [
+      "W. Ho",
+      "Scott Watson"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "AMIA: A knowledge representation model for computational autobiographic agents",
+     "doi": "10.1109/DEVLRN.2007.4354039",
+     "autores": [
+      "W. Ho",
+      "Scott Watson"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Corroborating emotion theory with role theory and agent technology: a framework for designing emotional agents as motivational tutoring entities",
+     "autores": [
+      "B. Marin"
+     ]
+    }
+   ]
+  },
+  "arxiv": {
+   "consulta": "all:\"autobiographic agent\"",
+   "n": 0,
+   "itens": []
+  }
+ },
+ "Q2": {
+  "openalex": {
+   "consulta": "animat AND (homeostasis OR survival) AND memory",
+   "n": 641,
+   "itens": [
+    {
+     "ano": 2011,
+     "titulo": "Integrated Information Increases with Fitness in the Evolution of Animats",
+     "doi": "https://doi.org/10.1371/journal.pcbi.1002236",
+     "id": "https://openalex.org/W1998567810",
+     "autores": [
+      "Jeffrey A. Edlund",
+      "Nicolas Chaumont"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Combining Evolution and Learning in Computational Ecosystems",
+     "doi": "https://doi.org/10.2478/jagi-2020-0001",
+     "id": "https://openalex.org/W3002844906",
+     "autores": [
+      "Claes Strannegård",
+      "Wen Xu"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "[Social] Allostasis: Or, How I Learned To Stop Worrying and Love The Noise",
+     "doi": "https://doi.org/10.1162/isal.a.912",
+     "id": "https://openalex.org/W4417133664",
+     "autores": [
+      "Imran Khan"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "Animat vision: Active vision in artificial animals",
+     "doi": "https://doi.org/10.1109/iccv.1995.466856",
+     "id": "https://openalex.org/W2169464814",
+     "autores": [
+      "Demetri Terzopoulos",
+      "Tamer Farouk Rabie"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "How Organisms Gained Causal Independence and How It Might Be Quantified",
+     "doi": "https://doi.org/10.3390/biology7030038",
+     "id": "https://openalex.org/W2811308619",
+     "autores": [
+      "Keith D. Farnsworth"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Learning and decision-making in artificial animals",
+     "doi": "https://doi.org/10.2478/jagi-2018-0002",
+     "id": "https://openalex.org/W2885611884",
+     "autores": [
+      "Claes Strannegård",
+      "Nils Svangård"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Evolution and learning in artificial ecosystems",
+     "id": "https://openalex.org/W2946300395",
+     "autores": [
+      "Claes Strannegård",
+      "Wen Xu"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Using evolutionary artificial neural networks to design hierarchical animat nervous systems.",
+     "id": "https://openalex.org/W1860001449",
+     "autores": [
+      "David McMinn"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Comparison of Adaptive Behaviors of an Animat in Different Markovian 2-D Environments Using XCS Classifier Systems",
+     "id": "https://openalex.org/W105223570",
+     "autores": [
+      "Armin Najarpour-Foroushani"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "MEART: The semi-living artist",
+     "doi": "https://doi.org/10.3389/neuro.12.005.2007",
+     "id": "https://openalex.org/W2094694909",
+     "autores": [
+      "Douglas J. Bakkum"
+     ]
+    },
+    {
+     "ano": 1999,
+     "titulo": "Towards an algorithmic theory of adaptation",
+     "doi": "https://doi.org/10.1016/s0304-3975(97)00211-9",
+     "id": "https://openalex.org/W1971743648",
+     "autores": [
+      "Jean-Denis Fouks"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Exploring adaptive behaviour control with an animat inspired by the Siamese fighting fish (Betta splendens)",
+     "id": "https://openalex.org/W2757977325",
+     "autores": [
+      "Jan Peter Sheridan Richards"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Artificial motives: A review of motivation in artificial creatures",
+     "doi": "https://doi.org/10.1080/095400900750060131",
+     "id": "https://openalex.org/W2135209725",
+     "autores": [
+      "Tony Savage"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Neuroscientific implications for situated and embodied artificial intelligence",
+     "doi": "https://doi.org/10.1080/09540090701192584",
+     "id": "https://openalex.org/W2068602009",
+     "autores": [
+      "Keith L. Downing"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "The Embodied Brain of SOVEREIGN2: From Space-Variant Conscious Percepts During Visual Search and Navigation to Learning Invariant Object Categories and Cognitive-Emotional Plans for Acquiring Valued Goals",
+     "doi": "https://doi.org/10.3389/fncom.2019.00036",
+     "id": "https://openalex.org/W2953561566",
+     "autores": [
+      "Stephen Grossberg"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Emotions, Motivation-Based Action Selection and Dynamic Environments",
+     "doi": "https://doi.org/10.18745/th.23942",
+     "id": "https://openalex.org/W3144652720",
+     "autores": [
+      "Claire O'Bryne"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Decision-Making From the Animal Perspective: Bridging Ecology and Subjective Cognition",
+     "doi": "https://doi.org/10.3389/fevo.2019.00164",
+     "id": "https://openalex.org/W2945185909",
+     "autores": [
+      "Sergey V. Budaev",
+      "Christian Jørgensen"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "The problem of survival from an algorithmic point of view",
+     "doi": "https://doi.org/10.1016/s0004-3702(01)00133-3",
+     "id": "https://openalex.org/W2016760416",
+     "autores": [
+      "Jean-Denis Fouks",
+      "Laurent Signac"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Degeneracy in hippocampal physiology and plasticity",
+     "doi": "https://doi.org/10.1002/hipo.23139",
+     "id": "https://openalex.org/W2958093286",
+     "autores": [
+      "Rahul Kumar Rathour",
+      "Rishikesh Narayanan"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Homeostatic Agent for General Environment",
+     "doi": "https://doi.org/10.1515/jagi-2017-0001",
+     "id": "https://openalex.org/W2622127366",
+     "autores": [
+      "Naoto Yoshida"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "Chemical Basis for Minimal Cognition",
+     "doi": "https://doi.org/10.1162/artl_a_00002",
+     "id": "https://openalex.org/W2039922706",
+     "autores": [
+      "Martin Michael Hanczyc",
+      "Takashi Ikegami"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Towards Strong AI",
+     "doi": "https://doi.org/10.1007/s13218-021-00705-x",
+     "id": "https://openalex.org/W3134077149",
+     "autores": [
+      "Martin V. Butz"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "The Tao of Agency: Autotelic AI, Embedded Agency and Dissolution of the Self",
+     "doi": "https://doi.org/10.48550/arxiv.2606.19924",
+     "id": "https://openalex.org/W7165383093",
+     "autores": [
+      "Aritra Sarkar"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Colonial Heritage, Memory and Sustainability in Africa: Challenges, Opportunities and Prospects",
+     "id": "https://openalex.org/W2414530244",
+     "autores": [
+      "Munyaradzi Mawere"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "A Journey Through Hell: Dante's influence on Art Spiegelman's Maus",
+     "doi": "https://doi.org/10.5565/rev/dea.105",
+     "id": "https://openalex.org/W2905594535",
+     "autores": [
+      "Brian Ireland",
+      "Penelope James"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "When Remembering and Planning are Worth it: Navigating under Change",
+     "doi": "https://doi.org/10.48550/arxiv.2602.15274",
+     "id": "https://openalex.org/W7130384441",
+     "autores": [
+      "Omid Madani",
+      "J. Brian Burns"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Overcoming deception in evolution of cognitive behaviors",
+     "doi": "https://doi.org/10.1145/2576768.2598300",
+     "id": "https://openalex.org/W2118253315",
+     "autores": [
+      "Joel Lehman",
+      "Risto P Miikkulainen"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Evolutionary Self-Replication as a Mechanism for Producing Artificial Intelligence",
+     "doi": "https://doi.org/10.48550/arxiv.2109.08057",
+     "id": "https://openalex.org/W3199468404",
+     "autores": [
+      "Samuel Schmidgall",
+      "Hays, Joseph"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "An Electronic Circuit Model of the Interpostsynaptic Functional LINK Designed to Study the Formation of Internal Sensations in the Nervous System",
+     "doi": "https://doi.org/10.1155/2014/318390",
+     "id": "https://openalex.org/W2109315429",
+     "autores": [
+      "Kunjumon I. Vadakkan"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Evolution of Spiking Neural Networks for Temporal Pattern Recognition and Animat Control",
+     "doi": "https://doi.org/10.18745/th.17181",
+     "id": "https://openalex.org/W2564692961",
+     "autores": [
+      "Ahmed Abdelmotaleb"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Time scales of memory, learning, and plasticity",
+     "doi": "https://doi.org/10.1007/s00422-012-0529-z",
+     "id": "https://openalex.org/W2125517286",
+     "autores": [
+      "Christian Tetzlaff",
+      "Christoph Kolodziejski"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "“As many Ciphers without an I”: Self-Reflexive Violence in the Work of Thomas Nashe",
+     "doi": "https://doi.org/10.1086/673498",
+     "id": "https://openalex.org/W2000810071",
+     "autores": [
+      "Tamsin Theresa Badcoe"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Survival egoism: we are, they will be",
+     "doi": "https://doi.org/10.1007/s00146-026-02866-5",
+     "id": "https://openalex.org/W2990692564",
+     "autores": [
+      "Tommaso Castiglione Ferrari"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Computational memory architectures for autobiographic agents interacting in a complex virtual environment: a working model",
+     "doi": "https://doi.org/10.1080/09540090801889469",
+     "id": "https://openalex.org/W2059687835",
+     "autores": [
+      "Wan Ching Ho",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Survival of the mutable: architecture of adaptive reactive agents",
+     "id": "https://openalex.org/W2769472947",
+     "autores": [
+      "Renata Luiza Stange",
+      "Paulo Roberto Massa Cereda"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A potential mechanism for Gibsonian resonance: behavioral entrainment emerges from local homeostasis in an unsupervised reservoir network",
+     "doi": "https://doi.org/10.1007/s11571-023-09988-2",
+     "id": "https://openalex.org/W4385218607",
+     "autores": [
+      "James Benjamin Falandays",
+      "Jeffrey Yoshimi"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Anesthesia disrupts distance, but not direction, of path integration memory",
+     "doi": "https://doi.org/10.1016/j.cub.2021.11.039",
+     "id": "https://openalex.org/W3217670675",
+     "autores": [
+      "Ioannis Pisokas",
+      "Wolfgang Rößler"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Hormonal Modulation of Perception in Motivation-Based Action Selection Architectures",
+     "id": "https://openalex.org/W1746164181",
+     "autores": [
+      "Orlando Avila-García",
+      "Lola D. Cañamero"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Naming the Dead: An Ethics of Memory and Metonymy",
+     "doi": "https://doi.org/10.17615/ec2w-zw44",
+     "id": "https://openalex.org/W3206889181",
+     "autores": [
+      "Emily Brennan-Moran"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Computational memory architectures for autobiographic and narrative virtual agents",
+     "doi": "https://doi.org/10.18745/th.14271",
+     "id": "https://openalex.org/W1584396711",
+     "autores": [
+      "Wan Ching Ho"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Immuno-virotherapy for glioblastoma: Characterization of Delta 24-ACT in combination with different immunomodulators as therapeutic approach",
+     "id": "https://openalex.org/W3157658146",
+     "autores": [
+      "Montserrat Puigdelloses Vallcorba"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Maus d’Art Spiegelman. Una dissociació de rols a través de la genealogia semiòtica de gats i ratolins a la literatura, la novel•la gràfica i la cultura visual.",
+     "id": "https://openalex.org/W2739667466",
+     "autores": [
+      "Raquel Crisóstomo"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A functional model of memory-oriented cooperation between hippocampal and cortical regions across sleep-wake cycles",
+     "id": "https://openalex.org/W4390865535",
+     "autores": [
+      "Dominique Béroule"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Perceiving animacy from kinematics: visual specification of life-likeness in simple geometric patterns",
+     "doi": "https://doi.org/10.3389/fpsyg.2023.1167809",
+     "id": "https://openalex.org/W4379229507",
+     "autores": [
+      "Giulia Parovel"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Awareness and integrated information theory identify plant meristems as sites of conscious activity",
+     "doi": "https://doi.org/10.1007/s00709-021-01633-1",
+     "id": "https://openalex.org/W3139268003",
+     "autores": [
+      "ANTHONY J. TREWAVAS"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "A sensory system for robots using evolutionary artificial neural networks.",
+     "id": "https://openalex.org/W610171824",
+     "autores": [
+      "Ann Reddipogu"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Stability of learning in the ARBIB autonomous robot",
+     "id": "https://openalex.org/W1725697799",
+     "autores": [
+      "Richard French",
+      "R.I. Damper"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Plasticity of recurring spatiotemporal activity patterns in cortical networks",
+     "doi": "https://doi.org/10.1088/1478-3975/4/3/005",
+     "id": "https://openalex.org/W2104476748",
+     "autores": [
+      "Radhika Madhavan",
+      "Zenas C. Chao"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Behavior control in the sensorimotor loop with short-term synaptic dynamics induced by self-regulating neurons",
+     "doi": "https://doi.org/10.3389/fnbot.2014.00019",
+     "id": "https://openalex.org/W1974551448",
+     "autores": [
+      "Hazem Toutounji",
+      "Frank Pasemann"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "MKER: multi-modal knowledge extraction and reasoning for future event prediction",
+     "doi": "https://doi.org/10.1007/s40747-024-01741-4",
+     "id": "https://openalex.org/W4406195336",
+     "autores": [
+      "Chenghang Lai",
+      "Shoumeng Qiu"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Organoid intelligence (OI): the new frontier in biocomputing and intelligence-in-a-dish",
+     "doi": "https://doi.org/10.3389/fsci.2023.1017235",
+     "id": "https://openalex.org/W4323566431",
+     "autores": [
+      "Lena Smirnova",
+      "Brian  S. Caffo"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Neurophysiological and Autonomic Dynamics of Threat Processing during Sustained Social Fear Generalization",
+     "doi": "https://doi.org/10.1162/jocn_a_02276",
+     "id": "https://openalex.org/W4404307768",
+     "autores": [
+      "Jourdan J. Pouliot",
+      "Richard T. Ward"
+     ]
+    },
+    {
+     "ano": 1990,
+     "titulo": "CSM: A Computational Model of Cumulative Learning",
+     "doi": "https://doi.org/10.1007/bf00116877",
+     "id": "https://openalex.org/W1971497957",
+     "autores": [
+      "Hayong Harry Zhou"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "OpenLife: Toward Open-World Artificial Life with Autonomous LLM Agents",
+     "doi": "https://doi.org/10.1162/isal.a.1036",
+     "id": "https://openalex.org/W7166811347",
+     "autores": [
+      "Atsushi Masumori",
+      "Itsuki Doi"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Affect, Anticipation, and Adaptation: Affect-Controlled Selection of Anticipatory Simulation in Artificial Adaptive Agents",
+     "doi": "https://doi.org/10.1177/1059712307084686",
+     "id": "https://openalex.org/W2009967740",
+     "autores": [
+      "Joost Broekens",
+      "Walter A. Kosters"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Assessing the Performance of Different Behavior Selection Architectures in a Large and Complex Virtual Environment",
+     "doi": "https://doi.org/10.1109/cec.2005.1554706",
+     "id": "https://openalex.org/W1885274932",
+     "autores": [
+      "Wan Ching Ho",
+      "Orlando Avila-García"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Minimal physicalism as a scale-free substrate for cognition and consciousness",
+     "doi": "https://doi.org/10.1093/nc/niab013",
+     "id": "https://openalex.org/W3188501181",
+     "autores": [
+      "Chris Fields",
+      "James F. Glazebrook"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Emotions as a dynamical system: the interplay between the meta-control and communication function of emotions",
+     "doi": "https://doi.org/10.2478/s13230-012-0005-4",
+     "id": "https://openalex.org/W2064455153",
+     "autores": [
+      "C. Hasson",
+      "Philippe Gaussier"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Automatic cybersickness detection by deep learning of augmented physiological data from off-the-shelf consumer-grade sensors",
+     "doi": "https://doi.org/10.3389/frvir.2024.1364207",
+     "id": "https://openalex.org/W4399755538",
+     "autores": [
+      "Murat Yalcin",
+      "Andreas Halbig"
+     ]
+    },
+    {
+     "ano": 1998,
+     "titulo": "FROM PERCEPTION-ACTION LOOPS TO IMITATION PROCESSES: A BOTTOM-UP APPROACH OF LEARNING BY IMITATION",
+     "doi": "https://doi.org/10.1080/088395198117596",
+     "id": "https://openalex.org/W2150272875",
+     "autores": [
+      "Philippe Gaussier",
+      "Sorin Moga"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Brain-behavioural olfactory asymmetries in Apoidea",
+     "doi": "https://doi.org/10.15168/11572_368826",
+     "id": "https://openalex.org/W126871571",
+     "autores": [
+      "Elisa Rigosi"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Agent based Evolution Model in JAVA (ABEMJ)",
+     "doi": "https://doi.org/10.5120/ijca2015907698",
+     "id": "https://openalex.org/W2990828428",
+     "autores": [
+      "Shama Yazdani",
+      "Smit Anand"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Learning under constraints: a theoretical framework for comparing resource-constrained learning in biological and artificial systems",
+     "doi": "https://doi.org/10.3389/fncom.2026.1636604",
+     "id": "https://openalex.org/W7165001642",
+     "autores": [
+      "Dmytro Kucherov",
+      "Serge Dolgikh"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Adaptive foraging for simulated and real robotic swarms: the dynamical response threshold approach",
+     "doi": "https://doi.org/10.1007/s11721-015-0117-7",
+     "id": "https://openalex.org/W2269884838",
+     "autores": [
+      "Eduardo Castelló Ferrer",
+      "知幸 山本"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "The representation of space in the brain",
+     "doi": "https://doi.org/10.1016/j.beproc.2016.12.012",
+     "id": "https://openalex.org/W2565012513",
+     "autores": [
+      "Roddy M. Grieves",
+      "Kathryn J. Jeffery"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "Cognitive map plasticity and imitation strategies to improve individual and social behaviors of autonomous agents",
+     "doi": "https://doi.org/10.2478/s13230-010-0004-2",
+     "id": "https://openalex.org/W2068338126",
+     "autores": [
+      "Philippe Laroque",
+      "Nathalie Gaussier"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "An Overview of In Vitro Biological Neural Networks for Robot Intelligence",
+     "doi": "https://doi.org/10.34133/cbsystems.0001",
+     "id": "https://openalex.org/W4315471187",
+     "autores": [
+      "Zhe Chen",
+      "Qian Liang"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Technological Approach to Mind Everywhere (TAME): an experimentally- grounded framework for understanding diverse bodies and minds",
+     "doi": "https://doi.org/10.31234/osf.io/t6e8p",
+     "id": "https://openalex.org/W4200471981",
+     "autores": [
+      "Michael G. Levin"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Evolving interpretable plasticity for spiking networks",
+     "doi": "https://doi.org/10.7554/elife.66273",
+     "id": "https://openalex.org/W3211024470",
+     "autores": [
+      "Jakob Jordan",
+      "Maximilian Schmidt"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Is it pain if it does not hurt? On the unlikelihood of insect pain",
+     "doi": "https://doi.org/10.4039/tce.2019.49",
+     "id": "https://openalex.org/W2969561139",
+     "autores": [
+      "Shelley A. Adamo"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Homeostatic set-points are physical and foundational to organism autonomy",
+     "doi": "https://doi.org/10.1016/j.biosystems.2025.105634",
+     "id": "https://openalex.org/W4415706476",
+     "autores": [
+      "Keith D. Farnsworth"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "A Modular Cognitive Architecture for Autonomous, Self-Motivated Agents",
+     "doi": "https://doi.org/10.36227/techrxiv.176462076.64363307/v2",
+     "id": "https://openalex.org/W7127335002",
+     "autores": [
+      "Andrea Grandi"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Offline encoding impaired by epigenetic regulations of monoamines in the guided propagation model of autism",
+     "doi": "https://doi.org/10.1186/s12868-018-0477-1",
+     "id": "https://openalex.org/W2905330692",
+     "autores": [
+      "Dominique Béroule"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "The roles of the amygdala in the affective regulation of body, brain, and behaviour",
+     "doi": "https://doi.org/10.1080/09540091003682553",
+     "id": "https://openalex.org/W2068077601",
+     "autores": [
+      "Marco Mirolli",
+      "Francesco Mannella"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "ReaCog, a Minimal Cognitive Controller Based on Recruitment of Reactive Systems",
+     "doi": "https://doi.org/10.3389/fnbot.2017.00003",
+     "id": "https://openalex.org/W2582903031",
+     "autores": [
+      "Malte Schilling",
+      "Holk Cruse"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Temporal Representations for Exploration: Learning Complex Exploratory Behavior without Extrinsic Rewards",
+     "doi": "https://doi.org/10.48550/arxiv.2603.02008",
+     "id": "https://openalex.org/W7133326860",
+     "autores": [
+      "Faisal Mohamed",
+      "Catherine Ji"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Modelling Alzheimer's disease: Insights fromin vivotoin vitrothree-dimensional culture platforms",
+     "doi": "https://doi.org/10.1002/term.2728",
+     "id": "https://openalex.org/W2884469272",
+     "autores": [
+      "Vivek Ranjan",
+      "Lifeng Qiu"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Architecture of the insect society: comparative analysis of collective construction and social function of nests",
+     "doi": "https://doi.org/10.1007/s00040-025-01057-7",
+     "id": "https://openalex.org/W4414140053",
+     "autores": [
+      "Paige B Caine",
+      "A. T. Robertson"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "3PT206 Regulation of GABAergic synapses by IP_3/Ca^<2+> signaling(The 50th Annual Meeting of the Biophysical Society of Japan)",
+     "doi": "https://doi.org/10.2142/biophys.52.s175_5",
+     "id": "https://openalex.org/W2611578241",
+     "autores": [
+      "Hiroko Bannai",
+      "Fumihiro Niwa"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "AN AUTONOMOUS AND GUIDED CROWD IN PANIC SITUATIONS",
+     "id": "https://openalex.org/W2150849381",
+     "autores": [
+      "Foudil Cherif",
+      "Noureddine Djedi"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Evolving Indoor Navigational Strategies Using Gated Recurrent Units In NEAT",
+     "doi": "https://doi.org/10.48550/arxiv.1904.06239",
+     "id": "https://openalex.org/W2956725536",
+     "autores": [
+      "James Butterworth",
+      "Rahul Savani"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Energy Costs and Neural Complexity Evolution in Changing Environments",
+     "doi": "https://doi.org/10.1162/isal.a.888",
+     "id": "https://openalex.org/W7110060432",
+     "autores": [
+      "Sian Heesom-Green",
+      "Jonathan Shock"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Modeling the Evolution of Mimicry",
+     "doi": "https://doi.org/10.1162/978-0-262-33936-0-ch072",
+     "id": "https://openalex.org/W2109457269",
+     "autores": [
+      "Mohiul Islam",
+      "Peter D. Grogono"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Dynamics of Collective Decision Making of Honeybees in Complex Temperature Fields",
+     "doi": "https://doi.org/10.1371/journal.pone.0076250",
+     "id": "https://openalex.org/W1982894989",
+     "autores": [
+      "Martina Szopek",
+      "Thomas Schmickl"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "A cultured human neural network operates a robotic actuator",
+     "doi": "https://doi.org/10.1016/j.biosystems.2008.09.006",
+     "id": "https://openalex.org/W2091839354",
+     "autores": [
+      "Rita M.R. Pizzi",
+      "Danilo Augusto de Albuquerque Rossetti"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Craftax: A Lightning-Fast Benchmark for Open-Ended Reinforcement Learning",
+     "doi": "https://doi.org/10.48550/arxiv.2402.16801",
+     "id": "https://openalex.org/W4392223126",
+     "autores": [
+      "Matthews, Michael",
+      "Michael Beukman"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "The Causally Emergent Alignment Hypothesis: Causal Emergence Aligns with and Predicts Final Reward in Reinforcement Learning Agents",
+     "doi": "https://doi.org/10.48550/arxiv.2605.06746",
+     "id": "https://openalex.org/W7160819604",
+     "autores": [
+      "Federico Pigozzi",
+      "Michael Levin"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Long-Term Maintenance of Human Stem Cell-derived Neural Networks for Electrophysiology Studies",
+     "doi": "https://doi.org/10.21203/rs.3.rs-8159974/v1",
+     "id": "https://openalex.org/W4417112363",
+     "autores": [
+      "Shravan Thaploo",
+      "Derrick Lin"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Intrinsic Motivations Drive Learning of Eye Movements: An Experiment with Human Adults",
+     "doi": "https://doi.org/10.1371/journal.pone.0118705",
+     "id": "https://openalex.org/W2063614476",
+     "autores": [
+      "Daniele Caligiore",
+      "Magda Mustile"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Qualia from quantum magic: a quantum resource approach to phenomenal consciousness",
+     "doi": "https://doi.org/10.3389/fphy.2025.1715825",
+     "id": "https://openalex.org/W7138285975",
+     "autores": [
+      "G. M. Viswanathan"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Grounding Emotion Appraisal in Autonomous Humanoids",
+     "doi": "https://doi.org/10.3384/lic.diva-105344",
+     "id": "https://openalex.org/W2151084115",
+     "autores": [
+      "Kiril Kiryazov"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Multi-Modal Data Analysis Based Game Player Experience Modeling Using LSTM-DNN",
+     "doi": "https://doi.org/10.32604/cmc.2021.015612",
+     "id": "https://openalex.org/W3160088123",
+     "autores": [
+      "Sehar Shahzad Farooq",
+      "Mustansar Fiaz"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Towards the Self-constructive Brain: emergence of adaptive behavior",
+     "doi": "https://doi.org/10.48550/arxiv.1608.02229",
+     "id": "https://openalex.org/W2519015246",
+     "autores": [
+      "Fernando Corbacho"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Memristive PAD three-dimensional emotion generation system based on D–S evidence theory",
+     "doi": "https://doi.org/10.1007/s11071-023-09264-2",
+     "id": "https://openalex.org/W4391286130",
+     "autores": [
+      "Mengxian Zhang",
+      "Chunhua Wang"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Material-Based Intelligence: Self-organizing, Autonomous and Adaptive Cognition Embodied in Physical Substrates",
+     "doi": "https://doi.org/10.48550/arxiv.2511.08838",
+     "id": "https://openalex.org/W4416235721",
+     "autores": [
+      "Vladimir A. Baulin",
+      "Rudolf Marcel Füchslin"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Neurorobotic Models of Spatial Navigation and Their Applications",
+     "id": "https://openalex.org/W3010507865",
+     "autores": [
+      "Tiffany J. Hwu"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Creation of Defined Single Cell Resolution Neuronal Circuits on Microelectrode Arrays",
+     "id": "https://openalex.org/W1582903054",
+     "autores": [
+      "Russell Kirk Pirlo"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Electrophysiology, agent-based modeling and inverse optimal control applications in neuroethology",
+     "id": "https://openalex.org/W2254331976",
+     "autores": [
+      "Marianne Catanho"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "genomic and behavioural evolution in the artific ial ecosystem simulation EcoSim",
+     "id": "https://openalex.org/W2136771141",
+     "autores": [
+      "Marwa Khater"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "128th Volume, 36th Issue",
+     "id": "https://openalex.org/W7210309610",
+     "autores": [
+      "The Review"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Emotional Intervention on Stigmergy Based Foraging Behaviour of Immune Network Driven Mobile Robots",
+     "doi": "https://doi.org/10.5772/5471",
+     "id": "https://openalex.org/W1552928867",
+     "autores": [
+      "Diana Tsankova"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Steps to a “Properly Embodied” cognitive science",
+     "doi": "https://doi.org/10.1016/j.cogsys.2012.05.001",
+     "id": "https://openalex.org/W2157114937",
+     "autores": [
+      "Mog Stapleton"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "Six views of embodied cognition",
+     "doi": "https://doi.org/10.3758/bf03196322",
+     "id": "https://openalex.org/W2023015865",
+     "autores": [
+      "Margaret Wilson"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Embodied Robot Models for Interdisciplinary Emotion Research",
+     "doi": "https://doi.org/10.1109/taffc.2019.2908162",
+     "id": "https://openalex.org/W2942053682",
+     "autores": [
+      "Lola D. Cañamero"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Swarm intelligence: novel tools for optimization, feature extraction, and multi-agent system modeling",
+     "doi": "https://doi.org/10.20868/upm.thesis.7206",
+     "id": "https://openalex.org/W36659293",
+     "autores": [
+      "Aleksandar Jevtić"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Spatial Properties of STDP in a Self-Learning Spiking Neural Network Enable Controlling a Mobile Robot",
+     "doi": "https://doi.org/10.3389/fnins.2020.00088",
+     "id": "https://openalex.org/W3007981140",
+     "autores": [
+      "Sergey A. Lobov",
+      "Alexey N. Mikhaylov"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "A Flexible Component-Based Robot Control Architecture for Hormonal Modulation of Behaviour and Affect",
+     "doi": "https://doi.org/10.1007/978-3-319-64107-2_36",
+     "id": "https://openalex.org/W2738527170",
+     "autores": [
+      "Luke Hickton",
+      "Matthew Lewis"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "An ethological and emotional basis for human–robot interaction",
+     "doi": "https://doi.org/10.1016/s0921-8890(02)00375-5",
+     "id": "https://openalex.org/W2038256537",
+     "autores": [
+      "Ronald C. Arkin",
+      "Masahiro Fujita"
+     ]
+    },
+    {
+     "ano": 1994,
+     "titulo": "Automatic Creation of an Autonomous Agent: Genetic Evolution of a Neural Network Driven Robot",
+     "doi": "https://doi.org/10.3929/ethz-a-010111549",
+     "id": "https://openalex.org/W1492895344",
+     "autores": [
+      "Dario Floreano",
+      "Francesco Mondada C"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Anticipation: Beyond synthetic biology and cognitive robotics",
+     "doi": "https://doi.org/10.1016/j.biosystems.2016.07.011",
+     "id": "https://openalex.org/W2484031233",
+     "autores": [
+      "Slawomir J. Nasuto",
+      "Yoshikatsu Hayashi"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Artificial Life XI: Proceedings of the Eleventh International Conference on the Simulation and Synthesis of Living Systems",
+     "id": "https://openalex.org/W2068244389",
+     "autores": [
+      "Bullock, S.",
+      "Noble, J."
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Neurorobotics—A Thriving Community and a Promising Pathway Toward Intelligent Cognitive Robots",
+     "doi": "https://doi.org/10.3389/fnbot.2018.00042",
+     "id": "https://openalex.org/W2809892310",
+     "autores": [
+      "Jeffrey L. Krichmar"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "An artificial life environment for autonomous virtual agents with multi‐sensorial and multi‐perceptive features",
+     "doi": "https://doi.org/10.1002/cav.34",
+     "id": "https://openalex.org/W1974150320",
+     "autores": [
+      "Toni Conde",
+      "Daniël Thalmann"
+     ]
+    },
+    {
+     "ano": 1999,
+     "titulo": "Reinforcement Learning in Autonomous Robots: An Empirical Investigation of the Role of Emotions",
+     "id": "https://openalex.org/W1556756526",
+     "autores": [
+      "Sandra Clara Gadanho"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Artificial Gene Regulatory Networks—A Review",
+     "doi": "https://doi.org/10.1162/artl_a_00267",
+     "id": "https://openalex.org/W2912050044",
+     "autores": [
+      "Sylvain Cussat‐Blanc",
+      "Kyle Harrington"
+     ]
+    },
+    {
+     "ano": 1992,
+     "titulo": "Self-improving reactive agents based on reinforcement learning, planning and teaching",
+     "doi": "https://doi.org/10.1007/bf00992699",
+     "id": "https://openalex.org/W2141559645",
+     "autores": [
+      "Long-Ji Lin"
+     ]
+    },
+    {
+     "ano": 1993,
+     "titulo": "Behavior-Based Artificial Intelligence",
+     "doi": "https://doi.org/10.7551/mitpress/3116.003.0003",
+     "id": "https://openalex.org/W2012149201",
+     "autores": [
+      "Pattie Maes"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Emotion-augmented machine learning: Overview of an emerging domain",
+     "doi": "https://doi.org/10.1109/acii.2017.8273617",
+     "id": "https://openalex.org/W2787049626",
+     "autores": [
+      "Harald Strömfelt",
+      "Yue Zhang"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Learning Classifier Systems: A Complete Introduction, Review, and Roadmap",
+     "doi": "https://doi.org/10.1155/2009/736398",
+     "id": "https://openalex.org/W2009718765",
+     "autores": [
+      "Ryan J. Urbanowicz",
+      "Jason H. Moore"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Some Mechanisms for Managing Aggressive Behavior in Group Robotics",
+     "doi": "https://doi.org/10.2507/29th.daaam.proceedings.082",
+     "id": "https://openalex.org/W2905505132",
+     "autores": [
+      "Irina Karpova",
+      "Valery E. Karpov"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Endless forms most beautiful 2.0: teleonomy and the bioengineering of chimaeric and synthetic organisms",
+     "doi": "https://doi.org/10.1093/biolinnean/blac073",
+     "id": "https://openalex.org/W4285388569",
+     "autores": [
+      "Wesley P. Clawson",
+      "Michael G. Levin"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Epigenetic adaptation in action selection environments with temporal dynamics",
+     "doi": "https://doi.org/10.7551/978-0-262-31709-2-ch073",
+     "id": "https://openalex.org/W1969083188",
+     "autores": [
+      "John Lones",
+      "Lola D. Cañamero"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "The Brain's Best Kept Secret Is Its Degenerate Structure",
+     "doi": "https://doi.org/10.1523/jneurosci.1339-24.2024",
+     "id": "https://openalex.org/W4403110471",
+     "autores": [
+      "Larissa Albantakis",
+      "Christophe Bernard"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Neural Control of Action Selection Among Innate Behaviors",
+     "doi": "https://doi.org/10.1007/s12264-022-00886-x",
+     "id": "https://openalex.org/W4281704468",
+     "autores": [
+      "Xinyu Jiang",
+      "Yufeng Pan"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Virtually Impossible: Obstacles to Generalizing between Simulated and Real Humans",
+     "id": "https://openalex.org/W7110493779",
+     "autores": [
+      "Kugele, Sean",
+      "Neemeh, Zachariah"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Grand Challenges for Computational Intelligence",
+     "doi": "https://doi.org/10.3389/frobt.2014.00002",
+     "id": "https://openalex.org/W2172239579",
+     "autores": [
+      "Mikhail Prokopenko"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Keep Your Options Open: An Information-Based Driving Principle for Sensorimotor Systems",
+     "doi": "https://doi.org/10.1371/journal.pone.0004018",
+     "id": "https://openalex.org/W2111927824",
+     "autores": [
+      "Alexander S. Klyubin",
+      "Daniel Polani"
+     ]
+    },
+    {
+     "ano": 1997,
+     "titulo": "Shifting Inductive Bias with Success-Story Algorithm, Adaptive Levin Search, and Incremental Self-Improvement",
+     "doi": "https://doi.org/10.1023/a:1007383707642",
+     "id": "https://openalex.org/W1486056878",
+     "autores": [
+      "Jürgen Schmidhuber",
+      "Jieyu Zhao"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "26th Annual Computational Neuroscience Meeting (CNS*2017): Part 3",
+     "doi": "https://doi.org/10.1186/s12868-017-0372-1",
+     "id": "https://openalex.org/W2916657809",
+     "autores": [
+      "Adam J. H. Newton",
+      "Alexandra H. Seidenstein"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "The Minimal Complexity of Adapting Agents Increases with Fitness",
+     "doi": "https://doi.org/10.1371/journal.pcbi.1003111",
+     "id": "https://openalex.org/W2096596156",
+     "autores": [
+      "Nikhil J Joshi",
+      "Giulio Tononi"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "Editorial",
+     "doi": "https://doi.org/10.1080/09540090412331316162",
+     "id": "https://openalex.org/W4238600568",
+     "autores": [
+      "Stefano Nolfi"
+     ]
+    },
+    {
+     "ano": 1992,
+     "titulo": "Self-Improving Reactive Agents Based on Reinforcement Learning, Planning and Teaching",
+     "doi": "https://doi.org/10.1023/a:1022628806385",
+     "id": "https://openalex.org/W4256160650",
+     "autores": [
+      "Long-Ji Lin"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Modeling long-term nutritional behaviors using deep homeostatic reinforcement learning",
+     "doi": "https://doi.org/10.1093/pnasnexus/pgae540",
+     "id": "https://openalex.org/W4404815779",
+     "autores": [
+      "Naoto Yoshida",
+      "Etsushi Arikawa"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Thinking Adaptive: Towards a Behaviours Virtual",
+     "id": "https://openalex.org/W66039618",
+     "autores": [
+      "Carlos Gershenson",
+      "Pedro Pablo González Pérez"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "On What Makes Certain Dynamical Systems Cognitive: A Minimally Cognitive Organization Program",
+     "doi": "https://doi.org/10.1177/105971230601400208",
+     "id": "https://openalex.org/W2061803363",
+     "autores": [
+      "Xabier E. Barandiaran",
+      "Álvaro Moreno"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "An action selection architecture for autonomous virtual humans in persistent worlds",
+     "doi": "https://doi.org/10.5075/epfl-thesis-3468",
+     "id": "https://openalex.org/W2101662497",
+     "autores": [
+      "Étienne de Sevin"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "AHA: A general cognitive architecture for Darwinian agents",
+     "doi": "https://doi.org/10.1016/j.bica.2018.07.009",
+     "id": "https://openalex.org/W2884474587",
+     "autores": [
+      "Sergey V. Budaev",
+      "Jarl Giske"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Empathic Coupling of Homeostatic States for Intrinsic Prosociality",
+     "doi": "https://doi.org/10.48550/arxiv.2412.12103",
+     "id": "https://openalex.org/W4405561637",
+     "autores": [
+      "Naoto Yoshida",
+      "Kingson Man"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "World Models",
+     "doi": "https://doi.org/10.5281/zenodo.1207631",
+     "id": "https://openalex.org/W2795843265",
+     "autores": [
+      "David Ha",
+      "Jürgen Schmidhuber"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "The Origins of Boredom",
+     "doi": "https://doi.org/10.31234/osf.io/bz6n8",
+     "id": "https://openalex.org/W3163269110",
+     "autores": [
+      "Yijun Lin",
+      "Erin Corwin Westgate"
+     ]
+    },
+    {
+     "ano": 1995,
+     "titulo": "Genetic algorithms: An overview",
+     "doi": "https://doi.org/10.1002/cplx.6130010108",
+     "id": "https://openalex.org/W2030463632",
+     "autores": [
+      "Melanie Mitchell"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Emergent Computation and Modelling: Complex organization and Bifurcation within Environmental Bounds (COBWEB)",
+     "doi": "https://doi.org/10.3808/jei.200300008",
+     "id": "https://openalex.org/W2018380975",
+     "autores": [
+      "Nina Suh"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Will We Ever Have Conscious Machines?",
+     "doi": "https://doi.org/10.3389/fncom.2020.556544",
+     "id": "https://openalex.org/W3014541266",
+     "autores": [
+      "Patrick Krauß",
+      "Andreas Maier"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Born to learn: The inspiration, progress, and future of evolved plastic artificial neural networks",
+     "doi": "https://doi.org/10.1016/j.neunet.2018.07.013",
+     "id": "https://openalex.org/W2605353576",
+     "autores": [
+      "Andrea Soltoggio",
+      "Kenneth Owen Stanley"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Distributed recurrent neural forward models with synaptic adaptation and CPG-based control for complex behaviors of walking robots",
+     "doi": "https://doi.org/10.3389/fnbot.2015.00010",
+     "id": "https://openalex.org/W1957247193",
+     "autores": [
+      "Sakyasingha Dasgupta",
+      "Dennis Goldschmidt"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A robotic honeycomb for interaction with a honeybee colony",
+     "doi": "https://doi.org/10.1126/scirobotics.add7385",
+     "id": "https://openalex.org/W4353038841",
+     "autores": [
+      "Rafael Barmak",
+      "Martin Stefanec"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Spatial learning and localization in rodents: Behavioral simulations and results",
+     "doi": "https://doi.org/10.31274/rtd-20201118-42",
+     "id": "https://openalex.org/W2907694479",
+     "autores": [
+      "Rushi Bhatt"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Sleep and Dreaming in the Predictive Processing Framework",
+     "doi": "https://doi.org/10.15502/9783958573079",
+     "id": "https://openalex.org/W2604677307",
+     "autores": [
+      "Alessio Bucci",
+      "Matteo Grasso"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Intrinsic motivations and open-ended development in animals, humans, and robots: an overview",
+     "doi": "https://doi.org/10.3389/fpsyg.2014.00985",
+     "id": "https://openalex.org/W2005581799",
+     "autores": [
+      "Gianluca Baldassarre",
+      "Tom Stafford"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Consciousness results when communication modifies the form of self-estimated fitness",
+     "doi": "https://doi.org/10.48550/arxiv.1401.6761",
+     "id": "https://openalex.org/W1792449293",
+     "autores": [
+      "J. H. van Hateren"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Universal psychometrics: Measuring cognitive abilities in the machine kingdom",
+     "doi": "https://doi.org/10.1016/j.cogsys.2013.06.001",
+     "id": "https://openalex.org/W2080659041",
+     "autores": [
+      "José Hernández‐Orallo",
+      "David L. Dowe"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Guideless Artificial Life Model for Reproduction, Development, and Interactions",
+     "doi": "https://doi.org/10.1162/artl_a_00466",
+     "id": "https://openalex.org/W4407085393",
+     "autores": [
+      "Keishu Utimula"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "The Barbados 2018 List of Open Issues in Continual Learning",
+     "doi": "https://doi.org/10.48550/arxiv.1811.07004",
+     "id": "https://openalex.org/W2901367914",
+     "autores": [
+      "Tom Schaul",
+      "Hado P. van Hasselt"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Fault Recovery Through Online Adaptation of Boolean Network Robots",
+     "doi": "https://doi.org/10.3390/s25185849",
+     "id": "https://openalex.org/W4414356551",
+     "autores": [
+      "Paolo Baldini",
+      "Michele Braccini"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "The emergence and evolution of linguistic structure: from lexical to grammatical communication systems",
+     "doi": "https://doi.org/10.1080/09540090500269088",
+     "id": "https://openalex.org/W1984650769",
+     "autores": [
+      "Luc Steels"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Controlling Bursting in Cortical Cultures with Closed-Loop Multi-Electrode Stimulation",
+     "doi": "https://doi.org/10.1523/jneurosci.4209-04.2005",
+     "id": "https://openalex.org/W2095025631",
+     "autores": [
+      "Daniel A. Wagenaar",
+      "Radhika Madhavan"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "From Imprinting to Adaptation : Building a History of Affective Interaction",
+     "id": "https://openalex.org/W89145038",
+     "autores": [
+      "Arnaud Blanchard",
+      "Lola D. Cañamero"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Modeling Dynamic Decision-Making of Virtual Humans",
+     "doi": "https://doi.org/10.3390/systems4010004",
+     "id": "https://openalex.org/W2237910238",
+     "autores": [
+      "Oliver Handel"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "Machine Psychology: Autonomous Behavior, Perceptual Categorization and Conditioning in a Brain-based Device",
+     "doi": "https://doi.org/10.1093/cercor/12.8.818",
+     "id": "https://openalex.org/W2108984806",
+     "autores": [
+      "Jeffrey L. Krichmar"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "The Minimal Complexity of Adapting Agents Increases with Fitness",
+     "doi": "https://doi.org/10.7551/978-0-262-31050-5-ch047",
+     "id": "https://openalex.org/W2054202921",
+     "autores": [
+      "Nikhil J Joshi",
+      "Giulio Tononi"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "A CONCISE STUDY TOWARDS ENGINEERING CONSCIOUSNESS.",
+     "doi": "https://doi.org/10.21474/ijar01/4067",
+     "id": "https://openalex.org/W2613845415",
+     "autores": [
+      "Mayukh Mukhopadhyay"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Consciousness and complexity: Neurobiological naturalism and integrated information theory",
+     "doi": "https://doi.org/10.1016/j.concog.2022.103281",
+     "id": "https://openalex.org/W4221052931",
+     "autores": [
+      "Francesco Ellia",
+      "Robert Chis-Ciure"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Modeling emotion for human-like behavior in future intelligent robots",
+     "doi": "https://doi.org/10.48550/arxiv.2009.14810",
+     "id": "https://openalex.org/W4286403428",
+     "autores": [
+      "Marwen Belkaid",
+      "Luiz Pessoa"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A Human-Robot Mutual Learning System with Affect-Grounded Language Acquisition and Differential Outcomes Training",
+     "doi": "https://doi.org/10.1007/978-981-99-8718-4_10",
+     "id": "https://openalex.org/W4389264140",
+     "autores": [
+      "Alva Markelius",
+      "Sofia Sjöberg"
+     ]
+    },
+    {
+     "ano": 1991,
+     "titulo": "Behavioral synergy without explicit integration",
+     "doi": "https://doi.org/10.1145/122344.122370",
+     "id": "https://openalex.org/W2133374920",
+     "autores": [
+      "Maja J. Matarić"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Collective Intelligence of Morphogenesis as a Teleonomic Process",
+     "doi": "https://doi.org/10.7551/mitpress/14642.003.0013",
+     "id": "https://openalex.org/W4386055149",
+     "autores": [
+      "Michael G. Levin"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "A General Ant Colony Model to solve Combinatorial Optimization Problems.",
+     "id": "https://openalex.org/W100236840",
+     "autores": [
+      "José Aguilar"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Modeling Emotion to Enable Intelligent Behavior in Robots",
+     "doi": "https://doi.org/10.3406/intel.2023.2057",
+     "id": "https://openalex.org/W7167973643",
+     "autores": [
+      "Marwen Belkaid",
+      "Luiz Pessoa"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "On the Proper Treatment of Dynamics in Cognitive Science",
+     "doi": "https://doi.org/10.1111/tops.12686",
+     "id": "https://openalex.org/W4385481479",
+     "autores": [
+      "Randall D. Beer"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "A survey of socially interactive robots",
+     "doi": "https://doi.org/10.1016/s0921-8890(02)00372-x",
+     "id": "https://openalex.org/W2099019320",
+     "autores": [
+      "Terrence Fong",
+      "Illah Nourbakhsh"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Reasons, Robots and the Extended Mind",
+     "doi": "https://doi.org/10.1111/1468-0017.00162",
+     "id": "https://openalex.org/W2072729203",
+     "autores": [
+      "Andy Clark"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Competency in Navigating Arbitrary Spaces as an Invariant for Analyzing Cognition in Diverse Embodiments",
+     "doi": "https://doi.org/10.3390/e24060819",
+     "id": "https://openalex.org/W4282568588",
+     "autores": [
+      "Chris Fields",
+      "Michael G. Levin"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "Analysis of non-linear relationships between catch per unit effort and abundance in a tuna purse-seine fishery simulated with artificial neural networks",
+     "doi": "https://doi.org/10.1016/j.icesjms.2004.05.002",
+     "id": "https://openalex.org/W2119981639",
+     "autores": [
+      "Daniel Gaertner",
+      "Michel Dreyfus-León"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Evolutionary emergence : the struggle for existence in artificial biota",
+     "id": "https://openalex.org/W2147108104",
+     "autores": [
+      "Alastair Channon"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "A Statistical Physics Characterization of the Complex Systems Dynamics: Quantifying Complexity from Spatio-Temporal Interactions",
+     "doi": "https://doi.org/10.1038/srep27602",
+     "id": "https://openalex.org/W2427630346",
+     "autores": [
+      "Hana Koorehdavoudi",
+      "Paul Bogdan"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Efficient Searching by Bias and Raising Threshold Algorithm Using Multiple Voting in the Best-of-n Problem",
+     "doi": "https://doi.org/10.7763/ijcte.2019.v11.1239",
+     "id": "https://openalex.org/W2959456197",
+     "autores": [
+      "Nhu Hai Phung",
+      "M. Kubo"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "The Long-Term Efficacy of “Social Buffering” in Artificial Social Agents: Contextual Affective Perception Matters",
+     "doi": "https://doi.org/10.3389/frobt.2022.699573",
+     "id": "https://openalex.org/W4295974689",
+     "autores": [
+      "Imran Khan",
+      "Lola D. Cañamero"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Future shapes present: autonomous goal-directed and sensory-focused mode switching in a Bayesian allostatic network model",
+     "doi": "https://doi.org/10.1038/s44260-025-00046-y",
+     "id": "https://openalex.org/W4412508969",
+     "autores": [
+      "Hayato Idei",
+      "Jun Tani"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "ACO-based document clustering method",
+     "doi": "https://doi.org/10.17951/ai.2005.3.1.315-323",
+     "id": "https://openalex.org/W2401984664",
+     "autores": [
+      "Łukasz Machnik"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Probing for consciousness in machines",
+     "doi": "https://doi.org/10.3389/frai.2025.1610225",
+     "id": "https://openalex.org/W4413363322",
+     "autores": [
+      "Mathis Immertreu",
+      "Achim Schilling"
+     ]
+    },
+    {
+     "ano": 1998,
+     "titulo": "Design of artificial neural oscillatory circuits for the control of lamprey- and salamander-like locomotion using evolutionary algorithms",
+     "id": "https://openalex.org/W1896888274",
+     "autores": [
+      "Auke Jan Ijspeert"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A Systematic Literature Review of Decision-Making and Control Systems for Autonomous and Social Robots",
+     "doi": "https://doi.org/10.1007/s12369-023-00977-3",
+     "id": "https://openalex.org/W4360986002",
+     "autores": [
+      "Marcos Maroto Gómez",
+      "Fernándo Alonso-Martín"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Motivation driven learning for interactive synthetic characters",
+     "doi": "https://doi.org/10.1145/336595.337537",
+     "id": "https://openalex.org/W2048673658",
+     "autores": [
+      "Song-Yee Yoon",
+      "Bruce Mitchell Blumberg"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Behavioral Ethics Ecologies of Human-Artificial Intelligence Systems",
+     "doi": "https://doi.org/10.3390/bs12040103",
+     "id": "https://openalex.org/W4223553458",
+     "autores": [
+      "Stephen Fox"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "More than Child's Play: North Carolina Professor Explores the History of Dolls and Their Sociological Impact.",
+     "id": "https://openalex.org/W19107219",
+     "autores": [
+      "Eleanor Lee Yates"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Viability Evolution: Elimination and Extinction in Evolutionary Computation",
+     "id": "https://openalex.org/W1812341221",
+     "autores": [
+      "Claudio Mattiussi",
+      "Dario Floreano"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Graduated embodiment for sophisticated agent evolution and optimization.",
+     "doi": "https://doi.org/10.2172/921610",
+     "id": "https://openalex.org/W2152017559",
+     "autores": [
+      "Arthurine Pierson",
+      "Michael Peters"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Re: Marks from East Timor: a field guide to East Timor's graffiti",
+     "id": "https://openalex.org/W2765740009",
+     "autores": [
+      "C. E. Parkinson"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "Adaptive Behaviour Based Robotics using On-Board Genetic Programming",
+     "id": "https://openalex.org/W1598830258",
+     "autores": [
+      "Anders Kofod‐Petersen"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Explorations into the behaviour-oriented nature of intelligence : fuzzy behavioural maps",
+     "id": "https://openalex.org/W2802051676",
+     "autores": [
+      "Gonzalez de Miguel",
+      "Ana María"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Reinforcement Learning of Targeted Movement in a Spiking Neuronal Model of Motor Cortex",
+     "doi": "https://doi.org/10.1371/journal.pone.0047251",
+     "id": "https://openalex.org/W2049380481",
+     "autores": [
+      "George L. Chadderdon",
+      "Samuel A. Neymotin"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Patiency is not a virtue: the design of intelligent systems and systems of ethics",
+     "doi": "https://doi.org/10.1007/s10676-018-9448-6",
+     "id": "https://openalex.org/W2786522954",
+     "autores": [
+      "Joanna Joy Bryson"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Interfacing Neural Network Components and Nucleic Acids",
+     "doi": "https://doi.org/10.3389/fbioe.2017.00053",
+     "id": "https://openalex.org/W2774219408",
+     "autores": [
+      "Thomas Lissek"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Embodied modeling of the organization of the brain",
+     "id": "https://openalex.org/W1500642926",
+     "autores": [
+      "Julie Janssen",
+      "A.E.A. Goosen"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Ontogeny of collective behaviour",
+     "doi": "https://doi.org/10.1098/rstb.2022.0065",
+     "id": "https://openalex.org/W4321349414",
+     "autores": [
+      "Isabella B. Muratore",
+      "Simon Garnier"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "Effective Knowledge Transfer in Family Firms",
+     "doi": "https://doi.org/10.4337/9781847204394.00029",
+     "id": "https://openalex.org/W1488425615",
+     "autores": [
+      "Rosa Nelly Trevinyo‐Rodríguez",
+      "Josep Tàpies"
+     ]
+    },
+    {
+     "ano": 1997,
+     "titulo": "Learning and Co-operation in Mobile Multi-Robot Systems",
+     "doi": "https://doi.org/10.24382/4252",
+     "id": "https://openalex.org/W1710351639",
+     "autores": [
+      "Alexis Kirke"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Book Review - Comparative Psychology: A Handbook",
+     "doi": "https://doi.org/10.46867/c47g6s",
+     "id": "https://openalex.org/W2768424339",
+     "autores": [
+      "Gilbert Gottleib"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Distributed Recurrent Neural Forward Models with Synaptic Adaptation for Complex Behaviors of Walking Robots",
+     "doi": "https://doi.org/10.48550/arxiv.1506.03599",
+     "id": "https://openalex.org/W1953183878",
+     "autores": [
+      "Sakyasingha Dasgupta",
+      "Dennis Goldschmidt"
+     ]
+    },
+    {
+     "ano": 1995,
+     "titulo": "A dynamical systems perspective on agent-environment interaction",
+     "doi": "https://doi.org/10.1016/0004-3702(94)00005-l",
+     "id": "https://openalex.org/W2071739800",
+     "autores": [
+      "Randall D. Beer"
+     ]
+    }
+   ]
+  },
+  "semantic_scholar": {
+   "consulta": "animat + (homeostasis | survival) + memory",
+   "n": 0,
+   "itens": []
+  },
+  "arxiv": {
+   "consulta": "all:animat AND all:memory AND all:survival  ∪  all:animat AND all:memory AND all:homeostasis (o arXiv não aceitou o OR entre parênteses: devolveu 0)",
+   "n": 0,
+   "itens": []
+  }
+ },
+ "Q3": {
+  "openalex": {
+   "consulta": "\"artificial creature\" AND \"episodic memory\"",
+   "n": 30,
+   "itens": [
+    {
+     "ano": 2006,
+     "titulo": "A Cognitive Control Architecture for an Artificial Creature using Episodic Memory",
+     "doi": "https://doi.org/10.1109/sice.2006.314799",
+     "id": "https://openalex.org/W2162055732",
+     "autores": [
+      "Naveen Suresh Kuppuswamy",
+      "Se-Hyoung Cho"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Efeitos do estresse, memória e aprendizagem no comportamento de animais, via simulação computacional",
+     "id": "https://openalex.org/W2753805786",
+     "autores": [
+      "Henrique E. Borges",
+      "Felipe Duarte dos Reis"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "The effects of prediction error on episodic memory",
+     "doi": "https://doi.org/10.21248/gups.81682",
+     "id": "https://openalex.org/W4391318121",
+     "autores": [
+      "Gözem Turan"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "A Multi-Domain Evaluation of Scaling in a General Episodic Memory",
+     "doi": "https://doi.org/10.1609/aaai.v26i1.8151",
+     "id": "https://openalex.org/W2221140589",
+     "autores": [
+      "Nate Derbinsky",
+      "Justin Li"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "From generating to violating predictions: The effects of prediction error on episodic memory",
+     "doi": "https://doi.org/10.31234/osf.io/zm29a",
+     "id": "https://openalex.org/W4316193695",
+     "autores": [
+      "Gözem Turan",
+      "Isabelle Ehrlich"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Behavior Selection Algorithm for Personal Service Robots Using Intelligence Operating Architecture",
+     "doi": "https://doi.org/10.1007/978-3-642-32527-4_41",
+     "id": "https://openalex.org/W40773618",
+     "autores": [
+      "Woo-Ri Ko",
+      "Chang-Young Jung"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Are Animals Stuck in Time or Are They Chronesthetic Creatures?",
+     "doi": "https://doi.org/10.1111/j.1756-8765.2008.01004.x",
+     "id": "https://openalex.org/W1970137442",
+     "autores": [
+      "Nicola Susan Clayton",
+      "James A. Russell"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "An integrated epigenetic robot architecture via context-influenced long-term memory",
+     "doi": "https://doi.org/10.1109/devlrn.2014.6982956",
+     "id": "https://openalex.org/W2329406859",
+     "autores": [
+      "Ferdian Adi Pratama",
+      "Fulvio Mastrogiovanni"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Construindo um subsistema motivacional para o cognitive system toolkit",
+     "doi": "https://doi.org/10.47749/t/unicamp.2017.994558",
+     "id": "https://openalex.org/W2802308953",
+     "autores": [
+      "Eduardo  de Moraes Froes"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Reconnaissance et stabilité d'une mémoire épisodique influencée par les émotions artificielles pour un robot autonome",
+     "id": "https://openalex.org/W7199884616",
+     "autores": [
+      "Francis Leconte"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Modelo de memoria episódica para assistentes robóticos",
+     "doi": "https://doi.org/10.11606/003128584",
+     "id": "https://openalex.org/W7214177878",
+     "autores": [
+      "Felipe Sinyee Tsai",
+      "Jiahao Zhao"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "An Episodic Long-Term Memory for Robots: The Bender Case",
+     "doi": "https://doi.org/10.1007/978-3-319-29339-4_22",
+     "id": "https://openalex.org/W2399574143",
+     "autores": [
+      "María-Loreto Sánchez",
+      "Mauricio Correa"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Long-term knowledge acquisition in a memory-based epigenetic robot architecture for verbal interaction",
+     "doi": "https://doi.org/10.1109/roman.2015.7333563",
+     "id": "https://openalex.org/W2112402363",
+     "autores": [
+      "Ferdian Adi Pratama",
+      "Fulvio Mastrogiovanni"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "A Contrast‐Based Computational Model of Surprise and Its Applications",
+     "doi": "https://doi.org/10.1111/tops.12310",
+     "id": "https://openalex.org/W2769832641",
+     "autores": [
+      "Luís Macedo",
+      "Amílcar Cardoso"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Long-term knowledge acquisition using contextual information in a memory-inspired robot architecture",
+     "doi": "https://doi.org/10.1080/0952813x.2015.1134679",
+     "id": "https://openalex.org/W2340579822",
+     "autores": [
+      "Ferdian Adi Pratama",
+      "Fulvio Mastrogiovanni"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "Context and Category Information in Children and Adults",
+     "id": "https://openalex.org/W2767571551",
+     "autores": [
+      "Adam F Osth",
+      "Simon John Dennis"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "A cognitive ego-vision system for interactive assistance",
+     "doi": "https://doi.org/10.24385/lincoln.24327055",
+     "id": "https://openalex.org/W53725686",
+     "autores": [
+      "Marc Hanheide"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "A future of living machines?: International trends and prospects in biomimetic and biohybrid systems",
+     "doi": "https://doi.org/10.1117/12.2046305",
+     "id": "https://openalex.org/W2029813988",
+     "autores": [
+      "Tony J. Prescott",
+      "Nathan F. Lepora"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Emotional agents - state of the art and applications",
+     "doi": "https://doi.org/10.2298/csis141026047i",
+     "id": "https://openalex.org/W2280745474",
+     "autores": [
+      "Mirjana Drenovak Ivanović",
+      "Zoran Budimac"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Autonomous decision-making for socially interactive robots",
+     "id": "https://openalex.org/W2902216837",
+     "autores": [
+      "Raúl Pérula-Martínez"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Situated representation",
+     "doi": "https://doi.org/10.26481/dis.20051201md",
+     "id": "https://openalex.org/W4212881119",
+     "autores": [
+      "Michel van Dartel"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "ReaCog, a Minimal Cognitive Controller Based on Recruitment of Reactive Systems",
+     "doi": "https://doi.org/10.3389/fnbot.2017.00003",
+     "id": "https://openalex.org/W2582903031",
+     "autores": [
+      "Malte Schilling",
+      "Holk Cruse"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Knowledge consolidation and inference in an integrated neuro-cognitive architecture",
+     "doi": "https://doi.org/10.32657/10356/43793",
+     "id": "https://openalex.org/W4249143327",
+     "autores": [
+      "Richard J. Oentaryo"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Generative AI for Simulating Real World Dynamics Applications and Challenges",
+     "doi": "https://doi.org/10.36227/techrxiv.176049719.90048379/v1",
+     "id": "https://openalex.org/W4415184666",
+     "autores": [
+      "Chenxi Yao",
+      "Qishi Zhan"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "A Motivation-Driven Incremental Learning Framework for Robotics",
+     "doi": "https://doi.org/10.47749/t/unicamp.2025.1498859",
+     "id": "https://openalex.org/W4413926775",
+     "autores": [
+      "Letícia Mara Berto",
+      "Ricardo Gudwin"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "The Mind-Technology Problem",
+     "doi": "https://doi.org/10.1007/978-3-030-72644-7",
+     "id": "https://openalex.org/W4248066308",
+     "autores": [
+      "Robert W. Clowes",
+      "Gärtner, Klaus"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "I in an other’s eye",
+     "doi": "https://doi.org/10.1007/s00146-017-0694-7",
+     "id": "https://openalex.org/W2594252508",
+     "autores": [
+      "Alan John Dix"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "Bioculturalism, simulation and satire : the case of S1mOne",
+     "id": "https://openalex.org/W2176694239",
+     "autores": [
+      "Anna Krajewska"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Simultaneous incremental neuroevolution of motor control, navigation and object manipulation in 3D virtual creatures",
+     "id": "https://openalex.org/W2900848038",
+     "autores": [
+      "Adam Stanton"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "科学館での子ども型ロボットの実践活動に基づく子どものための交流創出支援の研究",
+     "doi": "https://doi.org/10.15083/0002009572",
+     "id": "https://openalex.org/W7207877255",
+     "autores": [
+      "Kanae Kochigami"
+     ]
+    }
+   ]
+  },
+  "semantic_scholar": {
+   "consulta": "\"artificial creature\" + \"episodic memory\"",
+   "n": 2,
+   "itens": [
+    {
+     "ano": 2006,
+     "titulo": "A Cognitive Control Architecture for an Artificial Creature using Episodic Memory",
+     "doi": "10.1109/SICE.2006.314799",
+     "autores": [
+      "N. Kuppuswamy",
+      "Se-Hyoung Cho"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Behavior Selection Algorithm for Personal Service Robots Using Intelligence Operating Architecture",
+     "doi": "10.1007/978-3-642-32527-4_41",
+     "autores": [
+      "Woo-Ri Ko",
+      "C. Jung"
+     ]
+    }
+   ]
+  },
+  "arxiv": {
+   "consulta": "all:\"artificial creature\" AND all:\"episodic memory\"",
+   "n": 0,
+   "itens": []
+  }
+ },
+ "Q4": {
+  "openalex": {
+   "consulta": "emotion AND reinforcement AND robot AND survival",
+   "n": 3630,
+   "itens": [
+    {
+     "ano": 1999,
+     "titulo": "Reinforcement Learning in Autonomous Robots: An Empirical Investigation of the Role of Emotions",
+     "id": "https://openalex.org/W1556756526",
+     "autores": [
+      "Sandra Clara Gadanho"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "A reinforcement learning model of joy, distress, hope and fear",
+     "doi": "https://doi.org/10.1080/09540091.2015.1031081",
+     "id": "https://openalex.org/W2012234732",
+     "autores": [
+      "Joost Broekens",
+      "Elmer Jacobs"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "A Temporal Difference Reinforcement Learning Theory of Emotion: unifying emotion, cognition and adaptive behavior",
+     "doi": "https://doi.org/10.48550/arxiv.1807.08941",
+     "id": "https://openalex.org/W2884604357",
+     "autores": [
+      "Joost Broekens"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Robotics cyber security: vulnerabilities, attacks, countermeasures, and recommendations",
+     "doi": "https://doi.org/10.1007/s10207-021-00545-8",
+     "id": "https://openalex.org/W3138047676",
+     "autores": [
+      "Jean-Paul A. Yaacoub",
+      "Hassan Noura"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Emotion in reinforcement learning agents and robots: a survey",
+     "doi": "https://doi.org/10.1007/s10994-017-5666-0",
+     "id": "https://openalex.org/W2614309179",
+     "autores": [
+      "Thomas M. Moerland",
+      "Joost Broekens"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Robot Learning Driven by Emotions",
+     "doi": "https://doi.org/10.1177/105971230200900102",
+     "id": "https://openalex.org/W2072376581",
+     "autores": [
+      "Sandra Clara Gadanho",
+      "John C. T. Hallam"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Emotions as a dynamical system: the interplay between the meta-control and communication function of emotions",
+     "doi": "https://doi.org/10.2478/s13230-012-0005-4",
+     "id": "https://openalex.org/W2064455153",
+     "autores": [
+      "C. Hasson",
+      "Philippe Gaussier"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Service robots for affective labor: a sociology of labor perspective",
+     "doi": "https://doi.org/10.1007/s00146-021-01208-x",
+     "id": "https://openalex.org/W3157231780",
+     "autores": [
+      "Anna Dobrosovestnova",
+      "Glenda Hannibal"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Living with Robots",
+     "doi": "https://doi.org/10.7551/mitpress/13487.001.0001",
+     "id": "https://openalex.org/W4288076938",
+     "autores": [
+      "Ruth S. Aylett",
+      "Patricia Amancio Vargas"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Can a Robot Have Free Will?",
+     "doi": "https://doi.org/10.3390/e19050237",
+     "id": "https://openalex.org/W2594200229",
+     "autores": [
+      "Keith D. Farnsworth"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Emotions, Motivation-Based Action Selection and Dynamic Environments",
+     "doi": "https://doi.org/10.18745/th.23942",
+     "id": "https://openalex.org/W3144652720",
+     "autores": [
+      "Claire O'Bryne"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Neurorobotics: Neuroscience and Robots",
+     "doi": "https://doi.org/10.7551/mitpress/13780.003.0006",
+     "id": "https://openalex.org/W4280617507",
+     "autores": [
+      "Tiffany J. Hwu",
+      "Jeffrey L. Krichmar"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Intrinsic Vicarious Conditioning for Deep Reinforcement Learning",
+     "doi": "https://doi.org/10.48550/arxiv.2605.12224",
+     "id": "https://openalex.org/W7160997649",
+     "autores": [
+      "Rodney Sanchez",
+      "Ferat Sahin"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "The Theory of Neural Cognition Applied to Robotics",
+     "doi": "https://doi.org/10.5772/60693",
+     "id": "https://openalex.org/W2139346019",
+     "autores": [
+      "Claude F. Touzet"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Grounding Context in Embodied Cognitive Robotics",
+     "doi": "https://doi.org/10.3389/fnbot.2022.843108",
+     "id": "https://openalex.org/W4282927619",
+     "autores": [
+      "Diana Valenzo",
+      "Alejandra Ciria"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "The Psychology of Scent: Memory, Emotion, and Cognition in the World of Odors",
+     "doi": "https://doi.org/10.7359/2404-2026-didi",
+     "id": "https://openalex.org/W7168342781",
+     "autores": [
+      "Cinzia Di Dio",
+      "Antonella Marchetti"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Brain. Conscious and Unconscious Mechanisms of Cognition, Emotions, and Language",
+     "doi": "https://doi.org/10.3390/brainsci2040790",
+     "id": "https://openalex.org/W2050342172",
+     "autores": [
+      "LEONID I. PERLOVSKY",
+      "Roman Ilin"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Emotion-augmented machine learning: Overview of an emerging domain",
+     "doi": "https://doi.org/10.1109/acii.2017.8273617",
+     "id": "https://openalex.org/W2787049626",
+     "autores": [
+      "Harald Strömfelt",
+      "Yue Zhang"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "What Is Psychological Spin? A Thermodynamic Framework for Emotions and Social Behavior",
+     "doi": "https://doi.org/10.3390/psych5040081",
+     "id": "https://openalex.org/W4389242740",
+     "autores": [
+      "Éva Déli"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Robots as Ideal Moral Agents per the Moral Responsibility System",
+     "doi": "https://doi.org/10.3233/faia200952",
+     "id": "https://openalex.org/W3114401010",
+     "autores": [
+      "Dane Leigh Gogoshin"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "A functionalist theory of emotion",
+     "doi": "https://doi.org/10.31234/osf.io/p7t4y_v2",
+     "id": "https://openalex.org/W4413865275",
+     "autores": [
+      "Ralph Adolphs"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Robots and Artificial Intelligence’s Effects on Employ Prospects in the Future",
+     "doi": "https://doi.org/10.14445/23488387/ijcse-v10i4p102",
+     "id": "https://openalex.org/W4384447494",
+     "autores": [
+      "Lakshmi M"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Real-Time AI-Driven Prognostics and Health Management in Robotics",
+     "doi": "https://doi.org/10.3390/app16073441",
+     "id": "https://openalex.org/W7147628638",
+     "autores": [
+      "Mohad Tanveer",
+      "Muhammad Haris Yazdani"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Challenges and Solutions to Criminal Liability for the Actions of Robots and AI",
+     "doi": "https://doi.org/10.46604/aiti.2023.12038",
+     "id": "https://openalex.org/W4390406823",
+     "autores": [
+      "Vladimír Smejkal",
+      "Jindřich Kodl"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Emotions, diffusive emotional control and the motivational problem for autonomous cognitive systems",
+     "doi": "https://doi.org/10.48550/arxiv.0901.3025",
+     "id": "https://openalex.org/W4394643333",
+     "autores": [
+      "Claudius Gros"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Affective Episodic Memory System for Virtual Creatures: The First Step of Emotion‐Oriented Memory",
+     "doi": "https://doi.org/10.1155/2021/7954140",
+     "id": "https://openalex.org/W3207784122",
+     "autores": [
+      "Luis Martin",
+      "Jonathan-Hernando Rosales"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Facial EMG – Investigating the Interplay of Facial Muscles and Emotions",
+     "doi": "https://doi.org/10.1007/978-3-031-08651-9_17",
+     "id": "https://openalex.org/W4310098342",
+     "autores": [
+      "Tanja S. H. Wingenbach"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Developmental and Evolutionary Lexicon Acquisition in Cognitive Agents/Robots with Grounding Principle: A Short Review",
+     "doi": "https://doi.org/10.1155/2016/8571265",
+     "id": "https://openalex.org/W2300794799",
+     "autores": [
+      "Nadia Rasheed",
+      "Shamsudin H. M. Amin"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "Cognition and Emotion: Perspectives of a Closing Gap",
+     "doi": "https://doi.org/10.48550/arxiv.1002.3035",
+     "id": "https://openalex.org/W2949600535",
+     "autores": [
+      "Claudius Gros"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Neuromodulatory Systems and Their Interactions: A Review of Models, Theories, and Experiments",
+     "doi": "https://doi.org/10.3389/fncir.2017.00108",
+     "id": "https://openalex.org/W2777887263",
+     "autores": [
+      "Michael C. Avery",
+      "Jeffrey L. Krichmar"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Rationality, preferences, and emotions with biological constraints: it all starts from our senses",
+     "doi": "https://doi.org/10.1016/j.tics.2024.01.003",
+     "id": "https://openalex.org/W4391693700",
+     "autores": [
+      "Rafael Hernán Polanía",
+      "Denis Burdakov"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "The Role of Consciousness in Coupling Emotions, Motivations, and Behaviors",
+     "doi": "https://doi.org/10.3390/brainsci14060582",
+     "id": "https://openalex.org/W4399366626",
+     "autores": [
+      "Sergio Frumento",
+      "Danilo Menicucci"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "Design and integration of agent - based partial brain models for robotic systems by means of hierarchical cooperative coevolution",
+     "doi": "https://doi.org/10.12681/eadd/15942",
+     "id": "https://openalex.org/W13688980",
+     "autores": [
+      "Michail Maniadakis A"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Evolutionary computation for bottom-up hypothesis generation on emotion and communication",
+     "doi": "https://doi.org/10.1080/09540091.2020.1814203",
+     "id": "https://openalex.org/W3084299033",
+     "autores": [
+      "Casper Hesp",
+      "Bram T. Heerebout"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "EMOTIONS IN PLOTS WITH NON-DETERMINISTIC PLANNING FOR INTERACTIVE STORYTELLING",
+     "doi": "https://doi.org/10.17771/pucrio.acad.26169",
+     "id": "https://openalex.org/W4248350025",
+     "autores": [
+      "FABIO ARAUJO GUILHERME DA SILVA"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "A Realist Argument for the Self: Emotions and Consciousness in Self-Making",
+     "doi": "https://doi.org/10.82227/repository.uwtsd.ac.uk.00001183",
+     "id": "https://openalex.org/W3025871571",
+     "autores": [
+      "Andrew Oberg"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Theoretical derivation of EMOTION-I model for emotional feel of sensation",
+     "doi": "https://doi.org/10.1186/1471-2202-9-s1-p79",
+     "id": "https://openalex.org/W2158234248",
+     "autores": [
+      "David C. Tam"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Artificial Motivation for Cognitive Software Agents",
+     "doi": "https://doi.org/10.2478/jagi-2020-0002",
+     "id": "https://openalex.org/W3004032573",
+     "autores": [
+      "Ryan J. McCall",
+      "Stan Franklin"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Social Networks In The Emotions Of Schoolchildren During The Covid 19 Pandemic",
+     "doi": "https://doi.org/10.47750/pnr.2022.13.s02.65",
+     "id": "https://openalex.org/W4312907579",
+     "autores": [
+      "Freddy Hugo Copaja Arocutipa",
+      "Aracelli del Carmen Gonzales-Sánchez"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Revisiting Turing and His Test: Comprehensiveness, Qualia, and the Real World",
+     "id": "https://openalex.org/W2105738721",
+     "autores": [
+      "Vincent C. Müller",
+      "Aladdin Ayesh"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Index",
+     "doi": "https://doi.org/10.26619/1647-7251.dt0122",
+     "id": "https://openalex.org/W4225493369",
+     "autores": [
+      "OBSERVARE"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Babylonian nights: emotion, identity, and the Caribbean party in England, 1950–1987",
+     "doi": "https://doi.org/10.1080/13619462.2026.2698682",
+     "id": "https://openalex.org/W7167798402",
+     "autores": [
+      "Ryan Walmsley"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Moving the Body and the Mind: Links Between Emotion and Rhythmic Communication and Underlying Neurobiological Mechanisms",
+     "doi": "https://doi.org/10.1007/978-3-032-24250-1_11",
+     "id": "https://openalex.org/W4408518816",
+     "autores": [
+      "Morgan L. Gustison",
+      "Gabriela-Alina Sauciuc"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Physics of the Mind",
+     "doi": "https://doi.org/10.3389/fnsys.2016.00084",
+     "id": "https://openalex.org/W2555073169",
+     "autores": [
+      "LEONID I. PERLOVSKY"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "What Can We Know About Consciousness in Animals? A Critical Analysis of Claims by Joseph LeDoux",
+     "id": "https://openalex.org/W2917943030",
+     "autores": [
+      "Hilde Andenæs"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "The Twitter of Machines",
+     "doi": "https://doi.org/10.23889/suthesis.68663",
+     "id": "https://openalex.org/W4406155874",
+     "autores": [
+      "Owen Bridge"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "E.A.I. Anxiety: Technopanic and Post-Human Potential",
+     "id": "https://openalex.org/W2985906429",
+     "autores": [
+      "Zachary Mandell"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "The impact of voice on trust attributions",
+     "doi": "https://doi.org/10.24382/438",
+     "id": "https://openalex.org/W2749277322",
+     "autores": [
+      "Ilaria Torre"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Vers une universalité des émotions : analyse de la capacité émotionnelle des vertébrés et invertébrés",
+     "doi": "https://doi.org/10.71781/7353",
+     "id": "https://openalex.org/W2883523208",
+     "autores": [
+      "Éva Amzallag"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Emotional Theory of Rationality",
+     "doi": "https://doi.org/10.3389/fnint.2019.00011",
+     "id": "https://openalex.org/W2085202411",
+     "autores": [
+      "Mario Garcés",
+      "Lucila Finkel Morgenstern"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Mind–brain identity theory confirmed?",
+     "doi": "https://doi.org/10.1007/s11571-023-09992-6",
+     "id": "https://openalex.org/W4385312550",
+     "autores": [
+      "Wieslaw  Ludwik Galus"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Can the Artificial Intelligence Speak? Subalternity of “Subontologies” and the Death of the Programmer",
+     "doi": "https://doi.org/10.26650/acin.1279545",
+     "id": "https://openalex.org/W4382460370",
+     "autores": [
+      "Haktan Kalır"
+     ]
+    },
+    {
+     "ano": 1969,
+     "titulo": "Are Pschological Principles Useful?(A Guid to the Study of Human Learning)",
+     "id": "https://openalex.org/W212740864",
+     "autores": [
+      "David R. Stone"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Analytical review of proceedings of IITI’25 conference",
+     "doi": "https://doi.org/10.46973/0201-727x_2025_4_108",
+     "id": "https://openalex.org/W7201850262",
+     "autores": [
+      "Ковалев Сергей Михайлович",
+      "I. V. Kotenko"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Translating Neurobehavioral Toxicity Across Species From Zebrafish to Rats to Humans: Implications for Risk Assessment",
+     "doi": "https://doi.org/10.3389/ftox.2021.629229",
+     "id": "https://openalex.org/W3132143016",
+     "autores": [
+      "Charles V. Vorhees",
+      "Michael T. Williams"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Conception of Intelligence and Some Misconceptions Concerning Artificial Intelligence",
+     "doi": "https://doi.org/10.20944/preprints202505.1852.v1",
+     "id": "https://openalex.org/W4409798816",
+     "autores": [
+      "Sidharta Chatterjee",
+      "Isaac Mao"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Procrastination : what keeps us at it? - a search for positive aspects",
+     "doi": "https://doi.org/10.14288/1.0053936",
+     "id": "https://openalex.org/W2301554998",
+     "autores": [
+      "Howard F. Askwith"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Is what you feel what you don't know?",
+     "doi": "https://doi.org/10.1017/s0140525x00422429",
+     "id": "https://openalex.org/W2053871089",
+     "autores": [
+      "Simon Moore",
+      "Mike Oaksford"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Robot's Behavioral Decision-making Strategy Based on Artificial Emotion and Q-learning",
+     "id": "https://openalex.org/W2361126780",
+     "autores": [
+      "Mao Jun-xin"
+     ]
+    },
+    {
+     "ano": 1995,
+     "titulo": "Limits of Natural Science: Brain Research and Computers",
+     "doi": "https://doi.org/10.1515/znc-1995-5-601",
+     "id": "https://openalex.org/W2269973742",
+     "autores": [
+      "Hennig Stieve"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Examination of Corporal Punishment from Three Perspectives: A Recommended Corporal Punishment Counseling Model and its Application",
+     "doi": "https://doi.org/10.5782/2223-2621.2014.18.1.68",
+     "id": "https://openalex.org/W3007097547",
+     "autores": [
+      "Ayla Akbash"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "A Biological Analysis of the Difficulties in Replicating Human Subjective Experience in Artificial Systems",
+     "doi": "https://doi.org/10.4108/eai.22-5-2026.2365135",
+     "id": "https://openalex.org/W7213540035",
+     "autores": [
+      "Yifei Xie"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "A multiscale inflammatory map: linking individual stress to societal dysfunction",
+     "doi": "https://doi.org/10.3389/fsci.2023.1239462",
+     "id": "https://openalex.org/W4392707555",
+     "autores": [
+      "Yoram Vodovotz B",
+      "Julia C. Arciero"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Freud and the algorithm: neuropsychoanalysis as a framework to understand artificial general intelligence",
+     "doi": "https://doi.org/10.1057/s41599-021-00812-y",
+     "id": "https://openalex.org/W3170610468",
+     "autores": [
+      "Luca M. Possati"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "FROM STREET DANCES AND 'BREAKING' TO NIGHT CLUBBING: POPULAR ENTERTAINMENT AS CULTURAL AND SYMBOLIC CAPITAL IN CONTEMPORARY ATHENS",
+     "doi": "https://doi.org/10.2218/tu.v2i2.67",
+     "id": "https://openalex.org/W2239888611",
+     "autores": [
+      "Natalia A. Koutsougera"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Embodied Robot Models for Interdisciplinary Emotion Research",
+     "doi": "https://doi.org/10.1109/taffc.2019.2908162",
+     "id": "https://openalex.org/W2942053682",
+     "autores": [
+      "Lola D. Cañamero"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Reinforcement Learning Embedded in Brains and Robots",
+     "doi": "https://doi.org/10.5772/5278",
+     "id": "https://openalex.org/W1497437446",
+     "autores": [
+      "Cornelius Weber",
+      "Mark Elshaw"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Computational Processes for General Intelligence",
+     "doi": "https://doi.org/10.36227/techrxiv.20462718.v1",
+     "id": "https://openalex.org/W4292071027",
+     "autores": [
+      "Prabhakar Balakrishnan"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Computational Processes for General Intelligence",
+     "doi": "https://doi.org/10.36227/techrxiv.20462718.v2",
+     "id": "https://openalex.org/W4293294421",
+     "autores": [
+      "Prabhakar Balakrishnan"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "On the Evolution of Subjective Experience",
+     "doi": "https://doi.org/10.48550/arxiv.2008.08073",
+     "id": "https://openalex.org/W3071792939",
+     "autores": [
+      "Jerome A. Feldman"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Computational Processes for General Intelligence",
+     "doi": "https://doi.org/10.36227/techrxiv.20462718.v5",
+     "id": "https://openalex.org/W4297386562",
+     "autores": [
+      "Prabhakar Balakrishnan"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Computational Processes for General Intelligence",
+     "doi": "https://doi.org/10.36227/techrxiv.20462718.v6",
+     "id": "https://openalex.org/W4304693487",
+     "autores": [
+      "Prabhakar Balakrishnan"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Two Routes to Interoceptive Prioritisation: Dissociating Likelihood Precision and Preference Reweighting in Active Inference",
+     "doi": "https://doi.org/10.48550/arxiv.2610.18617",
+     "id": "https://openalex.org/W7221790491",
+     "autores": [
+      "St John Grimbly",
+      "Nicolas Kuske"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Computational Processes for General Intelligence",
+     "doi": "https://doi.org/10.36227/techrxiv.20462718.v4",
+     "id": "https://openalex.org/W4294927208",
+     "autores": [
+      "Prabhakar Balakrishnan"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Computational Processes for General Intelligence",
+     "doi": "https://doi.org/10.36227/techrxiv.20462718.v3",
+     "id": "https://openalex.org/W4294770606",
+     "autores": [
+      "Prabhakar Balakrishnan"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Reinforcement learning-based aggregation for robot swarms",
+     "doi": "https://doi.org/10.1177/10597123231202593",
+     "id": "https://openalex.org/W4386769120",
+     "autores": [
+      "Arash Sadeghi Amjadi",
+      "Cem Bilaloğlu"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "A unified theoretical framework underlying the regulation of motivated behavior",
+     "doi": "https://doi.org/10.1002/bies.202400016",
+     "id": "https://openalex.org/W4402146165",
+     "autores": [
+      "Yu‐Been Kim",
+      "Young Hee Lee"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Appraisal-based computational emotion modeling with reinforcement learning",
+     "id": "https://openalex.org/W7220889869",
+     "autores": [
+      "Jiayi Eurus Zhang"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Modeling Emotion to Enable Intelligent Behavior in Robots",
+     "doi": "https://doi.org/10.3406/intel.2023.2057",
+     "id": "https://openalex.org/W7167973643",
+     "autores": [
+      "Marwen Belkaid",
+      "Luiz Pessoa"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Modelling Emotion Based Reward Valuation with Computational Reinforcement Learning.",
+     "id": "https://openalex.org/W2977838932",
+     "autores": [
+      "Chris Child",
+      "C. Koluman"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Social Robot Navigation with Adaptive Proxemics Based on Emotions",
+     "doi": "https://doi.org/10.48550/arxiv.2401.17663",
+     "id": "https://openalex.org/W4391462819",
+     "autores": [
+      "Barış Bilen",
+      "Kivrak, Hasan"
+     ]
+    },
+    {
+     "ano": 2014,
+     "titulo": "An Emotion Theory Approach to Artificial Emotion Systems for Robots and Intelligent Systems: Survey and Classification",
+     "doi": "https://doi.org/10.1515/jisys-2013-0069",
+     "id": "https://openalex.org/W2165791632",
+     "autores": [
+      "Sylvia Tidwell Scheuring",
+      "Arvin Agah"
+     ]
+    },
+    {
+     "ano": 2000,
+     "titulo": "Affective synthetic characters",
+     "id": "https://openalex.org/W2337346920",
+     "autores": [
+      "Song-Yee Yoon",
+      "Gerald E. Schneider"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A Systematic Study on Reinforcement Learning Based Applications",
+     "doi": "https://doi.org/10.3390/en16031512",
+     "id": "https://openalex.org/W4319084034",
+     "autores": [
+      "Keerthana Sivamayilvelan",
+      "Elakkiya Rajasekar"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "EMOTION BASED SUBSUMPTION ARCHITECTURE FOR AUTONOMOUS MOBILE ROBOTICS",
+     "id": "https://openalex.org/W2280325366",
+     "autores": [
+      "Ivan Svetlicic"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Cognitive Emotion Aware Systems Using Multimodal Signals and Reinforcement Learning",
+     "doi": "https://doi.org/10.53759/7669/jmc202505106",
+     "id": "https://openalex.org/W4411896839",
+     "autores": [
+      "A. Ezil Sam Leni",
+      "T.K. Revathi"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Modeling emotion for human-like behavior in future intelligent robots",
+     "doi": "https://doi.org/10.48550/arxiv.2009.14810",
+     "id": "https://openalex.org/W4286403428",
+     "autores": [
+      "Marwen Belkaid",
+      "Luiz Pessoa"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Reinforcement Learning with Emotion-Shaped Rewards for Affective Recommendation in Autism Spectrum Disorder",
+     "doi": "https://doi.org/10.1051/e3sconf/202672601053",
+     "id": "https://openalex.org/W7168172267",
+     "autores": [
+      "Nisrine El Ayat",
+      "Yasmine LEBBADI"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Reinforcement Learning with Emotion-Shaped Rewards for Affective Recommendation in Autism Spectrum Disorder",
+     "doi": "https://doi.org/10.1051/e3sconf/202672601053/pdf",
+     "id": "https://openalex.org/W7168234895",
+     "autores": [
+      "Nisrine El Ayat",
+      "Yasmine LEBBADI"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Emotion-based Parameter Modulation for a Mobile Robot Planning and Control System",
+     "doi": "https://doi.org/10.26686/wgtn.16959097.v1",
+     "id": "https://openalex.org/W1542394984",
+     "autores": [
+      "Christopher Peter Lee-Johnson"
+     ]
+    },
+    {
+     "ano": 2005,
+     "titulo": "Child and Adults Perspectives on Robot Appearance",
+     "id": "https://openalex.org/W184588360",
+     "autores": [
+      "Sarah N. Woods",
+      "Kerstin Dautenhahn"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Using Affect as a Communication Modality to Improve Human-Robot Communication in Robot-Assisted Search and Rescue Scenarios",
+     "doi": "https://doi.org/10.1109/taffc.2022.3221922",
+     "id": "https://openalex.org/W4312806248",
+     "autores": [
+      "Sami Alperen Akgun",
+      "Moojan Ghafurian"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Emotion Modelling and Facial Affect Recognition in Human-Computer and Human-Robot Interaction",
+     "doi": "https://doi.org/10.5772/6648",
+     "id": "https://openalex.org/W1504759592",
+     "autores": [
+      "Lori Malatesta",
+      "John Murray"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Emotion as an emergent phenomenon of the neurocomputational energy regulation mechanism of a cognitive agent in a decision-making task",
+     "doi": "https://doi.org/10.1177/1059712319880649",
+     "id": "https://openalex.org/W2981111762",
+     "autores": [
+      "Murat Kırtay",
+      "Lorenzo Vannucci"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Modeling Cognitive-Affective Processes with Appraisal and Reinforcement Learning",
+     "doi": "https://doi.org/10.48550/arxiv.2309.06367",
+     "id": "https://openalex.org/W4386722087",
+     "autores": [
+      "Jiayi Zhang",
+      "Joost Broekens"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Adaptive emotion-aware chatbot for mental health diagnosis using recurrent reinforcement learning and transformer models",
+     "doi": "https://doi.org/10.3389/frai.2026.1769286",
+     "id": "https://openalex.org/W7160323222",
+     "autores": [
+      "Sonia Dessai",
+      "Sandhya Arora"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "Developmental robotics: a survey",
+     "doi": "https://doi.org/10.1080/09540090310001655110",
+     "id": "https://openalex.org/W2162850206",
+     "autores": [
+      "Max Lungarella",
+      "Giorgio Metta B"
+     ]
+    },
+    {
+     "ano": 2003,
+     "titulo": "A survey of socially interactive robots",
+     "doi": "https://doi.org/10.1016/s0921-8890(02)00372-x",
+     "id": "https://openalex.org/W2099019320",
+     "autores": [
+      "Terrence Fong",
+      "Illah Nourbakhsh"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Swarm Intelligence in Multiplexed Robots Problems Identified",
+     "doi": "https://doi.org/10.36948/ijfmr.2025.v07i01.34967",
+     "id": "https://openalex.org/W4406917954",
+     "autores": [
+      "Adhyayan Sharma -"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "A Game Theoretic Approach to Swarm Robotics",
+     "doi": "https://doi.org/10.1155/2006/183949",
+     "id": "https://openalex.org/W1978640853",
+     "autores": [
+      "Sidney Nascimento Givigi",
+      "Howard M. Schwartz"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Affect and Learning: a computational analysis",
+     "id": "https://openalex.org/W1538815457",
+     "autores": [
+      "D.J. Broekens"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Proxemic behavior in navigation tasks using reinforcement learning",
+     "doi": "https://doi.org/10.1007/s00521-022-07628-0",
+     "id": "https://openalex.org/W4292057448",
+     "autores": [
+      "Cristian Millán-Arias",
+      "Bruno Fernandes"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Social Robots as Creativity Eliciting Agents",
+     "doi": "https://doi.org/10.3389/frobt.2021.673730",
+     "id": "https://openalex.org/W3201481557",
+     "autores": [
+      "Safinah Ali",
+      "Nisha Devasia"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Advancing Emotionally Aware Child–Robot Interaction with Biophysical Data and Insight-Driven Affective Computing",
+     "doi": "https://doi.org/10.3390/s25041161",
+     "id": "https://openalex.org/W4407585486",
+     "autores": [
+      "Diego R. Faria",
+      "Amie Louise Godkin"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Improving the Survival Time of Multiagents in Social Dilemmas through Neurotransmitter-Based Deep Q-Learning Model of Emotions",
+     "doi": "https://doi.org/10.1155/2022/3449433",
+     "id": "https://openalex.org/W4210784663",
+     "autores": [
+      "Muhammad Awais",
+      "Maida Shahid"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Reinforcement-learning in fronto-striatal circuits",
+     "doi": "https://doi.org/10.1038/s41386-021-01108-0",
+     "id": "https://openalex.org/W3192769286",
+     "autores": [
+      "Bruno B. Averbeck",
+      "John P. O’Doherty"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Exploring the direction of the English translation of environmental protection articles based on the robot cognitive- emotional interaction model",
+     "doi": "https://doi.org/10.17993/3ctic.2023.121.222-246",
+     "id": "https://openalex.org/W4366394191",
+     "autores": [
+      "Shuai Song"
+     ]
+    },
+    {
+     "ano": 2004,
+     "titulo": "Internal robotics",
+     "doi": "https://doi.org/10.1080/09540090412331314768",
+     "id": "https://openalex.org/W4238716505",
+     "autores": [
+      "Domenico Parisi"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Robot pain: a speculative review of its functions",
+     "id": "https://openalex.org/W2716955321",
+     "autores": [
+      "Carme Torras A"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "Risks and Robots – some ethical issues",
+     "id": "https://openalex.org/W1595795525",
+     "autores": [
+      "Peter Olsthoorn",
+      "Lambèr M. M. Royakkers"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Bayesian Deep Multi-Agent Multimodal Reinforcement Learning for Embedded Systems in Games, Natural Language Processing and Robotics",
+     "doi": "https://doi.org/10.31219/osf.io/sjrkh",
+     "id": "https://openalex.org/W4296990004",
+     "autores": [
+      "Ioannis Kourouklides"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "A Neuro-Inspired Control Architecture to Enhance Robot Self-Preservation and Adaptation in Autonomous Navigation Tasks",
+     "doi": "https://doi.org/10.1109/lra.2025.3583630",
+     "id": "https://openalex.org/W4411725096",
+     "autores": [
+      "Andrea Usai",
+      "Alessandro Rizzo"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Natural and engineered safe reinforcement learning",
+     "doi": "https://doi.org/10.1038/s44271-026-00542-4",
+     "id": "https://openalex.org/W7221631140",
+     "autores": [
+      "Pranav Mahajan",
+      "Ben Seymour"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Bayesian Deep Multi-Agent Multimodal Reinforcement Learning for Embedded Systems in Games, Natural Language Processing and Robotics",
+     "doi": "https://doi.org/10.31219/osf.io/sjrkh_v1",
+     "id": "https://openalex.org/W4409391288",
+     "autores": [
+      "Ioannis Kourouklides"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Unlocking the Emotional World of Visual Media: An Overview of the Science, Research, and Impact of Understanding Emotion",
+     "doi": "https://doi.org/10.1109/jproc.2023.3273517",
+     "id": "https://openalex.org/W4377861913",
+     "autores": [
+      "James Z. Wang",
+      "Sicheng Zhao"
+     ]
+    },
+    {
+     "ano": 2010,
+     "titulo": "Facial expression of emotion and perception of the Uncanny Valley in virtual characters",
+     "doi": "https://doi.org/10.1016/j.chb.2010.10.018",
+     "id": "https://openalex.org/W2026871208",
+     "autores": [
+      "Angela Tinwell",
+      "Mark Grimshaw"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Speech Emotion Recognition Using Attention Model",
+     "doi": "https://doi.org/10.3390/ijerph20065140",
+     "id": "https://openalex.org/W4324382619",
+     "autores": [
+      "Jagjeet Singh",
+      "Lakshmi Babu Saheer"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "A Motivation-Driven Incremental Learning Framework for Robotics",
+     "doi": "https://doi.org/10.47749/t/unicamp.2025.1498859",
+     "id": "https://openalex.org/W4413926775",
+     "autores": [
+      "Letícia Mara Berto",
+      "Ricardo Gudwin"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Child–Robot Interaction in Education",
+     "id": "https://openalex.org/W2748464912",
+     "autores": [
+      "Sofia Serholt"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Human-Robot Interactions for Single Robots and Multi-Robot Teams",
+     "id": "https://openalex.org/W2560196836",
+     "autores": [
+      "Alexander Hong"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Loneliness Kills: Can Autonomous Systems and Robotics Assist in Providing Solutions?",
+     "doi": "https://doi.org/10.4172/2090-4908.1000e113",
+     "id": "https://openalex.org/W2300755651",
+     "autores": [
+      "Tauseef Gulrez",
+      "Samia Nefti-Meziani"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "An Emergency Evacuation Behavior Simulation Method Combines Personality Traits and Emotion Contagion",
+     "doi": "https://doi.org/10.1109/access.2020.2985987",
+     "id": "https://openalex.org/W3015438597",
+     "autores": [
+      "Rui Zhou",
+      "Yi Ou"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Advancements in Emotion Classification via Facial and Body Gesture Analysis: A Survey",
+     "doi": "https://doi.org/10.1111/exsy.13759",
+     "id": "https://openalex.org/W4403667607",
+     "autores": [
+      "Anjali Diwan",
+      "Reshma Sunil"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Robotic Intuition Operation: A stimulus-object based hybrid approach to Emotional Modelling",
+     "doi": "https://doi.org/10.36227/techrxiv.16607855.v1",
+     "id": "https://openalex.org/W4389555404",
+     "autores": [
+      "DEBASISH BURAGOHAIN -"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Vocal Interactivity in-and-between Humans, Animals, and Robots",
+     "doi": "https://doi.org/10.3389/frobt.2016.00061",
+     "id": "https://openalex.org/W2535435835",
+     "autores": [
+      "Roger K. Moore",
+      "Ricard Marxer"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Stress-Inspired Modulation of Robotic Deliberative Functions",
+     "doi": "https://doi.org/10.1007/s12369-025-01263-0",
+     "id": "https://openalex.org/W4416298185",
+     "autores": [
+      "Laurène Carminatti",
+      "Ana Tanevska"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Built to Behave: Constraining Reinforcement Learning Agents with Restraining Bolts",
+     "doi": "https://doi.org/10.34726/hss.2026.130021",
+     "id": "https://openalex.org/W7160499815",
+     "autores": [
+      "Radu Florin Tulcan"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Interaction-Shaping Robotics: Robots That Influence Interactions between Other Agents",
+     "doi": "https://doi.org/10.1145/3643803",
+     "id": "https://openalex.org/W4391473821",
+     "autores": [
+      "Sarah Gillet",
+      "Marynel Vázquez"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "EMOTION-I Model: A Biologically-Based Theoretical Framework for Deriving Emotional Context of Sensation in Autonomous Control Systems",
+     "doi": "https://doi.org/10.2174/1874110x00701010028",
+     "id": "https://openalex.org/W2093474571",
+     "autores": [
+      "David C. Tam"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "”I don’t want to work for a robot, but for a human” : Emotional intelligence in leading an IT organization",
+     "id": "https://openalex.org/W3027452289",
+     "autores": [
+      "Emilia Laurila"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Developments in Image Processing Using Deep Learning and Reinforcement Learning",
+     "doi": "https://doi.org/10.3390/jimaging9100207",
+     "id": "https://openalex.org/W4387230345",
+     "autores": [
+      "Jorge Valente",
+      "João António"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Choose Your Weapon: Survival Strategies for Depressed AI Academics [Point of View]",
+     "doi": "https://doi.org/10.1109/jproc.2024.3364137",
+     "id": "https://openalex.org/W4392405529",
+     "autores": [
+      "Julian Togelius",
+      "Georgios N. Yannakakis"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "Emotional metacontrol of attention: Top-down modulation of sensorimotor processes in a robotic visual search task",
+     "doi": "https://doi.org/10.1371/journal.pone.0184960",
+     "id": "https://openalex.org/W2760175060",
+     "autores": [
+      "Marwen Belkaid",
+      "Nicolas Cuperlier"
+     ]
+    },
+    {
+     "ano": 2002,
+     "titulo": "A New Approach to Robot's Imitation of Behaviors by Decomposition of Multiple-Valued Relations",
+     "id": "https://openalex.org/W653742163",
+     "autores": [
+      "Uland Y. Wong",
+      "Marek A. Perkowski"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Emotion as a Mode of Engagement: A Critical Defense of Ben-Ze’ev’s Social Theory of Emotions",
+     "doi": "https://doi.org/10.20381/ruor-473",
+     "id": "https://openalex.org/W2558243227",
+     "autores": [
+      "Jamie Charbonneau"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Temporal Dynamics and Latent Structures of Emotional States in Human– Robot Interaction: A Markovian and Hidden Markov Model Analysis of Longitudinal Facial Emotion Sequences",
+     "doi": "https://doi.org/10.6025/jmpt/2026/17/3/95-123",
+     "id": "https://openalex.org/W7202094134",
+     "autores": [
+      "Pit Pichappan"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Modeling long-term nutritional behaviors using deep homeostatic reinforcement learning",
+     "doi": "https://doi.org/10.1093/pnasnexus/pgae540",
+     "id": "https://openalex.org/W4404815779",
+     "autores": [
+      "Naoto Yoshida",
+      "Etsushi Arikawa"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Influencing Human Performance: Investigating the Effect of Non-humanoid Robot Feedback on Task Performance",
+     "doi": "https://doi.org/10.1145/3610978.3640651",
+     "id": "https://openalex.org/W4392646095",
+     "autores": [
+      "Mohammed Shabaj Ahmed",
+      "Manuel Giuliani"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Reinforcement learning: the effect of environment",
+     "doi": "https://doi.org/10.1177/0301006616671273",
+     "id": "https://openalex.org/W2589501981",
+     "autores": [
+      "Xu, He",
+      "Michael H. Herzog"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "The Influence of Prior Expectations of a Robot’s Lifelikeness on Users’ Intentions to Treat a Zoomorphic Robot as a Companion",
+     "doi": "https://doi.org/10.1007/s12369-016-0340-4",
+     "id": "https://openalex.org/W2279695219",
+     "autores": [
+      "Maartje M.A. de Graaf",
+      "Somaya Ben Allouch"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Will Robots Know That They Are Robots? The Ethics of Utilizing Learning Machines",
+     "doi": "https://doi.org/10.1007/978-3-031-05434-1_31",
+     "id": "https://openalex.org/W4285060271",
+     "autores": [
+      "Rebekah Ann Rousi"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Environment Evasion Modeling in Emergency Situations: Computational Simulator with Reinforcement Learning",
+     "doi": "https://doi.org/10.55592/cilamce2025.v5i.14467",
+     "id": "https://openalex.org/W7143516630",
+     "autores": [
+      "Victor Emmanuel de Vasconcelos Gomes",
+      "Gray Farias Moita"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "SIMPLEX — Simulation of Personal Emotion Experience",
+     "doi": "https://doi.org/10.5772/6178",
+     "id": "https://openalex.org/W1588125314",
+     "autores": [
+      "Henrik Kessler",
+      "Alexander Festini"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Multiplayer Online Battle Arena (MOBA) Games: Improving Negative Atmosphere with Social Robots and AI Teammates",
+     "doi": "https://doi.org/10.3390/systems11080425",
+     "id": "https://openalex.org/W4385812237",
+     "autores": [
+      "Yimin Wang",
+      "Yonglin Dai"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "An Information-Theoretic Perspective on Intrinsic Motivation in Reinforcement Learning: A Survey",
+     "doi": "https://doi.org/10.3390/e25020327",
+     "id": "https://openalex.org/W4319966548",
+     "autores": [
+      "Arthur Aubret",
+      "Laëtitia Matignon"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Social robot deception and the culture of trust",
+     "doi": "https://doi.org/10.1515/pjbr-2021-0021",
+     "id": "https://openalex.org/W3157872126",
+     "autores": [
+      "Henrik Skaug Sætra"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Survival egoism: we are, they will be",
+     "doi": "https://doi.org/10.1007/s00146-026-02866-5",
+     "id": "https://openalex.org/W2990692564",
+     "autores": [
+      "Tommaso Castiglione Ferrari"
+     ]
+    },
+    {
+     "ano": 2015,
+     "titulo": "Towards Improving Human-Robot Interaction For Social Robots",
+     "id": "https://openalex.org/W2753329426",
+     "autores": [
+      "Saad Ahmad Khan"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Emotion-Driven Decision Making: When Rationality Meets Occasional Sub-Optimality",
+     "doi": "https://doi.org/10.36227/techrxiv.172468837.72342934/v1",
+     "id": "https://openalex.org/W4401884896",
+     "autores": [
+      "Shounak Das",
+      "Prabir Mondal"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Robotic Knitting",
+     "doi": "https://doi.org/10.14361/9783839452035",
+     "id": "https://openalex.org/W4212825214",
+     "autores": [
+      "Pat Treusch"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Beyond Nature Versus Nurture: the Emergence of Emotion",
+     "doi": "https://doi.org/10.1007/s42761-023-00212-2",
+     "id": "https://openalex.org/W4386294720",
+     "autores": [
+      "Adrienne Wood",
+      "James Arthur Coan"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "PERCEIVED SAFETY IN PHYSICAL HUMAN ROBOT INTERACTION - A SURVEY",
+     "doi": "https://doi.org/10.1016/j.robot.2022.104047",
+     "id": "https://openalex.org/W4210536149",
+     "autores": [
+      "Anara Sandygulova",
+      "Danna Summers"
+     ]
+    },
+    {
+     "ano": 2013,
+     "titulo": "Reinforcement learning with motivations for realistic agents",
+     "id": "https://openalex.org/W200019048",
+     "autores": [
+      "Jacquelyne Forgette"
+     ]
+    },
+    {
+     "ano": 2016,
+     "titulo": "Robots, Autonomy, and Responsibility",
+     "doi": "https://doi.org/10.3233/978-1-61499-708-5-145",
+     "id": "https://openalex.org/W2886413207",
+     "autores": [
+      "Raul Hakli",
+      "Pekka Mäkelä"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Trust identification through cognitive correlates with emphasizing attention in cloud robotics",
+     "doi": "https://doi.org/10.1016/j.eij.2022.01.003",
+     "id": "https://openalex.org/W4210755236",
+     "autores": [
+      "Wasim Ahmad Khan",
+      "Fahad Ahmad"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Robotic Knitting",
+     "id": "https://openalex.org/W7137526793",
+     "autores": [
+      "Pat Treusch"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Biomimetic Robotics and Intelligence: A Survey",
+     "doi": "https://doi.org/10.1002/smb2.12010",
+     "id": "https://openalex.org/W4409474206",
+     "autores": [
+      "Yixuan Sheng",
+      "Wei Nie"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Robot-Assisted Tower Construction—A Method to Study the Impact of a Robot’s Allocation Behavior on Interpersonal Dynamics and Collaboration in Groups",
+     "doi": "https://doi.org/10.1145/3394287",
+     "id": "https://openalex.org/W3041216465",
+     "autores": [
+      "Malte Friedrich Jung",
+      "Dominic James DiFranzo"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Complex Emotion Recognition System using basic emotions via Facial Expression, EEG, and ECG Signals: a review",
+     "doi": "https://doi.org/10.48550/arxiv.2409.07493",
+     "id": "https://openalex.org/W4403662763",
+     "autores": [
+      "Javad Hassannataj Joloudari",
+      "Mohammad Maftoun"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Survival in a world of complex dangers",
+     "doi": "https://doi.org/10.1016/j.neubiorev.2024.105924",
+     "id": "https://openalex.org/W4403457973",
+     "autores": [
+      "Dean Mobbs",
+      "Toby Wise"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Emotion regulation from an action-control perspective",
+     "doi": "https://doi.org/10.1016/j.neubiorev.2023.105397",
+     "id": "https://openalex.org/W4386886809",
+     "autores": [
+      "Bob Bramson",
+      "Ivan Toni"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Complex emotion recognition system using basic emotions via facial expression, electroencephalogram, and electrocardiogram signals: a review",
+     "doi": "https://doi.org/10.3389/fpsyg.2026.1682883",
+     "id": "https://openalex.org/W7133201545",
+     "autores": [
+      "Javad Hassannataj Joloudari",
+      "Mohammad Maftoun"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Active learning in robotics: A review of control principles",
+     "doi": "https://doi.org/10.1016/j.mechatronics.2021.102576",
+     "id": "https://openalex.org/W3166801429",
+     "autores": [
+      "Annalisa Taylor",
+      "Thomas A. Berrueta"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Implications of children's social, emotional, and relational interactions with robots for human–robot empathy",
+     "doi": "https://doi.org/10.4324/9781003189978-17",
+     "id": "https://openalex.org/W4313493471",
+     "autores": [
+      "Jacqueline M. Kory-Westlund"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Persuasive Strategies for Social Robots Engaged in Human-Robot Interaction",
+     "id": "https://openalex.org/W7132984423",
+     "autores": [
+      "Shane Saunderson"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Modular design automation of the morphologies, controllers, and vision systems for intelligent robots: a survey",
+     "doi": "https://doi.org/10.1007/s44267-023-00006-x",
+     "id": "https://openalex.org/W4375843772",
+     "autores": [
+      "Wenji Li",
+      "Zhaojun Wang"
+     ]
+    },
+    {
+     "ano": 2022,
+     "titulo": "Mitigating negative emotions through virtual reality and embodiment",
+     "doi": "https://doi.org/10.3389/fnhum.2022.916227",
+     "id": "https://openalex.org/W4289517089",
+     "autores": [
+      "Maria Sansoni",
+      "Giovanni Scarzello"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "First Steps Towards a Theory of Synthetic Emotions",
+     "doi": "https://doi.org/10.22492/issn.2187-4743.2026.22",
+     "id": "https://openalex.org/W7164164904",
+     "autores": [
+      "David Leucas",
+      "Sylvia Iasulaitis"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Preventing antisocial robots: A pathway to artificial empathy",
+     "doi": "https://doi.org/10.1126/scirobotics.abq3658",
+     "id": "https://openalex.org/W4384025168",
+     "autores": [
+      "Leonardo Christov‐Moore",
+      "Nicco Reggente"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "The quest for the optimal level of sense of agency in the case of human-operated, AI-enabled robotics",
+     "doi": "https://doi.org/10.1016/j.cobeha.2026.101674",
+     "id": "https://openalex.org/W7203536025",
+     "autores": [
+      "Jacopo Elettari",
+      "Tony J. Prescott"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Emotion-Aware Cyber-Physical Systems",
+     "doi": "https://doi.org/10.20868/upm.thesis.62775",
+     "id": "https://openalex.org/W3046147523",
+     "autores": [
+      "Alberto Corredera Arbide"
+     ]
+    },
+    {
+     "ano": 2017,
+     "titulo": "A Developmental Robotics Manifesto",
+     "id": "https://openalex.org/W2752578520",
+     "autores": [
+      "Douglas Blank",
+      "James B. Marshall"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Survival Decisions in a Multidimensional World",
+     "doi": "https://doi.org/10.31234/osf.io/jkmpq",
+     "id": "https://openalex.org/W4366729113",
+     "autores": [
+      "Dean Mobbs",
+      "Toby Wise"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "GPT-4 accurately predicts human emotions at phenomenological and neural levels",
+     "id": "https://openalex.org/W7220790901",
+     "autores": [
+      "Lauri Suominen"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Augmented Memory Replay in Reinforcement Learning With Continuous Control",
+     "doi": "https://doi.org/10.1109/tcds.2021.3050723",
+     "id": "https://openalex.org/W2997756730",
+     "autores": [
+      "Mirza Ramičić",
+      "Andrea Bonarini"
+     ]
+    },
+    {
+     "ano": 2006,
+     "titulo": "A sensory system for robots using evolutionary artificial neural networks.",
+     "id": "https://openalex.org/W610171824",
+     "autores": [
+      "Ann Reddipogu"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Understanding Practical Emotions: Bridging Affect and Action",
+     "doi": "https://doi.org/10.52106/3065-5501.1013",
+     "id": "https://openalex.org/W7118598998",
+     "autores": [
+      "Stevie Amos Burke"
+     ]
+    },
+    {
+     "ano": 2019,
+     "titulo": "Assessing Children's Perceptions and Acceptance of a Social Robot",
+     "doi": "https://doi.org/10.1145/3311927.3323143",
+     "id": "https://openalex.org/W2949015186",
+     "autores": [
+      "Jacqueline M. Kory-Westlund",
+      "Cynthia Breazeal"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "Synthetic emotions and consciousness: exploring architectural boundaries",
+     "doi": "https://doi.org/10.1007/s00146-026-02896-z",
+     "id": "https://openalex.org/W4415026007",
+     "autores": [
+      "Hermann Borotschnig"
+     ]
+    },
+    {
+     "ano": 2026,
+     "titulo": "A Swarm Optimization-Based Deep Reinforcement Learning Approach for Nonlinear Control Systems with Shapley Value Interpretability",
+     "doi": "https://doi.org/10.28979/jarnas.1949124",
+     "id": "https://openalex.org/W7214929426",
+     "autores": [
+      "Mustafa Can Bingöl"
+     ]
+    },
+    {
+     "ano": 2011,
+     "titulo": "From Robot Arm to Intentional Agent: the Articulated Head",
+     "doi": "https://doi.org/10.5772/16383",
+     "id": "https://openalex.org/W2150301808",
+     "autores": [
+      "Christian H. Kroos",
+      "C. Damith"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Emotion assessment for affective computing based on brain and peripheral signals",
+     "doi": "https://doi.org/10.13097/archive-ouverte/unige:4708",
+     "id": "https://openalex.org/W587740133",
+     "autores": [
+      "Guillaume Chanel"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Robotic Knitting: Re-Crafting Human-Robot Collaboration Through Careful Coboting",
+     "doi": "https://doi.org/10.14361/9783839452035",
+     "id": "https://openalex.org/W3043659439",
+     "autores": [
+      "Pat Treusch"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Exploring cognitive functions in robotics",
+     "doi": "https://doi.org/10.47749/t/unicamp.2020.1129257",
+     "id": "https://openalex.org/W4251097953",
+     "autores": [
+      "Letícia Mara Berto"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Embedding Fear in Medical AI: A Risk-Averse Framework for Safety and Ethics",
+     "doi": "https://doi.org/10.3390/ai6050101",
+     "id": "https://openalex.org/W4410359765",
+     "autores": [
+      "Andrej Thurzo",
+      "Vladimír Thurzo"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Computing Research Survival Manual",
+     "doi": "https://doi.org/10.1088/978-0-7503-5017-4",
+     "id": "https://openalex.org/W4386289230",
+     "autores": [
+      "Haruna Chiroma",
+      "Jemal H Abawjy"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Understanding the sense of self through robotics",
+     "doi": "https://doi.org/10.1126/scirobotics.adn2733",
+     "id": "https://openalex.org/W4403917765",
+     "autores": [
+      "Tony J. Prescott",
+      "Kai Thorsten Vogeley"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "Estrogenic control of reward prediction errors and reinforcement learning",
+     "doi": "https://doi.org/10.1101/2023.12.09.570945",
+     "id": "https://openalex.org/W4389521713",
+     "autores": [
+      "Carla E. M. Golden",
+      "Audrey C. Martin"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "Medicine and the rise of the robots: a qualitative review of recent advances of artificial intelligence in health",
+     "doi": "https://doi.org/10.1136/leader-2018-000071",
+     "id": "https://openalex.org/W2805654720",
+     "autores": [
+      "Erwin Loh"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Adapting to My User, Engaging with My Robot: An Adaptive Affective Architecture for a Social Assistive Robot",
+     "doi": "https://doi.org/10.1145/3691348",
+     "id": "https://openalex.org/W4402088472",
+     "autores": [
+      "Marcos Maroto Gómez",
+      "Matthew Lewis"
+     ]
+    },
+    {
+     "ano": 2023,
+     "titulo": "A motivational model based on artificial biological functions for the intelligent decision-making of social robots",
+     "doi": "https://doi.org/10.1007/s12293-023-00390-3",
+     "id": "https://openalex.org/W4376504140",
+     "autores": [
+      "Marcos Maroto Gómez",
+      "María Malfáz"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "A computational model of robotic surprise",
+     "doi": "https://doi.org/10.18418/978-3-96043-000-1",
+     "id": "https://openalex.org/W2301549626",
+     "autores": [
+      "Alex Juarez"
+     ]
+    },
+    {
+     "ano": 2020,
+     "titulo": "Motivation as a tool for designing lifelong learning robots",
+     "doi": "https://doi.org/10.3233/ica-200633",
+     "id": "https://openalex.org/W3032977088",
+     "autores": [
+      "Alejandro Romero",
+      "Francisco Bellas"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "Social Robots as Intentional Agents",
+     "doi": "https://doi.org/10.3384/diss.diva-178806",
+     "id": "https://openalex.org/W3199957645",
+     "autores": [
+      "Sam Thellman"
+     ]
+    },
+    {
+     "ano": 2025,
+     "titulo": "Does Care Lead to Bonds? Exploring the Relationship Between Human Caregiving for Robots and Human-Robot Bonding",
+     "doi": "https://doi.org/10.1145/3706598.3714271",
+     "id": "https://openalex.org/W4409735992",
+     "autores": [
+      "Jiaxin Xu",
+      "Chao Zhang"
+     ]
+    },
+    {
+     "ano": 2012,
+     "titulo": "Learning against learning : evolutionary dynamics of reinforcement learning algorithms in strategic interactions",
+     "doi": "https://doi.org/10.26481/dis.20121217mk",
+     "id": "https://openalex.org/W1260602278",
+     "autores": [
+      "Michael Kaisers"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "Emotion modelling with human belief revision in computer games",
+     "id": "https://openalex.org/W2244021318",
+     "autores": [
+      "Yan Ma"
+     ]
+    },
+    {
+     "ano": 2007,
+     "titulo": "EMOTION-II Model: A Theoretical Framework for Happy Emotion as a Self-Assessment Measure Indicating the Degree-of-Fit (Congruency) between the Expectancy in Subjective and Objective Realities in Autonomous Control Systems",
+     "doi": "https://doi.org/10.2174/1874110x00701010047",
+     "id": "https://openalex.org/W1983525934",
+     "autores": [
+      "David C. Tam"
+     ]
+    },
+    {
+     "ano": 2024,
+     "titulo": "Initializing the weights of a multilayer perceptron for activity and emotion recognition",
+     "doi": "https://doi.org/10.1016/j.eswa.2024.124305",
+     "id": "https://openalex.org/W4398775375",
+     "autores": [
+      "Inma Mohíno-Herranz",
+      "Roberto Gil‐Pita"
+     ]
+    },
+    {
+     "ano": 2021,
+     "titulo": "FAtiMA Toolkit -- Toward an effective and accessible tool for the development of intelligent virtual agents and social robots",
+     "doi": "https://doi.org/10.48550/arxiv.2103.03020",
+     "id": "https://openalex.org/W3135443258",
+     "autores": [
+      "Samuel F. Mascarenhas",
+      "Manuel Guimarães"
+     ]
+    }
+   ]
+  },
+  "semantic_scholar": {
+   "consulta": "emotion + reinforcement + robot + survival",
+   "n": 6,
+   "itens": [
+    {
+     "ano": 2011,
+     "titulo": "Robot's Behavioral Decision-making Strategy Based on Artificial Emotion and Q-learning",
+     "autores": [
+      "Jun-Xin Mao"
+     ]
+    },
+    {
+     "ano": 2008,
+     "titulo": "Preference-Oriented Planning for Achieving Satisfactory Emotional States",
+     "autores": [
+      "Daniel Pérez",
+      "S. Fernández"
+     ]
+    },
+    {
+     "ano": 2001,
+     "titulo": "Robot Learning Driven by Emotions",
+     "doi": "10.1177/105971230200900102",
+     "autores": [
+      "S. Gadanho",
+      "J. Hallam"
+     ]
+    },
+    {
+     "ano": 2009,
+     "titulo": "Automatic Detection of Emotion in Music: Interaction with Emotionally Sensitive Machines",
+     "doi": "10.4018/978-1-60566-354-8.CH002",
+     "autores": [
+      "C. Laurier",
+      "Perfecto Herrera"
+     ]
+    },
+    {
+     "ano": 1999,
+     "titulo": "Reinforcement learning in autonomous robots : an empirical investigation of the role of emotions",
+     "autores": [
+      "S. Gadanho"
+     ]
+    },
+    {
+     "ano": 2018,
+     "titulo": "S2-G-2-6 Understanding human behavior from motion: Applications to neurology, rehabilitation and robotics",
+     "autores": [
+      "N. Morimura",
+      "H. Yasuda"
+     ]
+    }
+   ]
+  },
+  "arxiv": {
+   "consulta": "all:emotion AND all:reinforcement AND all:robot AND all:survival",
+   "n": 0,
+   "itens": []
+  }
+ }
+}

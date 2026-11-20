@@ -1,0 +1,116 @@
+/* Prancha "o pet assistindo TV" (docs/PLANO_UX_GOSTO_VISUAL.md, UX-GV-1 a 10 aprovadas em 2026-11-11). HTML estatico, so desenho; nenhum
+   codigo do jogo. Os tokens, a .caixa, a .mundo, o .pet e a .nota vem de ../ux-lugares-menus/lugares.css (copias de
+   web/app/src/estilo/tokens.css); aqui nao ha cor nova. As cores do tapete e das almofadas sao amostras do proprio fundo (a .amostra de
+   la). Os tamanhos sao de desenho: PROPOSTO, SEM FONTE. */
+.mundo > img{image-rendering:auto}
+.tapete{border-radius:50%;z-index:2;opacity:.92}
+.almofada{border-radius:50%;z-index:3}
+.almofada::after{content:"";position:absolute;inset:18% 14% 30%;border-radius:50%;background:var(--chao-sombra);opacity:.25}
+.tv-img{z-index:4}
+.pet.pulo{translate:0 -10px}
+.pet.inclina{rotate:-9deg}
+.pet.longe{translate:-6px 0}
+/* o sinal da reacao sobre o pet: um icone no lugar dos emotes de hoje (UX-GV-10), nao um balao de texto */
+.sinal{position:absolute;z-index:20;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:var(--hx-texto);color:var(--hx-escolhido-ink);border:2px solid var(--hx-borda)}
+:root[data-pele="vidro"] .sinal{color:#061226}   /* o --hx-chao do Vidro sem a transparencia (lugares.css:36) */
+.sinal svg.ic{width:22px;height:22px;stroke-width:2.4}
+.sinal::after{content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:inherit;rotate:45deg;translate:-50% 0;z-index:-1}
+
+/* ---- a HUD de contexto (so para situar; o desenho fiel e o das pranchas ux-pet e ux-lugares-menus) */
+.t-topo{position:absolute;left:14px;top:12px;z-index:30;display:flex;align-items:center;gap:8px;padding:6px 12px;font-weight:600}
+.t-topo small{color:var(--hx-sec);font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+.t-relogio{position:absolute;top:12px;z-index:30;padding:6px 12px;font:700 15px var(--hx-f-num);color:var(--hx-num)}
+.t-trilho{position:absolute;left:14px;top:64px;z-index:30;display:flex;flex-direction:column;gap:4px;padding:6px}
+.t-trilho span{width:40px;height:40px;display:grid;place-items:center;color:var(--hx-sec)}
+.t-trilho span.at{color:var(--hx-escolhido-ink);background:var(--hx-escolhido);box-shadow:var(--hx-escolhido-brilho)}
+.t-dock{position:absolute;left:50%;bottom:14px;translate:-50% 0;z-index:30;display:flex;gap:6px;padding:6px}
+.t-dock span{min-width:74px;height:44px;padding:0 10px;display:grid;place-items:center;background:var(--hx-tecla);border:1px solid var(--hx-borda);font-weight:600}
+.t-dock span.dest{outline:2px solid var(--hx-aprendido);outline-offset:2px}
+.t-pilha{position:absolute;right:14px;top:64px;z-index:30;display:flex;flex-direction:column;gap:6px;width:250px}
+.t-pilha > *{padding:8px 12px;display:flex;align-items:center;gap:8px;color:var(--hx-texto-2);font-weight:600}
+.t-pilha .tv-bt{color:var(--hx-btn-ink);background:var(--hx-btn-bg);border:1px solid var(--hx-btn-borda);min-height:44px}
+.t-borda{position:absolute;right:8px;top:120px;z-index:30;display:flex;flex-direction:column;gap:8px}
+.t-borda span{width:44px;height:44px;display:grid;place-items:center}
+.t-borda span.tv-bt{color:var(--hx-btn-ink);border-color:var(--hx-btn-borda)}
+
+/* ---- o selo da captura: fixo, com o Parar, nas tres vistas (UX-GV-6) */
+.cap-selo{position:absolute;top:12px;z-index:40;display:flex;align-items:center;gap:10px;padding:5px 6px 5px 12px;font-weight:600;border-color:var(--hx-alerta)}
+.cap-selo i{width:9px;height:9px;border-radius:50%;background:var(--hx-alerta);flex:none}
+.tb{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;font-weight:700;letter-spacing:.02em;
+  color:var(--hx-texto);background:var(--hx-tecla);border:1px solid var(--hx-borda)}
+.tb.forte{color:var(--hx-btn-ink);background:var(--hx-btn-bg);border-color:var(--hx-btn-borda)}
+.tb.p{min-height:36px;padding:0 12px}
+.tb.cheio{width:100%}
+
+/* ---- o painel da TV (a direita a partir de 900 px) e a folha do celular */
+.tvp{position:absolute;z-index:35;display:flex;flex-direction:column;padding:0}
+.tvp-cab{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--hx-borda)}
+.tvp-cab b{font-size:19px;font-weight:700;letter-spacing:.02em}
+.tvp-cab small{display:block;color:var(--hx-sec);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.tvp-cab .fecha{margin-left:auto;width:44px;height:44px;display:grid;place-items:center;background:none;border:1px solid var(--hx-borda)}
+.tvp-sec{padding:12px 14px;border-bottom:1px solid var(--hx-borda);display:flex;flex-direction:column;gap:8px}
+.tvp-sec:last-child{border-bottom:0}
+.tvp h3{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--hx-rotulo)}
+.tvp p{font-size:15px;line-height:1.35}
+.tvp .fraco{color:var(--hx-sec);font-size:13.5px}
+.tvp .forte-txt{font-size:17px;font-weight:600}
+.linha-bts{display:flex;gap:8px;flex-wrap:wrap}
+.linha-bts .tb{flex:1 1 0;white-space:nowrap}
+.abre{display:flex;align-items:center;gap:6px;min-height:44px;font-weight:700;color:var(--hx-texto);background:none;border:0;padding:0}
+.abre svg.ic{width:16px;height:16px}
+.abre.aberto svg.ic{rotate:90deg}
+.priv{display:flex;gap:8px;align-items:flex-start;color:var(--hx-texto-2);font-size:13.5px;line-height:1.35}
+.priv svg.ic{width:18px;height:18px;margin-top:1px;color:var(--hx-rotulo)}
+
+/* ---- o porque: uma linha por componente, um trilho, tres origens com forma propria (UX-GV-4 e 5) */
+.gl{display:grid;grid-template-columns:64px 1fr;gap:2px 10px;align-items:center}
+.gl > b{font-weight:600;font-size:14px;grid-row:span 2}
+.gl-trilho{position:relative;height:22px}
+.gl-trilho::before{content:"";position:absolute;left:0;right:0;top:10px;height:2px;background:var(--hx-medidor-trilho)}
+.gl-ext{display:flex;justify-content:space-between;color:var(--hx-sec);font-size:11.5px}
+.m-nasc{position:absolute;top:2px;width:3px;height:18px;background:var(--hx-texto);translate:-50% 0}
+.m-ver{position:absolute;top:10px;height:0;border-top:2px dotted var(--hx-texto-2)}
+.m-ver::after{content:"";position:absolute;top:-6px;border:5px solid transparent}
+.m-ver.dir::after{right:-6px;border-left-color:var(--hx-texto-2)}
+.m-ver.esq::after{left:-6px;border-right-color:var(--hx-texto-2)}
+.m-car{position:absolute;top:5px;height:12px;border:1px dashed var(--hx-aprendido);
+  background:repeating-linear-gradient(-45deg,var(--hx-aprendido) 0 1px,transparent 1px 5px)}
+.m-hoje{position:absolute;top:5px;width:12px;height:12px;rotate:45deg;translate:-50% 0;background:var(--hx-texto);border:2px solid var(--hx-miolo)}
+.m-agora{position:absolute;top:4px;width:14px;height:14px;border-radius:50%;translate:-50% 0;border:3px solid var(--hx-alerta);background:none}
+.leg{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--hx-sec);font-size:12px}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.leg > span > i{position:relative;display:inline-block;width:20px;height:14px}
+.leg .m-nasc{top:-2px;left:50%} .leg .m-ver{top:6px;left:0;width:14px} .leg .m-car{top:1px;left:0;width:20px}
+.leg .m-hoje{top:1px;left:50%} .leg .m-agora{top:0;left:50%}
+.grupo{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--hx-sec);margin-top:4px}
+
+/* ---- a folha do celular (UX-GV-8): recolhida em duas linhas, acima do dock; esticada, cerca de meia tela */
+.folha-tv{left:0;right:0;border-left:0;border-right:0}
+.folha-tv .alca{align-self:center;width:40px;height:4px;border-radius:2px;background:var(--hx-borda);margin-top:6px}
+.folha-tv .tvp-sec{padding:8px 14px}
+.cel-dock{position:absolute;left:0;right:0;bottom:0;height:64px;z-index:36;display:flex;gap:4px;padding:8px;border-left:0;border-right:0;border-bottom:0}
+.cel-dock span{flex:1;display:grid;place-items:center;height:48px;background:var(--hx-tecla);border:1px solid var(--hx-borda);font-weight:600;font-size:13px}
+.cel-dock span.dest{outline:2px solid var(--hx-aprendido);outline-offset:1px}
+
+/* ---- a janela pequena (360 x 620): sempre escura, sem barras */
+.jp{position:absolute;inset:0;display:flex;flex-direction:column;gap:14px;padding:14px;background:var(--hx-miolo)}
+.jp .cap-selo{position:static;align-self:flex-start}
+.jp-palco{position:relative;flex:1;display:grid;place-items:end center;padding-bottom:26px;border:1px solid var(--hx-borda);background:var(--hx-miolo-2)}
+.jp-balao{position:absolute;left:50%;top:40%;translate:-50% 0;padding:8px 14px;font-weight:600;font-size:16px;white-space:nowrap}
+.jp-balao::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;rotate:45deg;translate:-50% 0;background:var(--hx-miolo-2);
+  border-right:1px solid var(--hx-borda);border-bottom:1px solid var(--hx-borda)}
+.jp .pet{position:static}
+.jp p{font-size:16px;line-height:1.35}
+
+/* ---- as paginas de comparacao (as reacoes e o giro) */
+.quadros{position:absolute;inset:70px 20px 20px;display:grid;gap:14px}
+.quadro{position:relative;overflow:hidden;border:1px solid var(--hx-borda);background:var(--hx-miolo)}
+.quadro .mundo{pointer-events:none}
+.quadro .rot{position:absolute;left:0;right:0;bottom:0;z-index:30;padding:8px 12px;background:var(--hx-miolo);border-top:1px solid var(--hx-borda)}
+.quadro .rot b{display:block;font-size:16px}
+.quadro .rot small{color:var(--hx-sec);font-size:13px}
+.quadro .selo-q{position:absolute;left:8px;top:8px;z-index:30;padding:3px 10px;font-weight:700;font-size:13px}
+.titulo-p{position:absolute;left:20px;top:16px;z-index:50;font-size:22px;font-weight:700}
+.titulo-p small{display:block;font-size:14px;font-weight:500;color:var(--hx-sec)}
+.veu{position:absolute;inset:0;z-index:25;background:var(--chao-sombra);opacity:.35;pointer-events:none}

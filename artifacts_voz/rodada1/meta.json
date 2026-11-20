@@ -1,0 +1,101 @@
+{
+ "ambiente": {
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0"
+ },
+ "fontes_sha256": {
+  "digilab/config.py": "55b6b87be87bf92863cb61d6b4f8237f6c27f1a55c2af7bfdf555a96a96e736d",
+  "digilab/donos_educacao.py": "9943d495436825c48f1628fb4fd4d58cefcc9a303c6ea3db91fbbc2ee9e42e8c",
+  "digilab/educacao.py": "518200cf6f3a16dbffe5894cdbfaa90edfe61655b0f0266e34489dd43167a043",
+  "digilab/historia.py": "612602b077f6b80296340b0e096e23ac0446a5ddce5aa4d0aa0b5773102ec4f2",
+  "digilab_fala_livre/almanaque.json": "e105b3e73ac4320d9a5935e84fb1ebcb748c22e3c4ee72a5cc975b6996a0aa3d",
+  "digilab_fala_livre/corpus_especies.json": "10caefdc4f3a281c35a11cb38cf502f2a42ee2f2889161e2bbf4028679d390a4",
+  "digilab_fala_livre/fatos.py": "d0cb69a85e6c1a6f5e0ee8c8f4bd933be285daad51373a7a9b3732f92df22bc1",
+  "digilab_fala_livre/gerar.py": "2fe2b9b21213da55bb988d83bf4ea811552c7f652b75c08fd9748a0f35634c96",
+  "digilab_fala_livre/mentira.py": "47ba821bc92ed2aaa04bb340335450d54a20f97e39dcf87ac9a1890786bcd14e",
+  "digilab_fala_livre/prompt.py": "c82b1db6d824a4d011b52e042a5bd2c3aa2984741663c6315c72882f5195df96",
+  "digilab_fala_livre/verificador.py": "03aeae7518d7c64cec20ce14ee86d755356e6f0978914d2456c814bc42d3b418",
+  "experiments/avaliar_voz.py": "069914648b510488efa1d8cc55a48cd5353918a7a6f95bb512ef521572a6bd6a"
+ },
+ "gerador": "gemma2:9b",
+ "grupos": {
+  "A": {
+   "bracos": [
+    "atencioso",
+    "aleatorio",
+    "relapso",
+    "incoerente",
+    "exigente",
+    "permissivo",
+    "lutador"
+   ],
+   "momentos": "dia 8, (9, 12, 15, 18, 21) h",
+   "ovos": [
+    70001,
+    70002,
+    70003,
+    70004
+   ],
+   "personas": [
+    [
+     "arara",
+     70001
+    ],
+    [
+     "aula",
+     70002
+    ],
+    [
+     "bio",
+     70003
+    ],
+    [
+     "zita",
+     70004
+    ]
+   ]
+  },
+  "B": {
+   "mentira": "ConfigMentira ligada",
+   "sombrios": [
+    [
+     "exigente",
+     70002
+    ],
+    [
+     "exigente",
+     70003
+    ],
+    [
+     "exigente",
+     70006
+    ],
+    [
+     "exigente",
+     70007
+    ],
+    [
+     "exigente",
+     70008
+    ],
+    [
+     "treinador",
+     70002
+    ],
+    [
+     "treinador",
+     70003
+    ],
+    [
+     "treinador",
+     70006
+    ]
+   ]
+  }
+ },
+ "hash_parametros_mentira": "f880cf863027e6f96cceeba9eb481eeffcfd0321e339436a52ddd4365d156208",
+ "juiz": "qwen2.5:7b",
+ "prompt": "livre-v3",
+ "semente": 20260929,
+ "verificador": "verif-v4"
+}

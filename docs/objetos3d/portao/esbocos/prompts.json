@@ -1,0 +1,21 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": [
+  "ref_maquete_b.png"
+ ],
+ "prompt_base": "Concept art of a single prop for a cozy 3D island game for children with an anime digital-world look. Match the art style of the reference image: anime background art, bright saturated colors, cel shading with crisp dark ink outlines. Unlike a flat toy, show rich hand-painted detail: painted texture variation inside every color area, visible materials (stone blocks, wood grain, canvas seams, chipped paint), small wear, moss and little plants where it fits, soft gradients and highlights. Painterly anime background-art finish: soft brush strokes inside each color area, believable materials rather than plastic, a thin light rim highlight on the edges facing the sky, and most of the detail on the main feature of the object. Chunky readable silhouette, slightly toy-like proportions, friendly and inviting, nothing scary. No text, no letters, no numbers, no logo, no brand, no symbols, no characters, no creatures. Show only the object, the full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow.",
+ "variantes": [
+  {
+   "nome": "esboco_1_pedra_blocos",
+   "prompt": "An arena entrance gate: a thick stone arch built from big carved stone blocks with moss and small flowers on top, red and gold cloth banners without symbols hanging on both pillars, and a glowing cyan digital portal with a subtle swirling grid filling the arch."
+  },
+  {
+   "nome": "esboco_2_anel_runas",
+   "prompt": "An arena entrance gate: a round stone ring standing upright on a low stepped stone base, with glowing cyan engraved lines along the ring, ivy on one side, and a shimmering cyan portal surface inside the ring."
+  },
+  {
+   "nome": "esboco_3_pilares_viga",
+   "prompt": "An arena entrance gate: two stout stone pillars joined by a heavy wooden beam with a small tiled roof, two hanging lanterns, red cloth banners, and a glowing cyan portal between the pillars."
+  }
+ ]
+}

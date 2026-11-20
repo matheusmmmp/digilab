@@ -1,0 +1,1344 @@
+t     0 D1  bebe        brincar         [- | ref -]  (^_^)
+t    15 D1  bebe        ocioso          [- | ref -]  (^_^)
+t    30 D1  bebe        chamar_atencao  [- | ref -]  (^_^)
+t    45 D1  bebe        ocioso          [- | ref -]  (^_^)
+t    60 D1  bebe        brincar         [- | ref -]  (^_^)
+t    75 D1  bebe        brincar         [- | ref -]  (^_^)
+t    90 D1  bebe        explorar        [- | ref -]  (^_^)
+t   105 D1  bebe        ocioso          [- | ref -]  (^_^)
+t   120 D1  bebe        dormir          [hora,energia | ref -]  (^_^)
+t   135 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   150 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   165 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   180 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   195 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   210 D1  bebe        brincar         [- | ref -]  (^_^)
+t   225 D1  bebe        explorar        [- | ref -]  (^_^)
+t   240 D1  bebe        brincar         [- | ref -]  (^_^)
+t   255 D1  bebe        explorar        [- | ref -]  (^_^)
+t   270 D1  bebe        brincar         [- | ref -]  (^_^)
+t   285 D1  bebe        chamar_atencao  [- | ref -]  (^_^)
+t   300 D1  bebe        brincar         [- | ref -]  (^_^)
+t   315 D1  bebe        ocioso          [- | ref -]  (^_^)
+t   330 D1  bebe        dormir          [hora,energia | ref -]  (^_^)
+t   345 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   360 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   375 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   390 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   405 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   420 D1  bebe        chamar_atencao  [fome | ref -]  (^_^)
+t   435 D1  bebe        chamar_atencao  [fome | ref -]  (^_^)
+t   450 D1  bebe        chamar_atencao  [fome | ref -]  (^_^)
+t   465 D1  bebe        chamar_atencao  [fome | ref -]  (^_^)
+t   480 D1  bebe        comer           [fome | ref -]  (^_^)
+t   495 D1  bebe        comer           [fome | ref -]  (^_^)
+t   510 D1  bebe        chamar_atencao  [fome | ref -]  (^_^)
+t   525 D1  bebe        chamar_atencao  [fome | ref -]  (^_^)
+t   540 D1  bebe        comer           [fome | ref -]  (^_^)
+t   555 D1  bebe        comer           [fome | ref -]  (^_^)
+t   570 D1  bebe        ocioso          [- | ref -]  (^_^)
+t   585 D1  bebe        ocioso          [- | ref -]  (^_^)
+t   600 D1  bebe        comer           [fome | ref -]  (^_^)
+t   615 D1  bebe        chamar_atencao  [- | ref -]  (^_^)
+t   630 D1  bebe        brincar         [- | ref -]  (^_^)
+t   645 D1  bebe        brincar         [- | ref -]  (^_^)
+t   660 D1  bebe        ocioso          [- | ref -]  (^_^)
+t   675 D1  bebe        brincar         [- | ref -]  (^_^)
+t   690 D1  bebe        ocioso          [- | ref -]  (^_^)
+t   705 D1  bebe        explorar        [- | ref -]  (^_^)
+t   720 D1  bebe        brincar         [- | ref -]  (^_^)
+t   735 D1  bebe        chamar_atencao  [- | ref -]  (^_^)
+t   750 D1  bebe        brincar         [- | ref -]  (^_^)
+t   765 D1  bebe        brincar         [- | ref -]  (^_^)
+t   780 D1  bebe        brincar         [- | ref -]  (^_^)
+t   795 D1  bebe        brincar         [- | ref -]  (^_^)
+t   810 D1  bebe        brincar         [- | ref -]  (^_^)
+t   825 D1  bebe        explorar        [- | ref -]  (^_^)
+t   840 D1  bebe        dormir          [energia | ref -]  (^_^)
+t   855 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   870 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   885 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   900 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   915 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   930 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   945 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   960 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   975 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t   990 D1  bebe        brincar         [- | ref -]  (^_^)
+t  1005 D1  bebe        explorar        [- | ref -]  (^_^)
+t  1020 D1  bebe        brincar         [- | ref -]  (^_^)
+t  1035 D1  bebe        explorar        [- | ref -]  (^_^)
+t  1050 D1  bebe        brincar         [- | ref -]  (^_^)
+t  1065 D1  bebe        explorar        [- | ref -]  (^_^)
+t  1080 D1  bebe        brincar         [- | ref -]  (^_^)
+t  1095 D1  bebe        ocioso          [- | ref -]  (^_^)
+t  1110 D1  bebe        brincar         [- | ref -]  (^_^)
+t  1125 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1140 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1155 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1170 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1185 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1200 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1215 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1230 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1245 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1260 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1275 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1290 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1305 D1  bebe        chamar_atencao  [higiene | ref -]  (^_^)
+t  1320 D1  bebe        dormir          [hora,energia | ref -]  (^_^)
+t  1335 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1350 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1365 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1380 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1395 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1410 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1425 D1  bebe        dormir          [dormindo,energia | ref -]  (^_^)
+t  1440 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1455 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1470 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1485 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1500 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1515 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1530 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1545 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1560 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1575 D2  crianca     chamar_atencao  [higiene | ref -]  [chamar] [:higiene:]
+t  1590 D2  crianca     explorar        [- | ref -]  [explorar]
+t  1605 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  1620 D2  crianca     brincar         [- | ref -]  [brincar]
+t  1635 D2  crianca     dormir          [hora,energia | ref -]  [dormir] [:hora do dia:]
+t  1650 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1665 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1680 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1695 D2  crianca     brincar         [- | ref -]  [brincar]
+t  1710 D2  crianca     brincar         [- | ref -]  [brincar]
+t  1725 D2  crianca     brincar         [- | ref -]  [brincar]
+t  1740 D2  crianca     dormir          [hora,energia | ref -]  [dormir] [:hora do dia:]
+t  1755 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1770 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1785 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1800 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1815 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  1830 D2  crianca     brincar         [- | ref -]  [brincar]
+t  1845 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  1860 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  1875 D2  crianca     explorar        [- | ref -]  [explorar]
+t  1890 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  1905 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  1920 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  1935 D2  crianca     explorar        [- | ref -]  [explorar]
+t  1950 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  1965 D2  crianca     brincar         [- | ref -]  [brincar]
+t  1980 D2  crianca     explorar        [- | ref -]  [explorar]
+t  1995 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2010 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2025 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2040 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2055 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2070 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2085 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2100 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2115 D2  crianca     dormir          [energia | ref -]  [dormir] [:cansaço:]
+t  2130 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2145 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2160 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2175 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2190 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2205 D2  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2220 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2235 D2  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2250 D2  crianca     dormir          [energia | ref -]  [dormir] [:cansaço:]
+t  2265 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2280 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2295 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2310 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2325 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2340 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2355 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2370 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2385 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2400 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  2415 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2430 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2445 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2460 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2475 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2490 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2505 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  2520 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  2535 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2550 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2565 D2  crianca     chamar_atencao  [- | ref -]  [chamar]
+t  2580 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  2595 D2  crianca     chamar_atencao  [- | ref -]  [chamar]
+t  2610 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2625 D2  crianca     ocioso          [- | ref -]  [à toa]
+t  2640 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2655 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2670 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2685 D2  crianca     brincar         [- | ref -]  [brincar]
+t  2700 D2  crianca     explorar        [- | ref -]  [explorar]
+t  2715 D2  crianca     chamar_atencao  [tempo_sem_cuidado | ref 192]  [chamar] [:sem cuidado:]
+t  2730 D2  crianca     chamar_atencao  [tempo_sem_cuidado | ref 192]  [chamar] [:sem cuidado:]
+t  2745 D2  crianca     dormir          [energia | ref -]  [dormir] [:cansaço:]
+t  2760 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2775 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2790 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2805 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2820 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2835 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2850 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2865 D2  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2880 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  2895 D3  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2910 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2925 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  2940 D3  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2955 D3  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2970 D3  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  2985 D3  crianca     dormir          [hora,energia | ref -]  [dormir] [:hora do dia:]
+t  3000 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3015 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3030 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3045 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3060 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3075 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3090 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3105 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3120 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3135 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3150 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3165 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3180 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3195 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3210 D3  crianca     dormir          [hora,energia | ref -]  [dormir] [:hora do dia:]
+t  3225 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3240 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3255 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3270 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3285 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3300 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3315 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3330 D3  crianca     comer           [fome | ref -]  [comer] [:fome:]
+t  3345 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3360 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3375 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3390 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3405 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3420 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3435 D3  crianca     dormir          [energia | ref -]  [dormir] [:cansaço:]
+t  3450 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3465 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3480 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3495 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3510 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3525 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3540 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3555 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3570 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3585 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3600 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3615 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3630 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3645 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3660 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3675 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3690 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3705 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3720 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3735 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3750 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3765 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3780 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3795 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3810 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3825 D3  crianca     explorar        [- | ref -]  [explorar]
+t  3840 D3  crianca     brincar         [- | ref -]  [brincar]
+t  3855 D3  crianca     ocioso          [- | ref -]  [à toa]
+t  3870 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  3885 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  3900 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  3915 D3  crianca     chamar_atencao  [tempo_sem_cuidado | ref 290]  [chamar] [:sem cuidado:]
+t  3930 D3  crianca     dormir          [energia | ref -]  [dormir] [:cansaço:]
+t  3945 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3960 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3975 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  3990 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4005 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4020 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4035 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4050 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4065 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4080 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4095 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4110 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4125 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4140 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4155 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4170 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4185 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4200 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4215 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4230 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4245 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4260 D3  crianca     dormir          [hora,energia | ref -]  [dormir] [:hora do dia:]
+t  4275 D3  crianca     dormir          [dormindo,energia | ref -]  [dormir] [:sono:]
+t  4290 D3  crianca     chamar_atencao  [fome | ref -]  [chamar] [:fome:]
+t  4305 D3  crianca     dormir          [hora,energia | ref -]  [dormir] [:hora do dia:]
+t  4320 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4335 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4350 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4365 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4380 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4395 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4410 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4425 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4440 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4455 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4470 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4485 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4500 D4  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  4515 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4530 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4545 D4  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  4560 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4575 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4590 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4605 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4620 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  4635 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4650 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4665 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4680 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4695 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4710 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4725 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4740 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4755 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4770 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4785 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4800 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4815 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4830 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4845 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4860 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4875 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4890 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4905 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4920 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4935 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4950 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4965 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4980 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  4995 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5010 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5025 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5040 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5055 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5070 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5085 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5100 D4  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  5115 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5130 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5145 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5160 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5175 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5190 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5205 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5220 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5235 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5250 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5265 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5280 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5295 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5310 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5325 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5340 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5355 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5370 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5385 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5400 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5415 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5430 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5445 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5460 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5475 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5490 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5505 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5520 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5535 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5550 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5565 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5580 D4  adolescente brincar         [- | ref -]  brincar... 
+t  5595 D4  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  5610 D4  adolescente comer           [fome | ref -]  comer... fome...
+t  5625 D4  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  5640 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5655 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5670 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5685 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5700 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5715 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5730 D4  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5745 D4  adolescente brincar         [- | ref -]  brincar... 
+t  5760 D5  adolescente brincar         [- | ref -]  brincar... 
+t  5775 D5  adolescente ocioso          [- | ref -]  à toa... 
+t  5790 D5  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  5805 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5820 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5835 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5850 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5865 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  5880 D5  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  5895 D5  adolescente brincar         [- | ref -]  brincar... 
+t  5910 D5  adolescente explorar        [- | ref -]  explorar... 
+t  5925 D5  adolescente explorar        [- | ref -]  explorar... 
+t  5940 D5  adolescente brincar         [- | ref -]  brincar... 
+t  5955 D5  adolescente explorar        [- | ref -]  explorar... 
+t  5970 D5  adolescente ocioso          [- | ref -]  à toa... 
+t  5985 D5  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  6000 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6015 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6030 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6045 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6060 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6075 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6090 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6105 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6120 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6135 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6150 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6165 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6180 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6195 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6210 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6225 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6240 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6255 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6270 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6285 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6300 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6315 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6330 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6345 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6360 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6375 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6390 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6405 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6420 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6435 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6450 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6465 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6480 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6495 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6510 D5  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  6525 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6540 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6555 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6570 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6585 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6600 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6615 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  6630 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6645 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6660 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6675 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6690 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6705 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6720 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6735 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6750 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6765 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6780 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6795 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6810 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6825 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6840 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6855 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6870 D5  adolescente chamar_atencao  [fome,higiene | ref -]  chamar... fome...
+t  6885 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6900 D5  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  6915 D5  adolescente comer           [fome | ref -]  comer... fome...
+t  6930 D5  adolescente ocioso          [- | ref -]  à toa... 
+t  6945 D5  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  6960 D5  adolescente comer           [fome | ref -]  comer... fome...
+t  6975 D5  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  6990 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7005 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7020 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7035 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7050 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7065 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7080 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7095 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7110 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7125 D5  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7140 D5  adolescente explorar        [- | ref -]  explorar... 
+t  7155 D5  adolescente explorar        [- | ref -]  explorar... 
+t  7170 D5  adolescente explorar        [- | ref -]  explorar... 
+t  7185 D5  adolescente ocioso          [- | ref -]  à toa... 
+t  7200 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7215 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7230 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  7245 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7260 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  7275 D6  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  7290 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7305 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7320 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7335 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7350 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7365 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  7380 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  7395 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7410 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7425 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  7440 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7455 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  7470 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7485 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7500 D6  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  7515 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7530 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7545 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7560 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7575 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7590 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  7605 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7620 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7635 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7650 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7665 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7680 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  7695 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7710 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7725 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  7740 D6  adolescente explorar        [- | ref -]  explorar... 
+t  7755 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  7770 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7785 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7800 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7815 D6  adolescente brincar         [- | ref -]  brincar... 
+t  7830 D6  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  7845 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7860 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7875 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7890 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7905 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7920 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7935 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7950 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7965 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7980 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  7995 D6  adolescente explorar        [- | ref -]  explorar... 
+t  8010 D6  adolescente explorar        [- | ref -]  explorar... 
+t  8025 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8040 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8055 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8070 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8085 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8100 D6  adolescente comer           [fome | ref -]  comer... fome...
+t  8115 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8130 D6  adolescente comer           [fome | ref -]  comer... fome...
+t  8145 D6  adolescente brincar         [- | ref -]  brincar... 
+t  8160 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8175 D6  adolescente comer           [fome | ref -]  comer... fome...
+t  8190 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8205 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8220 D6  adolescente comer           [fome | ref -]  comer... fome...
+t  8235 D6  adolescente chamar_atencao  [fome | ref -]  chamar... fome...
+t  8250 D6  adolescente brincar         [- | ref -]  brincar... 
+t  8265 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  8280 D6  adolescente brincar         [- | ref -]  brincar... 
+t  8295 D6  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  8310 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8325 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8340 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8355 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8370 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8385 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8400 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8415 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8430 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8445 D6  adolescente explorar        [- | ref -]  explorar... 
+t  8460 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8475 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8490 D6  adolescente explorar        [- | ref -]  explorar... 
+t  8505 D6  adolescente explorar        [- | ref -]  explorar... 
+t  8520 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8535 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8550 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8565 D6  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  8580 D6  adolescente ocioso          [- | ref -]  à toa... 
+t  8595 D6  adolescente explorar        [- | ref -]  explorar... 
+t  8610 D6  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  8625 D6  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8640 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8655 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8670 D7  adolescente brincar         [- | ref -]  brincar... 
+t  8685 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  8700 D7  adolescente brincar         [- | ref -]  brincar... 
+t  8715 D7  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  8730 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8745 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8760 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8775 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8790 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8805 D7  adolescente brincar         [- | ref -]  brincar... 
+t  8820 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  8835 D7  adolescente brincar         [- | ref -]  brincar... 
+t  8850 D7  adolescente explorar        [- | ref -]  explorar... 
+t  8865 D7  adolescente explorar        [- | ref -]  explorar... 
+t  8880 D7  adolescente explorar        [- | ref -]  explorar... 
+t  8895 D7  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t  8910 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8925 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8940 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8955 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8970 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  8985 D7  adolescente comer           [fome | ref -]  comer... fome...
+t  9000 D7  adolescente comer           [fome | ref -]  comer... fome...
+t  9015 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9030 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9045 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9060 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9075 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9090 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9105 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9120 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9135 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9150 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9165 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9180 D7  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  9195 D7  adolescente chamar_atencao  [higiene | ref -]  chamar... higiene...
+t  9210 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9225 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9240 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9255 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9270 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9285 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9300 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9315 D7  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  9330 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9345 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9360 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9375 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9390 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9405 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9420 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9435 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9450 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9465 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9480 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9495 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9510 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9525 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9540 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9555 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9570 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9585 D7  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  9600 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9615 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9630 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9645 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9660 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9675 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9690 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9705 D7  adolescente chamar_atencao  [- | ref -]  chamar... 
+t  9720 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9735 D7  adolescente dormir          [energia | ref -]  dormir... cansaço...
+t  9750 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9765 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9780 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9795 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9810 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9825 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9840 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9855 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9870 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t  9885 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9900 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9915 D7  adolescente explorar        [- | ref -]  explorar... 
+t  9930 D7  adolescente ocioso          [- | ref -]  à toa... 
+t  9945 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9960 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9975 D7  adolescente brincar         [- | ref -]  brincar... 
+t  9990 D7  adolescente brincar         [- | ref -]  brincar... 
+t 10005 D7  adolescente brincar         [- | ref -]  brincar... 
+t 10020 D7  adolescente dormir          [hora,energia | ref -]  dormir... hora do dia...
+t 10035 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t 10050 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t 10065 D7  adolescente dormir          [dormindo,energia | ref -]  dormir... sono...
+t 10080 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10095 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10110 D8  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 10125 D8  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 10140 D8  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 10155 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 10170 D8  adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 10185 D8  adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 10200 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 10215 D8  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 10230 D8  adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 10245 D8  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 10260 D8  adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 10275 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10290 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10305 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10320 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10335 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10350 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10365 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10380 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10395 D8  adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 10410 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10425 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10440 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10455 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10470 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10485 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10500 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10515 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10530 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10545 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10560 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10575 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10590 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10605 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10620 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10635 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10650 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10665 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10680 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10695 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10710 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 10725 D8  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 10740 D8  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 10755 D8  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 10770 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 10785 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 10800 D8  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 10815 D8  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 10830 D8  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 10845 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 10860 D8  adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 10875 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10890 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10905 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10920 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10935 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10950 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10965 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10980 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 10995 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11010 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11025 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11040 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11055 D8  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11070 D8  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11085 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11100 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11115 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11130 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11145 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11160 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11175 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11190 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11205 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11220 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11235 D8  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 11250 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11265 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11280 D8  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 11295 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11310 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11325 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11340 D8  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 11355 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11370 D8  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 11385 D8  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11400 D8  adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 11415 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11430 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11445 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11460 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11475 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11490 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11505 D8  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11520 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11535 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11550 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11565 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11580 D9  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 11595 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11610 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11625 D9  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 11640 D9  adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 11655 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11670 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11685 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11700 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11715 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11730 D9  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 11745 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11760 D9  adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 11775 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11790 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 11805 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11820 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 11835 D9  adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 11850 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11865 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11880 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11895 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11910 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 11925 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 11940 D9  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11955 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 11970 D9  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 11985 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 12000 D9  adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 12015 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 12030 D9  adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 12045 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 12060 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 12075 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 12090 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 12105 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 12120 D9  adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 12135 D9  adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 12150 D9  adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 12165 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12180 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12195 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12210 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12225 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12240 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12255 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12270 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12285 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12300 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12315 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12330 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12345 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12360 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12375 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12390 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12405 D9  adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 12420 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12435 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12450 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12465 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12480 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12495 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12510 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12525 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12540 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12555 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12570 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12585 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12600 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12615 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12630 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12645 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12660 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12675 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12690 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12705 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12720 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12735 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12750 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12765 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12780 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12795 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12810 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12825 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12840 D9  adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 12855 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12870 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12885 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12900 D9  adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 12915 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12930 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12945 D9  adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12960 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12975 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 12990 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13005 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13020 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13035 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13050 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13065 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13080 D10 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 13095 D10 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 13110 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13125 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13140 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13155 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13170 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13185 D10 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 13200 D10 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 13215 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13230 D10 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 13245 D10 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 13260 D10 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 13275 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13290 D10 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 13305 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13320 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13335 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13350 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13365 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13380 D10 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 13395 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13410 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13425 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13440 D10 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 13455 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13470 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13485 D10 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 13500 D10 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 13515 D10 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 13530 D10 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 13545 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13560 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13575 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13590 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13605 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13620 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13635 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13650 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13665 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13680 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13695 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13710 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13725 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13740 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13755 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13770 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13785 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13800 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13815 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13830 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13845 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13860 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13875 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13890 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 13905 D10 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 13920 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13935 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13950 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13965 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13980 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 13995 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14010 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14025 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14040 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14055 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14070 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14085 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14100 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14115 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14130 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14145 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14160 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14175 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14190 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14205 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14220 D10 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 14235 D10 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14250 D10 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14265 D10 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14280 D10 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14295 D10 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14310 D10 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14325 D10 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 14340 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14355 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14370 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14385 D10 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14400 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14415 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14430 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14445 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14460 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14475 D11 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 14490 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14505 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14520 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14535 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14550 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14565 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14580 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14595 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14610 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14625 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14640 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14655 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14670 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14685 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14700 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14715 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14730 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 14745 D11 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 14760 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14775 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14790 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14805 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 14820 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14835 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14850 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14865 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14880 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14895 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14910 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14925 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14940 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14955 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14970 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 14985 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15000 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15015 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15030 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15045 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15060 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15075 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15090 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15105 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15120 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15135 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15150 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15165 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 15180 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 15195 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 15210 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 15225 D11 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 15240 D11 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 15255 D11 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 15270 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15285 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15300 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15315 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15330 D11 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 15345 D11 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 15360 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15375 D11 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 15390 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15405 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15420 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15435 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15450 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15465 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15480 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15495 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15510 D11 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 15525 D11 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 15540 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15555 D11 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 15570 D11 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 15585 D11 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 15600 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15615 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15630 D11 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 15645 D11 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 15660 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15675 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15690 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15705 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15720 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15735 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15750 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15765 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15780 D11 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15795 D11 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15810 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15825 D11 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15840 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15855 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15870 D12 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1228]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1228).
+t 15885 D12 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1228]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1228).
+t 15900 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15915 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15930 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 15945 D12 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 15960 D12 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 15975 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 15990 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16005 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16020 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16035 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16050 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16065 D12 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 16080 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16095 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16110 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16125 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16140 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16155 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16170 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16185 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16200 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16215 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16230 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16245 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16260 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16275 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16290 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16305 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16320 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16335 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16350 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16365 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16380 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16395 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16410 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16425 D12 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 16440 D12 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 16455 D12 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 16470 D12 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 16485 D12 adulto      chamar_atencao  [higiene | ref -]  Chamei você por causa da higiene.
+t 16500 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16515 D12 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 16530 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16545 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16560 D12 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 16575 D12 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 16590 D12 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 16605 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16620 D12 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 16635 D12 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 16650 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16665 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16680 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16695 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16710 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16725 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16740 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16755 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16770 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 16785 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16800 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16815 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16830 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16845 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16860 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16875 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16890 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16905 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16920 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16935 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16950 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16965 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 16980 D12 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 16995 D12 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17010 D12 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17025 D12 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17040 D12 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 17055 D12 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17070 D12 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17085 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 17100 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 17115 D12 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 17130 D12 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17145 D12 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 17160 D12 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 17175 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17190 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17205 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17220 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17235 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17250 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17265 D12 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17280 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17295 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17310 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17325 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 17340 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 17355 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17370 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17385 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17400 D13 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 17415 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17430 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17445 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17460 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17475 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17490 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17505 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17520 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17535 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17550 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17565 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17580 D13 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 17595 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17610 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17625 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17640 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17655 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 17670 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17685 D13 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 17700 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 17715 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17730 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17745 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17760 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17775 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17790 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17805 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17820 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17835 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17850 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17865 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17880 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17895 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17910 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 17925 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 17940 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 17955 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 17970 D13 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1387]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1387).
+t 17985 D13 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1387]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1387).
+t 18000 D13 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1387]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1387).
+t 18015 D13 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1387]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1387).
+t 18030 D13 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1387]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1387).
+t 18045 D13 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1387]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1387).
+t 18060 D13 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 18075 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18090 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18105 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18120 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18135 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18150 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18165 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18180 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18195 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18210 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18225 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 18240 D13 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 18255 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18270 D13 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 18285 D13 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 18300 D13 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 18315 D13 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 18330 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 18345 D13 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 18360 D13 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 18375 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18390 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18405 D13 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 18420 D13 adulto      comer           [fome | ref -]  Comi por causa da fome.
+t 18435 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18450 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18465 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18480 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18495 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18510 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18525 D13 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 18540 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18555 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18570 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18585 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18600 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18615 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18630 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18645 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18660 D13 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18675 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18690 D13 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18705 D13 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18720 D14 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18735 D14 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 18750 D14 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18765 D14 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 18780 D14 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18795 D14 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 18810 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18825 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18840 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18855 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18870 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 18885 D14 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 18900 D14 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18915 D14 adulto      ocioso          [- | ref -]  Fiquei à toa. Não sei, só quis.
+t 18930 D14 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 18945 D14 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18960 D14 adulto      brincar         [- | ref -]  Brinquei. Não sei, só quis.
+t 18975 D14 adulto      chamar_atencao  [- | ref -]  Chamei você. Não sei, só quis.
+t 18990 D14 adulto      explorar        [- | ref -]  Explorei. Não sei, só quis.
+t 19005 D14 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 19020 D14 adulto      dormir          [hora,energia | ref -]  Dormi por causa da hora do dia e por causa do cansaço.
+t 19035 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19050 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19065 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19080 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19095 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19110 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19125 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19140 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19155 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19170 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19185 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19200 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19215 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19230 D14 adulto      chamar_atencao  [tempo_sem_cuidado | ref 1472]  Chamei você porque fiquei muito tempo sem cuidado (lembro do evento #1472).
+t 19245 D14 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 19260 D14 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 19275 D14 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 19290 D14 adulto      chamar_atencao  [fome | ref -]  Chamei você por causa da fome.
+t 19305 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19320 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19335 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19350 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19365 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19380 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19395 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19410 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19425 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19440 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19455 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19470 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19485 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19500 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19515 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19530 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19545 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19560 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19575 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19590 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19605 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19620 D14 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 19635 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19650 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19665 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19680 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19695 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19710 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19725 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19740 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19755 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19770 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19785 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19800 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19815 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19830 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19845 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19860 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19875 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19890 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19905 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19920 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19935 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19950 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 19965 D14 adulto      dormir          [energia | ref -]  Dormi por causa do cansaço.
+t 19980 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 19995 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20010 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20025 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20040 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20055 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20070 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20085 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20100 D14 adulto      dormir          [dormindo,energia | ref -]  Dormi porque eu estava com sono e por causa do cansaço.
+t 20115 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 20130 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.
+t 20145 D14 adulto      chamar_atencao  [fome,higiene | ref -]  Chamei você por causa da fome e por causa da higiene.

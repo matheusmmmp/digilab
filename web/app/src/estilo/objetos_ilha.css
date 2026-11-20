@@ -1,0 +1,64 @@
+/* Os objetos que falam (ObjetosDaIlha.tsx; prancha docs/pranchas/ux-ilha-a/ilha_a.css). Nenhuma cor nova: so os tokens --hx-* e --hud-* das duas peles
+   (tokens.css) e os cantos em L do Militar (pele-xcom.css). As medidas (a altura de 34 px da etiqueta e 28 px do selo, a largura de 300 px do cartao, 220 px no
+   celular) sao de layout: PROPOSTO, SEM FONTE. A caixa e posta por transform (a vista escreve o ponto a cada quadro); aqui so o deslocamento do proprio
+   tamanho: a etiqueta e o selo ficam centrados acima do topo do objeto, e o cartao pelo canto de cima. */
+.objetos-ilha{ position:fixed; inset:0; z-index:7; pointer-events:none }
+.obj-etq, .obj-selo, .obj-cartao{ position:absolute; left:0; top:0; will-change:transform; color:var(--hx-texto);
+  background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)); border:1px solid var(--hx-borda);
+  box-shadow:var(--hud-brilho), var(--hx-sombra); backdrop-filter:var(--hud-desfoque); -webkit-backdrop-filter:var(--hud-desfoque) }
+:root[data-pele="vidro"] :is(.obj-etq, .obj-selo, .obj-cartao){ border-radius:10px }
+:root[data-pele="xcom"] :is(.obj-etq, .obj-selo, .obj-cartao){ border-radius:0; background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) }
+
+/* a etiqueta curta: icone, numero e rotulo curto, centrada acima do objeto, com a ponta ate ele */
+.obj-etq{ display:flex; align-items:center; gap:6px; height:34px; padding:0 10px; white-space:nowrap; font:600 15px/1 var(--hx-f); translate:-50% -100% }
+.obj-etq::after, .obj-selo::after{ content:""; position:absolute; left:50%; top:100%; width:2px; height:10px; margin-left:-1px; background:var(--hx-borda) }
+.obj-etq svg, .obj-selo svg{ flex:none; width:18px; height:18px; color:var(--hx-rotulo) }
+.obj-etq b, .obj-selo b{ font:700 19px/1 var(--hx-f-num); color:var(--hx-num) }
+.obj-etq--alvo{ border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho), var(--hx-sombra) }
+
+/* o selo do lugar: so o progresso, pequeno */
+.obj-selo{ display:flex; align-items:center; gap:5px; height:28px; padding:0 8px; white-space:nowrap; font:600 13px/1 var(--hx-f); translate:-50% -100% }
+.obj-selo b{ font-size:16px }
+.obj-selo svg{ width:15px; height:15px }
+.obj-selo .obj-ok{ color:var(--hx-ok) }
+.obj-hora{ display:inline-flex; align-items:center; gap:3px; font:700 14px/1 var(--hx-f-num); color:var(--hx-num) }
+.obj-ponto{ width:9px; height:9px; border-radius:50%; background:var(--hx-necessidade); box-shadow:0 0 0 2px var(--hx-chao) }
+
+/* so com o mouse sobre o objeto, e bem translucidos (o Matheus, 2026-11-08); a opacidade e de layout: PROPOSTO, SEM FONTE */
+.obj-etq, .obj-selo{ opacity:.55 }
+
+/* o cartao do toque */
+.obj-cartao{ width:300px; max-width:calc(100vw - 16px); padding:12px 12px 12px 14px; font:500 15px/1.25 var(--hx-f); pointer-events:auto }
+.obj-cartao-topo{ display:flex; align-items:center; gap:8px }
+.obj-cartao-topo > svg{ flex:none; width:20px; height:20px; color:var(--hx-rotulo) }
+.obj-cartao-nome{ margin:0; font:700 var(--hx-titulo-tam)/1 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-texto) }
+.obj-cartao-num{ margin-left:auto; display:flex; align-items:baseline; gap:5px; color:var(--hx-sec) }
+.obj-cartao-num b{ font:700 24px/1 var(--hx-f-num); color:var(--hx-num) }
+.obj-fechar{ display:inline-grid; place-items:center; width:44px; height:44px; margin:-10px -8px -10px auto; padding:0; border:0; background:transparent; color:var(--hx-texto-2); cursor:pointer }
+.obj-cartao-num + .obj-fechar{ margin-left:0 }
+.obj-fechar svg{ width:18px; height:18px }
+.obj-fechar:focus-visible, .obj-gesto:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.obj-cartao-linha{ display:flex; align-items:center; gap:7px; margin:10px 0 0 }
+.obj-cartao-linha svg{ flex:none; width:17px; height:17px }
+.obj-sem{ color:var(--hx-sec) }
+.obj-aprendeu{ color:var(--hx-aprendido) }
+.obj-gesto{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:44px; margin-top:12px; font:700 16px/1 var(--hx-f); cursor:pointer;
+  color:var(--hx-btn-ink); background:var(--hx-btn-bg); border:1px solid var(--hx-btn-borda) }
+.obj-gesto:hover:not(:disabled){ background:var(--hx-btn-bg-hover) }
+.obj-gesto:disabled{ cursor:default; color:var(--hx-sec); border-color:var(--hx-borda); background:var(--hx-tecla) }
+:root[data-pele="vidro"] .obj-gesto{ border-radius:8px }
+.obj-gesto svg{ width:19px; height:19px }
+
+/* o celular: a etiqueta e o cartao menores */
+@media (max-width: 899px){
+  .obj-etq{ height:28px; padding:0 8px; gap:5px; font-size:13px }
+  .obj-etq b{ font-size:16px }
+  .obj-etq svg{ width:15px; height:15px }
+  .obj-selo{ height:24px; padding:0 6px; font-size:12px }
+  .obj-selo b{ font-size:14px }
+  .obj-cartao{ width:220px; padding:10px 10px 10px 12px; font-size:13px }
+  .obj-cartao-nome{ font-size:13px }
+  .obj-cartao-num b{ font-size:20px }
+  .obj-cartao-linha{ margin-top:8px }
+  .obj-gesto{ font-size:15px; margin-top:10px }
+}

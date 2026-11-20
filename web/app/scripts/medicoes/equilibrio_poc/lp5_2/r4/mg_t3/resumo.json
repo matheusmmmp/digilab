@@ -1,0 +1,523 @@
+{
+ "tarefa": "LUTA_POC, LP5, o resumo das metas",
+ "fase": "lp5_2",
+ "faixa": "calibracao",
+ "parcial": true,
+ "grupos": [
+  "lideres"
+ ],
+ "commit": "544c2768449b235df05f199f72095c5a45d0ebee+sujo",
+ "candidato": {
+  "nome": "mg_t3",
+  "mapa": {
+   "neutro": 10,
+   "hp": 1300,
+   "atk": 100,
+   "def": 50,
+   "vel": 60,
+   "cad": 2000,
+   "hcd": 8,
+   "crit": 10,
+   "erro": 18,
+   "hpot": 2,
+   "esquiva": 0,
+   "atordoa": 0
+  },
+  "gama": {
+   "vigor": 0.02,
+   "folego": 0.14,
+   "recuperacao": 0.02,
+   "forca": 0.02,
+   "mira": 0.14,
+   "guarda": 0.06
+  },
+  "pesoPonto": 15,
+  "multVida": {
+   "crianca": 0.6,
+   "adolescente": 0.9,
+   "adulto": 1.35,
+   "mega": 2.025
+  },
+  "multAtk": {
+   "crianca": 1,
+   "adolescente": 1.5,
+   "adulto": 2.25,
+   "mega": 3.375
+  },
+  "npcTotal": {
+   "npc_tier1_brutamontes": 76.8,
+   "npc_tier2_sentinela": 72,
+   "npc_tier2_carcereiro": 270,
+   "npc_tier2_porteiro": 54,
+   "npc_v6_youkomon": 45,
+   "npc_v5_myotismon": 7.7,
+   "npc_v6_marinbullmon": 110,
+   "npc_v5_puppetmon": 45,
+   "npc_v5_machinedramon": 36,
+   "npc_v5_piedmon": 440
+  },
+  "npcDivisao": {
+   "npc_tier2_carcereiro": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   },
+   "npc_v6_youkomon": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   },
+   "npc_v5_myotismon": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   },
+   "npc_v5_piedmon": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   },
+   "npc_tier2_porteiro": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   },
+   "npc_v5_puppetmon": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   },
+   "npc_v5_machinedramon": {
+    "vigor": 0.45,
+    "folego": 0.45,
+    "recuperacao": 0.45,
+    "forca": 0.45,
+    "mira": 2.1,
+    "guarda": 2.1
+   }
+  },
+  "treinoRival": {
+   "arena": 0,
+   "salao": 0,
+   "liga": 0,
+   "torre": 0,
+   "fabrica": 0
+  },
+  "tiro": {
+   "distMin": 110,
+   "esperaMax": 1500,
+   "recuaAbaixo": 0.75,
+   "recuo": 1.5,
+   "recuaNaPrep": 2,
+   "danoProj": 0.7,
+   "velProj": 1
+  },
+  "esquiva": {
+   "ligada": 1,
+   "kChance": 1,
+   "kReacao": 1,
+   "kDash": 1,
+   "chanceMax": 0.95,
+   "pertoChance": 0,
+   "pertoReacao": 200,
+   "contraMs": 0,
+   "gamaMira": 0.6,
+   "kAtento": 0.5,
+   "gamaFolego": 0.6
+  }
+ },
+ "lutas": 27546,
+ "segundos_somados": 22.142,
+ "passam": [
+  "P1",
+  "D1",
+  "D3"
+ ],
+ "falham": [
+  "P2",
+  "P3",
+  "D2"
+ ],
+ "metas": [
+  {
+   "id": "P1",
+   "meta": "o Gazimon",
+   "criterio": "sem treino <= 0,41; tipico >= 0,59 (a D-LP5-17); a pior especie so na leitura",
+   "passa": true,
+   "valores": {
+    "nome": "Gazimon",
+    "estagio": "crianca",
+    "mapa": "campo",
+    "limite_sem": 0.41,
+    "limite_tipico": 0.59,
+    "sem_treino": 0.373,
+    "ic_sem": [
+     0.346,
+     0.4
+    ],
+    "tipico": 0.615,
+    "ic_tipico": [
+     0.587,
+     0.642
+    ],
+    "pior_especie": 0.033,
+    "por_especie": {
+     "brasa": 0.868,
+     "cirro": 0.033,
+     "limo": 0.476,
+     "ferrugem": 0.912
+    }
+   }
+  },
+  {
+   "id": "P2",
+   "meta": "os 6 lideres",
+   "criterio": "cada um, no estagio dele: sem treino <= 0,41/0,35/0,30/0,27; tipico >= 0,59/0,65/0,70/0,73 (a D-LP5-17; a Cidadela, a serie de 3)",
+   "passa": false,
+   "valores": {
+    "Gazimon": {
+     "nome": "Gazimon",
+     "estagio": "crianca",
+     "mapa": "campo",
+     "limite_sem": 0.41,
+     "limite_tipico": 0.59,
+     "sem_treino": 0.373,
+     "ic_sem": [
+      0.346,
+      0.4
+     ],
+     "tipico": 0.615,
+     "ic_tipico": [
+      0.587,
+      0.642
+     ],
+     "pior_especie": 0.033,
+     "por_especie": {
+      "brasa": 0.868,
+      "cirro": 0.033,
+      "limo": 0.476,
+      "ferrugem": 0.912
+     },
+     "passa": true
+    },
+    "Guardromon": {
+     "nome": "Guardromon",
+     "estagio": "adolescente",
+     "mapa": "coliseu",
+     "limite_sem": 0.35,
+     "limite_tipico": 0.65,
+     "sem_treino": 0.416,
+     "ic_sem": [
+      0.388,
+      0.444
+     ],
+     "tipico": 0.678,
+     "ic_tipico": [
+      0.651,
+      0.704
+     ],
+     "pior_especie": 0.389,
+     "por_especie": {
+      "brasa": 0.64,
+      "limo": 0.389,
+      "ferrugem": 0.961,
+      "cirro": 0.819
+     },
+     "passa": false
+    },
+    "Youkomon": {
+     "nome": "Youkomon",
+     "estagio": "adolescente",
+     "mapa": "floresta",
+     "limite_sem": 0.35,
+     "limite_tipico": 0.65,
+     "sem_treino": 0.418,
+     "ic_sem": [
+      0.391,
+      0.446
+     ],
+     "tipico": 0.635,
+     "ic_tipico": [
+      0.607,
+      0.662
+     ],
+     "pior_especie": 0.418,
+     "por_especie": {
+      "brasa": 0.677,
+      "limo": 0.792,
+      "ferrugem": 0.418,
+      "cirro": 0.604
+     },
+     "passa": false
+    },
+    "Myotismon": {
+     "nome": "Myotismon",
+     "estagio": "adulto",
+     "mapa": "castelo",
+     "limite_sem": 0.3,
+     "limite_tipico": 0.7,
+     "sem_treino": 0.185,
+     "ic_sem": [
+      0.164,
+      0.208
+     ],
+     "tipico": 0.523,
+     "ic_tipico": [
+      0.494,
+      0.551
+     ],
+     "pior_especie": 0.3,
+     "por_especie": {
+      "brasa": 0.533,
+      "limo": 0.3,
+      "cirro": 0.692,
+      "ferrugem": 0.564
+     },
+     "passa": false
+    },
+    "MarinBullmon": {
+     "nome": "MarinBullmon",
+     "estagio": "adulto",
+     "mapa": "praia",
+     "limite_sem": 0.3,
+     "limite_tipico": 0.7,
+     "sem_treino": 0.273,
+     "ic_sem": [
+      0.249,
+      0.299
+     ],
+     "tipico": 0.816,
+     "ic_tipico": [
+      0.793,
+      0.837
+     ],
+     "pior_especie": 0.727,
+     "por_especie": {
+      "brasa": 0.81,
+      "limo": 0.839,
+      "cirro": 0.727,
+      "ferrugem": 0.867
+     },
+     "passa": true
+    },
+    "Piedmon": {
+     "nome": "Piedmon",
+     "estagio": "mega",
+     "mapa": "caverna",
+     "limite_sem": 0.27,
+     "limite_tipico": 0.73,
+     "sem_treino": 0.46,
+     "ic_sem": [
+      0.432,
+      0.488
+     ],
+     "tipico": 0.694,
+     "ic_tipico": [
+      0.668,
+      0.72
+     ],
+     "pior_especie": 0.297,
+     "por_especie": {
+      "limo": 0.297,
+      "brasa": 0.868,
+      "cirro": 0.747,
+      "ferrugem": 0.987
+     },
+     "passa": false
+    }
+   }
+  },
+  {
+   "id": "P3",
+   "meta": "os 4 desafiantes",
+   "criterio": "cada um: o limite do lider do estagio, +0,15 no sem treino e +0,05 no tipico (a D-LP5-17)",
+   "passa": false,
+   "valores": {
+    "Tortomon": {
+     "nome": "Tortomon",
+     "estagio": "adolescente",
+     "mapa": "coliseu",
+     "limite_sem": 0.5,
+     "limite_tipico": 0.7,
+     "sem_treino": 0.463,
+     "ic_sem": [
+      0.434,
+      0.491
+     ],
+     "tipico": 0.896,
+     "ic_tipico": [
+      0.877,
+      0.912
+     ],
+     "pior_especie": 0.607,
+     "por_especie": {
+      "brasa": 0.607,
+      "limo": 0.994,
+      "ferrugem": 0.993,
+      "cirro": 0.988
+     },
+     "passa": true
+    },
+    "Devidramon": {
+     "nome": "Devidramon",
+     "estagio": "adolescente",
+     "mapa": "coliseu",
+     "limite_sem": 0.5,
+     "limite_tipico": 0.7,
+     "sem_treino": 0.641,
+     "ic_sem": [
+      0.613,
+      0.667
+     ],
+     "tipico": 0.739,
+     "ic_tipico": [
+      0.714,
+      0.763
+     ],
+     "pior_especie": 0.389,
+     "por_especie": {
+      "brasa": 0.73,
+      "limo": 0.389,
+      "ferrugem": 0.989,
+      "cirro": 0.965
+     },
+     "passa": false
+    },
+    "Puppetmon": {
+     "nome": "Puppetmon",
+     "estagio": "mega",
+     "mapa": "caverna",
+     "limite_sem": 0.42,
+     "limite_tipico": 0.78,
+     "sem_treino": 0.688,
+     "ic_sem": [
+      0.662,
+      0.714
+     ],
+     "tipico": 0.759,
+     "ic_tipico": [
+      0.734,
+      0.783
+     ],
+     "pior_especie": 0.331,
+     "por_especie": {
+      "limo": 0.331,
+      "brasa": 0.936,
+      "cirro": 0.894,
+      "ferrugem": 1
+     },
+     "passa": false
+    },
+    "Machinedramon": {
+     "nome": "Machinedramon",
+     "estagio": "mega",
+     "mapa": "caverna",
+     "limite_sem": 0.42,
+     "limite_tipico": 0.78,
+     "sem_treino": 0.684,
+     "ic_sem": [
+      0.657,
+      0.71
+     ],
+     "tipico": 0.783,
+     "ic_tipico": [
+      0.758,
+      0.805
+     ],
+     "pior_especie": 0.456,
+     "por_especie": {
+      "limo": 0.456,
+      "brasa": 0.936,
+      "cirro": 0.841,
+      "ferrugem": 1
+     },
+     "passa": false
+    }
+   }
+  },
+  {
+   "id": "D1",
+   "meta": "a duracao",
+   "criterio": "mediana de cada estagio de 15 a 40 s; p90 <= 60 s; nenhuma forma com mediana < 8 s",
+   "passa": true,
+   "valores": {
+    "por_estagio": {
+     "crianca": {
+      "mediana_s": 19.65,
+      "p90_s": 27.95,
+      "lutas": 2400
+     },
+     "adolescente": {
+      "mediana_s": 22.45,
+      "p90_s": 29.55,
+      "lutas": 9600
+     },
+     "adulto": {
+      "mediana_s": 17.05,
+      "p90_s": 28.05,
+      "lutas": 8346
+     },
+     "mega": {
+      "mediana_s": 18.45,
+      "p90_s": 28.65,
+      "lutas": 7200
+     }
+    },
+    "formas_curtas": [],
+    "mediana_min_forma": 12.35,
+    "mediana_max_forma": 28.35
+   }
+  },
+  {
+   "id": "D2",
+   "meta": "sem fim e empate",
+   "criterio": "lutas no limite <= 0,5 %; empates <= 2 % em cada forma",
+   "passa": false,
+   "valores": {
+    "sem_fim": 0,
+    "lutas": 27546,
+    "empate_total": 0.009,
+    "empate_max_forma": 0.08,
+    "formas_acima_de_2pc": [
+     "brasa_crianca_arisco (0.08)",
+     "ferrugem_adolescente_brigao (0.029)",
+     "limo_adolescente_colosso (0.034)",
+     "ferrugem_adolescente_cacador (0.028)",
+     "cirro_adolescente_guardiao (0.029)",
+     "cirro_adolescente_cacador (0.06)",
+     "cirro_adolescente_brigao (0.023)",
+     "limo_adulto_sentinela (0.022)",
+     "npc_tier2_sentinela (0.044)"
+    ]
+   }
+  },
+  {
+   "id": "D3",
+   "meta": "a Cidadela cabe",
+   "criterio": "a serie de 3 (pet tipico) no p90 <= 180 s",
+   "passa": true,
+   "valores": {
+    "p90_s": 51.55,
+    "mediana_s": 43.85
+   }
+  }
+ ]
+}

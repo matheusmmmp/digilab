@@ -1,0 +1,793 @@
+{
+  "criterios": {
+    "C-L2-1": {
+      "diferenca": -7.262777777777778,
+      "ic95": {
+        "ic_inferior": -7.6112046104688735,
+        "ic_superior": -6.9143509450866825
+      },
+      "media_a": 25.690555555555555,
+      "media_b": 18.427777777777777,
+      "motivo": null,
+      "passa": false,
+      "unidades": 450
+    },
+    "C-L2-2": {
+      "diferenca": 0.010304648626845983,
+      "ic95": {
+        "ic_inferior": 0.003204980505622402,
+        "ic_superior": 0.017404316748069564
+      },
+      "media_a": 0.42636218255381053,
+      "media_b": 0.43666683118065647,
+      "motivo": null,
+      "passa": true,
+      "unidades": 450
+    },
+    "C-L2-3": {
+      "comparacoes": {
+        "episodio|comedouro": {
+          "diferenca": 0.0028374015668687588,
+          "ic95": {
+            "ic_inferior": -0.0022074176043536567,
+            "ic_superior": 0.007882220738091174
+          },
+          "margem": -0.03,
+          "media_a": 0.8159981182691214,
+          "media_b": 0.81883551983599,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "episodio|perto": {
+          "diferenca": -9.186661287630941e-05,
+          "ic95": {
+            "ic_inferior": -0.0008242579028258059,
+            "ic_superior": 0.0006405246770731871
+          },
+          "margem": -0.03,
+          "media_a": 0.9560587016093962,
+          "media_b": 0.9559668349965199,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "exaustao|comedouro": {
+          "diferenca": 0.0005142195767195772,
+          "ic95": {
+            "ic_inferior": -0.0008369255796245454,
+            "ic_superior": 0.0018653647330636996
+          },
+          "margem": 0.02,
+          "media_a": 0.1750338955026455,
+          "media_b": 0.1755481150793651,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "exaustao|longe": {
+          "diferenca": -0.007074239417989418,
+          "ic95": {
+            "ic_inferior": -0.01085583533030509,
+            "ic_superior": -0.0032926435056737455
+          },
+          "margem": 0.02,
+          "media_a": 0.32354580026455027,
+          "media_b": 0.31647156084656086,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "exaustao|perto": {
+          "diferenca": -0.0003141534391534394,
+          "ic95": {
+            "ic_inferior": -0.0007220882865122122,
+            "ic_superior": 9.378140820533355e-05
+          },
+          "margem": 0.02,
+          "media_a": 0.15638640873015874,
+          "media_b": 0.1560722552910053,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "privacao|comedouro": {
+          "diferenca": -0.00010416666666666623,
+          "ic95": {
+            "ic_inferior": -0.0025194768294493535,
+            "ic_superior": 0.0023111434961160214
+          },
+          "margem": 0.02,
+          "media_a": 0.15472718253968254,
+          "media_b": 0.15462301587301586,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "privacao|longe": {
+          "diferenca": -0.01603753306878307,
+          "ic95": {
+            "ic_inferior": -0.024893400107919655,
+            "ic_superior": -0.007181666029646483
+          },
+          "margem": 0.02,
+          "media_a": 0.556291335978836,
+          "media_b": 0.5402538029100529,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "privacao|perto": {
+          "diferenca": 8.101851851851823e-05,
+          "ic95": {
+            "ic_inferior": -0.00018044640187273183,
+            "ic_superior": 0.0003424834389097683
+          },
+          "margem": 0.02,
+          "media_a": 0.14213955026455027,
+          "media_b": 0.14222056878306877,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "racao|comedouro": {
+          "diferenca": 0.0012762294227608283,
+          "ic95": {
+            "ic_inferior": -0.0027002599614540344,
+            "ic_superior": 0.005252718806975691
+          },
+          "margem": -0.03,
+          "media_a": 0.42094917885430894,
+          "media_b": 0.42222540827706984,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        },
+        "racao|perto": {
+          "diferenca": 0.00041304483697781046,
+          "ic95": {
+            "ic_inferior": -0.0007846787935829609,
+            "ic_superior": 0.0016107684675385817
+          },
+          "margem": -0.03,
+          "media_a": 0.6892940289080195,
+          "media_b": 0.6897070737449973,
+          "motivo": null,
+          "passa": true,
+          "unidades": 450
+        }
+      },
+      "passa": true
+    },
+    "C-L2-4": {
+      "expiradas": 34,
+      "frac_expirou": 0.0007931324064570309,
+      "frac_meta_ou_achou_nunca_suspensas": 0.8403636554181513,
+      "frac_meta_ou_achou_suspensas": 0.15519281531599866,
+      "passa": false,
+      "suspensoes": 42868
+    },
+    "leitura": {
+      "nao_afirma": "nem que a L-2 conserta o longe, nem que o modular supera o A, nem prontidao (a espec, secao 8)",
+      "o_longe_melhorou": true,
+      "segue_para_o_jogo": false
+    },
+    "limiares": {
+      "C-L2-1": 0.5,
+      "C-L2-3": {
+        "corpo": 0.02,
+        "taxas": -0.03
+      },
+      "C-L2-4": {
+        "diferenca_max": 0.1,
+        "expirou_max": 0.25
+      },
+      "status": "PROPOSTOS, SEM FONTE (a espec, secao 7.3; a LS-7 os aprovou sem muda-los)"
+    },
+    "parte_a": {
+      "outra_com_racao_em_R_por_vida": {
+        "comedouro": 1.835,
+        "longe": 18.38888888888889
+      },
+      "volta_ao_matheus": false
+    }
+  },
+  "descritivos": {
+    "M0_x_M0+S": {
+      "c_l2_1|longe": {
+        "diferenca": -6.568888888888889,
+        "ic95": {
+          "ic_inferior": -6.88357408192131,
+          "ic_superior": -6.254203695856468
+        },
+        "media_a": 21.913888888888888,
+        "media_b": 15.345,
+        "motivo": null,
+        "unidades": 450
+      },
+      "episodio|comedouro": {
+        "diferenca": 0.01119411189181294,
+        "ic95": {
+          "ic_inferior": 0.004843988024122196,
+          "ic_superior": 0.017544235759503687
+        },
+        "media_a": 0.7078893559073363,
+        "media_b": 0.7190834677991491,
+        "motivo": null,
+        "unidades": 450
+      },
+      "episodio|longe": {
+        "diferenca": 0.008996546166605598,
+        "ic95": {
+          "ic_inferior": 0.0028360964730013184,
+          "ic_superior": 0.015156995860209879
+        },
+        "media_a": 0.4635869151777768,
+        "media_b": 0.4725834613443824,
+        "motivo": null,
+        "unidades": 450
+      },
+      "episodio|perto": {
+        "diferenca": 0.0003991044997138338,
+        "ic95": {
+          "ic_inferior": -0.0012984495176940798,
+          "ic_superior": 0.0020966585171217473
+        },
+        "media_a": 0.9071493515478204,
+        "media_b": 0.9075484560475342,
+        "motivo": null,
+        "unidades": 450
+      },
+      "exaustao|comedouro": {
+        "diferenca": -0.0032547949735449743,
+        "ic95": {
+          "ic_inferior": -0.005437657048655675,
+          "ic_superior": -0.0010719328984342734
+        },
+        "media_a": 0.178463955026455,
+        "media_b": 0.17520916005291004,
+        "motivo": null,
+        "unidades": 450
+      },
+      "exaustao|longe": {
+        "diferenca": -0.002731481481481483,
+        "ic95": {
+          "ic_inferior": -0.005578547078813971,
+          "ic_superior": 0.00011558411585100388
+        },
+        "media_a": 0.27588128306878307,
+        "media_b": 0.27314980158730157,
+        "motivo": null,
+        "unidades": 450
+      },
+      "exaustao|perto": {
+        "diferenca": -6.944444444444404e-05,
+        "ic95": {
+          "ic_inferior": -0.0007242677241573057,
+          "ic_superior": 0.0005853788352684177
+        },
+        "media_a": 0.14828786375661376,
+        "media_b": 0.1482184193121693,
+        "motivo": null,
+        "unidades": 450
+      },
+      "privacao|comedouro": {
+        "diferenca": -0.01275297619047619,
+        "ic95": {
+          "ic_inferior": -0.02025093769935199,
+          "ic_superior": -0.0052550146816003895
+        },
+        "media_a": 0.20465277777777777,
+        "media_b": 0.19189980158730158,
+        "motivo": null,
+        "unidades": 450
+      },
+      "privacao|longe": {
+        "diferenca": -0.008291997354497352,
+        "ic95": {
+          "ic_inferior": -0.015573682187602116,
+          "ic_superior": -0.0010103125213925881
+        },
+        "media_a": 0.5767915013227513,
+        "media_b": 0.568499503968254,
+        "motivo": null,
+        "unidades": 450
+      },
+      "privacao|perto": {
+        "diferenca": 0.00023313492063492105,
+        "ic95": {
+          "ic_inferior": -0.00027701263336334754,
+          "ic_superior": 0.0007432824746331896
+        },
+        "media_a": 0.12541914682539682,
+        "media_b": 0.12565228174603174,
+        "motivo": null,
+        "unidades": 450
+      },
+      "racao|comedouro": {
+        "diferenca": 0.004287964224360133,
+        "ic95": {
+          "ic_inferior": 0.0002822746957698184,
+          "ic_superior": 0.008293653752950447
+        },
+        "media_a": 0.24725096768791288,
+        "media_b": 0.251538931912273,
+        "motivo": null,
+        "unidades": 450
+      },
+      "racao|perto": {
+        "diferenca": 0.0001256876706053736,
+        "ic95": {
+          "ic_inferior": -0.0016820725640234054,
+          "ic_superior": 0.0019334479052341524
+        },
+        "media_a": 0.531321831172498,
+        "media_b": 0.5314475188431034,
+        "motivo": null,
+        "unidades": 450
+      }
+    },
+    "racao_longe_M3_x_M3+S": {
+      "diferenca": 0.0017207117266539677,
+      "ic95": {
+        "ic_inferior": -0.0007577731818985728,
+        "ic_superior": 0.004199196635206508
+      },
+      "media_a": 0.08016597739973465,
+      "media_b": 0.08188668912638862,
+      "motivo": null,
+      "unidades": 450
+    },
+    "somas": {
+      "M0+S|comedouro": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 1291,
+            "episodios": 25088,
+            "liquido_soma": 21601.63333333333
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 46,
+            "episodios": 10155,
+            "liquido_soma": 9384.483333333334
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 9156,
+          "andado_liquido_medio": 0.1150785934208394,
+          "retomadas_com_alvo": 10285
+        },
+        "s4": {
+          "reflexo_em_2": 8173,
+          "retomadas": 10288
+        },
+        "s6": {
+          "persistencia_decidiu": 3161,
+          "retomadas": 10288
+        }
+      },
+      "M0+S|longe": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 1476,
+            "episodios": 13149,
+            "liquido_soma": 17462.916666666668
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 30,
+            "episodios": 14377,
+            "liquido_soma": 10953.05
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 30345,
+          "andado_liquido_medio": 0.15313074028498563,
+          "retomadas_com_alvo": 37382
+        },
+        "s4": {
+          "reflexo_em_2": 31240,
+          "retomadas": 37408
+        },
+        "s6": {
+          "persistencia_decidiu": 9544,
+          "retomadas": 37408
+        }
+      },
+      "M0+S|perto": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 15706,
+            "episodios": 38298,
+            "liquido_soma": 3848.85
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 182,
+            "episodios": 3884,
+            "liquido_soma": -780.2833333333333
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 739,
+          "andado_liquido_medio": 0.02208994708994709,
+          "retomadas_com_alvo": 756
+        },
+        "s4": {
+          "reflexo_em_2": 542,
+          "retomadas": 756
+        },
+        "s6": {
+          "persistencia_decidiu": 257,
+          "retomadas": 756
+        }
+      },
+      "M0|comedouro": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 1243,
+            "episodios": 24511,
+            "liquido_soma": 21037.916666666668
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 61,
+            "episodios": 10441,
+            "liquido_soma": 9506.916666666666
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 0,
+          "andado_liquido_medio": null,
+          "retomadas_com_alvo": 0
+        },
+        "s4": {
+          "reflexo_em_2": 0,
+          "retomadas": 0
+        },
+        "s6": {
+          "persistencia_decidiu": 0,
+          "retomadas": 0
+        }
+      },
+      "M0|longe": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 1392,
+            "episodios": 12631,
+            "liquido_soma": 16737.983333333334
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 39,
+            "episodios": 14335,
+            "liquido_soma": 11210.366666666667
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 0,
+          "andado_liquido_medio": null,
+          "retomadas_com_alvo": 0
+        },
+        "s4": {
+          "reflexo_em_2": 0,
+          "retomadas": 0
+        },
+        "s6": {
+          "persistencia_decidiu": 0,
+          "retomadas": 0
+        }
+      },
+      "M0|perto": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 15740,
+            "episodios": 38230,
+            "liquido_soma": 3803.2833333333333
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 168,
+            "episodios": 3895,
+            "liquido_soma": -758.4166666666666
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 0,
+          "andado_liquido_medio": null,
+          "retomadas_com_alvo": 0
+        },
+        "s4": {
+          "reflexo_em_2": 0,
+          "retomadas": 0
+        },
+        "s6": {
+          "persistencia_decidiu": 0,
+          "retomadas": 0
+        }
+      },
+      "M3+S|comedouro": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 2971,
+            "episodios": 24509,
+            "liquido_soma": 25135.95
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 81,
+            "episodios": 5580,
+            "liquido_soma": 7305.583333333333
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 6159,
+          "andado_liquido_medio": 0.08491353607632678,
+          "retomadas_com_alvo": 6708
+        },
+        "s4": {
+          "reflexo_em_2": 5391,
+          "retomadas": 6709
+        },
+        "s6": {
+          "persistencia_decidiu": 1750,
+          "retomadas": 6709
+        }
+      },
+      "M3+S|longe": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 984,
+            "episodios": 10153,
+            "liquido_soma": 14747.933333333332
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 20,
+            "episodios": 12384,
+            "liquido_soma": 4192.0
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 35446,
+          "andado_liquido_medio": 0.14953276802125326,
+          "retomadas_com_alvo": 43162
+        },
+        "s4": {
+          "reflexo_em_2": 37358,
+          "retomadas": 43213
+        },
+        "s6": {
+          "persistencia_decidiu": 10305,
+          "retomadas": 43213
+        }
+      },
+      "M3+S|perto": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 17272,
+            "episodios": 36593,
+            "liquido_soma": 1462.2833333333333
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 108,
+            "episodios": 1479,
+            "liquido_soma": -534.4
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 351,
+          "andado_liquido_medio": 0.019878957169459963,
+          "retomadas_com_alvo": 358
+        },
+        "s4": {
+          "reflexo_em_2": 260,
+          "retomadas": 359
+        },
+        "s6": {
+          "persistencia_decidiu": 57,
+          "retomadas": 359
+        }
+      },
+      "M3|comedouro": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 2987,
+            "episodios": 24369,
+            "liquido_soma": 24602.833333333332
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 78,
+            "episodios": 5670,
+            "liquido_soma": 7514.583333333333
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 0,
+          "andado_liquido_medio": null,
+          "retomadas_com_alvo": 0
+        },
+        "s4": {
+          "reflexo_em_2": 0,
+          "retomadas": 0
+        },
+        "s6": {
+          "persistencia_decidiu": 0,
+          "retomadas": 0
+        }
+      },
+      "M3|longe": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 939,
+            "episodios": 9586,
+            "liquido_soma": 14044.833333333334
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 15,
+            "episodios": 12132,
+            "liquido_soma": 3968.5333333333333
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 0,
+          "andado_liquido_medio": null,
+          "retomadas_com_alvo": 0
+        },
+        "s4": {
+          "reflexo_em_2": 0,
+          "retomadas": 0
+        },
+        "s6": {
+          "persistencia_decidiu": 0,
+          "retomadas": 0
+        }
+      },
+      "M3|perto": {
+        "m_l3": {
+          "fechados": {
+            "ao_menos_n_min": 17302,
+            "episodios": 36660,
+            "liquido_soma": 1456.15
+          },
+          "nao_fechados": {
+            "ao_menos_n_min": 109,
+            "episodios": 1479,
+            "liquido_soma": -526.4
+          }
+        },
+        "s3": {
+          "andado_ate_zero": 0,
+          "andado_liquido_medio": null,
+          "retomadas_com_alvo": 0
+        },
+        "s4": {
+          "reflexo_em_2": 0,
+          "retomadas": 0
+        },
+        "s6": {
+          "persistencia_decidiu": 0,
+          "retomadas": 0
+        }
+      }
+    }
+  },
+  "fase": "l2_avaliacao",
+  "mecanismo": {
+    "M0+S|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 2.952777777777778,
+      "buscas_trocadas_por_vida": 2.952777777777778,
+      "c_l2_1_por_vida": 2.952777777777778,
+      "intencoes_suspensas_que_acabaram_por_vida": 5.1305555555555555,
+      "retomadas_por_vida": 5.7155555555555555,
+      "vidas": 1800
+    },
+    "M0+S|longe": {
+      "buscas_expiradas_por_vida": 0.01611111111111111,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 15.31611111111111,
+      "buscas_trocadas_por_vida": 15.328888888888889,
+      "c_l2_1_por_vida": 15.345,
+      "intencoes_suspensas_que_acabaram_por_vida": 16.54277777777778,
+      "retomadas_por_vida": 20.782222222222224,
+      "vidas": 1800
+    },
+    "M0+S|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.09888888888888889,
+      "buscas_trocadas_por_vida": 0.09944444444444445,
+      "c_l2_1_por_vida": 0.09944444444444445,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.6455555555555555,
+      "retomadas_por_vida": 0.42,
+      "vidas": 1800
+    },
+    "M0|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 3.525,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.9183333333333333,
+      "buscas_trocadas_por_vida": 4.443888888888889,
+      "c_l2_1_por_vida": 4.443888888888889,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 1800
+    },
+    "M0|longe": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 16.611666666666668,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 5.29,
+      "buscas_trocadas_por_vida": 21.913888888888888,
+      "c_l2_1_por_vida": 21.913888888888888,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 1800
+    },
+    "M0|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.1111111111111111,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.03777777777777778,
+      "buscas_trocadas_por_vida": 0.14888888888888888,
+      "c_l2_1_por_vida": 0.14888888888888888,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 1800
+    },
+    "M3+S|comedouro": {
+      "buscas_expiradas_por_vida": 0.0011111111111111111,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 1.835,
+      "buscas_trocadas_por_vida": 1.835,
+      "c_l2_1_por_vida": 1.836111111111111,
+      "intencoes_suspensas_que_acabaram_por_vida": 3.5866666666666664,
+      "retomadas_por_vida": 3.727222222222222,
+      "vidas": 1800
+    },
+    "M3+S|longe": {
+      "buscas_expiradas_por_vida": 0.017777777777777778,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 18.38888888888889,
+      "buscas_trocadas_por_vida": 18.41,
+      "c_l2_1_por_vida": 18.427777777777777,
+      "intencoes_suspensas_que_acabaram_por_vida": 19.846666666666668,
+      "retomadas_por_vida": 24.00722222222222,
+      "vidas": 1800
+    },
+    "M3+S|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.0,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.059444444444444446,
+      "buscas_trocadas_por_vida": 0.06055555555555556,
+      "c_l2_1_por_vida": 0.06055555555555556,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.38222222222222224,
+      "retomadas_por_vida": 0.19944444444444445,
+      "vidas": 1800
+    },
+    "M3|comedouro": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 1.8994444444444445,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.6116666666666667,
+      "buscas_trocadas_por_vida": 2.511111111111111,
+      "c_l2_1_por_vida": 2.511111111111111,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 1800
+    },
+    "M3|longe": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 20.551111111111112,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 5.126666666666667,
+      "buscas_trocadas_por_vida": 25.690555555555555,
+      "c_l2_1_por_vida": 25.690555555555555,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 1800
+    },
+    "M3|perto": {
+      "buscas_expiradas_por_vida": 0.0,
+      "buscas_trocadas_pelo_reflexo_por_vida": 0.06888888888888889,
+      "buscas_trocadas_por_outra_com_racao_em_R_por_vida": 0.03611111111111111,
+      "buscas_trocadas_por_vida": 0.10611111111111111,
+      "c_l2_1_por_vida": 0.10611111111111111,
+      "intencoes_suspensas_que_acabaram_por_vida": 0.0,
+      "retomadas_por_vida": 0.0,
+      "vidas": 1800
+    }
+  },
+  "modo": "l2_avaliacao",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md"
+}

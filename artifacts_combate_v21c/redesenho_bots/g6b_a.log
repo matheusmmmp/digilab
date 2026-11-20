@@ -1,0 +1,4 @@
+duelista {"original": 0.677, "c0:defender<-golpe_rapido": 0.662, "c1:defender<-investida": 0.657, "c2:golpe_rapido<-preparar_pesado": 0.575}
+furioso {"original": 0.791, "c0:golpe_rapido<-preparar_pesado": 0.791, "c1:esquivar<-golpe_rapido": 0.725, "c2:recuar<-investida": 0.79}
+espelho {"original": 0.629, "c0:preparar_pesado<-contra_golpe": 0.551, "c1:carregar<-contra_golpe": 0.52, "c2:recuar<-contra_golpe": 0.542}
+muralha {"original": 0.713, "c0:preparar_pesado<-contra_golpe": 0.716, "c1:preparar_pesado<-defender": 0.811, "c2:recuar<-contra_golpe": 0.711}

@@ -1,0 +1,8942 @@
+{
+ "codigo_c4": {
+  "arquivos": 23,
+  "iguais_ao_meta": true,
+  "sha256": {
+   "digilab/config.py": "53bd9a205ed7af38ce7e6fbbbd02a7cfe27bdb4f19ae33f29244e8914e7a8343",
+   "digilab/digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+   "digilab/digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+   "digilab/digibrain/adapt.py": "8711599511c75464d1c14217643acbed5f7661786a8ab7d16fa8b1a2e2cf6953",
+   "digilab/digibrain/afeto.py": "e890523b5239b6b12818997a5d82ff5f722f390ecf3f69ebcfd60324c43c525f",
+   "digilab/digibrain/arb.py": "f5465f353366a81da3fd32b84377d40988ff46d60dda17237ad47c3053d3fa64",
+   "digilab/digibrain/estado.py": "4081f55cf169e9a7c12ec86dae000fff87f33eb91653a089e80450be21038cad",
+   "digilab/digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+   "digilab/digibrain/impulso.py": "41e867e648d26f678675efcf344aa424ab7ff58d4ac203e4206acbe769b38b47",
+   "digilab/digibrain/mem.py": "69b5907c3b19ba3f38779d8894eb19dfb2dc3c6581dda882e1fa85fe570f5b05",
+   "digilab/digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+   "digilab/digibrain/plast.py": "6739a7032a7a45328b251916c54e81b91755c34168409b12b5ba3044c681b0b8",
+   "digilab/digibrain/sens.py": "fa58b1e6161ca6388027a5ce6cc8a111b25f1cc7ab0eb9fe9ca6a1e135872d8a",
+   "digilab/engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+   "digilab/metrics.py": "8c6a6794356d7e9b9375721d6f72d7788036859f17a97c409d66115a1482a425",
+   "digilab/mundo.py": "78120bdf479812742013b44f406f9377981f9c180c574cc68004e1f42b5283bb",
+   "digilab_fala_livre/fatos.py": "dcb71c502b09d84ebff31f8067799e8b19d3163fe3797b58f97b4fbd6c1e16d3",
+   "digilab_fala_livre/memoria_fala.py": "9e288def0f788235df628244de6616b2ab07d39a96b65a9064ab7ad46fdfd260",
+   "experiments/configs/v2_memoria_autobio/memoria_autobio.json": "784c35fd66f1ec2082a8a71d27949d83ee6a0c8af10ad871b51d08e2b802deab",
+   "experiments/run_v2_digibrain_prototipo.py": "7780862ec1d65cb6199ac5dab83fff9bae83e7bb127102ac6a390e27bc533b28",
+   "experiments/run_v2_habito_intencao.py": "8a6cc3de0d3af4cc8fa4a19b15215b9607bd016989129bc8bb666c31c4102701",
+   "experiments/run_v2_longe_regular.py": "5583a217edd04ad2493c91c23d67d913605adb780699a14a9495e6b58a9a900c",
+   "experiments/run_v2_memoria_autobio.py": "dcc83a04f88db17e777a66d95b467a3e15ff24e59a5c7ab510db0a7925b30cf0"
+  }
+ },
+ "commit_da_c4": "a287ba20fafdc1fbbf9be7100f89d9c90f466948",
+ "fontes_sha256": {
+  "gabaritos": {
+   "digibrain_modular_comedouro.json.gz": "2034aa7e075809c028234262d6486c83d2f89967490158ec788a7841d63668a5",
+   "digibrain_modular_fins.json.gz": "129177bf123bd65a4e2f5c453f07814075424fd1c4c3cb3a08c79c77d5836314",
+   "digibrain_modular_longe_fixo.json.gz": "5b37fcb0314efff5b74b02116d81a7dcba725b00d89f77439bbb3c93412b109d"
+  },
+  "medidas.json": "869ff3971b91e6d848f3f9e16d1798049105442bde1968a6852daa852c153023",
+  "medidas.json.gz": "8b48d0a234afc69adfaf72d150d0d4317d4f7dd9abfa7fc2e49908a6758fd93b",
+  "meta.json": "6315784c4290ddfcfa3a373ca2ae14165f164581a2f184dd9210446441213a18",
+  "resultado.json": "6f8c91d8e2b857194de1de00145a4da817efca76eb882bcd2d090dd3101cd6d3",
+  "vidas.tar.gz": "aa0c398716bf9b285889c3e3f490f9d3538b41d1135d9ee3b788fd28cfa50aed"
+ },
+ "grupos": {
+  "AN0|REL|comedouro": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.999939362,
+     "S_mediana_das_vidas": 0.152831714,
+     "S_portas": {
+      "g_exp": 0.001270656,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.152831714,
+      "z": 0.152581201
+     },
+     "S_vezes_C": {
+      "dp": 0.043364159,
+      "gl": 3,
+      "ic_inferior": 0.092186335,
+      "ic_superior": 0.230190441,
+      "media": 0.161188388,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.043364159,
+      "gl": 3,
+      "ic_inferior": 0.092186335,
+      "ic_superior": 0.230190441,
+      "media": 0.161188388,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.052863436,
+      "n": 227
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.821877888,
+     "S_portas": {
+      "g_exp": 0.001593138,
+      "incentivo": 0.000128125,
+      "reflexo": 0.393051871,
+      "todo": 0.821877888,
+      "z": 0.578752738
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.012892759,
+     "S_portas": {
+      "g_exp": 1.3389e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.012892759,
+      "z": 0.012862901
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer"
+     ],
+     "C": 0.415704679,
+     "S_mediana_das_vidas": 0.31660066,
+     "S_portas": {
+      "g_exp": 0.00147141,
+      "incentivo": 0.036258384,
+      "reflexo": 0.0,
+      "todo": 0.31660066,
+      "z": 0.291755125
+     },
+     "S_vezes_C": {
+      "dp": 0.107878938,
+      "gl": 3,
+      "ic_inferior": -0.039021827,
+      "ic_superior": 0.304297101,
+      "media": 0.132637637,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.10786655,
+      "gl": 3,
+      "ic_inferior": -0.039246049,
+      "ic_superior": 0.304033456,
+      "media": 0.132393704,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 1.0,
+      "n": 8
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.076799485,
+     "S_portas": {
+      "g_exp": 0.000324792,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.076799485,
+      "z": 0.076554865
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.003149919,
+     "S_mediana_das_vidas": 0.082137256,
+     "S_portas": {
+      "g_exp": 0.003847187,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.082137256,
+      "z": 0.08027934
+     },
+     "S_vezes_C": {
+      "dp": 8.3637e-05,
+      "gl": 3,
+      "ic_inferior": 0.000125528,
+      "ic_superior": 0.000391699,
+      "media": 0.000258613,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.020280456,
+      "gl": 3,
+      "ic_inferior": -0.065645351,
+      "ic_superior": -0.00110389,
+      "media": -0.03337462,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.0,
+      "n": 7
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.035548741,
+     "S_portas": {
+      "g_exp": 0.002773967,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.035548741,
+      "z": 0.034045786
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.994450187,
+     "S_mediana_das_vidas": 0.225481394,
+     "S_portas": {
+      "g_exp": 0.009490947,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.225481394,
+      "z": 0.22432085
+     },
+     "S_vezes_C": {
+      "dp": 0.068014404,
+      "gl": 3,
+      "ic_inferior": 0.118505338,
+      "ic_superior": 0.334957528,
+      "media": 0.226731433,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.068054635,
+      "gl": 3,
+      "ic_inferior": 0.118312173,
+      "ic_superior": 0.334892394,
+      "media": 0.226602284,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.163410302,
+      "n": 563
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer"
+    ],
+    "higiene": [],
+    "humor": [
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.123048795,
+    "tv_mediana": 0.049265269
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.606587614,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": true,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "fome",
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [
+     "fome"
+    ],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.069198195,
+    "gl": 3,
+    "ic_inferior": 0.337776342,
+    "ic_superior": 0.557995881,
+    "media": 0.447886112,
+    "motivo": null,
+    "n": 4,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.052971149,
+    "gl": 3,
+    "ic_inferior": 0.045915099,
+    "ic_superior": 0.214492937,
+    "media": 0.130204018,
+    "motivo": null,
+    "n": 4,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -133.620573732,
+     "ic_superior": -38.212759601,
+     "media": -85.916666667,
+     "n": 3
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|humor": {
+     "alivia": false,
+     "ic_inferior": -91.064150751,
+     "ic_superior": 910.064150751,
+     "media": 409.5,
+     "n": 3
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 590.059291226,
+     "ic_superior": 675.774042107,
+     "media": 632.916666667,
+     "n": 3
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -27.845109434,
+     "ic_superior": -21.655485804,
+     "media": -24.750297619,
+     "n": 4
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 138.43512457,
+     "ic_superior": 1494.191065907,
+     "media": 816.313095238,
+     "n": 4
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -94.26551184,
+     "ic_superior": -30.73448816,
+     "media": -62.5,
+     "n": 2
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 7.635115888,
+     "ic_superior": 28.267717365,
+     "media": 17.951416626,
+     "n": 4
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -110.66097694,
+     "ic_superior": -98.443663536,
+     "media": -104.552320238,
+     "n": 4
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 8.190437375,
+     "ic_superior": 50.633047704,
+     "media": 29.41174254,
+     "n": 4
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 72.276837909,
+     "ic_superior": 119.412023763,
+     "media": 95.844430836,
+     "n": 4
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.215077605,
+    "chamar_atencao": 0.641537324,
+    "comer": 0.37398374,
+    "dormir": 0.932002956,
+    "emburrar": 0.048780488,
+    "explorar": 1.324464154,
+    "ocioso": 0.124907613
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.606587614,
+   "entropia_media": 1.306693977,
+   "fracao_reflexo": 0.119140625,
+   "leitura": {
+    "apontam": [
+     "HP"
+    ],
+    "aviso_reflexo": null,
+    "linha": "aponta para HP"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.84825757,
+    "chamar_atencao": 0.929958025,
+    "comer": 1.244171268,
+    "dormir": 0.916607736,
+    "emburrar": 0.826292585,
+    "explorar": 1.123048795,
+    "ocioso": 0.937364072
+   },
+   "tv_p_p1_mediana_das_vidas": 0.049265269,
+   "unidades": 4,
+   "vidas": 4
+  },
+  "AN0|REL|longe": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.178359419,
+     "S_portas": {
+      "g_exp": 4.4015e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.178359419,
+      "z": 0.178332551
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.809881798,
+     "S_portas": {
+      "g_exp": 0.001254314,
+      "incentivo": 7.0955e-05,
+      "reflexo": 0.325045816,
+      "todo": 0.809881798,
+      "z": 0.639162616
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.019034415,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.019034415,
+      "z": 0.019034415
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.54188147,
+     "S_mediana_das_vidas": 0.355165294,
+     "S_portas": {
+      "g_exp": 0.001541644,
+      "incentivo": 0.022035088,
+      "reflexo": 0.0,
+      "todo": 0.355165294,
+      "z": 0.333767162
+     },
+     "S_vezes_C": {
+      "dp": 0.006946148,
+      "gl": 1,
+      "ic_inferior": 0.130048829,
+      "ic_superior": 0.254866155,
+      "media": 0.192457492,
+      "motivo": null,
+      "n": 2,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.008923779,
+      "gl": 1,
+      "ic_inferior": 0.086425142,
+      "ic_superior": 0.246779092,
+      "media": 0.166602117,
+      "motivo": null,
+      "n": 2,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.4,
+      "n": 5
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.103990936,
+     "S_portas": {
+      "g_exp": 0.000467812,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.103990936,
+      "z": 0.103521215
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.45598331,
+     "S_mediana_das_vidas": 0.142576419,
+     "S_portas": {
+      "g_exp": 0.003706862,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.142576419,
+      "z": 0.141325376
+     },
+     "S_vezes_C": {
+      "dp": 0.002615458,
+      "gl": 1,
+      "ic_inferior": 0.041513511,
+      "ic_superior": 0.088511424,
+      "media": 0.065012467,
+      "motivo": null,
+      "n": 2,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.0027376,
+      "gl": 1,
+      "ic_inferior": 2.6043e-05,
+      "ic_superior": 0.049218759,
+      "media": 0.024622401,
+      "motivo": null,
+      "n": 2,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.259259259,
+      "n": 27
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.064609991,
+     "S_portas": {
+      "g_exp": 0.005291588,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.064609991,
+      "z": 0.062762727
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.999399797,
+     "S_mediana_das_vidas": 0.333488472,
+     "S_portas": {
+      "g_exp": 0.016481872,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.333488472,
+      "z": 0.328956359
+     },
+     "S_vezes_C": {
+      "dp": 0.059051367,
+      "gl": 1,
+      "ic_inferior": -0.197267172,
+      "ic_superior": 0.863843794,
+      "media": 0.333288311,
+      "motivo": null,
+      "n": 2,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.058961702,
+      "gl": 1,
+      "ic_inferior": -0.196524967,
+      "ic_superior": 0.862974783,
+      "media": 0.333224908,
+      "motivo": null,
+      "n": 2,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.245945946,
+      "n": 370
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.308196678,
+    "tv_mediana": 0.066135293
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.550287253,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.030092143,
+    "gl": 1,
+    "ic_inferior": 0.059764421,
+    "ic_superior": 0.60049878,
+    "media": 0.330131601,
+    "motivo": null,
+    "n": 2,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.021127352,
+    "gl": 1,
+    "ic_inferior": 0.007097694,
+    "ic_superior": 0.386741153,
+    "media": 0.196919423,
+    "motivo": null,
+    "n": 2,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -103.032349334,
+     "ic_superior": -82.240377939,
+     "media": -92.636363636,
+     "n": 2
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 349.700145915,
+     "ic_superior": 591.118035903,
+     "media": 470.409090909,
+     "n": 2
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 289.976022716,
+     "ic_superior": 704.66034092,
+     "media": 497.318181818,
+     "n": 2
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -96.668264011,
+     "ic_superior": 42.802766935,
+     "media": -26.932748538,
+     "n": 2
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 283.199743551,
+     "ic_superior": 800.996162882,
+     "media": 542.097953216,
+     "n": 2
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -64.096031512,
+     "ic_superior": -29.153968488,
+     "media": -46.625,
+     "n": 2
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": -40.912979647,
+     "ic_superior": 109.234713762,
+     "media": 34.160867057,
+     "n": 2
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -106.708022751,
+     "ic_superior": -84.853546027,
+     "media": -95.780784389,
+     "n": 2
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 0.211452706,
+     "ic_superior": 20.214289868,
+     "media": 10.212871287,
+     "n": 2
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 27.796268982,
+     "ic_superior": 49.651967104,
+     "media": 38.724118043,
+     "n": 2
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 12.05399507,
+     "ic_superior": 287.697903421,
+     "media": 149.875949246,
+     "n": 2
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 2
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.369272237,
+    "chamar_atencao": 0.783018868,
+    "comer": 0.234501347,
+    "dormir": 0.936657682,
+    "emburrar": 0.09703504,
+    "explorar": 1.409703504,
+    "ocioso": 0.114555256
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.550287253,
+   "entropia_media": 1.40317524,
+   "fracao_reflexo": 0.033854167,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.880043659,
+    "chamar_atencao": 0.913272633,
+    "comer": 1.07683288,
+    "dormir": 0.921281342,
+    "emburrar": 0.882131084,
+    "explorar": 1.308196678,
+    "ocioso": 0.936251407
+   },
+   "tv_p_p1_mediana_das_vidas": 0.066135293,
+   "unidades": 2,
+   "vidas": 2
+  },
+  "AN0|REL|longe_fixo": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.121964075,
+     "S_portas": {
+      "g_exp": 0.00108161,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.121964075,
+      "z": 0.121092895
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.87111018,
+     "S_portas": {
+      "g_exp": 0.001313406,
+      "incentivo": 0.0,
+      "reflexo": 0.52386646,
+      "todo": 0.87111018,
+      "z": 0.469121592
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.011665273,
+     "S_portas": {
+      "g_exp": 8.337e-06,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.011665273,
+      "z": 0.011667517
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer"
+     ],
+     "C": 0.398206935,
+     "S_mediana_das_vidas": 0.280300718,
+     "S_portas": {
+      "g_exp": 0.002243452,
+      "incentivo": 0.005909822,
+      "reflexo": 0.0,
+      "todo": 0.280300718,
+      "z": 0.274046645
+     },
+     "S_vezes_C": {
+      "dp": 0.089030778,
+      "gl": 3,
+      "ic_inferior": -0.041511584,
+      "ic_superior": 0.241824086,
+      "media": 0.100156251,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.088037904,
+      "gl": 3,
+      "ic_inferior": -0.041024389,
+      "ic_superior": 0.239151513,
+      "media": 0.099063562,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.96969697,
+      "n": 33
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.068288167,
+     "S_portas": {
+      "g_exp": 7.3258e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.068288167,
+      "z": 0.068205889
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.054883337,
+     "S_portas": {
+      "g_exp": 0.002138776,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.054883337,
+      "z": 0.053728379
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 4.373e-06,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 4.373e-06,
+      "z": 4.373e-06
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.027951917,
+     "S_portas": {
+      "g_exp": 0.000105485,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.027951917,
+      "z": 0.026342277
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.904918715,
+     "S_mediana_das_vidas": 0.160131076,
+     "S_portas": {
+      "g_exp": 0.00528713,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.160131076,
+      "z": 0.159355371
+     },
+     "S_vezes_C": {
+      "dp": 0.054693023,
+      "gl": 3,
+      "ic_inferior": 0.037694492,
+      "ic_superior": 0.211752101,
+      "media": 0.124723296,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.054678979,
+      "gl": 3,
+      "ic_inferior": 0.037695398,
+      "ic_superior": 0.211708313,
+      "media": 0.124701855,
+      "motivo": null,
+      "n": 4,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.07278481,
+      "n": 316
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer"
+    ],
+    "higiene": [],
+    "humor": [],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.179052284,
+    "tv_mediana": 0.055338913
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.60594209,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": []
+   },
+   "HP": {
+    "aponta": true,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "fome"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [
+     "fome"
+    ],
+    "receptores_sensiveis": [
+     "fome",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.084062124,
+    "gl": 2,
+    "ic_inferior": 0.248888687,
+    "ic_superior": 0.666532471,
+    "media": 0.457710579,
+    "motivo": null,
+    "n": 3,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.069312931,
+    "gl": 3,
+    "ic_inferior": 0.002147433,
+    "ic_superior": 0.222732115,
+    "media": 0.112439774,
+    "motivo": null,
+    "n": 4,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -155.420512223,
+     "ic_superior": -18.023932221,
+     "media": -86.722222222,
+     "n": 3
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|humor": {
+     "alivia": false,
+     "ic_inferior": -394.078118143,
+     "ic_superior": 1009.633673699,
+     "media": 307.777777778,
+     "n": 3
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "brincar|tedio": {
+     "alivia": false,
+     "ic_inferior": -157.218288866,
+     "ic_superior": 1579.514585162,
+     "media": 711.148148148,
+     "n": 3
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -49.681604989,
+     "ic_superior": -33.937006758,
+     "media": -41.809305873,
+     "n": 3
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 201.531038164,
+     "ic_superior": 898.488031248,
+     "media": 550.009534706,
+     "n": 3
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -98.551716711,
+     "ic_superior": 31.390249826,
+     "media": -33.580733443,
+     "n": 3
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 3
+    },
+    "explorar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": -10.240532284,
+     "ic_superior": 69.275224425,
+     "media": 29.517346071,
+     "n": 4
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -131.165065632,
+     "ic_superior": -87.110617692,
+     "media": -109.137841662,
+     "n": 4
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|fome": {
+     "alivia": false,
+     "ic_inferior": -5.373513184,
+     "ic_superior": 16.249815268,
+     "media": 5.438151042,
+     "n": 4
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|humor": {
+     "alivia": false,
+     "ic_inferior": -1.423152744,
+     "ic_superior": 77.204194105,
+     "media": 37.890520681,
+     "n": 4
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 73.957658223,
+     "ic_superior": 142.356465106,
+     "media": 108.157061664,
+     "n": 4
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 4
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.159565581,
+    "chamar_atencao": 0.809523809,
+    "comer": 0.399331663,
+    "dormir": 0.940685046,
+    "emburrar": 0.246449457,
+    "explorar": 1.370927318,
+    "ocioso": 0.101921471
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.60594209,
+   "entropia_media": 1.468008829,
+   "fracao_reflexo": 0.220703125,
+   "leitura": {
+    "apontam": [
+     "HP"
+    ],
+    "aviso_reflexo": null,
+    "linha": "aponta para HP"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "fome",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.888737611,
+    "chamar_atencao": 0.946163812,
+    "comer": 1.054653479,
+    "dormir": 0.909370843,
+    "emburrar": 0.960976294,
+    "explorar": 1.179052284,
+    "ocioso": 0.948864643
+   },
+   "tv_p_p1_mediana_das_vidas": 0.055338913,
+   "unidades": 4,
+   "vidas": 4
+  },
+  "C4|REL|comedouro": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.996149616,
+     "S_mediana_das_vidas": 0.113217306,
+     "S_portas": {
+      "g_exp": 0.000157182,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.113217306,
+      "z": 0.113079256
+     },
+     "S_vezes_C": {
+      "dp": 0.009183171,
+      "gl": 39,
+      "ic_inferior": 0.109940904,
+      "ic_superior": 0.115814745,
+      "media": 0.112877824,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.009182573,
+      "gl": 39,
+      "ic_inferior": 0.109939077,
+      "ic_superior": 0.115812536,
+      "media": 0.112875806,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.066461246,
+      "n": 290786
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.857917604,
+     "S_portas": {
+      "g_exp": 0.000396474,
+      "incentivo": 6.805e-05,
+      "reflexo": 0.529468184,
+      "todo": 0.857917604,
+      "z": 0.497063979
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.012471026,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.012471026,
+      "z": 0.012506587
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.587627515,
+     "S_mediana_das_vidas": 0.24315533,
+     "S_portas": {
+      "g_exp": 0.000453288,
+      "incentivo": 0.049509348,
+      "reflexo": 0.0,
+      "todo": 0.24315533,
+      "z": 0.219164994
+     },
+     "S_vezes_C": {
+      "dp": 0.012642697,
+      "gl": 39,
+      "ic_inferior": 0.146506687,
+      "ic_superior": 0.154593348,
+      "media": 0.150550017,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.008676506,
+      "gl": 39,
+      "ic_inferior": 0.09712534,
+      "ic_superior": 0.102675102,
+      "media": 0.099900221,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.128365039,
+      "n": 44576
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.054248939,
+     "S_portas": {
+      "g_exp": 9.6733e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.054248939,
+      "z": 0.054239292
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.510068824,
+     "S_mediana_das_vidas": 0.074556578,
+     "S_portas": {
+      "g_exp": 0.001150781,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.074556578,
+      "z": 0.074088056
+     },
+     "S_vezes_C": {
+      "dp": 0.003077958,
+      "gl": 39,
+      "ic_inferior": 0.034388034,
+      "ic_superior": 0.036356791,
+      "media": 0.035372412,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.003029434,
+      "gl": 39,
+      "ic_inferior": 0.006551401,
+      "ic_superior": 0.008489121,
+      "media": 0.007520261,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.117307943,
+      "n": 38335
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.025542951,
+     "S_portas": {
+      "g_exp": 0.001028389,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.025542951,
+      "z": 0.024923804
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.993954043,
+     "S_mediana_das_vidas": 0.154663937,
+     "S_portas": {
+      "g_exp": 0.008828239,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.154663937,
+      "z": 0.153935103
+     },
+     "S_vezes_C": {
+      "dp": 0.008121297,
+      "gl": 39,
+      "ic_inferior": 0.152070349,
+      "ic_superior": 0.157264982,
+      "media": 0.154667666,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.008119511,
+      "gl": 39,
+      "ic_inferior": 0.151850653,
+      "ic_superior": 0.157044144,
+      "media": 0.154447399,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.126311845,
+      "n": 290907
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.167602593,
+    "tv_mediana": 0.07766071
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.648513249,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.021445168,
+    "gl": 39,
+    "ic_inferior": 0.370143365,
+    "ic_superior": 0.38386036,
+    "media": 0.377001863,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.006478101,
+    "gl": 39,
+    "ic_inferior": 0.111295183,
+    "ic_superior": 0.115438777,
+    "media": 0.11336698,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -96.400815825,
+     "ic_superior": -95.425907478,
+     "media": -95.913361652,
+     "n": 782
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 417.162009525,
+     "ic_superior": 433.217235757,
+     "media": 425.189622641,
+     "n": 782
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 782
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 500.608026367,
+     "ic_superior": 513.909206003,
+     "media": 507.258616185,
+     "n": 782
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -28.539071811,
+     "ic_superior": -27.874788261,
+     "media": -28.206930036,
+     "n": 800
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 729.720334407,
+     "ic_superior": 784.119429222,
+     "media": 756.919881815,
+     "n": 800
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": -0.142110082,
+     "ic_superior": 0.004951668,
+     "media": -0.068579207,
+     "n": 800
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -52.291583232,
+     "ic_superior": -51.174045741,
+     "media": -51.732814487,
+     "n": 762
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 762
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 32.871318889,
+     "ic_superior": 34.708114074,
+     "media": 33.789716482,
+     "n": 800
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -117.55590575,
+     "ic_superior": -117.14015442,
+     "media": -117.348030085,
+     "n": 800
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 0.02654579,
+     "ic_superior": 0.080995733,
+     "media": 0.053770761,
+     "n": 800
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 32.508629674,
+     "ic_superior": 33.512721559,
+     "media": 33.010675617,
+     "n": 800
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 102.772255795,
+     "ic_superior": 104.395664877,
+     "media": 103.583960336,
+     "n": 800
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.321316623,
+    "chamar_atencao": 0.719016779,
+    "comer": 0.641031408,
+    "dormir": 0.976098603,
+    "emburrar": 0.079591597,
+    "explorar": 1.483958032,
+    "ocioso": 0.055173443
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.648513249,
+   "entropia_media": 1.409337089,
+   "fracao_reflexo": 0.152294457,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.881912566,
+    "chamar_atencao": 0.898837766,
+    "comer": 1.382521623,
+    "dormir": 0.880814761,
+    "emburrar": 0.868946045,
+    "explorar": 1.167602593,
+    "ocioso": 0.942259709
+   },
+   "tv_p_p1_mediana_das_vidas": 0.07766071,
+   "unidades": 200,
+   "vidas": 800
+  },
+  "C4|REL|longe": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.999595207,
+     "S_mediana_das_vidas": 0.091236853,
+     "S_portas": {
+      "g_exp": 9.9e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.091236853,
+      "z": 0.091048235
+     },
+     "S_vezes_C": {
+      "dp": 0.011452621,
+      "gl": 39,
+      "ic_inferior": 0.092539532,
+      "ic_superior": 0.099864983,
+      "media": 0.096202258,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.011452691,
+      "gl": 39,
+      "ic_inferior": 0.09253942,
+      "ic_superior": 0.099864917,
+      "media": 0.096202169,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.049505862,
+      "n": 108674
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.91555182,
+     "S_portas": {
+      "g_exp": 0.000423531,
+      "incentivo": 1.1786e-05,
+      "reflexo": 0.639084219,
+      "todo": 0.91555182,
+      "z": 0.379179533
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.010599537,
+     "S_portas": {
+      "g_exp": 3.5e-07,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.010599537,
+      "z": 0.010658445
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.589815841,
+     "S_mediana_das_vidas": 0.191054559,
+     "S_portas": {
+      "g_exp": 0.000589565,
+      "incentivo": 0.009198502,
+      "reflexo": 0.0,
+      "todo": 0.191054559,
+      "z": 0.182955344
+     },
+     "S_vezes_C": {
+      "dp": 0.011830434,
+      "gl": 39,
+      "ic_inferior": 0.118494591,
+      "ic_superior": 0.126061703,
+      "media": 0.122278147,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.010488513,
+      "gl": 39,
+      "ic_inferior": 0.089655549,
+      "ic_superior": 0.096364328,
+      "media": 0.093009938,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.261214864,
+      "n": 119997
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.04695094,
+     "S_portas": {
+      "g_exp": 4.933e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.04695094,
+      "z": 0.046928539
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.472099803,
+     "S_mediana_das_vidas": 0.068672307,
+     "S_portas": {
+      "g_exp": 0.000953603,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.068672307,
+      "z": 0.06812466
+     },
+     "S_vezes_C": {
+      "dp": 0.003938863,
+      "gl": 39,
+      "ic_inferior": 0.03065667,
+      "ic_superior": 0.033176089,
+      "media": 0.03191638,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.003199721,
+      "gl": 39,
+      "ic_inferior": 0.006986477,
+      "ic_superior": 0.009033117,
+      "media": 0.008009797,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.073300259,
+      "n": 148758
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.000172441,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.000172441,
+      "z": 0.000151586
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.023173933,
+     "S_portas": {
+      "g_exp": 0.000800345,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.023173933,
+      "z": 0.022635321
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.997923576,
+     "S_mediana_das_vidas": 0.133068311,
+     "S_portas": {
+      "g_exp": 0.006241415,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.133068311,
+      "z": 0.131569933
+     },
+     "S_vezes_C": {
+      "dp": 0.013604832,
+      "gl": 39,
+      "ic_inferior": 0.157816146,
+      "ic_superior": 0.166518219,
+      "media": 0.162167183,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.01356078,
+      "gl": 39,
+      "ic_inferior": 0.157631148,
+      "ic_superior": 0.166305044,
+      "media": 0.161968096,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.14170087,
+      "n": 348410
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.337126435,
+    "tv_mediana": 0.095154586
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.630756446,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.022893687,
+    "gl": 39,
+    "ic_inferior": 0.308234197,
+    "ic_superior": 0.32287771,
+    "media": 0.315555953,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.009386166,
+    "gl": 39,
+    "ic_inferior": 0.10013915,
+    "ic_superior": 0.106142833,
+    "media": 0.103140992,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -100.881236626,
+     "ic_superior": -99.351858007,
+     "media": -100.116547317,
+     "n": 792
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 527.205675687,
+     "ic_superior": 547.311232511,
+     "media": 537.258454099,
+     "n": 792
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 556.981463405,
+     "ic_superior": 579.232432634,
+     "media": 568.106948019,
+     "n": 792
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -46.298065796,
+     "ic_superior": -45.364031092,
+     "media": -45.831048444,
+     "n": 800
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 473.571751303,
+     "ic_superior": 482.830678648,
+     "media": 478.201214976,
+     "n": 800
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": -1.057921935,
+     "ic_superior": -0.687621479,
+     "media": -0.872771707,
+     "n": 800
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -44.178370363,
+     "ic_superior": -42.151201441,
+     "media": -43.164785902,
+     "n": 793
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 43.567990212,
+     "ic_superior": 45.394663574,
+     "media": 44.481326893,
+     "n": 800
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -115.224955968,
+     "ic_superior": -113.791960111,
+     "media": -114.508458039,
+     "n": 800
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 4.749938047,
+     "ic_superior": 5.518272468,
+     "media": 5.134105258,
+     "n": 800
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 39.137248295,
+     "ic_superior": 40.377266087,
+     "media": 39.757257191,
+     "n": 800
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 132.895389235,
+     "ic_superior": 137.401908029,
+     "media": 135.148648632,
+     "n": 800
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.398725257,
+    "chamar_atencao": 0.851980369,
+    "comer": 0.481179814,
+    "dormir": 0.969407889,
+    "emburrar": 0.188736077,
+    "explorar": 1.809876674,
+    "ocioso": 0.059644337
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.630756446,
+   "entropia_media": 1.562484382,
+   "fracao_reflexo": 0.244420573,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.860186345,
+    "chamar_atencao": 0.866363285,
+    "comer": 0.964647139,
+    "dormir": 0.8759059,
+    "emburrar": 0.856421046,
+    "explorar": 1.337126435,
+    "ocioso": 0.924144732
+   },
+   "tv_p_p1_mediana_das_vidas": 0.095154586,
+   "unidades": 200,
+   "vidas": 800
+  },
+  "C4|REL|longe_fixo": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.999230202,
+     "S_mediana_das_vidas": 0.113109895,
+     "S_portas": {
+      "g_exp": 0.000117171,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.113109895,
+      "z": 0.112782044
+     },
+     "S_vezes_C": {
+      "dp": 0.020010409,
+      "gl": 39,
+      "ic_inferior": 0.117619832,
+      "ic_superior": 0.130419111,
+      "media": 0.124019472,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.02001044,
+      "gl": 39,
+      "ic_inferior": 0.117619793,
+      "ic_superior": 0.130419091,
+      "media": 0.124019442,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.058727997,
+      "n": 152704
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.89495991,
+     "S_portas": {
+      "g_exp": 0.000346016,
+      "incentivo": 2.121e-05,
+      "reflexo": 0.596004963,
+      "todo": 0.89495991,
+      "z": 0.42623506
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.014036619,
+     "S_portas": {
+      "g_exp": 1.0535e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.014036619,
+      "z": 0.014166022
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.588973546,
+     "S_mediana_das_vidas": 0.203449836,
+     "S_portas": {
+      "g_exp": 0.000643798,
+      "incentivo": 0.015363275,
+      "reflexo": 0.0,
+      "todo": 0.203449836,
+      "z": 0.193420205
+     },
+     "S_vezes_C": {
+      "dp": 0.026895399,
+      "gl": 39,
+      "ic_inferior": 0.130381948,
+      "ic_superior": 0.14758508,
+      "media": 0.138983514,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.021961645,
+      "gl": 39,
+      "ic_inferior": 0.098654171,
+      "ic_superior": 0.112701521,
+      "media": 0.105677846,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.189550225,
+      "n": 97093
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.058577744,
+     "S_portas": {
+      "g_exp": 5.4619e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.058577744,
+      "z": 0.05846811
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.488017783,
+     "S_mediana_das_vidas": 0.055363872,
+     "S_portas": {
+      "g_exp": 0.000742127,
+      "incentivo": 3.8668e-05,
+      "reflexo": 0.0,
+      "todo": 0.055363872,
+      "z": 0.05481392
+     },
+     "S_vezes_C": {
+      "dp": 0.008445567,
+      "gl": 39,
+      "ic_inferior": 0.031472081,
+      "ic_superior": 0.036874128,
+      "media": 0.034173105,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.005718501,
+      "gl": 39,
+      "ic_inferior": 0.008554673,
+      "ic_superior": 0.012212404,
+      "media": 0.010383538,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.080697467,
+      "n": 106385
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.000231459,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.000231459,
+      "z": 0.000134731
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.025002627,
+     "S_portas": {
+      "g_exp": 0.00018938,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.025002627,
+      "z": 0.024840299
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.996381739,
+     "S_mediana_das_vidas": 0.12828256,
+     "S_portas": {
+      "g_exp": 0.006297505,
+      "incentivo": 4.8038e-05,
+      "reflexo": 0.0,
+      "todo": 0.12828256,
+      "z": 0.126895807
+     },
+     "S_vezes_C": {
+      "dp": 0.02471823,
+      "gl": 39,
+      "ic_inferior": 0.152572804,
+      "ic_superior": 0.168383351,
+      "media": 0.160478077,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.024655721,
+      "gl": 39,
+      "ic_inferior": 0.152290562,
+      "ic_superior": 0.168061126,
+      "media": 0.160175844,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.134278981,
+      "n": 288973
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.263484931,
+    "tv_mediana": 0.083273324
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.626481518,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.029061406,
+    "gl": 39,
+    "ic_inferior": 0.350077036,
+    "ic_superior": 0.368665613,
+    "media": 0.359371325,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.019149429,
+    "gl": 39,
+    "ic_inferior": 0.108289258,
+    "ic_superior": 0.120537826,
+    "media": 0.114413542,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -101.503638656,
+     "ic_superior": -99.631085132,
+     "media": -100.567361894,
+     "n": 792
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 464.336418465,
+     "ic_superior": 488.443000119,
+     "media": 476.389709292,
+     "n": 792
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 530.879934556,
+     "ic_superior": 557.552436272,
+     "media": 544.216185414,
+     "n": 792
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -38.727832316,
+     "ic_superior": -37.566495614,
+     "media": -38.147163965,
+     "n": 792
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 533.482427266,
+     "ic_superior": 554.285167897,
+     "media": 543.883797582,
+     "n": 792
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": -1.158832887,
+     "ic_superior": -0.485714684,
+     "media": -0.822273786,
+     "n": 792
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 792
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -47.694422413,
+     "ic_superior": -45.859422657,
+     "media": -46.776922535,
+     "n": 778
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 778
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 53.776859607,
+     "ic_superior": 55.96844294,
+     "media": 54.872651273,
+     "n": 800
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -114.158927872,
+     "ic_superior": -112.770158846,
+     "media": -113.464543359,
+     "n": 800
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 0.993409342,
+     "ic_superior": 1.320696463,
+     "media": 1.157052903,
+     "n": 800
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 35.223128355,
+     "ic_superior": 36.889131922,
+     "media": 36.056130139,
+     "n": 800
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 116.67541329,
+     "ic_superior": 120.801243079,
+     "media": 118.738328184,
+     "n": 800
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.363396525,
+    "chamar_atencao": 0.808825819,
+    "comer": 0.483051619,
+    "dormir": 0.972059992,
+    "emburrar": 0.138609238,
+    "explorar": 1.58232853,
+    "ocioso": 0.077388207
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.626481518,
+   "entropia_media": 1.483602927,
+   "fracao_reflexo": 0.193404948,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.876066403,
+    "chamar_atencao": 0.890963261,
+    "comer": 1.107633509,
+    "dormir": 0.886186478,
+    "emburrar": 0.87619349,
+    "explorar": 1.263484931,
+    "ocioso": 0.917680426
+   },
+   "tv_p_p1_mediana_das_vidas": 0.083273324,
+   "unidades": 200,
+   "vidas": 800
+  },
+  "C4|SEM|comedouro": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.994921256,
+     "S_mediana_das_vidas": 0.106678543,
+     "S_portas": {
+      "g_exp": 0.00018671,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.106678543,
+      "z": 0.106614569
+     },
+     "S_vezes_C": {
+      "dp": 0.009721071,
+      "gl": 39,
+      "ic_inferior": 0.103748437,
+      "ic_superior": 0.109966336,
+      "media": 0.106857387,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.009719609,
+      "gl": 39,
+      "ic_inferior": 0.103743525,
+      "ic_superior": 0.109960489,
+      "media": 0.106852007,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.058762653,
+      "n": 348827
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.867093881,
+     "S_portas": {
+      "g_exp": 0.000451446,
+      "incentivo": 8.3093e-05,
+      "reflexo": 0.534508608,
+      "todo": 0.867093881,
+      "z": 0.506436543
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.011856037,
+     "S_portas": {
+      "g_exp": 2.948e-06,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.011856037,
+      "z": 0.011856037
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.641702858,
+     "S_mediana_das_vidas": 0.249509884,
+     "S_portas": {
+      "g_exp": 0.000463352,
+      "incentivo": 0.04418888,
+      "reflexo": 0.0,
+      "todo": 0.249509884,
+      "z": 0.240471156
+     },
+     "S_vezes_C": {
+      "dp": 0.018051524,
+      "gl": 39,
+      "ic_inferior": 0.171141496,
+      "ic_superior": 0.182687811,
+      "media": 0.176914653,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.012145815,
+      "gl": 39,
+      "ic_inferior": 0.112670828,
+      "ic_superior": 0.120439668,
+      "media": 0.116555248,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.116328579,
+      "n": 98643
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.050785196,
+     "S_portas": {
+      "g_exp": 0.00011598,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.050785196,
+      "z": 0.050750056
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.475272181,
+     "S_mediana_das_vidas": 0.079120186,
+     "S_portas": {
+      "g_exp": 0.001151267,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.079120186,
+      "z": 0.078753572
+     },
+     "S_vezes_C": {
+      "dp": 0.003683961,
+      "gl": 39,
+      "ic_inferior": 0.035017367,
+      "ic_superior": 0.037373743,
+      "media": 0.036195555,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.002330908,
+      "gl": 39,
+      "ic_inferior": 0.005518068,
+      "ic_superior": 0.007008989,
+      "media": 0.006263529,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.106567125,
+      "n": 90816
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 6.762e-06,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 6.762e-06,
+      "z": 2.437e-06
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.02463388,
+     "S_portas": {
+      "g_exp": 0.001032434,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.02463388,
+      "z": 0.024057911
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.993275488,
+     "S_mediana_das_vidas": 0.158978169,
+     "S_portas": {
+      "g_exp": 0.007341277,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.158978169,
+      "z": 0.156818372
+     },
+     "S_vezes_C": {
+      "dp": 0.012451935,
+      "gl": 39,
+      "ic_inferior": 0.160258333,
+      "ic_superior": 0.168222976,
+      "media": 0.164240655,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.012429816,
+      "gl": 39,
+      "ic_inferior": 0.160024228,
+      "ic_superior": 0.167974724,
+      "media": 0.163999476,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.101355528,
+      "n": 495010
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.165420633,
+    "tv_mediana": 0.075328337
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.672044733,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.0132447,
+    "gl": 39,
+    "ic_inferior": 0.400839918,
+    "ic_superior": 0.409311639,
+    "media": 0.405075778,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.009400905,
+    "gl": 39,
+    "ic_inferior": 0.118045507,
+    "ic_superior": 0.124058618,
+    "media": 0.121052062,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -99.235623352,
+     "ic_superior": -98.360318194,
+     "media": -98.797970773,
+     "n": 798
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 492.893406226,
+     "ic_superior": 507.776409981,
+     "media": 500.334908103,
+     "n": 798
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 590.929727821,
+     "ic_superior": 601.480800035,
+     "media": 596.205263928,
+     "n": 798
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -34.805188697,
+     "ic_superior": -33.699603399,
+     "media": -34.252396048,
+     "n": 800
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 560.165596508,
+     "ic_superior": 584.706092372,
+     "media": 572.43584444,
+     "n": 800
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": -0.065804455,
+     "ic_superior": -0.005485762,
+     "media": -0.035645109,
+     "n": 800
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -50.851674609,
+     "ic_superior": -49.453715777,
+     "media": -50.152695193,
+     "n": 795
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 795
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 32.355136614,
+     "ic_superior": 33.888065697,
+     "media": 33.121601156,
+     "n": 800
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -121.563591683,
+     "ic_superior": -121.063955376,
+     "media": -121.313773529,
+     "n": 800
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 0.089959293,
+     "ic_superior": 0.171860773,
+     "media": 0.130910033,
+     "n": 800
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 33.932051299,
+     "ic_superior": 34.97871475,
+     "media": 34.455383024,
+     "n": 800
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 125.258865164,
+     "ic_superior": 127.4662508,
+     "media": 126.362557982,
+     "n": 800
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.350122166,
+    "chamar_atencao": 0.711752475,
+    "comer": 0.754094855,
+    "dormir": 0.977224974,
+    "emburrar": 0.114978352,
+    "explorar": 1.404661379,
+    "ocioso": 0.041389399
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.672044733,
+   "entropia_media": 1.452469565,
+   "fracao_reflexo": 0.151901042,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.855637078,
+    "chamar_atencao": 0.933142711,
+    "comer": 1.346970585,
+    "dormir": 0.876272159,
+    "emburrar": 0.948908492,
+    "explorar": 1.165420633,
+    "ocioso": 0.938867946
+   },
+   "tv_p_p1_mediana_das_vidas": 0.075328337,
+   "unidades": 200,
+   "vidas": 800
+  },
+  "C4|SEM|longe": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.999405681,
+     "S_mediana_das_vidas": 0.098949493,
+     "S_portas": {
+      "g_exp": 0.000109571,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.098949493,
+      "z": 0.098928003
+     },
+     "S_vezes_C": {
+      "dp": 0.011805699,
+      "gl": 39,
+      "ic_inferior": 0.100253808,
+      "ic_superior": 0.1078051,
+      "media": 0.104029454,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.011805699,
+      "gl": 39,
+      "ic_inferior": 0.100253808,
+      "ic_superior": 0.1078051,
+      "media": 0.104029454,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.055943184,
+      "n": 200507
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.906284997,
+     "S_portas": {
+      "g_exp": 0.000438802,
+      "incentivo": 1.8675e-05,
+      "reflexo": 0.596299363,
+      "todo": 0.906284997,
+      "z": 0.42761375
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.012261184,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.012261184,
+      "z": 0.01231198
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.576342828,
+     "S_mediana_das_vidas": 0.23164937,
+     "S_portas": {
+      "g_exp": 0.000600681,
+      "incentivo": 0.01367313,
+      "reflexo": 0.0,
+      "todo": 0.23164937,
+      "z": 0.218893288
+     },
+     "S_vezes_C": {
+      "dp": 0.01156379,
+      "gl": 39,
+      "ic_inferior": 0.132520495,
+      "ic_superior": 0.139917053,
+      "media": 0.136218774,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.009749023,
+      "gl": 39,
+      "ic_inferior": 0.102944848,
+      "ic_superior": 0.109180626,
+      "media": 0.106062737,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.139976553,
+      "n": 183395
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.052753151,
+     "S_portas": {
+      "g_exp": 7.6317e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.052753151,
+      "z": 0.052752705
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.453581703,
+     "S_mediana_das_vidas": 0.080552582,
+     "S_portas": {
+      "g_exp": 0.000955737,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.080552582,
+      "z": 0.080159482
+     },
+     "S_vezes_C": {
+      "dp": 0.0037116,
+      "gl": 39,
+      "ic_inferior": 0.035959209,
+      "ic_superior": 0.038333263,
+      "media": 0.037146236,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.002276279,
+      "gl": 39,
+      "ic_inferior": 0.009321145,
+      "ic_superior": 0.010777124,
+      "media": 0.010049134,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.075926352,
+      "n": 217250
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.000131405,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.000131405,
+      "z": 0.000129803
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.025137173,
+     "S_portas": {
+      "g_exp": 0.000728918,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.025137173,
+      "z": 0.02469513
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.998058543,
+     "S_mediana_das_vidas": 0.158693581,
+     "S_portas": {
+      "g_exp": 0.006382611,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.158693581,
+      "z": 0.156635491
+     },
+     "S_vezes_C": {
+      "dp": 0.01373807,
+      "gl": 39,
+      "ic_inferior": 0.173161962,
+      "ic_superior": 0.181949258,
+      "media": 0.17755561,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.013707351,
+      "gl": 39,
+      "ic_inferior": 0.173027507,
+      "ic_superior": 0.181795154,
+      "media": 0.177411331,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.139627264,
+      "n": 534695
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.255324478,
+    "tv_mediana": 0.066471635
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.640543727,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.01969505,
+    "gl": 39,
+    "ic_inferior": 0.333206257,
+    "ic_superior": 0.345803822,
+    "media": 0.33950504,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.009181602,
+    "gl": 39,
+    "ic_inferior": 0.1108011,
+    "ic_superior": 0.116673937,
+    "media": 0.113737519,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -105.131870729,
+     "ic_superior": -103.74803559,
+     "media": -104.43995316,
+     "n": 800
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 590.282771793,
+     "ic_superior": 608.513546876,
+     "media": 599.398159334,
+     "n": 800
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 624.993954985,
+     "ic_superior": 647.05725784,
+     "media": 636.025606413,
+     "n": 800
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -46.696773236,
+     "ic_superior": -45.981831635,
+     "media": -46.339302436,
+     "n": 800
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 477.159586318,
+     "ic_superior": 485.301689323,
+     "media": 481.23063782,
+     "n": 800
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": -0.76927229,
+     "ic_superior": -0.467872411,
+     "media": -0.618572351,
+     "n": 800
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -45.161901896,
+     "ic_superior": -43.352658096,
+     "media": -44.257279996,
+     "n": 796
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 796
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 54.402188504,
+     "ic_superior": 56.870922224,
+     "media": 55.636555364,
+     "n": 800
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -117.122776699,
+     "ic_superior": -115.524423775,
+     "media": -116.323600237,
+     "n": 800
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 7.108215156,
+     "ic_superior": 8.077259238,
+     "media": 7.592737197,
+     "n": 800
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 38.478455845,
+     "ic_superior": 39.620023554,
+     "media": 39.049239699,
+     "n": 800
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 168.871236578,
+     "ic_superior": 174.002594292,
+     "media": 171.436915435,
+     "n": 800
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 797
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.425043433,
+    "chamar_atencao": 0.847497821,
+    "comer": 0.449377892,
+    "dormir": 0.970406725,
+    "emburrar": 0.211703939,
+    "explorar": 1.431269779,
+    "ocioso": 0.045200087
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.640543727,
+   "entropia_media": 1.588178629,
+   "fracao_reflexo": 0.205026972,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.887941065,
+    "chamar_atencao": 0.926853616,
+    "comer": 1.011091102,
+    "dormir": 0.899505217,
+    "emburrar": 0.970400332,
+    "explorar": 1.255324478,
+    "ocioso": 0.932687608
+   },
+   "tv_p_p1_mediana_das_vidas": 0.066471635,
+   "unidades": 200,
+   "vidas": 800
+  },
+  "C4|SEM|longe_fixo": {
+   "A4": {
+    "curiosidade": {
+     "A_r": [
+      "explorar"
+     ],
+     "C": 0.998506567,
+     "S_mediana_das_vidas": 0.115336553,
+     "S_portas": {
+      "g_exp": 0.000110748,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.115336553,
+      "z": 0.115018897
+     },
+     "S_vezes_C": {
+      "dp": 0.02368579,
+      "gl": 39,
+      "ic_inferior": 0.116659281,
+      "ic_superior": 0.131809447,
+      "media": 0.124234364,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.02368566,
+      "gl": 39,
+      "ic_inferior": 0.116658063,
+      "ic_superior": 0.131808146,
+      "media": 0.124233105,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.055313993,
+      "n": 246773
+     }
+    },
+    "dor": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.0,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.0,
+      "z": 0.0
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "energia": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.895443432,
+     "S_portas": {
+      "g_exp": 0.00036431,
+      "incentivo": 2.202e-05,
+      "reflexo": 0.591871934,
+      "todo": 0.895443432,
+      "z": 0.451923863
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "estresse": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.013217836,
+     "S_portas": {
+      "g_exp": 2.5341e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.013217836,
+      "z": 0.013348365
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "fome": {
+     "A_r": [
+      "comer",
+      "explorar"
+     ],
+     "C": 0.608515812,
+     "S_mediana_das_vidas": 0.22999902,
+     "S_portas": {
+      "g_exp": 0.000628304,
+      "incentivo": 0.019505725,
+      "reflexo": 0.0,
+      "todo": 0.22999902,
+      "z": 0.219375816
+     },
+     "S_vezes_C": {
+      "dp": 0.031421685,
+      "gl": 39,
+      "ic_inferior": 0.141097363,
+      "ic_superior": 0.161195648,
+      "media": 0.151146506,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.024929753,
+      "gl": 39,
+      "ic_inferior": 0.10480566,
+      "ic_superior": 0.120751503,
+      "media": 0.112778582,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.114078129,
+      "n": 158558
+     }
+    },
+    "higiene": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.055925991,
+     "S_portas": {
+      "g_exp": 4.6265e-05,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.055925991,
+      "z": 0.055919692
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "humor": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.453891818,
+     "S_mediana_das_vidas": 0.066452974,
+     "S_portas": {
+      "g_exp": 0.000740836,
+      "incentivo": 3.6585e-05,
+      "reflexo": 0.0,
+      "todo": 0.066452974,
+      "z": 0.066111012
+     },
+     "S_vezes_C": {
+      "dp": 0.009544394,
+      "gl": 39,
+      "ic_inferior": 0.03205447,
+      "ic_superior": 0.03815936,
+      "media": 0.035106915,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.005484378,
+      "gl": 39,
+      "ic_inferior": 0.007245927,
+      "ic_superior": 0.010753905,
+      "media": 0.008999916,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.084264898,
+      "n": 183920
+     }
+    },
+    "saude": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.00023367,
+     "S_portas": {
+      "g_exp": 0.0,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.00023367,
+      "z": 0.000219225
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "solidao": {
+     "A_r": [],
+     "C": null,
+     "S_mediana_das_vidas": 0.024452168,
+     "S_portas": {
+      "g_exp": 0.000171546,
+      "incentivo": 0.0,
+      "reflexo": 0.0,
+      "todo": 0.024452168,
+      "z": 0.024122745
+     },
+     "S_vezes_C": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": null,
+      "gl": null,
+      "ic_inferior": null,
+      "ic_superior": null,
+      "media": null,
+      "motivo": "menos de 2 valores",
+      "n": 0,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": null,
+      "n": 0
+     }
+    },
+    "tedio": {
+     "A_r": [
+      "brincar",
+      "explorar"
+     ],
+     "C": 0.996420179,
+     "S_mediana_das_vidas": 0.135601364,
+     "S_portas": {
+      "g_exp": 0.006174349,
+      "incentivo": 4.101e-05,
+      "reflexo": 0.0,
+      "todo": 0.135601364,
+      "z": 0.134393889
+     },
+     "S_vezes_C": {
+      "dp": 0.030470818,
+      "gl": 39,
+      "ic_inferior": 0.158041108,
+      "ic_superior": 0.177531189,
+      "media": 0.167786149,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "dP_alivio": {
+      "dp": 0.030408974,
+      "gl": 39,
+      "ic_inferior": 0.157797251,
+      "ic_superior": 0.177247774,
+      "media": 0.167522512,
+      "motivo": null,
+      "n": 40,
+      "nivel": 0.95
+     },
+     "hp2": {
+      "fracao_vies_contexto_acima_de_meio": 0.128738735,
+      "n": 469711
+     }
+    }
+   },
+   "A_r": {
+    "curiosidade": [
+     "explorar"
+    ],
+    "dor": [],
+    "energia": [],
+    "estresse": [],
+    "fome": [
+     "comer",
+     "explorar"
+    ],
+    "higiene": [],
+    "humor": [
+     "brincar",
+     "explorar"
+    ],
+    "saude": [],
+    "solidao": [],
+    "tedio": [
+     "brincar",
+     "explorar"
+    ]
+   },
+   "HA": {
+    "aponta": false,
+    "cortes": [
+     0.1,
+     1.25
+    ],
+    "rho_do_comportamento_com_mais_unidades": 1.216059753,
+    "tv_mediana": 0.059894625
+   },
+   "HC": {
+    "aponta": false,
+    "corpo_no_inato_mediana": 0.65854845,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     "1/3"
+    ],
+    "receptores_com_dP_alivio_baixo": [
+     "humor"
+    ]
+   },
+   "HP": {
+    "aponta": false,
+    "cortes": [
+     "6 receptores",
+     0.05,
+     0.5,
+     "metade",
+     "1/2 da diferenca de w"
+    ],
+    "incoerentes": [
+     "humor"
+    ],
+    "ramo_1": false,
+    "ramo_2_receptores": [],
+    "receptores_sensiveis": [
+     "curiosidade",
+     "fome",
+     "humor",
+     "tedio"
+    ]
+   },
+   "RV": {
+    "dp": 0.022148642,
+    "gl": 39,
+    "ic_inferior": 0.383276798,
+    "ic_superior": 0.397443757,
+    "media": 0.390360278,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "SE_C": {
+    "dp": 0.022996855,
+    "gl": 39,
+    "ic_inferior": 0.112213732,
+    "ic_superior": 0.126923235,
+    "media": 0.119568484,
+    "motivo": null,
+    "n": 40,
+    "nivel": 0.95
+   },
+   "alivio": {
+    "brincar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|energia": {
+     "alivia": false,
+     "ic_inferior": -105.55743589,
+     "ic_superior": -103.909424642,
+     "media": -104.733430266,
+     "n": 793
+    },
+    "brincar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|humor": {
+     "alivia": true,
+     "ic_inferior": 555.446622035,
+     "ic_superior": 579.960745074,
+     "media": 567.703683555,
+     "n": 793
+    },
+    "brincar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "brincar|tedio": {
+     "alivia": true,
+     "ic_inferior": 626.687349242,
+     "ic_superior": 650.336840537,
+     "media": 638.51209489,
+     "n": 793
+    },
+    "chamar_atencao|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "chamar_atencao|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "comer|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "comer|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "comer|energia": {
+     "alivia": false,
+     "ic_inferior": -41.65232951,
+     "ic_superior": -40.6659734,
+     "media": -41.159151455,
+     "n": 793
+    },
+    "comer|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "comer|fome": {
+     "alivia": true,
+     "ic_inferior": 510.52656323,
+     "ic_superior": 524.548088552,
+     "media": 517.537325891,
+     "n": 793
+    },
+    "comer|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "comer|humor": {
+     "alivia": false,
+     "ic_inferior": -0.65060496,
+     "ic_superior": -0.31832179,
+     "media": -0.484463375,
+     "n": 793
+    },
+    "comer|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "comer|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "comer|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 793
+    },
+    "dormir|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "dormir|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "emburrar|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|humor": {
+     "alivia": false,
+     "ic_inferior": -46.570379978,
+     "ic_superior": -44.709168942,
+     "media": -45.63977446,
+     "n": 790
+    },
+    "emburrar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "emburrar|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 790
+    },
+    "explorar|curiosidade": {
+     "alivia": true,
+     "ic_inferior": 59.428422376,
+     "ic_superior": 61.397961475,
+     "media": 60.413191926,
+     "n": 800
+    },
+    "explorar|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|energia": {
+     "alivia": false,
+     "ic_inferior": -118.498231408,
+     "ic_superior": -117.031638661,
+     "media": -117.764935035,
+     "n": 800
+    },
+    "explorar|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|fome": {
+     "alivia": true,
+     "ic_inferior": 1.568058434,
+     "ic_superior": 2.05697857,
+     "media": 1.812518502,
+     "n": 800
+    },
+    "explorar|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|humor": {
+     "alivia": true,
+     "ic_inferior": 36.652228891,
+     "ic_superior": 38.238194691,
+     "media": 37.445211791,
+     "n": 800
+    },
+    "explorar|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 800
+    },
+    "explorar|tedio": {
+     "alivia": true,
+     "ic_inferior": 147.980238254,
+     "ic_superior": 154.237037408,
+     "media": 151.108637831,
+     "n": 800
+    },
+    "ocioso|curiosidade": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|dor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|energia": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|estresse": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|fome": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|higiene": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|humor": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|saude": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|solidao": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    },
+    "ocioso|tedio": {
+     "alivia": false,
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 798
+    }
+   },
+   "ativas_media": {
+    "brincar": 0.386981768,
+    "chamar_atencao": 0.808965042,
+    "comer": 0.49855178,
+    "dormir": 0.973589669,
+    "emburrar": 0.185701993,
+    "explorar": 1.379627685,
+    "ocioso": 0.052230647
+   },
+   "corpo_no_inato_mediana_das_vidas": 0.65854845,
+   "entropia_media": 1.527082762,
+   "fracao_reflexo": 0.185037202,
+   "leitura": {
+    "apontam": [],
+    "aviso_reflexo": null,
+    "linha": "indeterminado"
+   },
+   "mais_unidades": "explorar",
+   "receptores_com_A_r": [
+    "curiosidade",
+    "fome",
+    "humor",
+    "tedio"
+   ],
+   "reflexo_acima_de_um_terco": false,
+   "rho": {
+    "brincar": 0.887202819,
+    "chamar_atencao": 0.934143738,
+    "comer": 1.13025883,
+    "dormir": 0.894289122,
+    "emburrar": 0.969565805,
+    "explorar": 1.216059753,
+    "ocioso": 0.928254867
+   },
+   "tv_p_p1_mediana_das_vidas": 0.059894625,
+   "unidades": 200,
+   "vidas": 800
+  }
+ },
+ "parede_s": {
+  "AN0": 9.503426551818848,
+  "C4": 5944.2706208229065
+ },
+ "pasta_c4": "D:\\Trab\\digilab\\v3-memoria-run\\artifacts_v2_digibrain_prototipo\\memoria_autobio\\run",
+ "plano": "docs/PLANO_ANALISE_V3_PET_VIVO.md (APROVADO em 2026-11-08, repassado pelo Gerente da V3)",
+ "processos": 4,
+ "rotulo": "auditoria da escolha (0b) e medida de age pelo estado (0c) da PET_VIVO: so leitura, sem vida nova e sem semente; pos hoc, descritiva e geradora de hipotese (secao 6 do plano)",
+ "scripts": {
+  "digilab/metrics.py": "facb1c0f6cba9f0d90d8c44f929dee84585fbcecb1d746dcf82df41cc86d5908",
+  "experiments/auditoria_pet_vivo.py": "1cc192bf30fc1ed06209a73926285506ab26ccf9e114634817657ec535301f90"
+ },
+ "subamostra": "o contrafactual nos k < 8 de cada base da C4 e em toda a AN0 (PV-0-5)",
+ "vidas": {
+  "AN0": 10,
+  "C4": 4800,
+  "com_contrafactual": 970
+ }
+}

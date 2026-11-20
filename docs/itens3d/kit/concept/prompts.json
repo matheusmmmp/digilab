@@ -1,0 +1,11 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": ["ref_ilha_saco_gerado.png", "ref_ilha_kits.png"],
+ "prompt_base": "Concept art of a single small first aid kit prop for a cozy low-poly 3D island game. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. The kit is a small closed case with a carrying handle on top and a clear first aid cross, readable from far away. Show only the kit, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters.",
+ "variantes": [
+  {"nome": "concept_1_maleta", "prompt": "A white rounded plastic case with a red cross on the lid and on the front, a dark grey handle and two small grey latches."},
+  {"nome": "concept_2_bolsa", "prompt": "A soft cream canvas pouch shaped like a small box, tied with rope bands like the bag in the first reference image, a red cross patch sewn on the front and a rope handle."},
+  {"nome": "concept_3_caixote", "prompt": "A small wooden crate with a white painted lid, a red cross on the lid and front, rope handles on the sides and on top, tropical island style."},
+  {"nome": "concept_4_vermelho", "prompt": "A bright red rounded case with a big white cross on the lid and front, a white handle and a thin white band around the middle."}
+ ]
+}

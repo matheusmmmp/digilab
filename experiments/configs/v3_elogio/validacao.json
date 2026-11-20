@@ -1,0 +1,9 @@
+{
+  "descricao": "ELOGIO, a validacao (etapa 5, uma vez): os seis bracos no g e no W da calibracao (D-EL-21: g = S/4 = 256, W = 2), sementes 25301 a 25500",
+  "fase": "validacao",
+  "plano": "docs/PLANO_ANALISE_V3_ELOGIO.md",
+  "dias": 12,
+  "unidades": {"bases": [25301], "n": 200},
+  "ganho": 256,
+  "janela": 2
+}

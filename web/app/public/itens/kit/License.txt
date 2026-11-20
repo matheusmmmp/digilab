@@ -1,0 +1,17 @@
+DigiLab: o kit medico da ilha (kit.gltf, kit.bin, kit_cor.png)
+
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06.
+Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
+Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do kit.gltf e neste arquivo.
+
+Como foi feito (docs/TAREFA_V3_ITENS_3D.md e docs/itens3d/kit/ no repositorio):
+- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo recortadas da propria ilha do jogo (o saco gerado e os
+  kits CC0, sem o pet); o concept 3 (caixote) escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do concept;
+- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
+- conserto no Blender 4.5 LTS, por script: a malha da Meshy fica como veio; a cor e chapada em cinco cores do concept (sem a sombra
+  embutida), e a cruz vermelha do concept, que a malha da Meshy nao trouxe, entra como uma cruz plana sobre a tampa.
+As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do kit.gltf.
+
+Uso: no jogo DigiLab, publicado. Credito: "Kit medico gerado com a Meshy (meshy.ai)".
+Aprovacao: o Matheus escolheu o concept em 2026-11-06; a aprovacao da captura na ilha fica no PR do kit e do coco.

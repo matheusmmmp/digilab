@@ -1,0 +1,7 @@
+{
+  "descricao": "GOSTO_VISUAL, GV3b: o piloto com o enjoo ligado (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md, secao 6): so o custo e a conferencia de que o pet olha nas sondas; nada se ajusta. Nao roda antes do adendo e do codigo na main.",
+  "fase": "gosto_visual_enjoo",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md",
+  "unidades": {"bases": [90101, 90202], "k": 2},
+  "dias": 14
+}

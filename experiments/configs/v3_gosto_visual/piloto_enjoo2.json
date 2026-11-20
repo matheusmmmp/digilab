@@ -1,0 +1,7 @@
+{
+  "descricao": "GOSTO_VISUAL, GV3b do adendo 2: o piloto com o enjoo ligado e a regra sem_sonda para as duas TVs sem lugar (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md, secoes 2 e 6): so o custo, a conferencia de que o pet olha nas sondas e a contagem das replicas sem lugar contra o teto; nada se ajusta. Nao roda antes do adendo 2 e do codigo na main.",
+  "fase": "gosto_visual_enjoo2",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md",
+  "unidades": {"bases": [91101, 91202], "k": 2},
+  "dias": 14
+}

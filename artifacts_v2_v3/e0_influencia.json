@@ -1,0 +1,548 @@
+{
+ "analise": {
+  "geral": {
+   "frac_decisivo_impulsos_na_escolha": 0.8135184569338211,
+   "frac_decisivo_impulsos_todas": 0.9165550595238096,
+   "frac_mudou_l1_na_escolha": 0.34810442301296973,
+   "frac_mudou_l1_todas": 0.15576636904761904,
+   "frac_mudou_na_escolha": 0.34810442301296973,
+   "frac_mudou_todas": 0.15576636904761904,
+   "frac_um_candidato": 0.5525297619047619,
+   "n": 26880,
+   "n_escolha": 12028,
+   "razao_dec_imp_na_escolha": 1.9217925216007543,
+   "tv_media_na_escolha": 0.23912293211711896
+  },
+  "pesos": [
+   {
+    "desvio_maximo": 8185,
+    "dono": "atencioso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 101
+   },
+   {
+    "desvio_maximo": 16329,
+    "dono": "atencioso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 202
+   },
+   {
+    "desvio_maximo": 1214,
+    "dono": "atencioso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 303
+   },
+   {
+    "desvio_maximo": 16212,
+    "dono": "atencioso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 404
+   },
+   {
+    "desvio_maximo": 8860,
+    "dono": "atencioso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 505
+   },
+   {
+    "desvio_maximo": 3569,
+    "dono": "relapso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 101
+   },
+   {
+    "desvio_maximo": 8651,
+    "dono": "relapso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 202
+   },
+   {
+    "desvio_maximo": 7126,
+    "dono": "relapso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 303
+   },
+   {
+    "desvio_maximo": 14237,
+    "dono": "relapso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 404
+   },
+   {
+    "desvio_maximo": 7546,
+    "dono": "relapso",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 505
+   },
+   {
+    "desvio_maximo": 5387,
+    "dono": "aleatorio",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 101
+   },
+   {
+    "desvio_maximo": 4856,
+    "dono": "aleatorio",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 202
+   },
+   {
+    "desvio_maximo": 4401,
+    "dono": "aleatorio",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 303
+   },
+   {
+    "desvio_maximo": 4801,
+    "dono": "aleatorio",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 404
+   },
+   {
+    "desvio_maximo": 5128,
+    "dono": "aleatorio",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 505
+   },
+   {
+    "desvio_maximo": 4281,
+    "dono": "incoerente",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 101
+   },
+   {
+    "desvio_maximo": 920,
+    "dono": "incoerente",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 202
+   },
+   {
+    "desvio_maximo": 574,
+    "dono": "incoerente",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 303
+   },
+   {
+    "desvio_maximo": 7969,
+    "dono": "incoerente",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 404
+   },
+   {
+    "desvio_maximo": 611,
+    "dono": "incoerente",
+    "n_pesos": 525,
+    "pesos_no_teto": 0,
+    "semente": 505
+   }
+  ],
+  "por_dia": {
+   "0": {
+    "frac_decisivo_impulsos_na_escolha": 0.9954954954954955,
+    "frac_decisivo_impulsos_todas": 0.9973958333333334,
+    "frac_mudou_l1_na_escolha": 0.0918918918918919,
+    "frac_mudou_l1_todas": 0.053125,
+    "frac_mudou_na_escolha": 0.0918918918918919,
+    "frac_mudou_todas": 0.053125,
+    "frac_um_candidato": 0.421875,
+    "n": 1920,
+    "n_escolha": 1110,
+    "razao_dec_imp_na_escolha": 0.11845821638550509,
+    "tv_media_na_escolha": 0.061837606550832765
+   },
+   "1": {
+    "frac_decisivo_impulsos_na_escolha": 0.9575892857142857,
+    "frac_decisivo_impulsos_todas": 0.9802083333333333,
+    "frac_mudou_l1_na_escolha": 0.2533482142857143,
+    "frac_mudou_l1_todas": 0.11822916666666666,
+    "frac_mudou_na_escolha": 0.2533482142857143,
+    "frac_mudou_todas": 0.11822916666666666,
+    "frac_um_candidato": 0.5333333333333333,
+    "n": 1920,
+    "n_escolha": 896,
+    "razao_dec_imp_na_escolha": 0.38561846393696014,
+    "tv_media_na_escolha": 0.16179369038563735
+   },
+   "10": {
+    "frac_decisivo_impulsos_na_escolha": 0.7110849056603774,
+    "frac_decisivo_impulsos_todas": 0.8723958333333334,
+    "frac_mudou_l1_na_escolha": 0.41745283018867924,
+    "frac_mudou_l1_todas": 0.184375,
+    "frac_mudou_na_escolha": 0.41745283018867924,
+    "frac_mudou_todas": 0.184375,
+    "frac_um_candidato": 0.5583333333333333,
+    "n": 1920,
+    "n_escolha": 848,
+    "razao_dec_imp_na_escolha": 3.257026626803989,
+    "tv_media_na_escolha": 0.28107301598730833
+   },
+   "11": {
+    "frac_decisivo_impulsos_na_escolha": 0.7111111111111111,
+    "frac_decisivo_impulsos_todas": 0.878125,
+    "frac_mudou_l1_na_escolha": 0.3987654320987654,
+    "frac_mudou_l1_todas": 0.16822916666666668,
+    "frac_mudou_na_escolha": 0.3987654320987654,
+    "frac_mudou_todas": 0.16822916666666668,
+    "frac_um_candidato": 0.578125,
+    "n": 1920,
+    "n_escolha": 810,
+    "razao_dec_imp_na_escolha": 3.461036263654289,
+    "tv_media_na_escolha": 0.28229179856434833
+   },
+   "12": {
+    "frac_decisivo_impulsos_na_escolha": 0.6636971046770601,
+    "frac_decisivo_impulsos_todas": 0.8427083333333333,
+    "frac_mudou_l1_na_escolha": 0.40311804008908686,
+    "frac_mudou_l1_todas": 0.18854166666666666,
+    "frac_mudou_na_escolha": 0.40311804008908686,
+    "frac_mudou_todas": 0.18854166666666666,
+    "frac_um_candidato": 0.5322916666666667,
+    "n": 1920,
+    "n_escolha": 898,
+    "razao_dec_imp_na_escolha": 3.5742887205604457,
+    "tv_media_na_escolha": 0.2981556086895017
+   },
+   "13": {
+    "frac_decisivo_impulsos_na_escolha": 0.6721105527638191,
+    "frac_decisivo_impulsos_todas": 0.8640625,
+    "frac_mudou_l1_na_escolha": 0.4321608040201005,
+    "frac_mudou_l1_todas": 0.17916666666666667,
+    "frac_mudou_na_escolha": 0.4321608040201005,
+    "frac_mudou_todas": 0.17916666666666667,
+    "frac_um_candidato": 0.5854166666666667,
+    "n": 1920,
+    "n_escolha": 796,
+    "razao_dec_imp_na_escolha": 3.901180063737447,
+    "tv_media_na_escolha": 0.2692190968819934
+   },
+   "2": {
+    "frac_decisivo_impulsos_na_escolha": 0.9386792452830188,
+    "frac_decisivo_impulsos_todas": 0.9729166666666667,
+    "frac_mudou_l1_na_escolha": 0.28773584905660377,
+    "frac_mudou_l1_todas": 0.12708333333333333,
+    "frac_mudou_na_escolha": 0.28773584905660377,
+    "frac_mudou_todas": 0.12708333333333333,
+    "frac_um_candidato": 0.5583333333333333,
+    "n": 1920,
+    "n_escolha": 848,
+    "razao_dec_imp_na_escolha": 0.5267053663634029,
+    "tv_media_na_escolha": 0.18914653030861
+   },
+   "3": {
+    "frac_decisivo_impulsos_na_escolha": 0.942998760842627,
+    "frac_decisivo_impulsos_todas": 0.9760416666666667,
+    "frac_mudou_l1_na_escolha": 0.35315985130111527,
+    "frac_mudou_l1_todas": 0.1484375,
+    "frac_mudou_na_escolha": 0.35315985130111527,
+    "frac_mudou_todas": 0.1484375,
+    "frac_um_candidato": 0.5796875,
+    "n": 1920,
+    "n_escolha": 807,
+    "razao_dec_imp_na_escolha": 0.8491497751134771,
+    "tv_media_na_escolha": 0.23364716304708388
+   },
+   "4": {
+    "frac_decisivo_impulsos_na_escolha": 0.9135381114903299,
+    "frac_decisivo_impulsos_todas": 0.9604166666666667,
+    "frac_mudou_l1_na_escolha": 0.3560864618885097,
+    "frac_mudou_l1_todas": 0.16302083333333334,
+    "frac_mudou_na_escolha": 0.3560864618885097,
+    "frac_mudou_todas": 0.16302083333333334,
+    "frac_um_candidato": 0.5421875,
+    "n": 1920,
+    "n_escolha": 879,
+    "razao_dec_imp_na_escolha": 1.0787662929381838,
+    "tv_media_na_escolha": 0.24729719835709515
+   },
+   "5": {
+    "frac_decisivo_impulsos_na_escolha": 0.8748524203069658,
+    "frac_decisivo_impulsos_todas": 0.9447916666666667,
+    "frac_mudou_l1_na_escolha": 0.35064935064935066,
+    "frac_mudou_l1_todas": 0.1546875,
+    "frac_mudou_na_escolha": 0.35064935064935066,
+    "frac_mudou_todas": 0.1546875,
+    "frac_um_candidato": 0.5588541666666667,
+    "n": 1920,
+    "n_escolha": 847,
+    "razao_dec_imp_na_escolha": 1.3823034029331807,
+    "tv_media_na_escolha": 0.25366029894968134
+   },
+   "6": {
+    "frac_decisivo_impulsos_na_escolha": 0.7742346938775511,
+    "frac_decisivo_impulsos_todas": 0.9078125,
+    "frac_mudou_l1_na_escolha": 0.3903061224489796,
+    "frac_mudou_l1_todas": 0.159375,
+    "frac_mudou_na_escolha": 0.3903061224489796,
+    "frac_mudou_todas": 0.159375,
+    "frac_um_candidato": 0.5916666666666667,
+    "n": 1920,
+    "n_escolha": 784,
+    "razao_dec_imp_na_escolha": 1.7174642587826605,
+    "tv_media_na_escolha": 0.27625865607526956
+   },
+   "7": {
+    "frac_decisivo_impulsos_na_escolha": 0.7404306220095693,
+    "frac_decisivo_impulsos_todas": 0.8869791666666667,
+    "frac_mudou_l1_na_escolha": 0.4019138755980861,
+    "frac_mudou_l1_todas": 0.175,
+    "frac_mudou_na_escolha": 0.4019138755980861,
+    "frac_mudou_todas": 0.175,
+    "frac_um_candidato": 0.5645833333333333,
+    "n": 1920,
+    "n_escolha": 836,
+    "razao_dec_imp_na_escolha": 2.0645609914385985,
+    "tv_media_na_escolha": 0.28375252983455906
+   },
+   "8": {
+    "frac_decisivo_impulsos_na_escolha": 0.702176403207331,
+    "frac_decisivo_impulsos_todas": 0.8645833333333334,
+    "frac_mudou_l1_na_escolha": 0.4146620847651776,
+    "frac_mudou_l1_todas": 0.18854166666666666,
+    "frac_mudou_na_escolha": 0.4146620847651776,
+    "frac_mudou_todas": 0.18854166666666666,
+    "frac_um_candidato": 0.5453125,
+    "n": 1920,
+    "n_escolha": 873,
+    "razao_dec_imp_na_escolha": 2.6776634376849278,
+    "tv_media_na_escolha": 0.291201023380617
+   },
+   "9": {
+    "frac_decisivo_impulsos_na_escolha": 0.7185929648241206,
+    "frac_decisivo_impulsos_todas": 0.8833333333333333,
+    "frac_mudou_l1_na_escolha": 0.41708542713567837,
+    "frac_mudou_l1_todas": 0.17291666666666666,
+    "frac_mudou_na_escolha": 0.41708542713567837,
+    "frac_mudou_todas": 0.17291666666666666,
+    "frac_um_candidato": 0.5854166666666667,
+    "n": 1920,
+    "n_escolha": 796,
+    "razao_dec_imp_na_escolha": 2.8155682098601136,
+    "tv_media_na_escolha": 0.28180766579046024
+   }
+  },
+  "por_dono": {
+   "aleatorio": {
+    "frac_decisivo_impulsos_na_escolha": 0.8326878388845856,
+    "frac_decisivo_impulsos_todas": 0.9357142857142857,
+    "frac_mudou_l1_na_escolha": 0.360573199070488,
+    "frac_mudou_l1_todas": 0.13854166666666667,
+    "frac_mudou_na_escolha": 0.360573199070488,
+    "frac_mudou_todas": 0.13854166666666667,
+    "frac_um_candidato": 0.6157738095238096,
+    "n": 6720,
+    "n_escolha": 2582,
+    "razao_dec_imp_na_escolha": 1.3411043582570317,
+    "tv_media_na_escolha": 0.30872067646402457
+   },
+   "atencioso": {
+    "frac_decisivo_impulsos_na_escolha": 0.9994727128921698,
+    "frac_decisivo_impulsos_todas": 0.999702380952381,
+    "frac_mudou_l1_na_escolha": 0.2454521486949644,
+    "frac_mudou_l1_todas": 0.13854166666666667,
+    "frac_mudou_na_escolha": 0.2454521486949644,
+    "frac_mudou_todas": 0.13854166666666667,
+    "frac_um_candidato": 0.4355654761904762,
+    "n": 6720,
+    "n_escolha": 3793,
+    "razao_dec_imp_na_escolha": 2.2099186210793156,
+    "tv_media_na_escolha": 0.12971979019355356
+   },
+   "incoerente": {
+    "frac_decisivo_impulsos_na_escolha": 0.7600102014792145,
+    "frac_decisivo_impulsos_todas": 0.8599702380952381,
+    "frac_mudou_l1_na_escolha": 0.36878347360367253,
+    "frac_mudou_l1_todas": 0.21517857142857144,
+    "frac_mudou_na_escolha": 0.36878347360367253,
+    "frac_mudou_todas": 0.21517857142857144,
+    "frac_um_candidato": 0.41651785714285716,
+    "n": 6720,
+    "n_escolha": 3921,
+    "razao_dec_imp_na_escolha": 1.2899934778729112,
+    "tv_media_na_escolha": 0.22172053727058794
+   },
+   "relapso": {
+    "frac_decisivo_impulsos_na_escolha": 0.49884526558891457,
+    "frac_decisivo_impulsos_todas": 0.8708333333333333,
+    "frac_mudou_l1_na_escolha": 0.5075057736720554,
+    "frac_mudou_l1_todas": 0.13080357142857144,
+    "frac_mudou_na_escolha": 0.5075057736720554,
+    "frac_mudou_todas": 0.13080357142857144,
+    "frac_um_candidato": 0.7422619047619048,
+    "n": 6720,
+    "n_escolha": 1732,
+    "razao_dec_imp_na_escolha": 3.544043829258186,
+    "tv_media_na_escolha": 0.41435360856378245
+   }
+  },
+  "por_regra": {
+   "abandono": {
+    "candidatos": [
+     1
+    ],
+    "frac_decisivo_impulsos_na_escolha": null,
+    "frac_decisivo_impulsos_todas": 1.0,
+    "frac_do_total": 0.08831845238095239,
+    "frac_mudou_l1_na_escolha": null,
+    "frac_mudou_l1_todas": 0.0,
+    "frac_mudou_na_escolha": null,
+    "frac_mudou_todas": 0.0,
+    "frac_um_candidato": 1.0,
+    "n": 2374,
+    "n_escolha": 0,
+    "razao_dec_imp_na_escolha": null,
+    "tv_media_na_escolha": null
+   },
+   "fome_moderada": {
+    "candidatos": [
+     2
+    ],
+    "frac_decisivo_impulsos_na_escolha": 0.5940099833610649,
+    "frac_decisivo_impulsos_todas": 0.5940099833610649,
+    "frac_do_total": 0.022358630952380953,
+    "frac_mudou_l1_na_escolha": 0.4193011647254576,
+    "frac_mudou_l1_todas": 0.4193011647254576,
+    "frac_mudou_na_escolha": 0.4193011647254576,
+    "frac_mudou_todas": 0.4193011647254576,
+    "frac_um_candidato": 0.0,
+    "n": 601,
+    "n_escolha": 601,
+    "razao_dec_imp_na_escolha": 4.520900206240828,
+    "tv_media_na_escolha": 0.4353780079524114
+   },
+   "pedido_necessidade": {
+    "candidatos": [
+     1
+    ],
+    "frac_decisivo_impulsos_na_escolha": null,
+    "frac_decisivo_impulsos_todas": 1.0,
+    "frac_do_total": 0.0697172619047619,
+    "frac_mudou_l1_na_escolha": null,
+    "frac_mudou_l1_todas": 0.0,
+    "frac_mudou_na_escolha": null,
+    "frac_mudou_todas": 0.0,
+    "frac_um_candidato": 1.0,
+    "n": 1874,
+    "n_escolha": 0,
+    "razao_dec_imp_na_escolha": null,
+    "tv_media_na_escolha": null
+   },
+   "sono_continuar": {
+    "candidatos": [
+     1
+    ],
+    "frac_decisivo_impulsos_na_escolha": null,
+    "frac_decisivo_impulsos_todas": 1.0,
+    "frac_do_total": 0.3456473214285714,
+    "frac_mudou_l1_na_escolha": null,
+    "frac_mudou_l1_todas": 0.0,
+    "frac_mudou_na_escolha": null,
+    "frac_mudou_todas": 0.0,
+    "frac_um_candidato": 1.0,
+    "n": 9291,
+    "n_escolha": 0,
+    "razao_dec_imp_na_escolha": null,
+    "tv_media_na_escolha": null
+   },
+   "sono_exaustao": {
+    "candidatos": [
+     1
+    ],
+    "frac_decisivo_impulsos_na_escolha": null,
+    "frac_decisivo_impulsos_todas": 1.0,
+    "frac_do_total": 0.021800595238095237,
+    "frac_mudou_l1_na_escolha": null,
+    "frac_mudou_l1_todas": 0.0,
+    "frac_mudou_na_escolha": null,
+    "frac_mudou_todas": 0.0,
+    "frac_um_candidato": 1.0,
+    "n": 586,
+    "n_escolha": 0,
+    "razao_dec_imp_na_escolha": null,
+    "tv_media_na_escolha": null
+   },
+   "sono_noite": {
+    "candidatos": [
+     1
+    ],
+    "frac_decisivo_impulsos_na_escolha": null,
+    "frac_decisivo_impulsos_todas": 1.0,
+    "frac_do_total": 0.027046130952380953,
+    "frac_mudou_l1_na_escolha": null,
+    "frac_mudou_l1_todas": 0.0,
+    "frac_mudou_na_escolha": null,
+    "frac_mudou_todas": 0.0,
+    "frac_um_candidato": 1.0,
+    "n": 727,
+    "n_escolha": 0,
+    "razao_dec_imp_na_escolha": null,
+    "tv_media_na_escolha": null
+   },
+   "tempo_livre": {
+    "candidatos": [
+     4
+    ],
+    "frac_decisivo_impulsos_na_escolha": 0.8250634462238557,
+    "frac_decisivo_impulsos_todas": 0.8250634462238557,
+    "frac_do_total": 0.4251116071428571,
+    "frac_mudou_l1_na_escolha": 0.3443598494793034,
+    "frac_mudou_l1_todas": 0.3443598494793034,
+    "frac_mudou_na_escolha": 0.3443598494793034,
+    "frac_mudou_todas": 0.3443598494793034,
+    "frac_um_candidato": 0.0,
+    "n": 11427,
+    "n_escolha": 11427,
+    "razao_dec_imp_na_escolha": 1.8968356518537852,
+    "tv_media_na_escolha": 0.22880094904395795
+   }
+  },
+  "traco_frac_anteriores_um_candidato": {
+   "1": 0.5523827252419955,
+   "2": 0.5523091247672254,
+   "4": 0.5521617592247484,
+   "8": 0.5518103770063456
+  },
+  "um_candidato_por_regra_frac_do_total": {
+   "abandono": 0.08831845238095239,
+   "pedido_necessidade": 0.0697172619047619,
+   "sono_continuar": 0.3456473214285714,
+   "sono_exaustao": 0.021800595238095237,
+   "sono_noite": 0.027046130952380953
+  }
+ },
+ "braco": "P1-c-tapa",
+ "dias": 14,
+ "donos": [
+  "atencioso",
+  "relapso",
+  "aleatorio",
+  "incoerente"
+ ],
+ "orcamento": 224,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "versao": 2
+}

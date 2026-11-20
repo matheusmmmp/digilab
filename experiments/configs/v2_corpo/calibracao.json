@@ -1,0 +1,97 @@
+{
+  "descricao": "Calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 6, secao 7 e adendos 1 a 3; autorizada pelo Matheus em 2026-10-12): a grade so do P0-c, (m_sobe, m_reduz) em {1/2, 1, 2}^2, nas 20 unidades das bases 33101...33505 (K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao), 1.440 vidas; a regra da 6.2 (a faixa dos drives, o mais perto de (1, 1), o w_novos); no ponto, o piloto da 6.3 (G-HOJE, corpo com os acoplados, tapa, G e P1-cw: 120 por unidade) e as sensibilidades da 6.4 e da A1.2 (24 por unidade); as margens e o N da secao 7. O gasto do metabolismo fixo no do passo 0 (A3.2c: m_gasto = 1/2, nao fechou).",
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "unidades": {
+    "bases": [
+      33101,
+      33202,
+      33303,
+      33404,
+      33505
+    ],
+    "k": 4,
+    "prefixo": "corpo"
+  },
+  "mundos": [
+    "bola",
+    "padrao"
+  ],
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "corpo": {
+    "gasto_atividades_den": 2,
+    "gasto_atividades_num": 1,
+    "gasto_basal_acordado": 188,
+    "gasto_basal_dormindo": 94
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+  "grade": {
+    "m_sobe": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "m_reduz": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "w_novos": [
+      1,
+      2,
+      4
+    ]
+  },
+  "faixas": {
+    "tedio_solidao": [
+      0.1,
+      0.5
+    ],
+    "estresse_max": 0.2,
+    "parcela_novos": [
+      0.25,
+      0.75
+    ]
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8
+  },
+  "sensibilidade": {
+    "recompensa_tapa": [
+      -0.5,
+      -2.0
+    ],
+    "janela_tedio": [
+      4,
+      16
+    ]
+  }
+}

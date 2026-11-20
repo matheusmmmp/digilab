@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca da run da C1 (longe regular): as sementes dos testes, 2 dias; so confere que o orquestrador roda. Nenhuma semente da faixa 71101...71505.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "longe_regular",
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 2,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 2,
+  "orcamento_por_dia": 16
+}

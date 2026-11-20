@@ -1,0 +1,911 @@
+{
+  "G-MVP_piloto": {
+    "fora_do_k": true,
+    "fracao": 0.5,
+    "plano": null
+  },
+  "aviso": "o piloto serve so para o efeito, as premissas, o valor do M4-con, o K e o custo (secao 6.2): nenhum numero e evidencia",
+  "contrastes_so_relato": {
+    "G-ABLA": {
+      "G-ABLA-MEM": {
+        "celulas": 4,
+        "contraste": "medida(M3) - (M2)",
+        "holm": {
+          "limiar": 0.025,
+          "ordem": 3,
+          "p": 0.036,
+          "p_ajustado": 0.072,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": 0.01905378747011954,
+          "ic_superior": 0.15525647650025637,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.004850821271910902,
+          "ic_superior": 0.19945321227329435,
+          "nivel": 0.95
+        },
+        "media": 0.08715513198518794,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.036,
+        "passa": false,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.04366900342467366,
+          "t": 2.1215128115909025
+        }
+      },
+      "G-ABLA-P1": {
+        "celulas": 12,
+        "contraste": "falta_ao_comer(M0) - (M1)",
+        "holm": {
+          "limiar": 0.0125,
+          "ordem": 1,
+          "p": 0.0,
+          "p_ajustado": 0.0,
+          "rejeita": true
+        },
+        "ic90": {
+          "ic_inferior": 0.0365636200589596,
+          "ic_superior": 0.049203244360949666,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.036160972518065444,
+          "ic_superior": 0.055120408971050555,
+          "nivel": 0.95
+        },
+        "media": 0.04288343220995463,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.0,
+        "passa": true,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.0014023107676725776,
+          "t": 5.459456464973211
+        }
+      },
+      "G-ABLA-P2": {
+        "celulas": 12,
+        "contraste": "medida(M2) - (M1)",
+        "holm": {
+          "limiar": 0.05,
+          "ordem": 4,
+          "p": 0.9644,
+          "p_ajustado": 0.9644,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": -0.02546291641000413,
+          "ic_superior": -0.005552876987378854,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.027464563772883463,
+          "ic_superior": 0.0024004953610544514,
+          "nivel": 0.95
+        },
+        "media": -0.015507896698691494,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.9644,
+        "passa": false,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.9398562311662951,
+          "t": -1.8708147977751988
+        }
+      },
+      "G-ABLA-PERS": {
+        "celulas": 12,
+        "contraste": "intencoes_com_meta(M3) - (M3-sp)",
+        "holm": {
+          "limiar": 0.016666666666666666,
+          "ordem": 2,
+          "p": 0.0,
+          "p_ajustado": 0.0,
+          "rejeita": true
+        },
+        "ic90": {
+          "ic_inferior": 0.010977665909152197,
+          "ic_superior": 0.029791586882566973,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.003797952222027983,
+          "ic_superior": 0.032018833682150145,
+          "nivel": 0.95
+        },
+        "media": 0.020384626395859588,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.0,
+        "passa": true,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.05853862690597639,
+          "t": 1.8918791796875745
+        }
+      }
+    },
+    "G-MOD": {
+      "G-MOD-CON": {
+        "celulas": 12,
+        "contraste": "d_fe(M4-con) - (M4)",
+        "holm": {
+          "limiar": 0.05,
+          "ordem": 2,
+          "p": 1.0,
+          "p_ajustado": 1.0,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": -0.023110503701866552,
+          "ic_superior": -0.011379327647339807,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.026246534667107583,
+          "ic_superior": -0.00864977058531747,
+          "nivel": 0.95
+        },
+        "media": -0.01724491567460318,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 1.0,
+        "passa": false,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.988092751583042,
+          "t": -3.2067676941992627
+        }
+      },
+      "G-MOD-EMB": {
+        "celulas": 12,
+        "contraste": "d_fe(M4-emb) - (M4)",
+        "holm": {
+          "limiar": 0.025,
+          "ordem": 1,
+          "p": 0.964,
+          "p_ajustado": 1.0,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": -0.007204408137676368,
+          "ic_superior": -0.000513112116953264,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.007683033991953262,
+          "ic_superior": 0.0023539100391313933,
+          "nivel": 0.95
+        },
+        "media": -0.003858760127314816,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.964,
+        "passa": false,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.7157704448256751,
+          "t": -0.6100965606988935
+        }
+      }
+    }
+  },
+  "custo": {
+    "avaliacao_estimada": {
+      "cpu_s": 12552.685546875,
+      "k": 10,
+      "vidas": 5400
+    },
+    "cpu_por_unidade": 223.15885416666669,
+    "cpu_por_vida": {
+      "M0": 2.3257378472222223,
+      "M1": 2.34375,
+      "M2": 2.3305121527777777,
+      "M3": 2.4034288194444446,
+      "M3-sp": 2.3700086805555554,
+      "M4": 2.2784288194444446,
+      "M4-con": 2.2769097222222223,
+      "M4-emb": 2.267795138888889
+    }
+  },
+  "descritivos": {
+    "M0": {
+      "d_fe": 0.6000500630373677,
+      "episodios_sairam": 0,
+      "exaustao": 0.20176091269841268,
+      "fins": {
+        "meta": 2552,
+        "trocou": 198
+      },
+      "influencia": {
+        "afeto": 0.007564484126984126,
+        "aprendido": 0.0001240079365079365,
+        "habito": 0.0,
+        "incentivo": 0.0,
+        "memoria": 0.0,
+        "persistencia": 0.0001240079365079365
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.626416046626984
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.6938707286155203
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6242417052469136
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.5365712907848325
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7390143298059965
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4669729456018519
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.5365712907848325
+        },
+        "incoerente|longe": {
+          "d_fe": 0.7093299782297179
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4650085289902998
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5596680169753087
+        },
+        "relapso|longe": {
+          "d_fe": 0.6809522638337743
+        },
+        "relapso|perto": {
+          "d_fe": 0.561983630952381
+        }
+      },
+      "privacao": 0.32270998677248675,
+      "refeicoes_por_dia": 2.6547619047619047,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M1": {
+      "d_fe": 0.5843521521118092,
+      "episodios_sairam": 0,
+      "exaustao": 0.19359705687830686,
+      "fins": {
+        "meta": 2863,
+        "trocou": 176
+      },
+      "influencia": {
+        "afeto": 0.005849041005291006,
+        "aprendido": 0.019303902116402115,
+        "habito": 0.0,
+        "incentivo": 0.019014550264550265,
+        "memoria": 0.0,
+        "persistencia": 0.00022734788359788356
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6078582175925925
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7401719370039682
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6080154941027337
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4795222869819224
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7536894703483245
+        },
+        "atencioso|perto": {
+          "d_fe": 0.458724254574515
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4795222869819224
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6720942322530865
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4538622891865079
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5635632371582893
+        },
+        "relapso|longe": {
+          "d_fe": 0.6431020171957672
+        },
+        "relapso|perto": {
+          "d_fe": 0.5521001019620811
+        }
+      },
+      "privacao": 0.3156208664021164,
+      "refeicoes_por_dia": 2.8988095238095237,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M2": {
+      "d_fe": 0.5870231716866916,
+      "episodios_sairam": 0,
+      "exaustao": 0.2095940806878307,
+      "fins": {
+        "meta": 3544,
+        "trocou": 221
+      },
+      "influencia": {
+        "afeto": 0.014508928571428572,
+        "aprendido": 0.1741898148148148,
+        "habito": 0.17239169973544974,
+        "incentivo": 0.0095692791005291,
+        "memoria": 0.0,
+        "persistencia": 0.0003513558201058201
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6327027116402116
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7095897541887125
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6341314828593475
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4684733245149912
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7122135898919754
+        },
+        "atencioso|perto": {
+          "d_fe": 0.43932437720458556
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4684733245149912
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6656507592041446
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44145364169973544
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.6228102540784833
+        },
+        "relapso|longe": {
+          "d_fe": 0.6634285094246032
+        },
+        "relapso|perto": {
+          "d_fe": 0.5860263310185185
+        }
+      },
+      "privacao": 0.3017319775132275,
+      "refeicoes_por_dia": 3.5188492063492065,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M3": {
+      "d_fe": 0.5887332049621546,
+      "episodios_sairam": 4585,
+      "exaustao": 0.2299520502645503,
+      "fins": {
+        "meta": 5702,
+        "trocou": 1932
+      },
+      "influencia": {
+        "afeto": 0.01312417328042328,
+        "aprendido": 0.24950396825396826,
+        "habito": 0.15513392857142858,
+        "incentivo": 0.00886656746031746,
+        "memoria": 0.11631944444444445,
+        "persistencia": 0.0016741071428571428
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6338680900022046
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7483083319554673
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6355877976190476
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4747926518408289
+        },
+        "atencioso|longe": {
+          "d_fe": 0.738799327601411
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4393002438822751
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4747926518408289
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6110877562830689
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4422663414902998
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5897067005621693
+        },
+        "relapso|longe": {
+          "d_fe": 0.6958470086529983
+        },
+        "relapso|perto": {
+          "d_fe": 0.5804415578152557
+        }
+      },
+      "privacao": 0.30166997354497355,
+      "refeicoes_por_dia": 3.577380952380952,
+      "visitas_lugar_lembrado": 2133,
+      "visitas_vazias": 2133
+    },
+    "M3-sp": {
+      "d_fe": 0.5857205320399764,
+      "episodios_sairam": 4491,
+      "exaustao": 0.22771990740740738,
+      "fins": {
+        "meta": 5590,
+        "trocou": 1983
+      },
+      "influencia": {
+        "afeto": 0.01246279761904762,
+        "aprendido": 0.24811921296296294,
+        "habito": 0.15705605158730157,
+        "incentivo": 0.008639219576719577,
+        "memoria": 0.11487268518518519,
+        "persistencia": 0.0
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6436982060185185
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7264085579254851
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6356252686838625
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.45664616402116404
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7085296310074956
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44104169422398587
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.45664616402116404
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6576758777006173
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4411427055776014
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5938752411265432
+        },
+        "relapso|longe": {
+          "d_fe": 0.6888042948082012
+        },
+        "relapso|perto": {
+          "d_fe": 0.5785525793650793
+        }
+      },
+      "privacao": 0.2963583002645503,
+      "refeicoes_por_dia": 3.509920634920635,
+      "visitas_lugar_lembrado": 2106,
+      "visitas_vazias": 2106
+    },
+    "M4": {
+      "d_fe": 0.5985154860651822,
+      "episodios_sairam": 5112,
+      "exaustao": 0.2339409722222222,
+      "fins": {
+        "meta": 6288,
+        "trocou": 2032
+      },
+      "influencia": {
+        "afeto": 0.016968419312169313,
+        "aprendido": 0.2848048941798942,
+        "habito": 0.19971478174603174,
+        "incentivo": 0.004133597883597883,
+        "memoria": 0.11824156746031747,
+        "persistencia": 0.001384755291005291
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6369193466159612
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7339065393518519
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6422250606261023
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.5281617063492063
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7165550319664903
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44263024277998236
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.5281617063492063
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6472839643959435
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44676038910934746
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5949685433201058
+        },
+        "relapso|longe": {
+          "d_fe": 0.6831762841710759
+        },
+        "relapso|perto": {
+          "d_fe": 0.5814370177469136
+        }
+      },
+      "privacao": 0.32159391534391535,
+      "refeicoes_por_dia": 3.8720238095238093,
+      "visitas_lugar_lembrado": 2363,
+      "visitas_vazias": 2363
+    },
+    "M4-con": {
+      "d_fe": 0.5812705703905791,
+      "episodios_sairam": 4970,
+      "exaustao": 0.21786127645502645,
+      "fins": {
+        "meta": 6127,
+        "trocou": 1991
+      },
+      "influencia": {
+        "afeto": 0.017216435185185185,
+        "aprendido": 0.28922784391534395,
+        "habito": 0.2047164351851852,
+        "incentivo": 0.003947585978835978,
+        "memoria": 0.11357060185185186,
+        "persistencia": 0.0013020833333333333
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6455993923611111
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7245220803020281
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.636691867835097
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.48643225722001765
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6740120701058201
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4455979456018519
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.48643225722001765
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6103704599316578
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4437785631613757
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5878114528218695
+        },
+        "relapso|longe": {
+          "d_fe": 0.6578907283399471
+        },
+        "relapso|perto": {
+          "d_fe": 0.5761077697861552
+        }
+      },
+      "privacao": 0.27081266534391535,
+      "refeicoes_por_dia": 3.9910714285714284,
+      "visitas_lugar_lembrado": 2099,
+      "visitas_vazias": 2099
+    },
+    "M4-emb": {
+      "d_fe": 0.5946567259378674,
+      "episodios_sairam": 5126,
+      "exaustao": 0.23071676587301587,
+      "fins": {
+        "meta": 6272,
+        "trocou": 1880
+      },
+      "influencia": {
+        "afeto": 0.01765046296296296,
+        "aprendido": 0.2926173941798942,
+        "habito": 0.20506779100529102,
+        "incentivo": 0.003596230158730158,
+        "memoria": 0.12140376984126984,
+        "persistencia": 0.0014467592592592592
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.645353374393739
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7249627287257496
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6364850019290124
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.5254408964395944
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6426888985339506
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44215265376984125
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.5254408964395944
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6710557691247795
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44601572833994707
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5850883074294533
+        },
+        "relapso|longe": {
+          "d_fe": 0.7134223021384479
+        },
+        "relapso|perto": {
+          "d_fe": 0.5777741539902999
+        }
+      },
+      "privacao": 0.3132440476190476,
+      "refeicoes_por_dia": 3.89484126984127,
+      "visitas_lugar_lembrado": 2353,
+      "visitas_vazias": 2353
+    }
+  },
+  "fase": "piloto",
+  "g_apr_m4": {
+    "m4_con": 1919,
+    "media": 1918.5446015211642
+  },
+  "modo": "piloto",
+  "n": {
+    "chega_ao_alvo": true,
+    "fora_do_k": {
+      "G-ABLA-P2": "o efeito do piloto tem o sinal contrario ao previsto (ou e 0): fora da conta do K",
+      "G-MOD-CON": "o efeito do piloto tem o sinal contrario ao previsto (ou e 0): fora da conta do K",
+      "G-MOD-EMB": "o efeito do piloto tem o sinal contrario ao previsto (ou e 0): fora da conta do K"
+    },
+    "k": 10,
+    "planos": {
+      "G-ABLA-MEM": 0.04357756599259397,
+      "G-ABLA-P1": 0.021441716104977315,
+      "G-ABLA-PERS": 0.010192313197929794
+    },
+    "tabela": [
+      {
+        "k": 4,
+        "n": 20,
+        "poder": {
+          "G-ABLA-MEM": 0.5985,
+          "G-ABLA-P1": 0.9995,
+          "G-ABLA-PERS": 0.525
+        },
+        "poder_conjunto_abla": 0.3365,
+        "poder_mvp": null
+      },
+      {
+        "k": 5,
+        "n": 25,
+        "poder": {
+          "G-ABLA-MEM": 0.6805,
+          "G-ABLA-P1": 1.0,
+          "G-ABLA-PERS": 0.578
+        },
+        "poder_conjunto_abla": 0.408,
+        "poder_mvp": null
+      },
+      {
+        "k": 6,
+        "n": 30,
+        "poder": {
+          "G-ABLA-MEM": 0.731,
+          "G-ABLA-P1": 1.0,
+          "G-ABLA-PERS": 0.664
+        },
+        "poder_conjunto_abla": 0.4865,
+        "poder_mvp": null
+      },
+      {
+        "k": 7,
+        "n": 35,
+        "poder": {
+          "G-ABLA-MEM": 0.806,
+          "G-ABLA-P1": 1.0,
+          "G-ABLA-PERS": 0.6925
+        },
+        "poder_conjunto_abla": 0.564,
+        "poder_mvp": null
+      },
+      {
+        "k": 8,
+        "n": 40,
+        "poder": {
+          "G-ABLA-MEM": 0.8565,
+          "G-ABLA-P1": 1.0,
+          "G-ABLA-PERS": 0.736
+        },
+        "poder_conjunto_abla": 0.6355,
+        "poder_mvp": null
+      },
+      {
+        "k": 9,
+        "n": 45,
+        "poder": {
+          "G-ABLA-MEM": 0.8585,
+          "G-ABLA-P1": 1.0,
+          "G-ABLA-PERS": 0.767
+        },
+        "poder_conjunto_abla": 0.6685,
+        "poder_mvp": null
+      },
+      {
+        "k": 10,
+        "n": 50,
+        "poder": {
+          "G-ABLA-MEM": 0.893,
+          "G-ABLA-P1": 1.0,
+          "G-ABLA-PERS": 0.8005
+        },
+        "poder_conjunto_abla": 0.716,
+        "poder_mvp": null
+      }
+    ]
+  },
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "premissas": {
+    "G-ELEGIVEL": {
+      "frac_vidas": 1.0,
+      "passa": true,
+      "vidas": 72
+    },
+    "G-PESA": {
+      "habito": {
+        "braco": "M2",
+        "ic90": {
+          "ic_inferior": 0.16827876984126985,
+          "ic_superior": 0.17650462962962962,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.16610863095238096,
+          "ic_superior": 0.1784474206349206,
+          "nivel": 0.95
+        },
+        "media": 0.17239169973544974,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.0,
+        "passa": true,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 7.559765711896256e-08,
+          "t": 41.6117899558642
+        }
+      },
+      "incentivo": {
+        "braco": "M1",
+        "ic90": {
+          "ic_inferior": 0.018208498677248677,
+          "ic_superior": 0.01982060185185185,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.018105158730158732,
+          "ic_superior": 0.020523313492063492,
+          "nivel": 0.95
+        },
+        "media": 0.019014550264550265,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.0,
+        "passa": true,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 1.4525303502727907e-07,
+          "t": 36.50333824146474
+        }
+      },
+      "memoria": {
+        "braco": "M3",
+        "ic90": {
+          "ic_inferior": 0.10910631613756615,
+          "ic_superior": 0.12353257275132275,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.10621279761904762,
+          "ic_superior": 0.12785218253968253,
+          "nivel": 0.95
+        },
+        "media": 0.11631944444444443,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.0,
+        "passa": true,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 2.899430202318134e-06,
+          "t": 19.983698876078705
+        }
+      },
+      "persistencia": {
+        "braco": "M3",
+        "ic90": {
+          "ic_inferior": 0.001343419312169312,
+          "ic_superior": 0.0020047949735449732,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.0011780753968253968,
+          "ic_superior": 0.0021701388888888886,
+          "nivel": 0.95
+        },
+        "media": 0.0016741071428571428,
+        "motivo": null,
+        "n": 6,
+        "n_grupos": 3,
+        "p_unilateral": 0.0,
+        "passa": false,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.00027482410799356094,
+          "t": 7.815969899817958
+        }
+      }
+    }
+  }
+}

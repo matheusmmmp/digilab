@@ -1,0 +1,121 @@
+{
+  "artefatos_sha256": {
+    "analise.json": "c4bc1ed254ca1155dc4c4bc7c5339161a05e76d7c99f33415703535ebdd4e9af",
+    "custo.json": "8ac4b627beef5d75f5031bb756f111fbb5cf5d3fc1b244b2420b92053c9e539e",
+    "medidas.json": "8edeea9bb847547e4be7e5eb177f1435caf8a42b6a453e61b39782d1dd9c08f7"
+  },
+  "bootstrap": 2000,
+  "config": {
+    "descricao": "GOSTO_VISUAL, GV3b: o piloto com o enjoo ligado (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md, secao 6): so o custo e a conferencia de que o pet olha nas sondas; nada se ajusta. Nao roda antes do adendo e do codigo na main.",
+    "dias": 14,
+    "fase": "gosto_visual_enjoo",
+    "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md",
+    "unidades": {
+      "bases": [
+        90101,
+        90202
+      ],
+      "k": 2
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_gosto_visual/piloto_enjoo.json",
+  "config_sha256": "8cd1ab9e3d63533d279384f51facefa76bab0dd7c43db7372905fba52e6c1037",
+  "dias_sonda": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "donos": [
+    "nenhum",
+    "calmo",
+    "agitado"
+  ],
+  "duracao_s": 113.44237041473389,
+  "enjoo_tela": {
+    "k_desenjoo": 63,
+    "k_enjoo": 2960,
+    "k_olhando": 4389,
+    "ligada": true,
+    "meia_vida_desenjoo": 720,
+    "meia_vida_enjoo": 15,
+    "meia_vida_olhando": 10,
+    "peso_tedio": 512,
+    "prototipos": 6,
+    "raio_mesmo": 67500,
+    "saturacao_exposicao": 512,
+    "tau_enjoo_lembrado": 1040,
+    "w_enjoo": 512
+  },
+  "fase": "gosto_visual_enjoo",
+  "fim": "2026-11-12T09:27:12",
+  "genomas": [
+    "proprio",
+    "vazio"
+  ],
+  "git_head": "234d958f91a9eb734063dbc70ef4cf2e00b83d8f",
+  "git_limpo": true,
+  "inicio": "2026-11-12T09:25:19",
+  "modo": "piloto_enjoo",
+  "orquestrador_sha256": "0b8e150f079b5125cbc76c9a319e9dbef6ef21328919d130b6e799373a6364ec",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md",
+  "plano_base": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+  "plano_base_sha256": "010d268721ac4eae16a0f6aa543ab3100434c28851884a1b7168d0315de7f146",
+  "plano_sha256": "664de580bc3b483696290abbace40cb55fff7e12166fa9008b3b9dac3d98cbc2",
+  "processos": 4,
+  "python": "3.13.0",
+  "replicas": 3,
+  "sha256": {
+    "config.py": "a5371d3e68b255c331debbad6b85836681b4495cfb7df8ee9da88a90379c094d",
+    "corpo.py": "ed198a4a664f4d451b88d63ef625fe63006a9996869bbd4b33ddf1ef4c5e256f",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "66478686d8acde154308f2fb3811b0a430d1b60bc2a34d98a36d719ebb8c204f",
+    "digibrain/afeto.py": "a378bc9fe333486f09fc5cb65e192fb283fda389d3156f5e1476492a20d3bba6",
+    "digibrain/arb.py": "cf2864fd07309522fa2666023f865722096fae4fdae909923230ac8234f809cb",
+    "digibrain/decodificador.py": "743764f0b230862f88d99ea3e997b4b27b1da6604b0f796fbb912cd4577df1f8",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "0aa14448d45915f11de56687df40d7c0d8db8c560353a8117bd2d552f4cd83e9",
+    "digibrain/mem.py": "d0d61e22032cf339b568aa7dd7e6a57cb5173eaca3beb66f8f0c70b4c9068169",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "6745c38a6840678b7dabf7e669c155822b6c9ecc527f73633389e00acabb1f0d",
+    "digibrain/sens.py": "f4840d2f07be32f25eee97fe29ddcbeb3964ff69ca43fc8576de8dd6187e395f",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd",
+    "motor_corpo.py": "0b381108f599f3650ceed3a90439fc3213f343ab3346ef4d1d930c1116139c33",
+    "mundo.py": "706426e4c2714cbaad47cf88032118fe0d702632ec48496f62f4df6407121c97",
+    "tv.py": "e93312921b2feef9ed15d596dd05921b3fb184cbd060f3cc77bc06f1f24f28ba"
+  },
+  "sonda_sha256": "d3eee15766dc1cbfa616854997dd55ae4571c1ec94a6a327464c8dad7067b5d3",
+  "unidades": [
+    {
+      "base": 90101,
+      "genoma": 16320293305896642048,
+      "k": 0,
+      "semente": 17597000067465215865
+    },
+    {
+      "base": 90101,
+      "genoma": 8783763127810991908,
+      "k": 1,
+      "semente": 12515760934692496936
+    },
+    {
+      "base": 90202,
+      "genoma": 14785104271753756282,
+      "k": 0,
+      "semente": 4980257106985529718
+    },
+    {
+      "base": 90202,
+      "genoma": 9431456333755277153,
+      "k": 1,
+      "semente": 10861848797014556591
+    }
+  ],
+  "vidas_parede_s": 113.04836539999815
+}

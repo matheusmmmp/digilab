@@ -1,0 +1,27 @@
+{
+ "nome": "g04_r12",
+ "pesoPonto": 30,
+ "gama": {
+  "vigor": 0.04,
+  "folego": 0.04,
+  "recuperacao": 0.04,
+  "forca": 0.04,
+  "mira": 0.04,
+  "guarda": 0.04
+ },
+ "mapa": {
+  "hp": 1300
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.72,
+  "adulto": 0.864,
+  "mega": 1.0368
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.2,
+  "adulto": 1.44,
+  "mega": 1.728
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": [
+  "ref_maquete_b.png",
+  "ref_geladeira_gerada.png"
+ ],
+ "prompt_base": "Concept sketch of a single arena gate, the entrance to a monster-training battle arena, as a landmark building for a cozy low-poly 3D island game for children with an anime digital-world look, cute, friendly and inviting, nothing scary, broken or dirty. Match the art style of the reference images: simple chunky rounded shapes, toy-like proportions, flat cel shading with two tones, soft saturated colors, clean flat color areas. Big enough for a small creature to walk in. No text, no letters, no numbers, no logo, no brand, no flags with symbols, no characters, no creatures. Show only the object, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow.",
+ "variantes": [
+  {
+   "nome": "concept_1_pedra",
+   "prompt": "A stone arch gate with two thick round pillars, red and gold cloth banners without any symbol, and a glowing cyan digital portal surface filling the arch."
+  },
+  {
+   "nome": "concept_2_madeira",
+   "prompt": "A wooden fort-style gate with two towers, big closed double doors with iron studs, two lit torches and a little roof on top, like a playful colosseum entrance."
+  },
+  {
+   "nome": "concept_3_digital",
+   "prompt": "A rounded metal gate frame in white and blue with hexagonal grid panels, cyan light strips, a soft glowing archway and two small speakers on the sides, like a futuristic stadium entrance."
+  }
+ ]
+}

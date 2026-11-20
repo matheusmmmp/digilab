@@ -1,0 +1,1031 @@
+{
+  "candidatos": {
+    "v21:espelho@54": {
+      "estilo": "v21:espelho",
+      "total": 54
+    },
+    "v21:espelho@57": {
+      "estilo": "v21:espelho",
+      "total": 57
+    },
+    "v21:espelho@60": {
+      "estilo": "v21:espelho",
+      "total": 60
+    },
+    "v21:espelho@63": {
+      "estilo": "v21:espelho",
+      "total": 63
+    },
+    "v21:furioso@80": {
+      "estilo": "v21:furioso",
+      "total": 80
+    },
+    "v21:sentinela@72": {
+      "estilo": "v21:sentinela",
+      "total": 72
+    },
+    "v2c:agressivo@105": {
+      "estilo": "v2c:agressivo",
+      "total": 105
+    },
+    "v2c:agressivo@110": {
+      "estilo": "v2c:agressivo",
+      "total": 110
+    }
+  },
+  "conjunto": "calibracao",
+  "descricao": "Rebalanceamento da escada dos NPCs da campanha (combate V21C). So sementes de CALIBRACAO.",
+  "escadas": {
+    "v21:espelho@54|v21:furioso@80|v2c:agressivo@105": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.575,
+          "tier2": 0.346,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.413,
+          "tier2": 0.279,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.92,
+          "tier2": 0.48,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.809,
+          "tier2": 0.422,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@54|v21:furioso@80|v2c:agressivo@110": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.575,
+          "tier2": 0.346,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.413,
+          "tier2": 0.279,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.92,
+          "tier2": 0.48,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.809,
+          "tier2": 0.422,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@54|v21:sentinela@72|v2c:agressivo@105": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.575,
+          "tier2": 0.289,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.413,
+          "tier2": 0.234,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.92,
+          "tier2": 0.572,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.809,
+          "tier2": 0.427,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@54|v21:sentinela@72|v2c:agressivo@110": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.575,
+          "tier2": 0.289,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.413,
+          "tier2": 0.234,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.92,
+          "tier2": 0.572,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.809,
+          "tier2": 0.427,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@57|v21:furioso@80|v2c:agressivo@105": {
+      "K1": true,
+      "K2": false,
+      "K3": true,
+      "K4": true,
+      "ok": false,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.55,
+          "tier2": 0.346,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.416,
+          "tier2": 0.279,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.918,
+          "tier2": 0.48,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.771,
+          "tier2": 0.422,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@57|v21:furioso@80|v2c:agressivo@110": {
+      "K1": true,
+      "K2": false,
+      "K3": true,
+      "K4": true,
+      "ok": false,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.55,
+          "tier2": 0.346,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.416,
+          "tier2": 0.279,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.918,
+          "tier2": 0.48,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.771,
+          "tier2": 0.422,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@57|v21:sentinela@72|v2c:agressivo@105": {
+      "K1": true,
+      "K2": false,
+      "K3": true,
+      "K4": true,
+      "ok": false,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.55,
+          "tier2": 0.289,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.416,
+          "tier2": 0.234,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.918,
+          "tier2": 0.572,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.771,
+          "tier2": 0.427,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@57|v21:sentinela@72|v2c:agressivo@110": {
+      "K1": true,
+      "K2": false,
+      "K3": true,
+      "K4": true,
+      "ok": false,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.55,
+          "tier2": 0.289,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.416,
+          "tier2": 0.234,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.918,
+          "tier2": 0.572,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.771,
+          "tier2": 0.427,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@60|v21:furioso@80|v2c:agressivo@105": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.516,
+          "tier2": 0.346,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.366,
+          "tier2": 0.279,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.915,
+          "tier2": 0.48,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.745,
+          "tier2": 0.422,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@60|v21:furioso@80|v2c:agressivo@110": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.516,
+          "tier2": 0.346,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.366,
+          "tier2": 0.279,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.915,
+          "tier2": 0.48,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.745,
+          "tier2": 0.422,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@105": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.516,
+          "tier2": 0.289,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.366,
+          "tier2": 0.234,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.915,
+          "tier2": 0.572,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.745,
+          "tier2": 0.427,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@110": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.516,
+          "tier2": 0.289,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.366,
+          "tier2": 0.234,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.915,
+          "tier2": 0.572,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.745,
+          "tier2": 0.427,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@63|v21:furioso@80|v2c:agressivo@105": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.535,
+          "tier2": 0.346,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.378,
+          "tier2": 0.279,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.913,
+          "tier2": 0.48,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.736,
+          "tier2": 0.422,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@63|v21:furioso@80|v2c:agressivo@110": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.535,
+          "tier2": 0.346,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.378,
+          "tier2": 0.279,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.913,
+          "tier2": 0.48,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.736,
+          "tier2": 0.422,
+          "tier3": 0.12
+        }
+      }
+    },
+    "v21:espelho@63|v21:sentinela@72|v2c:agressivo@105": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.535,
+          "tier2": 0.289,
+          "tier3": 0.014
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.378,
+          "tier2": 0.234,
+          "tier3": 0.003
+        },
+        "adultos_36": {
+          "tier1": 0.913,
+          "tier2": 0.572,
+          "tier3": 0.49
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.736,
+          "tier2": 0.427,
+          "tier3": 0.135
+        }
+      }
+    },
+    "v21:espelho@63|v21:sentinela@72|v2c:agressivo@110": {
+      "K1": true,
+      "K2": true,
+      "K3": true,
+      "K4": true,
+      "ok": true,
+      "resumo": {
+        "adolescentes_18": {
+          "tier1": 0.535,
+          "tier2": 0.289,
+          "tier3": 0.01
+        },
+        "adolescentes_sem_treino": {
+          "tier1": 0.378,
+          "tier2": 0.234,
+          "tier3": 0.0
+        },
+        "adultos_36": {
+          "tier1": 0.913,
+          "tier2": 0.572,
+          "tier3": 0.479
+        },
+        "adultos_sem_treino": {
+          "tier1": 0.736,
+          "tier2": 0.427,
+          "tier3": 0.12
+        }
+      }
+    }
+  },
+  "limiares": {
+    "degrau": 0.1,
+    "t1_adol": [
+      0.25,
+      0.6
+    ],
+    "t1_adulto_min": 0.7,
+    "t1_ganho_treino": 0.15,
+    "t2_adol_max": 0.4,
+    "t2_adulto": [
+      0.35,
+      0.65
+    ],
+    "t2_alto": 0.6,
+    "t2_baixo": 0.4,
+    "t2_n_extremos": 2,
+    "t3_adol_max": 0.15,
+    "t3_alcancavel": 0.5,
+    "t3_forma_max": 0.5,
+    "t3_n_alcancavel": 2
+  },
+  "medidas": {
+    "v21:espelho@54": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.34,
+          "18": 0.5363
+        },
+        "cacador": {
+          "0": 1.0,
+          "18": 1.0
+        },
+        "colosso": {
+          "0": 0.1075,
+          "18": 0.5062
+        },
+        "guardiao": {
+          "0": 0.2038,
+          "18": 0.2562
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.4387,
+          "18": 0.61,
+          "36": 0.5725
+        },
+        "emboscador": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "espelho": {
+          "0": 0.6875,
+          "18": 0.7837,
+          "36": 0.825
+        },
+        "furioso": {
+          "0": 0.8375,
+          "18": 0.9513,
+          "36": 0.9675
+        },
+        "muralha": {
+          "0": 0.9975,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "sentinela": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "tita": {
+          "0": 0.885,
+          "18": 0.99,
+          "36": 0.9988
+        },
+        "vigia": {
+          "0": 0.6238,
+          "18": 0.9725,
+          "36": 1.0
+        }
+      }
+    },
+    "v21:espelho@57": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.2963,
+          "18": 0.4962
+        },
+        "cacador": {
+          "0": 1.0,
+          "18": 1.0
+        },
+        "colosso": {
+          "0": 0.2025,
+          "18": 0.42
+        },
+        "guardiao": {
+          "0": 0.1638,
+          "18": 0.2838
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.3362,
+          "18": 0.56,
+          "36": 0.5887
+        },
+        "emboscador": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "espelho": {
+          "0": 0.6837,
+          "18": 0.8187,
+          "36": 0.7963
+        },
+        "furioso": {
+          "0": 0.8163,
+          "18": 0.9563,
+          "36": 0.9612
+        },
+        "muralha": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "sentinela": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "tita": {
+          "0": 0.8387,
+          "18": 0.99,
+          "36": 1.0
+        },
+        "vigia": {
+          "0": 0.4913,
+          "18": 0.9163,
+          "36": 0.995
+        }
+      }
+    },
+    "v21:espelho@60": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.2525,
+          "18": 0.435
+        },
+        "cacador": {
+          "0": 1.0,
+          "18": 1.0
+        },
+        "colosso": {
+          "0": 0.07,
+          "18": 0.4362
+        },
+        "guardiao": {
+          "0": 0.14,
+          "18": 0.1925
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.345,
+          "18": 0.555,
+          "36": 0.5525
+        },
+        "emboscador": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "espelho": {
+          "0": 0.6663,
+          "18": 0.775,
+          "36": 0.8063
+        },
+        "furioso": {
+          "0": 0.7775,
+          "18": 0.93,
+          "36": 0.9637
+        },
+        "muralha": {
+          "0": 0.9962,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "sentinela": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "tita": {
+          "0": 0.7638,
+          "18": 0.9812,
+          "36": 0.9975
+        },
+        "vigia": {
+          "0": 0.4113,
+          "18": 0.955,
+          "36": 0.9975
+        }
+      }
+    },
+    "v21:espelho@63": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.2325,
+          "18": 0.42
+        },
+        "cacador": {
+          "0": 1.0,
+          "18": 1.0
+        },
+        "colosso": {
+          "0": 0.1288,
+          "18": 0.5112
+        },
+        "guardiao": {
+          "0": 0.15,
+          "18": 0.21
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.3212,
+          "18": 0.5062,
+          "36": 0.5363
+        },
+        "emboscador": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "espelho": {
+          "0": 0.655,
+          "18": 0.7675,
+          "36": 0.8187
+        },
+        "furioso": {
+          "0": 0.7362,
+          "18": 0.9425,
+          "36": 0.9513
+        },
+        "muralha": {
+          "0": 0.9962,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "sentinela": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "tita": {
+          "0": 0.7762,
+          "18": 0.975,
+          "36": 1.0
+        },
+        "vigia": {
+          "0": 0.4012,
+          "18": 0.92,
+          "36": 0.9988
+        }
+      }
+    },
+    "v21:furioso@80": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.6288,
+          "18": 0.6125
+        },
+        "cacador": {
+          "0": 0.0725,
+          "18": 0.1325
+        },
+        "colosso": {
+          "0": 0.0262,
+          "18": 0.0
+        },
+        "guardiao": {
+          "0": 0.3875,
+          "18": 0.6375
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.4325,
+          "18": 0.255,
+          "36": 0.0575
+        },
+        "emboscador": {
+          "0": 0.035,
+          "18": 0.035,
+          "36": 0.035
+        },
+        "espelho": {
+          "0": 0.9637,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "furioso": {
+          "0": 0.87,
+          "18": 0.9838,
+          "36": 1.0
+        },
+        "muralha": {
+          "0": 0.8825,
+          "18": 0.9675,
+          "36": 0.995
+        },
+        "sentinela": {
+          "0": 0.1175,
+          "18": 0.045,
+          "36": 0.03
+        },
+        "tita": {
+          "0": 0.0213,
+          "18": 0.0437,
+          "36": 0.1212
+        },
+        "vigia": {
+          "0": 0.0562,
+          "18": 0.3163,
+          "36": 0.605
+        }
+      }
+    },
+    "v21:sentinela@72": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.9363,
+          "18": 0.7362
+        },
+        "cacador": {
+          "0": 0.0013,
+          "18": 0.4213
+        },
+        "colosso": {
+          "0": 0.0,
+          "18": 0.0
+        },
+        "guardiao": {
+          "0": 0.0,
+          "18": 0.0
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.7325,
+          "18": 0.5337,
+          "36": 0.5887
+        },
+        "emboscador": {
+          "0": 0.2787,
+          "18": 0.8812,
+          "36": 0.9912
+        },
+        "espelho": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "furioso": {
+          "0": 1.0,
+          "18": 1.0,
+          "36": 1.0
+        },
+        "muralha": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        },
+        "sentinela": {
+          "0": 0.4062,
+          "18": 0.9788,
+          "36": 1.0
+        },
+        "tita": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        },
+        "vigia": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        }
+      }
+    },
+    "v2c:agressivo@105": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.01,
+          "18": 0.0188
+        },
+        "cacador": {
+          "0": 0.0,
+          "18": 0.0
+        },
+        "colosso": {
+          "0": 0.0013,
+          "18": 0.02
+        },
+        "guardiao": {
+          "0": 0.0,
+          "18": 0.0175
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.0938,
+          "18": 0.1875,
+          "36": 0.105
+        },
+        "emboscador": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        },
+        "espelho": {
+          "0": 0.495,
+          "18": 0.6412,
+          "36": 0.9762
+        },
+        "furioso": {
+          "0": 0.0338,
+          "18": 0.0588,
+          "36": 0.07
+        },
+        "muralha": {
+          "0": 0.3312,
+          "18": 0.655,
+          "36": 0.885
+        },
+        "sentinela": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        },
+        "tita": {
+          "0": 0.1175,
+          "18": 0.4888,
+          "36": 0.955
+        },
+        "vigia": {
+          "0": 0.0125,
+          "18": 0.3813,
+          "36": 0.9325
+        }
+      }
+    },
+    "v2c:agressivo@110": {
+      "adolescente": {
+        "brigao": {
+          "0": 0.0013,
+          "18": 0.0112
+        },
+        "cacador": {
+          "0": 0.0,
+          "18": 0.0
+        },
+        "colosso": {
+          "0": 0.0,
+          "18": 0.0138
+        },
+        "guardiao": {
+          "0": 0.0,
+          "18": 0.0138
+        }
+      },
+      "adulto": {
+        "duelista": {
+          "0": 0.065,
+          "18": 0.1787,
+          "36": 0.0625
+        },
+        "emboscador": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        },
+        "espelho": {
+          "0": 0.4725,
+          "18": 0.5587,
+          "36": 0.9625
+        },
+        "furioso": {
+          "0": 0.025,
+          "18": 0.0475,
+          "36": 0.0688
+        },
+        "muralha": {
+          "0": 0.3175,
+          "18": 0.6088,
+          "36": 0.9012
+        },
+        "sentinela": {
+          "0": 0.0,
+          "18": 0.0,
+          "36": 0.0
+        },
+        "tita": {
+          "0": 0.0675,
+          "18": 0.4662,
+          "36": 0.9512
+        },
+        "vigia": {
+          "0": 0.0125,
+          "18": 0.1862,
+          "36": 0.8888
+        }
+      }
+    }
+  },
+  "n_por_semente": 20,
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ]
+}

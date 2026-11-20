@@ -1,0 +1,3093 @@
+"""O mundo fisico minimo (V2; docs/TAREFA_V2_MUNDO_FISICO.md, etapa 2; MF-1 a MF-4 decididas em 2026-10-07).
+
+Estende o MotorFrutas (digilab/frutas.py, que nao muda) por subclasse, como as frutas (N4) e a bola (A1) entraram; engine.py e
+ambiente.py tambem nao mudam. Desligado (ConfigMundo.ligada False, o padrao): nenhuma rng nova, nenhum registro novo, nenhuma chave
+nova em estado(), nem o embrulho da politica: o MotorFrutas byte a byte. Ligado, o mundo SUBSTITUI o cenario do N4 e da A1: frutas,
+racao e bola sao objetos com posicao (ConfigFrutas.ligada e ConfigBola.ligada junto com o mundo levantam erro), e os gestos de hoje
+(`alimentar`, `oferecer_fruta_<f>`, `por_bola`, `tirar_bola`) levantam erro: o gesto e o `deixar_*`.
+
+O mapa (secao 3): 64 x 30 celulas de 16 subunidades; posicoes inteiras em subunidades (0 <= x < 1024, 0 <= y < 480), distancia
+`isqrt(dx^2 + dy^2)`. Regioes por faixa de x (casa, jardim, campo, mata; ConfigMundo.layout); o pet nasce no ninho. Direcoes por uma
+tabela inteira de 16 (DIR16, escala 1024; indice 0 = leste, crescendo no sentido anti-horario, com o norte em y menor).
+
+O dono (secao 4): `deixar_comida(tipo, x, y)` (racao ou fruta) conta como contato, como o `alimentar` de hoje (zera o tempo sem
+cuidado, soma um cuidado, gasta orcamento; o embrulho e o vinculo recebem `alimentar`); a fome so sobe quando o pet come.
+`deixar_bola(x, y)` segue o `por_bola`: gasta orcamento e nao e contato. Os dois sao tipos novos do log (events.deixar_comida,
+events.deixar_bola); so o `reproduzir_mundo` os entende. `DonoComLugar` troca o `alimentar` do dono sintetico pelo `deixar_comida`
+no lugar do estilo (comedouro, perto, longe), com a rng propria `dono-lugar` (sem o braco: numeros comuns). `CanalMundo` impoe o
+orcamento com os gestos; `simular_vida_mundo` e o `simular_vida` com ele.
+
+O pet (secao 5): o cerebro escolhe a acao; nas decisoes de explorar, comer e brincar o motor monta os candidatos a alvo, sorteia um
+`u` em [0, 2^16) da rng `alvo` (sempre nessas tres acoes: numeros comuns) e pergunta ao gancho opcional `escolher_alvo(acao,
+candidatos, percepcao, u)` (None = o padrao do motor). O motor anda de uma vez, na decisao: alcance = velocidade x intervalo; energia
+- custo x deslocamento, alem do efeito de sempre da acao. Ao chegar (raio de pegar 1 celula): comer come a comida do alvo; explorar
+come a comida boa mais proxima no raio, com a fome abaixo de `fome_max_comer_achado` (MF-1); brincar com a bola sobe o humor e a bola
+rola. Comer sem comida no alcance nao da fome: o mundo desfaz o +0,05 do `efeito_da_acao_do_pet` antes de qualquer cerebro observar
+(MF-2). O alvo que ficou sem chegar vira o candidato `continuar` se a proxima decisao for a mesma acao.
+
+O mundo (secao 6, MF-4): as arvores (quedas, recarga, ate 4 frutas no chao por arvore), a comida que amadurece, apodrece e some, e a
+bola que rola, cada sorteio num fluxo proprio por `derivar_semente` (`mundo-arvores`, `mundo-bola`, `mundo-sujeira`), nunca na
+`_rng_ambiente` do engine nem na rng do pet. As quedas nao dependem do pet: P0 e P1 da mesma semente veem as mesmas (G-NUMS).
+
+O mundo como componente (docs/TAREFA_V2_DOIS_PETS.md, etapa 1; docs/futuro/dois_pets.md, secao 2): a classe `Mundo` guarda o que e do
+mundo (arvores, comidas, bola, os fluxos `mundo-arvores` e `mundo-bola`, as quedas, as comidas que sumiram, as bolas deixadas e as
+rolagens) e nao sabe de pet. O `MotorMundo` ligado e dono do proprio `Mundo`, com a semente do pet, e guarda o que e do pet (posicao,
+alvo pendente, os fluxos `alvo` e `mundo-sujeira`, consumos, decisoes, regioes, visitas, comidas deixadas). A atualizacao do mundo e
+idempotente por tick. Com um pet, a vida e a de antes byte a byte (G2); dois motores sobre o mesmo `Mundo` sao a etapa 2 (o `Grupo`).
+
+A percepcao (secao 7, MF-3): `Observacao.mundo` = `PercepcaoMundo` (posicao, regiao, os objetos vistos a ate 6 celulas, o cheiro e a
+direcao dele, o alvo pendente). A consequencia (secao 8): depois de andar, comer e brincar, o gancho opcional `consequencia_mundo(acao,
+ocorrido, obs_depois)`, uma vez por decisao de explorar, comer ou brincar; o `fruta_comida` da E2 quando o pet come uma fruta; e o
+cerebro observa a transicao com a observacao seguinte ja com tudo aplicado.
+
+O que o motor registra para as medidas do plano (adendo 1, A1.8; as medidas sao do D): a posicao e a regiao a cada decisao
+(`decisoes_mundo`), as trocas de regiao (`regioes`), as visitas as manchas das arvores com chegada e saida (`visitas`), as quedas
+(`quedas`, do fluxo que nao depende do pet), os consumos (`consumos_mundo`), as comidas deixadas e as que sumiram.
+
+O banheiro (docs/TAREFA_V2_BANHEIRO.md, secoes 2 a 5, etapa 3; BN-1 a BN-6 decididas em 2026-10-07): `cfg_banheiro` (ConfigBanheiro)
+liga, e exige o corpo com a sub-chave `banheiro` na frente (com_corpo(MotorMundo), digilab/motor_corpo.py: a vontade e o conforto sao do
+corpo). Desligado, nada muda (nenhuma rng, nenhum registro, nenhuma chave em estado()). Ligado:
+- o banheiro e um retangulo de celulas da casa (`ConfigBanheiro.celulas_x`, `celulas_y`), sem parede;
+- `aliviar` (AcaoPet.ALIVIAR) e uma acao com alvo: o motor sorteia o u da rng `alvo` e oferece dois candidatos, `banheiro` (o ponto do
+  banheiro mais perto do pet) e `aqui` (onde o pet esta); sem o gancho do cerebro, `aqui`. O pet anda ate o alvo, com o custo de energia
+  da distancia. Com `aqui`, alivia onde esta. Com `banheiro`, alivia ao chegar; o banheiro alem do alcance de uma decisao NAO e mais
+  alivio no caminho (a continuacao, decisao do Matheus de 2026-10-11): o pet segura a vontade e o alvo fica pendente, como o `continuar`,
+  ate chegar, ate o cerebro trocar de acao ou de alvo, ou ate a urgencia (registro `idas_banheiro`). Com a vontade acima de
+  `limiar_urgente` (a regra urgente do instinto), o alvo tem de ser `aqui` (falha alto);
+- a necessidade e um objeto do `Mundo` (fora da percepcao `vistos`: o pet a sente pelo corpo), deixada onde o pet aliviou. O limpador
+  (`ConfigBanheiro.limpador`) a recolhe na hora quando o alivio termina dentro do banheiro; fora dele, nada. O corpo recebe o
+  `estimulo_aliviar` (a vontade a zero) e, quando a necessidade fica no chao, o `estimulo_necessidade` (o cheiro imediato);
+- a zona da necessidade e o banheiro (dentro do retangulo) ou a regiao de sempre (fora dele): a cada tick o corpo recebe quantas
+  necessidades estao na zona do pet (`passo(..., necessidades=n)`). O `limpar` do dono recolhe as da zona do pet;
+- o registro `alivios` (um dict por aliviar: tick do mundo, dentro, urgente, alvo, distancia ao banheiro na decisao, recolhido; o contrato
+  da bancada, experiments/bancada_v2.py) e as `recolhas` do limpar. O `DonoCarinhoBanheiro` acaricia no primeiro passo do dono depois
+  de cada alivio dentro do banheiro, fora do orcamento (`simular_vida_mundo(..., carinho=)`).
+
+O pet que pensa (J5; docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.3, etapa 3; PP-1 e PP-5 do plano): `cfg_pqp` (ConfigPetQuePensaMundo)
+liga, so com o mundo e so com um pet (fora do grupo). Desligado, nada muda. Ligado:
+- os troncos que o pet ja viu: um tronco a ate o raio da visao do pet, na percepcao da decisao ou na posicao depois de andar, entra em
+  `troncos_vistos` (id -> o primeiro tick do mundo); a percepcao ganha `troncos` (os troncos a vista agora: id, dx, dy, d);
+- no explorar, depois dos candidatos de hoje, um candidato `arvore:<id>` por tronco ja visto, no pe da arvore, na ordem do layout (PP-1).
+  O padrao do motor e o instinto nunca os escolhem; o `continuar` de uma ida a arvore leva ao mesmo ponto;
+- a fruta na mao (`dar_fruta_<f>`, fora do orcamento): o pet a come na hora, onde esta, com o efeito vigente, sem decisao e sem andar
+  (acordado; dormindo falha alto). Entra em `consumos_mundo` com `como` = "mao" e chega ao cerebro so pelo gancho opcional
+  `fruta_na_mao(tipo, obs_antes, obs_depois)`: nao passa pelo `receber_acao_dono`, pelo `fruta_comida`, pelo `consequencia_mundo` nem
+  pelo `mudanca_no_corpo` (a G-SEM-CREDITO). Nao e contato;
+- a troca de tipo (`trocar_arvores_<x>_<y>`, fora do orcamento): no tick do evento as arvores do tipo x passam a dar y, e as do y a dar
+  x. As quedas ate o tick do evento usam o tipo antigo e as frutas que ja estao no chao ficam como cairam. O registro e do `Mundo`
+  (`trocas_tipo`), e o replay o refaz pelo log.
+
+O contrato sensorio-motor da P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1, etapa 1; as contas em digilab/contrato.py):
+`cfg_contrato` (ConfigContrato) liga, so com o mundo e so com um pet (fora do grupo). Desligado, nada muda (nem o resumo). Ligado:
+- `sensores`: a percepcao da decisao sai como PercepcaoContrato, com os mesmos campos e a `orientacao`: os vistos e os troncos sao os de
+  hoje que passam pelo cone em torno da orientacao e pela oclusao. Os troncos sao quadrados opacos de `lado_tronco`, sem colisao (P4-4),
+  e o tronco nao tapa a si mesmo. O cerebro nao ganha entrada (P4-2);
+- `controlador`: nas acoes com alvo, o pet anda pelo controlador do POC nos ticks da decisao (o A* refeito a cada tick, o bloqueio e o
+  deslize), em vez do salto do `passo_ate`; o deslocamento e o comprimento andado; o `chegou` continua o do raio de pegar;
+- `paredes` (W-4; desligada no plano da P4): as quatro paredes na borda do mapa, que colidem e tapam;
+- a orientacao (16 setores) vem do ultimo deslocamento e comeca no setor 0, como no POC; parado, fica. O registro de cada decisao com alvo
+  (`contrato_decisoes` e o `ocorrido["contrato"]`): a orientacao, por que parou, o contato, os bigodes, o resultado e a trajetoria.
+
+O Paladar, o lado do mundo (docs/futuro/paladar.md, secao 3.1, etapa 1): `cfg_paladar` (ConfigPaladar) liga, so com o mundo. Desligado,
+nada muda. Ligado, cada consumo leva o perfil de gosto do tipo comido (um dict {qualidade: inteiro em [0, C]}, uma copia do da config):
+o registro do consumo (`consumos_mundo`, e com ele o `ocorrido["comeu"]` do `comer` e do "achou e comeu") ganha `perfil`, o dict na comida
+madura e None na podre; a fruta na mao (sempre madura) tambem. O mundo nao usa o perfil para nada: nao muda a nutricao, o humor, o cheiro,
+a percepcao, os candidatos nem nenhuma rng. O corpo (o orgao do Paladar, do B) o le daqui.
+
+O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1; AS-1 a AS-11 aprovadas em 2026-11-08): `cfg_sacudir` (ConfigSacudir) liga, so com
+o mundo e um pet. Desligado, nada muda. Ligado, cada arvore tem um galho (ate `galho_max`, nasce cheio, repoe uma fruta a cada
+`recarga_galho_min` ticks), e o evento `sacudir_arvore(tick, arvore)` (events.sacudir_arvore; o replay o refaz) derruba uma fruta do galho
+num ponto a ate `raio_queda_celulas` do tronco, pelo fluxo proprio `arvore-sacode`, se houver lugar no chao (o teto de hoje). Nao e
+contato nem cuidado e vale com o pet dormindo. O registro e do `Mundo` (`galhos`, `sacudidas`). A queda natural nao muda.
+`cfg_fruta_comida` (ConfigFrutaComoComida, AS-11): ligada, o laco nao entrega o `fruta_comida` ao cerebro, e a fruta do mundo chega como a
+racao (o A do v11 com o corpo quebra com o aviso, o MV-10).
+
+A fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md; `cfg_fruta_ao_lado`, ConfigFrutaAoLado): so com o mundo e um pet. Desligada,
+nada muda. Ligada, o motor aceita o evento `deixar_fruta(tipo, x, y)` (events.deixar_fruta; o replay o refaz), so logo depois de uma racao
+deixada pelo dono no mesmo tick (a racao de referencia); a fruta nasce madura com a origem `dono_ao_lado` (ORIGEM_AO_LADO), entra em
+`frutas_ao_lado` (tick, id, tipo, x, y, racao) e no resumo do mundo fisico, e o estado() ganha `fruta_ao_lado` (as maduras ao lado no
+chao, por tipo). E fora do orcamento e sem contato (o canal nao a ve; o deixar_bola e o modelo). Quem poe e o `DonoFrutaAoLado`, pelo
+`simular_vida_mundo(..., ao_lado=)`.
+
+A TV (GOSTO_VISUAL, P1c; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 1; `cfg_tv`, ConfigTV; a grade e o modo livre em digilab/tv.py): so com o
+mundo, um pet (fora do grupo) e o corpo na frente com a ConfigTela (o MotorCorpo confere). Desligada, nada muda (nem rng, nem registro, nem
+chave no estado() ou no resumo). Ligada, a TV e um objeto do `Mundo` no centro de `ConfigTV.celula` (fora dos `vistos` da percepcao: a
+classe `tela` do M-SENS e da P1d). O motor da ao corpo, a cada tick, o que ela passa se o pet olha (`_intensidades_da_tela`; zeros se nao):
+o pet olha quando esta acordado, parado (o ocioso) e com a TV no raio da visao; com um cerebro que tem o gancho `olhando_tela` (o
+DigiBrain modular com a subchave `olhar`, P1d), so quando ele escolheu olhar esta TV. Antes de cada decisao, o cerebro com o gancho
+`ver_tela` recebe as TVs a vista (`_linhas_tela`: id, dx, dy, d; a TV fica fora dos `vistos`). Os eventos `trocar_canal(programa)`
+(a fonte "grade") e `sentido_tela(fonte, niveis)` (a fonte "evento", o modo livre gravado) so mudam a TV: nao sao contato nem cuidado e
+nao passam pelo estado, pelo corpo nem pelo cerebro; o replay os refaz. O estado() ganha `tv` (o programa, se esta ligada, se o pet olha) e o
+resumo, o registro da TV. O `mudar_ilha` com a TV falha alto.
+"""
+
+from __future__ import annotations
+
+import math
+import random
+from dataclasses import dataclass, replace
+from typing import Callable
+
+from .ambiente import PoliticaInstintoBola
+from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo, LayoutMundo
+from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
+from .config import CONFIG_PALADAR, ConfigPaladar
+from .config import CONFIG_GENOMA, ConfigGenoma
+from .genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
+from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
+from .config import CONFIG_CONTRATO, ConfigContrato
+from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_FECHADO, PONTE, TERRA
+from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
+from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
+from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
+from .config import ConfigIntervencaoSocial
+from .config import CONFIG_LANCE_DONO, ConfigLanceDono
+from .config import CONFIG_ORGAO, ConfigOrgao
+from . import orgao as _orgao
+from . import contrato as ct
+from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
+from .corpo import CANAIS_TELA, leitura_orgao
+from .donos import Visao
+from .engine import Motor
+from .events import ACOES_PARAR_ARVORES, tipo_parado
+from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
+                     LogDeEventos, fruta_dada, ler_deixar_bola, ler_deixar_comida, par_da_troca)
+from .events import deixar_bola as evento_deixar_bola
+from .events import levar_pet as evento_levar_pet
+from .events import ler_levar_pet
+from .events import mudar_ilha as evento_mudar_ilha
+from .events import ler_mudar_ilha
+from .config import ILHAS_DE_TROCA, ILHAS_MAIORES
+from .events import deixar_fruta as evento_deixar_fruta
+from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
+from .events import resumo_luta as evento_resumo_luta
+from .events import deixar_comida as evento_deixar_comida
+from .events import ler_sacudir_arvore
+from .events import sacudir_arvore as evento_sacudir_arvore
+from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
+from .events import TIPO_PERCEPCAO_TELA, ler_percepcao_tela
+from .events import percepcao_tela as evento_percepcao_tela
+from .events import sentido_tela as evento_sentido_tela
+from .events import sentido_tela_desligada as evento_sentido_tela_desligada
+from .events import trocar_canal as evento_trocar_canal
+from .tv import ID_TV, IDS_DUAS_TVS, TV, DuasTVsSemLugar, TVFixa, TVSemChave
+from .config import ConfigDuasTVs
+from .frutas import MotorFrutas
+from .policy import Observacao, Transicao
+from .protocol import derivar_semente
+from .temperamento import NEUTRO, Temperamento
+from .treino import CanalDeInteracao, OrcamentoExcedido, OrcamentoNaoConsumido, Vida
+
+ESCALA_DIR = 1024
+# as 16 direcoes em inteiros: (arred(1024 cos a), -arred(1024 sen a)), a = i x 22,5 graus; y cresce para o sul
+DIR16 = ((1024, 0), (946, -392), (724, -724), (392, -946), (0, -1024), (-392, -946), (-724, -724), (-946, -392),
+         (-1024, 0), (-946, 392), (-724, 724), (-392, 946), (0, 1024), (392, 946), (724, 724), (946, 392))
+# as 8 do cheiro (secao 7): 1 a 8 = L, NE, N, NO, O, SO, S, SE (os indices pares do DIR16)
+DIRECOES_CHEIRO = ("L", "NE", "N", "NO", "O", "SO", "S", "SE")
+ACOES_COM_ALVO = (AcaoPet.EXPLORAR, AcaoPet.COMER, AcaoPet.BRINCAR)
+ID_BOLA = 0
+GESTOS_PROIBIDOS = (AcaoUsuario.ALIMENTAR,) + ACOES_BOLA + ACOES_FRUTAS
+
+
+class MundoSemChave(RuntimeError):
+    """Gesto do mundo (`deixar_*`) num motor com ConfigMundo.ligada = False."""
+
+
+class BanheiroSemMundo(ValueError):
+    """O banheiro (ConfigBanheiro ligada) sem o mundo fisico ligado, ou sem o corpo com a sub-chave banheiro na frente."""
+
+
+class PetQuePensaSemChave(ValueError):
+    """a fruta na mao, a troca de tipo ou a ConfigPetQuePensaMundo sem o mundo, sem a chave ou no grupo"""
+
+
+class SacudirSemChave(ValueError):
+    """o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md) sem o mundo, sem a ConfigSacudir ou no grupo"""
+
+
+class GestoForaDoMundo(ValueError):
+    """Gesto de hoje (`alimentar`, `oferecer_fruta_<f>`, `por_bola`, `tirar_bola`) numa vida com o mundo: o gesto e o `deixar_*`."""
+
+
+# ================================================================== a conta inteira (a mesma no TS da etapa 5)
+def div_arred(n: int, d: int) -> int:
+    """n / d em inteiros, arredondado ao mais proximo, meio longe do zero (o mesmo de lobos.div_arred). d > 0."""
+    if d <= 0:
+        raise ValueError(f"divisor nao positivo: {d}")
+    q, r = divmod(abs(n), d)
+    if 2 * r >= d:
+        q += 1
+    return q if n >= 0 else -q
+
+
+def distancia(dx: int, dy: int) -> int:
+    return math.isqrt(dx * dx + dy * dy)
+
+
+def no_mapa(x: int, y: int, cm: ConfigMundo) -> tuple[int, int]:
+    """corta para dentro do mapa"""
+    return min(cm.celulas_x * cm.sub - 1, max(0, x)), min(cm.celulas_y * cm.sub - 1, max(0, y))
+
+
+def deslocar(x: int, y: int, direcao: int, comprimento: int, cm: ConfigMundo) -> tuple[int, int]:
+    """o ponto a `comprimento` subunidades na direcao (0 a 15 do DIR16), cortado para dentro do mapa"""
+    cx, cy = DIR16[direcao]
+    return no_mapa(x + div_arred(cx * comprimento, ESCALA_DIR), y + div_arred(cy * comprimento, ESCALA_DIR), cm)
+
+
+def direcao_do_golpe(px: int, py: int, bx: int, by: int) -> int | None:
+    """a direcao do golpe na bola (ConfigBolaNoGolpe): das 16, a mais alinhada com o vetor do pet a bola (o maior produto escalar, em
+    inteiros; no empate, a de menor indice). Com o pet em cima da bola nao ha lado: None"""
+    dx, dy = bx - px, by - py
+    if dx == 0 and dy == 0:
+        return None
+    melhor, maior = 0, None
+    for k, (cx, cy) in enumerate(DIR16):
+        p = dx * cx + dy * cy
+        if maior is None or p > maior:
+            melhor, maior = k, p
+    return melhor
+
+
+def passo_ate(x: int, y: int, tx: int, ty: int, alcance: int, cm: ConfigMundo) -> tuple[int, int]:
+    """secao 5: chega em t se d <= alcance; senao anda `alcance` na direcao de t, cortado para dentro do mapa"""
+    dx, dy = tx - x, ty - y
+    d = distancia(dx, dy)
+    if d <= alcance:
+        return tx, ty
+    return no_mapa(x + div_arred(dx * alcance, d), y + div_arred(dy * alcance, d), cm)
+
+
+def centro_da_celula(celula: tuple, cm: ConfigMundo) -> tuple[int, int]:
+    return celula[0] * cm.sub + cm.sub // 2, celula[1] * cm.sub + cm.sub // 2
+
+
+def celulas_secas(cm: ConfigMundo) -> tuple[bool, ...] | None:
+    """A agua do layout (docs/TAREFA_V3_ILHA_AGUA.md, IA1; config.AGUA_POR_LAYOUT, pelo nome): None no mapa sem agua (os layouts de antes); com agua, uma celula por
+    posicao (linha a linha, de cima para baixo), True onde o pet pisa (a terra e a ponte). O mapa do tamanho errado ou com um caractere
+    desconhecido falha alto."""
+    linhas = AGUA_POR_LAYOUT.get(cm.layout.nome)
+    if linhas is None:
+        return None
+    if len(linhas) != cm.celulas_y or any(type(l) is not str or len(l) != cm.celulas_x for l in linhas):
+        raise ValueError(f"a agua do layout {cm.layout.nome!r} nao tem {cm.celulas_y} linhas de {cm.celulas_x} celulas")
+    # a arvore e o marco fechados (a ilha grande, secao 12 da tarefa) sao celulas em que o pet nao pisa, como a agua
+    ruins = sorted({c for l in linhas for c in l} - {AGUA_MAR, AGUA_DOCE, TERRA, PONTE, ARVORE_FECHADA, MARCO_FECHADO})
+    if ruins:
+        raise ValueError(f"a agua do layout {cm.layout.nome!r} tem caractere desconhecido: {ruins}")
+    return tuple(c in (TERRA, PONTE) for l in linhas for c in l)
+
+
+def solidos_da_agua(cm: ConfigMundo) -> tuple:
+    """Os solidos da agua, em subunidades: em cada linha, cada trecho seguido de celulas de agua; o mesmo trecho em linhas seguidas vira
+    um retangulo so. Na ordem de (y0, x0). A agua colide e nao tapa a visao; a categoria e `obstaculo` (a lista de categorias do contrato
+    nao muda: o gabarito dele a sorteia)."""
+    secas = celulas_secas(cm)
+    if secas is None:
+        return ()
+    nx, ny = cm.celulas_x, cm.celulas_y
+    abertos: dict[tuple[int, int], int] = {}
+    rets: list[tuple[int, int, int, int]] = []
+    for y in range(ny + 1):
+        trechos, x = set(), 0
+        while y < ny and x < nx:
+            if secas[y * nx + x]:
+                x += 1
+                continue
+            x0 = x
+            while x < nx and not secas[y * nx + x]:
+                x += 1
+            trechos.add((x0, x))
+        for k in sorted(abertos):
+            if k not in trechos:
+                rets.append((k[0], abertos.pop(k), k[1], y))
+        for k in trechos:
+            abertos.setdefault(k, y)
+    return tuple(ct.Solido(x0 * cm.sub, y0 * cm.sub, x1 * cm.sub, y1 * cm.sub, "obstaculo", True, False)
+                 for x0, y0, x1, y1 in sorted(rets, key=lambda r: (r[1], r[0])))
+
+
+def tamanho_do_mapa(cm: ConfigMundo) -> tuple[int, int]:
+    """o mapa em subunidades (largura, altura): o limite das posicoes dos eventos deste mundo (events._posicao_mundo)"""
+    return cm.celulas_x * cm.sub, cm.celulas_y * cm.sub
+
+
+def regiao_de(x: int, cm: ConfigMundo) -> int:
+    """0 casa, 1 jardim, 2 campo, 3 mata (a ordem de layout.regioes)"""
+    celula = x // cm.sub
+    for i, (_, x0, x1) in enumerate(cm.layout.regioes):
+        if x0 <= celula <= x1:
+            return i
+    raise ValueError(f"x fora de toda regiao: {x}")
+
+
+ZONA_BANHEIRO = -1                     # a zona da necessidade dentro do banheiro (fora dele, o indice da regiao)
+
+
+def faixa_do_banheiro(cbh: ConfigBanheiro, cm: ConfigMundo) -> tuple[int, int, int, int]:
+    """O retangulo do banheiro em subunidades, inclusivo: (x0, x1, y0, y1). Fora do mapa, ou fora da casa, falha alto."""
+    (cx0, cx1), (cy0, cy1) = cbh.celulas_x, cbh.celulas_y
+    if cx1 >= cm.celulas_x or cy1 >= cm.celulas_y:
+        raise ValueError(f"banheiro fora do mapa: x {cbh.celulas_x}, y {cbh.celulas_y}")
+    casa = cm.layout.regioes[0]
+    if casa[0] != "casa" or not casa[1] <= cx0 <= cx1 <= casa[2]:
+        raise ValueError(f"o banheiro tem de ficar dentro da casa {casa}: x {cbh.celulas_x}")
+    # no layout com agua, o banheiro inteiro fica em celulas em que o pet pisa (na ilha grande, o retangulo de sempre cai no mar)
+    secas = celulas_secas(cm)
+    if secas is not None and not all(secas[cy * cm.celulas_x + cx] for cy in range(cy0, cy1 + 1) for cx in range(cx0, cx1 + 1)):
+        raise ValueError(f"o banheiro tem celula fechada no layout {cm.layout.nome!r}: x {cbh.celulas_x}, y {cbh.celulas_y}")
+    sub = cm.sub
+    return cx0 * sub, (cx1 + 1) * sub - 1, cy0 * sub, (cy1 + 1) * sub - 1
+
+
+def no_banheiro(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) -> bool:
+    x0, x1, y0, y1 = faixa_do_banheiro(cbh, cm)
+    return x0 <= x <= x1 and y0 <= y <= y1
+
+
+def ponto_do_banheiro(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) -> tuple[int, int]:
+    """O ponto do banheiro mais perto de (x, y): a posicao cortada para dentro do retangulo (dentro dele, a propria posicao)."""
+    x0, x1, y0, y1 = faixa_do_banheiro(cbh, cm)
+    return min(x1, max(x0, x)), min(y1, max(y0, y))
+
+
+def zona_da_necessidade(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) -> int:
+    """A zona em que a necessidade incomoda (secao 3): o banheiro (ZONA_BANHEIRO) dentro do retangulo, a regiao de sempre fora dele."""
+    return ZONA_BANHEIRO if no_banheiro(x, y, cbh, cm) else regiao_de(x, cm)
+
+
+def campo_em(x: int, y: int, fontes: list[tuple[int, int, int]], raio: int) -> int:
+    """A conta inteira do cheiro (secao 7), com o raio dado em subunidades: a soma de A x (R - d) // R sobre as fontes com d < R; `fontes`
+    = (x, y, A). O cheiro da comida (`cheiro_em`), o cheiro de cada pet e o rastro (dois pets, secao 5.3) e o som (5.4) usam esta conta."""
+    total = 0
+    for fx, fy, a in fontes:
+        d = distancia(fx - x, fy - y)
+        if d < raio:
+            total += a * (raio - d) // raio
+    return total
+
+
+def direcao_do_campo(x: int, y: int, fontes: list[tuple[int, int, int]], raio: int, sub: int) -> tuple[int, int]:
+    """(campo no centro, direcao): a direcao 1 a 8 em que o campo medido a 1 celula (`sub` subunidades) passa do centro, a maior vence e o
+    empate fica com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
+    centro = campo_em(x, y, fontes, raio)
+    melhor, direcao = centro, 0
+    for k in range(8):
+        cx, cy = DIR16[2 * k]
+        c = campo_em(x + div_arred(cx * sub, ESCALA_DIR), y + div_arred(cy * sub, ESCALA_DIR), fontes, raio)
+        if c > melhor:
+            melhor, direcao = c, k + 1
+    return centro, direcao
+
+
+def cheiro_em(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> int:
+    """secao 7: a soma de A x (R - d) // R sobre as comidas boas com d < R; `fontes` = (x, y, A)"""
+    return campo_em(x, y, fontes, cm.raio_cheiro_celulas * cm.sub)
+
+
+def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> tuple[int, int]:
+    """(cheiro no centro, direcao): a direcao 1 a 8 em que o cheiro medido a 1 celula passa do centro, a maior vence e o empate fica
+    com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
+    return direcao_do_campo(x, y, fontes, cm.raio_cheiro_celulas * cm.sub, cm.sub)
+
+
+# a fruta ao lado da racao (ConfigFrutaAoLado; o RP-2 de docs/futuro/paladar.md): a origem da comida que o dono poe ao lado da racao,
+# para separar no registro do consumo "comeu a fruta ao lado" de "achou na arvore" e de "a comida do dono"
+ORIGEM_AO_LADO = "dono_ao_lado"
+
+
+# ================================================================== o Paladar, o lado do mundo (docs/futuro/paladar.md, secao 3.1)
+# o registro de status dos campos da ConfigPaladar (conferido por teste contra os campos da dataclass)
+PARAMETROS_PALADAR_MUNDO = {
+    "ligada": ("PROPOSTO", "docs/futuro/paladar.md, secao 4: a chave do mundo, desligada por padrao"),
+    "perfis": ("PROPOSTO", "SEM FONTE; docs/futuro/paladar.md, secao 3.1 (PL-3): quatro qualidades, as frutas como a mesma forma girada "
+                           "(3C/4 e C/4), a racao com C/4 de salgado"),
+}
+
+
+# ================================================================== percepcao e alvos
+@dataclass(frozen=True)
+class PercepcaoMundo:
+    """Secao 7. `vistos`: (id, tipo, dx, dy, d), em ordem de d, tipo e id, no maximo `max_vistos`; tipo = `racao`, `a`, `b`, `c`,
+    o mesmo com `_podre`, ou `bola` (id 0). `cheiro` so das comidas boas; `direcao_cheiro` 0 a 8 (com o orgao do Olfato da comida, os
+    dois ficam 0: o cheiro chega pelos receptores do corpo, dois pets, secao 5.6); `alvo_pendente` o tipo do alvo da
+    decisao anterior que ficou sem chegar, ou None. `troncos` (o J5, so com ConfigPetQuePensaMundo.ligada; senao vazio): (id, dx, dy, d)
+    dos troncos a ate o raio da visao, em ordem de d e id."""
+
+    x: int
+    y: int
+    regiao: int
+    vistos: tuple
+    cheiro: int
+    direcao_cheiro: int
+    alvo_pendente: str | None
+    troncos: tuple = ()
+
+
+@dataclass(frozen=True)
+class PercepcaoContrato(PercepcaoMundo):
+    """A P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.2; P4-2): a PercepcaoMundo de hoje montada pelos sensores do contrato, com a chave
+    `sensores` da ConfigContrato. Os `vistos` e os `troncos` so trazem o que passa pelo cone em torno da `orientacao` e pela oclusao dos
+    troncos (e das paredes, com a chave delas). O cerebro nao ganha entrada: os campos sao os de hoje, mais a `orientacao`, que nenhum
+    lobo le; o ModeloMundo a usa so para saber que a visao foi a do cone."""
+
+    orientacao: int = 0
+
+
+@dataclass(frozen=True)
+class Alvo:
+    """Um candidato a alvo (secao 5). tipo: `comida` (id), `bola` (id 0), `cheiro`, `vagar`, `casa`, `continuar` (de = o tipo do alvo
+    antigo) ou `ponto` (so o cerebro, no explorar: um lugar lembrado). No grupo, o explorar tem tambem `seguir` (onde o outro esta, visto)
+    e `onde_comeu` (onde se viu o outro comer), que o padrao do motor nunca escolhe (dois pets, secao 6)."""
+
+    tipo: str
+    x: int
+    y: int
+    id: int | None = None
+    de: str | None = None
+
+    @staticmethod
+    def ponto(x: int, y: int) -> "Alvo":
+        return Alvo("ponto", x, y)
+
+    def objeto(self) -> str | None:
+        """`comida` ou `bola` quando o alvo e um objeto (direto ou pelo continuar)"""
+        t = self.de if self.tipo == "continuar" else self.tipo
+        return t if t in ("comida", "bola") else None
+
+    def para_dict(self) -> dict:
+        return {"tipo": self.tipo, "x": self.x, "y": self.y, "id": self.id, "de": self.de}
+
+
+# ================================================================== o Olfato da comida pelo orgao (dois pets, secao 5.6; DP-13)
+# Com o orgao do Olfato da comida ligado, o pet nao recebe a direcao do cheiro: a percepcao do mundo fica sem `cheiro` e sem
+# `direcao_cheiro`, e o candidato `cheiro` da lugar a dois candidatos que so usam o que o pet sente (G-SEM-DIRECAO): a leitura dos
+# receptores das narinas (`PercepcaoCorpo.olfato_comida`, ou `_esq` e `_dir`), a direcao do ultimo passo (a propriocepcao) e o u do alvo.
+# As funcoes abaixo so recebem isso; nenhuma le o mundo (conferido por AST no teste).
+CANDIDATOS_CHEIRO_ORGAO = ("cheiro_seguir", "cheiro_virar")
+
+
+def leitura_do_olfato(corpo, narinas: int) -> tuple[int, ...]:
+    """A leitura dos receptores do Olfato da comida na `PercepcaoCorpo`: (r,) com uma narina, (r_esq, r_dir) com duas. Sem o receptor
+    (o orgao desligado, ou outro numero de narinas), falha alto."""
+    if narinas == 1:
+        leitura = (corpo.olfato_comida,)
+    elif narinas == 2:
+        leitura = (corpo.olfato_comida_esq, corpo.olfato_comida_dir)
+    else:
+        raise ValueError(f"narinas: 1 ou 2, nao {narinas!r}")
+    if any(type(r) is not int for r in leitura):
+        raise ValueError(f"o Olfato da comida sem o receptor na percepcao do corpo: {leitura!r} ({narinas} narina(s))")
+    return leitura
+
+
+def olfato_forte(leitura: tuple[int, ...], limiar: int) -> bool:
+    """o cheiro forte do explorar: alguma narina le acima do `limiar` (na escala S do receptor)"""
+    return max(leitura) > limiar
+
+
+def alvos_do_olfato(x: int, y: int, passo: int, leitura: tuple[int, ...], anterior: tuple[int, ...] | None, u: int,
+                    cm: ConfigMundo) -> list[Alvo]:
+    """Os candidatos do cheiro pelo orgao (secao 5.6), em (x, y), com a direcao do ultimo passo `passo` (0 a 15 na DIR16): nenhum sem
+    cheiro (todas as narinas em 0); senao dois, a `passo_cheiro_celulas` celulas, com o preferido pela regra da opcao na frente.
+    - `cheiro_seguir`: um passo na direcao do ultimo passo;
+    - `cheiro_virar`: com duas narinas, 45 graus (dois indices da DIR16) para o lado da narina mais forte, a esquerda no sentido
+      anti-horario; empatadas, o lado sai do bit 8 do u. Com uma narina, uma das outras 15 direcoes, sorteada pelos bits altos do u
+      (`(u >> 8) % 15`; o u e o da rng `alvo`: "a direcao sorteada no fluxo alvo").
+    - o preferido: com duas narinas, seguir se elas empatam, virar se nao; com uma, virar se a leitura caiu desde a decisao anterior
+      (`anterior`), seguir se subiu ou ficou (e na primeira decisao)."""
+    if type(passo) is not int or not 0 <= passo < 16:
+        raise ValueError(f"passo fora da DIR16: {passo!r}")
+    if type(u) is not int or not 0 <= u < (1 << 16):
+        raise ValueError(f"u do alvo fora de [0, 2^16): {u!r}")
+    if max(leitura) == 0:
+        return []
+    dist = cm.passo_cheiro_celulas * cm.sub
+    if len(leitura) == 2:
+        esq, dir_ = leitura
+        lado = 2 if esq > dir_ else (-2 if dir_ > esq else (2 if (u >> 8) & 1 == 0 else -2))
+        virar = (passo + lado) % 16
+        prefere_virar = esq != dir_
+    elif len(leitura) == 1:
+        virar = (passo + 1 + (u >> 8) % 15) % 16
+        prefere_virar = anterior is not None and leitura[0] < anterior[0]
+    else:
+        raise ValueError(f"leitura do olfato com {len(leitura)} narinas")
+    seguir = Alvo("cheiro_seguir", *deslocar(x, y, passo, dist, cm))
+    vira = Alvo("cheiro_virar", *deslocar(x, y, virar, dist, cm))
+    return [vira, seguir] if prefere_virar else [seguir, vira]
+
+
+def alvo_padrao_de(acao: AcaoPet, cands: list[Alvo], p: PercepcaoMundo, cmf: ConfigMundo) -> Alvo | None:
+    """O alvo padrao do motor (secao 5), em funcao pura da percepcao da decisao: o que o instinto usa e nunca a comida podre.
+    - comer: a comida boa vista mais proxima (os vistos ja vem em ordem de d, tipo e id), senao o cheiro;
+    - explorar: o continuar, senao o cheiro forte (acima de `limiar_cheiro_explorar`), senao o vagar;
+    - brincar: a bola vista.
+    Com o orgao do Olfato da comida (dois pets, secao 5.6), o "cheiro" e o primeiro dos candidatos do orgao (`cheiro_seguir`,
+    `cheiro_virar`): o motor os poe com o preferido pela regra da opcao na frente (`alvos_do_olfato`), e no explorar so os oferece com o
+    cheiro forte (`olfato_forte`). A percepcao do mundo nao tem cheiro nem direcao, entao o ramo de hoje nao dispara (G-SEM-DIRECAO)."""
+    if acao is AcaoPet.COMER:
+        podres = {i for i, tipo, *_ in p.vistos if tipo.endswith("_podre")}
+        for a in cands:
+            if a.tipo == "comida" and a.id not in podres:
+                return a
+        return next((a for a in cands if a.tipo == "cheiro" or a.tipo in CANDIDATOS_CHEIRO_ORGAO), None)
+    if acao is AcaoPet.EXPLORAR:
+        cont = next((a for a in cands if a.tipo == "continuar"), None)
+        if cont is not None:
+            return cont
+        if p.direcao_cheiro and p.cheiro > cmf.limiar_cheiro_explorar:
+            return next(a for a in cands if a.tipo == "cheiro")
+        olfato = next((a for a in cands if a.tipo in CANDIDATOS_CHEIRO_ORGAO), None)
+        if olfato is not None:
+            return olfato
+        return next(a for a in cands if a.tipo == "vagar")
+    return next((a for a in cands if a.tipo == "bola"), None)
+
+
+# ================================================================== os sentidos sobre o outro (dois pets, etapa 3; degrau 1)
+# docs/futuro/dois_pets.md, secao 5 (DP-4, DP-11): a visao (5.1) e o toque (5.2). Nenhum sentido le o estado interno do outro: as funcoes
+# abaixo so recebem o que e fisico (a posicao, a acao que se ve de fora, o consumo visto, o contato). O grupo (digilab/grupo.py) as chama.
+CANDIDATOS_SOCIAIS = ("seguir", "onde_comeu")      # os candidatos do explorar que so existem com o outro (secao 6)
+TIPOS_TOQUE = ("disputa_ganhou", "disputa_perdeu", "encostou", "encostaram", "esbarrou")
+
+
+@dataclass(frozen=True)
+class PercepcaoSocial:
+    """Secao 5. Sem campo de estado interno do outro (G-RECEPTOR-SOCIAL).
+    - `outros`: (id, dx, dy, d, acao_visivel) dos pets a ate o raio da visao do mundo, em ordem de d e de id; `acao_visivel` e a acao
+      que o outro escolheu na ultima decisao dele (o que se ve de fora);
+    - `onde_comeu`: (id, x, y, idade) do ultimo ponto em que este pet VIU cada outro comer (dentro do raio, no momento do consumo), com a
+      idade em ticks; em ordem de id; nada de quem nunca foi visto comendo;
+    - `toque`: (id, tipo, direcao, idade) do ultimo contato com cada outro (tipo em TIPOS_TOQUE; direcao 1 a 8 na tabela do cheiro, 0 na
+      mesma celula); em ordem de id;
+    - `sentidos` (o degrau 1b, so com a ConfigSentidos ligada; senao None): o cheiro de cada outro, o rastro dele e os sons ouvidos
+      (`PercepcaoSentidos`);
+    - `reputacao` (a CO6, so com a subchave `co6` da ConfigCooperacao; senao None): (id, r) de cada outro presente no grupo, a vista ou
+      nao (CO6-2), em ordem de id, com r a reputacao dele vista por este pet (a memoria dos atos que este pet testemunhou), na escala S;
+    - `peso_dever` (a CO6; senao None): o peso dos deveres `k` deste pet, na escala S (o estado moral do proprio pet)."""
+
+    outros: tuple
+    onde_comeu: tuple
+    toque: tuple
+    sentidos: "PercepcaoSentidos | None" = None
+    reputacao: tuple | None = None
+    peso_dever: int | None = None
+
+
+# ------------------------------------------------------------------ o degrau 1b: o cheiro proprio, o rastro e o som (dois pets, etapa 8)
+# docs/futuro/dois_pets.md, secoes 5.3, 5.4 e 5.6; OA-1 (o campo calculado), OA-2 (a direcao pelo mundo, como pre-processamento) e OA-3
+# (o som em linha reta). Tudo aqui so le o que e fisico: a posicao do outro, o rastro que ele deixou no mundo e o som da acao dele.
+SONS = ("comendo", "bola", "chamado", "emburrado")
+SOM_DA_ACAO = {AcaoPet.CHAMAR_ATENCAO: "chamado", AcaoPet.EMBURRAR: "emburrado"}     # os sons das acoes sem alvo
+
+
+def acao_visivel(acao: AcaoPet) -> str:
+    """a acao do pet vista de fora (a percepcao social do outro pet): o ir ate a TV (D-GV-TVJOGO-3) e andar, e chega como o explorar (o A
+    ve as oito acoes de antes, lobos.ACOES_VISIVEIS); as outras, como sao"""
+    return AcaoPet.EXPLORAR.value if acao is AcaoPet.IR_TV else acao.value
+
+# os numeros do mundo sao os da ConfigOlfato e da ConfigOuvido (status em corpo.PARAMETROS_OLFATO e corpo.PARAMETROS_OUVIDO)
+PARAMETROS_SENTIDOS: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "DP-11 (o degrau 1b), DP-13 e DP-14: desligada por padrao, o grupo de hoje (G2)"),
+}
+PASSO_INICIAL = 0            # a direcao do ultimo passo antes do primeiro passo: leste (0 na DIR16), uma convencao (secao 5.6)
+
+
+@dataclass(frozen=True)
+class PercepcaoSentidos:
+    """O degrau 1b (secoes 5.3, 5.4 e 5.6). Sem campo de estado interno do outro (G-RECEPTOR-SOCIAL).
+    - `passo`: a direcao do ultimo passo do proprio pet (0 a 15 na tabela DIR16; a propriocepcao que poe as narinas e os ouvidos);
+    - `cheiro`: (id, intensidade, direcao, esq, dir) de cada outro presente, em ordem de id: a intensidade no centro do pet e a direcao 1 a 8
+      (0 sem gradiente; a conta e o desempate do cheiro da comida) do canal do outro (o cheiro dele e o rastro dele), e a intensidade no
+      ponto de cada narina;
+    - `sons`: (id, som, direcao, distancia, intensidade, esq, dir, idade) dos sons ouvidos desde a decisao anterior, na ordem em que
+      soaram: quem emitiu, o som (SONS), a direcao 1 a 8 e a distancia em linha reta ate onde soou, a intensidade no centro e no ponto de
+      cada ouvido (tudo no momento do som) e a idade em ticks. Os sons do proprio pet nao entram.
+    Com o orgao do Olfato social, `cheiro` fica vazio; com o da Audicao, `sons` fica vazio: o que o pet sente do outro chega so
+    pelos receptores do corpo, sem direcao nem distancia do mundo (secao 5.6; G-SEM-DIRECAO)."""
+
+    passo: int
+    cheiro: tuple
+    sons: tuple
+
+
+def direcao_em_8(dx: int, dy: int) -> int:
+    """a direcao 1 a 8 (L, NE, N, NO, O, SO, S, SE; a tabela do cheiro) mais perto do vetor (dx, dy): o maior produto escalar com DIR16,
+    o empate fica com a ordem fixa; 0 no vetor nulo"""
+    if dx == 0 and dy == 0:
+        return 0
+    melhor, direcao = None, 0
+    for k in range(8):
+        cx, cy = DIR16[2 * k]
+        p = cx * dx + cy * dy
+        if melhor is None or p > melhor:
+            melhor, direcao = p, k + 1
+    return direcao
+
+
+def direcao_em_16(dx: int, dy: int) -> int | None:
+    """o indice 0 a 15 da tabela DIR16 mais perto do vetor (dx, dy) (o maior produto escalar; o empate fica com a ordem fixa); None no
+    vetor nulo"""
+    if dx == 0 and dy == 0:
+        return None
+    melhor, direcao = None, 0
+    for j, (cx, cy) in enumerate(DIR16):
+        p = cx * dx + cy * dy
+        if melhor is None or p > melhor:
+            melhor, direcao = p, j
+    return direcao
+
+
+def pontos_laterais(x: int, y: int, passo: int, afastamento: int) -> tuple[tuple[int, int], tuple[int, int]]:
+    """(esquerda, direita): os pontos a `afastamento` subunidades de lado em relacao a direcao `passo` (0 a 15 na DIR16; a esquerda e 90
+    graus no sentido anti-horario, quatro indices adiante). Nao cortados ao mapa (so contam)."""
+    pontos = []
+    for lado in ((passo + 4) % 16, (passo + 12) % 16):
+        cx, cy = DIR16[lado]
+        pontos.append((x + div_arred(cx * afastamento, ESCALA_DIR), y + div_arred(cy * afastamento, ESCALA_DIR)))
+    return pontos[0], pontos[1]
+
+
+def fontes_do_pet(x: int, y: int, marcas: list[tuple[int, int, int]], tick: int, co: ConfigOlfato) -> list[tuple[int, int, int]]:
+    """secao 5.3: as fontes do canal de um pet: o cheiro dele na posicao atual (`cheiro_pet`) e cada marca do rastro (x, y, tick em que foi
+    deixada), com `cheiro_marca` x (T - idade) // T, T = `idade_marca`; a marca na idade T, ou com intensidade 0, nao conta"""
+    fontes = [(x, y, co.cheiro_pet)]
+    for mx, my, t in marcas:
+        idade = tick - t
+        if idade < 0:
+            raise ValueError(f"marca do futuro: tick {t} no tick {tick}")
+        if idade < co.idade_marca:
+            a = co.cheiro_marca * (co.idade_marca - idade) // co.idade_marca
+            if a > 0:
+                fontes.append((mx, my, a))
+    return fontes
+
+
+def cheiro_do_pet(x: int, y: int, passo: int, fontes: list[tuple[int, int, int]], co: ConfigOlfato, sub: int) -> tuple:
+    """(intensidade, direcao, esq, dir) do canal de um pet para quem esta em (x, y) com o ultimo passo `passo`: a conta inteira e a direcao
+    do cheiro da comida (`direcao_do_campo`) com o raio do pet, e a intensidade no ponto de cada narina"""
+    raio = co.raio_celulas * sub
+    centro, direcao = direcao_do_campo(x, y, fontes, raio, sub)
+    esq, dir_ = pontos_laterais(x, y, passo, co.afastamento_narinas)
+    return centro, direcao, campo_em(*esq, fontes, raio), campo_em(*dir_, fontes, raio)
+
+
+def som_ouvido(lx: int, ly: int, passo: int, sx: int, sy: int, cv: ConfigOuvido, sub: int) -> tuple | None:
+    """(direcao, distancia, intensidade, esq, dir) do som que soou em (sx, sy) para quem esta em (lx, ly) com o ultimo passo `passo`, ou
+    None fora do alcance (d >= R_som): a linha reta (OA-3), a intensidade A x (R - d) // R no centro e no ponto de cada ouvido"""
+    raio = cv.raio_som_celulas * sub
+    dx, dy = sx - lx, sy - ly
+    d = distancia(dx, dy)
+    if d >= raio:
+        return None
+    fonte = [(sx, sy, cv.som)]
+    esq, dir_ = pontos_laterais(lx, ly, passo, cv.afastamento_ouvidos)
+    return direcao_em_8(dx, dy), d, campo_em(lx, ly, fonte, raio), campo_em(*esq, fonte, raio), campo_em(*dir_, fonte, raio)
+
+
+def celula_de(x: int, y: int, cm: ConfigMundo) -> tuple[int, int]:
+    return x // cm.sub, y // cm.sub
+
+
+def direcao_vizinha(dcx: int, dcy: int) -> int:
+    """a direcao de uma celula vizinha na tabela do cheiro (1 a 8 = L, NE, N, NO, O, SO, S, SE; y cresce para o sul), 0 na mesma celula"""
+    if max(abs(dcx), abs(dcy)) > 1:
+        raise ValueError(f"celula nao vizinha: ({dcx}, {dcy})")
+    if dcx == 0 and dcy == 0:
+        return 0
+    for k in range(8):
+        cx, cy = DIR16[2 * k]
+        if (cx > 0) - (cx < 0) == dcx and (cy > 0) - (cy < 0) == dcy:
+            return k + 1
+    raise AssertionError("tabela das direcoes incompleta")      # as 8 vizinhas estao todas na tabela
+
+
+def em_contato(a: tuple[int, int], b: tuple[int, int], cm: ConfigMundo, raio_celulas: int) -> bool:
+    """secao 5.2: as celulas a no maximo `raio_celulas` em Chebyshev (a mesma celula ou a vizinha, com 1)"""
+    (ax, ay), (bx, by) = celula_de(*a, cm), celula_de(*b, cm)
+    return max(abs(ax - bx), abs(ay - by)) <= raio_celulas
+
+
+def perceber_social(x: int, y: int, tick: int, outros: list[tuple], viu_comer: dict, toques: dict, raio_visao: int,
+                    sentidos: PercepcaoSentidos | None = None) -> PercepcaoSocial:
+    """Pura: o que um pet em (x, y) percebe dos outros agora. `outros` = (id, x, y, acao_visivel), so o fisico; `viu_comer` = {id: (x, y,
+    tick)} e `toques` = {id: (tipo, direcao, tick)}, a memoria do proprio pet; `tick` e o do mundo. `sentidos`: o degrau 1b, ja montado
+    pelo grupo (so com a ConfigSentidos ligada)."""
+    vistos = []
+    for ident, ox, oy, acao in outros:
+        dx, dy = ox - x, oy - y
+        d = distancia(dx, dy)
+        if d <= raio_visao:
+            vistos.append((ident, dx, dy, d, acao))
+    vistos.sort(key=lambda v: (v[3], v[0]))
+    comeu = tuple((i, cx, cy, tick - t) for i, (cx, cy, t) in sorted(viu_comer.items()))
+    toque = tuple((i, tipo, direcao, tick - t) for i, (tipo, direcao, t) in sorted(toques.items()))
+    return PercepcaoSocial(tuple(vistos), comeu, toque, sentidos)
+
+
+def tipos_do_contato(a: str, b: str, disputa: dict | None, seguiu: dict) -> dict[str, str]:
+    """secao 5.2: o tipo do contato para cada um, pelo que aconteceu no tick (nunca por intencao). `disputa` = {"vencedor", "perdedor"} ou
+    None; `seguiu` = {id: o id do pet que ele seguiu neste tick, ou None}. A disputa vence o encostar, que vence o esbarrar."""
+    if disputa is not None:
+        return {disputa["vencedor"]: "disputa_ganhou", disputa["perdedor"]: "disputa_perdeu"}
+    tipos = {}
+    for eu, outro in ((a, b), (b, a)):
+        if seguiu.get(eu) == outro:
+            tipos[eu] = "encostou"
+        elif seguiu.get(outro) == eu:
+            tipos[eu] = "encostaram"
+        else:
+            tipos[eu] = "esbarrou"
+    return tipos
+
+
+# ================================================================== o embrulho da politica
+class _PoliticaComMundo:
+    """Embrulho do MotorMundo (so com a chave): antes de `agir` avanca o mundo e injeta `obs.mundo`; em `observar` aplica a consequencia
+    do mundo ANTES de repassar a transicao (com a observacao seguinte refeita), e depois chama os ganchos. Delega o resto."""
+
+    def __init__(self, politica, motor: "MotorMundo") -> None:
+        self._pm = politica
+        self._motor = motor
+
+    def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
+        obs = replace(obs, mundo=self._motor._antes_da_decisao(), social=self._motor._social)
+        self._motor._obs_decisao = obs
+        return self._pm.agir(obs, rng)
+
+    def observar(self, transicao: Transicao) -> None:
+        m = self._motor
+        ocorrido = m._consequencia(transicao.acao)
+        obs_depois = m._observacao_depois_mundo()
+        self._pm.observar(Transicao(observacao=m._obs_decisao, acao=transicao.acao, observacao_seguinte=obs_depois,
+                                    recompensa=transicao.recompensa))
+        comeu = ocorrido["comeu"] if ocorrido is not None else None
+        if comeu is not None and comeu["tipo"] in FRUTAS and not m.cfc.ligada:
+            # E2: os cerebros que ja o usam. Com a fruta do mundo como comida (AS-11), o aviso nao vai: a fruta chega como a racao
+            aviso = getattr(self._pm, "fruta_comida", None)
+            if aviso is not None:
+                aviso(comeu["tipo"], obs_depois)
+        if ocorrido is not None:
+            gancho = getattr(self._pm, "consequencia_mundo", None)
+            if gancho is not None:
+                gancho(transicao.acao, ocorrido, obs_depois)
+
+    def receber_acao_dono(self, acao: AcaoUsuario, tick: int) -> None:
+        self._pm.receber_acao_dono(acao, tick)
+
+    def estado_interno(self) -> dict:
+        return self._pm.estado_interno()
+
+    def __getattr__(self, nome: str):
+        return getattr(self._pm, nome)
+
+
+# ================================================================== o mundo como componente (dois pets, etapa 1)
+class Mundo:
+    """O mundo fisico como componente (docs/futuro/dois_pets.md, secao 2; DP-1; docs/TAREFA_V2_DOIS_PETS.md, etapa 1): as arvores, as
+    comidas, a bola, os fluxos do mundo (`mundo-arvores`, `mundo-bola`) e os registros do mundo (as quedas, as comidas que sumiram, as
+    bolas deixadas e as rolagens). Nao sabe de pet: a posicao, o alvo pendente, a percepcao guardada, os fluxos do pet (`alvo`,
+    `mundo-sujeira`) e os registros do pet (consumos, decisoes, regioes, visitas, comidas deixadas pelo dono) ficam no MotorMundo de cada
+    pet. Com um pet, o MotorMundo e dono do proprio Mundo, com a semente do pet: a vida de hoje, byte a byte (G2). A forma e a do motor
+    em TS (web/app/motor/mundo.ts: o mundo recebe a posicao e o estado do pet), sem a parte do pet, para dois motores poderem apontar
+    para o mesmo Mundo (etapa 2).
+
+    A atualizacao (quedas, apodrecer, sumir) e idempotente por tick (`atualizar`): a segunda chamada no mesmo tick nao faz nada, e um tick
+    para tras falha alto. Com dois pets, quem decide primeiro no tick a dispara, e o resultado so le o tick e o fluxo `mundo-arvores`."""
+
+    def __init__(self, cfg_mundo: ConfigMundo, semente: int, arvores_na_casa: bool = False) -> None:
+        # `arvores_na_casa` (TAREFA_V3_ARVORE_SACODE, D-AS-S1-7): so o motor com a ConfigSacudir ligada; a arvore na casa (o bosque do lar
+        # da planta A da ilha) cai como a do jardim. Sem ele, a arvore na casa falha alto, como hoje
+        if type(arvores_na_casa) is not bool:
+            raise TypeError(f"arvores_na_casa e bool: {arvores_na_casa!r}")
+        if not cfg_mundo.ligada:
+            raise MundoSemChave("o Mundo so existe com a ConfigMundo ligada")
+        cm = self.cmf = cfg_mundo
+        self.semente = semente
+        self.rng_arvores = random.Random(derivar_semente("mundo-arvores", semente))
+        self.rng_bola = random.Random(derivar_semente("mundo-bola", semente))
+        self.raio_visao = cm.raio_visao_celulas * cm.sub
+        self.ninho = centro_da_celula(cm.layout.ninho, cm)
+        self.comedouro = centro_da_celula(cm.layout.comedouro, cm)
+        bx, by = centro_da_celula(cm.layout.bola_inicio, cm)
+        self.bola = {"x0": bx, "y0": by, "x1": bx, "y1": by, "t0": 0, "d": 0}
+        nomes = [r[0] for r in cm.layout.regioes]
+        self.arvores: list[dict] = []
+        for ident, x, y, fruta in cm.layout.arvores:
+            if fruta not in FRUTAS:
+                raise ValueError(f"arvore {ident} com fruta desconhecida: {fruta!r}")
+            ax, ay = centro_da_celula((x, y), cm)
+            nome = nomes[regiao_de(ax, cm)]
+            if nome == "jardim" or (nome == "casa" and arvores_na_casa):
+                p = cm.p_queda_jardim * cm.mult_queda
+            elif nome == "mata":
+                p = cm.p_queda_mata * cm.mult_queda
+            else:
+                raise ValueError(f"arvore {ident} fora do jardim e da mata: {nome}")
+            self.arvores.append({"id": ident, "x": ax, "y": ay, "fruta": fruta, "regiao": nome, "p": p, "recarga_ate": 0})
+        # a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): None no mapa sem agua, e nada muda. Com agua, o ninho, o comedouro, a bola e as
+        # arvores ficam em terra, e toda a terra se alcanca a pe a partir do ninho (o layout que nao cumpre falha alto)
+        self.secas = celulas_secas(cm)
+        if self.secas is not None:
+            self._conferir_agua()
+        self.comidas: dict[int, dict] = {}
+        self.prox_id = ID_BOLA + 1
+        self.passo_mundo = 0
+        self.tick_atualizado: int | None = None          # o ultimo tick atualizado (a atualizacao e idempotente por tick)
+        # os registros do mundo (derivados; o replay reconstroi tudo)
+        self.quedas: list[dict] = []
+        self.sumidas: list[dict] = []
+        self.bolas_deixadas: list[dict] = []
+        self.troca_ilha: dict | None = None        # a troca de ilha (IA4): None ate o evento `mudar_ilha`
+        self.troca_maior: dict | None = None       # a ida para a ilha maior (IG4): None ate o `mudar_ilha` para um destino de ILHAS_MAIORES
+        self.rolagens: list[dict] = []
+        # o banheiro (TAREFA_V2_BANHEIRO, secao 3): as necessidades no chao, so depois de `ligar_necessidades` (um motor com o banheiro);
+        # sem ele, None e nada muda (nem o resumo). Um contador proprio: os ids das comidas nao mudam com o banheiro
+        self.necessidades: dict[int, dict] | None = None
+        self.prox_necessidade = 1
+        self.recolhidas: list[dict] = []
+        # o J5 (o pet que pensa): as trocas de tipo por arvore, so depois de `ligar_trocas` (o motor com a ConfigPetQuePensaMundo); sem
+        # ela, None e nada muda (nem o resumo)
+        self.trocas_tipo: list[dict] | None = None
+        # o J5, adendo 8 (A8.3): as paradas de arvores (o tick, o tipo, as arvores, os ids retirados do chao), so depois da primeira; sem
+        # ela, None e nada muda (nem o resumo)
+        self.paradas_arvores: list[dict] | None = None
+        # dois pets, etapa 8 (o degrau 1b): o rastro de cada pet, {id: [(x, y, tick), ...]} em ordem de tick, so depois de `ligar_marcas`
+        # (o grupo com a ConfigSentidos ligada); sem ele, None e nada muda (nem o resumo)
+        self.marcas: dict[str, list[tuple[int, int, int]]] | None = None
+        # o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secao 3.2): o galho de cada arvore, as sacudidas e o fluxo `arvore-sacode`, so depois
+        # de `ligar_sacudir` (o motor com a ConfigSacudir); sem ele, None e nada muda (nem o resumo)
+        self.galhos: dict[str, dict] | None = None
+        self.sacudidas: list[dict] | None = None
+        self.rng_sacode: random.Random | None = None
+        self.csa: ConfigSacudir | None = None
+        # a TV (GOSTO_VISUAL, P1c; digilab/tv.py): so depois de `ligar_tv` (o motor com a ConfigTV); sem ela, None e nada muda (nem o
+        # resumo)
+        self.tv: TV | None = None
+        # as duas TVs da sonda (P1e): so numa copia do pet, depois do `MotorMundo.ligar_duas_tvs`; ((id, TVFixa), (id, TVFixa)) ou None
+        self.duas_tvs: tuple | None = None
+        # o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1): os lances e o fluxo `dono-bola`, so depois de `ligar_lance` (o motor com a
+        # ConfigLanceDono ligada); sem ele, None e nada muda (nem o resumo)
+        self.cld: ConfigLanceDono | None = None
+        self.lances: list[dict] | None = None
+        self.rng_lance: random.Random | None = None
+
+    # ------------------------------------------------------------ a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1)
+    def _conferir_agua(self) -> None:
+        cm, secas, nx = self.cmf, self.secas, self.cmf.celulas_x
+        lay = cm.layout
+        pontos = [("ninho", lay.ninho), ("comedouro", lay.comedouro), ("bola_inicio", lay.bola_inicio)]
+        pontos += [(f"arvore {a[0]}", (a[1], a[2])) for a in lay.arvores]
+        for nome, (cx, cy) in pontos:
+            if not secas[cy * nx + cx]:
+                raise ValueError(f"layout {lay.nome!r}: {nome} na agua ({cx}, {cy})")
+        ini = lay.ninho[1] * nx + lay.ninho[0]
+        vistas, fila = {ini}, [ini]
+        while fila:
+            i = fila.pop()
+            x, y = i % nx, i // nx
+            for vx, vy in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                j = vy * nx + vx
+                if 0 <= vx < nx and 0 <= vy < cm.celulas_y and secas[j] and j not in vistas:
+                    vistas.add(j)
+                    fila.append(j)
+        ilhadas = sum(secas) - len(vistas)
+        if ilhadas:
+            raise ValueError(f"layout {lay.nome!r}: {ilhadas} celulas de terra que o pet nao alcanca a pe a partir do ninho")
+
+    def seca(self, x: int, y: int) -> bool:
+        """o ponto (dentro do mapa) esta em terra? Sem agua no mapa, sempre"""
+        return self.secas is None or self.secas[(y // self.cmf.sub) * self.cmf.celulas_x + x // self.cmf.sub]
+
+    def em_terra(self, x: int, y: int) -> tuple[int, int]:
+        """o ponto, se esta em terra; senao o centro da celula de terra mais perto (a conta do contrato: octil, o empate pelo indice)"""
+        if self.seca(x, y):
+            return x, y
+        cm = self.cmf
+        return centro_da_celula(ct.livre_mais_perto(self.secas, cm.celulas_x, (x // cm.sub, y // cm.sub)), cm)
+
+    def ate_a_margem(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """o ultimo ponto em terra da linha de (x0, y0) a (x1, y1), antes da primeira agua: a bola para na margem. Os pontos da linha
+        sao os do `tapado` do contrato: p0 + (p1 - p0) k / n, com n = max(|dx|, |dy|)"""
+        if self.secas is None:
+            return x1, y1
+        dx, dy = x1 - x0, y1 - y0
+        n = max(abs(dx), abs(dy))
+        x, y = x0, y0
+        for k in range(1, n + 1):
+            px, py = x0 + div_arred(dx * k, n), y0 + div_arred(dy * k, n)
+            if not self.seca(px, py):
+                break
+            x, y = px, py
+        return x, y
+
+    def trocar_layout(self, layout: LayoutMundo, tick: int) -> dict:
+        """A troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4): o mundo passa do layout de hoje, sem agua, para `layout`, que e o mesmo
+        (so o nome muda) com agua. O mundo ja vem atualizado ate o tick. A comida que fica na agua vai para a terra mais perto; a bola
+        para onde esta, ou na terra mais perto. Nenhum fluxo de acaso anda. Uma vez so por mundo. Devolve o registro (`troca_ilha`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_layout no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.secas is not None or self.troca_ilha is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja tem agua: a troca de ilha vale uma vez, de um layout sem agua")
+        if replace(layout, nome=self.cmf.layout.nome) != self.cmf.layout:
+            raise ValueError(f"a troca de ilha so muda a agua: {layout.nome!r} nao e o layout {self.cmf.layout.nome!r} com outro nome")
+        de = self.cmf.layout.nome
+        cm = replace(self.cmf, layout=layout)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a troca de ilha e para a ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(c["x"], c["y"])
+            if (x, y) != (c["x"], c["y"]):
+                comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+                c["x"], c["y"] = x, y
+        bx, by = self.bola_em(tick)
+        x, y = self.em_terra(bx, by)
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_ilha = {"tick": tick, "de": de, "para": layout.nome, "comidas": comidas, "bola": {"de": [bx, by], "para": [x, y]}}
+        return self.troca_ilha
+
+    def trocar_para_maior(self, layout: LayoutMundo, celulas_x: int, celulas_y: int, origens: tuple, tick: int) -> dict:
+        """A ida para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4): o mundo passa do layout de hoje (um dos `origens`) para
+        `layout`, que tem outro tamanho. O mundo ja vem atualizado ate o tick. Tudo o que tem posicao anda o deslocamento do ninho de la
+        para o ninho de ca (IG-7): o ninho e o comedouro passam a ser os do layout novo, e a comida e a bola vao junto, para a terra mais
+        perto se cairem em celula fechada ou fora do mapa. A bola para onde esta. Nenhum fluxo de acaso anda. Uma vez so por mundo; o
+        mundo com arvores ou com o banheiro nao troca (as posicoes deles nao tem destino). Devolve o registro (`troca_maior`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_para_maior no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.troca_maior is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja passou para a ilha maior: a troca vale uma vez")
+        if self.cmf.layout not in origens:
+            raise ValueError(f"a ilha maior {layout.nome!r} nao recebe o mundo {self.cmf.layout.nome!r}")
+        if self.arvores or self.necessidades is not None:
+            raise ValueError("a ida para a ilha maior nao leva arvores nem o banheiro")
+        de, sub = self.cmf.layout, self.cmf.sub
+        dx, dy = (layout.ninho[0] - de.ninho[0]) * sub, (layout.ninho[1] - de.ninho[1]) * sub
+        bola_de = self.bola_em(tick)                              # no mundo de la, antes de trocar
+        cm = replace(self.cmf, layout=layout, celulas_x=celulas_x, celulas_y=celulas_y)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a ilha maior e uma ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self.ninho, self.comedouro = centro_da_celula(layout.ninho, cm), centro_da_celula(layout.comedouro, cm)
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(*no_mapa(c["x"] + dx, c["y"] + dy, cm))
+            comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+            c["x"], c["y"] = x, y
+        x, y = self.em_terra(*no_mapa(bola_de[0] + dx, bola_de[1] + dy, cm))
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_maior = {"tick": tick, "de": de.nome, "para": layout.nome, "deslocamento": [dx, dy], "comidas": comidas,
+                            "bola": {"de": list(bola_de), "para": [x, y]}}
+        return self.troca_maior
+
+    def rolagem_seca(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """onde a bola que rola de (x0, y0) para (x1, y1) para: na margem (`ate_a_margem`) e, depois, encurtada ate que todo ponto por
+        onde ela passa tick a tick (a conta do `bola_em`, que arredonda pela distancia e pode sair 1 subunidade da linha) esteja em
+        terra. Sem agua, (x1, y1)."""
+        if self.secas is None:
+            return x1, y1
+        x1, y1 = self.ate_a_margem(x0, y0, x1, y1)
+        atrito = self.cmf.atrito
+        while True:
+            d = distancia(x1 - x0, y1 - y0)
+            px, py = x0, y0
+            for j in range(1, -(-d // atrito)):
+                qx, qy = x0 + div_arred((x1 - x0) * atrito * j, d), y0 + div_arred((y1 - y0) * atrito * j, d)
+                if not self.seca(qx, qy):
+                    break
+                px, py = qx, qy
+            else:
+                return x1, y1
+            if distancia(px - x0, py - y0) >= d:
+                raise RuntimeError(f"a rolagem da bola nao encurtou: ({x0}, {y0}) -> ({x1}, {y1})")
+            x1, y1 = px, py
+
+    # ------------------------------------------------------------ dois pets, etapa 8: o rastro (secao 5.3)
+    def ligar_marcas(self) -> None:
+        if self.marcas is None:
+            self.marcas = {}
+
+    def deixar_marca(self, ident: str, x: int, y: int, tick: int, co: ConfigOlfato) -> None:
+        """uma marca do pet `ident` em (x, y) no tick (do mundo): as que chegaram a idade T saem, e acima de `max_marcas` as mais antigas"""
+        if self.marcas is None:
+            raise ValueError("marca num Mundo sem o rastro (ligar_marcas: o grupo com a ConfigSentidos ligada)")
+        lista = self.marcas.setdefault(ident, [])
+        if lista and lista[-1][2] > tick:
+            raise ValueError(f"marca fora de ordem: tick {tick} depois de {lista[-1][2]}")
+        while lista and tick - lista[0][2] >= co.idade_marca:
+            lista.pop(0)
+        lista.append((x, y, tick))
+        while len(lista) > co.max_marcas:
+            lista.pop(0)
+
+    def marcas_de(self, ident: str) -> list[tuple[int, int, int]]:
+        if self.marcas is None:
+            raise ValueError("rastro num Mundo sem o rastro (ligar_marcas)")
+        return list(self.marcas.get(ident, []))
+
+    # ------------------------------------------------------------ o J5: a troca de tipo por arvore e os troncos
+    def ligar_trocas(self) -> None:
+        if self.trocas_tipo is None:
+            self.trocas_tipo = []
+
+    def trocar_tipos(self, x: str, y: str, tick: int) -> dict:
+        """No tick (o mundo ja atualizado ate ele), as arvores do tipo x passam a dar y e as do y a dar x. As frutas no chao nao mudam."""
+        if self.trocas_tipo is None:
+            raise PetQuePensaSemChave("troca de tipo num Mundo sem a ConfigPetQuePensaMundo")
+        if x == y or x not in FRUTAS or y not in FRUTAS:
+            raise ValueError(f"troca de tipo invalida: {x!r}, {y!r}")
+        if self.tick_atualizado != tick:
+            raise RuntimeError(f"troca de tipo no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        novas = {}
+        for arv in self.arvores:
+            if arv["fruta"] in (x, y):
+                arv["fruta"] = y if arv["fruta"] == x else x
+                novas[arv["id"]] = arv["fruta"]
+        reg = {"tick": tick, "x": x, "y": y, "arvores": novas}
+        self.trocas_tipo.append(reg)
+        return reg
+
+    def parar_arvores(self, tipo: str, tick: int) -> dict:
+        """O J5, adendo 8 (A8.3, PJ8-1): no tick (o mundo ja atualizado ate ele), as arvores que dao `tipo` param de dar fruta ate o fim da
+        vida, e as frutas caidas delas que estao no chao (maduras ou podres) saem do mundo. As de outra origem (a fruta ao lado da racao, a
+        comida do dono) nunca saem. Os sorteios das quedas continuam (o fluxo `mundo-arvores` anda igual), so nada cai dessas arvores."""
+        if self.trocas_tipo is None:
+            raise PetQuePensaSemChave("parar arvores num Mundo sem a ConfigPetQuePensaMundo")
+        if tipo not in FRUTAS:
+            raise ValueError(f"parar arvores de tipo invalido: {tipo!r}")
+        if self.tick_atualizado != tick:
+            raise RuntimeError(f"parar arvores no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.paradas_arvores is None:
+            self.paradas_arvores = []
+        arvores = sorted(a["id"] for a in self.arvores if a["fruta"] == tipo)
+        for a in self.arvores:
+            if a["id"] in arvores:
+                a["parada"] = True
+        retiradas = sorted(c["id"] for c in self.comidas.values() if c["origem"] in arvores)
+        for i in retiradas:
+            del self.comidas[i]
+        reg = {"tick": tick, "tipo": tipo, "arvores": arvores, "retiradas": retiradas}
+        self.paradas_arvores.append(reg)
+        return reg
+
+    def troncos_perto(self, x: int, y: int) -> list[tuple]:
+        """(id, dx, dy, d) dos troncos a ate o raio da visao de (x, y), em ordem de d e id"""
+        perto = []
+        for arv in self.arvores:
+            dx, dy = arv["x"] - x, arv["y"] - y
+            d = distancia(dx, dy)
+            if d <= self.raio_visao:
+                perto.append((arv["id"], dx, dy, d))
+        perto.sort(key=lambda t: (t[3], t[0]))
+        return perto
+
+    # ------------------------------------------------------------ o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1)
+    def ligar_lance(self, cl: ConfigLanceDono) -> None:
+        """liga o registro dos lances e o fluxo proprio `dono-bola` (da semente do mundo: no grupo, o mundo e de todos e o lance tambem);
+        nenhum outro fluxo muda. No grupo, cada motor com a chave a liga: a segunda vez, com a mesma config, nao faz nada"""
+        if not isinstance(cl, ConfigLanceDono) or not cl.ligada:
+            raise ValueError(f"ligar_lance precisa da ConfigLanceDono ligada: {cl!r}")
+        if self.lances is not None:
+            if self.cld != cl:
+                raise ValueError(f"o lance ja esta ligado neste Mundo com outra ConfigLanceDono: {self.cld!r} x {cl!r}")
+            return
+        self.cld = cl
+        self.lances = []
+        self.rng_lance = random.Random(derivar_semente("dono-bola", self.semente))
+
+    def lancar_bola(self, px: int, py: int, tick: int) -> dict:
+        """o dono pega a bola onde ela estiver e a joga perto do pet em (px, py): a direcao (uma das 16) e a distancia (em celulas) saem do
+        fluxo `dono-bola`, e a bola cai parada em terra (a conta do `deixar_bola`). Devolve o lance registrado"""
+        if self.lances is None:
+            raise ValueError("lancar_bola sem a ConfigLanceDono ligada (ligar_lance)")
+        cm, cl = self.cmf, self.cld
+        de = self.bola_em(tick)
+        direcao = self.rng_lance.randrange(16)
+        celulas = self.rng_lance.randint(cl.lance_min_celulas, cl.lance_max_celulas)
+        x, y = self.em_terra(*deslocar(px, py, direcao, celulas * cm.sub, cm))
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        lance = {"tick": tick, "de": de, "pet": (px, py), "direcao": direcao, "celulas": celulas, "para": (x, y)}
+        self.lances.append(lance)
+        return lance
+
+    # ------------------------------------------------------------ o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secoes 3.2 e 3.3)
+    def ligar_sacudir(self, cs: ConfigSacudir) -> None:
+        """liga o galho (cheio, com o relogio parado), o registro das sacudidas e o fluxo proprio `arvore-sacode`, que so anda quando cai
+        uma fruta; nenhum outro fluxo muda"""
+        if not isinstance(cs, ConfigSacudir) or not cs.ligada:
+            raise SacudirSemChave(f"ligar_sacudir precisa da ConfigSacudir ligada: {cs!r}")
+        if self.galhos is not None:
+            raise RuntimeError("o sacudir ja esta ligado neste Mundo")
+        self.csa = cs
+        self.galhos = {a["id"]: {"no_galho": cs.galho_max, "repoe_em": None} for a in self.arvores}
+        self.sacudidas = []
+        self.rng_sacode = random.Random(derivar_semente("arvore-sacode", self.semente))
+
+    def galho_em(self, ident: str, tick: int) -> tuple[int, int | None]:
+        """Pura: (frutas no galho, o tick da proxima reposicao ou None) da arvore no tick. O galho abaixo do maximo repoe uma fruta a cada
+        `recarga_galho_min` ticks, contados da primeira fruta que saiu com ele cheio; cheio, o relogio para."""
+        if self.galhos is None:
+            raise SacudirSemChave("o galho so existe com a ConfigSacudir ligada")
+        g = self.galhos[ident]
+        n, prox = g["no_galho"], g["repoe_em"]
+        cs = self.csa
+        while prox is not None and tick >= prox:
+            n += 1
+            prox = prox + cs.recarga_galho_min if n < cs.galho_max else None
+        return n, prox
+
+    def sacudir(self, ident: str, tick: int) -> dict:
+        """O dono sacode a arvore `ident` no tick (o mundo ja atualizado ate ele). Com fruta no galho e lugar no chao (o teto de hoje,
+        `max_frutas_por_arvore` frutas da arvore no chao, maduras ou podres), cai uma fruta do tipo da arvore, madura, com a origem = o id
+        da arvore, num ponto sorteado como o da queda natural (direcao em 16 e distancia ate `raio_queda_celulas`, no fluxo
+        `arvore-sacode`). Sem fruta no galho, com o chao cheio ou com a arvore parada (o J5), nada cai e nada se sorteia. Devolve o registro
+        da sacudida (tambem em `sacudidas`)."""
+        if self.galhos is None:
+            raise SacudirSemChave("sacudir a arvore sem a ConfigSacudir ligada")
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"sacudir no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        arv = next((a for a in self.arvores if a["id"] == ident), None)
+        if arv is None:
+            raise ValueError(f"sacudir uma arvore que nao existe no layout {self.cmf.layout.nome!r}: {ident!r}")
+        cm = self.cmf
+        n, prox = self.galho_em(ident, tick)
+        no_chao = sum(1 for c in self.comidas.values() if c["origem"] == ident and self.situacao(c, tick) is not None)
+        reg = {"tick": tick, "arvore": ident, "no_galho_antes": n, "no_chao_antes": no_chao, "caiu": None}
+        if n == 0:
+            reg["motivo"] = "galho_vazio"
+        elif arv.get("parada"):
+            reg["motivo"] = "parada"
+        elif no_chao >= cm.max_frutas_por_arvore:
+            reg["motivo"] = "chao_cheio"
+        else:
+            rng = self.rng_sacode
+            x, y = deslocar(arv["x"], arv["y"], rng.randrange(16), rng.randrange(cm.raio_queda_celulas * cm.sub + 1), cm)
+            c = self.nova_comida(arv["fruta"], x, y, tick, ident)
+            if prox is None:                       # o galho estava cheio: o relogio comeca agora
+                prox = tick + self.csa.recarga_galho_min
+            n -= 1
+            reg.update(motivo="caiu", caiu=c["id"], x=c["x"], y=c["y"], tipo=arv["fruta"])     # onde a fruta ficou (a agua, IA1)
+        self.galhos[ident] = {"no_galho": n, "repoe_em": prox}
+        self.sacudidas.append(reg)
+        return reg
+
+    # ------------------------------------------------------------ a TV (GOSTO_VISUAL, P1c)
+    def ligar_tv(self, ctv: ConfigTV) -> None:
+        """liga a TV no centro da celula `ctv.celula` (dentro do mapa e em terra; falha alto fora) e, na fonte "grade", o fluxo proprio
+        `tv-programas`; nenhum outro fluxo muda"""
+        if not isinstance(ctv, ConfigTV) or not ctv.ligada:
+            raise TVSemChave(f"ligar_tv precisa da ConfigTV ligada: {ctv!r}")
+        if self.tv is not None:
+            raise RuntimeError("a TV ja esta ligada neste Mundo")
+        cm = self.cmf
+        cx, cy = ctv.celula
+        if not (cx < cm.celulas_x and cy < cm.celulas_y):
+            raise ValueError(f"a celula da TV {ctv.celula} fora do mapa ({cm.celulas_x} x {cm.celulas_y})")
+        x, y = centro_da_celula(ctv.celula, cm)
+        if not self.seca(x, y):
+            raise ValueError(f"a celula da TV {ctv.celula} e agua")
+        self.tv = TV(ctv, self.semente, x, y)
+
+    # ------------------------------------------------------------ o banheiro
+    def ligar_necessidades(self) -> None:
+        """Chamado pelo motor com o banheiro (todos os pets do mundo com ele chamam; a segunda vez nao faz nada)."""
+        if self.necessidades is None:
+            self.necessidades = {}
+
+    def deixar_necessidade(self, x: int, y: int, tick: int) -> dict:
+        """A necessidade que fica no chao, onde o pet aliviou (o limpador nao a recolheu)."""
+        if self.necessidades is None:
+            raise BanheiroSemMundo("necessidade num Mundo sem o banheiro ligado")
+        if no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"necessidade fora do mapa: ({x}, {y})")
+        x, y = self.em_terra(x, y)
+        n = {"id": self.prox_necessidade, "x": x, "y": y, "tick": tick}
+        self.prox_necessidade += 1
+        self.necessidades[n["id"]] = n
+        return n
+
+    def recolher_necessidades(self, ids: list[int], tick: int, como: str) -> None:
+        """As necessidades `ids` saem do chao (o `limpar` do dono); a que nao esta no chao falha alto (KeyError)."""
+        for i in ids:
+            n = self.necessidades.pop(i)
+            self.recolhidas.append({**n, "recolhida_em": tick, "como": como})
+
+    # ------------------------------------------------------------ a comida e a bola no tempo
+    def prazo_maduro(self, tipo: str) -> int:
+        return self.cmf.maduro_racao_min if tipo == "racao" else self.cmf.maduro_fruta_min
+
+    def situacao(self, comida: dict, tick: int) -> str | None:
+        """`madura`, `podre`, ou None (sumiu), pela idade (secao 6)"""
+        idade = tick - comida["tick_posta"]
+        m = self.prazo_maduro(comida["tipo"])
+        if idade < m:
+            return "madura"
+        if idade < m + self.cmf.prazo_podre_min:
+            return "podre"
+        return None
+
+    def bola_em(self, tick: int) -> tuple[int, int]:
+        """a bola anda `atrito` subunidades por tick ate parar no ponto final"""
+        b = self.bola
+        if b["d"] == 0 or tick >= b["t0"] + -(-b["d"] // self.cmf.atrito):
+            return b["x1"], b["y1"]
+        andou = self.cmf.atrito * (tick - b["t0"])
+        return b["x0"] + div_arred((b["x1"] - b["x0"]) * andou, b["d"]), b["y0"] + div_arred((b["y1"] - b["y0"]) * andou, b["d"])
+
+    def nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
+        x, y = self.em_terra(x, y)                 # a agua (IA1): a comida que cairia na agua fica na terra mais perto
+        c = {"id": self.prox_id, "tipo": tipo, "x": x, "y": y, "tick_posta": tick, "origem": origem}
+        self.prox_id += 1
+        self.comidas[c["id"]] = c
+        return c
+
+    def _remover_sumidas(self, tick: int) -> None:
+        for c in [c for c in self.comidas.values() if self.situacao(c, tick) is None]:
+            del self.comidas[c["id"]]
+            fim = c["tick_posta"] + self.prazo_maduro(c["tipo"]) + self.cmf.prazo_podre_min
+            self.sumidas.append({**c, "sumiu_em": fim})
+
+    def atualizar(self, tick: int) -> None:
+        """os passos do mundo ate o tick (secao 6): em cada um, cada arvore fora da recarga sorteia a queda no fluxo `mundo-arvores`.
+        Os sorteios nao dependem do pet; so quantas frutas cabem no chao dependem (o excesso nao cai). Idempotente por tick: no mesmo
+        tick nao faz nada (quem decide primeiro dispara), e um tick para tras falha alto."""
+        if self.tick_atualizado is not None:
+            if tick < self.tick_atualizado:
+                raise ValueError(f"o mundo nao volta no tempo: atualizado ate o tick {self.tick_atualizado}, pedido o {tick}")
+            if tick == self.tick_atualizado:
+                return
+        cm, rng = self.cmf, self.rng_arvores
+        ate = tick // cm.passo_mundo_ticks
+        while self.passo_mundo < ate:
+            self.passo_mundo += 1
+            tk = self.passo_mundo * cm.passo_mundo_ticks
+            for arv in self.arvores:
+                if tk < arv["recarga_ate"]:
+                    continue
+                if rng.random() >= arv["p"]:
+                    continue
+                n = rng.randint(cm.frutas_por_queda_min, cm.frutas_por_queda_max)
+                pontos = [deslocar(arv["x"], arv["y"], rng.randrange(16), rng.randrange(cm.raio_queda_celulas * cm.sub + 1), cm)
+                          for _ in range(n)]
+                no_chao = sum(1 for c in self.comidas.values()
+                              if c["origem"] == arv["id"] and self.situacao(c, tk) is not None)
+                cabem = 0 if arv.get("parada") else max(0, cm.max_frutas_por_arvore - no_chao)
+                ids = [self.nova_comida(arv["fruta"], x, y, tk, arv["id"])["id"] for x, y in pontos[:cabem]]
+                self.quedas.append({"tick": tk, "arvore": arv["id"], "sorteadas": n, "pontos": pontos, "colocadas": ids})
+                arv["recarga_ate"] = tk + cm.recarga_min
+        self._remover_sumidas(tick)
+        self.tick_atualizado = tick
+
+    # ------------------------------------------------------------ percepcao
+    def fontes_de_cheiro(self, tick: int) -> list[tuple[int, int, int]]:
+        cm = self.cmf
+        return [(c["x"], c["y"], cm.cheiro_racao if c["tipo"] == "racao" else cm.cheiro_fruta)
+                for c in self.comidas.values() if self.situacao(c, tick) == "madura"]
+
+    def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None, troncos: bool = False,
+                 cheiro: bool = True, contrato: tuple | None = None) -> PercepcaoMundo:
+        """Pura (nao sorteia nem muda nada): o que um pet em (x, y) percebe agora (MF-3); `alvo_pendente` e o do pet. `troncos` (o J5):
+        os troncos a vista entram na percepcao. `cheiro` False (o orgao do Olfato da comida, dois pets, secao 5.6; G-SEM-DIRECAO): o
+        cheiro e a direcao do cheiro nem sao calculados e ficam 0; o pet so sente o cheiro pelos receptores do corpo. `contrato` (a P4,
+        com a chave `sensores`): (orientacao, cos_meio, opacos, quadrados dos troncos); os vistos e os troncos passam pelo cone e pela
+        oclusao (o tronco nao tapa a si mesmo), e a percepcao sai como PercepcaoContrato."""
+        def ve(ox: int, oy: int, proprio=None) -> bool:
+            if contrato is None:
+                return True
+            orientacao, cos_meio, opacos, _q = contrato
+            return ct.visivel(x, y, ox, oy, orientacao, self.raio_visao, cos_meio, tuple(o for o in opacos if o is not proprio))
+        vistos = []
+        for c in self.comidas.values():
+            sit = self.situacao(c, tick)
+            if sit is None:
+                continue
+            dx, dy = c["x"] - x, c["y"] - y
+            d = distancia(dx, dy)
+            if d <= self.raio_visao and ve(c["x"], c["y"]):
+                vistos.append((c["id"], c["tipo"] if sit == "madura" else c["tipo"] + "_podre", dx, dy, d))
+        bx, by = self.bola_em(tick)
+        d = distancia(bx - x, by - y)
+        if d <= self.raio_visao and ve(bx, by):
+            vistos.append((ID_BOLA, "bola", bx - x, by - y, d))
+        vistos.sort(key=lambda v: (v[4], v[1], v[0]))
+        intensidade, direcao = direcao_do_cheiro(x, y, self.fontes_de_cheiro(tick), self.cmf) if cheiro else (0, 0)
+        p = PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), intensidade, direcao, alvo_pendente)
+        if contrato is not None:
+            quadrados = contrato[3]
+            p = PercepcaoContrato(**{**p.__dict__, "orientacao": contrato[0]})
+            if troncos:
+                return replace(p, troncos=tuple(t for t in self.troncos_perto(x, y)
+                                                if ve(x + t[1], y + t[2], quadrados.get(t[0]))))
+            return p
+        return replace(p, troncos=tuple(self.troncos_perto(x, y))) if troncos else p
+
+    def maduras_perto(self, x: int, y: int, tick: int, raio: int) -> list[tuple[int, str, int]]:
+        """as comidas maduras a ate `raio` de (x, y), em (distancia, tipo, id), da mais perto (o "achou e comeu" do explorar, MF-1)"""
+        perto = sorted((distancia(c["x"] - x, c["y"] - y), c["tipo"], c["id"]) for c in self.comidas.values()
+                       if self.situacao(c, tick) == "madura")
+        return [p for p in perto if p[0] <= raio]
+
+    # ------------------------------------------------------------ o que muda o mundo
+    def retirar_comida(self, ident: int) -> dict:
+        """a comida sai do chao (alguem a comeu); a que nao esta no chao falha alto (KeyError)"""
+        return self.comidas.pop(ident)
+
+    def rolar_bola(self, tick: int, de: tuple[int, int] | None = None) -> dict:
+        """alguem brincou com a bola: ela rola do ponto em que esta, no fluxo `mundo-bola` (vai mais longe no campo). Com `de` (a posicao
+        de quem bateu; ConfigBolaNoGolpe), a direcao e a do golpe; o sorteio dela fica no fluxo, e a distancia sai a mesma"""
+        cm = self.cmf
+        bx, by = self.bola_em(tick)
+        sorteada = self.rng_bola.randrange(16)
+        golpe = None if de is None else direcao_do_golpe(de[0], de[1], bx, by)
+        direcao = sorteada if golpe is None else golpe
+        celulas = self.rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
+        if cm.layout.regioes[regiao_de(bx, cm)][0] == "campo":
+            celulas *= cm.mult_bola_campo
+        x1, y1 = self.rolagem_seca(bx, by, *deslocar(bx, by, direcao, celulas * cm.sub, cm))    # a agua (IA1): a bola para na margem
+        self.bola = {"x0": bx, "y0": by, "x1": x1, "y1": y1, "t0": tick, "d": distancia(x1 - bx, y1 - by)}
+        rolagem = {"tick": tick, "de": (bx, by), "para": (x1, y1), "direcao": direcao, "celulas": celulas}
+        self.rolagens.append(rolagem)
+        return rolagem
+
+    def deixar_comida(self, tipo: str, x: int, y: int, tick: int) -> dict:
+        """a comida que o dono deixa (origem `dono`); tipo desconhecido ou posicao fora do mapa falha alto"""
+        if tipo not in TIPOS_COMIDA_MUNDO or no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"deixar_comida invalido: {tipo!r} ({x}, {y})")
+        return self.nova_comida(tipo, x, y, tick, "dono")
+
+    def deixar_fruta_ao_lado(self, tipo: str, x: int, y: int, tick: int) -> dict:
+        """a fruta que o dono poe ao lado da racao (ConfigFrutaAoLado), com a origem `dono_ao_lado`; so fruta, dentro do mapa"""
+        if tipo not in FRUTAS or no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"deixar_fruta invalido: {tipo!r} ({x}, {y})")
+        return self.nova_comida(tipo, x, y, tick, ORIGEM_AO_LADO)
+
+    def deixar_bola(self, x: int, y: int, tick: int) -> None:
+        """o dono poe a bola parada em (x, y); fora do mapa falha alto"""
+        if no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"deixar_bola fora do mapa: ({x}, {y})")
+        x, y = self.em_terra(x, y)
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.bolas_deixadas.append({"tick": tick, "x": x, "y": y})
+
+    # ------------------------------------------------------------ leitura
+    def resumo(self) -> dict:
+        """tudo o que o mundo guarda (sem o que e do pet)"""
+        return {"bola": dict(self.bola), "comidas": [dict(c) for c in self.comidas.values()], "prox_id": self.prox_id,
+                "passo_mundo": self.passo_mundo, "tick_atualizado": self.tick_atualizado, "arvores": [dict(a) for a in self.arvores],
+                "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
+                "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
+                **({} if self.troca_ilha is None else {"troca_ilha": self.troca_ilha}),
+                **({} if self.troca_maior is None else {"troca_maior": self.troca_maior}),
+                **({} if self.necessidades is None else {
+                    "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
+                    "recolhidas": self.recolhidas}),
+                **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo}),
+                **({} if self.paradas_arvores is None else {"paradas_arvores": self.paradas_arvores}),
+                **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}}),
+                **({} if self.galhos is None else {"galhos": {i: dict(g) for i, g in self.galhos.items()}, "sacudidas": self.sacudidas,
+                                                   "rng_sacode": self.rng_sacode.getstate()}),
+                **({} if self.lances is None else {"lances": self.lances, "rng_lance": self.rng_lance.getstate()})}
+
+
+# ================================================================== o motor
+class MotorMundo(MotorFrutas):
+    """O motor de um pet no mundo fisico. Ligado, e dono do proprio `Mundo` (`self.mundo`, com a semente do pet): o que e do mundo
+    (arvores, comidas, bola, quedas, sumidas, rolagens, bolas deixadas e os fluxos `mundo-arvores` e `mundo-bola`) mora nele, e os
+    atributos de antes (`comidas`, `arvores`, `bola_mundo`, `quedas`...) leem de la. O que e do pet fica aqui: a posicao, o alvo pendente,
+    a percepcao da decisao, os fluxos `alvo` e `mundo-sujeira` e os registros do pet (consumos, decisoes, regioes, visitas, comidas
+    deixadas pelo dono)."""
+
+    def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
+                 entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
+                 cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
+                 cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
+                 cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
+                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None,
+                 cfg_tv_jogo: ConfigTVJogo | None = None, cfg_lance_dono: ConfigLanceDono | None = None,
+                 cfg_orgao: ConfigOrgao | None = None, **kw) -> None:
+        super().__init__(*a, **kw)
+        # o orgao da visao (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md): so com a TV ligada e um pet so; desligado, nada muda
+        self.cor = cfg_orgao or CONFIG_ORGAO
+        if not isinstance(self.cor, ConfigOrgao):
+            raise TypeError(f"cfg_orgao e uma ConfigOrgao: {self.cor!r}")
+        self.cld = cfg_lance_dono or CONFIG_LANCE_DONO
+        if not isinstance(self.cld, ConfigLanceDono):
+            raise TypeError(f"cfg_lance_dono e uma ConfigLanceDono: {self.cld!r}")
+        self.ctv = cfg_tv or CONFIG_TV
+        if not isinstance(self.ctv, ConfigTV):
+            raise TypeError(f"cfg_tv e uma ConfigTV: {self.ctv!r}")
+        # a TV no jogo (as decisoes A e D, D-GV-TVJOGO): so com a TV ligada; desligada, nada muda
+        self.ctj = cfg_tv_jogo or CONFIG_TVJOGO
+        if not isinstance(self.ctj, ConfigTVJogo):
+            raise TypeError(f"cfg_tv_jogo e uma ConfigTVJogo: {self.ctj!r}")
+        if self.ctj.ligada and not self.ctv.ligada:
+            raise TVSemChave("a ConfigTVJogo (a TV desligada e o ir ate a TV) exige a ConfigTV ligada")
+        if self.ctj.desligar and self.ctv.fonte != "evento":
+            raise TVSemChave("a TV desligada (ConfigTVJogo.desligar) e do modo livre gravado (a fonte \"evento\")")
+        self.csa = cfg_sacudir or CONFIG_SACUDIR
+        if not isinstance(self.csa, ConfigSacudir):
+            raise TypeError(f"cfg_sacudir e uma ConfigSacudir: {self.csa!r}")
+        self.cfc = cfg_fruta_comida or CONFIG_FRUTA_COMO_COMIDA
+        if not isinstance(self.cfc, ConfigFrutaComoComida):
+            raise TypeError(f"cfg_fruta_comida e uma ConfigFrutaComoComida: {self.cfc!r}")
+        self.cct = cfg_contrato or CONFIG_CONTRATO
+        if not isinstance(self.cct, ConfigContrato):
+            raise TypeError(f"cfg_contrato e uma ConfigContrato: {self.cct!r}")
+        self.cmf = cfg_mundo or CONFIG_MUNDO
+        self.cbh = cfg_banheiro or CONFIG_BANHEIRO
+        self.cpq = cfg_pqp or CONFIG_PQP_MUNDO
+        self.cpal = cfg_paladar or CONFIG_PALADAR
+        if not isinstance(self.cpal, ConfigPaladar):
+            raise TypeError(f"cfg_paladar e uma ConfigPaladar: {self.cpal!r}")
+        self.cfal = cfg_fruta_ao_lado or CONFIG_FRUTA_AO_LADO
+        if not isinstance(self.cfal, ConfigFrutaAoLado):
+            raise TypeError(f"cfg_fruta_ao_lado e uma ConfigFrutaAoLado: {self.cfal!r}")
+        self.cdc = cfg_decisao_comida or CONFIG_DECISAO_NA_COMIDA
+        if not isinstance(self.cdc, ConfigDecisaoNaComida):
+            raise TypeError(f"cfg_decisao_comida e uma ConfigDecisaoNaComida: {self.cdc!r}")
+        self.cbg = cfg_bola_golpe or CONFIG_BOLA_NO_GOLPE
+        if not isinstance(self.cbg, ConfigBolaNoGolpe):
+            raise TypeError(f"cfg_bola_golpe e uma ConfigBolaNoGolpe: {self.cbg!r}")
+        if not self.cmf.ligada:
+            if efeito_frutas is not None or mundo is not None or entrada_mundo:
+                raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
+            if self.cbh.ligada:
+                raise BanheiroSemMundo("o banheiro exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cpq.ligada:
+                raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cpal.ligada:
+                raise ValueError("o Paladar (ConfigPaladar) exige o mundo fisico (ConfigMundo.ligada): os perfis sao das comidas do mapa")
+            if self.cfal.ligada:
+                raise ValueError("a fruta ao lado (ConfigFrutaAoLado) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cct.ligada:
+                raise ValueError("o contrato da P4 (ConfigContrato) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cdc.ligada:
+                raise ValueError("a decisao na comida (ConfigDecisaoNaComida) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cbg.ligada:
+                raise ValueError("a bola no golpe (ConfigBolaNoGolpe) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.csa.ligada:
+                raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cfc.ligada:
+                raise ValueError("a fruta do mundo como comida (ConfigFrutaComoComida) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.ctv.ligada:
+                raise TVSemChave("a TV (ConfigTV) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cld.ligada:
+                raise ValueError("o lance do dono (ConfigLanceDono) exige o mundo fisico (ConfigMundo.ligada)")
+            return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
+        if self.cf.ligada or self.cb.ligada:
+            raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
+        if self.ce.ligada or self.cl.ligada:
+            raise ValueError("o mundo minimo roda sem educacao e sem lesoes (a morte fica desligada, plano secao 2)")
+        efeito = {f: 0.0 for f in FRUTAS} if efeito_frutas is None else dict(efeito_frutas)
+        if set(efeito) != set(FRUTAS):
+            raise ValueError(f"efeito_frutas precisa de {FRUTAS}: {sorted(efeito)}")
+        self.efeito_frutas = efeito
+        cm, sub = self.cmf, self.cmf.sub
+        self._alcance = cm.velocidade * self.cfg.intervalo_decisao_ticks
+        self._raio_pegar = cm.raio_pegar_celulas * sub
+        self._raio_visao = cm.raio_visao_celulas * sub
+        self._raio_mancha = cm.raio_mancha_celulas * sub
+        semente = self.semente
+        if mundo is None:
+            if entrada_mundo:
+                raise ValueError("entrada_mundo so com um Mundo dado (o do grupo)")
+            self.mundo = Mundo(cm, semente, arvores_na_casa=True) if self.csa.ligada else Mundo(cm, semente)   # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+        else:                                         # no grupo (digilab/grupo.py): o mundo e de todos, e o pet entra num tick dele
+            if not isinstance(mundo, Mundo) or mundo.cmf != cm:
+                raise ValueError("o Mundo dado tem de ser um Mundo com a mesma ConfigMundo do motor")
+            if type(entrada_mundo) is not int or entrada_mundo < 0 or entrada_mundo % TICKS_POR_DIA:
+                raise ValueError(f"entrada_mundo tem de ser um inicio de dia do mundo (multiplo de {TICKS_POR_DIA}): {entrada_mundo!r}")
+            self.mundo = mundo
+        # o relogio do pet (o Estado, o log, o corpo) comeca em 0 na entrada; o do mundo e o do pet mais a entrada. Os metodos do motor
+        # recebem o tick do pet; o Mundo e os registros do mundo fisico usam o do mundo. Com a entrada no inicio do dia, a hora do dia
+        # e a mesma nos dois relogios.
+        self.entrada_mundo = entrada_mundo
+        self._rng_sujeira = random.Random(derivar_semente("mundo-sujeira", semente))
+        self._rng_alvo = random.Random(derivar_semente("alvo", semente))
+        self.pet = self.mundo.ninho
+        self._pendente: dict | None = None             # {"acao", "alvo"}: o alvo que ficou sem chegar
+        self._fome_antes = 0.0
+        self._percepcao: PercepcaoMundo | None = None
+        self._obs_decisao: Observacao | None = None
+        self._manchas_abertas: dict[str, dict] = {}
+        # os registros do pet (derivados; o replay reconstroi tudo)
+        self.consumos_mundo: list[dict] = []
+        self.deixadas: list[dict] = []
+        self.levadas: list[dict] = []           # cada vez que o dono levou o pet (levar_pet): tick, de, o ponto pedido e onde ele caiu
+        # o parceiro gravado (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.2): so a bancada o liga, por `aceitar_ponto_gravado`; desligado, nada muda
+        self._ponto_gravado = False
+        self.decisoes_mundo: list[dict] = []
+        self.regioes: list[dict] = []
+        self.visitas: list[dict] = []
+        if self.cbh.ligada:
+            # o banheiro (secao 2): exige o corpo na frente (a vontade e do corpo); o MotorCorpo confere a sub-chave `banheiro`
+            from .motor_corpo import MotorCorpo
+            if not isinstance(self, MotorCorpo):
+                raise BanheiroSemMundo("o banheiro exige o corpo na frente do motor (com_corpo(MotorMundo)) com a sub-chave banheiro")
+            faixa_do_banheiro(self.cbh, cm)                # o retangulo no mapa e dentro da casa (falha alto)
+            self.mundo.ligar_necessidades()
+            self.alivios: list[dict] = []              # o contrato da bancada: tick, dentro, urgente, alvo, distancia, recolhido
+            self.recolhas: list[dict] = []             # o limpar do dono: tick, zona, ids recolhidos
+            self.alivios_dentro = 0
+            self.idas_banheiro: list[dict] = []        # a continuacao: cada aliviar com o alvo `banheiro` que segurou a vontade
+
+        # dois pets, etapa 3: o grupo e o id do pet nele (o Grupo poe na entrada); fora do grupo, nada disto e usado e a vida e a de hoje
+        if self.cfal.ligada:
+            # a fruta ao lado da racao (RP-2 do paladar): so com um pet, fora do grupo (o registro do grupo nao tem o evento)
+            if mundo is not None:
+                raise ValueError("a fruta ao lado (ConfigFrutaAoLado) roda com um pet, fora do grupo")
+            self.frutas_ao_lado: list[dict] = []        # cada fruta posta: tick, id, tipo, x, y, a racao de referencia
+        if self.cpq.ligada:
+            # o J5 (TAREFA_V2_PET_QUE_PENSA, secao 2.3): so com um pet (o grupo nao tem a mao nem a troca)
+            if mundo is not None:
+                raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) roda com um pet, fora do grupo")
+            self.troncos_vistos: dict[str, int] = {}     # id -> o primeiro tick do mundo em que o pet viu o tronco
+            self.mundo.ligar_trocas()
+
+        if self.csa.ligada:
+            # o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, S1): so com um pet, fora do grupo (o registro do grupo nao tem o evento)
+            if mundo is not None:
+                raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) roda com um pet, fora do grupo")
+            self.mundo.ligar_sacudir(self.csa)
+
+        if self.ctv.ligada:
+            # a TV (GOSTO_VISUAL, P1c): com o corpo na frente (o MotorCorpo confere a ConfigTela); com um pet, o motor a liga. No grupo (a
+            # decisao B, D-GV-TVJOGO), a TV e do mundo comum: o Grupo a liga (Grupo(cfg_tv=)), e o motor so confere que e a mesma config
+            from .motor_corpo import MotorCorpo
+            if not isinstance(self, MotorCorpo):
+                raise TVSemChave("a TV exige o corpo na frente do motor (com_corpo(MotorMundo)) com a ConfigTela ligada")
+            if mundo is None:
+                self.mundo.ligar_tv(self.ctv)
+                if self.cor.ligada:                 # o orgao da visao (OV2): os conceitos da TV, pela rng propria `tv-conceitos`
+                    self.mundo.tv.ligar_orgao(self.cor, self.semente)
+            elif self.mundo.tv is None or self.mundo.tv.cfg != self.ctv:
+                raise TVSemChave("a TV (ConfigTV) no grupo e do mundo comum: o Grupo a liga com a mesma ConfigTV (Grupo(cfg_tv=))")
+        if self.cor.ligada and (not self.ctv.ligada or mundo is not None):
+            raise TVSemChave("o orgao da visao (ConfigOrgao) exige a TV ligada e um pet so (o grupo fica fora da primeira versao)")
+
+        self._lance_tick: int | None = None       # o lance do dono (BB-4): o tick do pet do ultimo lance deste pet (None: nenhum)
+        if self.cld.ligada:
+            # o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1): o registro e o fluxo `dono-bola` moram no Mundo (no grupo, o de todos)
+            self.mundo.ligar_lance(self.cld)
+
+        if self.cct.ligada:
+            # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o cone nem as paredes). A
+            # excecao (TAREFA_V3_COOPERACAO, CO4a): o controlador sozinho, o da ilha com agua (CONFIG_CONTRATO_AGUA), vale no grupo; cada
+            # pet anda pelo dele, contra a agua do mundo partilhado
+            if mundo is not None and (self.cct.sensores or self.cct.paredes):
+                raise ValueError("o contrato da P4 (ConfigContrato) roda com um pet, fora do grupo; no grupo, so o controlador (a agua)")
+            self._montar_contrato()
+
+        if self.mundo.secas is not None:
+            # a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): quem desvia dela e o controlador do contrato; o banheiro anda em linha reta
+            if not self.cct.controlador:
+                raise ValueError("o layout com agua exige o controlador do contrato (ConfigContrato.controlador)")
+            if self.cbh.ligada:
+                raise ValueError("o layout com agua nao roda com o banheiro (o aliviar anda em linha reta)")
+
+        self._grupo = None
+        self.ident: str | None = None
+        self._social: PercepcaoSocial | None = None     # a percepcao social da decisao (None sozinho)
+        self._cands_sociais: dict[Alvo, str] = {}       # o candidato social da decisao -> o id do outro
+        self._pendente_antes: dict | None = None        # o alvo pendente com que a decisao comecou (a disputa)
+        self._tick_social: dict | None = None           # o que o grupo le no fim do tick (partida, alvo, quem seguiu, o que comeu)
+        self._viu_comer: dict[str, tuple] = {}          # a memoria da visao: {id: (x, y, tick)} do ultimo consumo visto de cada outro
+        self._toques: dict[str, tuple] = {}             # a memoria do toque: {id: (tipo, direcao, tick)} do ultimo contato com cada outro
+        # dois pets, etapa 8 (o degrau 1b): a direcao do ultimo passo (0 a 15 na DIR16), acompanhada so com a ConfigSentidos ligada no grupo
+        # ou com o orgao do Olfato ou da Audicao no corpo (que a pede na primeira leitura); a caixa dos sons ouvidos desde a decisao
+        # anterior (esvaziada a cada decisao) e o estimulo dos ouvidos do orgao, por tick (o tick do mundo em que o som entra no passo)
+        self._passo: int | None = None
+        self._olfato_anterior: tuple[int, ...] | None = None      # o orgao do Olfato da comida: a leitura da decisao anterior
+        self._sons_ouvidos: list[tuple] = []
+        self._sons_orgao: list[tuple] = []
+        # os registros sociais do pet (as medidas; derivados, o replay refaz)
+        self.vistos_comer: list[dict] = []
+        self.idas_onde_comeu: list[dict] = []
+        self.a_vista: dict[str, int] = {}               # decisoes com cada outro a vista
+        self.decisoes_no_grupo = 0                      # decisoes com outro pet presente
+        self.politica = _PoliticaComMundo(self.politica, self)
+
+    # ------------------------------------------------------------ a P4: o contrato sensorio-motor (ConfigContrato)
+    def _montar_contrato(self) -> None:
+        """Os solidos do contrato: as paredes na borda do mapa (so com a chave `paredes`; solidas e opacas) e os quadrados dos troncos (com a
+        chave `sensores`; opacos, sem colisao, P4-4). A orientacao do pet comeca no setor 0, como no POC."""
+        cc, cm = self.cct, self.cmf
+        largura, altura, e = cm.celulas_x * cm.sub, cm.celulas_y * cm.sub, cc.espessura_parede
+        paredes = ()
+        if cc.paredes:
+            paredes = (ct.Solido(-e, -e, largura + e, 0, "parede", True, True), ct.Solido(-e, altura, largura + e, altura + e, "parede", True, True),
+                       ct.Solido(-e, 0, 0, altura, "parede", True, True), ct.Solido(largura, 0, largura + e, altura, "parede", True, True))
+        meio = cc.lado_tronco // 2
+        self._quadrados_troncos = {a["id"]: ct.Solido(a["x"] - meio, a["y"] - meio, a["x"] - meio + cc.lado_tronco,
+                                                      a["y"] - meio + cc.lado_tronco, "tronco", False, True)
+                                   for a in self.mundo.arvores} if cc.sensores else {}
+        self._solidos = paredes + solidos_da_agua(cm)             # os que colidem (o controlador e os bigodes); a agua, IA1
+        self._opacos = paredes + tuple(self._quadrados_troncos.values())
+        self.orientacao = 0
+        self.contrato_decisoes: list[dict] = []                   # por decisao com alvo: o que o controlador e os sensores registraram
+
+    def _contrato_da_percepcao(self) -> tuple | None:
+        if not self.cct.sensores:
+            return None
+        return (self.orientacao, self.cct.cos_meio_cone, self._opacos, self._quadrados_troncos)
+
+    # ------------------------------------------------------------ o que e do mundo (lido do Mundo)
+    @property
+    def comidas(self) -> dict[int, dict]:
+        return self.mundo.comidas
+
+    @property
+    def arvores(self) -> list[dict]:
+        return self.mundo.arvores
+
+    @property
+    def bola_mundo(self) -> dict:
+        return self.mundo.bola
+
+    @property
+    def comedouro(self) -> tuple[int, int]:
+        return self.mundo.comedouro
+
+    @property
+    def quedas(self) -> list[dict]:
+        return self.mundo.quedas
+
+    @property
+    def sumidas(self) -> list[dict]:
+        return self.mundo.sumidas
+
+    @property
+    def rolagens(self) -> list[dict]:
+        return self.mundo.rolagens
+
+    @property
+    def bolas_deixadas(self) -> list[dict]:
+        return self.mundo.bolas_deixadas
+
+    @property
+    def _rng_arvores(self) -> random.Random:
+        return self.mundo.rng_arvores
+
+    @property
+    def _rng_bola(self) -> random.Random:
+        return self.mundo.rng_bola
+
+    @property
+    def _prox_id(self) -> int:
+        return self.mundo.prox_id
+
+    @property
+    def _passo_mundo(self) -> int:
+        return self.mundo.passo_mundo
+
+    def _tm(self, tick: int) -> int:
+        """o tick do pet no relogio do mundo"""
+        return tick + self.entrada_mundo
+
+    def _prazo_maduro(self, tipo: str) -> int:
+        return self.mundo.prazo_maduro(tipo)
+
+    def situacao(self, comida: dict, tick: int) -> str | None:
+        return self.mundo.situacao(comida, self._tm(tick))
+
+    def bola_em(self, tick: int) -> tuple[int, int]:
+        return self.mundo.bola_em(self._tm(tick))
+
+    def _nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
+        return self.mundo.nova_comida(tipo, x, y, self._tm(tick), origem)
+
+    def _atualizar_mundo(self, tick: int) -> None:
+        self.mundo.atualizar(self._tm(tick))
+
+    def _fontes_de_cheiro(self, tick: int) -> list[tuple[int, int, int]]:
+        return self.mundo.fontes_de_cheiro(self._tm(tick))
+
+    # ------------------------------------------------------------ percepcao
+    def _perceber(self, tick: int) -> PercepcaoMundo:
+        """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
+        x, y = self.pet
+        pend = self._pendente["alvo"].tipo if self._pendente is not None else None
+        return self.mundo.perceber(x, y, self._tm(tick), pend, troncos=self.cpq.ligada, cheiro=not self._olfato_comida(),
+                                   contrato=self._contrato_da_percepcao())
+
+    def _observacao_depois_mundo(self) -> Observacao:
+        """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
+        return replace(Observacao.de_estado(self._estado), mundo=self._perceber(self._estado.tick), social=self.percepcao_social())
+
+    def percepcao_social(self) -> "PercepcaoSocial | None":
+        """o que o pet percebe dos outros agora (None fora do grupo, ou sozinho nele)"""
+        return None if self._grupo is None else self._grupo.perceber_social(self.ident)
+
+    def _antes_da_decisao(self) -> PercepcaoMundo:
+        """Chamado pelo embrulho logo antes de `agir`: o mundo anda ate o tick (uma vez por tick) e o pet percebe."""
+        t = self._estado.tick
+        self.mundo.atualizar(self._tm(t))
+        self._percepcao = self._perceber(t)
+        self._fome_antes = self._estado.fome
+        if self._olfato_comida() or self._olfato_outro() or self._audicao():
+            self._ligar_propriocepcao()                     # os orgaos usam a direcao do ultimo passo (5.6), venha de onde vier o estimulo
+        if self.cpq.ligada:
+            self._ver_troncos(self._percepcao.troncos, self._tm(t))
+        if self.cld.ligada:                                 # o lance do dono (BB-4): o convite, ao cerebro que tem o gancho (o A nao tem)
+            convite = getattr(self._pm_cerebro(), "bola_do_dono", None)
+            if convite is not None:
+                convite(self.convite_ativo())
+        if self._tv_ligada():                               # a TV (P1d): as TVs a vista, ao cerebro que tem o gancho `ver_tela`
+            ver = getattr(self._pm_cerebro(), "ver_tela", None)
+            if ver is not None:
+                ver(self._linhas_tela())
+            if self.cor.ligada:                             # o orgao (OV2): o que o pet ve na TV que olha, ao cerebro que tem o gancho
+                ver_c = getattr(self._pm_cerebro(), "ver_conceitos", None)
+                if ver_c is not None:
+                    ver_c(self._conceitos_da_tela())
+        if self._grupo is not None:
+            self._social = self.percepcao_social()
+            if self._grupo.cs.ligada:
+                self._sons_ouvidos = []                     # os sons desde a decisao anterior ja estao na percepcao desta
+            self._pendente_antes = self._pendente
+            self._cands_sociais = {}
+            if self._social is not None:
+                self.decisoes_no_grupo += 1
+                for ident, *_ in self._social.outros:
+                    self.a_vista[ident] = self.a_vista.get(ident, 0) + 1
+        return self._percepcao
+
+    def convite_ativo(self) -> bool:
+        """o lance do dono (BB-4): o tick do pet esta na janela do convite, de `janela_convite_ticks` ticks a partir do ultimo lance?"""
+        if not self.cld.ligada:
+            raise ValueError("convite_ativo sem a ConfigLanceDono ligada")
+        t = self._estado.tick
+        return self._lance_tick is not None and 0 <= t - self._lance_tick < self.cld.janela_convite_ticks
+
+    def _intensidades_do_orgao(self) -> dict[str, int]:
+        """O lado do mundo dos orgaos do Olfato e da Audicao (dois pets, secao 5.6; DP-13 e DP-14), pedido pelo MotorCorpo antes de cada tick
+        e de cada percepcao: por receptor de orgao do corpo, a intensidade no ponto da narina (do ouvido), um inteiro, sem direcao. Com
+        duas narinas, os pontos sao os de `pontos_laterais` pela direcao do ultimo passo; com uma, o centro do pet.
+        - `olfato_comida`: o cheiro das comidas boas (`campo_em` com as fontes e o raio do cheiro da comida);
+        - `olfato_outro`: o canal de cada outro pet do grupo (o cheiro proprio e o rastro, `fontes_do_pet`), so com a ConfigSentidos ligada
+          e o outro presente; fora disso, 0;
+        - `ouvido_<som>`: a soma dos sons daquele tipo que entram no passo deste tick (a intensidade no ponto do ouvido, de onde o pet estava
+          quando o som soou); entre os sons, 0."""
+        self._ligar_propriocepcao()
+        agora = self._tm(self._estado.tick)
+        self.mundo.atualizar(agora)                      # idempotente por tick: as quedas sao as mesmas atualizando em todo tick
+        x, y = self.pet
+        sub = self.cmf.sub
+        g = self._grupo
+        outros = [] if g is None or not g.cs.ligada else [i for i in g.ids_presentes() if i != self.ident]
+        self._sons_orgao = [s for s in self._sons_orgao if s[0] >= agora]
+        out = {}
+        for o in self.corpo.orgaos:
+            if o.sentido == "olfato":
+                af = self.co.afastamento_narinas
+                ponto = (x, y) if o.lado is None else pontos_laterais(x, y, self._passo, af)[0 if o.lado == "esq" else 1]
+                if o.canal == "comida":
+                    out[o.receptor] = campo_em(*ponto, self.mundo.fontes_de_cheiro(agora), self.cmf.raio_cheiro_celulas * sub)
+                elif o.canal == "outro":
+                    v = 0
+                    for i in outros:
+                        fontes = fontes_do_pet(*g.motores[i].pet, self.mundo.marcas_de(i), agora, g.cs.olfato)
+                        v += campo_em(*ponto, fontes, g.cs.olfato.raio_celulas * sub)
+                    out[o.receptor] = v
+                else:
+                    raise ValueError(f"canal do olfato desconhecido: {o.canal!r}")
+            elif o.sentido == "ouvido":
+                k = 2 if o.lado is None else (3 if o.lado == "esq" else 4)
+                out[o.receptor] = sum(s[k] for s in self._sons_orgao if s[0] == agora and s[1] == o.canal)
+            else:
+                raise ValueError(f"orgao desconhecido: {o.sentido!r}")
+        return out
+
+    def _ligar_propriocepcao(self) -> None:
+        """A direcao do ultimo passo (a propriocepcao, secao 5.6) e do motor: ela comeca em PASSO_INICIAL na primeira vez que alguem a
+        pede (os orgaos na decisao, o lado do mundo do orgao antes de cada tick, os sentidos do grupo na entrada) e dai anda com o pet. Nao
+        depende de quem entrega o estimulo dos orgaos: um lado do mundo trocado (um motor de teste) nao a deixa desligada."""
+        if self._passo is None:
+            self._passo = PASSO_INICIAL
+
+    def _ver_troncos(self, troncos, tick_mundo: int) -> None:
+        """o J5: os troncos a vista entram em `troncos_vistos` (o primeiro tick em que o pet os viu)"""
+        for ident, *_ in troncos:
+            self.troncos_vistos.setdefault(ident, tick_mundo)
+
+    # ------------------------------------------------------------ os alvos
+    # ------------------------------------------------------------ os orgaos do corpo (o MotorCorpo os liga; aqui, sem corpo, nenhum)
+    def _olfato_comida(self) -> bool:
+        """o orgao do Olfato da comida (dois pets, secao 5.6): so existe com o corpo na frente (o MotorCorpo responde)"""
+        return False
+
+    def _olfato_outro(self) -> bool:
+        """o orgao do Olfato social (o cheiro do outro e o rastro): so com o corpo na frente"""
+        return False
+
+    def _audicao(self) -> bool:
+        """o orgao da Audicao: so com o corpo na frente"""
+        return False
+
+    def _leitura_olfato_decisao(self) -> tuple[int, ...]:
+        """a leitura das narinas na observacao da decisao (o que o pet sente; G-SEM-DIRECAO)"""
+        if self._obs_decisao is None or self._obs_decisao.corpo is None:
+            raise RuntimeError("o Olfato da comida sem a percepcao do corpo na observacao da decisao")
+        return leitura_do_olfato(self._obs_decisao.corpo, self.co.narinas)
+
+    def _limiar_olfato_explorar(self) -> int:
+        """o `limiar_cheiro_explorar` de hoje lido pelo receptor: a leitura que o orgao sem adaptacao da a essa intensidade"""
+        return leitura_orgao(self.cmf.limiar_cheiro_explorar, 0, self.co.limiar, self.co.meia_saturacao, self.cc.escala_receptor)
+
+    def _alvos_olfato(self, p: PercepcaoMundo, u: int, explorar: bool) -> list[Alvo]:
+        """os candidatos do cheiro pelo orgao na decisao (no explorar, so com o cheiro forte)"""
+        if self._passo is None:
+            raise RuntimeError("o Olfato da comida sem a direcao do ultimo passo (o orgao a pede na primeira leitura)")
+        leitura = self._leitura_olfato_decisao()
+        if explorar and not olfato_forte(leitura, self._limiar_olfato_explorar()):
+            return []
+        return alvos_do_olfato(p.x, p.y, self._passo, leitura, self._olfato_anterior, u, self.cmf)
+
+    def _alvo_cheiro(self, p: PercepcaoMundo) -> Alvo:
+        x, y = deslocar(p.x, p.y, 2 * (p.direcao_cheiro - 1), self.cmf.passo_cheiro_celulas * self.cmf.sub, self.cmf)
+        return Alvo("cheiro", x, y)
+
+    def _continuar(self, acao: AcaoPet) -> Alvo | None:
+        pend = self._pendente
+        if pend is None or pend["acao"] is not acao:
+            return None
+        velho: Alvo = pend["alvo"]
+        if velho.tipo == "comida":
+            c = self.mundo.comidas.get(velho.id)
+            return None if c is None else Alvo("continuar", c["x"], c["y"], velho.id, "comida")
+        if velho.tipo == "bola":
+            bx, by = self.mundo.bola_em(self._tm(self._estado.tick))
+            return Alvo("continuar", bx, by, ID_BOLA, "bola")
+        return Alvo("continuar", velho.x, velho.y, None, velho.tipo)
+
+    def candidatos(self, acao: AcaoPet, u: int) -> list[Alvo]:
+        """secao 5, a tabela das sub-decisoes"""
+        p, cm = self._percepcao, self.cmf
+        cands: list[Alvo] = []
+        if acao is AcaoPet.COMER:
+            cands += [Alvo("comida", p.x + dx, p.y + dy, i) for i, tipo, dx, dy, _ in p.vistos if tipo != "bola"]
+            if self._olfato_comida():
+                cands += self._alvos_olfato(p, u, explorar=False)
+            elif p.direcao_cheiro:
+                cands.append(self._alvo_cheiro(p))
+        elif acao is AcaoPet.EXPLORAR:
+            if self._olfato_comida():
+                cands += self._alvos_olfato(p, u, explorar=True)
+            elif p.direcao_cheiro:
+                cands.append(self._alvo_cheiro(p))
+            faixa = cm.vagar_max_celulas - cm.vagar_min_celulas + 1
+            vx, vy = deslocar(p.x, p.y, u % 16, (cm.vagar_min_celulas + (u // 16) % faixa) * cm.sub, cm)
+            cands.append(Alvo("vagar", vx, vy))
+            cands.append(Alvo("casa", *self.mundo.comedouro))
+        elif acao is AcaoPet.BRINCAR:
+            cands += [Alvo("bola", p.x + dx, p.y + dy, i) for i, tipo, dx, dy, _ in p.vistos if tipo == "bola"]
+        elif acao is AcaoPet.ALIVIAR and self.cbh.ligada:
+            # o banheiro (secao 4): o ponto do banheiro mais perto e onde o pet esta. Sem candidato `continuar`: a ida pendente ao banheiro
+            # (a continuacao) aparece na percepcao (`alvo_pendente`); o ponto e recalculado da posicao nova, na direcao da ida
+            return [Alvo("banheiro", *ponto_do_banheiro(p.x, p.y, self.cbh, cm)), Alvo("aqui", p.x, p.y)]
+        else:
+            raise ValueError(f"acao sem alvo: {acao}")
+        cont = self._continuar(acao)
+        if cont is not None:
+            cands.append(cont)
+        if acao is AcaoPet.EXPLORAR and self._social is not None:
+            cands += self._candidatos_sociais(p)
+        if acao is AcaoPet.EXPLORAR and self.cpq.ligada:
+            # PP-1: um candidato por tronco ja visto, no pe da arvore, na ordem do layout, depois dos de hoje
+            cands += [Alvo(f"arvore:{a['id']}", a["x"], a["y"]) for a in self.mundo.arvores if a["id"] in self.troncos_vistos]
+        return cands
+
+    def _candidatos_sociais(self, p: PercepcaoMundo) -> list[Alvo]:
+        """dois pets, secao 6: `seguir` cada outro visto (onde ele esta) e `onde_comeu` de cada outro que este pet viu comer, depois dos
+        de hoje. O padrao do motor nunca os escolhe; so o cerebro."""
+        cands = []
+        for ident, dx, dy, _, _ in self._social.outros:
+            a = Alvo("seguir", p.x + dx, p.y + dy)
+            self._cands_sociais[a] = ident
+            cands.append(a)
+        for ident, x, y, _ in self._social.onde_comeu:
+            a = Alvo("onde_comeu", x, y)
+            self._cands_sociais[a] = ident
+            cands.append(a)
+        return cands
+
+    def alvo_padrao(self, acao: AcaoPet, cands: list[Alvo]) -> Alvo | None:
+        """o que o instinto usa (secao 5). Nunca escolhe comida podre. A conta e a `alvo_padrao_de` (o cerebro a usa para saber a classe
+        do padrao, no alvo aprendido). No `aliviar` (o banheiro), `aqui`: alivia onde esta."""
+        if acao is AcaoPet.ALIVIAR:
+            return next(a for a in cands if a.tipo == "aqui")
+        return alvo_padrao_de(acao, cands, self._percepcao, self.cmf)
+
+    def aceitar_ponto_gravado(self, ci: ConfigIntervencaoSocial) -> None:
+        """O parceiro gravado da bancada (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.2; E1-2): o cerebro pode devolver um ponto em toda acao com
+        alvo (comer e brincar tambem), para a reexecucao ir ao ponto gravado sem ler onde o outro esta agora. Chegar a um ponto nao come nem
+        chuta (o comer e o brincar pedem o objeto). So com a ConfigIntervencaoSocial ligada; o jogo nunca chama isto."""
+        if not isinstance(ci, ConfigIntervencaoSocial) or not ci.ligada:
+            raise ValueError(f"aceitar_ponto_gravado so com a ConfigIntervencaoSocial ligada: {ci!r}")
+        self._ponto_gravado = True
+
+    def _validar_alvo(self, acao: AcaoPet, alvo: Alvo, cands: list[Alvo]) -> None:
+        if alvo in cands:
+            return
+        if (acao is AcaoPet.EXPLORAR or self._ponto_gravado) and alvo.tipo == "ponto" and alvo.id is None and alvo.de is None:
+            if type(alvo.x) is int and type(alvo.y) is int and no_mapa(alvo.x, alvo.y, self.cmf) == (alvo.x, alvo.y):
+                return
+            raise ValueError(f"ponto fora do mapa ou nao inteiro: ({alvo.x!r}, {alvo.y!r})")
+        raise ValueError(f"alvo fora dos candidatos de {acao.value}: {alvo}")
+
+    # ------------------------------------------------------------ a consequencia
+    def _comer_mundo(self, ident: int, como: str, tick: int) -> dict:
+        c = self.mundo.retirar_comida(ident)
+        tick = self._tm(tick)                               # o registro do consumo e do mundo: o relogio do mundo
+        sit = self.mundo.situacao(c, tick)
+        e = self._estado
+        fome, humor, sujeira = e.fome, e.humor, e.sujeira
+        if sit == "madura" and c["tipo"] == "racao":
+            fome = min(1.0, fome + self.cfg.ganho_alimentar)
+            if self._rng_sujeira.random() < self.cfg.prob_sujeira_pos_refeicao:
+                sujeira = min(self.cfg.sujeira_maxima, sujeira + 1)
+        elif sit == "madura":
+            fome = min(1.0, fome + self.cmf.nutricao_fruta)
+            humor = min(1.0, max(0.0, humor + self.efeito_frutas[c["tipo"]]))
+        else:
+            humor = min(1.0, max(0.0, humor + self.cmf.efeito_podre))
+        self._estado = replace(e, fome=fome, humor=humor, sujeira=sujeira)
+        reg = {"tick": tick, "id": c["id"], "tipo": c["tipo"], "origem": c["origem"], "tick_posta": c["tick_posta"],
+               "situacao": sit, "como": como, "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome,
+               "humor_depois": humor}
+        if self.cpal.ligada:
+            reg["perfil"] = self.perfil_de(c["tipo"]) if sit == "madura" else None     # o Paladar: a podre nao tem perfil
+        self.consumos_mundo.append(reg)
+        if self._grupo is not None:                          # dois pets: o consumo e visto pelos outros e lido pela disputa
+            self._tick_social["comeu"] = {"id": c["id"], "tipo": c["tipo"], "x": c["x"], "y": c["y"], "situacao": sit}
+            self._grupo.viu_comer(self.ident, c["x"], c["y"])
+            self._grupo.emitir_som(self.ident, "comendo")
+        return reg
+
+    def perfil_de(self, tipo: str) -> dict:
+        """O Paladar (secao 3.1): uma copia do perfil de gosto do tipo, {qualidade: inteiro em [0, C]}. Sem a chave, falha alto."""
+        if not self.cpal.ligada:
+            raise ValueError("perfil de gosto sem o Paladar (ConfigPaladar.ligada)")
+        return dict(self.cpal.perfis[tipo])
+
+    def _rolar_bola(self, tick: int, de: tuple[int, int] | None = None) -> None:
+        """`de`: onde o pet estava antes do passo que o levou a bola (ConfigBolaNoGolpe: o golpe sai na direcao em que ele vinha)"""
+        self.mundo.rolar_bola(self._tm(tick), de if self.cbg.ligada else None)
+
+    def _consequencia(self, acao: AcaoPet) -> dict | None:
+        """Chamado pelo embrulho em `observar`, antes do cerebro: anda, come, brinca, desfaz o +0,05 do comer (MF-2) e registra."""
+        tick = self._estado.tick
+        x0, y0 = self.pet
+        regiao_antes = regiao_de(x0, self.cmf)
+        alvo = None
+        ocorrido = None
+        if self._grupo is not None and self._grupo.sentidos_ativos():
+            self.mundo.deixar_marca(self.ident, x0, y0, self._tm(tick), self._grupo.cs.olfato)     # o rastro (5.3)
+        if acao in ACOES_COM_ALVO:
+            u = self._rng_alvo.randrange(1 << 16)               # sempre nas tres acoes: numeros comuns
+            cands = self.candidatos(acao, u)
+            escolher = getattr(self._pm_cerebro(), "escolher_alvo", None)
+            alvo = escolher(acao, list(cands), self._percepcao, u) if escolher is not None else None
+            if alvo is None:
+                alvo = self.alvo_padrao(acao, cands)
+            else:
+                self._validar_alvo(acao, alvo, cands)
+            if alvo is not None and alvo.id is None and self.mundo.secas is not None:
+                # a agua (IA1): o ponto escolhido na agua (o vagar, o cheiro, o lugar lembrado) vale a terra mais perto; o pendente o guarda
+                tx, ty = self.mundo.em_terra(alvo.x, alvo.y)
+                if (tx, ty) != (alvo.x, alvo.y):
+                    alvo = replace(alvo, x=tx, y=ty)
+            andar = None
+            if alvo is not None and self.cct.controlador:      # a P4: o controlador do contrato, nos ticks da decisao
+                cm = self.cmf
+                andar = ct.controlar(x0, y0, alvo.x, alvo.y, self._raio_pegar, self.cfg.intervalo_decisao_ticks, cm.velocidade,
+                                     self.cct.r_pet, self._solidos, cm.celulas_x, cm.celulas_y, cm.sub, self.cct.ticks_bloqueado,
+                                     self.orientacao)
+                x1, y1 = andar.x, andar.y
+            else:
+                x1, y1 = (x0, y0) if alvo is None else passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, self.cmf)
+            if self._grupo is not None:
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
+                                     "social": self._id_social(alvo), "comeu": None}
+            desloc = distancia(x1 - x0, y1 - y0) if andar is None else andar.andado
+            self.pet = (x1, y1)
+            e = self._estado
+            if acao is AcaoPet.COMER:
+                e = replace(e, fome=self._fome_antes)               # MF-2: comer so da fome com comida
+            energia_antes = e.energia
+            if desloc:
+                e = replace(e, energia=max(0.0, e.energia - self.cmf.custo_energia_por_subunidade * desloc))
+            self._estado = e
+            chegou = alvo is not None and distancia(alvo.x - x1, alvo.y - y1) <= self._raio_pegar
+            comeu = None
+            bola = False
+            if chegou and acao is AcaoPet.COMER and alvo.objeto() == "comida":
+                comeu = self._comer_mundo(alvo.id, "comer", tick)
+            elif chegou and acao is AcaoPet.EXPLORAR and self._estado.fome < self.cmf.fome_max_comer_achado:
+                perto = self.mundo.maduras_perto(x1, y1, self._tm(tick), self._raio_pegar)
+                if perto:
+                    comeu = self._comer_mundo(perto[0][2], "achou", tick)
+            elif chegou and acao is AcaoPet.BRINCAR and alvo.objeto() == "bola":
+                self._estado = replace(self._estado, humor=min(1.0, self._estado.humor + self.cmf.ganho_humor_bola))
+                self._rolar_bola(tick, (x0, y0))
+                bola = True
+                if self._grupo is not None:
+                    self._grupo.emitir_som(self.ident, "bola")
+            if self._grupo is not None and self._id_social(alvo) is not None:
+                self._registrar_social(alvo, chegou, comeu, x1, y1, tick)
+            if alvo is not None and not chegou:
+                base = alvo if alvo.tipo != "continuar" else Alvo(alvo.de, alvo.x, alvo.y, alvo.id)
+                self._pendente = {"acao": acao, "alvo": base}
+                if self._grupo is not None and self._id_social(alvo) is not None:
+                    self._pendente["social"] = self._id_social(alvo)
+            else:
+                self._pendente = None
+            ocorrido = {"acao": acao.value, "u": u, "alvo": None if alvo is None else alvo.para_dict(), "de": (x0, y0),
+                        "para": (x1, y1), "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia,
+                        "chegou": chegou, "comeu": comeu, "brincou_com_bola": bola}
+            if self.cct.ligada and alvo is not None:
+                ocorrido["contrato"] = self._registro_contrato(tick, x0, y0, x1, y1, andar, chegou, comeu)
+        elif acao is AcaoPet.IR_TV:
+            alvo, ocorrido = self._ir_ate_tv(tick, x0, y0)
+            if self._grupo is not None:                      # como os outros ramos: o alvo e a TV, nunca comida (sem disputa)
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
+                                     "social": None, "comeu": None}
+        elif acao is AcaoPet.ALIVIAR:
+            alvo, ocorrido = self._aliviar(tick, x0, y0)
+            if self._grupo is not None:                      # como os outros ramos: o alvo do aliviar nunca e comida (sem disputa)
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
+                                     "social": None, "comeu": None}
+        else:
+            self._pendente = None
+            if self._grupo is not None:
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": None, "pendente_antes": self._pendente_antes,
+                                     "social": None, "comeu": None}
+                if acao in SOM_DA_ACAO:
+                    self._grupo.emitir_som(self.ident, SOM_DA_ACAO[acao])
+        if self._passo is not None and self.pet != (x0, y0):
+            self._passo = direcao_em_16(self.pet[0] - x0, self.pet[1] - y0)     # a propriocepcao (5.6): a direcao do ultimo passo
+        if self._olfato_comida():
+            self._olfato_anterior = self._leitura_olfato_decisao()   # a leitura desta decisao, para a seguinte (uma narina: subiu ou caiu)
+        self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
+        return ocorrido
+
+    def _ir_ate_tv(self, tick: int, x0: int, y0: int) -> tuple[Alvo, dict]:
+        """O ir ate a TV (a decisao D da captura ligada ao cerebro, D-GV-TVJOGO-3; so com a ConfigTVJogo.ir_ate_tv): o pet anda para a TV
+        (o centro da celula dela, que e terra) pelo andar das acoes com alvo (o controlador do contrato, ou o passo_ate), ate o raio de
+        pegar, nos ticks da decisao. Sem sorteio (nem o u da rng `alvo`), sem candidato e sem pendente: a decisao seguinte escolhe de novo.
+        O custo e o do andar (custo_energia_por_subunidade x deslocamento); o metabolismo da acao e o do ocioso."""
+        if not self.ctj.ir_ate_tv:
+            raise TVSemChave("a acao IR_TV exige a ConfigTVJogo.ir_ate_tv")
+        tv = self._exigir_tv("ir_tv")
+        alvo = Alvo("tv", tv.x, tv.y, ID_TV)
+        andar = None
+        if self.cct.controlador:
+            cm = self.cmf
+            andar = ct.controlar(x0, y0, alvo.x, alvo.y, self._raio_pegar, self.cfg.intervalo_decisao_ticks, cm.velocidade,
+                                 self.cct.r_pet, self._solidos, cm.celulas_x, cm.celulas_y, cm.sub, self.cct.ticks_bloqueado,
+                                 self.orientacao)
+            x1, y1 = andar.x, andar.y
+        else:
+            x1, y1 = passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, self.cmf)
+        desloc = distancia(x1 - x0, y1 - y0) if andar is None else andar.andado
+        self.pet = (x1, y1)
+        energia_antes = self._estado.energia
+        if desloc:
+            self._estado = replace(self._estado, energia=max(0.0, energia_antes - self.cmf.custo_energia_por_subunidade * desloc))
+        chegou = distancia(alvo.x - x1, alvo.y - y1) <= self._raio_pegar
+        self._pendente = None
+        ocorrido = {"acao": AcaoPet.IR_TV.value, "u": None, "alvo": alvo.para_dict(), "de": (x0, y0), "para": (x1, y1),
+                    "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia, "chegou": chegou, "comeu": None,
+                    "brincou_com_bola": False}
+        if self.cct.ligada:
+            ocorrido["contrato"] = self._registro_contrato(tick, x0, y0, x1, y1, andar, chegou, None)
+        return alvo, ocorrido
+
+    def _registro_contrato(self, tick: int, x0: int, y0: int, x1: int, y1: int, andar, chegou: bool, comeu: dict | None) -> dict:
+        """A P4: o que o contrato registra numa decisao com alvo (o registro da secao 5.1 do mundo_3d.md e o `ocorrido`). A orientacao anda
+        com o ultimo deslocamento (sem o controlador, o da decisao inteira); parado, fica. Os bigodes e o contato saem dos solidos que
+        colidem (as paredes, com a chave delas); o resultado percebido e o do POC (`tipos.ts`), sem a bola fisica (a do J5 rola sorteada)."""
+        if andar is not None:
+            self.orientacao = andar.orientacao
+            parou_por, contatos, trajetoria = andar.parou_por, [list(c) for c in andar.contatos], [list(p) for p in andar.trajetoria]
+        else:
+            if (x1, y1) != (x0, y0):
+                self.orientacao = ct.setor_de(x1 - x0, y1 - y0)
+            parou_por, contatos, trajetoria = ("chegou" if chegou else "hora"), [], None
+        contato = sorted([c[0], ct.relativo(c[1], self.orientacao)] for c in contatos)
+        reg = {"tick": self._tm(tick), "orientacao": self.orientacao, "parou_por": parou_por, "contato": contato,
+               "obstaculos": ct.bigodes(x1, y1, self.cct.r_pet, self.orientacao, self._solidos, self.cct.raio_bigode),
+               "resultado": {"parou_por": parou_por, "comeu": comeu is not None, "empurrou": False, "bola_afastou": None},
+               "trajetoria": trajetoria}
+        self.contrato_decisoes.append(reg)
+        return reg
+
+    def _aliviar(self, tick: int, x0: int, y0: int) -> tuple[Alvo, dict]:
+        """O `aliviar` (secoes 3 e 4): o alvo (`banheiro` ou `aqui`, pelo gancho do cerebro com o u da rng `alvo`; sem gancho, `aqui`),
+        o andar ate ele com o custo de energia, e o alivio. Dentro do banheiro com o limpador, a necessidade e recolhida na hora; senao ela
+        fica no chao (um objeto do Mundo). A vontade e o cheiro sao estimulos do corpo (o MotorCorpo, pelo `ocorrido`).
+
+        A continuacao (decisao do Matheus, 2026-10-11): com o alvo `banheiro`, o pet que nao chega ao banheiro nesta decisao NAO alivia:
+        segura a vontade, e o alvo fica pendente, como o `continuar` das outras acoes (a percepcao mostra `alvo_pendente` "banheiro" na
+        decisao seguinte; outra acao desfaz). Nada vai ao corpo alem do andar; a ida fica em `idas_banheiro`. Com o alvo `aqui`, alivia
+        onde esta. A regra urgente continua aliviando `aqui` (o acidente), com ou sem a ida pendente."""
+        cbh, cm = self.cbh, self.cmf
+        if not cbh.ligada:
+            raise BanheiroSemMundo("aliviar sem o banheiro (ConfigBanheiro.ligada)")
+        u = self._rng_alvo.randrange(1 << 16)                   # como nas outras acoes com alvo: numeros comuns
+        cands = self.candidatos(AcaoPet.ALIVIAR, u)
+        escolher = getattr(self._pm_cerebro(), "escolher_alvo", None)
+        alvo = escolher(AcaoPet.ALIVIAR, list(cands), self._percepcao, u) if escolher is not None else None
+        if alvo is None:
+            alvo = self.alvo_padrao(AcaoPet.ALIVIAR, cands)
+        else:
+            self._validar_alvo(AcaoPet.ALIVIAR, alvo, cands)
+        corpo = self._obs_decisao.corpo if self._obs_decisao is not None else None
+        if corpo is None or corpo.vontade is None:
+            raise BanheiroSemMundo("aliviar sem o receptor da vontade na observacao da decisao (o corpo com a sub-chave banheiro)")
+        S = self.cc.escala_receptor                               # o receptor na escala S do corpo
+        urgente = corpo.vontade / S > cbh.limiar_urgente          # a regra urgente do instinto (o acidente): o alvo e `aqui`
+        if urgente and alvo.tipo != "aqui":
+            raise RuntimeError(f"aliviar urgente (vontade {corpo.vontade}/{S}) com o alvo {alvo.tipo!r}: a regra urgente alivia aqui")
+        bx, by = ponto_do_banheiro(x0, y0, cbh, cm)
+        dist_banheiro = distancia(bx - x0, by - y0)
+        x1, y1 = passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, cm)
+        desloc = distancia(x1 - x0, y1 - y0)
+        self.pet = (x1, y1)
+        e = self._estado
+        energia_antes = e.energia
+        if desloc:
+            self._estado = replace(e, energia=max(0.0, e.energia - cm.custo_energia_por_subunidade * desloc))
+        dentro = no_banheiro(x1, y1, cbh, cm)
+        tm = self._tm(tick)
+        if alvo.tipo == "banheiro" and not dentro:
+            # a continuacao: segura a vontade; o alvo do banheiro fica pendente para a proxima decisao
+            continuacao = self._pendente is not None and self._pendente["acao"] is AcaoPet.ALIVIAR
+            self._pendente = {"acao": AcaoPet.ALIVIAR, "alvo": alvo}
+            restante = distancia(bx - x1, by - y1)
+            self.idas_banheiro.append({"tick": tm, "de": (x0, y0), "para": (x1, y1), "distancia": dist_banheiro, "restante": restante,
+                                       "continuacao": continuacao})
+            ocorrido = {"acao": AcaoPet.ALIVIAR.value, "u": u, "alvo": alvo.para_dict(), "de": (x0, y0), "para": (x1, y1),
+                        "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia, "chegou": False,
+                        "comeu": None, "brincou_com_bola": False, "alivio": None,
+                        "segurou": {"distancia": dist_banheiro, "restante": restante, "continuacao": continuacao}}
+            return alvo, ocorrido
+        self._pendente = None
+        recolhido = dentro and cbh.limpador
+        necessidade = None if recolhido else self.mundo.deixar_necessidade(x1, y1, tm)["id"]
+        self.alivios.append({"tick": tm, "dentro": dentro, "urgente": urgente, "alvo": alvo.tipo, "distancia": dist_banheiro,
+                             "recolhido": recolhido})
+        self.alivios_dentro += dentro
+        ocorrido = {"acao": AcaoPet.ALIVIAR.value, "u": u, "alvo": alvo.para_dict(), "de": (x0, y0), "para": (x1, y1),
+                    "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia, "chegou": (x1, y1) == (alvo.x, alvo.y),
+                    "comeu": None, "brincou_com_bola": False,
+                    "alivio": {"dentro": dentro, "urgente": urgente, "recolhido": recolhido, "necessidade": necessidade,
+                               "distancia": dist_banheiro}}
+        return alvo, ocorrido
+
+    def necessidades_na_zona(self) -> int:
+        """Quantas necessidades estao no chao na zona do pet (o banheiro, ou a regiao fora dele): o que o corpo recebe a cada tick."""
+        cbh, cm = self.cbh, self.cmf
+        z = zona_da_necessidade(*self.pet, cbh, cm)
+        return sum(1 for n in self.mundo.necessidades.values() if zona_da_necessidade(n["x"], n["y"], cbh, cm) == z)
+
+    def _id_social(self, alvo: Alvo | None) -> str | None:
+        """o id do outro de um alvo social (seguir, onde_comeu, ou o continuar deles), ou None"""
+        if alvo is None:
+            return None
+        if alvo.tipo in CANDIDATOS_SOCIAIS:
+            return self._cands_sociais[alvo]
+        if alvo.tipo == "continuar" and alvo.de in CANDIDATOS_SOCIAIS:
+            return self._pendente_antes["social"]
+        return None
+
+    def _registrar_social(self, alvo: Alvo, chegou: bool, comeu: dict | None, x1: int, y1: int, tick: int) -> None:
+        """a ida a `onde_comeu` (a confianca da secao 8 sai daqui): chegou, comeu, e quantas comidas boas estavam a vista na chegada"""
+        classe = alvo.de if alvo.tipo == "continuar" else alvo.tipo
+        if classe != "onde_comeu":
+            return
+        tm = self._tm(tick)
+        boas = len(self.mundo.maduras_perto(x1, y1, tm, self._raio_visao)) if chegou else None
+        self.idas_onde_comeu.append({"tick": tm, "outro": self._id_social(alvo), "x": alvo.x, "y": alvo.y,
+                                     "continuacao": alvo.tipo == "continuar", "chegou": chegou,
+                                     "comeu": None if comeu is None else {k: comeu[k] for k in ("id", "tipo", "situacao", "como")},
+                                     "boas_a_vista": boas})
+
+    def _pm_cerebro(self):
+        """o que esta embaixo do embrulho do mundo (os ganchos do cerebro passam pelos embrulhos de baixo)"""
+        return self.politica._pm
+
+    def _registrar_decisao(self, tick: int, acao: AcaoPet, antes: tuple, regiao_antes: int, alvo: Alvo | None,
+                           ocorrido: dict | None) -> None:
+        tick = self._tm(tick)                               # os registros do mundo fisico: o relogio do mundo
+        x1, y1 = self.pet
+        regiao = regiao_de(x1, self.cmf)
+        if self.cpq.ligada:
+            self._ver_troncos(self.mundo.troncos_perto(x1, y1), tick)
+        for v in self._manchas_abertas.values():               # as decisoes tomadas de dentro da mancha
+            v["decisoes"] += 1
+        dentro = {a["id"] for a in self.mundo.arvores if distancia(a["x"] - x1, a["y"] - y1) <= self._raio_mancha}
+        for ident in [i for i in self._manchas_abertas if i not in dentro]:
+            v = self._manchas_abertas.pop(ident)
+            v["saida"] = tick
+            self.visitas.append(v)
+        for ident in sorted(dentro - set(self._manchas_abertas)):
+            self._manchas_abertas[ident] = {"arvore": ident, "chegada": tick, "saida": None, "decisoes": 0}
+        if regiao != regiao_antes:
+            self.regioes.append({"tick": tick, "de": regiao_antes, "para": regiao})
+        self.decisoes_mundo.append({
+            "tick": tick, "acao": acao.value, "regra": getattr(self._pm_cerebro(), "ultima_regra", None),
+            "antes": antes, "regiao_antes": regiao_antes, "x": x1, "y": y1, "regiao": regiao,
+            "alvo": None if alvo is None else alvo.tipo,
+            "chegou": None if ocorrido is None else ocorrido["chegou"],
+            "deslocamento": 0 if ocorrido is None else ocorrido["deslocamento"],
+            "energia_gasta": 0.0 if ocorrido is None else ocorrido["energia_gasta"],
+            "comeu": None if ocorrido is None or ocorrido["comeu"] is None else ocorrido["comeu"]["id"],
+            "brincou_com_bola": False if ocorrido is None else ocorrido["brincou_com_bola"],
+            "manchas": sorted(dentro)})
+
+    # ------------------------------------------------------------ o dono
+    def _aplicar_acao_usuario(self, acao: AcaoUsuario) -> None:
+        if acao in ACOES_MAO or acao in ACOES_TROCA_ARVORES or acao in ACOES_PARAR_ARVORES:
+            if not (self.cmf.ligada and self.cpq.ligada):
+                raise PetQuePensaSemChave(f"{acao.value} sem o mundo e a ConfigPetQuePensaMundo ligados")
+            if acao in ACOES_MAO:
+                self._dar_fruta(fruta_dada(acao))
+            elif acao in ACOES_TROCA_ARVORES:
+                self._trocar_arvores(*par_da_troca(acao))
+            else:
+                self._parar_arvores(tipo_parado(acao))
+            return
+        if self.cmf.ligada and acao in GESTOS_PROIBIDOS:
+            raise GestoForaDoMundo(f"{acao.value} numa vida com o mundo: use deixar_comida/deixar_bola")
+        super()._aplicar_acao_usuario(acao)
+        if acao is AcaoUsuario.BRINCAR and self.cmf.ligada and self.cld.ligada:
+            # o lance do dono (BB-1 a BB-3): o Brincar de sempre ja foi (o contato, o corpo e o cerebro); a bola cai perto do pet, e o
+            # cerebro que recebe o convite (o gancho `bola_do_dono`, o DigiBrain modular) decide ja no proximo passo do laco (o padrao da
+            # decisao na comida: so o momento da decisao). O cerebro sem o gancho (o A, BB-6) segue no relogio de sempre: so a bola se mexe
+            tick = self._estado.tick
+            self.mundo.lancar_bola(*self.pet, self._tm(tick))
+            self._lance_tick = tick
+            if getattr(self._pm_cerebro(), "bola_do_dono", None) is not None:
+                self._proxima_decisao = min(self._proxima_decisao, tick)
+        if acao is AcaoUsuario.LIMPAR and self.cmf.ligada and self.cbh.ligada:
+            # o banheiro (secao 3): o limpar de hoje passa a recolher as necessidades da zona do pet (o efeito no corpo e o de sempre)
+            cbh, cm = self.cbh, self.cmf
+            z = zona_da_necessidade(*self.pet, cbh, cm)
+            ids = [n["id"] for n in self.mundo.necessidades.values() if zona_da_necessidade(n["x"], n["y"], cbh, cm) == z]
+            tm = self._tm(self._estado.tick)
+            self.mundo.recolher_necessidades(ids, tm, "limpar")
+            self.recolhas.append({"tick": tm, "zona": z, "ids": ids})
+
+    # ------------------------------------------------------------ o J5: a fruta na mao e a troca de tipo
+    def _dar_fruta(self, f: str) -> None:
+        """A fruta na mao (PQ-4, PP-5): o pet come na hora, onde esta, com o efeito vigente (a conta da fruta madura do `_comer_mundo`),
+        sem decisao e sem andar. Nao e contato. Chega ao cerebro so pelo gancho opcional `fruta_na_mao(tipo, obs_antes, obs_depois)`."""
+        tick = self._estado.tick
+        if self._estado.dormindo:
+            raise RuntimeError(f"fruta na mao com o pet dormindo (tick {tick}): o dono da a fruta com o pet acordado")
+        tm = self._tm(tick)
+        self.mundo.atualizar(tm)                           # a percepcao de antes e de depois e a do mundo no tick
+        antes = self._observacao_depois_mundo()
+        e = self._estado
+        fome = min(1.0, e.fome + self.cmf.nutricao_fruta)
+        humor = min(1.0, max(0.0, e.humor + self.efeito_frutas[f]))
+        self._estado = replace(e, fome=fome, humor=humor)
+        reg = {"tick": tm, "id": None, "tipo": f, "origem": "dono", "tick_posta": tm, "situacao": "madura", "como": "mao",
+               "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome, "humor_depois": humor}
+        if self.cpal.ligada:
+            reg["perfil"] = self.perfil_de(f)                  # o Paladar: a fruta na mao e sempre madura
+        self.consumos_mundo.append(reg)
+        self._n_eventos += 1                                # e um evento do log, mas NAO e contato
+        self._estimulo_mao(f)
+        gancho = getattr(self._pm_cerebro(), "fruta_na_mao", None)
+        if gancho is not None:
+            gancho(f, antes, self._observacao_depois_mundo())
+
+    def _estimulo_mao(self, f: str) -> None:
+        """o lugar do corpo (o MotorCorpo o troca pelo estimulo da fruta madura); sem o corpo, nada"""
+
+    def _trocar_arvores(self, x: str, y: str) -> None:
+        """A troca de tipo por arvore (o teste 2): o mundo anda ate o tick e as arvores dos tipos x e y trocam. Nao e contato."""
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        self.mundo.trocar_tipos(x, y, tm)
+        self._n_eventos += 1
+
+    def _parar_arvores(self, tipo: str) -> None:
+        """O J5, adendo 8: o mundo anda ate o tick, as arvores do tipo param e as frutas caidas delas saem. Nao e contato."""
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        self.mundo.parar_arvores(tipo, tm)
+        self._n_eventos += 1
+
+    def deixar_comida(self, tipo: str, x: int, y: int) -> None:
+        if not self.cmf.ligada:
+            raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
+        evento = evento_deixar_comida(self._estado.tick, tipo, x, y, tamanho_do_mapa(self.cmf))     # valida tipo e posicao antes do log
+        self._log.anexar(evento)
+        self._aplicar_deixar_comida(*ler_deixar_comida(evento, tamanho_do_mapa(self.cmf)))
+
+    def deixar_fruta(self, tipo: str, x: int, y: int) -> None:
+        """a fruta ao lado da racao (ConfigFrutaAoLado): fora do orcamento (o canal nao a ve) e sem contato"""
+        if not (self.cmf.ligada and self.cfal.ligada):
+            raise MundoSemChave("deixar_fruta sem o mundo e a ConfigFrutaAoLado ligados")
+        evento = evento_deixar_fruta(self._estado.tick, tipo, x, y, tamanho_do_mapa(self.cmf))      # valida tipo e posicao antes do log
+        self._log.anexar(evento)
+        self._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(self.cmf)))
+
+    def resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """O resumo pronto de uma luta (ponte da luta, PE1): vai ao log e ao corpo. So com o corpo e a ConfigLutaCorpo ligada."""
+        evento = evento_resumo_luta(self._estado.tick, rival, resultado, vida_perdida_s)
+        self._aplicar_resumo_luta(*ler_resumo_luta(evento))     # confere a chave antes de gravar no log
+        self._log.anexar(evento)
+
+    def _aplicar_resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """Sem o corpo (o MotorCorpo a sobrepoe), o evento `lt` nao existe: falha alto."""
+        raise LutaSemChave("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
+
+    def deixar_bola(self, x: int, y: int) -> None:
+        if not self.cmf.ligada:
+            raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
+        evento = evento_deixar_bola(self._estado.tick, x, y, tamanho_do_mapa(self.cmf))
+        self._log.anexar(evento)
+        self._aplicar_deixar_bola(*ler_deixar_bola(evento, tamanho_do_mapa(self.cmf)))
+
+    def levar_pet(self, x: int, y: int) -> None:
+        """O dono pega o pet e o solta em (x, y) (docs/TAREFA_V3_PEGAR_PET.md; os pets v19 do jogo web). Valida o evento e o estado antes
+        do log: o pet dormindo falha alto (PP-2)."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("levar_pet com ConfigMundo.ligada = False")
+        evento = evento_levar_pet(self._estado.tick, x, y)
+        self._aplicar_levar_pet(*ler_levar_pet(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_levar_pet(self, x: int, y: int) -> None:
+        """So a posicao do pet muda (PP-1): ele cai em no_mapa(x, y), a borda mais proxima quando o ponto fica fora (PP-4), e o destino
+        que tinha (o pendente) se perde; na proxima decisao ele escolhe de novo, de onde caiu. Nao e contato nem cuidado: nao passa
+        pelo estado, pelo corpo nem pelo cerebro (nenhum gancho), como o deixar_bola. O registro das decisoes, das regioes e das
+        manchas anda so na decisao. O pet dormindo nao e pego (PP-2)."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("levar_pet com ConfigMundo.ligada = False")
+        tick = self._estado.tick
+        if self._estado.dormindo:
+            raise RuntimeError(f"levar_pet com o pet dormindo (tick {tick}): o dono pega o pet acordado")
+        de = self.pet
+        self.pet = self._pet_em_terra(*no_mapa(x, y, self.cmf))
+        self._pendente = None
+        self.levadas.append({"tick": self._tm(tick), "de": list(de), "pedido": [x, y], "para": list(self.pet)})
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def mudar_ilha(self, nome: str) -> None:
+        """O mundo do pet passa para a ilha com agua `nome` (docs/TAREFA_V3_ILHA_AGUA.md, IA4; os pets v21 do jogo web que ja estavam
+        vivos). Valida o evento e a troca antes do log."""
+        evento = evento_mudar_ilha(self._estado.tick, nome)
+        self._aplicar_mudar_ilha(ler_mudar_ilha(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_mudar_ilha(self, nome: str) -> None:
+        """So o mundo muda: o layout ganha a agua, o contrato passa a ser o do destino (o controlador, que desvia dela), o que esta na
+        agua vai para a terra mais perto (a comida, a bola e o pet) e o destino que o pet tinha se perde. Nao e contato nem cuidado: nao
+        passa pelo estado, pelo corpo nem pelo cerebro, como o levar_pet. Vale com o pet acordado ou dormindo. Com um pet (fora do
+        grupo), sem o banheiro e sem o contrato ligado antes; o destino desconhecido e a segunda troca falham alto."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("mudar_ilha com ConfigMundo.ligada = False")
+        if nome not in ILHAS_DE_TROCA:
+            raise ValueError(f"mudar_ilha para uma ilha desconhecida: {nome!r}")
+        maior = ILHAS_MAIORES.get(nome)      # a ilha de outro tamanho (IG4): pode vir depois da agua, com o contrato ja ligado
+        if self._grupo is not None or self.cbh.ligada or (self.cct.ligada and maior is None):
+            raise ValueError("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes")
+        if self.ctv.ligada:
+            raise TVSemChave("mudar_ilha com a TV (ConfigTV) ligada: a TV ficaria onde a agua pode chegar (P1c)")
+        layout, contrato = ILHAS_DE_TROCA[nome]
+        if not contrato.controlador:
+            raise ValueError(f"a ilha {nome!r} tem agua e pede o controlador do contrato")
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        de = self.pet
+        if maior is None:
+            reg = self.mundo.trocar_layout(layout, tm)
+            self.cmf, self.cct = self.mundo.cmf, contrato
+            self._montar_contrato()
+            self.pet = self._pet_em_terra(*self.pet)
+        else:
+            # como na troca para a agua, a orientacao volta ao setor 0 e o registro das decisoes do controlador comeca vazio (as de antes
+            # estao nas coordenadas do mapa de la), mesmo que o controlador ja viesse ligado
+            reg = self.mundo.trocar_para_maior(layout, *maior, tm)
+            self.cmf, self.cct = self.mundo.cmf, contrato
+            self._montar_contrato()
+            dx, dy = reg["deslocamento"]
+            self.pet = self._pet_em_terra(*no_mapa(de[0] + dx, de[1] + dy, self.cmf))
+            # o cerebro que lembra lugares (o M-MEM do DigiBrain modular) anda com o mundo; o que nao lembra (o A) nao tem o gancho
+            gancho = getattr(self.politica, "mundo_deslocado", None)
+            if gancho is not None:
+                cm = self.cmf
+                reg["lugares_lembrados"] = gancho(dx, dy, lambda x, y: self.mundo.em_terra(*no_mapa(x, y, cm)), lambda x: regiao_de(x, cm))
+        self._pendente = None
+        reg["pet"] = {"de": list(de), "para": list(self.pet)}
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o levar_pet)
+
+    def _pet_em_terra(self, x: int, y: int) -> tuple[int, int]:
+        """a agua (IA1): o pet solto na agua, ou tao rente a ela que o corpo a invade, cai no centro da celula de terra mais perto"""
+        if self.mundo.secas is None or ct.bloqueio_em(x, y, self.cct.r_pet, self._solidos) is None:
+            return x, y
+        cm = self.cmf
+        return centro_da_celula(ct.livre_mais_perto(self.mundo.secas, cm.celulas_x, (x // cm.sub, y // cm.sub)), cm)
+
+    def sacudir_arvore(self, arvore: str) -> None:
+        """O dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md; os pets v20 do jogo web). Valida o evento e a arvore antes do log."""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("sacudir_arvore sem o mundo e a ConfigSacudir ligados")
+        evento = evento_sacudir_arvore(self._estado.tick, arvore)
+        self._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_sacudir_arvore(self, arvore: str) -> None:
+        """So o mundo muda (AS-1): o galho, e a fruta que cai. Nao e contato nem cuidado: nao passa pelo estado, pelo corpo nem pelo
+        cerebro (nenhum gancho), como o deixar_bola. Vale com o pet acordado ou dormindo. O mundo e atualizado ate o tick antes (as quedas
+        naturais ate ele, as que sumiram), como na troca de tipo do J5."""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("sacudir_arvore sem o mundo e a ConfigSacudir ligados")
+        tm = self._tm(self._estado.tick)
+        if not any(a["id"] == arvore for a in self.mundo.arvores):
+            raise ValueError(f"sacudir uma arvore que nao existe no layout {self.cmf.layout.nome!r}: {arvore!r}")
+        self.mundo.atualizar(tm)
+        self.mundo.sacudir(arvore, tm)
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    # ------------------------------------------------------------ a TV (GOSTO_VISUAL, P1c; digilab/tv.py)
+    def _tv_ligada(self) -> bool:
+        return self.cmf.ligada and self.ctv.ligada
+
+    def _exigir_tv(self, onde: str) -> TV:
+        if not self._tv_ligada():
+            raise TVSemChave(f"{onde} sem o mundo e a ConfigTV ligados")
+        return self.mundo.tv
+
+    def _olhando_tv(self, passa: dict[str, int] | None, ident: int = ID_TV, tv=None) -> bool:
+        """O pet olha a TV: a TV ligada (`passa` nao e None), o pet acordado e parado (a acao atual e o ocioso) e a TV no raio da visao
+        dele (P1c, D-GV-P1c-4). Com um cerebro que tem o comportamento `olhar` (o gancho `olhando_tela`, P1d: o DigiBrain modular com a
+        subchave), tambem a unidade de olhar desta TV escolhida na ultima decisao; sem o gancho (o A, os instintos), a regra da P1c.
+        `ident` e `tv`: a TV perguntada (a da vida, ID_TV, por padrao; uma das duas da sonda, P1e)."""
+        if passa is None or self._estado.dormindo or self._acao_atual is not AcaoPet.OCIOSO:
+            return False
+        olhando = getattr(self._pm_cerebro(), "olhando_tela", None)
+        if olhando is not None and olhando() != ident:
+            return False
+        tv = self.mundo.tv if tv is None else tv
+        return distancia(tv.x - self.pet[0], tv.y - self.pet[1]) <= self._raio_visao
+
+    def _tv_olhada_duas(self) -> tuple[int, TVFixa, dict[str, int]] | None:
+        """as duas TVs da sonda (P1e): (id, TV, o que ela passa) da TV que o pet olha, ou None"""
+        t = self._tm(self._estado.tick)
+        for ident, tv in self.mundo.duas_tvs:
+            passa = tv.em(t)
+            if self._olhando_tv(passa, ident, tv):
+                return ident, tv, passa
+        return None
+
+    def _linhas_tela(self) -> list[tuple[int, int, int, int]]:
+        """as TVs a vista para o cerebro (o gancho `ver_tela`, P1d): (id, dx, dy, d) da TV ligada no raio da visao; senao, nenhuma. Com as
+        duas TVs da sonda (P1e), so elas (a TV da vida fica de fora), na ordem dos ids"""
+        if self.mundo.duas_tvs is not None:
+            linhas = []
+            for ident, tv in self.mundo.duas_tvs:
+                dx, dy = tv.x - self.pet[0], tv.y - self.pet[1]
+                d = distancia(dx, dy)
+                if d <= self._raio_visao:
+                    linhas.append((ident, dx, dy, d))
+            return linhas
+        tv = self.mundo.tv
+        dx, dy = tv.x - self.pet[0], tv.y - self.pet[1]
+        d = distancia(dx, dy)
+        # o ir ate a TV (a decisao D, D-GV-TVJOGO-3): o pet sabe onde a TV fica, e a linha dela vai tambem fora do raio (com ela ligada)
+        if tv.em(self._tm(self._estado.tick)) is None or (d > self._raio_visao and not self.ctj.ir_ate_tv):
+            return []
+        return [(ID_TV, dx, dy, d)]
+
+    def olhando_tv(self) -> bool:
+        """se o pet olha a TV agora (so le); com as duas TVs da sonda, se olha alguma delas"""
+        tv = self._exigir_tv("olhando_tv")
+        if self.mundo.duas_tvs is not None:
+            return self._tv_olhada_duas() is not None
+        return self._olhando_tv(tv.em(self._tm(self._estado.tick)))
+
+    def tv_olhada(self) -> int | None:
+        """o id da TV que o pet olha agora (ID_TV, ou um dos IDS_DUAS_TVS na sonda), ou None (so le)"""
+        tv = self._exigir_tv("tv_olhada")
+        if self.mundo.duas_tvs is not None:
+            o = self._tv_olhada_duas()
+            return None if o is None else o[0]
+        return ID_TV if self._olhando_tv(tv.em(self._tm(self._estado.tick))) else None
+
+    def _intensidades_da_tela(self) -> dict[str, int]:
+        """O estimulo da tela do tick, para o corpo (`Corpo.sentir_tela`): o que a TV passa, se o pet olha; zeros se nao. A TV e sempre
+        perguntada (a grade e estendida ate o tick, nao importa o pet). Com as duas TVs da sonda (P1e), o que passa a TV olhada."""
+        tv = self._exigir_tv("o estimulo da tela")
+        if self.mundo.duas_tvs is not None:
+            o = self._tv_olhada_duas()
+            return dict(o[2]) if o is not None else {c: 0 for c in CANAIS_TELA}
+        passa = tv.em(self._tm(self._estado.tick))
+        if self._olhando_tv(passa):
+            return dict(passa)
+        return {c: 0 for c in CANAIS_TELA}
+
+    def _conceitos_da_tela(self) -> tuple[tuple[str, int], ...]:
+        """o orgao (OV2): os conceitos da TV que o pet olha agora (pares canonicos), ou nenhum se ele nao olha. As duas TVs da sonda (P1e)
+        nao passam conceito"""
+        tv = self._exigir_tv("os conceitos da tela")
+        if self.mundo.duas_tvs is not None:
+            return ()
+        t = self._tm(self._estado.tick)
+        return tv.conceitos_em(t) if self._olhando_tv(tv.em(t)) else ()
+
+    def ligar_duas_tvs(self, cfg: ConfigDuasTVs, perfis: tuple, replica: int) -> dict:
+        """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7). So numa copia do pet: a vida nunca chama isto,
+        e nada vai ao log. Com a ConfigDuasTVs ligada, a TV do jogo ligada (a fonte "grade"), um cerebro com o gancho `olhando_tela` (o
+        olhar do DigiBrain modular) e nenhuma dupla ligada antes; senao, falha alto.
+
+        A TV da vida sai de cena (as linhas, o estimulo e o olhar passam a ser so das duas). O perfil A fica na TV de id IDS_DUAS_TVS[0] e o
+        B na IDS_DUAS_TVS[1], cada uma a `distancia_celulas` do pet, em direcoes opostas: a direcao da A e sorteada por uma rng propria,
+        `duas-tvs-posicao` (derivar_semente com a semente do pet, o tick do mundo e a replica), que nao toca nenhum outro fluxo. Se uma
+        das duas cai fora do mapa (cortada) ou na agua, tenta a direcao seguinte, ate `tentativas`; sem nenhuma, falha alto
+        (`DuasTVsSemLugar`, um RuntimeError)."""
+        if not isinstance(cfg, ConfigDuasTVs) or not cfg.ligada:
+            raise TVSemChave(f"ligar_duas_tvs precisa da ConfigDuasTVs ligada: {cfg!r}")
+        tv = self._exigir_tv("ligar_duas_tvs")
+        if self.ctv.fonte != "grade":
+            raise TVSemChave(f"a sonda das duas TVs e da TV do jogo (a fonte \"grade\"), nao {self.ctv.fonte!r}")
+        if self.mundo.duas_tvs is not None:
+            raise TVSemChave("as duas TVs da sonda ja estao ligadas")
+        if getattr(self._pm_cerebro(), "olhando_tela", None) is None:
+            raise TVSemChave("a sonda das duas TVs exige um cerebro com o olhar (o gancho olhando_tela)")
+        if type(replica) is not int or replica < 0:
+            raise ValueError(f"a replica da sonda e inteiro >= 0: {replica!r}")
+        perfis = tuple(tuple(p) for p in perfis)
+        if len(perfis) != 2 or perfis[0] == perfis[1]:
+            raise ValueError(f"a sonda das duas TVs pede dois perfis diferentes: {perfis!r}")
+        tm = self._tm(self._estado.tick)
+        rng = random.Random(derivar_semente("duas-tvs-posicao", self.semente, tm, replica))
+        k0 = rng.randrange(len(DIR16))
+        cm, dist = self.cmf, cfg.distancia_celulas * self.cmf.sub
+        px, py = self.pet
+        for i in range(cfg.tentativas):
+            k = (k0 + i) % len(DIR16)
+            pontos = (deslocar(px, py, k, dist, cm), deslocar(px, py, (k + len(DIR16) // 2) % len(DIR16), dist, cm))
+            ds = [distancia(x - px, y - py) for x, y in pontos]
+            if ds[0] == ds[1] and ds[0] <= self._raio_visao and all(self.mundo.seca(x, y) for x, y in pontos):
+                break
+        else:
+            raise DuasTVsSemLugar(f"a sonda das duas TVs nao coube em {cfg.tentativas} direcoes a partir da {k0} (pet em {self.pet})",
+                                  self.pet, k0)
+        self.mundo.duas_tvs = tuple((ident, TVFixa(p, tv.cfg.escala, x, y)) for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos))
+        return {"tick": tm, "replica": replica, "direcao_sorteada": k0, "direcao": k, "pet": [px, py],
+                "tvs": {ident: {"x": x, "y": y, "perfil": list(p)} for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos)}}
+
+    def trocar_canal(self, programa: int) -> None:
+        """O dono troca o canal da TV do jogo (a fonte "grade"). Valida o evento e o programa antes do log."""
+        self._exigir_tv("trocar_canal")
+        evento = evento_trocar_canal(self._estado.tick, programa)
+        self._aplicar_trocar_canal(ler_trocar_canal(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_trocar_canal(self, programa: int) -> None:
+        """So a TV muda: o programa passa ate o fim do programa da grade. Nao e contato nem cuidado e nao passa pelo estado, pelo corpo nem
+        pelo cerebro (o assistir junto fica fora, GV-22), como o sacudir a arvore. Vale com o pet acordado ou dormindo."""
+        tv = self._exigir_tv("trocar_canal")
+        tv.trocar_canal(programa, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def sentido_tela(self, fonte: str, niveis) -> None:
+        """O modo livre gravado (a fonte "evento"): o que a TV passa a partir de agora. Valida o evento antes do log."""
+        self._exigir_tv("sentido_tela")
+        evento = evento_sentido_tela(self._estado.tick, fonte, niveis)
+        self._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        self._log.anexar(evento)
+
+    def desligar_tela(self, fonte: str) -> None:
+        """A TV desligada (a decisao A, D-GV-TVJOGO-1; so com a ConfigTVJogo.desligar): a TV nao passa nada ate o proximo sentido_tela.
+        Valida o evento antes do log."""
+        self._exigir_tv("sentido_tela")
+        evento = evento_sentido_tela_desligada(self._estado.tick, fonte)
+        self._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_sentido_tela(self, fonte: str, niveis: tuple[int, ...] | None) -> None:
+        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado. Os niveis None: a TV desligada (so com a
+        ConfigTVJogo.desligar; sem ela, falha alto). No grupo, a TV e do mundo comum: o Grupo aplica o evento (Grupo.sentido_tela)"""
+        tv = self._exigir_tv("sentido_tela")
+        if self._grupo is not None:
+            raise TVSemChave("o sentido_tela no grupo e do mundo comum: Grupo.sentido_tela")
+        if niveis is None and not self.ctj.desligar:
+            raise TVSemChave("a TV desligada (sentido_tela `fonte|desligada`) exige a ConfigTVJogo.desligar")
+        tv.sentir(fonte, niveis, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
+
+    def percepcao_tela(self, fonte: str, pares) -> None:
+        """O orgao da visao no modo livre gravado (OV2): o que ele reconheceu, a partir de agora. Valida o evento antes do log."""
+        self._exigir_orgao()
+        evento = evento_percepcao_tela(self._estado.tick, fonte, _orgao.VERSAO_LISTA, _orgao.canonico(pares, fonte))
+        self._aplicar_percepcao_tela(*ler_percepcao_tela(evento))
+        self._log.anexar(evento)
+
+    def _exigir_orgao(self) -> None:
+        if not self.cor.ligada:
+            raise TVSemChave("percepcao_tela sem a ConfigOrgao ligada (o orgao da visao, OV2)")
+        self._exigir_tv("percepcao_tela")
+
+    def _aplicar_percepcao_tela(self, fonte: str, lista: str, pares: tuple) -> None:
+        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado."""
+        self._exigir_orgao()
+        self.mundo.tv.perceber(fonte, lista, pares, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
+
+    def no_galho(self) -> dict[str, int]:
+        """as frutas no galho de cada arvore agora (o que o cartao da arvore mostra); so le"""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("o galho so existe com o mundo e a ConfigSacudir ligados")
+        t = self._tm(self._estado.tick)
+        return {a["id"]: self.mundo.galho_em(a["id"], t)[0] for a in self.mundo.arvores}
+
+    def _aplicar_deixar_comida(self, tipo: str, x: int, y: int) -> None:
+        if not self.cmf.ligada:
+            raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
+        tick = self._estado.tick
+        c = self.mundo.deixar_comida(tipo, x, y, self._tm(tick))
+        self.deixadas.append({"tick": self._tm(tick), "id": c["id"], "tipo": tipo, "x": x, "y": y, "pet": self.pet})
+        # contato, como o alimentar de hoje: zera o tempo sem cuidado, soma um cuidado, vinculo e politica recebem `alimentar`
+        self._contato(AcaoUsuario.ALIMENTAR, tick)
+        if self.cdc.ligada:                         # a decisao na comida: o pet decide ja no proximo passo (so o momento da decisao)
+            self._proxima_decisao = min(self._proxima_decisao, tick)
+
+    def _aplicar_deixar_fruta(self, tipo: str, x: int, y: int) -> None:
+        """A fruta ao lado: a racao de referencia e a ultima racao deixada pelo dono neste tick (sem ela, falha alto: a fruta vai logo
+        depois da racao, no mesmo passo). Sem contato e fora do orcamento (o evento e do log, como o deixar_bola)."""
+        if not (self.cmf.ligada and self.cfal.ligada):
+            raise MundoSemChave("deixar_fruta sem o mundo e a ConfigFrutaAoLado ligados")
+        tm = self._tm(self._estado.tick)
+        racao = next((d for d in reversed(self.deixadas) if d["tick"] == tm and d["tipo"] == "racao"), None)
+        if racao is None:
+            raise ValueError(f"fruta ao lado sem racao deixada no tick {tm}: a fruta vai logo depois da racao, no mesmo passo")
+        c = self.mundo.deixar_fruta_ao_lado(tipo, x, y, tm)
+        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": c["x"], "y": c["y"], "racao": racao["id"]})
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
+
+    def ao_lado_no_chao(self) -> dict[str, int]:
+        """as frutas ao lado maduras no chao agora, por tipo (o que o dono olha para repor)"""
+        t = self._tm(self._estado.tick)
+        n = {f: 0 for f in self.cfal.tipos}
+        for c in self.mundo.comidas.values():
+            if c["origem"] == ORIGEM_AO_LADO and self.mundo.situacao(c, t) == "madura":
+                n[c["tipo"]] += 1
+        return n
+
+    def _aplicar_deixar_bola(self, x: int, y: int) -> None:
+        if not self.cmf.ligada:
+            raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
+        self.mundo.deixar_bola(x, y, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o por_bola de hoje)
+
+    # ------------------------------------------------------------ leitura
+    def estado(self) -> dict:
+        d = super().estado()
+        if not self.cmf.ligada:
+            return d                             # desligado: o estado() do MotorFrutas, sem chave nova
+        t = self._tm(self._estado.tick)
+        d["mundo"] = {"pet": self.pet, "regiao": self.cmf.layout.regioes[regiao_de(self.pet[0], self.cmf)][0],
+                      "bola": self.mundo.bola_em(t),
+                      "comidas": sum(1 for c in self.mundo.comidas.values() if self.mundo.situacao(c, t) is not None)}
+        if self.cbh.ligada:
+            d["banheiro"] = {"alivios": len(self.alivios), "alivios_dentro": self.alivios_dentro,
+                             "necessidades": len(self.mundo.necessidades), "na_zona": self.necessidades_na_zona()}
+        if self.cfal.ligada:
+            d["fruta_ao_lado"] = {"no_chao": self.ao_lado_no_chao(), "postas": len(self.frutas_ao_lado)}
+        if self.csa.ligada:
+            d["sacudir"] = {"no_galho": self.no_galho(), "sacudidas": len(self.mundo.sacudidas)}
+        if self.ctv.ligada:
+            tv = self.mundo.tv
+            d["tv"] = {"programa": tv.programa_em(t), "ligada": tv.em(t) is not None, "olhando": self.olhando_tv()}
+            if m_duas := self.mundo.duas_tvs:          # a sonda das duas TVs (P1e): so na copia; a vida sai byte a byte
+                d["tv"] |= {"duas_tvs": [i for i, _ in m_duas], "olhada": self.tv_olhada()}
+        return d
+
+    def resumo_mundo_fisico(self) -> dict:
+        """tudo o que o mundo e o pet guardam (o G1 compara isto bit a bit); as mesmas chaves de antes da separacao do Mundo"""
+        m = self.mundo
+        return {"pet": self.pet, "bola": dict(m.bola), "comidas": [dict(c) for c in m.comidas.values()],
+                "prox_id": m.prox_id, "passo_mundo": m.passo_mundo,
+                "arvores": [dict(a) for a in m.arvores],
+                "pendente": None if self._pendente is None else {"acao": self._pendente["acao"].value,
+                                                                 "alvo": self._pendente["alvo"].para_dict()},
+                "rngs": [r.getstate() for r in (m.rng_arvores, m.rng_bola, self._rng_sujeira, self._rng_alvo)],
+                "quedas": m.quedas, "consumos": self.consumos_mundo, "sumidas": m.sumidas, "deixadas": self.deixadas,
+                "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
+                "regioes": self.regioes, "visitas": self.visitas,
+                "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
+                **({} if m.troca_ilha is None else {"troca_ilha": m.troca_ilha}),
+                **({} if m.troca_maior is None else {"troca_maior": m.troca_maior}),
+                **({} if not self.cbh.ligada else {
+                    "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
+                    "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
+                    "idas_banheiro": self.idas_banheiro}),
+                **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo}),
+                **({} if m.paradas_arvores is None else {"paradas_arvores": m.paradas_arvores}),
+                **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado}),
+                **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes}),
+                **({} if not self.levadas else {"levadas": self.levadas}),
+                **({} if m.galhos is None else {"galhos": {i: dict(g) for i, g in m.galhos.items()}, "sacudidas": m.sacudidas,
+                                                "rng_sacode": m.rng_sacode.getstate()}),
+                **({} if m.tv is None else {"tv": m.tv.resumo()}),
+                **({} if not self.cld.ligada else {"lances": m.lances, "rng_lance": m.rng_lance.getstate(), "lance_tick": self._lance_tick}),
+                **({} if m.duas_tvs is None else {"duas_tvs": {i: t.resumo() for i, t in m.duas_tvs}})}     # so com alguma levada: a vida de antes sai byte a byte
+
+    # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
+    # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
+    # eventos; o MotorEducacao confere a morte no fim) em volta do laco de n ticks do engine. O grupo intercala os ticks dos pets, entao
+    # chama as tres partes separadas: `_abrir_avanco`, `_um_tick` n vezes e `_fechar_avanco`. Com um pet, e o `_avancar(n)` byte a byte
+    # (o G2 do grupo); tests/test_grupo.py confere que nenhuma classe da cadeia tem outro `_avancar`.
+    def resumo_social(self) -> dict:
+        """os registros sociais do pet (so no grupo; o G1 do grupo compara)"""
+        return {"viu_comer": self._viu_comer, "toques": self._toques, "vistos_comer": self.vistos_comer,
+                "idas_onde_comeu": self.idas_onde_comeu, "a_vista": self.a_vista, "decisoes_no_grupo": self.decisoes_no_grupo}
+
+    def _abrir_avanco(self) -> None:
+        self._n_eventos += 1                     # o MotorPersonalidade._avancar
+
+    def _um_tick(self) -> None:
+        Motor._avancar(self, 1)                  # o laco do engine, um tick (decide se for a hora, e anda o tick)
+
+    def _fechar_avanco(self) -> None:
+        self._conferir_morte(self._estado.tick)  # o MotorEducacao._avancar (com as lesoes desligadas, nada)
+
+
+# ================================================================== replay
+def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config | None = None, semente: int = 42,
+                     fabrica_motor: Callable | None = None, ate_tick: int | None = None,
+                     cfg_genoma: ConfigGenoma | None = None) -> MotorMundo:
+    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`, `sacudir_arvore` e, com a ConfigTV,
+    `trocar_canal` e `sentido_tela`). `ate_tick`: para antes do primeiro evento nesse
+    tick (corta o avanco que o atravessa), como o reproduzir_educacao. Evento desconhecido levanta erro; luta, origem, fala e
+    decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes.
+
+    O evento `genoma` (V3 G0, E2; G0-4, G0-7): so com `cfg_genoma.ligado`, so como primeiro evento do log e so um (o genoma vazio nao
+    muda a vida: a trajetoria sai igual). Com a chave desligada (o padrao), fora da primeira posicao ou repetido, levanta erro."""
+    cfg = cfg or CONFIG_PADRAO
+    if fabrica_motor is None:
+        raise ValueError("reproduzir_mundo precisa da fabrica do MotorMundo")
+    motor = fabrica_motor(politica_fabrica(cfg), cfg, semente)
+    if not isinstance(motor, MotorMundo):
+        raise TypeError(f"a fabrica devolveu {type(motor).__name__}, nao MotorMundo")
+    cg = cfg_genoma or CONFIG_GENOMA
+    for i, evento in enumerate(log):
+        if evento.tipo == TIPO_GENOMA and (not cg.ligado or i != 0):
+            raise ValueError("o evento genoma so vale com a ConfigGenoma ligada e como o primeiro evento do log (G0-4)"
+                             if i == 0 else f"o evento genoma so vale como o primeiro evento do log (posicao {i}; G0-4)")
+        if ate_tick is not None and evento.tick >= ate_tick:
+            break
+        if evento.tipo == TIPO_GENOMA:
+            Genoma.de_evento(evento)             # confere o formato; o genoma vazio ("hoje") nao muda nada
+        elif evento.tipo == "avanco":
+            motor._avancar(int(evento.valor) if ate_tick is None else min(int(evento.valor), ate_tick - evento.tick))
+        elif evento.tipo == "acao_usuario":
+            motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
+        elif evento.tipo == "deixar_comida":
+            motor._aplicar_deixar_comida(*ler_deixar_comida(evento, tamanho_do_mapa(motor.cmf)))
+        elif evento.tipo == "deixar_bola":
+            motor._aplicar_deixar_bola(*ler_deixar_bola(evento, tamanho_do_mapa(motor.cmf)))
+        elif evento.tipo == "levar_pet":
+            motor._aplicar_levar_pet(*ler_levar_pet(evento))
+        elif evento.tipo == "mudar_ilha":
+            motor._aplicar_mudar_ilha(ler_mudar_ilha(evento))
+        elif evento.tipo == "deixar_fruta":
+            motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(motor.cmf)))
+        elif evento.tipo == "sacudir_arvore":
+            motor._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
+        elif evento.tipo == TIPO_TROCAR_CANAL:
+            motor._aplicar_trocar_canal(ler_trocar_canal(evento))
+        elif evento.tipo == TIPO_SENTIDO_TELA:
+            motor._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        elif evento.tipo == TIPO_PERCEPCAO_TELA:
+            motor._aplicar_percepcao_tela(*ler_percepcao_tela(evento))
+        elif evento.tipo == "lt":
+            motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
+        else:
+            raise ValueError(f"tipo de evento desconhecido no log do mundo: {evento.tipo!r}")
+    motor._log = LogDeEventos([e for e in log if ate_tick is None or e.tick < ate_tick])
+    return motor
+
+
+def fabricas_mundo(cfg_mundo: ConfigMundo | None = None, politica_fabrica: Callable | None = None,
+                   temperamento: Temperamento = NEUTRO, especie: str = "brasa", efeito_frutas: dict | None = None, **kw):
+    """(fabrica da politica, fabrica do motor) de uma vida com o mundo, no desenho do plano (secao 2): obediencia, educacao, lesoes,
+    frutas e bola desligadas. A politica padrao e o instinto com o gancho vazio do dono (o instinto do mundo e do chat B, etapa 3).
+    Reusadas no replay."""
+    cm = cfg_mundo or CONFIG_MUNDO_LIGADA
+    fp = politica_fabrica or (lambda cfg=None: PoliticaInstintoBola(cfg, CONFIG_BOLA))  # noqa: E731
+    fm = (lambda politica, cfg, s: MotorMundo(politica, cfg, s, temperamento, especie, obediencia_desligada=True,  # noqa: E731
+                                              cfg_mundo=cm, efeito_frutas=efeito_frutas, **kw))
+    return fp, fm
+
+
+# ================================================================== o dono
+@dataclass(frozen=True)
+class DeixarComida:
+    tipo: str
+    x: int
+    y: int
+
+
+@dataclass(frozen=True)
+class DeixarFruta:
+    tipo: str
+    x: int
+    y: int
+
+
+@dataclass(frozen=True)
+class DeixarBola:
+    x: int
+    y: int
+
+
+ESTILOS_LUGAR_V2 = ("comedouro", "perto", "longe")          # os estilos das runs ate a C1 (as runs de antes iteram estes, nao os novos)
+ESTILOS_LUGAR = ESTILOS_LUGAR_V2 + ("longe_fixo", "longe_ancora")    # o `longe_ancora`: LONGE_GEOMETRIA (PLANO_ANALISE_V3_LONGE_GEOMETRIA, 3.2)
+
+
+class DonoComLugar:
+    """Embrulha um dono sintetico (secao 4): o `alimentar` vira `deixar_comida("racao", x, y)` no lugar do estilo. A rng do lugar e
+    `derivar_semente("dono-lugar", semente, rotulo_dono)`, sem o braco: P0 e P1 sorteiam os mesmos desvios. Um sorteio fixo por
+    `alimentar` em cada estilo (perto e longe: direcao e distancia; comedouro: nenhum).
+
+    O `longe_ancora` (LONGE_GEOMETRIA, docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.2): cada racao cai num ponto novo, sorteado como
+    um ponto do `longe_fixo` (as mesmas direcoes viaveis, a mesma faixa de distancia ao comedouro, o mesmo teste de corte e as mesmas 1 000
+    tentativas), com a rng propria `derivar_semente("dono-lugar-ancora", semente, rotulo_dono)`. So a repeticao dos lugares muda."""
+
+    def __init__(self, base, estilo: str, semente: int, rotulo_dono: str, cfg_mundo: ConfigMundo | None = None,
+                 n_pontos: int = N_PONTOS_LONGE_FIXO) -> None:
+        if estilo not in ESTILOS_LUGAR:
+            raise ValueError(f"estilo de lugar desconhecido: {estilo!r} (opcoes: {ESTILOS_LUGAR})")
+        self.base = base
+        self.estilo = estilo
+        self.nome = getattr(base, "nome", rotulo_dono)
+        self.cmf = cfg_mundo or CONFIG_MUNDO_LIGADA
+        if not 1 <= n_pontos <= 16:
+            raise ValueError(f"n_pontos precisa estar entre 1 e 16 (as direcoes): {n_pontos}")
+        self.n_pontos = n_pontos                           # so conta no estilo `longe_fixo`
+        self._rng = random.Random(derivar_semente("dono-lugar", semente, rotulo_dono))
+        self.lugares: list[dict] = []
+        self.pontos_fixos: tuple[tuple[int, int], ...] = ()
+        self._rng_fixo: random.Random | None = None
+        self._rng_ancora: random.Random | None = None
+        self._viaveis_ancora: tuple[int, ...] = ()
+        if estilo == "longe_fixo":                         # rng propria: os outros estilos nao consomem nenhum sorteio novo
+            self._rng_fixo = random.Random(derivar_semente("dono-lugar-fixo", semente, rotulo_dono))
+            self.pontos_fixos = self._sortear_pontos_fixos()
+        elif estilo == "longe_ancora":                     # idem, com a rng dele; as direcoes viaveis sao as do longe_fixo
+            self._rng_ancora = random.Random(derivar_semente("dono-lugar-ancora", semente, rotulo_dono))
+            self._viaveis_ancora = tuple(self._direcoes_viaveis())
+            if not self._viaveis_ancora:
+                raise ValueError(f"longe_ancora: nenhuma direcao cabe no mapa a {self.cmf.longe_min_celulas} celulas do comedouro")
+
+    def _cabe_inteiro(self, direcao: int, r: int) -> bool:
+        """o ponto a r subunidades do comedouro na direcao cai dentro do mapa sem corte (a distancia fica na faixa, a menos de 1 subunidade)"""
+        cm = self.cmf
+        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
+        x, y = deslocar(cx, cy, direcao, r, cm)
+        return distancia(x - cx, y - cy) >= r - 1
+
+    def _direcoes_viaveis(self) -> list[int]:
+        """as direcoes das 16 em que o ponto a `longe_min_celulas` do comedouro cabe sem corte (o `longe_fixo` e o `longe_ancora`)"""
+        cm = self.cmf
+        return [d for d in range(16) if self._cabe_inteiro(d, cm.longe_min_celulas * cm.sub)]
+
+    def _ponto_na_direcao(self, rng: random.Random, direcao: int) -> tuple[int, int]:
+        """um ponto na direcao, a uma distancia uniforme em `longe_min_celulas`...`longe_max_celulas` do comedouro que caiba sem corte;
+        em 1 000 sorteios sem nenhuma que caiba, falha alto"""
+        cm = self.cmf
+        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
+        rmin, rmax = cm.longe_min_celulas * cm.sub, cm.longe_max_celulas * cm.sub
+        for _ in range(1000):
+            r = rng.randint(rmin, rmax)
+            if self._cabe_inteiro(direcao, r):
+                return deslocar(cx, cy, direcao, r, cm)
+        raise RuntimeError(f"{self.estilo}: nenhuma distancia da direcao {direcao} cabe no mapa em 1000 sorteios")
+
+    def _sortear_pontos_fixos(self) -> tuple[tuple[int, int], ...]:
+        """Os `n_pontos` lugares da vida (C1, secao 3.1): cada um a `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2),
+        em direcoes distintas das 16. O corte do mapa nao pode encurtar a distancia: so valem as direcoes e distancias cujo ponto cai
+        dentro do mapa sem corte (a distancia fica na faixa, a menos do arredondamento de 1 subunidade); sem direcoes bastantes, falha alto."""
+        viaveis = self._direcoes_viaveis()
+        if len(viaveis) < self.n_pontos:
+            raise ValueError(f"longe_fixo: so {len(viaveis)} direcoes cabem no mapa a {self.cmf.longe_min_celulas} celulas do comedouro, "
+                             f"e o n_pontos pede {self.n_pontos}")
+        return tuple(self._ponto_na_direcao(self._rng_fixo, direcao) for direcao in self._rng_fixo.sample(viaveis, self.n_pontos))
+
+    def lugar(self, estado: dict) -> tuple[int, int]:
+        m = estado.get("mundo")
+        if m is None:
+            raise ValueError("o DonoComLugar precisa do estado() do MotorMundo ligado (chave `mundo`)")
+        cm = self.cmf
+        if self.estilo == "comedouro":
+            return centro_da_celula(cm.layout.comedouro, cm)
+        if self.estilo == "longe_fixo":
+            return self.pontos_fixos[self._rng_fixo.randrange(len(self.pontos_fixos))]
+        if self.estilo == "longe_ancora":
+            return self._ponto_na_direcao(self._rng_ancora, self._viaveis_ancora[self._rng_ancora.randrange(len(self._viaveis_ancora))])
+        px, py = m["pet"]
+        direcao = self._rng.randrange(16)
+        if self.estilo == "perto":
+            r = self._rng.randrange(cm.perto_max_celulas * cm.sub + 1)
+        else:
+            r = self._rng.randint(cm.longe_min_celulas * cm.sub, cm.longe_max_celulas * cm.sub)
+        return deslocar(px, py, direcao, r, cm)
+
+    def decidir(self, visao: Visao, rng: random.Random) -> list:
+        saida = []
+        for acao in self.base.decidir(visao, rng):
+            if acao is AcaoUsuario.ALIMENTAR:
+                x, y = self.lugar(visao.estado)
+                self.lugares.append({"tick": visao.estado["tick"], "x": x, "y": y, "pet": visao.estado["mundo"]["pet"]})
+                saida.append(DeixarComida("racao", x, y))
+            else:
+                saida.append(acao)
+        return saida
+
+
+class DonoFrutaAoLado:
+    """A fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md; ConfigFrutaAoLado): depois de cada racao que o `DonoComLugar` deixa no
+    comedouro, no mesmo passo, o dono poe ao lado as frutas que faltam (as de cada tipo abaixo do `teto_por_tipo` de maduras ao lado no
+    chao), fora do orcamento e sem contato, pelo `simular_vida_mundo(..., ao_lado=)`. As celulas sao a coluna do comedouro + `coluna`, nas
+    linhas do comedouro + `linhas` (os centros, cortados ao mapa); o tipo de cada linha sai de uma permutacao de `tipos` sorteada uma vez
+    na construcao pela rng propria `derivar_semente("fruta-ao-lado", semente)` (um `shuffle`), fixa na vida. So com o DonoComLugar no
+    estilo `comedouro`: com `perto` ou `longe` a racao nao fica no comedouro, e "ao lado" nao teria sentido. Le so o estado() do motor
+    (`fruta_ao_lado.no_chao`) e os lugares do proprio dono. Os depositos (tick, tipo, x, y, a racao) ficam em `depositos`."""
+
+    def __init__(self, dono: DonoComLugar, semente: int, cfg: ConfigFrutaAoLado, cfg_mundo: ConfigMundo | None = None) -> None:
+        if not isinstance(dono, DonoComLugar) or dono.estilo != "comedouro":
+            raise ValueError("a fruta ao lado precisa do DonoComLugar no estilo `comedouro` (a racao no comedouro)")
+        if not cfg.ligada:
+            raise ValueError("DonoFrutaAoLado com a ConfigFrutaAoLado desligada")
+        self.dono, self.cfg = dono, cfg
+        cm = cfg_mundo or dono.cmf
+        self.permutacao = list(cfg.tipos)
+        random.Random(derivar_semente("fruta-ao-lado", semente)).shuffle(self.permutacao)
+        cx, cy = cm.layout.comedouro
+        self.celulas = {f: no_mapa(*centro_da_celula((cx + cfg.coluna, cy + dy), cm), cm) for f, dy in zip(self.permutacao, cfg.linhas)}
+        self._vistos = 0                                  # os lugares do dono ja olhados
+        self.depositos: list[dict] = []
+
+    def acoes(self, estado: dict) -> list[DeixarFruta]:
+        fal = estado.get("fruta_ao_lado")
+        if fal is None:
+            raise ValueError("o DonoFrutaAoLado precisa do estado() do MotorMundo com a ConfigFrutaAoLado ligada (chave `fruta_ao_lado`)")
+        novos = self.dono.lugares[self._vistos:]
+        self._vistos = len(self.dono.lugares)
+        if not novos:
+            return []
+        if any(lg["tick"] != estado["tick"] for lg in novos):
+            raise RuntimeError("racao de outro passo sem a fruta ao lado: a regra roda em todo passo, logo depois do dono")
+        racao = novos[-1]
+        no_chao = dict(fal["no_chao"])
+        saida = []
+        for f in self.cfg.tipos:
+            if no_chao[f] < self.cfg.teto_por_tipo:
+                x, y = self.celulas[f]
+                saida.append(DeixarFruta(f, x, y))
+                no_chao[f] += 1
+                self.depositos.append({"tick": estado["tick"], "tipo": f, "x": x, "y": y, "racao": (racao["x"], racao["y"])})
+        return saida
+
+
+class DonoCarinhoBanheiro:
+    """O dono que acaricia depois do banheiro (secao 5): depois de cada `aliviar` DENTRO do banheiro, um `acariciar` no primeiro passo
+    do dono depois do alivio (o momento do K4), fora do orcamento (BN-2), pelo canal do mundo do `simular_vida_mundo(..., carinho=)`.
+    Fora do banheiro, nada (nem bronca nem tapa). Le so o que o motor mostra no estado() (`banheiro.alivios_dentro`). Com uma decisao a
+    cada 15 ticks e o passo do dono de 15, a ultima decisao antes do carinho e o `aliviar`: o cerebro o recebe pelo corpo (CD-4) e o credita
+    a ela (G-CRED). Os ticks dos carinhos ficam em `ticks`."""
+
+    def __init__(self) -> None:
+        self.vistos = 0
+        self.ticks: list[int] = []
+
+    @property
+    def feitos(self) -> int:
+        return len(self.ticks)
+
+    def acoes(self, estado: dict) -> list[AcaoUsuario]:
+        b = estado.get("banheiro")
+        if b is None:
+            raise BanheiroSemMundo("o DonoCarinhoBanheiro precisa do estado() do MotorMundo com o banheiro (chave `banheiro`)")
+        novos = b["alivios_dentro"] - self.vistos
+        if novos < 0:
+            raise RuntimeError(f"alivios dentro do banheiro voltaram: {b['alivios_dentro']} < {self.vistos}")
+        self.vistos = b["alivios_dentro"]
+        self.ticks += [estado["tick"]] * novos
+        return [AcaoUsuario.ACARICIAR] * novos
+
+
+class CanalMundo(CanalDeInteracao):
+    """O CanalDeInteracao com os gestos do mundo: `DeixarComida` e `DeixarBola` gastam orcamento como qualquer acao do dono."""
+
+    def aplicar(self, acoes: list, passo: int, passos_totais: int) -> None:
+        minimo, maximo = self.limites(passo, passos_totais)
+        if len(acoes) > maximo:
+            raise OrcamentoExcedido(f"passo {passo}: dono pediu {len(acoes)} interacoes, maximo {maximo} "
+                                    f"(gasto {self.gasto}/{self.orcamento})")
+        if len(acoes) < minimo:
+            raise OrcamentoNaoConsumido(f"passo {passo}: dono fez {len(acoes)} interacoes, minimo {minimo} "
+                                        f"para fechar o orcamento")
+        for acao in acoes:
+            if isinstance(acao, DeixarComida):
+                self.motor.deixar_comida(acao.tipo, acao.x, acao.y)
+            elif isinstance(acao, DeixarBola):
+                self.motor.deixar_bola(acao.x, acao.y)
+            elif isinstance(acao, AcaoUsuario):
+                aceita = getattr(self.motor, "aceita", None)
+                if aceita is not None and not aceita(acao):
+                    self.rejeitados += 1
+                    continue
+                self.motor.observar(acao)
+            else:
+                raise TypeError(f"acao invalida vinda do dono: {acao!r}")
+            self.gasto += 1
+
+
+def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orcamento: int, fabrica_motor: Callable,
+                       cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, rotulo_dono: str | None = None,
+                       canal_classe: type | None = None, carinho: DonoCarinhoBanheiro | None = None,
+                       ao_lado: DonoFrutaAoLado | None = None) -> Vida:
+    """treino.simular_vida com o CanalMundo: o dono (embrulhado pelo DonoComLugar) deixa a comida e a bola pelos gestos do mundo, que
+    gastam o orcamento. A rng do dono e a de sempre (`dono`, semente, rotulo). `canal_classe` troca o canal (o CanalMundoComGestos de
+    digilab/gestos.py, com o DonoComGestos); o padrao e o CanalMundo. `carinho` (o DonoCarinhoBanheiro): os carinhos depois do banheiro,
+    logo depois das acoes do dono no passo e fora do orcamento (BN-2; o `interacoes` da Vida nao os conta)."""
+    cfg = cfg or CONFIG_PADRAO
+    cfg_donos = cfg_donos or CONFIG_DONOS
+    total = dias * TICKS_POR_DIA
+    if total % cfg_donos.passo_ticks != 0:
+        raise ValueError("duracao nao e multipla do passo do dono")
+    passos = total // cfg_donos.passo_ticks
+    motor = fabrica_motor(politica, cfg, semente)
+    if not isinstance(motor, MotorMundo) or not motor.cmf.ligada:
+        raise ValueError("simular_vida_mundo precisa do MotorMundo com o mundo ligado")
+    rng_dono = random.Random(derivar_semente("dono", semente, rotulo_dono or braco))
+    canal = (canal_classe or CanalMundo)(motor, orcamento, cfg_donos.max_interacoes_por_passo)
+    for passo in range(passos):
+        motor.avancar(cfg_donos.passo_ticks)
+        minimo, maximo = canal.limites(passo, passos)
+        visao = Visao(estado=motor.estado(), passo=passo, passos_totais=passos, orcamento=orcamento, gasto=canal.gasto,
+                      minimo_obrigatorio=minimo, maximo_permitido=maximo)
+        canal.aplicar(dono.decidir(visao, rng_dono), passo, passos)
+        if carinho is not None:
+            for acao in carinho.acoes(motor.estado()):
+                motor.observar(acao)
+        if ao_lado is not None:                  # a fruta ao lado da racao: logo depois das acoes do dono do passo, fora do orcamento
+            for acao in ao_lado.acoes(motor.estado()):
+                motor.deixar_fruta(acao.tipo, acao.x, acao.y)
+    canal.fechar()
+    return Vida(braco=braco, semente_coorte=semente, motor=motor, interacoes=canal.gasto)

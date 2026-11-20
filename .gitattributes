@@ -1,0 +1,18 @@
+# LF em tudo: engine.py tem hash congelado e os artefatos tem sha256 em metrics.json
+* text=auto eol=lf
+artifacts/** -text
+artifacts_ablacao/** -text
+artifacts_combate_v2/** -text
+artifacts_combate_v21/** -text
+artifacts_v21_pesquisa/** -text
+artifacts_campanha/** -text
+artifacts_expressao/** -text
+artifacts_fala/** -text
+artifacts_v1_memoria/** -text
+artifacts_v1_memoria_espacos/** -text
+artifacts_v1_personalidade/** -text
+
+# Saude, etapa 2 (Matheus, 2026-10-14): o registro por mes so cresce no fim; o git junta as duas pontas sem conflito
+docs/registro/*.md merge=union
+
+# Saude (Gerente, 2026-10-14, recomendacao aceita pelo Matheus): o indice sai do merge=union; um PR antigo colou o registro inteiro nele sem conflito

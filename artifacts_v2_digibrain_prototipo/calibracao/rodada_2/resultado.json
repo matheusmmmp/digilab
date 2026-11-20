@@ -1,0 +1,98 @@
+{
+  "aviso": "o T-CADEIA-1 e conferido por tests/test_digibrain_vidas.py antes da run; os bracos da ablacao nao sao olhados",
+  "criterios": {
+    "g_pesa": {
+      "habito": {
+        "passa": true,
+        "valor": 0.16567460317460317
+      },
+      "incentivo": {
+        "passa": false,
+        "valor": 0.008928571428571428
+      },
+      "memoria": {
+        "passa": true,
+        "valor": 0.1351376488095238
+      },
+      "persistencia": {
+        "passa": false,
+        "valor": 0.0015500992063492063
+      }
+    },
+    "pesos_no_teto": {
+      "passa": true,
+      "valor": 0.0
+    },
+    "taxa_mediana": {
+      "passa": false,
+      "valor": 0.33503134796238243
+    }
+  },
+  "descritivos": {
+    "M3": {
+      "d_fe": 0.6064181883473876,
+      "episodios_sairam": 2866,
+      "exaustao": 0.2349330357142857,
+      "fins": {
+        "meta": 3645,
+        "trocou": 1459
+      },
+      "influencia": {
+        "afeto": 0.013237847222222222,
+        "aprendido": 0.2691592261904762,
+        "habito": 0.16567460317460317,
+        "incentivo": 0.008928571428571428,
+        "memoria": 0.1351376488095238,
+        "persistencia": 0.0015500992063492063
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.644472583912037
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7452438512731482
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6361997457837302
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.5287751012731482
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7519109623015873
+        },
+        "atencioso|perto": {
+          "d_fe": 0.43838797949735453
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.5287751012731482
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6698252624834656
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44050720279431216
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5805084428736773
+        },
+        "relapso|longe": {
+          "d_fe": 0.7323851893187832
+        },
+        "relapso|perto": {
+          "d_fe": 0.5800268373842593
+        }
+      },
+      "privacao": 0.3322172619047619,
+      "refeicoes_por_dia": 3.5282738095238098,
+      "visitas_lugar_lembrado": 1263,
+      "visitas_vazias": 1263
+    }
+  },
+  "fase": "calibracao",
+  "fecha": false,
+  "modo": "calibracao",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "rodada": 2
+}

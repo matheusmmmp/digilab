@@ -1,0 +1,28 @@
+{
+ "nome": "g05_f1_m8_v06_45",
+ "pesoPonto": 15,
+ "gama": {
+  "vigor": 0.05,
+  "recuperacao": 0.05,
+  "guarda": 0.15,
+  "forca": 0.05,
+  "mira": 0.8,
+  "folego": 0.6
+ },
+ "mapa": {
+  "hp": 1300,
+  "vel": 45
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.9,
+  "adulto": 1.35,
+  "mega": 2.025
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.5,
+  "adulto": 2.25,
+  "mega": 3.375
+ }
+}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=820">
+<title>Pet · a ração no mundo (celular)</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;family=Rubik:ital,wght@1,800;1,900&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dl-up.css">
+<style>
+body{margin:0;width:820px;display:flex;gap:40px;background:#DCE6F4;font-family:"M PLUS Rounded 1c",sans-serif}
+.fone{position:relative;width:390px;height:844px;overflow:hidden;background:var(--dl-bg);color:#13244D}
+.cab{position:absolute;left:0;right:0;top:0;height:56px;display:flex;align-items:center;gap:8px;padding:0 14px;background:#FFF;box-shadow:0 2px 0 var(--dl-border)}
+.cab b{font-size:16px}.cab small{font-size:12px;font-weight:800;color:#4A5878}
+.cena{position:absolute;left:0;right:0;top:56px;height:430px;overflow:hidden}
+.chip{position:absolute;background:#FFF;border:2px solid var(--dl-navy);border-radius:999px;font-size:12px;font-weight:900;color:var(--dl-navy);padding:2px 10px}
+.doca{position:absolute;left:0;right:0;top:486px;padding:10px 14px;display:grid;gap:10px}
+.acoes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.acao{min-height:64px;border-radius:12px;background:#FFF;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:900;color:var(--dl-navy)}
+.acao--racao{box-shadow:0 0 0 3px #FFD23F,0 3px 0 3px #E0A800;cursor:grab}
+.acao small{font-size:10px;font-weight:800;color:#4A5878}
+.nota{font-size:12px;font-weight:700;color:#4A5878;margin:0}
+.nota b{color:var(--dl-navy)}
+.faixa{position:absolute;left:10px;right:10px;top:8px;background:#FFF;border-radius:14px;box-shadow:0 0 0 2px var(--dl-navy),0 4px 0 2px var(--dl-navy-deep);padding:8px 10px;display:grid;gap:8px}
+.faixa b{font-size:14px}
+.lugares{display:flex;flex-wrap:wrap;gap:6px}
+.lugar{min-height:44px;padding:0 12px;border-radius:10px;border:2px solid var(--dl-border);background:#F4F8FE;font:inherit;font-size:13px;font-weight:900;color:var(--dl-navy)}
+.lugar--foco{box-shadow:0 0 0 3px #FFFFFF,0 0 0 5px #128CFF}
+.rotulo{position:absolute;font-size:11px;font-weight:900;color:#13244D;background:rgba(255,255,255,.8);border-radius:6px;padding:0 6px}
+.legenda{position:absolute;left:0;right:0;bottom:0;height:96px;background:#173A8A;color:#FFF;padding:10px 14px;font-size:12px;font-weight:700;line-height:1.35}
+.legenda b{color:#FFD23F}
+</style>
+</head>
+<body>
+<!-- 1. O gesto: arrastar a ração da barra de ações e soltar no chão da cena -->
+<div class="fone">
+  <div class="cab"><b>Gomamon</b><small>Rookie · dia 1 · 14:00</small></div>
+  <div class="cena">
+    <svg viewBox="0 0 390 430" width="390" height="430" aria-label="A cena: a janela do mundo em volta do pet, a casa e o jardim" role="img">
+      <rect width="390" height="430" fill="#EEF4FC"/>
+      <!-- o chão do mundo em vista inclinada: a casa (células 0 a 15) e o jardim (16 a 33) -->
+      <polygon points="0,150 250,150 300,430 0,430" fill="#D6E3F4"/>
+      <polygon points="250,150 390,150 390,430 300,430" fill="#CFE7C2"/>
+      <line x1="250" y1="150" x2="300" y2="430" stroke="#B5CBE6" stroke-width="2" stroke-dasharray="6 6"/>
+      <!-- o ninho e o comedouro (o layout do motor) -->
+      <ellipse cx="70" cy="300" rx="34" ry="12" fill="#B8C8E6"/><ellipse cx="70" cy="296" rx="26" ry="8" fill="#DCE6F8"/>
+      <ellipse cx="160" cy="300" rx="20" ry="8" fill="#8FA4C8"/><ellipse cx="160" cy="296" rx="16" ry="6" fill="#C9D6EC"/>
+      <!-- o pet (placeholder original) sobre a sombra -->
+      <ellipse cx="200" cy="318" rx="26" ry="8" fill="rgba(23,58,138,.18)"/>
+      <ellipse cx="200" cy="288" rx="24" ry="28" fill="#7FB4F0"/><circle cx="192" cy="282" r="3" fill="#13244D"/><circle cx="208" cy="282" r="3" fill="#13244D"/>
+      <!-- o alvo da soltura e a ração sob o dedo -->
+      <ellipse cx="300" cy="270" rx="22" ry="8" fill="none" stroke="#FFD23F" stroke-width="3"/>
+      <ellipse cx="300" cy="266" rx="10" ry="5" fill="#9B6A3C"/><ellipse cx="300" cy="263" rx="7" ry="3" fill="#C08A55"/>
+      <path d="M 70,470 C 120,420 250,360 296,282" fill="none" stroke="#173A8A" stroke-width="3" stroke-dasharray="7 7" opacity=".6"/>
+    </svg>
+    <span class="chip" style="left:10px;top:10px">no jardim · 1 ração no chão</span>
+    <span class="rotulo" style="left:52px;top:322px">ninho</span>
+    <span class="rotulo" style="left:132px;top:322px">comedouro</span>
+    <span class="rotulo" style="left:268px;top:236px">solte aqui</span>
+  </div>
+  <div class="doca">
+    <div class="acoes">
+      <div class="acao acao--racao" role="button" aria-label="Pôr ração: arraste para o chão ou toque">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><ellipse cx="12" cy="15" rx="9" ry="5" fill="#9B6A3C"/><ellipse cx="12" cy="12" rx="6" ry="3" fill="#C08A55"/></svg>Pôr ração</div>
+      <div class="acao">Alimentar<small>reserva</small></div>
+      <div class="acao">Brincar</div>
+      <div class="acao">Mais</div>
+    </div>
+    <p class="nota"><b>Arraste a ração</b> e solte no chão da cena. Fora do mapa não vale: nada entra no registro.</p>
+    <p class="nota"><b>Alimentar</b> é a reserva temporária: põe a ração no comedouro.</p>
+  </div>
+  <div class="legenda"><b>1 · o gesto.</b> O ponto onde a ração cai vira a posição do mundo (subunidades inteiras) e entra no registro como o
+    evento da comida com lugar. A cena segue o motor: o pet, o comedouro, o ninho e a ração ficam onde o motor diz, e a câmera acompanha o pet.</div>
+</div>
+
+<!-- 2. O caminho acessível: escolher a ração e depois o lugar (toque no chão, ou um lugar nomeado pelo teclado) -->
+<div class="fone">
+  <div class="cab"><b>Gomamon</b><small>Rookie · dia 1 · 14:00</small></div>
+  <div class="cena">
+    <svg viewBox="0 0 390 430" width="390" height="430" aria-hidden="true">
+      <rect width="390" height="430" fill="#EEF4FC"/>
+      <polygon points="0,150 250,150 300,430 0,430" fill="#D6E3F4"/>
+      <polygon points="250,150 390,150 390,430 300,430" fill="#CFE7C2"/>
+      <line x1="250" y1="150" x2="300" y2="430" stroke="#B5CBE6" stroke-width="2" stroke-dasharray="6 6"/>
+      <ellipse cx="70" cy="300" rx="34" ry="12" fill="#B8C8E6"/><ellipse cx="70" cy="296" rx="26" ry="8" fill="#DCE6F8"/>
+      <ellipse cx="160" cy="300" rx="20" ry="8" fill="#8FA4C8"/><ellipse cx="160" cy="296" rx="16" ry="6" fill="#C9D6EC"/>
+      <ellipse cx="200" cy="318" rx="26" ry="8" fill="rgba(23,58,138,.18)"/>
+      <ellipse cx="200" cy="288" rx="24" ry="28" fill="#7FB4F0"/><circle cx="192" cy="282" r="3" fill="#13244D"/><circle cx="208" cy="282" r="3" fill="#13244D"/>
+      <!-- "perto do pet": 2 células a leste dele -->
+      <ellipse cx="236" cy="314" rx="18" ry="6" fill="none" stroke="#128CFF" stroke-width="3" stroke-dasharray="4 4"/>
+    </svg>
+    <div class="faixa" role="dialog" aria-label="Pôr a ração">
+      <b>Toque no chão para pôr a ração</b>
+      <div class="lugares">
+        <button class="lugar">Comedouro</button><button class="lugar lugar--foco">Perto do pet</button><button class="lugar">Longe</button><button class="lugar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <div class="doca">
+    <div class="acoes">
+      <div class="acao acao--racao" aria-pressed="true">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><ellipse cx="12" cy="15" rx="9" ry="5" fill="#9B6A3C"/><ellipse cx="12" cy="12" rx="6" ry="3" fill="#C08A55"/></svg>Pôr ração</div>
+      <div class="acao">Alimentar<small>reserva</small></div>
+      <div class="acao">Brincar</div>
+      <div class="acao">Mais</div>
+    </div>
+    <p class="nota"><b>Tocar em "Pôr ração"</b> abre a faixa: toque no chão, ou escolha um lugar com o teclado (Tab e Enter).</p>
+    <p class="nota"><b>Comedouro</b> é o do mapa; <b>perto do pet</b>, 2 células a leste dele; <b>longe</b>, 20 células para o lado com mais
+      espaço (as distâncias do motor: perto_max_celulas e longe_min_celulas).</p>
+  </div>
+  <div class="legenda"><b>2 · o caminho acessível.</b> O mesmo evento que o gesto: só muda como o lugar é escolhido. Esc ou Cancelar fecham a
+    faixa sem pôr nada. Sem WebGL, a cena de reserva (CSS e SVG) aceita o mesmo toque e os mesmos lugares.</div>
+</div>
+<!-- Prancha VERSIONADA com placeholders originais (sem imagens de terceiros). Só o que o motor tem: as regiões, o ninho, o comedouro, a
+     ração e o pet nas posições do mundo do v12. Tarefa: docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2. -->
+</body>
+</html>

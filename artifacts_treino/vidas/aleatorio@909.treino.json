@@ -1,0 +1,72 @@
+{
+  "braco": "aleatorio",
+  "carater_adulto": {
+    "atento": -0.1640625,
+    "impetuoso": 0.2218749999999999,
+    "paciente": 0.039062499999999514,
+    "resistente": -0.3187499999999999
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 3,
+    "treino": 71
+  },
+  "enroladas": 22,
+  "especie": "ferrugem",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "duelista",
+    "linha": "brigao",
+    "ramo": "arisco",
+    "rotulo": "ferrugem/arisco/brigao/duelista"
+  },
+  "obediencia_cuidado": 0.7972972972972973,
+  "ovo": 909,
+  "sessoes": 71,
+  "sombria": false,
+  "treino": {
+    "enroladas": 22,
+    "especie": "ferrugem",
+    "estresse": 10.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 2,
+    "pausas": {
+      "atendidas": 1,
+      "ignoradas": 8
+    },
+    "pontos": {
+      "folego": 4.172566011367019,
+      "forca": 5.12619146425,
+      "guarda": 6.1347544012799995,
+      "mira": 5.30510148,
+      "recuperacao": 2.4542267934375,
+      "vigor": 7.928505698396733
+    },
+    "pontos_estagio": {
+      "adolescente": 7.12134584873125,
+      "adulto": 14.0,
+      "crianca": 10.0
+    },
+    "sessoes": 71,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 31.121345848731252,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 21.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 4.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.6121099556345923
+}

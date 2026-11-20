@@ -1,0 +1,452 @@
+{
+  "custo": {
+    "cpu_s_por_vida": {
+      "P1": 0.737109375,
+      "P1-plan": 0.893359375,
+      "P1-plan-cong": 0.901953125,
+      "P1-plan-desfecho": 0.899609375
+    },
+    "cpu_s_por_vida_media": 0.8580078125,
+    "parede_s_piloto": 149.32482719421387,
+    "processos": 4,
+    "validacao": {
+      "cpu_h": 0.09533420138888889,
+      "n": 50,
+      "vidas": 400
+    },
+    "vidas_por_unidade": 8
+  },
+  "descritivo_nao_e_evidencia": {
+    "G-T1": {
+      "ic90": {
+        "ic_inferior": -0.22619047619047614,
+        "ic_superior": 0.3095238095238095,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.2564102564102564,
+        "ic_superior": 0.36666666666666664,
+        "nivel": 0.95
+      },
+      "media": 0.03333333333333334,
+      "motivo": null,
+      "n": 15,
+      "n_grupos": 5,
+      "p_unilateral": 0.4478,
+      "t_pareado": {
+        "gl": 14,
+        "p_unilateral": 0.40769669471459147,
+        "t": 0.2379154757154433
+      },
+      "unidades_com_valor": 15
+    },
+    "G-T1-CONG": {
+      "ic90": {
+        "ic_inferior": -0.07142857142857142,
+        "ic_superior": 0.2692307692307692,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.1,
+        "ic_superior": 0.3,
+        "nivel": 0.95
+      },
+      "media": 0.1,
+      "motivo": null,
+      "n": 15,
+      "n_grupos": 5,
+      "p_unilateral": 0.218,
+      "t_pareado": {
+        "gl": 14,
+        "p_unilateral": 0.19200011068015455,
+        "t": 0.8987170342729172
+      },
+      "unidades_com_valor": 15
+    },
+    "G-T1-DESF": {
+      "ic90": {
+        "ic_inferior": -0.19047619047619047,
+        "ic_superior": 0.358974358974359,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.2564102564102564,
+        "ic_superior": 0.4,
+        "nivel": 0.95
+      },
+      "media": 0.1,
+      "motivo": null,
+      "n": 15,
+      "n_grupos": 5,
+      "p_unilateral": 0.2863,
+      "t_pareado": {
+        "gl": 14,
+        "p_unilateral": 0.2485957701300311,
+        "t": 0.6970374326528528
+      },
+      "unidades_com_valor": 15
+    },
+    "G-T2": {
+      "ic90": null,
+      "ic95": null,
+      "media": null,
+      "motivo": "menos de 2 grupos com valor",
+      "n": 0,
+      "n_grupos": 0,
+      "p_unilateral": null,
+      "t_pareado": null,
+      "unidades_com_valor": 0
+    },
+    "G-T2-CONG": {
+      "ic90": null,
+      "ic95": null,
+      "media": null,
+      "motivo": "menos de 2 grupos com valor",
+      "n": 0,
+      "n_grupos": 0,
+      "p_unilateral": null,
+      "t_pareado": null,
+      "unidades_com_valor": 0
+    },
+    "G-T2-HAB": {
+      "ic90": null,
+      "ic95": null,
+      "media": null,
+      "motivo": "menos de 2 grupos com valor",
+      "n": 0,
+      "n_grupos": 0,
+      "p_unilateral": null,
+      "t_pareado": null,
+      "unidades_com_valor": 0
+    }
+  },
+  "escolha_g_plano": {
+    "desvio": 0.0,
+    "fechou": true,
+    "g_plano": 1024,
+    "media": 0.1522191698704663
+  },
+  "g_plano": 1024,
+  "margens": {
+    "com_espaco": {
+      "T1": true,
+      "T2": true
+    },
+    "delta_t1": 0.21666666666666665,
+    "delta_t2": 0.2857142857142857,
+    "minima": 0.05,
+    "n_t1": 20,
+    "n_t2": 7
+  },
+  "n": {
+    "alfa": 0.025,
+    "alfas_relato": [
+      0.0125,
+      0.05
+    ],
+    "alvo": 0.8,
+    "chega_ao_alvo": false,
+    "escolhido": {
+      "G-T1": {
+        "n_efetivo": 37,
+        "poder": 0.687
+      },
+      "G-T2": {
+        "n_efetivo": 0,
+        "poder": null
+      },
+      "k": 10,
+      "n": 50
+    },
+    "k": 10,
+    "k_max": 10,
+    "k_min": 4,
+    "n": 50,
+    "replicas": 2000,
+    "semente": 4242,
+    "tabela": [
+      {
+        "G-T1": {
+          "n_efetivo": 15,
+          "poder": 0.276
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 4,
+        "n": 20
+      },
+      {
+        "G-T1": {
+          "n_efetivo": 18,
+          "poder": 0.3515
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 5,
+        "n": 25
+      },
+      {
+        "G-T1": {
+          "n_efetivo": 22,
+          "poder": 0.4355
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 6,
+        "n": 30
+      },
+      {
+        "G-T1": {
+          "n_efetivo": 26,
+          "poder": 0.518
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 7,
+        "n": 35
+      },
+      {
+        "G-T1": {
+          "n_efetivo": 30,
+          "poder": 0.5885
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 8,
+        "n": 40
+      },
+      {
+        "G-T1": {
+          "n_efetivo": 33,
+          "poder": 0.6365
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 9,
+        "n": 45
+      },
+      {
+        "G-T1": {
+          "n_efetivo": 37,
+          "poder": 0.687
+        },
+        "G-T2": {
+          "n_efetivo": 0,
+          "poder": null
+        },
+        "k": 10,
+        "n": 50
+      }
+    ]
+  },
+  "poder_secundarios": {
+    "G-T1-CONG": {
+      "delta": 0.21666666666666665,
+      "n_efetivo": 37,
+      "poder": {
+        "0.0125": 0.8345,
+        "0.05": 0.961
+      },
+      "subpotenciado": {
+        "0.0125": false,
+        "0.05": false
+      }
+    },
+    "G-T1-DESF": {
+      "delta": 0.21666666666666665,
+      "n_efetivo": 37,
+      "poder": {
+        "0.0125": 0.559,
+        "0.05": 0.7845
+      },
+      "subpotenciado": {
+        "0.0125": false,
+        "0.05": false
+      }
+    },
+    "G-T2-CONG": {
+      "delta": 0.2857142857142857,
+      "n_efetivo": 0,
+      "poder": {
+        "0.0125": null,
+        "0.05": null
+      },
+      "subpotenciado": {
+        "0.0125": true,
+        "0.05": true
+      }
+    },
+    "G-T2-HAB": {
+      "delta": 0.2857142857142857,
+      "n_efetivo": 0,
+      "poder": {
+        "0.0125": null,
+        "0.05": null
+      },
+      "subpotenciado": {
+        "0.0125": true,
+        "0.05": true
+      }
+    }
+  },
+  "premissas": {
+    "G-APRENDEU": {
+      "P1": {
+        "ic": {
+          "ic_inferior": 0.4333333333333333,
+          "ic_superior": 0.6666666666666667,
+          "media": 0.55,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "n": 20,
+        "passa": true
+      },
+      "P1-plan": {
+        "ic": {
+          "ic_inferior": 0.3333333333333333,
+          "ic_superior": 0.5166666666666666,
+          "media": 0.4333333333333333,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "n": 20,
+        "passa": true
+      },
+      "P1-plan-cong": {
+        "ic": {
+          "ic_inferior": 0.3333333333333333,
+          "ic_superior": 0.5166666666666666,
+          "media": 0.4333333333333333,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "n": 20,
+        "passa": true
+      },
+      "P1-plan-desfecho": {
+        "ic": {
+          "ic_inferior": 0.3333333333333333,
+          "ic_superior": 0.5166666666666666,
+          "media": 0.4333333333333333,
+          "n": 20,
+          "nivel": 0.95
+        },
+        "n": 20,
+        "passa": true
+      }
+    },
+    "G-EXPOSICAO": {
+      "P1": {
+        "fracao": 0.55,
+        "n": 20,
+        "passa": false,
+        "sem": 11
+      },
+      "P1-plan": {
+        "fracao": 0.4,
+        "n": 20,
+        "passa": false,
+        "sem": 8
+      },
+      "P1-plan-cong": {
+        "fracao": 0.5,
+        "n": 20,
+        "passa": false,
+        "sem": 10
+      },
+      "P1-plan-desfecho": {
+        "fracao": 0.45,
+        "n": 20,
+        "passa": false,
+        "sem": 9
+      }
+    },
+    "G-OPORTUNIDADE": {
+      "P1-plan-cong/T1": {
+        "fracao": 0.25,
+        "n": 20,
+        "passa": true,
+        "sem": 5
+      },
+      "P1-plan-cong/T2": {
+        "fracao": 1.0,
+        "n": 20,
+        "passa": false,
+        "sem": 20
+      },
+      "P1-plan-desfecho/T1": {
+        "fracao": 0.2,
+        "n": 20,
+        "passa": true,
+        "sem": 4
+      },
+      "P1-plan-desfecho/T2": {
+        "fracao": 1.0,
+        "n": 20,
+        "passa": false,
+        "sem": 20
+      },
+      "P1-plan/T1": {
+        "fracao": 0.2,
+        "n": 20,
+        "passa": true,
+        "sem": 4
+      },
+      "P1-plan/T2": {
+        "fracao": 1.0,
+        "n": 20,
+        "passa": false,
+        "sem": 20
+      },
+      "P1/T1": {
+        "fracao": 0.15,
+        "n": 20,
+        "passa": true,
+        "sem": 3
+      },
+      "P1/T2": {
+        "fracao": 1.0,
+        "n": 20,
+        "passa": false,
+        "sem": 20
+      }
+    }
+  },
+  "regras": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, secoes 6 e 7",
+    "limiar_aprendeu": 0.25,
+    "limiar_sem": 0.25,
+    "margem_minima": 0.05,
+    "poder": {
+      "alfa": 0.025,
+      "alfas_relato": [
+        0.0125,
+        0.05
+      ],
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "replicas": 2000
+    }
+  },
+  "unidades": 20,
+  "valida_validacao": true
+}

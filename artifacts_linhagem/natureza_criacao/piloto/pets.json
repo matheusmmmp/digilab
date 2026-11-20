@@ -1,0 +1,802 @@
+{
+  "aleatorio@g80001r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "sentinela",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.04999999999999995,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 28.179614298700002,
+    "vinculo_final": 0.7447591735336808
+  },
+  "aleatorio@g80001r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "sentinela",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.921936379374998,
+    "vinculo_final": 0.3233051489358585
+  },
+  "aleatorio@g80002r80101": {
+    "adulto_liberado": false,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": null,
+      "estagio": "adolescente",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.09166666666666695,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 7
+    },
+    "treino_total": 27.162678012500002,
+    "vinculo_final": 0.6744793466535902
+  },
+  "aleatorio@g80002r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "sentinela",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.045000000000004925,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.1062035,
+    "vinculo_final": 0.53107150026734
+  },
+  "aleatorio@g80003r80101": {
+    "adulto_liberado": false,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": null,
+      "estagio": "adolescente",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 1,
+      "lutas": 10,
+      "vitorias": 0
+    },
+    "treino_total": 29.2580804,
+    "vinculo_final": 0.6522353414451019
+  },
+  "aleatorio@g80003r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.72481391676875,
+    "vinculo_final": 0.4080667185395618
+  },
+  "aleatorio@g80004r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.19200000000004924,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 28.179614298700002,
+    "vinculo_final": 0.6224145313590401
+  },
+  "aleatorio@g80004r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "aleatorio",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.865481830000004,
+    "vinculo_final": 0.3189143719105273
+  },
+  "atencioso@g80001r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 100,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "estagio": "adulto",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 8
+    },
+    "treino_total": 30.686982800000003,
+    "vinculo_final": 0.3753194146669098
+  },
+  "atencioso@g80001r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 81,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.99816152525,
+    "vinculo_final": 0.4716052835254815
+  },
+  "atencioso@g80002r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 100,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 29.197808750000004,
+    "vinculo_final": 0.4023317198431879
+  },
+  "atencioso@g80002r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 87,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 9
+    },
+    "treino_total": 26.0070046875,
+    "vinculo_final": 0.6021397919594864
+  },
+  "atencioso@g80003r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 93,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.666269475,
+    "vinculo_final": 0.4681178130811467
+  },
+  "atencioso@g80003r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 81,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 9
+    },
+    "treino_total": 28.06851575,
+    "vinculo_final": 0.342691678802132
+  },
+  "atencioso@g80004r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 100,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "estagio": "adulto",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 9
+    },
+    "treino_total": 26.17315,
+    "vinculo_final": 0.4822923948334302
+  },
+  "atencioso@g80004r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 93,
+    "dono": "atencioso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.998161525249998,
+    "vinculo_final": 0.21060714180180445
+  },
+  "permissivo@g80001r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 26.17315,
+    "vinculo_final": 0.7820409499037296
+  },
+  "permissivo@g80001r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 28.06851575,
+    "vinculo_final": 0.9534695748718244
+  },
+  "permissivo@g80002r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 28.096467708749998,
+    "vinculo_final": 0.681636811590087
+  },
+  "permissivo@g80002r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 9
+    },
+    "treino_total": 27.7911190875,
+    "vinculo_final": 0.9564349542359089
+  },
+  "permissivo@g80003r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 27.90337454125,
+    "vinculo_final": 0.9459606967426744
+  },
+  "permissivo@g80003r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 30.041525125,
+    "vinculo_final": 0.919913496893484
+  },
+  "permissivo@g80004r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "estagio": "adulto",
+      "linha": "cacador",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 26.17315,
+    "vinculo_final": 0.8378722491664823
+  },
+  "permissivo@g80004r80102": {
+    "adulto_liberado": true,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "permissivo",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 1.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 9
+    },
+    "treino_total": 28.2411095,
+    "vinculo_final": 0.9379658466933193
+  },
+  "relapso@g80001r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "estagio": "adulto",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.7190000000000254,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 8
+    },
+    "treino_total": 26.44373,
+    "vinculo_final": 0.38048563402001395
+  },
+  "relapso@g80001r80102": {
+    "adulto_liberado": false,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": null,
+      "estagio": "adolescente",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80001,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.577833333333424,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 4
+    },
+    "treino_total": 28.1137685,
+    "vinculo_final": 0.6086048914342941
+  },
+  "relapso@g80002r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "tita",
+      "estagio": "adulto",
+      "linha": "colosso",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.0,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 26.3394716,
+    "vinculo_final": 0.5932754377827248
+  },
+  "relapso@g80002r80102": {
+    "adulto_liberado": false,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": null,
+      "estagio": "adolescente",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80002,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.24583333333334162,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 4
+    },
+    "treino_total": 28.1137685,
+    "vinculo_final": 0.37395747830451453
+  },
+  "relapso@g80003r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "estagio": "adulto",
+      "linha": "guardiao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.8428333333333506,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 10
+    },
+    "treino_total": 29.833505210000002,
+    "vinculo_final": 0.39530801604608307
+  },
+  "relapso@g80003r80102": {
+    "adulto_liberado": false,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": null,
+      "estagio": "adolescente",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80003,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.2816666666666682,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 4
+    },
+    "treino_total": 28.113768500000003,
+    "vinculo_final": 0.43614415344463253
+  },
+  "relapso@g80004r80101": {
+    "adulto_liberado": true,
+    "ambiente": 80101,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": "duelista",
+      "estagio": "adulto",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.06533333333340668,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 8
+    },
+    "treino_total": 26.44373,
+    "vinculo_final": 0.5512197278170483
+  },
+  "relapso@g80004r80102": {
+    "adulto_liberado": false,
+    "ambiente": 80102,
+    "disciplina_final": 0,
+    "dono": "relapso",
+    "especie": "brasa",
+    "forma": {
+      "adulta": null,
+      "estagio": "adolescente",
+      "linha": "brigao",
+      "ramo": "arisco"
+    },
+    "genoma": 80004,
+    "morta": false,
+    "morte": null,
+    "saude_final": 0.12000000000000072,
+    "sombria": false,
+    "sparring": {
+      "lesoes": 0,
+      "lutas": 10,
+      "vitorias": 4
+    },
+    "treino_total": 28.113768500000003,
+    "vinculo_final": 0.43802756362161965
+  }
+}

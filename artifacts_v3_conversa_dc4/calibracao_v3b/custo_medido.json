@@ -1,0 +1,35 @@
+{
+  "bracos": {
+    "H": {
+      "modelo": "claude-haiku-5-5",
+      "chamadas_com_usage": 81,
+      "chamadas": 81,
+      "entrada_media": 3070.1,
+      "entrada_max": 3933,
+      "saida_media": 72.7,
+      "saida_max": 115,
+      "usd_calibracao": 0.027812,
+      "usd_validacao_pela_media": 0.0556,
+      "usd_validacao_pela_maior": 0.071
+    },
+    "S": {
+      "modelo": "claude-sonnet-5-5",
+      "chamadas_com_usage": 81,
+      "chamadas": 81,
+      "entrada_media": 3080.0,
+      "entrada_max": 4004,
+      "saida_media": 87.7,
+      "saida_max": 135,
+      "usd_calibracao": 0.570014,
+      "usd_validacao_pela_media": 1.14,
+      "usd_validacao_pela_maior": 1.4836
+    }
+  },
+  "gasto_acumulado_usd": 0.878222,
+  "teto_usd": 3.0,
+  "validacao_pela_media_usd": 1.1957,
+  "validacao_pela_maior_usd": 1.5546,
+  "folga_pela_media_usd": 0.9261,
+  "folga_pela_maior_usd": 0.5672,
+  "fonte": "artifacts_v3_conversa_dc4/calibracao_v3b/falas.jsonl (usage do dec-v3, voz-v3b), calibracao/falas.jsonl (usage do dec-v2) e calibracao_v3b/meta.json (gasto acumulado)"
+}

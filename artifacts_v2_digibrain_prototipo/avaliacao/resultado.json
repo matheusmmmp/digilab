@@ -1,0 +1,1657 @@
+{
+  "D-1": {
+    "entropia_dia": {
+      "bruto": {
+        "ic90": {
+          "ic_inferior": -0.009278592551698588,
+          "ic_superior": 0.002343940817885375,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.010596261258295428,
+          "ic_superior": 0.003036852600676446,
+          "nivel": 0.95
+        },
+        "media": -0.00377970432880949,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.8396,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.9363722251092734,
+          "t": -1.5513407859028803
+        }
+      },
+      "dp_m4_con": 0.020244699274092413,
+      "padronizado": {
+        "ic90": {
+          "ic_inferior": -0.4583220736488097,
+          "ic_superior": 0.11578047103347038,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.5234091707084874,
+          "ic_superior": 0.15000729620927358,
+          "nivel": 0.95
+        },
+        "media": -0.1867009372496069,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.8396,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.9363722251092734,
+          "t": -1.5513407859028805
+        }
+      }
+    },
+    "exploracao": {
+      "bruto": {
+        "ic90": {
+          "ic_inferior": -0.0010329861111111128,
+          "ic_superior": 0.0031820436507936493,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.0014682539682539688,
+          "ic_superior": 0.0036222718253968254,
+          "nivel": 0.95
+        },
+        "media": 0.0010565476190476189,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.2138,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.14483419713230916,
+          "t": 1.0704343014981716
+        }
+      },
+      "dp_m4_con": 0.007883221943906693,
+      "padronizado": {
+        "ic90": {
+          "ic_inferior": -0.13103603050394333,
+          "ic_superior": 0.4036476041694092,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.18625049233693722,
+          "ic_superior": 0.4594912906386769,
+          "nivel": 0.95
+        },
+        "media": 0.1340248475262419,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.2138,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.14483419713230916,
+          "t": 1.0704343014981716
+        }
+      }
+    },
+    "taxa_p1": {
+      "bruto": {
+        "ic90": {
+          "ic_inferior": -0.06557579329487546,
+          "ic_superior": 0.733301605806455,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.1262204280513862,
+          "ic_superior": 0.800066976850848,
+          "nivel": 0.95
+        },
+        "media": 0.32404763763623856,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.08,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.18435256532302946,
+          "t": 0.9072686151424008
+        }
+      },
+      "dp_m4_con": 3.4336830544265737,
+      "padronizado": {
+        "ic90": {
+          "ic_inferior": -0.019097800308137826,
+          "ic_superior": 0.21356123852523617,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.03675948713107566,
+          "ic_superior": 0.23300548250061465,
+          "nivel": 0.95
+        },
+        "media": 0.09437319417658209,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.08,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.18435256532302946,
+          "t": 0.9072686151424005
+        }
+      }
+    },
+    "taxa_p2": {
+      "bruto": {
+        "ic90": {
+          "ic_inferior": 0.186957426568102,
+          "ic_superior": 0.2573068741853843,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.18046337022137934,
+          "ic_superior": 0.26415484839962344,
+          "nivel": 0.95
+        },
+        "media": 0.22213215037674316,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 8.698853198086097e-10,
+          "t": 7.375814116174499
+        }
+      },
+      "dp_m4_con": 0.15505993073213528,
+      "padronizado": {
+        "ic90": {
+          "ic_inferior": 1.2057107576751687,
+          "ic_superior": 1.6594027417043011,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 1.163829813216725,
+          "ic_superior": 1.7035661447311536,
+          "nivel": 0.95
+        },
+        "media": 1.432556749689735,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 8.698853198086187e-10,
+          "t": 7.375814116174498
+        }
+      }
+    }
+  },
+  "D-2": {
+    "habito_menos_memoria": {
+      "ic90": {
+        "ic_inferior": 0.321664407092136,
+        "ic_superior": 0.5184443282882352,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.30155974930308366,
+        "ic_superior": 0.5286953662548107,
+        "nivel": 0.95
+      },
+      "media": 0.42544507371925294,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 1.3766463620893445e-06,
+        "t": 5.299040815195863
+      }
+    },
+    "por_lugar": {
+      "comedouro": {
+        "ic90": {
+          "ic_inferior": 0.5249135702950344,
+          "ic_superior": 0.8664639867951612,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.5081346488836975,
+          "ic_superior": 0.8950912878411614,
+          "nivel": 0.95
+        },
+        "media": 0.6872993178394293,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.8984600833037163e-08,
+          "t": 6.511044322766546
+        }
+      },
+      "longe": {
+        "ic90": {
+          "ic_inferior": -0.6454001354778955,
+          "ic_superior": -0.5279379458384101,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.655648809430438,
+          "ic_superior": -0.5135853444983052,
+          "nivel": 0.95
+        },
+        "media": -0.5866690406581528,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.9999999999991889,
+          "t": -9.378214981275283
+        }
+      },
+      "perto": {
+        "ic90": {
+          "ic_inferior": 0.8345004662713958,
+          "ic_superior": 1.826620564258593,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.7842056768591987,
+          "ic_superior": 1.9235326985468169,
+          "nivel": 0.95
+        },
+        "media": 1.3418027199689715,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.0950971636001724e-08,
+          "t": 6.483411314043395
+        }
+      }
+    }
+  },
+  "G-ABLA": {
+    "G-ABLA-MEM": {
+      "celulas": 4,
+      "contraste": "medida(M3) - (M2)",
+      "holm": {
+        "limiar": 0.0125,
+        "ordem": 1,
+        "p": 0.0,
+        "p_ajustado": 0.0,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": 0.1341794216398121,
+        "ic_superior": 0.16572185226498515,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.13132217335866866,
+        "ic_superior": 0.16920249565062387,
+        "nivel": 0.95
+      },
+      "leitura": "passa",
+      "media": 0.1502623345046463,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "premissa_g_pesa": true,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 1.7200356403276757e-20,
+        "t": 15.209442354360586
+      }
+    },
+    "G-ABLA-P1": {
+      "celulas": 12,
+      "contraste": "falta_ao_comer(M0) - (M1)",
+      "holm": {
+        "limiar": 0.016666666666666666,
+        "ordem": 2,
+        "p": 0.0,
+        "p_ajustado": 0.0,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": 0.04020746459252429,
+        "ic_superior": 0.04928442364507082,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.039312567648608424,
+        "ic_superior": 0.05017932058898669,
+        "nivel": 0.95
+      },
+      "leitura": "passa",
+      "media": 0.044752061188955014,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "premissa_g_pesa": true,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 9.808407813608102e-20,
+        "t": 14.566354287810224
+      }
+    },
+    "G-ABLA-P2": {
+      "celulas": 12,
+      "contraste": "medida(M2) - (M1)",
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 4,
+        "p": 1.0,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.014761602947761163,
+        "ic_superior": -0.008460820158590407,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.0157245421840268,
+        "ic_superior": -0.0077848950234677885,
+        "nivel": 0.95
+      },
+      "leitura": "nao passa",
+      "media": -0.011359172359397908,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 1.0,
+      "passa": false,
+      "premissa_g_pesa": true,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 0.9995623615740473,
+        "t": -3.5447845401752756
+      }
+    },
+    "G-ABLA-PERS": {
+      "celulas": 12,
+      "contraste": "intencoes_com_meta(M3) - (M3-sp)",
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 3,
+        "p": 0.0765,
+        "p_ajustado": 0.153,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.0009990319819845957,
+        "ic_superior": 0.0142613263916316,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.0023957417952733995,
+        "ic_superior": 0.01541222212759149,
+        "nivel": 0.95
+      },
+      "leitura": "inconclusivo por premissa: o modulo nao pesa",
+      "media": 0.006376991934798706,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0765,
+      "passa": false,
+      "premissa_g_pesa": false,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 0.0673309442907633,
+        "t": 1.5211012676725966
+      }
+    }
+  },
+  "G-ELEGIVEL": {
+    "frac_vidas": 1.0,
+    "passa": true,
+    "vidas": 600
+  },
+  "G-MOD": {
+    "G-MOD-CON": {
+      "celulas": 12,
+      "contraste": "d_fe(M4-con) - (M4)",
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 1,
+        "p": 0.158,
+        "p_ajustado": 0.316,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.0019008120453042295,
+        "ic_superior": 0.0073119186783509715,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.002647023671737208,
+        "ic_superior": 0.00805813030478395,
+        "nivel": 0.95
+      },
+      "media": 0.002863978105709879,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.158,
+      "passa": false,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 0.1449829233918306,
+        "t": 1.069766715784544
+      }
+    },
+    "G-MOD-EMB": {
+      "celulas": 12,
+      "contraste": "d_fe(M4-emb) - (M4)",
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 2,
+        "p": 0.7089,
+        "p_ajustado": 0.7089,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.0043189953290343865,
+        "ic_superior": 0.0022927438133818366,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.004683913483796292,
+        "ic_superior": 0.002657661968143742,
+        "nivel": 0.95
+      },
+      "media": -0.0010977019951499101,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.7089,
+      "passa": false,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 0.6875549094864695,
+        "t": -0.4920373741614082
+      }
+    }
+  },
+  "G-MVP": {
+    "ic90": {
+      "ic_inferior": 0.4766666666666666,
+      "ic_superior": 0.49333333333333335,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": 0.475,
+      "ic_superior": 0.495,
+      "nivel": 0.95
+    },
+    "limiar": 0.8,
+    "media": 0.485,
+    "medida": "a fracao de vidas do M3 com a taxa de fechamento >= 0,5 (media das celulas por unidade)",
+    "motivo": null,
+    "n": 50,
+    "n_grupos": 5,
+    "p_unilateral": 0.0,
+    "passa": false,
+    "t_pareado": {
+      "gl": 49,
+      "p_unilateral": 2.5642433800493624e-57,
+      "t": 94.05992056511859
+    },
+    "vidas_sem_elegivel": 0
+  },
+  "G-PESA": {
+    "habito": {
+      "braco": "M2",
+      "ic90": {
+        "ic_inferior": 0.170109126984127,
+        "ic_superior": 0.18040674603174606,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.16972718253968253,
+        "ic_superior": 0.18061507936507937,
+        "nivel": 0.95
+      },
+      "media": 0.17517113095238096,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 4.679989805169239e-55,
+        "t": 84.52332557021217
+      }
+    },
+    "incentivo": {
+      "braco": "M1",
+      "ic90": {
+        "ic_inferior": 0.01789186507936508,
+        "ic_superior": 0.01896329365079365,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.017795138888888888,
+        "ic_superior": 0.019047619047619046,
+        "nivel": 0.95
+      },
+      "media": 0.018444940476190476,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 2.9099004729213663e-48,
+        "t": 61.23821216450298
+      }
+    },
+    "memoria": {
+      "braco": "M3",
+      "ic90": {
+        "ic_inferior": 0.11902033730158731,
+        "ic_superior": 0.12686755952380951,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.1183829365079365,
+        "ic_superior": 0.12739583333333335,
+        "nivel": 0.95
+      },
+      "media": 0.12312251984126985,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 1.1386305428821085e-47,
+        "t": 59.53484952103529
+      }
+    },
+    "persistencia": {
+      "braco": "M3",
+      "ic90": {
+        "ic_inferior": 0.0012524801587301586,
+        "ic_superior": 0.0014756944444444442,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.0012276785714285714,
+        "ic_superior": 0.0015004960317460316,
+        "nivel": 0.95
+      },
+      "media": 0.0013640873015873015,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "passa": false,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 8.907996625535705e-24,
+        "t": 18.23027836669957
+      }
+    }
+  },
+  "comparacao_com_o_a": {
+    "M0 - A11": {
+      "com_cadeia": {
+        "ic90": {
+          "ic_inferior": 0.185,
+          "ic_superior": 0.20666666666666664,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.185,
+          "ic_superior": 0.21,
+          "nivel": 0.95
+        },
+        "media": 0.19666666666666666,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.932494255283112e-33,
+          "t": 29.65167195091258
+        }
+      },
+      "d_fe": {
+        "ic90": {
+          "ic_inferior": -0.046177351534942686,
+          "ic_superior": -0.03821467909501764,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.04703679535934745,
+          "ic_superior": -0.037917719838514115,
+          "nivel": 0.95
+        },
+        "media": -0.04204753568672839,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.0,
+          "t": -12.557549204416404
+        }
+      },
+      "privacao": {
+        "ic90": {
+          "ic_inferior": -0.5066319444444445,
+          "ic_superior": -0.48860119047619044,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.5078794642857143,
+          "ic_superior": -0.4870659722222222,
+          "nivel": 0.95
+        },
+        "media": -0.4974727182539682,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.0,
+          "t": -56.40435165414052
+        }
+      },
+      "refeicoes_por_dia": {
+        "ic90": {
+          "ic_inferior": 1.714047619047619,
+          "ic_superior": 1.758452380952381,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 1.7098809523809524,
+          "ic_superior": 1.7644047619047618,
+          "nivel": 0.95
+        },
+        "media": 1.735952380952381,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.92265694199051e-56,
+          "t": 89.47747855197461
+        }
+      },
+      "taxa": {
+        "ic90": {
+          "ic_inferior": 0.25191296241640354,
+          "ic_superior": 0.26242974167154737,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.2505885547478435,
+          "ic_superior": 0.2635652065722238,
+          "nivel": 0.95
+        },
+        "media": 0.25717135204397545,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 5.053675851706119e-54,
+          "t": 80.48938202896265
+        }
+      }
+    },
+    "M3 - A11": {
+      "com_cadeia": {
+        "ic90": {
+          "ic_inferior": 0.4766666666666666,
+          "ic_superior": 0.49333333333333335,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.475,
+          "ic_superior": 0.495,
+          "nivel": 0.95
+        },
+        "media": 0.485,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.5642433800493624e-57,
+          "t": 94.05992056511859
+        }
+      },
+      "d_fe": {
+        "ic90": {
+          "ic_inferior": -0.060068870287698424,
+          "ic_superior": -0.046527104483575846,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.06090345644565698,
+          "ic_superior": -0.044968550002755736,
+          "nivel": 0.95
+        },
+        "media": -0.05387550402336862,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.0,
+          "t": -16.30527699064414
+        }
+      },
+      "privacao": {
+        "ic90": {
+          "ic_inferior": -0.5326388888888889,
+          "ic_superior": -0.5015575396825397,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.5343402777777778,
+          "ic_superior": -0.49841021825396825,
+          "nivel": 0.95
+        },
+        "media": -0.5179489087301588,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.0,
+          "t": -62.822400036387435
+        }
+      },
+      "refeicoes_por_dia": {
+        "ic90": {
+          "ic_inferior": 2.563928571428572,
+          "ic_superior": 2.6528571428571426,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 2.5517857142857143,
+          "ic_superior": 2.6582142857142856,
+          "nivel": 0.95
+        },
+        "media": 2.6085714285714285,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.510356273342188e-63,
+          "t": 126.20218607723413
+        }
+      },
+      "taxa": {
+        "ic90": {
+          "ic_inferior": 0.3875531813536572,
+          "ic_superior": 0.3993347802835133,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.3868301116968359,
+          "ic_superior": 0.40091981618918965,
+          "nivel": 0.95
+        },
+        "media": 0.39334723403050886,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.3047811135617457e-62,
+          "t": 119.35365448234653
+        }
+      }
+    }
+  },
+  "custo": {
+    "avaliacao_estimada": null,
+    "cpu_por_unidade": 264.185,
+    "cpu_por_vida": {
+      "A11": 2.078203125,
+      "M0": 2.407265625,
+      "M1": 2.42796875,
+      "M2": 2.494817708333333,
+      "M3": 2.52390625,
+      "M3-sp": 2.53796875,
+      "M4": 2.52390625,
+      "M4-con": 2.510703125,
+      "M4-emb": 2.5106770833333334
+    }
+  },
+  "descritivo_11_celulas": {
+    "G-ELEGIVEL": {
+      "frac_vidas": 1.0,
+      "vidas": 550
+    },
+    "G-MVP": {
+      "ic90": {
+        "ic_inferior": 0.52,
+        "ic_superior": 0.5381818181818181,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.5181818181818181,
+        "ic_superior": 0.5399999999999999,
+        "nivel": 0.95
+      },
+      "media": 0.5290909090909091,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.0,
+      "t_pareado": {
+        "gl": 49,
+        "p_unilateral": 2.5642433800492894e-57,
+        "t": 94.0599205651186
+      }
+    },
+    "G-PESA": {
+      "habito": {
+        "braco": "M2",
+        "ic90": {
+          "ic_inferior": 0.16435876623376625,
+          "ic_superior": 0.17400162337662337,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.16395833333333332,
+          "ic_superior": 0.17475108225108227,
+          "nivel": 0.95
+        },
+        "media": 0.16897997835497836,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.3222103717907775e-54,
+          "t": 82.73859257295118
+        }
+      },
+      "incentivo": {
+        "braco": "M1",
+        "ic90": {
+          "ic_inferior": 0.016396103896103895,
+          "ic_superior": 0.017491883116883114,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.01628517316017316,
+          "ic_superior": 0.017600108225108223,
+          "nivel": 0.95
+        },
+        "media": 0.016964285714285713,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 3.2646638162123156e-47,
+          "t": 58.25136863810227
+        }
+      },
+      "memoria": {
+        "braco": "M3",
+        "ic90": {
+          "ic_inferior": 0.12669642857142857,
+          "ic_superior": 0.13485930735930737,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.1259659090909091,
+          "ic_superior": 0.13559794372294373,
+          "nivel": 0.95
+        },
+        "media": 0.130995670995671,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 2.5513057697647244e-47,
+          "t": 58.549356837563685
+        }
+      },
+      "persistencia": {
+        "braco": "M3",
+        "ic90": {
+          "ic_inferior": 0.0012932900432900433,
+          "ic_superior": 0.0015097402597402595,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.0012743506493506493,
+          "ic_superior": 0.0015286796536796534,
+          "nivel": 0.95
+        },
+        "media": 0.0014015151515151514,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 9.478333182625508e-24,
+          "t": 18.203875598429725
+        }
+      }
+    },
+    "aviso": "descritivo, sem gate: a analise principal e a das 12 celulas (decisao do Matheus, 2026-10-26)",
+    "celulas": 11,
+    "contrastes": {
+      "G-ABLA-MEM": {
+        "celulas": 3,
+        "ic90": {
+          "ic_inferior": 0.1635362542284044,
+          "ic_superior": 0.19990357302273548,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.1596696134601922,
+          "ic_superior": 0.20355397536883224,
+          "nivel": 0.95
+        },
+        "media": 0.18161179441451222,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.4446161271801335e-20,
+          "t": 15.274903502463504
+        }
+      },
+      "G-ABLA-P1": {
+        "celulas": 11,
+        "ic90": {
+          "ic_inferior": 0.037579362886364286,
+          "ic_superior": 0.04770536831832163,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.03663971473014186,
+          "ic_superior": 0.04864501647454406,
+          "nivel": 0.95
+        },
+        "media": 0.04267937253539622,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 1.683932942792801e-17,
+          "t": 12.764349821887532
+        }
+      },
+      "G-ABLA-P2": {
+        "celulas": 11,
+        "ic90": {
+          "ic_inferior": -0.016901327969876628,
+          "ic_superior": -0.009458822033448538,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.017878396762840535,
+          "ic_superior": -0.009170474208061122,
+          "nivel": 0.95
+        },
+        "media": -0.012854346613196468,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.9998975740144468,
+          "t": -4.012965291875055
+        }
+      },
+      "G-ABLA-PERS": {
+        "celulas": 11,
+        "ic90": {
+          "ic_inferior": -0.0007520959570086989,
+          "ic_superior": 0.015457135887036897,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.0021758106220533045,
+          "ic_superior": 0.016573293506760477,
+          "nivel": 0.95
+        },
+        "media": 0.006996591298752948,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.0702,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.0678087092516454,
+          "t": 1.5172972933676334
+        }
+      },
+      "G-MOD-CON": {
+        "celulas": 11,
+        "ic90": {
+          "ic_inferior": -0.0026886998707311175,
+          "ic_superior": 0.005889857052669554,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.0037955220358345315,
+          "ic_superior": 0.00644219757094757,
+          "nivel": 0.95
+        },
+        "media": 0.0018047287608225133,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.254,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.2470602856321445,
+          "t": 0.6889237369751291
+        }
+      },
+      "G-MOD-EMB": {
+        "celulas": 11,
+        "ic90": {
+          "ic_inferior": -0.004557338939995184,
+          "ic_superior": 0.0015698920003607481,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.005106309148027894,
+          "ic_superior": 0.002118862208393456,
+          "nivel": 0.95
+        },
+        "media": -0.0014937234698172183,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.7832,
+        "t_pareado": {
+          "gl": 49,
+          "p_unilateral": 0.7626244493846821,
+          "t": -0.7203187180737396
+        }
+      }
+    },
+    "fora": [
+      "incoerente",
+      "comedouro"
+    ]
+  },
+  "descritivos": {
+    "A11": {
+      "d_fe": 0.6442466905037478,
+      "exaustao": 0.024350198412698414,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.7073228348214287
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7071018700396826
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.7067898239087301
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.6110646833664021
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6386453306878307
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4950577199074074
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.6110646833664021
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6525371999007936
+        },
+        "incoerente|perto": {
+          "d_fe": 0.47851581018518524
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.7073622296626983
+        },
+        "relapso|longe": {
+          "d_fe": 0.7075184375000001
+        },
+        "relapso|perto": {
+          "d_fe": 0.7079796626984127
+        }
+      },
+      "privacao": 0.8187872023809524,
+      "refeicoes_por_dia": 0.9123809523809524
+    },
+    "M0": {
+      "d_fe": 0.6021991548170194,
+      "episodios_sairam": 0,
+      "exaustao": 0.20069196428571429,
+      "fins": {
+        "meta": 20948,
+        "trocou": 1792
+      },
+      "influencia": {
+        "afeto": 0.0068551587301587304,
+        "aprendido": 0.00023313492063492064,
+        "habito": 0.0,
+        "incentivo": 0.0,
+        "memoria": 0.0,
+        "persistencia": 0.00023313492063492064
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6320682093253969
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7162809408068783
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6324826413690476
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.5117983556547618
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7645956655092593
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4649263591269841
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.5117983556547618
+        },
+        "incoerente|longe": {
+          "d_fe": 0.7424075876322752
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4648214715608466
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5643571188822751
+        },
+        "relapso|longe": {
+          "d_fe": 0.6815219659391535
+        },
+        "relapso|perto": {
+          "d_fe": 0.5393311863425926
+        }
+      },
+      "privacao": 0.32131448412698416,
+      "refeicoes_por_dia": 2.6483333333333334,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M1": {
+      "d_fe": 0.5885211981922399,
+      "episodios_sairam": 0,
+      "exaustao": 0.19334821428571428,
+      "fins": {
+        "meta": 23386,
+        "trocou": 1659
+      },
+      "influencia": {
+        "afeto": 0.006086309523809523,
+        "aprendido": 0.018643353174603174,
+        "habito": 0.0,
+        "incentivo": 0.018444940476190476,
+        "memoria": 0.0,
+        "persistencia": 0.00011904761904761905
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6350271370701058
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7157431812169313
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6232270701058201
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4917592848875661
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7094140104166666
+        },
+        "atencioso|perto": {
+          "d_fe": 0.45471568039021165
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4917592848875661
+        },
+        "incoerente|longe": {
+          "d_fe": 0.710709810681217
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4545309738756614
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5593448842592593
+        },
+        "relapso|longe": {
+          "d_fe": 0.6693967212301587
+        },
+        "relapso|perto": {
+          "d_fe": 0.5466263392857144
+        }
+      },
+      "privacao": 0.30921130952380954,
+      "refeicoes_por_dia": 2.853809523809524,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M2": {
+      "d_fe": 0.5891722260802469,
+      "episodios_sairam": 0,
+      "exaustao": 0.20533234126984126,
+      "fins": {
+        "meta": 29720,
+        "trocou": 2044
+      },
+      "influencia": {
+        "afeto": 0.014198908730158728,
+        "aprendido": 0.17773065476190478,
+        "habito": 0.17517113095238096,
+        "incentivo": 0.008293650793650794,
+        "memoria": 0.0,
+        "persistencia": 0.0002876984126984127
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6685858597883597
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7108196585648149
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6497405191798942
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.491594105489418
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6480267956349206
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44143629133597884
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.491594105489418
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6744368163029101
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44133767443783073
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.613087699239418
+        },
+        "relapso|longe": {
+          "d_fe": 0.6663334871031746
+        },
+        "relapso|perto": {
+          "d_fe": 0.5730737003968254
+        }
+      },
+      "privacao": 0.30780753968253965,
+      "refeicoes_por_dia": 3.538095238095238,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M3": {
+      "d_fe": 0.5903711864803792,
+      "episodios_sairam": 39298,
+      "exaustao": 0.22983382936507937,
+      "fins": {
+        "meta": 48667,
+        "trocou": 17243
+      },
+      "influencia": {
+        "afeto": 0.01328125,
+        "aprendido": 0.25556051587301587,
+        "habito": 0.15468253968253967,
+        "incentivo": 0.00816220238095238,
+        "memoria": 0.12312251984126983,
+        "persistencia": 0.0013640873015873015
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6617608416005291
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7374810433201059
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6545859540343915
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4651626595568783
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6788296519510583
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4418839806547619
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4651626595568783
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6694129695767195
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4415413566468254
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5834221321097883
+        },
+        "relapso|longe": {
+          "d_fe": 0.7015421064814815
+        },
+        "relapso|perto": {
+          "d_fe": 0.5836688822751323
+        }
+      },
+      "privacao": 0.3008382936507937,
+      "refeicoes_por_dia": 3.5209523809523806,
+      "visitas_lugar_lembrado": 19331,
+      "visitas_vazias": 19331
+    },
+    "M3-sp": {
+      "d_fe": 0.591994636863426,
+      "episodios_sairam": 38978,
+      "exaustao": 0.2307217261904762,
+      "fins": {
+        "meta": 48366,
+        "trocou": 17901
+      },
+      "influencia": {
+        "afeto": 0.013112599206349206,
+        "aprendido": 0.25574900793650795,
+        "habito": 0.15618055555555554,
+        "incentivo": 0.008400297619047618,
+        "memoria": 0.1231671626984127,
+        "persistencia": 0.0
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6652521957671957
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7315749495701058
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6512958424272487
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.46145267939814816
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6754532688492064
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44174591765873017
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.46145267939814816
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6987023404431217
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44130864583333335
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5890563607804232
+        },
+        "relapso|longe": {
+          "d_fe": 0.7080114508928571
+        },
+        "relapso|perto": {
+          "d_fe": 0.5786293113425925
+        }
+      },
+      "privacao": 0.3048313492063492,
+      "refeicoes_por_dia": 3.4984523809523806,
+      "visitas_lugar_lembrado": 19199,
+      "visitas_vazias": 19199
+    },
+    "M4": {
+      "d_fe": 0.5898241239528218,
+      "episodios_sairam": 41899,
+      "exaustao": 0.2226016865079365,
+      "fins": {
+        "meta": 51503,
+        "trocou": 16986
+      },
+      "influencia": {
+        "afeto": 0.016996527777777777,
+        "aprendido": 0.29328373015873016,
+        "habito": 0.20612847222222222,
+        "incentivo": 0.003824404761904762,
+        "memoria": 0.11892609126984127,
+        "persistencia": 0.0016517857142857141
+      },
+      "pesos_no_teto": 2.0703933747412007e-05,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6646113831018519
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7375460185185184
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6522078530092592
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.49368485615079366
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6526621337632276
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44158646825396825
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.49368485615079366
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6432007523148148
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4434266575727513
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5870908349867725
+        },
+        "relapso|longe": {
+          "d_fe": 0.6925447999338624
+        },
+        "relapso|perto": {
+          "d_fe": 0.5756428736772486
+        }
+      },
+      "privacao": 0.2921106150793651,
+      "refeicoes_por_dia": 3.853690476190476,
+      "visitas_lugar_lembrado": 19135,
+      "visitas_vazias": 19135
+    },
+    "M4-con": {
+      "d_fe": 0.5926881020585317,
+      "episodios_sairam": 41787,
+      "exaustao": 0.22399801587301588,
+      "fins": {
+        "meta": 51420,
+        "trocou": 16984
+      },
+      "influencia": {
+        "afeto": 0.017316468253968254,
+        "aprendido": 0.28791666666666665,
+        "habito": 0.2007465277777778,
+        "incentivo": 0.003824404761904762,
+        "memoria": 0.11871031746031747,
+        "persistencia": 0.0016666666666666668
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6635461507936508
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7340784970238096
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6548570295965608
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.5082005770502646
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6437220502645503
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4424023611111111
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.5082005770502646
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6533780588624338
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4437445965608465
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5858228166335979
+        },
+        "relapso|longe": {
+          "d_fe": 0.697487080026455
+        },
+        "relapso|perto": {
+          "d_fe": 0.576817429728836
+        }
+      },
+      "privacao": 0.30029761904761904,
+      "refeicoes_por_dia": 3.882142857142857,
+      "visitas_lugar_lembrado": 18786,
+      "visitas_vazias": 18786
+    },
+    "M4-emb": {
+      "d_fe": 0.5887264219576719,
+      "episodios_sairam": 42586,
+      "exaustao": 0.22103174603174602,
+      "fins": {
+        "meta": 52166,
+        "trocou": 16451
+      },
+      "influencia": {
+        "afeto": 0.017085813492063492,
+        "aprendido": 0.2949826388888889,
+        "habito": 0.20776537698412698,
+        "incentivo": 0.0038814484126984124,
+        "memoria": 0.11875248015873018,
+        "persistencia": 0.0016567460317460315
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6603037938161376
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7288654224537037
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6544775901124339
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.49694339037698415
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6513128240740741
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4428543187830688
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.49694339037698415
+        },
+        "incoerente|longe": {
+          "d_fe": 0.635088992228836
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4431475338955026
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5871237648809524
+        },
+        "relapso|longe": {
+          "d_fe": 0.6927005787037036
+        },
+        "relapso|perto": {
+          "d_fe": 0.5749554637896825
+        }
+      },
+      "privacao": 0.2916517857142857,
+      "refeicoes_por_dia": 3.870595238095238,
+      "visitas_lugar_lembrado": 19681,
+      "visitas_vazias": 19681
+    }
+  },
+  "fase": "avaliacao",
+  "holm_alfa": 0.05,
+  "leitura": "o G-MVP falha: com o oraculo passando, a aprendizagem nao chega la (D4), falha de implementacao ou de calibracao",
+  "modo": "avaliacao",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md"
+}

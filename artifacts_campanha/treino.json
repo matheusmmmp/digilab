@@ -1,0 +1,543 @@
+{
+  "descricao": "campanha dos 5 bracos com treino (stats absolutos) contra os 3 NPCs; ver artifacts_treino/resumo.json",
+  "partidas_por_par": 100,
+  "por_braco": {
+    "aleatorio": {
+      "tier1_brutamontes": {
+        "ic_inferior": 0.9890000000000001,
+        "ic_superior": 1.0,
+        "media": 0.9955,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.991,
+        "ic_superior": 0.999,
+        "media": 0.9955,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.943,
+        "ic_superior": 0.9970000000000001,
+        "media": 0.9744999999999999,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_sentinela": {
+        "ic_inferior": 0.9734999999999999,
+        "ic_superior": 0.999,
+        "media": 0.9880000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier3_soberano": {
+        "ic_inferior": 0.924,
+        "ic_superior": 0.9964999999999999,
+        "media": 0.9644999999999999,
+        "n": 10,
+        "nivel": 0.95
+      }
+    },
+    "atencioso": {
+      "tier1_brutamontes": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.991,
+        "ic_superior": 1.0,
+        "media": 0.9970000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_sentinela": {
+        "ic_inferior": 0.994,
+        "ic_superior": 1.0,
+        "media": 0.998,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier3_soberano": {
+        "ic_inferior": 0.9754999999999999,
+        "ic_superior": 1.0,
+        "media": 0.9894999999999999,
+        "n": 10,
+        "nivel": 0.95
+      }
+    },
+    "exigente": {
+      "tier1_brutamontes": {
+        "ic_inferior": 0.991,
+        "ic_superior": 1.0,
+        "media": 0.9960000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.9790000000000001,
+        "ic_superior": 1.0,
+        "media": 0.993,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.9720000000000001,
+        "ic_superior": 0.9970000000000001,
+        "media": 0.9865,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_sentinela": {
+        "ic_inferior": 0.961,
+        "ic_superior": 1.0,
+        "media": 0.9855,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier3_soberano": {
+        "ic_inferior": 0.953,
+        "ic_superior": 0.994,
+        "media": 0.9754999999999999,
+        "n": 10,
+        "nivel": 0.95
+      }
+    },
+    "incoerente": {
+      "tier1_brutamontes": {
+        "ic_inferior": 0.992,
+        "ic_superior": 1.0,
+        "media": 0.9960000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.9715,
+        "ic_superior": 0.9960000000000001,
+        "media": 0.9845,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_sentinela": {
+        "ic_inferior": 0.994,
+        "ic_superior": 1.0,
+        "media": 0.998,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier3_soberano": {
+        "ic_inferior": 0.95,
+        "ic_superior": 0.9949999999999999,
+        "media": 0.974,
+        "n": 10,
+        "nivel": 0.95
+      }
+    },
+    "relapso": {
+      "tier1_brutamontes": {
+        "ic_inferior": 0.992,
+        "ic_superior": 1.0,
+        "media": 0.9960000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.9884999999999999,
+        "ic_superior": 1.0,
+        "media": 0.9955,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.9535,
+        "ic_superior": 0.9970000000000001,
+        "media": 0.9775,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_sentinela": {
+        "ic_inferior": 0.945,
+        "ic_superior": 1.0,
+        "media": 0.9800000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier3_soberano": {
+        "ic_inferior": 0.9185000000000001,
+        "ic_superior": 0.9970000000000001,
+        "media": 0.9615,
+        "n": 10,
+        "nivel": 0.95
+      }
+    }
+  },
+  "por_pet": {
+    "aleatorio@101": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.99,
+      "tier2_porteiro": 0.96,
+      "tier2_sentinela": 0.935,
+      "tier3_soberano": 0.94
+    },
+    "aleatorio@1010": {
+      "tier1_brutamontes": 0.98,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.94,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.9
+    },
+    "aleatorio@202": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 1.0
+    },
+    "aleatorio@303": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.99,
+      "tier2_porteiro": 0.99,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.995
+    },
+    "aleatorio@404": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.98,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 0.99
+    },
+    "aleatorio@505": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "aleatorio@606": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "aleatorio@707": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "aleatorio@808": {
+      "tier1_brutamontes": 0.975,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.855,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.82
+    },
+    "aleatorio@909": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.995,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.965,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@101": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@1010": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@202": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.96
+    },
+    "atencioso@303": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.995
+    },
+    "atencioso@404": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.97,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.94
+    },
+    "atencioso@505": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@606": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@707": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@808": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "atencioso@909": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "exigente@101": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "exigente@1010": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.99,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 0.99
+    },
+    "exigente@202": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.99,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.96
+    },
+    "exigente@303": {
+      "tier1_brutamontes": 0.99,
+      "tier2_carcereiro": 0.93,
+      "tier2_porteiro": 0.935,
+      "tier2_sentinela": 0.88,
+      "tier3_soberano": 0.895
+    },
+    "exigente@404": {
+      "tier1_brutamontes": 0.99,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.99,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.97
+    },
+    "exigente@505": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "exigente@606": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "exigente@707": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.985,
+      "tier3_soberano": 1.0
+    },
+    "exigente@808": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "exigente@909": {
+      "tier1_brutamontes": 0.98,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.96,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.94
+    },
+    "incoerente@101": {
+      "tier1_brutamontes": 0.99,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.95,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.91
+    },
+    "incoerente@1010": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 1.0
+    },
+    "incoerente@202": {
+      "tier1_brutamontes": 0.98,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.955,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.97
+    },
+    "incoerente@303": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.98,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.95
+    },
+    "incoerente@404": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "incoerente@505": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "incoerente@606": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "incoerente@707": {
+      "tier1_brutamontes": 0.99,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.96,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.91
+    },
+    "incoerente@808": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "incoerente@909": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "relapso@101": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 1.0
+    },
+    "relapso@1010": {
+      "tier1_brutamontes": 0.99,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.925,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.875
+    },
+    "relapso@202": {
+      "tier1_brutamontes": 0.99,
+      "tier2_carcereiro": 0.965,
+      "tier2_porteiro": 0.965,
+      "tier2_sentinela": 0.83,
+      "tier3_soberano": 0.815
+    },
+    "relapso@303": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 1.0
+    },
+    "relapso@404": {
+      "tier1_brutamontes": 0.98,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.895,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.935
+    },
+    "relapso@505": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "relapso@606": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.99,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "relapso@707": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.99,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.99
+    },
+    "relapso@808": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    },
+    "relapso@909": {
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 1.0
+    }
+  }
+}

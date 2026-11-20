@@ -1,0 +1,44 @@
+{
+  "descricao": "Fumaca da autoria da rede de si (W-BANCADA-REDE; docs/PLANO_ANALISE_V2_REDE_DE_SI.md, RS-4): o P1+ped-c (o corpo e o pedido juntos) e o P1-c no iguais_frutas, com a chave rede_de_si. NAO canonica: unidades derivadas das sementes dos testes, sem plano; so confere o encanamento (a autoria do pedido e ao nascer contra as sondas do cerebro), nunca como resultado.",
+  "bracos": [
+    "P1+ped-c",
+    "P1-c"
+  ],
+  "donos": [
+    "atencioso"
+  ],
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "rede_de_si"
+  },
+  "mundos": [
+    "iguais_frutas"
+  ],
+  "dias": 3,
+  "orcamento": 48,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_info": 256,
+    "w0_pedido": 256
+  },
+  "consequencia": {
+    "canais_ligados": true
+  },
+  "rede_de_si": {},
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 200,
+    "semente": 101,
+    "nivel": 0.95
+  }
+}

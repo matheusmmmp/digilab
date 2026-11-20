@@ -1,0 +1,6 @@
+calibracao: ponto {'g': 512, 'w0_pedido': 256, 'ganho': 4, 'w0_info': 256}; N da validacao 191815, 28760.0 h
+
+real	251m49.598s
+user	0m0.000s
+sys	0m0.030s
+rc=0

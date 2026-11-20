@@ -1,0 +1,455 @@
+{
+ "descricao": "O custo em pesos de cada receptor dos orgaos do Olfato e da Audicao como entrada do cerebro (docs/TAREFA_V2_DOIS_PETS.md, etapa 8b;",
+ "teto_padrao": 1000,
+ "teto_do_plano": 2000,
+ "teto_rede_de_si": 1000,
+ "conjuntos": {
+  "olfato_comida_1": [
+   "olfato_comida"
+  ],
+  "olfato_comida_2": [
+   "olfato_comida_esq",
+   "olfato_comida_dir"
+  ],
+  "olfato_outro_2": [
+   "olfato_outro_esq",
+   "olfato_outro_dir"
+  ],
+  "olfato_2": [
+   "olfato_comida_esq",
+   "olfato_comida_dir",
+   "olfato_outro_esq",
+   "olfato_outro_dir"
+  ],
+  "ouvido_1": [
+   "ouvido_comendo",
+   "ouvido_bola",
+   "ouvido_chamado",
+   "ouvido_emburrado"
+  ],
+  "ouvido_2": [
+   "ouvido_comendo_esq",
+   "ouvido_comendo_dir",
+   "ouvido_bola_esq",
+   "ouvido_bola_dir",
+   "ouvido_chamado_esq",
+   "ouvido_chamado_dir",
+   "ouvido_emburrado_esq",
+   "ouvido_emburrado_dir"
+  ],
+  "dp13_dp14": [
+   "olfato_comida_esq",
+   "olfato_comida_dir",
+   "olfato_outro_esq",
+   "olfato_outro_dir",
+   "ouvido_comendo_esq",
+   "ouvido_comendo_dir",
+   "ouvido_bola_esq",
+   "ouvido_bola_dir",
+   "ouvido_chamado_esq",
+   "ouvido_chamado_dir",
+   "ouvido_emburrado_esq",
+   "ouvido_emburrado_dir"
+  ]
+ },
+ "cerebros": {
+  "dois_pets_degrau1": {
+   "descricao": "o cerebro A da calibracao dos dois pets (o ponto da K2, o alvo aprendido, as entradas sociais, o modelo dos outros e a presenca da fruta) com o corpo da quimica",
+   "pesos_sem_orgao": 990,
+   "pares_tempo_livre": {
+    "tempo_livre": 7,
+    "bola_no_cenario": 7,
+    "fruta_no_cenario": 7
+   },
+   "custo_por_receptor": 21,
+   "receptores_do_corpo": 5,
+   "rede_de_si_sem_orgao": 359,
+   "conjuntos": {
+    "olfato_comida_1": {
+     "receptores": 1,
+     "custo": 21,
+     "total": 1011,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 6,
+      "pesos": 436,
+      "cabe": true
+     }
+    },
+    "olfato_comida_2": {
+     "receptores": 2,
+     "custo": 42,
+     "total": 1032,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 7,
+      "pesos": 519,
+      "cabe": true
+     }
+    },
+    "olfato_outro_2": {
+     "receptores": 2,
+     "custo": 42,
+     "total": 1032,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 7,
+      "pesos": 519,
+      "cabe": true
+     }
+    },
+    "olfato_2": {
+     "receptores": 4,
+     "custo": 84,
+     "total": 1074,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 9,
+      "pesos": 703,
+      "cabe": true
+     }
+    },
+    "ouvido_1": {
+     "receptores": 4,
+     "custo": 84,
+     "total": 1074,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 9,
+      "pesos": 703,
+      "cabe": true
+     }
+    },
+    "ouvido_2": {
+     "receptores": 8,
+     "custo": 168,
+     "total": 1158,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 13,
+      "pesos": 1143,
+      "cabe": false
+     }
+    },
+    "dp13_dp14": {
+     "receptores": 12,
+     "custo": 252,
+     "total": 1242,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 17,
+      "pesos": 1679,
+      "cabe": false
+     }
+    }
+   }
+  },
+  "pet_que_pensa_p1": {
+   "descricao": "o P1 do pet que pensa (o alvo aprendido, a presenca da fruta e as classes por arvore) com a quimica e o metabolismo",
+   "pesos_sem_orgao": 822,
+   "pares_tempo_livre": {
+    "tempo_livre": 7,
+    "bola_no_cenario": 7,
+    "fruta_no_cenario": 7
+   },
+   "custo_por_receptor": 21,
+   "receptores_do_corpo": 5,
+   "rede_de_si_sem_orgao": 359,
+   "conjuntos": {
+    "olfato_comida_1": {
+     "receptores": 1,
+     "custo": 21,
+     "total": 843,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 6,
+      "pesos": 436,
+      "cabe": true
+     }
+    },
+    "olfato_comida_2": {
+     "receptores": 2,
+     "custo": 42,
+     "total": 864,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 7,
+      "pesos": 519,
+      "cabe": true
+     }
+    },
+    "olfato_outro_2": {
+     "receptores": 2,
+     "custo": 42,
+     "total": 864,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 7,
+      "pesos": 519,
+      "cabe": true
+     }
+    },
+    "olfato_2": {
+     "receptores": 4,
+     "custo": 84,
+     "total": 906,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 9,
+      "pesos": 703,
+      "cabe": true
+     }
+    },
+    "ouvido_1": {
+     "receptores": 4,
+     "custo": 84,
+     "total": 906,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 9,
+      "pesos": 703,
+      "cabe": true
+     }
+    },
+    "ouvido_2": {
+     "receptores": 8,
+     "custo": 168,
+     "total": 990,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 13,
+      "pesos": 1143,
+      "cabe": false
+     }
+    },
+    "dp13_dp14": {
+     "receptores": 12,
+     "custo": 252,
+     "total": 1074,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 17,
+      "pesos": 1679,
+      "cabe": false
+     }
+    }
+   }
+  },
+  "mundo_etapa6": {
+   "descricao": "o P1 do mundo fisico com o corpo da etapa 6 (os drives novos e os gestos)",
+   "pesos_sem_orgao": 882,
+   "pares_tempo_livre": {
+    "tempo_livre": 7,
+    "bola_no_cenario": 7,
+    "fruta_no_cenario": 7
+   },
+   "custo_por_receptor": 21,
+   "receptores_do_corpo": 11,
+   "rede_de_si_sem_orgao": 911,
+   "conjuntos": {
+    "olfato_comida_1": {
+     "receptores": 1,
+     "custo": 21,
+     "total": 903,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 12,
+      "pesos": 1024,
+      "cabe": false
+     }
+    },
+    "olfato_comida_2": {
+     "receptores": 2,
+     "custo": 42,
+     "total": 924,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 13,
+      "pesos": 1143,
+      "cabe": false
+     }
+    },
+    "olfato_outro_2": {
+     "receptores": 2,
+     "custo": 42,
+     "total": 924,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 13,
+      "pesos": 1143,
+      "cabe": false
+     }
+    },
+    "olfato_2": {
+     "receptores": 4,
+     "custo": 84,
+     "total": 966,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 15,
+      "pesos": 1399,
+      "cabe": false
+     }
+    },
+    "ouvido_1": {
+     "receptores": 4,
+     "custo": 84,
+     "total": 966,
+     "cabe_no_padrao": true,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 15,
+      "pesos": 1399,
+      "cabe": false
+     }
+    },
+    "ouvido_2": {
+     "receptores": 8,
+     "custo": 168,
+     "total": 1050,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 19,
+      "pesos": 1983,
+      "cabe": false
+     }
+    },
+    "dp13_dp14": {
+     "receptores": 12,
+     "custo": 252,
+     "total": 1134,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 23,
+      "pesos": 2663,
+      "cabe": false
+     }
+    }
+   }
+  },
+  "mundo_banheiro": {
+   "descricao": "o P1 do mundo fisico com o corpo e o banheiro",
+   "pesos_sem_orgao": 998,
+   "pares_tempo_livre": {
+    "tempo_livre": 8,
+    "bola_no_cenario": 8,
+    "fruta_no_cenario": 8
+   },
+   "custo_por_receptor": 24,
+   "receptores_do_corpo": 13,
+   "rede_de_si_sem_orgao": 1143,
+   "conjuntos": {
+    "olfato_comida_1": {
+     "receptores": 1,
+     "custo": 24,
+     "total": 1022,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 14,
+      "pesos": 1268,
+      "cabe": false
+     }
+    },
+    "olfato_comida_2": {
+     "receptores": 2,
+     "custo": 48,
+     "total": 1046,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 15,
+      "pesos": 1399,
+      "cabe": false
+     }
+    },
+    "olfato_outro_2": {
+     "receptores": 2,
+     "custo": 48,
+     "total": 1046,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 15,
+      "pesos": 1399,
+      "cabe": false
+     }
+    },
+    "olfato_2": {
+     "receptores": 4,
+     "custo": 96,
+     "total": 1094,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 17,
+      "pesos": 1679,
+      "cabe": false
+     }
+    },
+    "ouvido_1": {
+     "receptores": 4,
+     "custo": 96,
+     "total": 1094,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 17,
+      "pesos": 1679,
+      "cabe": false
+     }
+    },
+    "ouvido_2": {
+     "receptores": 8,
+     "custo": 192,
+     "total": 1190,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 21,
+      "pesos": 2311,
+      "cabe": false
+     }
+    },
+    "dp13_dp14": {
+     "receptores": 12,
+     "custo": 288,
+     "total": 1286,
+     "cabe_no_padrao": false,
+     "cabe_no_teto_do_plano": true,
+     "rede_de_si": {
+      "receptores": 25,
+      "pesos": 3039,
+      "cabe": false
+     }
+    }
+   }
+  }
+ },
+ "codigo": {
+  "digilab/policies/lobos.py": "b095da808c4f70813ae2e32065681e8775cf2abec8bcd5a1d0c9d903920b1035",
+  "digilab/corpo.py": "4ef2fc6d932944a320e6b0f6485ca5cdace830a43b7dc0a7bee8f249920a3fba",
+  "digilab/rede_de_si.py": "d8fe20555dee99f22a14617c7596f6cfe3595165aab57bd81c969ad1eb49014e",
+  "experiments/custo_orgaos.py": "4d9a52665d793b50d665078afc8613e91732125d3965569ebb6e622e024a1b78"
+ }
+}

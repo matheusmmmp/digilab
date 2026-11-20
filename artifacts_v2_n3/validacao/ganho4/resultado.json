@@ -1,0 +1,187 @@
+{
+  "ganho": 4,
+  "gates": {
+    "G6": {
+      "deriva_media_dia14": 0.03616218828774713,
+      "deriva_media_dia7": 0.020283581441133403,
+      "passa": false,
+      "pesos_no_teto_por_vida": {
+        "aleatorio-P1@9101": 13,
+        "aleatorio-P1@9202": 13,
+        "aleatorio-P1@9303": 8,
+        "aleatorio-P1@9404": 8,
+        "aleatorio-P1@9505": 8,
+        "atencioso-P1@9101": 8,
+        "atencioso-P1@9202": 3,
+        "atencioso-P1@9303": 5,
+        "atencioso-P1@9404": 7,
+        "atencioso-P1@9505": 8,
+        "incoerente-P1@9101": 8,
+        "incoerente-P1@9202": 6,
+        "incoerente-P1@9303": 2,
+        "incoerente-P1@9404": 8,
+        "incoerente-P1@9505": 7,
+        "relapso-P1@9101": 5,
+        "relapso-P1@9202": 2,
+        "relapso-P1@9303": 2,
+        "relapso-P1@9404": 4,
+        "relapso-P1@9505": 4
+      },
+      "razao_deriva_14_7": 1.782830531811963,
+      "vidas_com_peso_no_teto": 20
+    },
+    "G_P1_privacao": {
+      "definicao": "por semente, media nos 4 donos de (privacao P0 - privacao P1), vidas fechadas",
+      "ic_inferior": -0.006733630952380954,
+      "ic_superior": 0.0076636904761904654,
+      "media": 0.0007812499999999944,
+      "n": 5,
+      "nivel": 0.95,
+      "passa": false,
+      "por_semente": {
+        "9101": -0.012834821428571425,
+        "9202": -0.002046130952380959,
+        "9303": 0.0007440476190476164,
+        "9404": 0.006882440476190466,
+        "9505": 0.011160714285714274
+      }
+    },
+    "sem_mortes_novas": {
+      "mortes_P0": 0,
+      "mortes_P1": 0,
+      "nota": "mundo padrao (MotorComFeedback, sem lesoes nem morte): vale por construcao",
+      "passa": true
+    }
+  },
+  "relatado": {
+    "acerto_na_tarefa_media": {
+      "P0": 0.593452380952381,
+      "P1": 0.44356398809523806,
+      "P3": 0.6340401785714286
+    },
+    "acoes_por_regra": {
+      "P0": {
+        "fome_moderada": {
+          "chamar_atencao": 0.499383477188656,
+          "comer": 0.5006165228113441
+        },
+        "tempo_livre": {
+          "brincar": 0.3452265372168285,
+          "chamar_atencao": 0.08956310679611651,
+          "explorar": 0.2901294498381877,
+          "ocioso": 0.2750809061488673
+        }
+      },
+      "P1": {
+        "fome_moderada": {
+          "chamar_atencao": 0.06420233463035019,
+          "comer": 0.9357976653696498
+        },
+        "tempo_livre": {
+          "brincar": 0.10543082524271845,
+          "chamar_atencao": 0.2710861650485437,
+          "explorar": 0.1497269417475728,
+          "ocioso": 0.47375606796116504
+        }
+      }
+    },
+    "acoplado_P0_menos_P1_mesmo_cuidado": {
+      "ic_inferior": -0.00669642857142857,
+      "ic_superior": 0.007254464285714279,
+      "media": 0.0006696428571428548,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "9101": -0.012834821428571425,
+        "9202": -0.001860119047619041,
+        "9303": 0.0007440476190476164,
+        "9404": 0.006882440476190466,
+        "9505": 0.010416666666666657
+      }
+    },
+    "deriva_final_media": {
+      "P1": 0.03616218828774713,
+      "P3": 0.01888206075749268
+    },
+    "g4": {
+      "fracao_aprendido_com_fator": 0.18058035714285714,
+      "fracao_aprendido_decidiu": 0.19252232142857142,
+      "fracao_bruta_com_fator": 0.6818824404761905,
+      "ic_aprendido": {
+        "ic_inferior": 0.1718377976190476,
+        "ic_superior": 0.18876488095238095,
+        "media": 0.18058035714285714,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "interacoes_acoplado_so_cuidado": [
+      74,
+      75,
+      81,
+      84,
+      85,
+      87,
+      113,
+      123,
+      142,
+      146,
+      148,
+      153,
+      158,
+      182,
+      185,
+      186
+    ],
+    "privacao_media": {
+      "P0": 0.1052455357142857,
+      "P1": 0.10446428571428572,
+      "P1<P0:nenhum": 0.10457589285714283,
+      "P3": 0.12511160714285713,
+      "P3<P3:sem_sinais": 0.13307291666666665
+    },
+    "privacao_por_dono_P0_menos_P1": {
+      "aleatorio": {
+        "ic_inferior": -0.03288690476190477,
+        "ic_superior": 0.024404761904761884,
+        "media": -0.0016369047619047671,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "atencioso": {
+        "ic_inferior": 0.0,
+        "ic_superior": 0.0,
+        "media": 0.0,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "incoerente": {
+        "ic_inferior": 0.0,
+        "ic_superior": 0.0,
+        "media": 0.0,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "relapso": {
+        "ic_inferior": -0.0022321428571429047,
+        "ic_superior": 0.009077380952380953,
+        "media": 0.004761904761904745,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "saude_P1_menos_P0": {
+      "ic_inferior": -0.005149032738094419,
+      "ic_superior": 0.010222550843253232,
+      "media": 0.002859027777777587,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "saude_media": {
+      "P0": 0.9163110119047658,
+      "P1": 0.9191700396825435,
+      "P3": 0.884691951884926
+    }
+  },
+  "segundos": 438.94136470000376
+}

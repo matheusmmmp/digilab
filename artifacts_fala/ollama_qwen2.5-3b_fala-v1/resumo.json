@@ -1,0 +1,16 @@
+{
+  "n": 200,
+  "aprovadas": 114,
+  "fracao_aprovada": 0.57,
+  "fracao_aprovada_com_fator": 0.68,
+  "fracao_aprovada_sem_fator": 0.46,
+  "quedas_por_tipo": {
+    "reprovada": 86
+  },
+  "tempo_medio_s": 2.866074058000231,
+  "tempo_max_s": 40.46359080000548,
+  "provedor": "ollama",
+  "modelo": "qwen2.5:3b",
+  "semente_amostra": 20260924,
+  "gasto": null
+}

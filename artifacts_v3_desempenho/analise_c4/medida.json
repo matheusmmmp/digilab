@@ -1,0 +1,85 @@
+{
+ "analisar": {
+  "arquivos_top15": {
+   "/digilab/metrics.py": 5.437,
+   "/experiments/run_v2_digibrain_prototipo.py": 12.342,
+   "/experiments/run_v2_longe_regular.py": 0.039,
+   "/experiments/run_v2_memoria_autobio.py": 1.719,
+   "C:/Users/mathe/AppData/Local/Programs/Python/Python313/Lib/random.py": 0.323,
+   "builtin:<built-in method _operator.index>": 0.036,
+   "builtin:<built-in method builtins.abs>": 1.918,
+   "builtin:<built-in method builtins.sorted>": 0.085,
+   "builtin:<built-in method builtins.sum>": 0.132,
+   "builtin:<built-in method math.lgamma>": 0.081,
+   "builtin:<method 'append' of 'list' objects>": 0.078,
+   "builtin:<method 'bit_length' of 'int' objects>": 0.044,
+   "builtin:<method 'extend' of 'list' objects>": 0.103,
+   "builtin:<method 'get' of 'dict' objects>": 0.33,
+   "builtin:<method 'getrandbits' of '_random.Random' objects>": 0.055
+  },
+  "categorias": {
+   "cerebro": {
+    "frac": 0.0,
+    "s": 0.0
+   },
+   "corpo": {
+    "frac": 0.0,
+    "s": 0.0
+   },
+   "fala": {
+    "frac": 0.0,
+    "s": 0.0
+   },
+   "json_gzip": {
+    "frac": 0.0,
+    "s": 0.0
+   },
+   "log_eventos": {
+    "frac": 0.0,
+    "s": 0.0
+   },
+   "metricas": {
+    "frac": 0.359,
+    "s": 8.192
+   },
+   "motor_mundo": {
+    "frac": 0.0,
+    "s": 0.0
+   },
+   "orquestrador": {
+    "frac": 0.641,
+    "s": 14.628
+   },
+   "outros": {
+    "frac": 0.0,
+    "s": 0.0
+   }
+  },
+  "parede_com_profiler_s": 22.832
+ },
+ "dump_resultado_s": 0.003,
+ "gzip_decompress_s": 0.17,
+ "interpretador": {
+  "executavel": "C:\\Users\\mathe\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "implementacao": "CPython",
+  "maquina": "AMD64",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "versao": "3.13.0"
+ },
+ "json_loads_s": 0.78,
+ "medidas_bytes": 138153669,
+ "modo": "analise",
+ "parede_script_s": 25.059,
+ "resultado_igual_ao_gravado": {
+  "descritivo": true,
+  "guarda": true,
+  "leitura": true,
+  "nao_demonstra": true,
+  "premissas": true,
+  "primario": true,
+  "secundarias": true
+ },
+ "resultado_sha256": "d736dabd943f5d9e1b85cdc866ffbdcb401f3d7fb37c0eff18f20d8a74a62cf1",
+ "run": "D:\\Trab\\digilab\\v3-memoria-run\\artifacts_v2_digibrain_prototipo\\memoria_autobio\\run",
+ "vidas": 14400
+}

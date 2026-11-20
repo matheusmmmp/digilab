@@ -1,0 +1,31 @@
+{
+ "origem": "medida do Matheus no botao 'Medir 10 s' da pagina do POC, num celular real (iPhone, iOS 26.4, Chrome para iOS 155, que desenha com o WebKit), servida pelo `npm run poc:preview -- --host` na rede local; colada em 2026-10-19 e repassada pelo coordenador. O JSON da pagina vai integral em `medida`, sem nenhuma mudanca (foi medido antes de a pagina ganhar o campo `aparelho`)",
+ "aparelho": "celular",
+ "ressalva": "com o sprite de reserva (16 x 16), nao com o atlas do Digimon UP, que so existe no modo dev",
+ "referencia": {
+  "fps": 30,
+  "status": "DECIDIDO 2026-10-19: referencia, nao gate duro",
+  "atinge": true
+ },
+ "medida": {
+  "medida": "M3",
+  "data": "2026-10-19T13:39:17.539Z",
+  "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_4_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/155.0.8059.37 Mobile/15E148 Safari/604.1",
+  "devicePixelRatio": 3,
+  "tela_css": [
+   402,
+   684
+  ],
+  "canvas_px": [
+   1110,
+   1472
+  ],
+  "px_por_sub": 4,
+  "sprite": "reserva",
+  "duracao_s": 10.023,
+  "quadros": 608,
+  "fps_media": 60.66,
+  "quadro_mediana_ms": 17,
+  "quadro_p95_ms": 17
+ }
+}

@@ -1,0 +1,463 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/grade_cartas_r2.py",
+ "faixa": "calibracao2",
+ "pontos": [
+  {
+   "cartas": {},
+   "efeito": {
+    "carta_folego": 0.0067,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.045,
+     "torre": -0.005,
+     "floresta": 0.02,
+     "cidadela": -0.0113,
+     "lago": -0.0037,
+     "espiral": -0.005
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_foco": {
+     "ritmo": 14
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0067,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0277
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.045,
+     "torre": -0.005,
+     "floresta": 0.02,
+     "cidadela": -0.0113,
+     "lago": -0.0037,
+     "espiral": -0.005
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.07,
+     "torre": 0.0225,
+     "floresta": 0.0525,
+     "cidadela": 0.0112,
+     "lago": 0.0025,
+     "espiral": 0.0075
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_foco": {
+     "ritmo": 12
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0067,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0075
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.045,
+     "torre": -0.005,
+     "floresta": 0.02,
+     "cidadela": -0.0113,
+     "lago": -0.0037,
+     "espiral": -0.005
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": -0.015,
+     "torre": -0.0025,
+     "floresta": 0.09,
+     "cidadela": -0.0137,
+     "lago": -0.0038,
+     "espiral": -0.01
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_foco": {
+     "ritmo": 10
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0067,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0085
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.045,
+     "torre": -0.005,
+     "floresta": 0.02,
+     "cidadela": -0.0113,
+     "lago": -0.0037,
+     "espiral": -0.005
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.03,
+     "torre": 0.0175,
+     "floresta": 0.035,
+     "cidadela": -0.0038,
+     "lago": -0.015,
+     "espiral": -0.0125
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_foco": {
+     "ritmo": 8
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0067,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0223
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.045,
+     "torre": -0.005,
+     "floresta": 0.02,
+     "cidadela": -0.0113,
+     "lago": -0.0037,
+     "espiral": -0.005
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.085,
+     "torre": 0.025,
+     "floresta": 0.0275,
+     "cidadela": -0.005,
+     "lago": 0,
+     "espiral": 0.0012
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 40
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0048,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.06,
+     "torre": -0.0125,
+     "floresta": 0.0125,
+     "cidadela": -0.0212,
+     "lago": -0.0037,
+     "espiral": -0.0062
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 60
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0046,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.06,
+     "torre": -0.0125,
+     "floresta": 0.0125,
+     "cidadela": -0.0225,
+     "lago": -0.0037,
+     "espiral": -0.0062
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 20,
+     "gutsTeto": 1.25
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0067,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.045,
+     "torre": -0.005,
+     "floresta": 0.02,
+     "cidadela": -0.0113,
+     "lago": -0.0037,
+     "espiral": -0.005
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 40,
+     "gutsTeto": 1.25
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0057,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.065,
+     "torre": -0.0125,
+     "floresta": 0.0125,
+     "cidadela": -0.0212,
+     "lago": -0.0037,
+     "espiral": -0.0062
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 60,
+     "gutsTeto": 1.25
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0063,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.06,
+     "torre": -0.005,
+     "floresta": 0.015,
+     "cidadela": -0.0225,
+     "lago": -0.0037,
+     "espiral": -0.0062
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 40,
+     "gutsTeto": 1.5
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0057,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.065,
+     "torre": -0.0125,
+     "floresta": 0.0125,
+     "cidadela": -0.0212,
+     "lago": -0.0037,
+     "espiral": -0.0062
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  },
+  {
+   "cartas": {
+    "carta_folego": {
+     "guts": 60,
+     "gutsTeto": 1.5
+    }
+   },
+   "efeito": {
+    "carta_folego": 0.0071,
+    "carta_cura": 0.0523,
+    "carta_foco": 0.0138
+   },
+   "por_arena": {
+    "carta_folego": {
+     "campina": 0.065,
+     "torre": -0.005,
+     "floresta": 0.015,
+     "cidadela": -0.0225,
+     "lago": -0.0037,
+     "espiral": -0.0062
+    },
+    "carta_cura": {
+     "campina": 0.145,
+     "torre": 0.0425,
+     "floresta": 0.0825,
+     "cidadela": 0.03,
+     "lago": 0.005,
+     "espiral": 0.0088
+    },
+    "carta_foco": {
+     "campina": 0.045,
+     "torre": 0.02,
+     "floresta": 0.025,
+     "cidadela": 0,
+     "lago": -0.0012,
+     "espiral": -0.0062
+    }
+   }
+  }
+ ]
+}

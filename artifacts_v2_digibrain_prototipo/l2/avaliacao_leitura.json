@@ -1,0 +1,688 @@
+{
+  "fontes": {
+    "artifacts_v2_digibrain_prototipo/l2/avaliacao/medidas_indice.json": "cd276329871222ed2ca63d1e6b90f0cacae547001340cfb90e62899c8fe2761b",
+    "artifacts_v2_digibrain_prototipo/l2/avaliacao/meta.json": "97bd5bcbeac9ff128494ddab62af14b1bf6d3a386fb382b211fde86aa062b83c",
+    "artifacts_v2_digibrain_prototipo/l2/avaliacao/resultado.json": "6c41fda4774274545c432dd049f7cbe0f1d29cb806d109711a5d51535ec57a15"
+  },
+  "por_braco_e_lugar": {
+    "M0+S|comedouro": {
+      "s1": {
+        "frac_expirou": 0.0,
+        "n_susp_medio": 1.3383865728207904,
+        "suspensas": 9235
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 27151,
+        "buscas_nunca_suspensas_meta_ou_achou": 25545,
+        "buscas_suspensas": 5477,
+        "buscas_suspensas_meta_ou_achou": 1768,
+        "fins_busca": {
+          "achou": 27313,
+          "trocou": 5315
+        },
+        "fins_ida": {
+          "meta": 73356,
+          "sumiu": 34,
+          "trocou": 3785
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.9408493241501233,
+        "frac_meta_ou_achou_suspensas": 0.32280445499360966
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 9156,
+        "andado_liquido_medio": 0.1150785934208394,
+        "andado_liquido_soma": 1183.5833333333333,
+        "frac_ate_zero": 0.8902284880894507,
+        "retomadas_com_alvo": 10285
+      },
+      "s4": {
+        "frac_reflexo_em_2": 0.7944206842923794,
+        "reflexo_em_2": 8173,
+        "retomadas": 10288
+      },
+      "s5": {
+        "exaustao_media": 0.17520916005291004,
+        "privacao_media": 0.19189980158730158
+      },
+      "s6": {
+        "frac_persistencia_decidiu": 0.307251166407465,
+        "persistencia_decidiu": 3161,
+        "retomadas": 10288
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 1,
+        "chamar_atencao/None": 1938,
+        "dormir/None": 1451,
+        "emburrar/None": 11,
+        "explorar/cheiro": 958,
+        "explorar/vagar": 956
+      },
+      "vidas": 1800
+    },
+    "M0+S|longe": {
+      "s1": {
+        "frac_expirou": 0.0009739060348591195,
+        "n_susp_medio": 1.532928098868254,
+        "suspensas": 29777
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 49071,
+        "buscas_nunca_suspensas_meta_ou_achou": 37140,
+        "buscas_suspensas": 23864,
+        "buscas_suspensas_meta_ou_achou": 4576,
+        "fins_busca": {
+          "achou": 41716,
+          "desistiu": 75,
+          "expirou": 29,
+          "sumiu": 3523,
+          "trocou": 27592
+        },
+        "fins_ida": {
+          "meta": 45226,
+          "superada": 695,
+          "trocou": 4858
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.7568625053493917,
+        "frac_meta_ou_achou_suspensas": 0.19175326852162253
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 30345,
+        "andado_liquido_medio": 0.15313074028498563,
+        "andado_liquido_soma": 5724.333333333333,
+        "frac_ate_zero": 0.8117543202610882,
+        "retomadas_com_alvo": 37382
+      },
+      "s4": {
+        "frac_reflexo_em_2": 0.8351154833190761,
+        "reflexo_em_2": 31240,
+        "retomadas": 37408
+      },
+      "s5": {
+        "exaustao_media": 0.27314980158730157,
+        "privacao_media": 0.568499503968254
+      },
+      "s6": {
+        "frac_persistencia_decidiu": 0.2551325919589393,
+        "persistencia_decidiu": 9544,
+        "retomadas": 37408
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 23,
+        "brincar/bola": 47,
+        "chamar_atencao/None": 10800,
+        "comer/comida": 18,
+        "dormir/None": 7330,
+        "emburrar/None": 372,
+        "explorar/cheiro": 4409,
+        "explorar/vagar": 4593
+      },
+      "vidas": 1800
+    },
+    "M0+S|perto": {
+      "s1": {
+        "frac_expirou": 0.0,
+        "n_susp_medio": 1.193631669535284,
+        "suspensas": 1162
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 15762,
+        "buscas_nunca_suspensas_meta_ou_achou": 15689,
+        "buscas_suspensas": 180,
+        "buscas_suspensas_meta_ou_achou": 73,
+        "fins_busca": {
+          "achou": 15762,
+          "sumiu": 1,
+          "trocou": 179
+        },
+        "fins_ida": {
+          "meta": 70272,
+          "superada": 410,
+          "trocou": 779
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.9953686080446644,
+        "frac_meta_ou_achou_suspensas": 0.40555555555555556
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 739,
+        "andado_liquido_medio": 0.02208994708994709,
+        "andado_liquido_soma": 16.7,
+        "frac_ate_zero": 0.9775132275132276,
+        "retomadas_com_alvo": 756
+      },
+      "s4": {
+        "frac_reflexo_em_2": 0.716931216931217,
+        "reflexo_em_2": 542,
+        "retomadas": 756
+      },
+      "s5": {
+        "exaustao_media": 0.1482184193121693,
+        "privacao_media": 0.12565228174603174
+      },
+      "s6": {
+        "frac_persistencia_decidiu": 0.33994708994708994,
+        "persistencia_decidiu": 257,
+        "retomadas": 756
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 1,
+        "chamar_atencao/None": 68,
+        "dormir/None": 43,
+        "emburrar/None": 3,
+        "explorar/cheiro": 36,
+        "explorar/vagar": 28
+      },
+      "vidas": 1800
+    },
+    "M0|comedouro": {
+      "s1": {
+        "frac_expirou": null,
+        "n_susp_medio": null,
+        "suspensas": 0
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 34885,
+        "buscas_nunca_suspensas_meta_ou_achou": 26886,
+        "buscas_suspensas": 0,
+        "buscas_suspensas_meta_ou_achou": 0,
+        "fins_busca": {
+          "achou": 26886,
+          "trocou": 7999
+        },
+        "fins_ida": {
+          "meta": 72881,
+          "trocou": 5149
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.770703740862835,
+        "frac_meta_ou_achou_suspensas": null
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 0,
+        "andado_liquido_medio": null,
+        "andado_liquido_soma": 0,
+        "frac_ate_zero": null,
+        "retomadas_com_alvo": 0
+      },
+      "s4": {
+        "frac_reflexo_em_2": null,
+        "reflexo_em_2": 0,
+        "retomadas": 0
+      },
+      "s5": {
+        "exaustao_media": 0.178463955026455,
+        "privacao_media": 0.20465277777777777
+      },
+      "s6": {
+        "frac_persistencia_decidiu": null,
+        "persistencia_decidiu": 0,
+        "retomadas": 0
+      },
+      "trocas_da_busca_por_vencedora": {
+        "chamar_atencao/None": 634,
+        "dormir/None": 6710,
+        "emburrar/None": 6,
+        "explorar/cheiro": 328,
+        "explorar/vagar": 321
+      },
+      "vidas": 1800
+    },
+    "M0|longe": {
+      "s1": {
+        "frac_expirou": null,
+        "n_susp_medio": null,
+        "suspensas": 0
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 82608,
+        "buscas_nunca_suspensas_meta_ou_achou": 39986,
+        "buscas_suspensas": 0,
+        "buscas_suspensas_meta_ou_achou": 0,
+        "fins_busca": {
+          "achou": 39986,
+          "desistiu": 22,
+          "sumiu": 3155,
+          "trocou": 39445
+        },
+        "fins_ida": {
+          "meta": 44683,
+          "trocou": 7862
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.48404512880108463,
+        "frac_meta_ou_achou_suspensas": null
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 0,
+        "andado_liquido_medio": null,
+        "andado_liquido_soma": 0,
+        "frac_ate_zero": null,
+        "retomadas_com_alvo": 0
+      },
+      "s4": {
+        "frac_reflexo_em_2": null,
+        "reflexo_em_2": 0,
+        "retomadas": 0
+      },
+      "s5": {
+        "exaustao_media": 0.27588128306878307,
+        "privacao_media": 0.5767915013227513
+      },
+      "s6": {
+        "frac_persistencia_decidiu": null,
+        "persistencia_decidiu": 0,
+        "retomadas": 0
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 17,
+        "brincar/bola": 24,
+        "chamar_atencao/None": 3883,
+        "comer/comida": 16,
+        "dormir/None": 32232,
+        "emburrar/None": 92,
+        "explorar/cheiro": 1612,
+        "explorar/vagar": 1569
+      },
+      "vidas": 1800
+    },
+    "M0|perto": {
+      "s1": {
+        "frac_expirou": null,
+        "n_susp_medio": null,
+        "suspensas": 0
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 15954,
+        "buscas_nunca_suspensas_meta_ou_achou": 15685,
+        "buscas_suspensas": 0,
+        "buscas_suspensas_meta_ou_achou": 0,
+        "fins_busca": {
+          "achou": 15685,
+          "sumiu": 1,
+          "trocou": 268
+        },
+        "fins_ida": {
+          "meta": 70228,
+          "trocou": 1446
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.983139024696001,
+        "frac_meta_ou_achou_suspensas": null
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 0,
+        "andado_liquido_medio": null,
+        "andado_liquido_soma": 0,
+        "frac_ate_zero": null,
+        "retomadas_com_alvo": 0
+      },
+      "s4": {
+        "frac_reflexo_em_2": null,
+        "reflexo_em_2": 0,
+        "retomadas": 0
+      },
+      "s5": {
+        "exaustao_media": 0.14828786375661376,
+        "privacao_media": 0.12541914682539682
+      },
+      "s6": {
+        "frac_persistencia_decidiu": null,
+        "persistencia_decidiu": 0,
+        "retomadas": 0
+      },
+      "trocas_da_busca_por_vencedora": {
+        "chamar_atencao/None": 29,
+        "dormir/None": 218,
+        "explorar/cheiro": 15,
+        "explorar/vagar": 6
+      },
+      "vidas": 1800
+    },
+    "M3+S|comedouro": {
+      "s1": {
+        "frac_expirou": 0.0003097893432465923,
+        "n_susp_medio": 1.2901177199504337,
+        "suspensas": 6456
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 21851,
+        "buscas_nunca_suspensas_meta_ou_achou": 20714,
+        "buscas_suspensas": 3190,
+        "buscas_suspensas_meta_ou_achou": 957,
+        "fins_busca": {
+          "achou": 21671,
+          "expirou": 2,
+          "saciou": 65,
+          "trocou": 3303
+        },
+        "fins_ida": {
+          "meta": 95743,
+          "saciou": 206,
+          "trocou": 3543
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.9479657681570638,
+        "frac_meta_ou_achou_suspensas": 0.3
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 6159,
+        "andado_liquido_medio": 0.08491353607632678,
+        "andado_liquido_soma": 569.6,
+        "frac_ate_zero": 0.9181574239713775,
+        "retomadas_com_alvo": 6708
+      },
+      "s4": {
+        "frac_reflexo_em_2": 0.8035474735430019,
+        "reflexo_em_2": 5391,
+        "retomadas": 6709
+      },
+      "s5": {
+        "exaustao_media": 0.1755481150793651,
+        "privacao_media": 0.15462301587301586
+      },
+      "s6": {
+        "frac_persistencia_decidiu": 0.26084364286778955,
+        "persistencia_decidiu": 1750,
+        "retomadas": 6709
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 5,
+        "chamar_atencao/None": 936,
+        "dormir/None": 871,
+        "emburrar/None": 3,
+        "explorar/cheiro": 547,
+        "explorar/ponto": 425,
+        "explorar/vagar": 516
+      },
+      "vidas": 1800
+    },
+    "M3+S|longe": {
+      "s1": {
+        "frac_expirou": 0.0008957563542716381,
+        "n_susp_medio": 1.4855839211734407,
+        "suspensas": 35724
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 41125,
+        "buscas_nunca_suspensas_meta_ou_achou": 30137,
+        "buscas_suspensas": 29654,
+        "buscas_suspensas_meta_ou_achou": 4131,
+        "fins_busca": {
+          "achou": 34268,
+          "desistiu": 51,
+          "expirou": 32,
+          "saciou": 256,
+          "sumiu": 3034,
+          "trocou": 33138
+        },
+        "fins_ida": {
+          "meta": 54429,
+          "saciou": 86,
+          "sumiu": 11,
+          "superada": 616,
+          "trocou": 5102
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.7328145896656535,
+        "frac_meta_ou_achou_suspensas": 0.1393066702637081
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 35446,
+        "andado_liquido_medio": 0.14953276802125326,
+        "andado_liquido_soma": 6454.133333333333,
+        "frac_ate_zero": 0.8212316389416616,
+        "retomadas_com_alvo": 43162
+      },
+      "s4": {
+        "frac_reflexo_em_2": 0.8645083655381482,
+        "reflexo_em_2": 37358,
+        "retomadas": 43213
+      },
+      "s5": {
+        "exaustao_media": 0.31647156084656086,
+        "privacao_media": 0.5402538029100529
+      },
+      "s6": {
+        "frac_persistencia_decidiu": 0.23846990488973224,
+        "persistencia_decidiu": 10305,
+        "retomadas": 43213
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 79,
+        "brincar/bola": 33,
+        "chamar_atencao/None": 9432,
+        "comer/comida": 41,
+        "dormir/None": 6911,
+        "emburrar/None": 257,
+        "explorar/cheiro": 4632,
+        "explorar/ponto": 7067,
+        "explorar/vagar": 4686
+      },
+      "vidas": 1800
+    },
+    "M3+S|perto": {
+      "s1": {
+        "frac_expirou": 0.0,
+        "n_susp_medio": 1.188953488372093,
+        "suspensas": 688
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 13360,
+        "buscas_nunca_suspensas_meta_ou_achou": 13299,
+        "buscas_suspensas": 115,
+        "buscas_suspensas_meta_ou_achou": 27,
+        "fins_busca": {
+          "achou": 13326,
+          "saciou": 38,
+          "sumiu": 2,
+          "trocou": 109
+        },
+        "fins_ida": {
+          "meta": 80905,
+          "saciou": 155,
+          "superada": 126,
+          "trocou": 497
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.995434131736527,
+        "frac_meta_ou_achou_suspensas": 0.23478260869565218
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 351,
+        "andado_liquido_medio": 0.019878957169459963,
+        "andado_liquido_soma": 7.116666666666667,
+        "frac_ate_zero": 0.9804469273743017,
+        "retomadas_com_alvo": 358
+      },
+      "s4": {
+        "frac_reflexo_em_2": 0.724233983286908,
+        "reflexo_em_2": 260,
+        "retomadas": 359
+      },
+      "s5": {
+        "exaustao_media": 0.1560722552910053,
+        "privacao_media": 0.14222056878306877
+      },
+      "s6": {
+        "frac_persistencia_decidiu": 0.15877437325905291,
+        "persistencia_decidiu": 57,
+        "retomadas": 359
+      },
+      "trocas_da_busca_por_vencedora": {
+        "chamar_atencao/None": 26,
+        "comer/comida": 2,
+        "dormir/None": 36,
+        "explorar/cheiro": 21,
+        "explorar/ponto": 16,
+        "explorar/vagar": 8
+      },
+      "vidas": 1800
+    },
+    "M3|comedouro": {
+      "s1": {
+        "frac_expirou": null,
+        "n_susp_medio": null,
+        "suspensas": 0
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 26060,
+        "buscas_nunca_suspensas_meta_ou_achou": 21540,
+        "buscas_suspensas": 0,
+        "buscas_suspensas_meta_ou_achou": 0,
+        "fins_busca": {
+          "achou": 21540,
+          "trocou": 4520
+        },
+        "fins_ida": {
+          "meta": 96018,
+          "trocou": 4709
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.8265541059094398,
+        "frac_meta_ou_achou_suspensas": null
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 0,
+        "andado_liquido_medio": null,
+        "andado_liquido_soma": 0,
+        "frac_ate_zero": null,
+        "retomadas_com_alvo": 0
+      },
+      "s4": {
+        "frac_reflexo_em_2": null,
+        "reflexo_em_2": 0,
+        "retomadas": 0
+      },
+      "s5": {
+        "exaustao_media": 0.1750338955026455,
+        "privacao_media": 0.15472718253968254
+      },
+      "s6": {
+        "frac_persistencia_decidiu": null,
+        "persistencia_decidiu": 0,
+        "retomadas": 0
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 5,
+        "chamar_atencao/None": 287,
+        "dormir/None": 3696,
+        "emburrar/None": 2,
+        "explorar/cheiro": 204,
+        "explorar/ponto": 153,
+        "explorar/vagar": 173
+      },
+      "vidas": 1800
+    },
+    "M3|longe": {
+      "s1": {
+        "frac_expirou": null,
+        "n_susp_medio": null,
+        "suspensas": 0
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 81435,
+        "buscas_nunca_suspensas_meta_ou_achou": 32643,
+        "buscas_suspensas": 0,
+        "buscas_suspensas_meta_ou_achou": 0,
+        "fins_busca": {
+          "achou": 32643,
+          "desistiu": 21,
+          "sumiu": 2528,
+          "trocou": 46243
+        },
+        "fins_ida": {
+          "meta": 53596,
+          "trocou": 8097
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.4008473015288267,
+        "frac_meta_ou_achou_suspensas": null
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 0,
+        "andado_liquido_medio": null,
+        "andado_liquido_soma": 0,
+        "frac_ate_zero": null,
+        "retomadas_com_alvo": 0
+      },
+      "s4": {
+        "frac_reflexo_em_2": null,
+        "reflexo_em_2": 0,
+        "retomadas": 0
+      },
+      "s5": {
+        "exaustao_media": 0.32354580026455027,
+        "privacao_media": 0.556291335978836
+      },
+      "s6": {
+        "frac_persistencia_decidiu": null,
+        "persistencia_decidiu": 0,
+        "retomadas": 0
+      },
+      "trocas_da_busca_por_vencedora": {
+        "brincar/None": 53,
+        "brincar/bola": 19,
+        "chamar_atencao/None": 2766,
+        "comer/comida": 26,
+        "dormir/None": 38859,
+        "emburrar/None": 74,
+        "explorar/cheiro": 1281,
+        "explorar/ponto": 1924,
+        "explorar/vagar": 1241
+      },
+      "vidas": 1800
+    },
+    "M3|perto": {
+      "s1": {
+        "frac_expirou": null,
+        "n_susp_medio": null,
+        "suspensas": 0
+      },
+      "s2": {
+        "buscas_nunca_suspensas": 13501,
+        "buscas_nunca_suspensas_meta_ou_achou": 13308,
+        "buscas_suspensas": 0,
+        "buscas_suspensas_meta_ou_achou": 0,
+        "fins_busca": {
+          "achou": 13308,
+          "sumiu": 2,
+          "trocou": 191
+        },
+        "fins_ida": {
+          "meta": 80929,
+          "trocou": 891
+        },
+        "frac_meta_ou_achou_nunca_suspensas": 0.985704762610177,
+        "frac_meta_ou_achou_suspensas": null
+      },
+      "s3": {
+        "andado_liquido_ate_zero": 0,
+        "andado_liquido_medio": null,
+        "andado_liquido_soma": 0,
+        "frac_ate_zero": null,
+        "retomadas_com_alvo": 0
+      },
+      "s4": {
+        "frac_reflexo_em_2": null,
+        "reflexo_em_2": 0,
+        "retomadas": 0
+      },
+      "s5": {
+        "exaustao_media": 0.15638640873015874,
+        "privacao_media": 0.14213955026455027
+      },
+      "s6": {
+        "frac_persistencia_decidiu": null,
+        "persistencia_decidiu": 0,
+        "retomadas": 0
+      },
+      "trocas_da_busca_por_vencedora": {
+        "chamar_atencao/None": 22,
+        "comer/comida": 2,
+        "dormir/None": 141,
+        "explorar/cheiro": 14,
+        "explorar/ponto": 6,
+        "explorar/vagar": 6
+      },
+      "vidas": 1800
+    }
+  },
+  "resultado_refeito_das_partes": true,
+  "rotulo": "a leitura da avaliacao da L-2: as S-1 a S-6 por braco e lugar, so das partes gravadas; descritiva, sem criterio",
+  "script": {
+    "arquivo": "experiments/leitura_l2_digibrain.py",
+    "sha256": "fbdf13fcd6fdb7a6b05e0407b0000e7cfd91f5656cd324a2b000d65ac0e9f63f"
+  },
+  "vidas": 21600
+}

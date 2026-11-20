@@ -1,0 +1,90 @@
+{
+  "criterio": "maior taxa media de especie <= 0.6; o coeficiente mais proximo do original",
+  "descricao": "Etapa 3 da TAREFA_CORRECAO_COMBATE: calibracao da formula de vida (causa da dominancia da Ferrugem).",
+  "escolha": {
+    "dispersao": 0.15666666666666668,
+    "hp_base": 80.0,
+    "hp_por_vigor": 2.0,
+    "maior": 0.5747916666666667,
+    "taxa_por_especie": {
+      "brasa": 0.5695833333333333,
+      "cirro": 0.4375,
+      "ferrugem": 0.5747916666666667,
+      "limo": 0.418125
+    }
+  },
+  "original": {
+    "hp_base": 70.0,
+    "hp_por_vigor": 3.0
+  },
+  "partidas_por_par_por_semente": 20,
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "varredura": [
+    {
+      "dispersao": 0.3433333333333333,
+      "hp_base": 70.0,
+      "hp_por_vigor": 3.0,
+      "maior": 0.6560416666666666,
+      "taxa_por_especie": {
+        "brasa": 0.545625,
+        "cirro": 0.3127083333333333,
+        "ferrugem": 0.6560416666666666,
+        "limo": 0.485625
+      }
+    },
+    {
+      "dispersao": 0.19208333333333333,
+      "hp_base": 75.0,
+      "hp_por_vigor": 2.5,
+      "maior": 0.6022916666666667,
+      "taxa_por_especie": {
+        "brasa": 0.5625,
+        "cirro": 0.41020833333333334,
+        "ferrugem": 0.6022916666666667,
+        "limo": 0.425
+      }
+    },
+    {
+      "dispersao": 0.15666666666666668,
+      "hp_base": 80.0,
+      "hp_por_vigor": 2.0,
+      "maior": 0.5747916666666667,
+      "taxa_por_especie": {
+        "brasa": 0.5695833333333333,
+        "cirro": 0.4375,
+        "ferrugem": 0.5747916666666667,
+        "limo": 0.418125
+      }
+    },
+    {
+      "dispersao": 0.17791666666666667,
+      "hp_base": 85.0,
+      "hp_por_vigor": 1.5,
+      "maior": 0.588125,
+      "taxa_por_especie": {
+        "brasa": 0.588125,
+        "cirro": 0.43375,
+        "ferrugem": 0.5679166666666666,
+        "limo": 0.41020833333333334
+      }
+    },
+    {
+      "dispersao": 0.16687500000000005,
+      "hp_base": 90.0,
+      "hp_por_vigor": 1.0,
+      "maior": 0.6054166666666667,
+      "taxa_por_especie": {
+        "brasa": 0.6054166666666667,
+        "cirro": 0.47854166666666664,
+        "ferrugem": 0.4775,
+        "limo": 0.43854166666666666
+      }
+    }
+  ]
+}

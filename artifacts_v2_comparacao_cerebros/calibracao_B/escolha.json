@@ -1,0 +1,16 @@
+{
+ "fecharam": {
+  "B-A": true,
+  "B-B": true,
+  "B-C": true,
+  "B-D": true
+ },
+ "fechou_o_cerebro": false,
+ "nao_aprende": true,
+ "ponto": {
+  "lambda_elegibilidade": 0.95,
+  "taxa_ator": 0.01,
+  "taxa_critico": 0.1,
+  "w0_info": 0.5
+ }
+}

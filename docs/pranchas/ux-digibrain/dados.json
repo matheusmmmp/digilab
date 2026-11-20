@@ -1,0 +1,4261 @@
+{
+ "fonte": "Motor.reproduzir(4242, log, 13).digibrain() — web/app/motor/motor.ts:319; save base SAVE_V11 de web/app/e2e/jogo.spec.ts",
+ "estados": {
+  "sem_decisao": {
+   "log": [],
+   "db": {
+    "decisao": null,
+    "aprendido": [],
+    "mapa": {
+     "receptores": [
+      "tedio",
+      "solidao",
+      "estresse",
+      "dor",
+      "susto"
+     ],
+     "arestas": [
+      {
+       "regra": "sono_exaustao",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_continuar",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_noite",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "pedido_necessidade",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "emburrar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "vies",
+       "w": 3072,
+       "w0": 3072,
+       "espessura": 1.7320508075688772,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "humor",
+       "w": 3072,
+       "w0": 3072,
+       "espessura": 1.7320508075688772,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "vies",
+       "w": 2048,
+       "w0": 2048,
+       "espessura": 1.4142135623730951,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "energia",
+       "w": 2048,
+       "w0": 2048,
+       "espessura": 1.4142135623730951,
+       "aprendido": 0
+      }
+     ],
+     "acesas": null
+    }
+   },
+   "ultimas": [],
+   "emocao": null,
+   "t": null
+  },
+  "save_e2e": {
+   "log": [
+    [
+     480,
+     "t",
+     120
+    ],
+    [
+     600,
+     "d",
+     "acariciar"
+    ],
+    [
+     600,
+     "t",
+     120
+    ],
+    [
+     720,
+     "d",
+     "tapa"
+    ],
+    [
+     720,
+     "t",
+     120
+    ],
+    [
+     840,
+     "dc",
+     {
+      "tipo": "racao",
+      "x": 168,
+      "y": 248
+     }
+    ],
+    [
+     840,
+     "t",
+     60
+    ]
+   ],
+   "db": {
+    "decisao": {
+     "n": 27,
+     "regra": "sono_continuar",
+     "acao": "dormir",
+     "barras": {
+      "impulsos": 1,
+      "decisao": 0,
+      "corpo": 0,
+      "memoria_emocao": 0,
+      "piso": 0
+     },
+     "chances": [
+      {
+       "acao": "dormir",
+       "chance": 1
+      }
+     ],
+     "quem_decidiu": {
+      "escolha": false,
+      "acao_instinto": "dormir",
+      "mudou": false
+     },
+     "percepcao": []
+    },
+    "aprendido": [
+     {
+      "acao": "explorar",
+      "desvio": -0.5285698699951171
+     },
+     {
+      "acao": "ocioso",
+      "desvio": 0.2590016937255859
+     },
+     {
+      "acao": "chamar_atencao",
+      "desvio": 0.2590016937255859
+     }
+    ],
+    "mapa": {
+     "receptores": [
+      "tedio",
+      "solidao",
+      "estresse",
+      "dor",
+      "susto"
+     ],
+     "arestas": [
+      {
+       "regra": "sono_exaustao",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_continuar",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_noite",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "pedido_necessidade",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "emburrar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "vies",
+       "w": 3133,
+       "w0": 3072,
+       "espessura": 1.7491627461445662,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "fome",
+       "w": 38,
+       "w0": 0,
+       "espessura": 0.1926379375927805,
+       "aprendido": 0.0023193359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "higiene",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "energia",
+       "w": 28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": 0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "humor",
+       "w": 58,
+       "w0": 0,
+       "espessura": 0.23799290955824715,
+       "aprendido": 0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "saude",
+       "w": 61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "hora",
+       "w": 30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": 0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "ticks_sem_cuidado",
+       "w": 10,
+       "w0": 0,
+       "espessura": 0.09882117688026186,
+       "aprendido": 0.0006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "vies",
+       "w": 1053,
+       "w0": 1024,
+       "espessura": 1.014061296224247,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "fome",
+       "w": 18,
+       "w0": 0,
+       "espessura": 0.13258252147247765,
+       "aprendido": 0.0010986328125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "higiene",
+       "w": 24,
+       "w0": 0,
+       "espessura": 0.15309310892394862,
+       "aprendido": 0.00146484375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "energia",
+       "w": 13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": 0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "humor",
+       "w": 3101,
+       "w0": 3072,
+       "espessura": 1.7402069740407318,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "saude",
+       "w": 29,
+       "w0": 0,
+       "espessura": 0.16828640022295324,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "hora",
+       "w": 16,
+       "w0": 0,
+       "espessura": 0.125,
+       "aprendido": 0.0009765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "ticks_sem_cuidado",
+       "w": 9,
+       "w0": 0,
+       "espessura": 0.09375,
+       "aprendido": 0.00054931640625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1085,
+       "w0": 1024,
+       "espessura": 1.0293543182500378,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": 38,
+       "w0": 0,
+       "espessura": 0.1926379375927805,
+       "aprendido": 0.0023193359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": 28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": 0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": 58,
+       "w0": 0,
+       "espessura": 0.23799290955824715,
+       "aprendido": 0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": 61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": 30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": 0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": 10,
+       "w0": 0,
+       "espessura": 0.09882117688026186,
+       "aprendido": 0.0006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "vies",
+       "w": 1926,
+       "w0": 2048,
+       "espessura": 1.3714442660932307,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "fome",
+       "w": -74,
+       "w0": 0,
+       "espessura": 0.2688226645950821,
+       "aprendido": -0.0045166015625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "higiene",
+       "w": -105,
+       "w0": 0,
+       "espessura": 0.32021721143623744,
+       "aprendido": -0.00640869140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "energia",
+       "w": 1990,
+       "w0": 2048,
+       "espessura": 1.3940442514497164,
+       "aprendido": -0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "humor",
+       "w": -122,
+       "w0": 0,
+       "espessura": 0.3451675317871019,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "saude",
+       "w": -122,
+       "w0": 0,
+       "espessura": 0.3451675317871019,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "hora",
+       "w": -61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": -0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "ticks_sem_cuidado",
+       "w": -28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": -0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "solidao",
+       "w": 4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": 0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "solidao",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "estresse",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "dor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "susto",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "solidao",
+       "w": 4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": 0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "tedio",
+       "w": -4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": -0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "solidao",
+       "w": -14,
+       "w0": 0,
+       "espessura": 0.11692679333668567,
+       "aprendido": -0.0008544921875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      }
+     ],
+     "acesas": {
+      "n": 27,
+      "regra": "sono_continuar",
+      "acao": "dormir",
+      "lobo_decisivo": "impulsos",
+      "arestas": [
+       {
+        "entrada": "vies",
+        "termo": 1,
+        "forca": 1
+       }
+      ]
+     }
+    }
+   },
+   "ultimas": [
+    {
+     "t": 840,
+     "quem": "pet",
+     "a": "dormir"
+    },
+    {
+     "t": 825,
+     "quem": "pet",
+     "a": "brincar"
+    },
+    {
+     "t": 810,
+     "quem": "pet",
+     "a": "ocioso"
+    },
+    {
+     "t": 795,
+     "quem": "pet",
+     "a": "brincar"
+    },
+    {
+     "t": 780,
+     "quem": "pet",
+     "a": "ocioso"
+    }
+   ],
+   "emocao": "alegria",
+   "t": null
+  },
+  "com_escolha": {
+   "log": [
+    [
+     480,
+     "t",
+     120
+    ],
+    [
+     600,
+     "d",
+     "acariciar"
+    ],
+    [
+     600,
+     "t",
+     120
+    ],
+    [
+     720,
+     "d",
+     "tapa"
+    ],
+    [
+     720,
+     "t",
+     120
+    ],
+    [
+     840,
+     "dc",
+     {
+      "tipo": "racao",
+      "x": 168,
+      "y": 248
+     }
+    ],
+    [
+     840,
+     "t",
+     60
+    ],
+    [
+     900,
+     "d",
+     "acariciar"
+    ],
+    [
+     900,
+     "t",
+     60
+    ],
+    [
+     960,
+     "t",
+     60
+    ],
+    [
+     1020,
+     "t",
+     60
+    ],
+    [
+     1080,
+     "t",
+     60
+    ],
+    [
+     1140,
+     "t",
+     60
+    ],
+    [
+     1200,
+     "d",
+     "acariciar"
+    ],
+    [
+     1200,
+     "t",
+     60
+    ]
+   ],
+   "db": {
+    "decisao": {
+     "n": 51,
+     "regra": "tempo_livre",
+     "acao": "chamar_atencao",
+     "barras": {
+      "impulsos": 1.0490809291974879,
+      "decisao": -0.03261500404496447,
+      "corpo": -0.016465925152523285,
+      "memoria_emocao": 0,
+      "piso": 0
+     },
+     "chances": [
+      {
+       "acao": "ocioso",
+       "chance": 0.2723415701433927
+      },
+      {
+       "acao": "explorar",
+       "chance": 0.2720690673447636
+      },
+      {
+       "acao": "brincar",
+       "chance": 0.36770292091554685
+      },
+      {
+       "acao": "chamar_atencao",
+       "chance": 0.08788644159629679
+      }
+     ],
+     "quem_decidiu": {
+      "escolha": true,
+      "acao_instinto": "chamar_atencao",
+      "mudou": false
+     },
+     "percepcao": [
+      {
+       "entrada": "hora",
+       "x": 0.8645833333333334,
+       "termo": -0.021952311197916668
+      },
+      {
+       "entrada": "tedio",
+       "x": 0.4501953125,
+       "termo": -0.015827178955078125
+      },
+      {
+       "entrada": "higiene",
+       "x": 0.48272,
+       "termo": 0.00801390625
+      }
+     ]
+    },
+    "aprendido": [
+     {
+      "acao": "explorar",
+      "desvio": 0.2773515127563477
+     },
+     {
+      "acao": "chamar_atencao",
+      "desvio": -0.04795539459228516
+     },
+     {
+      "acao": "ocioso",
+      "desvio": -0.047369457092285155
+     }
+    ],
+    "mapa": {
+     "receptores": [
+      "tedio",
+      "solidao",
+      "estresse",
+      "dor",
+      "susto"
+     ],
+     "arestas": [
+      {
+       "regra": "sono_exaustao",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_continuar",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_noite",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "pedido_necessidade",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "emburrar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "vies",
+       "w": 1517,
+       "w0": 1024,
+       "espessura": 1.217146380884403,
+       "aprendido": 0.03009033203125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "fome",
+       "w": 129,
+       "w0": 0,
+       "espessura": 0.3549317716125171,
+       "aprendido": 0.00787353515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "higiene",
+       "w": 280,
+       "w0": 0,
+       "espessura": 0.5229125165837972,
+       "aprendido": 0.01708984375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "energia",
+       "w": 267,
+       "w0": 0,
+       "espessura": 0.510629207449006,
+       "aprendido": 0.01629638671875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "humor",
+       "w": 397,
+       "w0": 0,
+       "espessura": 0.6226518389116024,
+       "aprendido": 0.02423095703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "saude",
+       "w": 493,
+       "w0": 0,
+       "espessura": 0.6938626034742037,
+       "aprendido": 0.03009033203125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "dormindo",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "hora",
+       "w": 385,
+       "w0": 0,
+       "espessura": 0.6131692771983932,
+       "aprendido": 0.02349853515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "ticks_sem_cuidado",
+       "w": 232,
+       "w0": 0,
+       "espessura": 0.4759858191164943,
+       "aprendido": 0.01416015625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 569,
+       "w0": 1024,
+       "espessura": 0.7454287776172852,
+       "aprendido": -0.02777099609375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": -119,
+       "w0": 0,
+       "espessura": 0.34089725358236606,
+       "aprendido": -0.00726318359375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": -259,
+       "w0": 0,
+       "espessura": 0.5029211543572213,
+       "aprendido": -0.01580810546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": -247,
+       "w0": 0,
+       "espessura": 0.4911323014219285,
+       "aprendido": -0.01507568359375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": -368,
+       "w0": 0,
+       "espessura": 0.5994789404140899,
+       "aprendido": -0.0224609375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": -455,
+       "w0": 0,
+       "espessura": 0.6665852814906732,
+       "aprendido": -0.02777099609375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "dormindo",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": -356,
+       "w0": 0,
+       "espessura": 0.5896238207535377,
+       "aprendido": -0.021728515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": -215,
+       "w0": 0,
+       "espessura": 0.45821494683172437,
+       "aprendido": -0.01312255859375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "vies",
+       "w": 3066,
+       "w0": 3072,
+       "espessura": 1.730358524988391,
+       "aprendido": -0.0003662109375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "fome",
+       "w": -4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": -0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "higiene",
+       "w": 17,
+       "w0": 0,
+       "espessura": 0.1288470508005519,
+       "aprendido": 0.00103759765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "energia",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "humor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "saude",
+       "w": -6,
+       "w0": 0,
+       "espessura": 0.07654655446197431,
+       "aprendido": -0.0003662109375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "sujeira",
+       "w": -13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": -0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "hora",
+       "w": -26,
+       "w0": 0,
+       "espessura": 0.15934435979977452,
+       "aprendido": -0.0015869140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "ticks_sem_cuidado",
+       "w": 8,
+       "w0": 0,
+       "espessura": 0.08838834764831845,
+       "aprendido": 0.00048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "vies",
+       "w": 1032,
+       "w0": 1024,
+       "espessura": 1.0038986502630631,
+       "aprendido": 0.00048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "fome",
+       "w": 5,
+       "w0": 0,
+       "espessura": 0.06987712429686843,
+       "aprendido": 0.00030517578125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "higiene",
+       "w": 13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": 0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "energia",
+       "w": 5,
+       "w0": 0,
+       "espessura": 0.06987712429686843,
+       "aprendido": 0.00030517578125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "humor",
+       "w": 3078,
+       "w0": 3072,
+       "espessura": 1.7337414383350247,
+       "aprendido": 0.0003662109375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "saude",
+       "w": 8,
+       "w0": 0,
+       "espessura": 0.08838834764831845,
+       "aprendido": 0.00048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "sujeira",
+       "w": -4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": -0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "hora",
+       "w": -2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": -0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "ticks_sem_cuidado",
+       "w": 7,
+       "w0": 0,
+       "espessura": 0.08267972847076846,
+       "aprendido": 0.00042724609375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1018,
+       "w0": 1024,
+       "espessura": 0.9970660083464885,
+       "aprendido": -0.0003662109375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": -5,
+       "w0": 0,
+       "espessura": 0.06987712429686843,
+       "aprendido": -0.00030517578125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": 17,
+       "w0": 0,
+       "espessura": 0.1288470508005519,
+       "aprendido": 0.00103759765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": -6,
+       "w0": 0,
+       "espessura": 0.07654655446197431,
+       "aprendido": -0.0003662109375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "sujeira",
+       "w": -13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": -0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": -26,
+       "w0": 0,
+       "espessura": 0.15934435979977452,
+       "aprendido": -0.0015869140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": 8,
+       "w0": 0,
+       "espessura": 0.08838834764831845,
+       "aprendido": 0.00048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "vies",
+       "w": 2099,
+       "w0": 2048,
+       "espessura": 1.4317138986194133,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "fome",
+       "w": 37,
+       "w0": 0,
+       "espessura": 0.19008632907181935,
+       "aprendido": 0.00225830078125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "higiene",
+       "w": -17,
+       "w0": 0,
+       "espessura": 0.1288470508005519,
+       "aprendido": -0.00103759765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "energia",
+       "w": 2063,
+       "w0": 2048,
+       "espessura": 1.4193831186469705,
+       "aprendido": 0.00091552734375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "humor",
+       "w": 40,
+       "w0": 0,
+       "espessura": 0.19764235376052372,
+       "aprendido": 0.00244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "saude",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "sujeira",
+       "w": 35,
+       "w0": 0,
+       "espessura": 0.184877493221863,
+       "aprendido": 0.00213623046875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "hora",
+       "w": 86,
+       "w0": 0,
+       "espessura": 0.28980057798424075,
+       "aprendido": 0.0052490234375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "ticks_sem_cuidado",
+       "w": -22,
+       "w0": 0,
+       "espessura": 0.14657549249448218,
+       "aprendido": -0.0013427734375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "tedio",
+       "w": -36,
+       "w0": 0,
+       "espessura": 0.1875,
+       "aprendido": -0.002197265625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "solidao",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "tedio",
+       "w": -11,
+       "w0": 0,
+       "espessura": 0.10364452469860624,
+       "aprendido": -0.00067138671875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "solidao",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "estresse",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "dor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "susto",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "tedio",
+       "w": -36,
+       "w0": 0,
+       "espessura": 0.1875,
+       "aprendido": -0.002197265625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "solidao",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "tedio",
+       "w": 94,
+       "w0": 0,
+       "espessura": 0.3029799910885206,
+       "aprendido": 0.0057373046875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "solidao",
+       "w": -11,
+       "w0": 0,
+       "espessura": 0.10364452469860624,
+       "aprendido": -0.00067138671875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      }
+     ],
+     "acesas": {
+      "n": 51,
+      "regra": "tempo_livre",
+      "acao": "chamar_atencao",
+      "lobo_decisivo": "impulsos",
+      "arestas": [
+       {
+        "entrada": "vies",
+        "termo": 0.994140625,
+        "forca": 1
+       },
+       {
+        "entrada": "fome",
+        "termo": -0.00299072265625,
+        "forca": 0.054848424820631986
+       },
+       {
+        "entrada": "higiene",
+        "termo": 0.00801390625,
+        "forca": 0.0897838487100798
+       },
+       {
+        "entrada": "energia",
+        "termo": 0.00032975260416666667,
+        "forca": 0.018212526903612258
+       },
+       {
+        "entrada": "humor",
+        "termo": -0.00096435546875,
+        "forca": 0.03114545380518391
+       },
+       {
+        "entrada": "saude",
+        "termo": -0.005859375,
+        "forca": 0.0767718022891156
+       },
+       {
+        "entrada": "sujeira",
+        "termo": -0.0025390625,
+        "forca": 0.050537387199098366
+       },
+       {
+        "entrada": "hora",
+        "termo": -0.021952311197916668,
+        "forca": 0.14859911216496147
+       },
+       {
+        "entrada": "ticks_sem_cuidado",
+        "termo": 0.000732421875,
+        "forca": 0.02714293100127328
+       },
+       {
+        "entrada": "tedio",
+        "termo": -0.015827178955078125,
+        "forca": 0.12617631678522426
+       },
+       {
+        "entrada": "solidao",
+        "termo": 0.0001316070556640625,
+        "forca": 0.011505769672489759
+       }
+      ]
+     }
+    }
+   },
+   "ultimas": [
+    {
+     "t": 1245,
+     "quem": "pet",
+     "a": "chamar_atencao"
+    },
+    {
+     "t": 1230,
+     "quem": "pet",
+     "a": "brincar"
+    },
+    {
+     "t": 1215,
+     "quem": "pet",
+     "a": "explorar"
+    },
+    {
+     "t": 1200,
+     "quem": "pet",
+     "a": "brincar"
+    },
+    {
+     "t": 1155,
+     "quem": "pet",
+     "a": "chamar_atencao"
+    }
+   ],
+   "emocao": "alegria",
+   "t": null
+  },
+  "uma_opcao": {
+   "log": [
+    [
+     480,
+     "t",
+     120
+    ],
+    [
+     600,
+     "d",
+     "acariciar"
+    ],
+    [
+     600,
+     "t",
+     120
+    ],
+    [
+     720,
+     "d",
+     "tapa"
+    ],
+    [
+     720,
+     "t",
+     120
+    ],
+    [
+     840,
+     "dc",
+     {
+      "tipo": "racao",
+      "x": 168,
+      "y": 248
+     }
+    ],
+    [
+     840,
+     "t",
+     60
+    ],
+    [
+     900,
+     "d",
+     "acariciar"
+    ],
+    [
+     900,
+     "t",
+     60
+    ]
+   ],
+   "db": {
+    "decisao": {
+     "n": 31,
+     "regra": "sono_continuar",
+     "acao": "dormir",
+     "barras": {
+      "impulsos": 1,
+      "decisao": 0,
+      "corpo": 0,
+      "memoria_emocao": 0,
+      "piso": 0
+     },
+     "chances": [
+      {
+       "acao": "dormir",
+       "chance": 1
+      }
+     ],
+     "quem_decidiu": {
+      "escolha": false,
+      "acao_instinto": "dormir",
+      "mudou": false
+     },
+     "percepcao": []
+    },
+    "aprendido": [
+     {
+      "acao": "explorar",
+      "desvio": -0.5354242579142252
+     },
+     {
+      "acao": "ocioso",
+      "desvio": 0.26281864166259766
+     },
+     {
+      "acao": "chamar_atencao",
+      "desvio": 0.26281864166259766
+     }
+    ],
+    "mapa": {
+     "receptores": [
+      "tedio",
+      "solidao",
+      "estresse",
+      "dor",
+      "susto"
+     ],
+     "arestas": [
+      {
+       "regra": "sono_exaustao",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_continuar",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_noite",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "pedido_necessidade",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "emburrar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "vies",
+       "w": 3133,
+       "w0": 3072,
+       "espessura": 1.7491627461445662,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "fome",
+       "w": 38,
+       "w0": 0,
+       "espessura": 0.1926379375927805,
+       "aprendido": 0.0023193359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "higiene",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "energia",
+       "w": 28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": 0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "humor",
+       "w": 58,
+       "w0": 0,
+       "espessura": 0.23799290955824715,
+       "aprendido": 0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "saude",
+       "w": 61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "hora",
+       "w": 30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": 0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "ticks_sem_cuidado",
+       "w": 10,
+       "w0": 0,
+       "espessura": 0.09882117688026186,
+       "aprendido": 0.0006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "vies",
+       "w": 1053,
+       "w0": 1024,
+       "espessura": 1.014061296224247,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "fome",
+       "w": 18,
+       "w0": 0,
+       "espessura": 0.13258252147247765,
+       "aprendido": 0.0010986328125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "higiene",
+       "w": 24,
+       "w0": 0,
+       "espessura": 0.15309310892394862,
+       "aprendido": 0.00146484375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "energia",
+       "w": 13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": 0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "humor",
+       "w": 3101,
+       "w0": 3072,
+       "espessura": 1.7402069740407318,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "saude",
+       "w": 29,
+       "w0": 0,
+       "espessura": 0.16828640022295324,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "hora",
+       "w": 16,
+       "w0": 0,
+       "espessura": 0.125,
+       "aprendido": 0.0009765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "ticks_sem_cuidado",
+       "w": 9,
+       "w0": 0,
+       "espessura": 0.09375,
+       "aprendido": 0.00054931640625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1085,
+       "w0": 1024,
+       "espessura": 1.0293543182500378,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": 38,
+       "w0": 0,
+       "espessura": 0.1926379375927805,
+       "aprendido": 0.0023193359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": 28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": 0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": 58,
+       "w0": 0,
+       "espessura": 0.23799290955824715,
+       "aprendido": 0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": 61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": 30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": 0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": 10,
+       "w0": 0,
+       "espessura": 0.09882117688026186,
+       "aprendido": 0.0006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "vies",
+       "w": 1926,
+       "w0": 2048,
+       "espessura": 1.3714442660932307,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "fome",
+       "w": -74,
+       "w0": 0,
+       "espessura": 0.2688226645950821,
+       "aprendido": -0.0045166015625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "higiene",
+       "w": -105,
+       "w0": 0,
+       "espessura": 0.32021721143623744,
+       "aprendido": -0.00640869140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "energia",
+       "w": 1990,
+       "w0": 2048,
+       "espessura": 1.3940442514497164,
+       "aprendido": -0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "humor",
+       "w": -122,
+       "w0": 0,
+       "espessura": 0.3451675317871019,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "saude",
+       "w": -122,
+       "w0": 0,
+       "espessura": 0.3451675317871019,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "hora",
+       "w": -61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": -0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "ticks_sem_cuidado",
+       "w": -28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": -0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "solidao",
+       "w": 4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": 0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "solidao",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "estresse",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "dor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "susto",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "solidao",
+       "w": 4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": 0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "tedio",
+       "w": -4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": -0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "solidao",
+       "w": -14,
+       "w0": 0,
+       "espessura": 0.11692679333668567,
+       "aprendido": -0.0008544921875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      }
+     ],
+     "acesas": {
+      "n": 31,
+      "regra": "sono_continuar",
+      "acao": "dormir",
+      "lobo_decisivo": "impulsos",
+      "arestas": [
+       {
+        "entrada": "vies",
+        "termo": 1,
+        "forca": 1
+       }
+      ]
+     }
+    }
+   },
+   "ultimas": [
+    {
+     "t": 900,
+     "quem": "pet",
+     "a": "dormir"
+    },
+    {
+     "t": 840,
+     "quem": "pet",
+     "a": "dormir"
+    },
+    {
+     "t": 825,
+     "quem": "pet",
+     "a": "brincar"
+    },
+    {
+     "t": 810,
+     "quem": "pet",
+     "a": "ocioso"
+    },
+    {
+     "t": 795,
+     "quem": "pet",
+     "a": "brincar"
+    }
+   ],
+   "emocao": "alegria",
+   "t": null
+  },
+  "com_aprendido": {
+   "log": [
+    [
+     480,
+     "t",
+     120
+    ],
+    [
+     600,
+     "d",
+     "acariciar"
+    ],
+    [
+     600,
+     "t",
+     120
+    ],
+    [
+     720,
+     "d",
+     "tapa"
+    ],
+    [
+     720,
+     "t",
+     120
+    ],
+    [
+     840,
+     "dc",
+     {
+      "tipo": "racao",
+      "x": 168,
+      "y": 248
+     }
+    ],
+    [
+     840,
+     "t",
+     60
+    ],
+    [
+     900,
+     "d",
+     "acariciar"
+    ],
+    [
+     900,
+     "t",
+     60
+    ],
+    [
+     960,
+     "t",
+     60
+    ]
+   ],
+   "db": {
+    "decisao": {
+     "n": 35,
+     "regra": "fome_moderada",
+     "acao": "chamar_atencao",
+     "barras": {
+      "impulsos": 0.9868448791159193,
+      "decisao": 0.013155120884080662,
+      "corpo": 0,
+      "memoria_emocao": 0,
+      "piso": 0
+     },
+     "chances": [
+      {
+       "acao": "comer",
+       "chance": 0.4933347574869792
+      },
+      {
+       "acao": "chamar_atencao",
+       "chance": 0.5066652425130208
+      }
+     ],
+     "quem_decidiu": {
+      "escolha": true,
+      "acao_instinto": "chamar_atencao",
+      "mudou": false
+     },
+     "percepcao": [
+      {
+       "entrada": "saude",
+       "x": 1,
+       "termo": 0.0029296875
+      },
+      {
+       "entrada": "humor",
+       "x": 0.91,
+       "termo": 0.002666015625
+      },
+      {
+       "entrada": "energia",
+       "x": 0.8216666666666667,
+       "termo": 0.0016048177083333333
+      }
+     ]
+    },
+    "aprendido": [
+     {
+      "acao": "explorar",
+      "desvio": -0.5310509745279949
+     },
+     {
+      "acao": "ocioso",
+      "desvio": 0.26012799580891927
+     },
+     {
+      "acao": "chamar_atencao",
+      "desvio": 0.26012799580891927
+     }
+    ],
+    "mapa": {
+     "receptores": [
+      "tedio",
+      "solidao",
+      "estresse",
+      "dor",
+      "susto"
+     ],
+     "arestas": [
+      {
+       "regra": "sono_exaustao",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_continuar",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_noite",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "pedido_necessidade",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "emburrar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "vies",
+       "w": 1021,
+       "w0": 1024,
+       "espessura": 0.9985340817919036,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "fome",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "higiene",
+       "w": -2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": -0.0001220703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "energia",
+       "w": -2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": -0.0001220703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "humor",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "saude",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "dormindo",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "hora",
+       "w": -2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": -0.0001220703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "ticks_sem_cuidado",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1027,
+       "w0": 1024,
+       "espessura": 1.0014637724351292,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "dormindo",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "vies",
+       "w": 3133,
+       "w0": 3072,
+       "espessura": 1.7491627461445662,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "fome",
+       "w": 38,
+       "w0": 0,
+       "espessura": 0.1926379375927805,
+       "aprendido": 0.0023193359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "higiene",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "energia",
+       "w": 28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": 0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "humor",
+       "w": 58,
+       "w0": 0,
+       "espessura": 0.23799290955824715,
+       "aprendido": 0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "saude",
+       "w": 61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "hora",
+       "w": 30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": 0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "ticks_sem_cuidado",
+       "w": 10,
+       "w0": 0,
+       "espessura": 0.09882117688026186,
+       "aprendido": 0.0006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "vies",
+       "w": 1053,
+       "w0": 1024,
+       "espessura": 1.014061296224247,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "fome",
+       "w": 18,
+       "w0": 0,
+       "espessura": 0.13258252147247765,
+       "aprendido": 0.0010986328125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "higiene",
+       "w": 24,
+       "w0": 0,
+       "espessura": 0.15309310892394862,
+       "aprendido": 0.00146484375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "energia",
+       "w": 13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": 0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "humor",
+       "w": 3101,
+       "w0": 3072,
+       "espessura": 1.7402069740407318,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "saude",
+       "w": 29,
+       "w0": 0,
+       "espessura": 0.16828640022295324,
+       "aprendido": 0.00177001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "hora",
+       "w": 16,
+       "w0": 0,
+       "espessura": 0.125,
+       "aprendido": 0.0009765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "ticks_sem_cuidado",
+       "w": 9,
+       "w0": 0,
+       "espessura": 0.09375,
+       "aprendido": 0.00054931640625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1085,
+       "w0": 1024,
+       "espessura": 1.0293543182500378,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": 38,
+       "w0": 0,
+       "espessura": 0.1926379375927805,
+       "aprendido": 0.0023193359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": 51,
+       "w0": 0,
+       "espessura": 0.22316963839196408,
+       "aprendido": 0.00311279296875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": 28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": 0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": 58,
+       "w0": 0,
+       "espessura": 0.23799290955824715,
+       "aprendido": 0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": 61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": 0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": 30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": 0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": 10,
+       "w0": 0,
+       "espessura": 0.09882117688026186,
+       "aprendido": 0.0006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "vies",
+       "w": 1926,
+       "w0": 2048,
+       "espessura": 1.3714442660932307,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "fome",
+       "w": -74,
+       "w0": 0,
+       "espessura": 0.2688226645950821,
+       "aprendido": -0.0045166015625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "higiene",
+       "w": -105,
+       "w0": 0,
+       "espessura": 0.32021721143623744,
+       "aprendido": -0.00640869140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "energia",
+       "w": 1990,
+       "w0": 2048,
+       "espessura": 1.3940442514497164,
+       "aprendido": -0.0035400390625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "humor",
+       "w": -122,
+       "w0": 0,
+       "espessura": 0.3451675317871019,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "saude",
+       "w": -122,
+       "w0": 0,
+       "espessura": 0.3451675317871019,
+       "aprendido": -0.0074462890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "hora",
+       "w": -61,
+       "w0": 0,
+       "espessura": 0.24407030237208294,
+       "aprendido": -0.00372314453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "ticks_sem_cuidado",
+       "w": -28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": -0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "solidao",
+       "w": 4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": 0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "solidao",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "estresse",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "dor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "susto",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "tedio",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "solidao",
+       "w": 4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": 0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "tedio",
+       "w": -4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": -0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "solidao",
+       "w": -14,
+       "w0": 0,
+       "espessura": 0.11692679333668567,
+       "aprendido": -0.0008544921875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      }
+     ],
+     "acesas": {
+      "n": 35,
+      "regra": "fome_moderada",
+      "acao": "chamar_atencao",
+      "lobo_decisivo": "impulsos",
+      "arestas": [
+       {
+        "entrada": "vies",
+        "termo": 1.0029296875,
+        "forca": 1
+       },
+       {
+        "entrada": "fome",
+        "termo": 0.00035400390625,
+        "forca": 0.018787490918031908
+       },
+       {
+        "entrada": "higiene",
+        "termo": 0.00126953125,
+        "forca": 0.035578403348241
+       },
+       {
+        "entrada": "energia",
+        "termo": 0.0016048177083333333,
+        "forca": 0.04000162281680494
+       },
+       {
+        "entrada": "humor",
+        "termo": 0.002666015625,
+        "forca": 0.05155800469472481
+       },
+       {
+        "entrada": "saude",
+        "termo": 0.0029296875,
+        "forca": 0.05404747453311749
+       },
+       {
+        "entrada": "hora",
+        "termo": 0.0013631184895833333,
+        "forca": 0.03686647045686325
+       },
+       {
+        "entrada": "ticks_sem_cuidado",
+        "termo": 0.000213623046875,
+        "forca": 0.014594486160539039
+       }
+      ]
+     }
+    }
+   },
+   "ultimas": [
+    {
+     "t": 1005,
+     "quem": "pet",
+     "a": "chamar_atencao"
+    },
+    {
+     "t": 990,
+     "quem": "pet",
+     "a": "comer"
+    },
+    {
+     "t": 900,
+     "quem": "pet",
+     "a": "dormir"
+    },
+    {
+     "t": 840,
+     "quem": "pet",
+     "a": "dormir"
+    },
+    {
+     "t": 825,
+     "quem": "pet",
+     "a": "brincar"
+    }
+   ],
+   "emocao": "alegria",
+   "t": null
+  },
+  "mudou": {
+   "log": [
+    [
+     480,
+     "t",
+     120
+    ],
+    [
+     600,
+     "d",
+     "acariciar"
+    ],
+    [
+     600,
+     "t",
+     120
+    ],
+    [
+     720,
+     "d",
+     "tapa"
+    ],
+    [
+     720,
+     "t",
+     120
+    ],
+    [
+     840,
+     "dc",
+     {
+      "tipo": "racao",
+      "x": 168,
+      "y": 248
+     }
+    ],
+    [
+     840,
+     "t",
+     60
+    ],
+    [
+     900,
+     "d",
+     "acariciar"
+    ],
+    [
+     900,
+     "t",
+     60
+    ],
+    [
+     960,
+     "t",
+     60
+    ],
+    [
+     1020,
+     "t",
+     60
+    ],
+    [
+     1080,
+     "t",
+     60
+    ],
+    [
+     1140,
+     "t",
+     60
+    ],
+    [
+     1200,
+     "d",
+     "acariciar"
+    ],
+    [
+     1200,
+     "t",
+     60
+    ],
+    [
+     1260,
+     "t",
+     60
+    ],
+    [
+     1320,
+     "t",
+     60
+    ],
+    [
+     1380,
+     "t",
+     60
+    ],
+    [
+     1440,
+     "t",
+     60
+    ],
+    [
+     1500,
+     "d",
+     "acariciar"
+    ],
+    [
+     1500,
+     "t",
+     60
+    ]
+   ],
+   "db": {
+    "decisao": {
+     "n": 71,
+     "regra": "fome_moderada",
+     "acao": "comer",
+     "barras": {
+      "impulsos": 0.3817382936587808,
+      "decisao": 0.6182617063412192,
+      "corpo": 0,
+      "memoria_emocao": 0,
+      "piso": 0
+     },
+     "chances": [
+      {
+       "acao": "comer",
+       "chance": 0.9766973268150335
+      },
+      {
+       "acao": "chamar_atencao",
+       "chance": 0.023302673184966465
+      }
+     ],
+     "quem_decidiu": {
+      "escolha": true,
+      "acao_instinto": "chamar_atencao",
+      "mudou": true
+     },
+     "percepcao": [
+      {
+       "entrada": "saude",
+       "x": 1,
+       "termo": 0.4814453125
+      },
+      {
+       "entrada": "humor",
+       "x": 0.8425,
+       "termo": 0.32663330078125
+      },
+      {
+       "entrada": "energia",
+       "x": 0.6328333333333334,
+       "termo": 0.16500634765625
+      }
+     ]
+    },
+    "aprendido": [
+     {
+      "acao": "explorar",
+      "desvio": 0.7704943194919162
+     },
+     {
+      "acao": "chamar_atencao",
+      "desvio": -0.2966262949286567
+     },
+     {
+      "acao": "ocioso",
+      "desvio": -0.2962844980536567
+     }
+    ],
+    "mapa": {
+     "receptores": [
+      "tedio",
+      "solidao",
+      "estresse",
+      "dor",
+      "susto"
+     ],
+     "arestas": [
+      {
+       "regra": "sono_exaustao",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_continuar",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "sono_noite",
+       "acao": "dormir",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "pedido_necessidade",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "abandono",
+       "acao": "emburrar",
+       "entrada": "vies",
+       "w": 1024,
+       "w0": 1024,
+       "espessura": 1,
+       "aprendido": 0
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "vies",
+       "w": 1517,
+       "w0": 1024,
+       "espessura": 1.217146380884403,
+       "aprendido": 0.03009033203125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "fome",
+       "w": 129,
+       "w0": 0,
+       "espessura": 0.3549317716125171,
+       "aprendido": 0.00787353515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "higiene",
+       "w": 280,
+       "w0": 0,
+       "espessura": 0.5229125165837972,
+       "aprendido": 0.01708984375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "energia",
+       "w": 267,
+       "w0": 0,
+       "espessura": 0.510629207449006,
+       "aprendido": 0.01629638671875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "humor",
+       "w": 397,
+       "w0": 0,
+       "espessura": 0.6226518389116024,
+       "aprendido": 0.02423095703125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "saude",
+       "w": 493,
+       "w0": 0,
+       "espessura": 0.6938626034742037,
+       "aprendido": 0.03009033203125
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "dormindo",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "hora",
+       "w": 385,
+       "w0": 0,
+       "espessura": 0.6131692771983932,
+       "aprendido": 0.02349853515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "comer",
+       "entrada": "ticks_sem_cuidado",
+       "w": 232,
+       "w0": 0,
+       "espessura": 0.4759858191164943,
+       "aprendido": 0.01416015625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 569,
+       "w0": 1024,
+       "espessura": 0.7454287776172852,
+       "aprendido": -0.02777099609375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": -119,
+       "w0": 0,
+       "espessura": 0.34089725358236606,
+       "aprendido": -0.00726318359375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": -259,
+       "w0": 0,
+       "espessura": 0.5029211543572213,
+       "aprendido": -0.01580810546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": -247,
+       "w0": 0,
+       "espessura": 0.4911323014219285,
+       "aprendido": -0.01507568359375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": -368,
+       "w0": 0,
+       "espessura": 0.5994789404140899,
+       "aprendido": -0.0224609375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": -455,
+       "w0": 0,
+       "espessura": 0.6665852814906732,
+       "aprendido": -0.02777099609375
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "dormindo",
+       "w": 3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": 0.00018310546875
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": -356,
+       "w0": 0,
+       "espessura": 0.5896238207535377,
+       "aprendido": -0.021728515625
+      },
+      {
+       "regra": "fome_moderada",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": -215,
+       "w0": 0,
+       "espessura": 0.45821494683172437,
+       "aprendido": -0.01312255859375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "vies",
+       "w": 2992,
+       "w0": 3072,
+       "espessura": 1.709349291397168,
+       "aprendido": -0.0048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "fome",
+       "w": -43,
+       "w0": 0,
+       "espessura": 0.2049199538844375,
+       "aprendido": -0.00262451171875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "higiene",
+       "w": -14,
+       "w0": 0,
+       "espessura": 0.11692679333668567,
+       "aprendido": -0.0008544921875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "energia",
+       "w": -37,
+       "w0": 0,
+       "espessura": 0.19008632907181935,
+       "aprendido": -0.00225830078125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "humor",
+       "w": -71,
+       "w0": 0,
+       "espessura": 0.2633171804117612,
+       "aprendido": -0.00433349609375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "saude",
+       "w": -80,
+       "w0": 0,
+       "espessura": 0.2795084971874737,
+       "aprendido": -0.0048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "sujeira",
+       "w": -28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": -0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "dormindo",
+       "w": -30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": -0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "hora",
+       "w": -65,
+       "w0": 0,
+       "espessura": 0.25194555463432966,
+       "aprendido": -0.00396728515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "ticks_sem_cuidado",
+       "w": -13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": -0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "vies",
+       "w": 968,
+       "w0": 1024,
+       "espessura": 0.9722718241315028,
+       "aprendido": -0.00341796875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "fome",
+       "w": -28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": -0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "higiene",
+       "w": -13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": -0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "energia",
+       "w": -30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": -0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "humor",
+       "w": 3018,
+       "w0": 3072,
+       "espessura": 1.7167602118525465,
+       "aprendido": -0.0032958984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "saude",
+       "w": -56,
+       "w0": 0,
+       "espessura": 0.23385358667337133,
+       "aprendido": -0.00341796875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "sujeira",
+       "w": -17,
+       "w0": 0,
+       "espessura": 0.1288470508005519,
+       "aprendido": -0.00103759765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "dormindo",
+       "w": -30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": -0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "hora",
+       "w": -32,
+       "w0": 0,
+       "espessura": 0.1767766952966369,
+       "aprendido": -0.001953125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "ticks_sem_cuidado",
+       "w": -13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": -0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "vies",
+       "w": 944,
+       "w0": 1024,
+       "espessura": 0.960143218483576,
+       "aprendido": -0.0048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "fome",
+       "w": -44,
+       "w0": 0,
+       "espessura": 0.2072890493972125,
+       "aprendido": -0.002685546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "higiene",
+       "w": -14,
+       "w0": 0,
+       "espessura": 0.11692679333668567,
+       "aprendido": -0.0008544921875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "energia",
+       "w": -37,
+       "w0": 0,
+       "espessura": 0.19008632907181935,
+       "aprendido": -0.00225830078125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "humor",
+       "w": -71,
+       "w0": 0,
+       "espessura": 0.2633171804117612,
+       "aprendido": -0.00433349609375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "saude",
+       "w": -80,
+       "w0": 0,
+       "espessura": 0.2795084971874737,
+       "aprendido": -0.0048828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "sujeira",
+       "w": -28,
+       "w0": 0,
+       "espessura": 0.16535945694153692,
+       "aprendido": -0.001708984375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "dormindo",
+       "w": -30,
+       "w0": 0,
+       "espessura": 0.1711632992203644,
+       "aprendido": -0.0018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "hora",
+       "w": -65,
+       "w0": 0,
+       "espessura": 0.25194555463432966,
+       "aprendido": -0.00396728515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "ticks_sem_cuidado",
+       "w": -13,
+       "w0": 0,
+       "espessura": 0.11267347735824966,
+       "aprendido": -0.00079345703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "vies",
+       "w": 2257,
+       "w0": 2048,
+       "espessura": 1.484621690027463,
+       "aprendido": 0.01275634765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "fome",
+       "w": 123,
+       "w0": 0,
+       "espessura": 0.3465792658252943,
+       "aprendido": 0.00750732421875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "higiene",
+       "w": 50,
+       "w0": 0,
+       "espessura": 0.2209708691207961,
+       "aprendido": 0.0030517578125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "energia",
+       "w": 2137,
+       "w0": 2048,
+       "espessura": 1.4446155414157775,
+       "aprendido": 0.00543212890625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "humor",
+       "w": 189,
+       "w0": 0,
+       "espessura": 0.42961647140211,
+       "aprendido": 0.01153564453125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "saude",
+       "w": 209,
+       "w0": 0,
+       "espessura": 0.45177600921253,
+       "aprendido": 0.01275634765625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "sujeira",
+       "w": 67,
+       "w0": 0,
+       "espessura": 0.2557922741210141,
+       "aprendido": 0.00408935546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "dormindo",
+       "w": 49,
+       "w0": 0,
+       "espessura": 0.21875,
+       "aprendido": 0.00299072265625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "hora",
+       "w": 183,
+       "w0": 0,
+       "espessura": 0.42274216432714634,
+       "aprendido": 0.01116943359375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "ticks_sem_cuidado",
+       "w": 21,
+       "w0": 0,
+       "espessura": 0.14320549046737,
+       "aprendido": 0.00128173828125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "tedio",
+       "w": -69,
+       "w0": 0,
+       "espessura": 0.25958199571618984,
+       "aprendido": -0.00421142578125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "solidao",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "ocioso",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "tedio",
+       "w": -39,
+       "w0": 0,
+       "espessura": 0.19515618744994995,
+       "aprendido": -0.00238037109375
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "solidao",
+       "w": -4,
+       "w0": 0,
+       "espessura": 0.0625,
+       "aprendido": -0.000244140625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "estresse",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "dor",
+       "w": -1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": -0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "brincar",
+       "entrada": "susto",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "tedio",
+       "w": -69,
+       "w0": 0,
+       "espessura": 0.25958199571618984,
+       "aprendido": -0.00421142578125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "solidao",
+       "w": -3,
+       "w0": 0,
+       "espessura": 0.05412658773652741,
+       "aprendido": -0.00018310546875
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "chamar_atencao",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "tedio",
+       "w": 165,
+       "w0": 0,
+       "espessura": 0.4014135180832853,
+       "aprendido": 0.01007080078125
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "solidao",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "dor",
+       "w": 1,
+       "w0": 0,
+       "espessura": 0.03125,
+       "aprendido": 0.00006103515625
+      },
+      {
+       "regra": "tempo_livre",
+       "acao": "explorar",
+       "entrada": "susto",
+       "w": 2,
+       "w0": 0,
+       "espessura": 0.04419417382415922,
+       "aprendido": 0.0001220703125
+      }
+     ],
+     "acesas": {
+      "n": 71,
+      "regra": "fome_moderada",
+      "acao": "comer",
+      "lobo_decisivo": "decisao",
+      "arestas": [
+       {
+        "entrada": "vies",
+        "termo": 1.4814453125,
+        "forca": 1
+       },
+       {
+        "entrada": "fome",
+        "termo": 0.045666503906249996,
+        "forca": 0.17557232901538503
+       },
+       {
+        "entrada": "higiene",
+        "termo": 0.07074375000000001,
+        "forca": 0.21852504913519313
+       },
+       {
+        "entrada": "energia",
+        "termo": 0.16500634765625,
+        "forca": 0.33373942523348166
+       },
+       {
+        "entrada": "humor",
+        "termo": 0.32663330078125,
+        "forca": 0.46955602531507373
+       },
+       {
+        "entrada": "saude",
+        "termo": 0.4814453125,
+        "forca": 0.5700732585426818
+       },
+       {
+        "entrada": "hora",
+        "termo": 0.027414957682291668,
+        "forca": 0.13603509926176402
+       },
+       {
+        "entrada": "ticks_sem_cuidado",
+        "termo": 0.021240234375,
+        "forca": 0.11973933455614018
+       }
+      ]
+     }
+    }
+   },
+   "ultimas": [
+    {
+     "t": 1515,
+     "quem": "pet",
+     "a": "comer"
+    },
+    {
+     "t": 1500,
+     "quem": "pet",
+     "a": "chamar_atencao"
+    },
+    {
+     "t": 1455,
+     "quem": "pet",
+     "a": "chamar_atencao"
+    },
+    {
+     "t": 1440,
+     "quem": "pet",
+     "a": "explorar"
+    },
+    {
+     "t": 1290,
+     "quem": "pet",
+     "a": "dormir"
+    }
+   ],
+   "emocao": "alegria",
+   "t": null
+  }
+ }
+}

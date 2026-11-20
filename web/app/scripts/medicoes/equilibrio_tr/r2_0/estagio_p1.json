@@ -1,0 +1,105 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-10-30",
+ "commit": "87223ceb",
+ "node": "v24.19.0",
+ "faixa": "calibracao2",
+ "bases": [
+  72101,
+  72202,
+  72303,
+  72404,
+  72505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p1",
+ "metas": {
+  "P-1": {
+   "vizinhos": {
+    "rookie_champion": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 2560,
+     "razao_E": 0.3886,
+     "vitorias_por_par": {}
+    },
+    "champion_ultimate": {
+     "pontos": 0.0576,
+     "vitorias": 0.0574,
+     "lutas": 10240,
+     "razao_E": 0.5572,
+     "vitorias_por_par": {
+      "brigao x sentinela": 293,
+      "brigao x emboscador": 270,
+      "brigao x tita": 5,
+      "guardiao x tita": 4,
+      "cacador x furioso": 1,
+      "colosso x emboscador": 9,
+      "colosso x tita": 6
+     }
+    },
+    "ultimate_mega": {
+     "pontos": 0.04,
+     "vitorias": 0.0399,
+     "lutas": 20480,
+     "razao_E": 0.2848,
+     "vitorias_por_par": {
+      "duelista x sentinela": 6,
+      "duelista x emboscador": 143,
+      "furioso x sentinela": 173,
+      "furioso x emboscador": 232,
+      "sentinela x muralha": 70,
+      "emboscador x muralha": 126,
+      "vigia x sentinela": 4,
+      "vigia x emboscador": 31,
+      "tita x sentinela": 12,
+      "tita x emboscador": 21
+     }
+    }
+   },
+   "dois_estagios": {
+    "rookie_ultimate": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 5120,
+     "razao_E": 0.1088,
+     "vitorias_por_par": {}
+    },
+    "champion_mega": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 10240,
+     "razao_E": 0.0606,
+     "vitorias_por_par": {}
+    }
+   },
+   "passa": true
+  }
+ },
+ "custo_s": 25.0288
+}

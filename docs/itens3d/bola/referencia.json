@@ -1,0 +1,107 @@
+{
+ "pasta": "D:Trabdigilabcapturas_itens3d\bola\referencia (fora do git: o pet e sprite do UP)",
+ "commit_base": "24c1f9b8",
+ "roteiro": "web/app/e2e_capturas/itens_bola_referencia.spec.ts",
+ "saves": "web/app/e2e_capturas/saves_bola.json",
+ "nota": "fps do Chrome sem janela nao e o do jogo; vale o draw_calls (G9)",
+ "imagens": {
+  "bola_1280_claro.png": "ee3d7947071fdba6bf710972151803f3c69862e68cf3ce89bee2c81d49ef9a5d",
+  "bola_1280_claro_recorte.png": "910907d505ec6db1a3e2bad174a58f7b7b28c448d10a88bdb21a4c97d46f5bde",
+  "bola_1280_escuro.png": "e1f7a2735bb0fdf071c38bf7be8a22bbe04c81e802e16e95e3fba957900c92a7",
+  "bola_1280_escuro_recorte.png": "c32612184d7a9e3a00d85b06d6df0bdf2ebcc55158e1dbbb107202ec6c1dbda2",
+  "bola_1280_noite.png": "ffbe5fd3d558737f0768803c7d6ac9d70c96bb18a7cf0d6ab75ddf9b1d5dcb50",
+  "bola_1280_noite_recorte.png": "f9f16b5698b2fae3e2ac22c52ba67c6175edd93fcdfbd67e979b96b197d1beb4",
+  "bola_390_claro.png": "01c565f0c19e78bd7cf4e16b79556267e08f8da40901f23b4da9b204d48c5034",
+  "bola_390_claro_recorte.png": "644b8ad5fc20e35c75f574e05e6dd4406bbffe7c6e9f50cb873d7cb0f4068f06",
+  "bola_390_escuro.png": "d004e2decabfa235b12f22356cacf428ab93394755b55bb228eb5b8865fc696f",
+  "bola_390_escuro_recorte.png": "d155537e1204b20cce88d7fc1ab1b40ed6ff7aacd5a6affc5a83299e54765913",
+  "bola_390_noite.png": "f510507802472d24de332cdf026ac8af8ec06f638b49bb4ab835f03bcff041fd",
+  "bola_390_noite_recorte.png": "bfb6ddc1706a80740d7b833180e3f72d8ad35c3e76c1ffd78166d817b7556c5f"
+ },
+ "m3": {
+  "bola_1280_claro": {
+   "draw_calls": 89,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    1280,
+    800
+   ],
+   "bola_tela": [
+    807.5018927237634,
+    554.0580512299213
+   ],
+   "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+  },
+  "bola_1280_escuro": {
+   "draw_calls": 89,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    1280,
+    800
+   ],
+   "bola_tela": [
+    807.5018927237634,
+    554.0580512299213
+   ],
+   "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+  },
+  "bola_1280_noite": {
+   "draw_calls": 109,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    1280,
+    800
+   ],
+   "bola_tela": [
+    807.5018927237634,
+    554.0580512299213
+   ],
+   "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+  },
+  "bola_390_claro": {
+   "draw_calls": 82,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    390,
+    687
+   ],
+   "bola_tela": [
+    265.90909090909093,
+    475.7973514936951
+   ],
+   "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+  },
+  "bola_390_escuro": {
+   "draw_calls": 82,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    390,
+    687
+   ],
+   "bola_tela": [
+    265.90909090909093,
+    475.7973514936951
+   ],
+   "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+  },
+  "bola_390_noite": {
+   "draw_calls": 98,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    390,
+    687
+   ],
+   "bola_tela": [
+    265.90909090909093,
+    475.797351493695
+   ],
+   "medida": "M3 (tela Pet, ilha, câmera atras, visual normal)",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+  }
+ }
+}

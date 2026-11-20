@@ -1,0 +1,408 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase1_relogio.ts",
+ "data": "2026-10-30",
+ "commit": "31e2ec8",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.2,
+  "recuo": 0.6,
+  "arrancada": 6.72,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0
+ },
+ "lutas": 7200,
+ "metas": {
+  "T-1": {
+   "duracao_media_s": 42.24,
+   "duracao_mediana_s": 37.024,
+   "p90_s": 70.816,
+   "passa": true
+  },
+  "T-2": {
+   "no_limite_total": 0.06,
+   "no_limite_pior_par": 0.695,
+   "passa": false
+  },
+  "T-3": {
+   "cidadela_media_s": 47.388,
+   "cidadela_p90_s": 63.808,
+   "passa": true
+  },
+  "T-4": {
+   "espelho_vitorias_a_entre_decididas": 0.515,
+   "passa": true
+  },
+  "T-5": {
+   "reagiu_quando_livre_com_regra": 0.785,
+   "livres_com_regra": 10547,
+   "preparos_com_alguma_decisao_livre": 0.621,
+   "preparos": 20107,
+   "passa": true
+  }
+ },
+ "piores_pares_no_limite": [
+  "furioso x sentinela: 0.695",
+  "muralha x sentinela: 0.545",
+  "vigia x vigia: 0.39",
+  "furioso x emboscador: 0.235",
+  "muralha x muralha: 0.1",
+  "espelho x espelho: 0.09",
+  "duelista x duelista: 0.05",
+  "duelista x muralha: 0.025"
+ ],
+ "espelho": [
+  {
+   "forma": "duelista",
+   "vitorias_a": 20,
+   "derrotas_a": 16,
+   "empates": 154
+  },
+  {
+   "forma": "furioso",
+   "vitorias_a": 60,
+   "derrotas_a": 20,
+   "empates": 120
+  },
+  {
+   "forma": "espelho",
+   "vitorias_a": 90,
+   "derrotas_a": 90,
+   "empates": 2
+  },
+  {
+   "forma": "muralha",
+   "vitorias_a": 78,
+   "derrotas_a": 100,
+   "empates": 2
+  },
+  {
+   "forma": "sentinela",
+   "vitorias_a": 58,
+   "derrotas_a": 64,
+   "empates": 78
+  },
+  {
+   "forma": "emboscador",
+   "vitorias_a": 74,
+   "derrotas_a": 56,
+   "empates": 70
+  },
+  {
+   "forma": "vigia",
+   "vitorias_a": 62,
+   "derrotas_a": 60,
+   "empates": 0
+  },
+  {
+   "forma": "tita",
+   "vitorias_a": 32,
+   "derrotas_a": 40,
+   "empates": 128
+  }
+ ],
+ "pares": [
+  {
+   "a": "duelista",
+   "b": "duelista",
+   "duracao_media_s": 26.252,
+   "no_limite": 0.05,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "furioso",
+   "duracao_media_s": 29.54,
+   "no_limite": 0,
+   "vitorias_a": 0.108,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "espelho",
+   "duracao_media_s": 45.948,
+   "no_limite": 0,
+   "vitorias_a": 0.203,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "muralha",
+   "duracao_media_s": 39.198,
+   "no_limite": 0.025,
+   "vitorias_a": 0.083,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "sentinela",
+   "duracao_media_s": 63.818,
+   "no_limite": 0.02,
+   "vitorias_a": 0.985,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "emboscador",
+   "duracao_media_s": 52.747,
+   "no_limite": 0.005,
+   "vitorias_a": 1,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "vigia",
+   "duracao_media_s": 32.642,
+   "no_limite": 0,
+   "vitorias_a": 0.695,
+   "lutas": 200
+  },
+  {
+   "a": "duelista",
+   "b": "tita",
+   "duracao_media_s": 28.422,
+   "no_limite": 0,
+   "vitorias_a": 0.75,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "furioso",
+   "duracao_media_s": 21.825,
+   "no_limite": 0,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "espelho",
+   "duracao_media_s": 33.875,
+   "no_limite": 0,
+   "vitorias_a": 0.25,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "muralha",
+   "duracao_media_s": 36.277,
+   "no_limite": 0,
+   "vitorias_a": 0.038,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "sentinela",
+   "duracao_media_s": 67.627,
+   "no_limite": 0.695,
+   "vitorias_a": 0.64,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "emboscador",
+   "duracao_media_s": 41.992,
+   "no_limite": 0.235,
+   "vitorias_a": 0.89,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "vigia",
+   "duracao_media_s": 31.566,
+   "no_limite": 0,
+   "vitorias_a": 0.885,
+   "lutas": 200
+  },
+  {
+   "a": "furioso",
+   "b": "tita",
+   "duracao_media_s": 31.635,
+   "no_limite": 0,
+   "vitorias_a": 0.253,
+   "lutas": 200
+  },
+  {
+   "a": "espelho",
+   "b": "espelho",
+   "duracao_media_s": 66.914,
+   "no_limite": 0.09,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "espelho",
+   "b": "muralha",
+   "duracao_media_s": 58.84,
+   "no_limite": 0,
+   "vitorias_a": 0.06,
+   "lutas": 200
+  },
+  {
+   "a": "espelho",
+   "b": "sentinela",
+   "duracao_media_s": 45.43,
+   "no_limite": 0,
+   "vitorias_a": 0.985,
+   "lutas": 200
+  },
+  {
+   "a": "espelho",
+   "b": "emboscador",
+   "duracao_media_s": 35.231,
+   "no_limite": 0,
+   "vitorias_a": 0.943,
+   "lutas": 200
+  },
+  {
+   "a": "espelho",
+   "b": "vigia",
+   "duracao_media_s": 37.051,
+   "no_limite": 0,
+   "vitorias_a": 0.003,
+   "lutas": 200
+  },
+  {
+   "a": "espelho",
+   "b": "tita",
+   "duracao_media_s": 48.453,
+   "no_limite": 0,
+   "vitorias_a": 0.018,
+   "lutas": 200
+  },
+  {
+   "a": "muralha",
+   "b": "muralha",
+   "duracao_media_s": 70.956,
+   "no_limite": 0.1,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "muralha",
+   "b": "sentinela",
+   "duracao_media_s": 71.75,
+   "no_limite": 0.545,
+   "vitorias_a": 0.53,
+   "lutas": 200
+  },
+  {
+   "a": "muralha",
+   "b": "emboscador",
+   "duracao_media_s": 35.799,
+   "no_limite": 0,
+   "vitorias_a": 0.925,
+   "lutas": 200
+  },
+  {
+   "a": "muralha",
+   "b": "vigia",
+   "duracao_media_s": 58.368,
+   "no_limite": 0,
+   "vitorias_a": 0.748,
+   "lutas": 200
+  },
+  {
+   "a": "muralha",
+   "b": "tita",
+   "duracao_media_s": 48.726,
+   "no_limite": 0,
+   "vitorias_a": 0.81,
+   "lutas": 200
+  },
+  {
+   "a": "sentinela",
+   "b": "sentinela",
+   "duracao_media_s": 29.02,
+   "no_limite": 0,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "sentinela",
+   "b": "emboscador",
+   "duracao_media_s": 23.594,
+   "no_limite": 0,
+   "vitorias_a": 0.758,
+   "lutas": 200
+  },
+  {
+   "a": "sentinela",
+   "b": "vigia",
+   "duracao_media_s": 45.983,
+   "no_limite": 0,
+   "vitorias_a": 0,
+   "lutas": 200
+  },
+  {
+   "a": "sentinela",
+   "b": "tita",
+   "duracao_media_s": 26.336,
+   "no_limite": 0.005,
+   "vitorias_a": 0,
+   "lutas": 200
+  },
+  {
+   "a": "emboscador",
+   "b": "emboscador",
+   "duracao_media_s": 28.123,
+   "no_limite": 0,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "emboscador",
+   "b": "vigia",
+   "duracao_media_s": 42.852,
+   "no_limite": 0,
+   "vitorias_a": 0,
+   "lutas": 200
+  },
+  {
+   "a": "emboscador",
+   "b": "tita",
+   "duracao_media_s": 34.689,
+   "no_limite": 0.01,
+   "vitorias_a": 0.01,
+   "lutas": 200
+  },
+  {
+   "a": "vigia",
+   "b": "vigia",
+   "duracao_media_s": 68.745,
+   "no_limite": 0.39,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  },
+  {
+   "a": "vigia",
+   "b": "tita",
+   "duracao_media_s": 40.031,
+   "no_limite": 0.005,
+   "vitorias_a": 0.035,
+   "lutas": 200
+  },
+  {
+   "a": "tita",
+   "b": "tita",
+   "duracao_media_s": 20.394,
+   "no_limite": 0,
+   "vitorias_a": 0.5,
+   "lutas": 200
+  }
+ ],
+ "custo_s": 8.696
+}

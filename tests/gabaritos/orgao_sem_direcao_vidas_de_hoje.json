@@ -1,0 +1,82 @@
+{
+ "instinto|B0|aleatorio|101": {
+  "corpos": "64ff7b4fb46c2c90da64db48bbfe9dcadad52fc551b7ceb40fce2dc5c2b5f42c",
+  "registro": "a161fb551b8c209ccfb57d3b3536100c41f69e9e1d8b963a9ff963615e94daf5",
+  "resumo": "60314b09ad4d9cad3b3c46b0048b8f9085a0e0f6cecf1dc337cf3b2feb830f9c"
+ },
+ "instinto|B0|aleatorio|202": {
+  "corpos": "dba81b74e4ed16f3e45660e5b0c34200a68d65f497aed8a1cb10d0cb091342be",
+  "registro": "5cf10def93864aba72ec4414b73315f66f2dcfd37f6ef965533acc3e0c6ca664",
+  "resumo": "aff7a91e620b094566d36415112ff4f8b88e443f7030578f36e3499fa01d3b29"
+ },
+ "instinto|B0|atencioso|101": {
+  "corpos": "2f059fbd9dfeb962849c31f783d0530f55b8b49f2d85636b8fd8f6b789926c77",
+  "registro": "6fe31006c0517f9844fd9c55ca290e8a30bb8cef9994d342af9f5f7d3270233f",
+  "resumo": "f93a460f446e063c52755dc855960b132c050a280a4230b5e9ee8ef29e286fe8"
+ },
+ "instinto|B0|atencioso|202": {
+  "corpos": "65a6ad2bef73b617df0dce1b2fdb213481ff4a32a5065540a9082b0667d99ea5",
+  "registro": "324066199fa275a910f27b3b383cf4a90e6cfcbeceff5ced74b377d189a3502e",
+  "resumo": "1bfca6d4416f9e24248671cca04abaaf39013e9784ba8956c712a71a2d8f02c5"
+ },
+ "instinto|B1|aleatorio|101": {
+  "corpos": "92c850a72981abcfe27b605f24e79b9d0cd521bfcab1fed059e1775d04b9964d",
+  "registro": "24fe8d5b917be293a0f3b947a1d7f8a58b346cbdd095b235494d2e79ec69aaec",
+  "resumo": "5ff8a18127ebbdcaa4c5cc68a3f405ce8f14689d793f5b8bc66f3fa25733e1b5"
+ },
+ "instinto|B1|aleatorio|202": {
+  "corpos": "c6e18b96ebf4fc0ff43799df0e32c302ba0feb0c1b03949e466937c24b049b43",
+  "registro": "1109d6df39e031428e7b8998b9c9074ef46966fc15134011c540b5ad3fc8f09c",
+  "resumo": "3856ad6eededc0eecc4e79c27ff8efa78226faa14a301babe0f917f40339be9f"
+ },
+ "instinto|B1|atencioso|101": {
+  "corpos": "a5750ac864a7f1ea5a54519c98b460a84fb3f93dc66d15e3a1d470eb2ab0276f",
+  "registro": "a1379fd21313a10dbdd6e93e1330199d5bc5358993eee1aadb7be41ecdbaa5c1",
+  "resumo": "6658390b39097b118e79d6ddca00b01041d93c0b4d5292cc4c84150c64c8c523"
+ },
+ "instinto|B1|atencioso|202": {
+  "corpos": "a7b114a3e1a5667c28537f37ec64d403ee12b81ae20c7a31635edea40b428ea7",
+  "registro": "c520ad598f0ee661e2c3088ce81d0f3bee13f87f3d567eeba63352bf1e8d67a0",
+  "resumo": "136a20cff5a769c777bb5d928db3d0def477c6410144042496841f531c2ccc4a"
+ },
+ "lobos|B0|aleatorio|101": {
+  "corpos": "465940da45309d2c36d132962808947916879e2e97cb987333f7de9d3548f9fe",
+  "registro": "60838307f8231c236e244263fc88124bd12ac59efb0174562421d455d8c9e325",
+  "resumo": "6e69635c8cf6e7a236f47e627bc236b7f4cbf5f5e8621ddfb7e62551cf1608f5"
+ },
+ "lobos|B0|aleatorio|202": {
+  "corpos": "bb0365f82e7dfa562d823417dcf74901e726bdec70d5553445e9d5c27318aac0",
+  "registro": "cfb717eff5c5abe6b29a0b93ac7a20cb1cff7debb174915ddf50d7bb2f3b0c06",
+  "resumo": "9a6a036fb89b8bf4f3c68a70b4868df8bcf4af462f9ea38ab6941336818a58f7"
+ },
+ "lobos|B0|atencioso|101": {
+  "corpos": "2a85f02e211fabd5ca0984734e84a15deb623d18ed5441627132a784db1ddfde",
+  "registro": "0b5310c116b9273411f0448548f03430cdf63af197fd8c4c087348ff14eb568c",
+  "resumo": "008332f6c53bce0d412c2bcd878c51749596881bd0506570148b3ba701a02c53"
+ },
+ "lobos|B0|atencioso|202": {
+  "corpos": "0ec6d9f73359dcf50d2b7f7d5739fee76b7911324a681d7993e963e71ecf092b",
+  "registro": "3dd768f91f87e5fe647a781563fb72d4a010fb62372612e6cb0e5955fa5cfeb0",
+  "resumo": "23c5a54606788cede9adda7d32cb2de8ebc346051531a9f3c3d9d8a89bd99c76"
+ },
+ "lobos|B1|aleatorio|101": {
+  "corpos": "d7cf8e744f1a53dda4cc3b840ca7df62ca69b0404a41035bac37290fb12045a6",
+  "registro": "e37b25dcc3715704b02af03c25c8e31e56cc8cc306c0f9ff5f63cf62a4689b74",
+  "resumo": "6a4d990fe97a793ae1ce3b648227074dd79b3b0f90290c6bc224f46b0467fdf5"
+ },
+ "lobos|B1|aleatorio|202": {
+  "corpos": "c9a4517b1182c34a8d5327a262ac40cf0a2a719b07949d42979c2d2f54968222",
+  "registro": "4d10cc3e3993a2a7b678ef93308fa3577af9514bd98735c92e9aa89668f0a520",
+  "resumo": "dfefbd9938ddbdfd7b89dc3fb742051edb95ecd69008eaf6db45e0cf3bb33a4c"
+ },
+ "lobos|B1|atencioso|101": {
+  "corpos": "2178d38c0cd86abfbbf38771e126e19e542eece8d3bc48a88a409c88cf6c01a7",
+  "registro": "3a209fcc81e75500342f1858c26fd5dc52db29a047e03d2e05fdcb409415a44a",
+  "resumo": "41c78d0cf450465366e8f3536bc76962e9e517e1466c44f8db8785522bdf13f3"
+ },
+ "lobos|B1|atencioso|202": {
+  "corpos": "28746c7cfc4a278066663f1116ea7d3da7db68e9a3233fea3f8583d9c630fd28",
+  "registro": "9cf55d243d527aa1dbdee9079960284f4f2d15b2cfc5d51e837f297cc26dd17d",
+  "resumo": "877518b2151d88dd5d22fdb4d86c9b609c708383902445403c2348a8dff80220"
+ }
+}

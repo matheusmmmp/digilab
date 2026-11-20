@@ -1,0 +1,106 @@
+{
+ "c4": {
+  "a4_s": 12.486965399996734,
+  "decisoes": 1344,
+  "reducao_s": 1.1208974000001035,
+  "replay_sem_a4_s": 4.345605100003013,
+  "rodadas_s": [
+   {
+    "contrafactual": 12.486965399996734,
+    "reducao": 3.781284300000152,
+    "replay": 16.832570499999747,
+    "total": 20.613936300000205
+   },
+   {
+    "contrafactual": 165.89781930000845,
+    "reducao": 1.1545297000002392,
+    "replay": 204.3591604000003,
+    "total": 205.51375370000005
+   },
+   {
+    "contrafactual": 14.502187600002799,
+    "reducao": 1.1208974000001035,
+    "replay": 19.785098700000162,
+    "total": 20.906077599999662
+   }
+  ],
+  "vida": "REL|aleatorio|longe_fixo|11369823291936750107"
+ },
+ "corte_h": 8,
+ "passa_do_corte": false,
+ "pior_projecao_h": 2.9115201733324585,
+ "projecao": {
+  "a4_960_vidas_h": 1.0708666733336032,
+  "a4_por_vida_s": 16.063000100004047,
+  "auditoria_inteira_com_a_vida_medida_h": 2.9115201733324585,
+  "auditoria_inteira_h": 2.304594390000663,
+  "c4_medida": {
+   "a4_s": 12.486965399996734,
+   "auditoria_inteira_h": 2.654631860000821,
+   "nota": "uma vida da C4 no codigo do a287ba2 (1 344 decisoes), o minimo das rodadas depois do aquecimento; a reducao com o contrafactual vale como teto para as 4 800 vidas",
+   "reducao_s": 1.1208974000001035,
+   "replay_sem_a4_s": 4.345605100003013
+  },
+  "decisoes_por_vida_c4": 1344,
+  "nota": "o tempo por decisao e o de parede (o process_time mede errado nesta maquina, D-PV0C-7), o minimo de 3 rodadas por vida e o pior das 2 vidas, na AN0 (codigo de hoje, 4 dias). A C4 roda o codigo do a287ba2, de custo parecido mas nao medido aqui. A auditoria inteira soma o replay da C4 (3,15 s por vida, A11.8, ou a vida medida aqui), a reducao das 4 800 vidas e o contrafactual das 960, com 4 processos",
+  "reducao_por_vida_s": 0.5511831500011795,
+  "vida_sem_a4_por_vida_s": 4.970777349995387
+ },
+ "rotulo": "o tempo do A-4 nas sementes dos testes (secao 8 do plano): so o tempo, nenhuma medida",
+ "vidas": [
+  {
+   "a4_por_decisao_s": 0.0020485968749947383,
+   "decisoes": 384,
+   "reducao_por_decisao_s": 0.00017745104166522196,
+   "rodadas_s": [
+    {
+     "contrafactual": 0.7866611999979796,
+     "reducao": 0.06814119999944523,
+     "replay": 1.1439285000005839,
+     "total": 1.2120724000005794
+    },
+    {
+     "contrafactual": 24.977750000011838,
+     "reducao": 9.899095400000078,
+     "replay": 84.47562410000046,
+     "total": 94.37472530000014
+    },
+    {
+     "contrafactual": 2.9049366000081136,
+     "reducao": 0.17666509999980917,
+     "replay": 4.225295400000505,
+     "total": 4.401963000000251
+    }
+   ],
+   "vida": "digibrain_modular_longe_fixo.json.gz|atencioso|longe_fixo|101",
+   "vida_sem_a4_por_decisao_s": 0.000930383593756782
+  },
+  {
+   "a4_por_decisao_s": 0.011951636979169677,
+   "decisoes": 384,
+   "reducao_por_decisao_s": 0.00041010651041754426,
+   "rodadas_s": [
+    {
+     "contrafactual": 63.73905579999882,
+     "reducao": 0.157480900000337,
+     "replay": 88.0893172999995,
+     "total": 88.24680079999962
+    },
+    {
+     "contrafactual": 4.589428600001156,
+     "reducao": 0.20883930000036344,
+     "replay": 6.009650699999838,
+     "total": 6.218493299999864
+    },
+    {
+     "contrafactual": 57.028026300008605,
+     "reducao": 0.21310489999996207,
+     "replay": 68.78136799999993,
+     "total": 68.99447560000044
+    }
+   ],
+   "vida": "digibrain_modular_longe_fixo.json.gz|atencioso|longe_fixo|202",
+   "vida_sem_a4_por_decisao_s": 0.003698495052079901
+  }
+ ]
+}

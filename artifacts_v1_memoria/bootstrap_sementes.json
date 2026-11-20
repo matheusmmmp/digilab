@@ -1,0 +1,45 @@
+{
+ "descricao": "Bootstrap sobre sementes do efeito da memoria na divergencia (pendencia do CLAUDE.md: \"efeito pequeno e sem",
+ "bootstrap": {
+  "reamostragens": 10000,
+  "semente": 20260929
+ },
+ "comparacoes": {
+  "artifacts_v1_memoria - artifacts": {
+   "sementes": [
+    101,
+    202,
+    303,
+    404,
+    505
+   ],
+   "separacao_com_memoria": 0.0062249327690927295,
+   "separacao_sem": 0.007293913500154434,
+   "efeito": -0.0010689807310617049,
+   "ic95": [
+    -0.0038599391680796107,
+    0.0028593688506364685
+   ],
+   "reamostras_validas": 9985,
+   "leitura": "IC inclui 0: sem evidencia de efeito"
+  },
+  "artifacts_v1_memoria_espacos - artifacts": {
+   "sementes": [
+    101,
+    202,
+    303,
+    404,
+    505
+   ],
+   "separacao_com_memoria": 0.006797619436460255,
+   "separacao_sem": 0.007293913500154434,
+   "efeito": -0.0004962940636941797,
+   "ic95": [
+    -0.0029669290697112594,
+    0.0018312005154915729
+   ],
+   "reamostras_validas": 9985,
+   "leitura": "IC inclui 0: sem evidencia de efeito"
+  }
+ }
+}

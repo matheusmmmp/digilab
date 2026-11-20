@@ -1,0 +1,80 @@
+{
+ "fase": "calibracao_v3b",
+ "base": 20262200,
+ "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC4.md",
+ "plano_sha256": "1e2a384dfd4bf669d8a563ff8b40d7cce78c4ddc041e441485de71645d8a3fb0",
+ "arquivos": {
+  "experiments/run_v3_conversa_dc4.py": "45890b149215d800983223fbdfc7ddbc2c9fc4911b4e1693e9ef1fa87045d870",
+  "experiments/entradas_dc4.py": "ba9414fd3cefbf9da412d03d03b09eacaa3c7964d128679bc004db624622d64b",
+  "experiments/montador_voz_rede.py": "5fd33d8899d1877cfdadabe62f1a3819da6f1a948043317beef7363c5639fc74",
+  "experiments/marcacao_dc4.py": "6eef3bb3d3bd8ffa502fef613bad8fa4e3b26d57ff7aa74be01c5898c5813e22",
+  "experiments/run_v3_conversa_dc3.py": "fe661aa83219a6bbdc8dac5b313ea0873746cf7d34b1a0434b0c7f121271d53c",
+  "experiments/configs/v3_conversa_dc4/calibracao.json": "7b54cbd19aa9d00799093ff828ab665557b87252cf9aaac69f117cb84c878c7a",
+  "experiments/configs/v3_conversa_dc4/validacao.json": "ce89426e503283f3cccfc62e6391eea7c987c965fb4c01f37016b37bc497677c",
+  "experiments/configs/v3_conversa_dc4/roteiros_calibracao.json": "9076050abca676128d4d65275962268a6684c27a74832485f2995fc03c724a6a",
+  "experiments/configs/v3_conversa_dc4/roteiros_validacao.json": "b374d906f3b59b7c3f0e967ce5dcc081ab217c76d67ff1d51e4c5c2beb39d598",
+  "docs/RUBRICA_DC4_FIDELIDADE.md": "4b1e811871e4571f3951067465dbaade59f3c29ff38e59cabb94c37439b65d0c",
+  "servidor/fala_livre_claude.py": "0dbc641090dbf0a365a5ee911afbf5c493760adbd8694c401988a69fd5b7be33",
+  "servidor/fala_livre.py": "56cccbde81e11b0c911e88c43e6f751bdc50770867742baf3046a5a068bc4a19",
+  "servidor/fala_llm.py": "42ad556b8b6a7ffadf864a5e70b2220670597f7c6bab75ee546d1a08e540bd36",
+  "digilab_fala_livre/__init__.py": "82beb2379edc51ef35fb0696ae9369d1d240973825acfda064bfce78941d0bd2",
+  "digilab_fala_livre/almanaque.py": "390fa85d81f9b35e64c372b648493d1e54d4be2f8a452ac9113e061cbb697087",
+  "digilab_fala_livre/apresentacao.py": "1cffd438ffef46a9628fd65622386322fb7fc383aec5b1f31f44c1606db1dc46",
+  "digilab_fala_livre/arvore.py": "46122d142c32e5bb90141efdb3d2142ec9da1d7e9d31ac4425b7f31153212250",
+  "digilab_fala_livre/avaliacao.py": "1cd0d266280c91de5cf990cfed5578b6866100ac531b3c578b3fd445da3e1940",
+  "digilab_fala_livre/conceitos.py": "ffb1527e04eced915b1ba358a84766181f86071bab788a6a6553e38586ca146e",
+  "digilab_fala_livre/corpus.py": "ac0a39b76f593706f538447778e0ef503c16f847ca38adb0d99b4e45578f89a7",
+  "digilab_fala_livre/fatos.py": "31539fa6e9779e4519de9d3a1eec240f42151535762c6cb33e911da38924d2f1",
+  "digilab_fala_livre/gerar.py": "8dee72308bcf2a81893120ed6362fe31cc540ffdcaf89268b255e3657b02fdb6",
+  "digilab_fala_livre/memoria_fala.py": "9e288def0f788235df628244de6616b2ab07d39a96b65a9064ab7ad46fdfd260",
+  "digilab_fala_livre/mentira.py": "e086677468964c1749cca4196ff402fc4e7fdd266c693b07ac63eccb95d2ac03",
+  "digilab_fala_livre/ollama.py": "d623a459e2b8382418ee6e9b57fa2517b34034b35fc5c0c720a3b1a394f9c717",
+  "digilab_fala_livre/prompt.py": "77a108fc481cb785c668d6b248e012892c837f08937947608a044eaa95928bae",
+  "digilab_fala_livre/revisao.py": "94566c1642e2265a91a357ca09bcf7cd67776a1578aeadde3fe2c02b257e2ef8",
+  "digilab_fala_livre/saida.py": "4733987b8f8622705bc905f97f9fd431eaf52c92a82e22eacbc6e10e0cb87f12",
+  "digilab_fala_livre/situacoes.py": "2b82c89024ac4ec0570196a06787f02049389796a45622129c16b1f8edf52086",
+  "digilab_fala_livre/verificador.py": "1f4505f7385dc63e8568b759c751da82f4c590550a30a9bf88caa122f2a5cc0b",
+  "digilab_fala_livre/voz.py": "64e1cf9c0223d39500f1a507e5d407b9be6af517fc2b061fe3f4f6daabb3286b"
+ },
+ "voz_dec_v3": "voz-v3b",
+ "origem": "artifacts_v3_conversa_dc4/calibracao",
+ "origem_sha256": {
+  "entradas.json": "17fb6669bbf2f593d59a35d2e339fbe3531a66162849ce8945f1af49baf764d9",
+  "falas.jsonl": "04ac8600d4d42f0f28eb463af44cd35ee643c50c876303f9bb1f9581faf4b738"
+ },
+ "clientes_falsos": false,
+ "ollama": {
+  "modelo": "gemma2:9b",
+  "digest": "ff02c3702f322b9e075e9568332d96c0a7028002f1a5a056e0a6784320a4db0b",
+  "modified_at": "2026-09-27T17:37:37.4132086-03:00",
+  "size": 5443152417
+ },
+ "python": "3.13.0",
+ "gasto": {
+  "limite_usd": 3.0,
+  "inicio_usd": 0.605999,
+  "fim_usd": 0.878222,
+  "da_rodada_usd": 0.272223,
+  "pelo_usage_usd": {
+   "H": 0.012563,
+   "S": 0.25966
+  }
+ },
+ "parada_no_teto": null,
+ "modelos_devolvidos": {
+  "G": [
+   "gemma2:9b"
+  ],
+  "H": [
+   "claude-haiku-5-5"
+  ],
+  "S": [
+   "claude-sonnet-5-5"
+  ]
+ },
+ "verificador_devolvido": [
+  "gemma2:9b"
+ ],
+ "falas": 114,
+ "reaproveitadas_no_historico": 84
+}

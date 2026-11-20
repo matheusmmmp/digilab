@@ -1,0 +1,715 @@
+{
+  "adendo_4": {
+    "g_apr_m4_con": 1923,
+    "k": 10
+  },
+  "bracos": {
+    "A11": null,
+    "M0": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "m_mem": false,
+      "p1": false,
+      "p2": false
+    },
+    "M1": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "m_mem": false,
+      "p2": false
+    },
+    "M2": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "m_mem": false
+    },
+    "M3": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true
+    },
+    "M3-420": {},
+    "M3-sem-inato": {
+      "intencao_cheiro": true
+    },
+    "M3-sem-intencao": {
+      "cheiro_inato": true
+    },
+    "M3-sp": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "persistencia": false
+    },
+    "M4": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "modula_g_apr": true
+    },
+    "M4-con": {
+      "cheiro_inato": true,
+      "controle_g_apr": "constante",
+      "intencao_cheiro": true
+    },
+    "M4-emb": {
+      "cheiro_inato": true,
+      "controle_g_apr": "embaralhado",
+      "intencao_cheiro": true,
+      "modula_g_apr": true
+    }
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "descricao": "Reavaliacao do conserto, por estimativa (adendo 4, APROVADO pelo Matheus em 2026-10-27; registrada em A4.10 antes da primeira vida): os 12 bracos (os 9 de hoje com as subchaves ligadas, mais M3-sem-inato, M3-sem-intencao e M3-420), bases 66101 a 66505, K = 10 (o do piloto do conserto, A4.5), com os valores calibrados do #428 (PROPOSTOS) e o g_apr do M4-con do piloto (1 923). Roda uma vez; o G-MVP sai como estimativa, sem passa nem falha.",
+    "dias": 14,
+    "fase": "reavaliacao",
+    "g_elegivel": {
+      "frac_vidas": 0.8,
+      "racoes": 3
+    },
+    "g_elegivel_ep": {
+      "episodios": 3,
+      "frac_vidas": 0.8
+    },
+    "g_mvp": {
+      "fome_elegivel": 0.5,
+      "limiar": 0.8,
+      "taxa_vida": 0.5,
+      "w_decisoes": 8
+    },
+    "g_mvp_ep": {
+      "fome_elegivel": 0.5,
+      "limiar": 0.8,
+      "taxa_vida": 0.5,
+      "w_decisoes": 8
+    },
+    "g_pesa": {
+      "bracos": {
+        "habito": "M2",
+        "incentivo": "M1",
+        "memoria": "M3",
+        "persistencia": "M3"
+      },
+      "limiar": 0.01
+    },
+    "holm": {
+      "alfa": 0.05
+    },
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+    "poder": {
+      "alfa_abla": 0.0125,
+      "alfa_mod": 0.025,
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "n_bases": 5,
+      "reamostragens_internas": 1000,
+      "replicas": 2000,
+      "semente": 4242
+    },
+    "unidades": {
+      "bases": [
+        66101,
+        66202,
+        66303,
+        66404,
+        66505
+      ],
+      "k": 10,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_digibrain_prototipo/reavaliacao.json",
+  "config_sha256": "d1d99106929b873ac86d4e55c4689f877df021af876c156f12113eaa69c5325e",
+  "duracao_s": 7065.186917543411,
+  "fase": "reavaliacao",
+  "fim": "2026-10-29T01:51:05",
+  "g_apr_m4_con": 1923,
+  "git_head": "988cf0d4345806ba5b486d2c5b0588cd4723a113",
+  "git_limpo": true,
+  "inatos": {
+    "a_max": 4096,
+    "beta_e": 1024,
+    "beta_t": 512,
+    "beta_u": 512,
+    "c_g": 1024,
+    "d_max": 1024,
+    "e0": 512,
+    "e_max": 1024,
+    "epsilon": 128,
+    "escala": 1024,
+    "escala_cuidado": 480,
+    "eta_d": 256,
+    "eta_h": 4,
+    "fora_do_r": [
+      "susto"
+    ],
+    "g0": 1024,
+    "g_max": 2048,
+    "g_max_incentivo": 1024,
+    "g_min": 512,
+    "ganho_r": 4,
+    "h_max": 512,
+    "lambda_busca": 256,
+    "lambda_sono": 256,
+    "n_desiste": 3,
+    "n_desiste_cheiro": 6,
+    "n_ep": 16,
+    "r_norm": 2,
+    "s_v": 1024,
+    "tau_c": 15,
+    "tau_e": 120,
+    "tau_f_desce": 480,
+    "tau_f_sobe": 60,
+    "tau_hab": 120,
+    "tau_v": 240,
+    "urgencia_a": 512,
+    "urgencia_b": 1536,
+    "urgencia_lambda": 512,
+    "w0": [
+      [
+        "ocioso",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_fome",
+            -256
+          ],
+          [
+            "u_higiene",
+            -256
+          ],
+          [
+            "u_energia",
+            -256
+          ],
+          [
+            "u_tedio",
+            -256
+          ]
+        ]
+      ],
+      [
+        "dormir",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_fome",
+            -1024
+          ],
+          [
+            "u_energia",
+            3072
+          ],
+          [
+            "noite",
+            512
+          ],
+          [
+            "dormindo",
+            512
+          ]
+        ]
+      ],
+      [
+        "comer",
+        [
+          [
+            "vies",
+            -1088
+          ],
+          [
+            "u_fome",
+            3072
+          ]
+        ]
+      ],
+      [
+        "brincar",
+        [
+          [
+            "vies",
+            -256
+          ],
+          [
+            "u_fome",
+            -512
+          ],
+          [
+            "u_energia",
+            -512
+          ],
+          [
+            "u_humor",
+            512
+          ],
+          [
+            "u_tedio",
+            512
+          ],
+          [
+            "bola_vista",
+            1024
+          ]
+        ]
+      ],
+      [
+        "chamar_atencao",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_higiene",
+            1024
+          ],
+          [
+            "u_solidao",
+            512
+          ],
+          [
+            "u_estresse",
+            256
+          ],
+          [
+            "sem_cuidado",
+            256
+          ],
+          [
+            "comida_vista",
+            -1024
+          ],
+          [
+            "fome_sem_comida",
+            2048
+          ]
+        ]
+      ],
+      [
+        "explorar",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_energia",
+            -2048
+          ],
+          [
+            "u_tedio",
+            1024
+          ],
+          [
+            "u_curiosidade",
+            1024
+          ],
+          [
+            "fome_sem_comida",
+            512
+          ],
+          [
+            "F",
+            512
+          ]
+        ]
+      ],
+      [
+        "emburrar",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "cuidado_humor",
+            2048
+          ]
+        ]
+      ]
+    ],
+    "w0_nov": [
+      [
+        "brincar",
+        128
+      ]
+    ],
+    "w0_prox": [
+      [
+        "comer",
+        512
+      ],
+      [
+        "brincar",
+        256
+      ]
+    ],
+    "w0_tipo": [
+      [
+        "comer",
+        [
+          [
+            "racao",
+            256
+          ],
+          [
+            "a",
+            256
+          ],
+          [
+            "b",
+            256
+          ],
+          [
+            "c",
+            256
+          ],
+          [
+            "podre",
+            -2048
+          ]
+        ]
+      ]
+    ],
+    "w0_tipo_cheiro": 256,
+    "w_mem": 1024,
+    "w_pers": 4096
+  },
+  "inicio": "2026-10-28T23:53:20",
+  "modo": "reavaliacao",
+  "orquestrador_sha256": "ef24a83bbcd78ef40dd08b9972a00b8768704d0cc9c6f9ee64369e3030faa446",
+  "piloto_resultado_sha256": "7824b337242435db264c26b50edfbc281fcc1a32b8a1eb55918ee4070834c294",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "plano_sha256": "fb37ca7ae26a46a196ed0ae57c07f7df0998cc7c3701daee66fe9138c04c81a8",
+  "processos": 4,
+  "python": "3.13.0",
+  "sha256": {
+    "config.py": "a370c02422e83195651644a526217c5dd42b0cc2606e1cb807157c531c6c5dc8",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "89a4813c7ce7105f59dc6d015299363dc78ad3a494e93dea2216811e61ddddc7",
+    "digibrain/afeto.py": "e890523b5239b6b12818997a5d82ff5f722f390ecf3f69ebcfd60324c43c525f",
+    "digibrain/arb.py": "5f30c965bca799b2a6c63be2efd83f873e2341f8b6815b744922caa0725d427f",
+    "digibrain/estado.py": "44a6def7ce5dc3e52b0eef5ee3631cfe2114c5ace8fd3b5642972ed7074f3035",
+    "digibrain/ganchos.py": "7c3b3fe8005d466ad29af630d07312b62a72a6f5d2ec6d886725189cf28be7a7",
+    "digibrain/impulso.py": "59bef1ffb7c1997c426eafc37092a15c004c6df7e14c2bb478fa6119fcf4675d",
+    "digibrain/mem.py": "97f5653b908db18a9ff4932795b6e82ee3d720e646aa7593e9d97e58508139fa",
+    "digibrain/plast.py": "6739a7032a7a45328b251916c54e81b91755c34168409b12b5ba3044c681b0b8",
+    "digibrain/sens.py": "fa58b1e6161ca6388027a5ce6cc8a111b25f1cc7ab0eb9fe9ca6a1e135872d8a",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "abf142c4f8f1eca2f81922614a20cea994894b417e56fe9902873a9efb56bf98"
+  },
+  "unidades": [
+    {
+      "base": 66101,
+      "genoma": 16814212922965156843,
+      "k": 0,
+      "semente": 17726104078491772386
+    },
+    {
+      "base": 66101,
+      "genoma": 14395329644036769878,
+      "k": 1,
+      "semente": 2167320857441914694
+    },
+    {
+      "base": 66101,
+      "genoma": 3275632102492005051,
+      "k": 2,
+      "semente": 4095896342614872380
+    },
+    {
+      "base": 66101,
+      "genoma": 11293060106658127696,
+      "k": 3,
+      "semente": 7171739266962956876
+    },
+    {
+      "base": 66101,
+      "genoma": 3102104296439548035,
+      "k": 4,
+      "semente": 7085863079822879723
+    },
+    {
+      "base": 66101,
+      "genoma": 16219171043683807225,
+      "k": 5,
+      "semente": 4329041036139355506
+    },
+    {
+      "base": 66101,
+      "genoma": 12890126570935614257,
+      "k": 6,
+      "semente": 7064151344047410440
+    },
+    {
+      "base": 66101,
+      "genoma": 8954608160988102080,
+      "k": 7,
+      "semente": 9426956816442423498
+    },
+    {
+      "base": 66101,
+      "genoma": 12042765945308532327,
+      "k": 8,
+      "semente": 3215124312353193553
+    },
+    {
+      "base": 66101,
+      "genoma": 13833253590056188480,
+      "k": 9,
+      "semente": 3190321334221498499
+    },
+    {
+      "base": 66202,
+      "genoma": 8050043196844579198,
+      "k": 0,
+      "semente": 8180528846191970440
+    },
+    {
+      "base": 66202,
+      "genoma": 16226457441219487126,
+      "k": 1,
+      "semente": 7706290415836552277
+    },
+    {
+      "base": 66202,
+      "genoma": 14117159680797460678,
+      "k": 2,
+      "semente": 6093367204787044757
+    },
+    {
+      "base": 66202,
+      "genoma": 13997118205101817854,
+      "k": 3,
+      "semente": 2841679789165230422
+    },
+    {
+      "base": 66202,
+      "genoma": 9348362674057918799,
+      "k": 4,
+      "semente": 9694672176845718330
+    },
+    {
+      "base": 66202,
+      "genoma": 18103118145340218124,
+      "k": 5,
+      "semente": 16830065595440083582
+    },
+    {
+      "base": 66202,
+      "genoma": 4657054744300804329,
+      "k": 6,
+      "semente": 16836101968774716573
+    },
+    {
+      "base": 66202,
+      "genoma": 3888096340294950502,
+      "k": 7,
+      "semente": 2730633527640146970
+    },
+    {
+      "base": 66202,
+      "genoma": 13556272009486427599,
+      "k": 8,
+      "semente": 9922650282702288074
+    },
+    {
+      "base": 66202,
+      "genoma": 13652293386116349116,
+      "k": 9,
+      "semente": 8482764890602620895
+    },
+    {
+      "base": 66303,
+      "genoma": 8900580850138951924,
+      "k": 0,
+      "semente": 9672717029857797979
+    },
+    {
+      "base": 66303,
+      "genoma": 13567082850826880816,
+      "k": 1,
+      "semente": 14060152675781798520
+    },
+    {
+      "base": 66303,
+      "genoma": 16189153615592664186,
+      "k": 2,
+      "semente": 5876163344744491155
+    },
+    {
+      "base": 66303,
+      "genoma": 7448087968828437742,
+      "k": 3,
+      "semente": 6918034702243797930
+    },
+    {
+      "base": 66303,
+      "genoma": 14285976130355257805,
+      "k": 4,
+      "semente": 16287840439471508394
+    },
+    {
+      "base": 66303,
+      "genoma": 2327704749743550127,
+      "k": 5,
+      "semente": 13233267967944046898
+    },
+    {
+      "base": 66303,
+      "genoma": 8019783998636105390,
+      "k": 6,
+      "semente": 5612572051839452822
+    },
+    {
+      "base": 66303,
+      "genoma": 8096343030082719946,
+      "k": 7,
+      "semente": 8209853848384029834
+    },
+    {
+      "base": 66303,
+      "genoma": 1064936999419951839,
+      "k": 8,
+      "semente": 11739674767145009349
+    },
+    {
+      "base": 66303,
+      "genoma": 18440662640167112279,
+      "k": 9,
+      "semente": 16812376844030013591
+    },
+    {
+      "base": 66404,
+      "genoma": 12922151130927638168,
+      "k": 0,
+      "semente": 14635952298961832119
+    },
+    {
+      "base": 66404,
+      "genoma": 9511170494110872551,
+      "k": 1,
+      "semente": 12329866493925411495
+    },
+    {
+      "base": 66404,
+      "genoma": 12659603007763360620,
+      "k": 2,
+      "semente": 16102834799799751203
+    },
+    {
+      "base": 66404,
+      "genoma": 14825793821525501964,
+      "k": 3,
+      "semente": 5657111078036150219
+    },
+    {
+      "base": 66404,
+      "genoma": 12128816471330364642,
+      "k": 4,
+      "semente": 16085425861712355641
+    },
+    {
+      "base": 66404,
+      "genoma": 1325953539106007013,
+      "k": 5,
+      "semente": 1515027729305738700
+    },
+    {
+      "base": 66404,
+      "genoma": 926604467445985362,
+      "k": 6,
+      "semente": 4527935524550743063
+    },
+    {
+      "base": 66404,
+      "genoma": 14659454351772333413,
+      "k": 7,
+      "semente": 7315100122380935693
+    },
+    {
+      "base": 66404,
+      "genoma": 1775659792542459318,
+      "k": 8,
+      "semente": 8642025276303106286
+    },
+    {
+      "base": 66404,
+      "genoma": 16021206587143706523,
+      "k": 9,
+      "semente": 8585444883268318439
+    },
+    {
+      "base": 66505,
+      "genoma": 16506872019177396248,
+      "k": 0,
+      "semente": 12055108503669340745
+    },
+    {
+      "base": 66505,
+      "genoma": 14558273119942544829,
+      "k": 1,
+      "semente": 5945711491694705026
+    },
+    {
+      "base": 66505,
+      "genoma": 5904385503291699840,
+      "k": 2,
+      "semente": 1344615505130530874
+    },
+    {
+      "base": 66505,
+      "genoma": 10908485332001849776,
+      "k": 3,
+      "semente": 214296317362489292
+    },
+    {
+      "base": 66505,
+      "genoma": 12184849253078802223,
+      "k": 4,
+      "semente": 2323654224721427381
+    },
+    {
+      "base": 66505,
+      "genoma": 4655944588458855709,
+      "k": 5,
+      "semente": 8600274211743050754
+    },
+    {
+      "base": 66505,
+      "genoma": 1399670735544343303,
+      "k": 6,
+      "semente": 8477862521001151594
+    },
+    {
+      "base": 66505,
+      "genoma": 12020891998093361167,
+      "k": 7,
+      "semente": 2344957270220673124
+    },
+    {
+      "base": 66505,
+      "genoma": 16112152329014503987,
+      "k": 8,
+      "semente": 14061971232839407155
+    },
+    {
+      "base": 66505,
+      "genoma": 11028243305523479797,
+      "k": 9,
+      "semente": 12622119303600028215
+    }
+  ],
+  "vidas_parede_s": 7059.928918799998
+}

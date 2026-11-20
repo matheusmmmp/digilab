@@ -1,0 +1,72 @@
+{
+  "descricao": "Validacao do pet que pensa (PLANO_ANALISE_V2_PET_QUE_PENSA, secao 7, com o desenho do adendo 5 e os numeros do adendo 6): os 4 bracos x T1 e T2 nas bases 46101...46505 com K_u = 10 (N = 50), o paladar e a fruta ao lado, o ganho_gosto S/2 e o g_plano S da calibracao, as margens Delta_T1 e Delta_T2 do piloto e a G-APRENDEU a 1/4. Roda uma vez, com o sim do Matheus (2026-10-18).",
+  "bracos": [
+    "P1",
+    "P1-plan",
+    "P1-plan-desfecho",
+    "P1-plan-cong"
+  ],
+  "consequencia": {
+    "canais_ligados": true,
+    "ganho": 4,
+    "ganho_gosto": 512
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "d_a": 7,
+  "dono": "atencioso",
+  "fruta_ao_lado": true,
+  "g_plano": 1024,
+  "janela": 3,
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_info": 256,
+    "w0_pedido": 256
+  },
+  "lugar": "comedouro",
+  "montagem": "completa",
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "paladar": true,
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+  "ponto": "T3",
+  "protocolos": [
+    "T1",
+    "T2"
+  ],
+  "tipo": "pet_que_pensa",
+  "unidades": {
+    "bases": [
+      46101,
+      46202,
+      46303,
+      46404,
+      46505
+    ],
+    "k": 10,
+    "prefixo": "pet_que_pensa"
+  },
+  "validacao": {
+    "calibracao": "artifacts_v2_pet_que_pensa/calibracao_ao_lado",
+    "margens": {
+      "delta_t1": 0.21666666666666665,
+      "delta_t2": 0.2857142857142857
+    },
+    "limiar_aprendeu": 0.25,
+    "bootstrap": {
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "holm": {
+      "alfa": 0.05
+    }
+  }
+}

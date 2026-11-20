@@ -1,0 +1,199 @@
+{
+ "versao": 2,
+ "nota": "DC3d: as vidas de hoje (a v21 com o modular e com o A, e o pet de teste v16); regravadas na LP4 da LUTA_POC (a v1 tinha as v13 a v19, gravadas antes do porte da fala_unidades); sha256",
+ "dias": 3,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "variantes": [
+  "v16",
+  "v21_modular",
+  "v21_a"
+ ],
+ "vidas": [
+  {
+   "variante": "v16",
+   "semente": 101,
+   "versao": 16,
+   "estagio": "crianca",
+   "eventos": 85,
+   "log_sha": "3bb1eaa169c66cf097ab8942b817569491b0bd0514f440ce427c39c0da3f36dc",
+   "assinatura": "98217934a03ea36114172e0395c37528bf37e1228629049dc45bdf36191a5157",
+   "decisoes_modular": 288,
+   "motivos": "0be92aee9f5e5412aef302e3407591a01fd74be7c963ec4d6da2f4bd4e935695",
+   "conceitos_v2": "73d403076adf8e41e1518a7ba6e639e2340d0e55e939ec7537f98e26bf5ad1c2"
+  },
+  {
+   "variante": "v16",
+   "semente": 202,
+   "versao": 16,
+   "estagio": "crianca",
+   "eventos": 81,
+   "log_sha": "e5417ce7f7aac2fae8eb9f059a8ab5b5488afe91d382fc6b4466f766a7303559",
+   "assinatura": "375c10506cc1313144100a1a778b519e7901f06fe1dc41ec8b3cb7b3af085adf",
+   "decisoes_modular": 288,
+   "motivos": "35cb54a0d54b4db62627a50b86db9eea099212468a0f994bfcaef0c5107ce224",
+   "conceitos_v2": "90a60cc523d6f1fb9c0d48d212872435c38a895936438ef4653346fa93f507b8"
+  },
+  {
+   "variante": "v16",
+   "semente": 303,
+   "versao": 16,
+   "estagio": "crianca",
+   "eventos": 87,
+   "log_sha": "e53dfc803cd0c497e53b93571bfd673bdcaf936968b347b925439d3ccdcbdb51",
+   "assinatura": "77366fd465009b9ad9283012a0413bddac8fbb837d33b8d5e9f3c6a3ebe5bc4b",
+   "decisoes_modular": 288,
+   "motivos": "c5620e15895edff1db373b2be4276743701a57745de441b3087a7b79b388ef59",
+   "conceitos_v2": "eb722783520c5e252aba4035599e713a7950fd8ddf934c6cc1ac9df046ecc2e2"
+  },
+  {
+   "variante": "v16",
+   "semente": 404,
+   "versao": 16,
+   "estagio": "crianca",
+   "eventos": 75,
+   "log_sha": "fda34b9ed31d4ccd1001dd6f525fe91fe0e77b0c37a9c1f3f8b0a05d50e60ce9",
+   "assinatura": "ff943d635c75d60035e0ccccc994e0e381f079498755ba77de13ca8e3e7cf437",
+   "decisoes_modular": 288,
+   "motivos": "f87275235af3d23ff321a72b2979fca1e2a0300d84ff94660c9f3a620bb9bab8",
+   "conceitos_v2": "82b684b62ea978ea065d3bd5ef1b856f43614f3a73a37aaf8329cc7fc91795fc"
+  },
+  {
+   "variante": "v16",
+   "semente": 505,
+   "versao": 16,
+   "estagio": "crianca",
+   "eventos": 71,
+   "log_sha": "adbe321db7f56c6a02b23fe50fb7598774e41a7bfa1300a421af2fe88f8ab236",
+   "assinatura": "682661a0f8f2b4daa0cee8da6fb34b3b09a52e23e14c168f6db9dd0a2fb0554c",
+   "decisoes_modular": 288,
+   "motivos": "4ef6cdcbf00a67002738635aeec88e7ce8b156638c5cfedcbda7f0085974e28d",
+   "conceitos_v2": "004d527fa16edd866f154d54a35c3bdb2d424e790196900d596e661549867360"
+  },
+  {
+   "variante": "v21_modular",
+   "semente": 101,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 86,
+   "log_sha": "4173b6550fb76ba7cf48e91eebd5ab9c3b98934a6927e1a82cc9ed9dec7554a0",
+   "assinatura": "fbf6d906c66526a448e57b96f6dd3b9f4a9982f8da9821bdc9c1914e72e10e2e",
+   "decisoes_modular": 288,
+   "motivos": "0be92aee9f5e5412aef302e3407591a01fd74be7c963ec4d6da2f4bd4e935695",
+   "conceitos_v2": "73d403076adf8e41e1518a7ba6e639e2340d0e55e939ec7537f98e26bf5ad1c2"
+  },
+  {
+   "variante": "v21_modular",
+   "semente": 202,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 82,
+   "log_sha": "38b1ad7da6e0c7b7e9073b47d8e9eccf8fda03ac6bbe8c2a5b5ddabef6b60858",
+   "assinatura": "ac6510cd81ddd7919e79b24930f544a41c68558df86033648c746ba6ec58a1f8",
+   "decisoes_modular": 288,
+   "motivos": "35cb54a0d54b4db62627a50b86db9eea099212468a0f994bfcaef0c5107ce224",
+   "conceitos_v2": "90a60cc523d6f1fb9c0d48d212872435c38a895936438ef4653346fa93f507b8"
+  },
+  {
+   "variante": "v21_modular",
+   "semente": 303,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 88,
+   "log_sha": "ab29fdbfb0e3904f775d007c7bdd555298874231befeb5382259f8750a5dce74",
+   "assinatura": "f9072634ffa359bd46ad827b68153cb612847032f4ea16bf910c5d4578542981",
+   "decisoes_modular": 288,
+   "motivos": "c5620e15895edff1db373b2be4276743701a57745de441b3087a7b79b388ef59",
+   "conceitos_v2": "eb722783520c5e252aba4035599e713a7950fd8ddf934c6cc1ac9df046ecc2e2"
+  },
+  {
+   "variante": "v21_modular",
+   "semente": 404,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 76,
+   "log_sha": "7a32dee25428659fbd005ff77aff6da0f5bf3470fc1e6f77996f5fe1f6ae0d55",
+   "assinatura": "cdf8c385f79a8f71a23535d5c693f87662ca8fba81f726e17856f3ab5afa04b2",
+   "decisoes_modular": 288,
+   "motivos": "f87275235af3d23ff321a72b2979fca1e2a0300d84ff94660c9f3a620bb9bab8",
+   "conceitos_v2": "82b684b62ea978ea065d3bd5ef1b856f43614f3a73a37aaf8329cc7fc91795fc"
+  },
+  {
+   "variante": "v21_modular",
+   "semente": 505,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 72,
+   "log_sha": "e3467cd9e8bd808bf50432a13a23a39245f3d4ac89d1d05733d4203216aceeab",
+   "assinatura": "0ea6cc2d677e232be89ad7eb14d05d381c82c6bd9c976831cbd9d8c5914db7ac",
+   "decisoes_modular": 288,
+   "motivos": "4ef6cdcbf00a67002738635aeec88e7ce8b156638c5cfedcbda7f0085974e28d",
+   "conceitos_v2": "004d527fa16edd866f154d54a35c3bdb2d424e790196900d596e661549867360"
+  },
+  {
+   "variante": "v21_a",
+   "semente": 101,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 127,
+   "log_sha": "77d9edd0f35040ffd5cf4233354d354b2cf68485ee28ca9a329ae979d107c475",
+   "assinatura": "d34c66d4744af21c69fa36f05905027b5dd9ab071abd5e3228de0b0a2218268f",
+   "decisoes_modular": 0,
+   "motivos": null,
+   "conceitos_v2": null
+  },
+  {
+   "variante": "v21_a",
+   "semente": 202,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 167,
+   "log_sha": "30f2937a43b82d32424e00b3eb062ba059d1568bc939846b9b1ab0bb1ba7b7cc",
+   "assinatura": "4689e32d3a5071ac7446510f389ebd6a8a9265ccc1a6cafa6654ed9cfcae8fba",
+   "decisoes_modular": 0,
+   "motivos": null,
+   "conceitos_v2": null
+  },
+  {
+   "variante": "v21_a",
+   "semente": 303,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 118,
+   "log_sha": "51760e092001076e9b8cb6fa0705c9ddbfba0829fab8b60129a6ef77e4812a6f",
+   "assinatura": "5eb8ee49cbccbaaaf2a6347465a3d7a068fd20f68dba129d02190428117dc72c",
+   "decisoes_modular": 0,
+   "motivos": null,
+   "conceitos_v2": null
+  },
+  {
+   "variante": "v21_a",
+   "semente": 404,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 157,
+   "log_sha": "60948f386a442d0c0cbdde33b2cff189564cd6fad5b43f33e95e13005f4df44d",
+   "assinatura": "342a10b0672ca9161bb37dc967bde60d36eb88a523f79810d65a8c03672e056e",
+   "decisoes_modular": 0,
+   "motivos": null,
+   "conceitos_v2": null
+  },
+  {
+   "variante": "v21_a",
+   "semente": 505,
+   "versao": 21,
+   "estagio": "crianca",
+   "eventos": 156,
+   "log_sha": "839d4d59e156112d3a742143acf1b498f133addb46d80f1b577fcca21300ee97",
+   "assinatura": "4b2b972f3482534358d107a180903eca058315ab1b19a1cfe099f14a4d93bd29",
+   "decisoes_modular": 0,
+   "motivos": null,
+   "conceitos_v2": null
+  }
+ ]
+}

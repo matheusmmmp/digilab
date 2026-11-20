@@ -1,0 +1,64 @@
+{
+  "bancada_sha256": "c2c2713f4fdba7fd2ba7bba6c7c0e26bf006dcda4bf9f5821e421ef60ba9af9d",
+  "config": {
+    "acoplados": [
+      {
+        "destino": "P1",
+        "filtro": "nenhum",
+        "origem": "P0"
+      },
+      {
+        "destino": "P3",
+        "filtro": "sem_sinais",
+        "origem": "P3"
+      }
+    ],
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 20261004
+    },
+    "bracos": [
+      "P0",
+      "P1",
+      "P3"
+    ],
+    "consequencia": {
+      "ganho": 4
+    },
+    "descricao": "N3 ganho 4 (validacao)",
+    "dias": 14,
+    "donos": [
+      "atencioso",
+      "relapso",
+      "aleatorio",
+      "incoerente"
+    ],
+    "genomas": [
+      null
+    ],
+    "mundos": [
+      "padrao"
+    ],
+    "orcamento": 224,
+    "plano": "docs/PLANO_ANALISE_V2_N3.md",
+    "sementes": [
+      9101,
+      9202,
+      9303,
+      9404,
+      9505
+    ],
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    }
+  },
+  "config_sha256": "695e49291fa9f0ab8584e6317da6697376af2ca73d0e7357bbec01c0fffde5f5",
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "lobos_sha256": "bf4391d31185eab6736acc392bc111a24aa3f6379908807472432de71177bd04",
+  "metrics_sha256": "2b6f913f6950571a79dd364654e733bca3a7fe943c29f86d159ea5f1bd6540e5",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0"
+}

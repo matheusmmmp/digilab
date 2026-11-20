@@ -1,0 +1,38 @@
+{
+ "gerado_por": "web/app/scripts/medir_arena_lp1.ts",
+ "commit": "562dc7d6",
+ "data": "2026-11-08",
+ "maquina": {
+  "cpu": "Intel(R) Core(TM) i7-14700KF",
+  "nucleos": 20,
+  "plataforma": "win32 10.0.26300"
+ },
+ "node": "v24.19.0",
+ "lutas": 480,
+ "repeticoes": 5,
+ "passosMedio": 1192,
+ "segundosJogoMedio": 19.1,
+ "segundosJogoP90": 21.488,
+ "semFim": 0,
+ "msPorLuta": 0.68,
+ "msPorLutaRepeticoes": [
+  0.632,
+  0.685,
+  0.658,
+  0.68,
+  0.733
+ ],
+ "usPorPasso": 0.57,
+ "msPorLutaPorMapa": {
+  "campo": 0.515,
+  "coliseu": 0.495,
+  "floresta": 0.729,
+  "praia": 0.598,
+  "deserto": 0.509,
+  "castelo": 0.687,
+  "caverna": 0.754,
+  "ringue": 0.51
+ },
+ "vida1000Lutas_s": 0.68,
+ "nota": "um processo, sem paralelismo; a R0 da COMBATE_TR mediu 1,185 ms por luta 1x1 (29,6 s de jogo) na POC do efb2ded com os status do Digimon UP; aqui os stats sao os genericos da POC, e as lutas sao mais curtas (segundosJogoMedio). O custo no celular segue SEM FONTE (a LP2 mede o replay)"
+}

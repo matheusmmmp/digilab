@@ -1,0 +1,984 @@
+{
+  "meta": {
+    "origem": "LLM",
+    "provedor": "ollama",
+    "modelo": "gemma2:9b",
+    "versao_prompt": "personas-v2",
+    "semente": 20260928,
+    "n": 24,
+    "data": "2026-09-29",
+    "versao_esquema": "persona-v1",
+    "planos": [
+      {
+        "rotina": "garcom do turno da noite",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.4,
+            0.7
+          ],
+          "limiar_cuidado": [
+            0.1,
+            0.35
+          ]
+        }
+      },
+      {
+        "rotina": "aposentado com muito tempo livre",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.7,
+            1.0
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "pai de um bebe recem-nascido, dorme pouco",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "cientista de laboratorio com horarios irregulares",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.1,
+            0.4
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.1,
+            0.35
+          ]
+        }
+      },
+      {
+        "rotina": "caminhoneira que passa dias na estrada",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "professor com aulas de manha e a tarde",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "estudante que assiste aula de dia e joga a noite",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.1,
+            0.35
+          ]
+        }
+      },
+      {
+        "rotina": "programadora que trabalha de casa",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "cozinheira de restaurante, fim de semana cheio",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.1,
+            0.35
+          ]
+        }
+      },
+      {
+        "rotina": "freelancer que trabalha de madrugada",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "agricultor que acorda as 4 h",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.1,
+            0.4
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "atleta amadora que treina cedo",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "motorista de aplicativo com turnos longos",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "enfermeira de plantao 12 por 36",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.1,
+            0.35
+          ]
+        }
+      },
+      {
+        "rotina": "vendedor que viaja a semana toda",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.4,
+            0.7
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "adolescente na escola, com celular so a noite",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "garcom do turno da noite",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.1,
+            0.35
+          ]
+        }
+      },
+      {
+        "rotina": "aposentado com muito tempo livre",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.3,
+            0.7
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "pai de um bebe recem-nascido, dorme pouco",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.4,
+            0.7
+          ],
+          "prob_ceder_petisco": [
+            0.7,
+            1.0
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "cientista de laboratorio com horarios irregulares",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.7,
+            1.0
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "caminhoneira que passa dias na estrada",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.7,
+            1.0
+          ],
+          "prob_feedback_coerente": [
+            0.7,
+            1.0
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "professor com aulas de manha e a tarde",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.1,
+            0.4
+          ],
+          "prob_ceder_petisco": [
+            0.7,
+            1.0
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.35,
+            0.6
+          ]
+        }
+      },
+      {
+        "rotina": "estudante que assiste aula de dia e joga a noite",
+        "perfil_treino": "atencioso",
+        "faixas": {
+          "prob_atender_janela": [
+            0.1,
+            0.4
+          ],
+          "prob_ceder_petisco": [
+            0.0,
+            0.3
+          ],
+          "prob_feedback_coerente": [
+            0.4,
+            0.7
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      },
+      {
+        "rotina": "programadora que trabalha de casa",
+        "perfil_treino": "exigente",
+        "faixas": {
+          "prob_atender_janela": [
+            0.7,
+            1.0
+          ],
+          "prob_ceder_petisco": [
+            0.7,
+            1.0
+          ],
+          "prob_feedback_coerente": [
+            0.1,
+            0.4
+          ],
+          "limiar_cuidado": [
+            0.6,
+            0.9
+          ]
+        }
+      }
+    ]
+  },
+  "personas": [
+    {
+      "nome": "noite",
+      "descricao": "Garçom que trabalha a noite, sempre atento ao pet durante seus horários. ",
+      "horarios": [
+        [
+          20,
+          3
+        ],
+        [
+          18,
+          6
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.45,
+      "prob_feedback_coerente": 0.7,
+      "limiar_cuidado": 0.28,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "arara",
+      "descricao": "Aposentado que aproveita a vida ao máximo, observando seu bichinho virtual com carinho durante as manhãs e tardes. ",
+      "horarios": [
+        [
+          8,
+          12
+        ],
+        [
+          14,
+          19
+        ]
+      ],
+      "prob_atender_janela": 0.56,
+      "prob_ceder_petisco": 0.73,
+      "prob_feedback_coerente": 0.29,
+      "limiar_cuidado": 0.81,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "papa",
+      "descricao": "Pai de um bebê recém-nascido que dorme muito pouco e se concentra em cuidar do filho.",
+      "horarios": [
+        [
+          21,
+          4
+        ],
+        [
+          8,
+          9
+        ]
+      ],
+      "prob_atender_janela": 0.53,
+      "prob_ceder_petisco": 0.17,
+      "prob_feedback_coerente": 0.26,
+      "limiar_cuidado": 0.48,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "bio",
+      "descricao": "Cientista laboratorial com horários totalmente desorganizados. Quando se lembra do pet, tenta dar comida e brincar.",
+      "horarios": [
+        [
+          3,
+          6
+        ],
+        [
+          12,
+          15
+        ]
+      ],
+      "prob_atender_janela": 0.38,
+      "prob_ceder_petisco": 0.49,
+      "prob_feedback_coerente": 0.27,
+      "limiar_cuidado": 0.28,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "rodo",
+      "descricao": "Caminhoneira que passa dias na estrada. Tem pouco tempo para cuidar do bichinho virtual, mas tenta dar atenção sempre que possível.",
+      "horarios": [
+        [
+          18,
+          20
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.37,
+      "prob_feedback_coerente": 0.25,
+      "limiar_cuidado": 0.58,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "aula",
+      "descricao": "Professor dedicado que cuida do pet durante os intervalos entre as aulas e no tempo livre à noite.",
+      "horarios": [
+        [
+          8,
+          12
+        ],
+        [
+          14,
+          19
+        ]
+      ],
+      "prob_atender_janela": 0.53,
+      "prob_ceder_petisco": 0.17,
+      "prob_feedback_coerente": 0.96,
+      "limiar_cuidado": 0.48,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "estudante",
+      "descricao": "Estudante dedicado que dá atenção ao pet durante os intervalos e à noite, após as aulas.",
+      "horarios": [
+        [
+          8,
+          10
+        ],
+        [
+          23,
+          4
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.15,
+      "prob_feedback_coerente": 0.28,
+      "limiar_cuidado": 0.3,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "zita",
+      "descricao": "Programadora que trabalha em casa, focada no trabalho. Dá atenção ao pet quando consegue se distrair.",
+      "horarios": [
+        [
+          8,
+          12
+        ],
+        [
+          14,
+          19
+        ]
+      ],
+      "prob_atender_janela": 0.53,
+      "prob_ceder_petisco": 0.17,
+      "prob_feedback_coerente": 0.26,
+      "limiar_cuidado": 0.83,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "fogo",
+      "descricao": "Cozinheira que trabalha em restaurante aos finais de semana e se esforça para cuidar do bichinho durante seus momentos livres.",
+      "horarios": [
+        [
+          9,
+          12
+        ],
+        [
+          14,
+          18
+        ]
+      ],
+      "prob_atender_janela": 0.53,
+      "prob_ceder_petisco": 0.67,
+      "prob_feedback_coerente": 0.28,
+      "limiar_cuidado": 0.29,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "lua",
+      "descricao": "Freelancer que trabalha durante a madrugada, então se dedica ao bichinho virtual principalmente à noite.",
+      "horarios": [
+        [
+          21,
+          4
+        ]
+      ],
+      "prob_atender_janela": 0.58,
+      "prob_ceder_petisco": 0.63,
+      "prob_feedback_coerente": 0.29,
+      "limiar_cuidado": 0.71,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "campo",
+      "descricao": "Agricultor que acorda cedo para trabalhar na plantação. Dá atenção ao bichinho durante seus momentos livres.",
+      "horarios": [
+        [
+          4,
+          6
+        ],
+        [
+          18,
+          20
+        ]
+      ],
+      "prob_atender_janela": 0.35,
+      "prob_ceder_petisco": 0.15,
+      "prob_feedback_coerente": 0.9,
+      "limiar_cuidado": 0.7,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "coral",
+      "descricao": "É uma atleta amadora dedicada, sempre treinando cedo. Dá atenção ao pet quando pode entre as atividades.",
+      "horarios": [
+        [
+          0,
+          2
+        ],
+        [
+          6,
+          8
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.43,
+      "prob_feedback_coerente": 0.71,
+      "limiar_cuidado": 0.68,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "turbo",
+      "descricao": "Motorista que leva tempo para responder porque está no trânsito. Quando pode, cuida bem do pet.",
+      "horarios": [
+        [
+          6,
+          10
+        ],
+        [
+          23,
+          4
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.18,
+      "prob_feedback_coerente": 0.78,
+      "limiar_cuidado": 0.62,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "planta",
+      "descricao": "Enfermeira em plantão noturno, cuida do pet apenas nos intervalos e durante os momentos livres no trabalho.",
+      "horarios": [
+        [
+          21,
+          0
+        ],
+        [
+          6,
+          8
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.23,
+      "prob_feedback_coerente": 0.77,
+      "limiar_cuidado": 0.21,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "viajante",
+      "descricao": "Vendedor que viaja a semana toda, só consegue cuidar do pet nos dias em casa.",
+      "horarios": [
+        [
+          20,
+          1
+        ],
+        [
+          8,
+          9
+        ]
+      ],
+      "prob_atender_janela": 0.65,
+      "prob_ceder_petisco": 0.17,
+      "prob_feedback_coerente": 0.43,
+      "limiar_cuidado": 0.52,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "celular",
+      "descricao": " Adolescente que só usa celular à noite, então cuida do pet apenas nesse horário.",
+      "horarios": [
+        [
+          21,
+          0
+        ]
+      ],
+      "prob_atender_janela": 0.85,
+      "prob_ceder_petisco": 0.1,
+      "prob_feedback_coerente": 0.9,
+      "limiar_cuidado": 0.42,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "garc",
+      "descricao": "Garçom do turno da noite, sempre atento aos pedidos dos clientes. Com pouco tempo livre para cuidar do pet virtual.",
+      "horarios": [
+        [
+          21,
+          6
+        ]
+      ],
+      "prob_atender_janela": 0.85,
+      "prob_ceder_petisco": 0.43,
+      "prob_feedback_coerente": 0.29,
+      "limiar_cuidado": 0.17,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "sol",
+      "descricao": "Aposentado, com tempo livre para cuidar do bichinho virtual. Gosta bastante da companhia e se diverte treinando.",
+      "horarios": [
+        [
+          7,
+          10
+        ],
+        [
+          13,
+          16
+        ]
+      ],
+      "prob_atender_janela": 0.58,
+      "prob_ceder_petisco": 0.42,
+      "prob_feedback_coerente": 0.92,
+      "limiar_cuidado": 0.37,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "bebe",
+      "descricao": "Pai recém-promovido a este novo cargo, ele se esforça para cuidar do pet enquanto tenta lidar com as demandas ininterruptas da vida familiar.",
+      "horarios": [
+        [
+          0,
+          3
+        ],
+        [
+          21,
+          24
+        ]
+      ],
+      "prob_atender_janela": 0.58,
+      "prob_ceder_petisco": 0.96,
+      "prob_feedback_coerente": 0.79,
+      "limiar_cuidado": 0.82,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "labora",
+      "descricao": "Cientista dedicada, com horários irregulares no laboratório. Quando consegue atenção ao pet virtual é breve e focada em tarefas.",
+      "horarios": [
+        [
+          8,
+          10
+        ],
+        [
+          23,
+          4
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.76,
+      "prob_feedback_coerente": 0.21,
+      "limiar_cuidado": 0.48,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "estrada",
+      "descricao": "Caminhoneira que passa a maior parte do tempo na estrada, olhando para o pet apenas quando faz paradas. Apesar da rotina agitada, tenta cuidar bem.",
+      "horarios": [
+        [
+          18,
+          20
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.83,
+      "prob_feedback_coerente": 0.8,
+      "limiar_cuidado": 0.74,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "leao",
+      "descricao": "Professor dedicado, com aulas pela manhã e tarde. Se dedica ao bichinho quando tem tempo livre.",
+      "horarios": [
+        [
+          8,
+          12
+        ],
+        [
+          14,
+          19
+        ]
+      ],
+      "prob_atender_janela": 0.35,
+      "prob_ceder_petisco": 0.76,
+      "prob_feedback_coerente": 0.12,
+      "limiar_cuidado": 0.58,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "gamer",
+      "descricao": "Estudante dedicado às aulas durante o dia e que se entrega aos jogos à noite.  Gasta pouco tempo com seu bichinho virtual fora do horário de lazer.",
+      "horarios": [
+        [
+          20,
+          1
+        ]
+      ],
+      "prob_atender_janela": 0.35,
+      "prob_ceder_petisco": 0.18,
+      "prob_feedback_coerente": 0.67,
+      "limiar_cuidado": 0.72,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "lixo",
+      "descricao": "Programadora que trabalha em casa, costuma se dedicar ao pet durante as pausas e no final do expediente.",
+      "horarios": [
+        [
+          9,
+          12
+        ],
+        [
+          14,
+          18
+        ]
+      ],
+      "prob_atender_janela": 0.75,
+      "prob_ceder_petisco": 0.83,
+      "prob_feedback_coerente": 0.26,
+      "limiar_cuidado": 0.79,
+      "perfil_treino": "exigente"
+    }
+  ]
+}

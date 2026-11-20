@@ -1,0 +1,72 @@
+{
+  "braco": "aleatorio",
+  "carater_adulto": {
+    "atento": -0.496875,
+    "impetuoso": -0.12187499999999998,
+    "paciente": 0.2546875000000001,
+    "resistente": 0.4859375
+  },
+  "condicao": 0.9930000000000008,
+  "dono": {
+    "carinho_no_slot": 10,
+    "treino": 64
+  },
+  "enroladas": 14,
+  "especie": "ferrugem",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "tita",
+    "linha": "colosso",
+    "ramo": "arisco",
+    "rotulo": "ferrugem/arisco/colosso/tita"
+  },
+  "obediencia_cuidado": 0.8888888888888888,
+  "ovo": 505,
+  "sessoes": 64,
+  "sombria": false,
+  "treino": {
+    "enroladas": 14,
+    "especie": "ferrugem",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 10,
+      "ignoradas": 5
+    },
+    "pontos": {
+      "folego": 6.31336633528187,
+      "forca": 6.323562511760899,
+      "guarda": 6.451001768448,
+      "mira": 3.61468665,
+      "recuperacao": 3.7477863478637015,
+      "vigor": 5.791602186645529
+    },
+    "pontos_estagio": {
+      "adolescente": 12.0,
+      "adulto": 14.0,
+      "crianca": 6.2420058
+    },
+    "sessoes": 64,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 32.2420058,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5474432561583512
+}

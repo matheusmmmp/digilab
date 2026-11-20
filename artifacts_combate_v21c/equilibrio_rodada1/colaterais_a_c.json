@@ -1,0 +1,640 @@
+{
+  "E4_escala": {
+    "a_c": {
+      "abaixo_de_0.60": {},
+      "menor": 0.83625,
+      "ok": true,
+      "taxa_adolescente_+22": {
+        "duelista": 0.96025,
+        "emboscador": 1.0,
+        "espelho": 0.83625,
+        "furioso": 1.0,
+        "muralha": 0.8535,
+        "sentinela": 1.0,
+        "tita": 1.0,
+        "vigia": 1.0
+      },
+      "taxa_sem_treino": {
+        "duelista": 0.9995,
+        "emboscador": 1.0,
+        "espelho": 0.85225,
+        "furioso": 1.0,
+        "muralha": 0.8565,
+        "sentinela": 1.0,
+        "tita": 1.0,
+        "vigia": 1.0
+      }
+    },
+    "v21c": {
+      "abaixo_de_0.60": {},
+      "menor": 0.83625,
+      "ok": true,
+      "taxa_adolescente_+22": {
+        "duelista": 0.96025,
+        "emboscador": 1.0,
+        "espelho": 0.83625,
+        "furioso": 1.0,
+        "muralha": 1.0,
+        "sentinela": 1.0,
+        "tita": 1.0,
+        "vigia": 1.0
+      },
+      "taxa_sem_treino": {
+        "duelista": 0.9995,
+        "emboscador": 1.0,
+        "espelho": 0.85225,
+        "furioso": 1.0,
+        "muralha": 1.0,
+        "sentinela": 1.0,
+        "tita": 1.0,
+        "vigia": 1.0
+      }
+    }
+  },
+  "S1": {
+    "a_c": {
+      "S1_ok": true,
+      "media_sombria_contra_normais": {
+        "bastiao_rachado": 0.1455625,
+        "colosso_partido": 0.265,
+        "devastador": 0.36778125,
+        "predador": 0.33603125
+      },
+      "sombria_x_normais": {
+        "bastiao_rachado": {
+          "duelista": 0.2825,
+          "emboscador": 0.0,
+          "espelho": 0.325,
+          "furioso": 0.04825,
+          "muralha": 0.22225,
+          "sentinela": 0.0,
+          "tita": 0.069,
+          "vigia": 0.2175
+        },
+        "colosso_partido": {
+          "duelista": 0.33875,
+          "emboscador": 0.003,
+          "espelho": 0.64025,
+          "furioso": 0.02125,
+          "muralha": 0.5805,
+          "sentinela": 0.005,
+          "tita": 0.18575,
+          "vigia": 0.3455
+        },
+        "devastador": {
+          "duelista": 0.7345,
+          "emboscador": 0.033,
+          "espelho": 0.306,
+          "furioso": 0.3135,
+          "muralha": 0.1275,
+          "sentinela": 0.03825,
+          "tita": 0.7995,
+          "vigia": 0.59
+        },
+        "predador": {
+          "duelista": 0.10725,
+          "emboscador": 0.93925,
+          "espelho": 0.171,
+          "furioso": 0.0085,
+          "muralha": 0.0575,
+          "sentinela": 0.95375,
+          "tita": 0.0785,
+          "vigia": 0.3725
+        }
+      },
+      "suporte_com_sombrias": [
+        "furioso",
+        "muralha",
+        "sentinela"
+      ],
+      "vence_todos_os_normais": {
+        "bastiao_rachado": false,
+        "colosso_partido": false,
+        "devastador": false,
+        "predador": false
+      },
+      "vitorias_contra_normais": {
+        "bastiao_rachado": [],
+        "colosso_partido": [
+          "espelho",
+          "muralha"
+        ],
+        "devastador": [
+          "duelista",
+          "tita",
+          "vigia"
+        ],
+        "predador": [
+          "emboscador",
+          "sentinela"
+        ]
+      }
+    },
+    "v21c": {
+      "S1_ok": true,
+      "media_sombria_contra_normais": {
+        "bastiao_rachado": 0.118125,
+        "colosso_partido": 0.1539375,
+        "devastador": 0.38896875,
+        "predador": 0.3289375
+      },
+      "sombria_x_normais": {
+        "bastiao_rachado": {
+          "duelista": 0.2825,
+          "emboscador": 0.0,
+          "espelho": 0.325,
+          "furioso": 0.04825,
+          "muralha": 0.00275,
+          "sentinela": 0.0,
+          "tita": 0.069,
+          "vigia": 0.2175
+        },
+        "colosso_partido": {
+          "duelista": 0.23425,
+          "emboscador": 0.0,
+          "espelho": 0.05725,
+          "furioso": 0.0015,
+          "muralha": 0.70325,
+          "sentinela": 0.001,
+          "tita": 0.20625,
+          "vigia": 0.028
+        },
+        "devastador": {
+          "duelista": 0.7345,
+          "emboscador": 0.033,
+          "espelho": 0.306,
+          "furioso": 0.3135,
+          "muralha": 0.297,
+          "sentinela": 0.03825,
+          "tita": 0.7995,
+          "vigia": 0.59
+        },
+        "predador": {
+          "duelista": 0.10725,
+          "emboscador": 0.93925,
+          "espelho": 0.171,
+          "furioso": 0.0085,
+          "muralha": 0.00075,
+          "sentinela": 0.95375,
+          "tita": 0.0785,
+          "vigia": 0.3725
+        }
+      },
+      "suporte_com_sombrias": [
+        "emboscador",
+        "espelho",
+        "furioso",
+        "muralha"
+      ],
+      "vence_todos_os_normais": {
+        "bastiao_rachado": false,
+        "colosso_partido": false,
+        "devastador": false,
+        "predador": false
+      },
+      "vitorias_contra_normais": {
+        "bastiao_rachado": [],
+        "colosso_partido": [
+          "muralha"
+        ],
+        "devastador": [
+          "duelista",
+          "tita",
+          "vigia"
+        ],
+        "predador": [
+          "emboscador",
+          "sentinela"
+        ]
+      }
+    }
+  },
+  "campanha_escala": {
+    "a_c": {
+      "tier1_brutamontes": {
+        "com": 0.98,
+        "estagio": "crianca",
+        "fator": 1.1,
+        "nivel_tipico": 8,
+        "passa": true,
+        "por_forma": {
+          "arisco": {
+            "0": 0.3,
+            "8": 0.985
+          },
+          "sereno": {
+            "0": 0.14,
+            "8": 0.975
+          }
+        },
+        "sem": 0.22,
+        "travados": []
+      },
+      "tier2_carcereiro": {
+        "com": 0.8481,
+        "estagio": "adolescente",
+        "fator": 1.5,
+        "nivel_tipico": 22,
+        "passa": true,
+        "por_forma": {
+          "brigao": {
+            "0": 0.01,
+            "22": 0.9675
+          },
+          "cacador": {
+            "0": 0.99,
+            "22": 1.0
+          },
+          "colosso": {
+            "0": 0.0,
+            "22": 0.5175
+          },
+          "guardiao": {
+            "0": 0.015,
+            "22": 0.9075
+          }
+        },
+        "sem": 0.2537,
+        "travados": []
+      },
+      "tier2_porteiro": {
+        "com": 0.8844,
+        "estagio": "adolescente",
+        "fator": 1.1,
+        "nivel_tipico": 22,
+        "passa": true,
+        "por_forma": {
+          "brigao": {
+            "0": 0.43,
+            "22": 1.0
+          },
+          "cacador": {
+            "0": 0.015,
+            "22": 0.555
+          },
+          "colosso": {
+            "0": 0.1475,
+            "22": 0.9825
+          },
+          "guardiao": {
+            "0": 0.1275,
+            "22": 1.0
+          }
+        },
+        "sem": 0.18,
+        "travados": []
+      },
+      "tier2_sentinela": {
+        "com": 0.7575,
+        "estagio": "adolescente",
+        "fator": 1.6,
+        "nivel_tipico": 22,
+        "passa": false,
+        "por_forma": {
+          "brigao": {
+            "0": 0.5275,
+            "22": 0.955
+          },
+          "cacador": {
+            "0": 1.0,
+            "22": 1.0
+          },
+          "colosso": {
+            "0": 0.0175,
+            "22": 0.3325
+          },
+          "guardiao": {
+            "0": 0.01,
+            "22": 0.7425
+          }
+        },
+        "sem": 0.3887,
+        "travados": [
+          "colosso"
+        ]
+      },
+      "tier3_soberano": {
+        "com": 0.9109,
+        "estagio": "adulto",
+        "fator": 1.2,
+        "nivel_tipico": 36,
+        "passa": true,
+        "por_forma": {
+          "duelista": {
+            "0": 0.2975,
+            "36": 1.0
+          },
+          "emboscador": {
+            "0": 0.0,
+            "36": 0.685
+          },
+          "espelho": {
+            "0": 0.205,
+            "36": 1.0
+          },
+          "furioso": {
+            "0": 0.2825,
+            "36": 1.0
+          },
+          "muralha": {
+            "0": 0.3675,
+            "36": 1.0
+          },
+          "sentinela": {
+            "0": 0.005,
+            "36": 0.6025
+          },
+          "tita": {
+            "0": 0.2375,
+            "36": 1.0
+          },
+          "vigia": {
+            "0": 0.0975,
+            "36": 1.0
+          }
+        },
+        "sem": 0.1866,
+        "travados": []
+      }
+    },
+    "v21c": {
+      "tier1_brutamontes": {
+        "com": 0.98,
+        "estagio": "crianca",
+        "fator": 1.1,
+        "nivel_tipico": 8,
+        "passa": true,
+        "por_forma": {
+          "arisco": {
+            "0": 0.3,
+            "8": 0.985
+          },
+          "sereno": {
+            "0": 0.14,
+            "8": 0.975
+          }
+        },
+        "sem": 0.22,
+        "travados": []
+      },
+      "tier2_carcereiro": {
+        "com": 0.8481,
+        "estagio": "adolescente",
+        "fator": 1.5,
+        "nivel_tipico": 22,
+        "passa": true,
+        "por_forma": {
+          "brigao": {
+            "0": 0.01,
+            "22": 0.9675
+          },
+          "cacador": {
+            "0": 0.99,
+            "22": 1.0
+          },
+          "colosso": {
+            "0": 0.0,
+            "22": 0.5175
+          },
+          "guardiao": {
+            "0": 0.015,
+            "22": 0.9075
+          }
+        },
+        "sem": 0.2537,
+        "travados": []
+      },
+      "tier2_porteiro": {
+        "com": 0.8844,
+        "estagio": "adolescente",
+        "fator": 1.1,
+        "nivel_tipico": 22,
+        "passa": true,
+        "por_forma": {
+          "brigao": {
+            "0": 0.43,
+            "22": 1.0
+          },
+          "cacador": {
+            "0": 0.015,
+            "22": 0.555
+          },
+          "colosso": {
+            "0": 0.1475,
+            "22": 0.9825
+          },
+          "guardiao": {
+            "0": 0.1275,
+            "22": 1.0
+          }
+        },
+        "sem": 0.18,
+        "travados": []
+      },
+      "tier2_sentinela": {
+        "com": 0.705,
+        "estagio": "adolescente",
+        "fator": 1.6,
+        "nivel_tipico": 22,
+        "passa": false,
+        "por_forma": {
+          "brigao": {
+            "0": 0.5275,
+            "22": 0.955
+          },
+          "cacador": {
+            "0": 1.0,
+            "22": 1.0
+          },
+          "colosso": {
+            "0": 0.005,
+            "22": 0.1225
+          },
+          "guardiao": {
+            "0": 0.01,
+            "22": 0.7425
+          }
+        },
+        "sem": 0.3856,
+        "travados": [
+          "colosso"
+        ]
+      },
+      "tier3_soberano": {
+        "com": 0.9109,
+        "estagio": "adulto",
+        "fator": 1.2,
+        "nivel_tipico": 36,
+        "passa": true,
+        "por_forma": {
+          "duelista": {
+            "0": 0.2975,
+            "36": 1.0
+          },
+          "emboscador": {
+            "0": 0.0,
+            "36": 0.685
+          },
+          "espelho": {
+            "0": 0.205,
+            "36": 1.0
+          },
+          "furioso": {
+            "0": 0.2825,
+            "36": 1.0
+          },
+          "muralha": {
+            "0": 0.1025,
+            "36": 1.0
+          },
+          "sentinela": {
+            "0": 0.005,
+            "36": 0.6025
+          },
+          "tita": {
+            "0": 0.2425,
+            "36": 1.0
+          },
+          "vigia": {
+            "0": 0.0925,
+            "36": 1.0
+          }
+        },
+        "sem": 0.1534,
+        "travados": []
+      }
+    }
+  },
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "rodada 1 do reequilibrio, so sementes de calibracao; chaves da ConfigCombateV21D, desligadas por padrao",
+    "config_regras": "experiments/configs/v21c/validacao.json",
+    "epsilon_bots_canonico": 0.05,
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "metodo": {
+      "E4": "run_bateria_v21 com escala: adulto sem treino x adolescente da linha sem treino e com +22 (uniforme); ok = todos >= 0,60",
+      "S1": "run_bateria_sombria: 12 formas (8 normais + 4 sombrias), mesma especie, rotulo 'sombria|<especie>'; S1 = nenhuma sombria vence (> 0,5) as 8 normais",
+      "campanha": "calibrar_escala.medir com os fatores de ConfigEscala.fator_npc: pet do estagio sugerido x NPC, sem treino e com o treino tipico; metas sem <= 0,30 e com >= 0,80; regras = campanha.REGRAS_CAMPANHA + chaves"
+    },
+    "partidas_por_par_por_semente_E4": 100,
+    "partidas_por_par_por_semente_S1": 100,
+    "partidas_por_par_por_semente_campanha": 10,
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      3101,
+      3202,
+      3303,
+      3404,
+      3505
+    ],
+    "variante_medida": "a_c",
+    "variantes": {
+      "a": {
+        "chaves": {
+          "preparo_sob_pele_oculto": true
+        },
+        "descricao": "A: o preparo do pesado feito sob pele_dura nao aparece em oponente_preparando (todos os bots)",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "95b959e728c250225c9e485fc58c574cb624bf5cedadbf70583694b88c31586c",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      },
+      "a_c": {
+        "chaves": {
+          "muralha_lista_espelho": true,
+          "preparo_sob_pele_oculto": true
+        },
+        "descricao": "A + C",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "bac8d3681fbe3cac240a229dce41ed37a180d551edeb10443a6b1b3d025c8fd8",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      },
+      "c": {
+        "chaves": {
+          "muralha_lista_espelho": true
+        },
+        "descricao": "C: a muralha luta com a lista de gambits do espelho",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "34644983dfccb84443d84002d9bca4f474de2ae71594c733686e9d1f84f60ffb",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      },
+      "v21c": {
+        "chaves": {},
+        "descricao": "V21C de hoje (sem chave)",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      }
+    }
+  },
+  "v21c_campanha_igual_calibracao_escala": true
+}

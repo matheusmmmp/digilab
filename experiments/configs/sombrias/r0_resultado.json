@@ -1,0 +1,2924 @@
+{
+  "candidatos": {
+    "atual": {},
+    "colosso_forca2": {
+      "colosso_partido": {
+        "stats": {
+          "folego": -3,
+          "forca": 4,
+          "mira": -2,
+          "vigor": 1
+        }
+      }
+    },
+    "colosso_forca_pesado": {
+      "colosso_partido": {
+        "gambits": "pesado",
+        "stats": {
+          "folego": -3,
+          "forca": 2,
+          "mira": -3,
+          "vigor": 4
+        }
+      }
+    },
+    "colosso_sem_regen": {
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 1.0
+        }
+      }
+    },
+    "pesado": {
+      "bastiao_rachado": {
+        "gambits": "pesado"
+      },
+      "colosso_partido": {
+        "gambits": "pesado"
+      },
+      "devastador": {
+        "gambits": "pesado"
+      },
+      "predador": {
+        "gambits": "pesado"
+      }
+    },
+    "pesado_esquiva": {
+      "bastiao_rachado": {
+        "gambits": "pesado_esquiva"
+      },
+      "colosso_partido": {
+        "gambits": "pesado_esquiva"
+      },
+      "devastador": {
+        "gambits": "pesado_esquiva"
+      },
+      "predador": {
+        "gambits": "pesado_esquiva"
+      }
+    },
+    "sem_leitura": {
+      "bastiao_rachado": {
+        "gambits": "sem_leitura"
+      },
+      "colosso_partido": {
+        "gambits": "sem_leitura"
+      },
+      "devastador": {
+        "gambits": "sem_leitura"
+      },
+      "predador": {
+        "gambits": "sem_leitura"
+      }
+    }
+  },
+  "descricao": "Redesenho das formas sombrias para o gate S2 (TAREFA_TREINO_SOMBRIO). So rotulos de CALIBRACAO.",
+  "n": 40,
+  "niveis": [
+    0,
+    6,
+    12,
+    18,
+    24,
+    30,
+    36
+  ],
+  "normais": {
+    "duelista": {
+      "por_nivel": {
+        "0": {
+          "tier1": 0.35,
+          "tier2": 0.453125
+        },
+        "6": {
+          "tier1": 0.49375,
+          "tier2": 0.2875
+        },
+        "12": {
+          "tier1": 0.621875,
+          "tier2": 0.42812500000000003
+        },
+        "18": {
+          "tier1": 0.546875,
+          "tier2": 0.234375
+        },
+        "24": {
+          "tier1": 0.671875,
+          "tier2": 0.12187500000000001
+        },
+        "30": {
+          "tier1": 0.6,
+          "tier2": 0.071875
+        },
+        "36": {
+          "tier1": 0.578125,
+          "tier2": 0.065625
+        }
+      },
+      "tier2_media": 0.23750000000000002,
+      "treino_minimo_tier1": 12
+    },
+    "emboscador": {
+      "por_nivel": {
+        "0": {
+          "tier1": 1.0,
+          "tier2": 0.0125
+        },
+        "6": {
+          "tier1": 1.0,
+          "tier2": 0.043750000000000004
+        },
+        "12": {
+          "tier1": 1.0,
+          "tier2": 0.025
+        },
+        "18": {
+          "tier1": 1.0,
+          "tier2": 0.025
+        },
+        "24": {
+          "tier1": 1.0,
+          "tier2": 0.03125
+        },
+        "30": {
+          "tier1": 1.0,
+          "tier2": 0.03125
+        },
+        "36": {
+          "tier1": 1.0,
+          "tier2": 0.06875
+        }
+      },
+      "tier2_media": 0.03392857142857143,
+      "treino_minimo_tier1": 0
+    },
+    "espelho": {
+      "por_nivel": {
+        "0": {
+          "tier1": 0.678125,
+          "tier2": 0.946875
+        },
+        "6": {
+          "tier1": 0.775,
+          "tier2": 0.975
+        },
+        "12": {
+          "tier1": 0.740625,
+          "tier2": 0.9875
+        },
+        "18": {
+          "tier1": 0.79375,
+          "tier2": 1.0
+        },
+        "24": {
+          "tier1": 0.796875,
+          "tier2": 1.0
+        },
+        "30": {
+          "tier1": 0.828125,
+          "tier2": 1.0
+        },
+        "36": {
+          "tier1": 0.796875,
+          "tier2": 1.0
+        }
+      },
+      "tier2_media": 0.9870535714285714,
+      "treino_minimo_tier1": 0
+    },
+    "furioso": {
+      "por_nivel": {
+        "0": {
+          "tier1": 0.88125,
+          "tier2": 0.85
+        },
+        "6": {
+          "tier1": 0.940625,
+          "tier2": 0.853125
+        },
+        "12": {
+          "tier1": 0.925,
+          "tier2": 0.975
+        },
+        "18": {
+          "tier1": 0.965625,
+          "tier2": 0.9875
+        },
+        "24": {
+          "tier1": 0.934375,
+          "tier2": 0.99375
+        },
+        "30": {
+          "tier1": 0.946875,
+          "tier2": 0.99375
+        },
+        "36": {
+          "tier1": 0.94375,
+          "tier2": 0.996875
+        }
+      },
+      "tier2_media": 0.9500000000000001,
+      "treino_minimo_tier1": 0
+    },
+    "muralha": {
+      "por_nivel": {
+        "0": {
+          "tier1": 1.0,
+          "tier2": 0.86875
+        },
+        "6": {
+          "tier1": 1.0,
+          "tier2": 0.93125
+        },
+        "12": {
+          "tier1": 1.0,
+          "tier2": 0.925
+        },
+        "18": {
+          "tier1": 1.0,
+          "tier2": 0.95625
+        },
+        "24": {
+          "tier1": 1.0,
+          "tier2": 0.990625
+        },
+        "30": {
+          "tier1": 1.0,
+          "tier2": 0.975
+        },
+        "36": {
+          "tier1": 1.0,
+          "tier2": 0.9875
+        }
+      },
+      "tier2_media": 0.9477678571428572,
+      "treino_minimo_tier1": 0
+    },
+    "sentinela": {
+      "por_nivel": {
+        "0": {
+          "tier1": 1.0,
+          "tier2": 0.1375
+        },
+        "6": {
+          "tier1": 1.0,
+          "tier2": 0.20625
+        },
+        "12": {
+          "tier1": 1.0,
+          "tier2": 0.09999999999999999
+        },
+        "18": {
+          "tier1": 1.0,
+          "tier2": 0.075
+        },
+        "24": {
+          "tier1": 1.0,
+          "tier2": 0.0375
+        },
+        "30": {
+          "tier1": 1.0,
+          "tier2": 0.03125
+        },
+        "36": {
+          "tier1": 1.0,
+          "tier2": 0.025
+        }
+      },
+      "tier2_media": 0.08750000000000001,
+      "treino_minimo_tier1": 0
+    },
+    "tita": {
+      "por_nivel": {
+        "0": {
+          "tier1": 0.903125,
+          "tier2": 0.034375
+        },
+        "6": {
+          "tier1": 0.95625,
+          "tier2": 0.009375
+        },
+        "12": {
+          "tier1": 0.98125,
+          "tier2": 0.028125
+        },
+        "18": {
+          "tier1": 0.990625,
+          "tier2": 0.04375
+        },
+        "24": {
+          "tier1": 1.0,
+          "tier2": 0.084375
+        },
+        "30": {
+          "tier1": 0.99375,
+          "tier2": 0.084375
+        },
+        "36": {
+          "tier1": 0.99375,
+          "tier2": 0.05625
+        }
+      },
+      "tier2_media": 0.048660714285714286,
+      "treino_minimo_tier1": 0
+    },
+    "vigia": {
+      "por_nivel": {
+        "0": {
+          "tier1": 0.615625,
+          "tier2": 0.03125
+        },
+        "6": {
+          "tier1": 0.765625,
+          "tier2": 0.11875
+        },
+        "12": {
+          "tier1": 0.921875,
+          "tier2": 0.234375
+        },
+        "18": {
+          "tier1": 0.971875,
+          "tier2": 0.24375
+        },
+        "24": {
+          "tier1": 0.984375,
+          "tier2": 0.43125
+        },
+        "30": {
+          "tier1": 0.990625,
+          "tier2": 0.565625
+        },
+        "36": {
+          "tier1": 1.0,
+          "tier2": 0.625
+        }
+      },
+      "tier2_media": 0.32142857142857145,
+      "treino_minimo_tier1": 0
+    }
+  },
+  "resultados": {
+    "atual": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.9125000000000001,
+              "tier2": 0.959375
+            },
+            "6": {
+              "tier1": 0.94375,
+              "tier2": 0.96875
+            },
+            "12": {
+              "tier1": 0.9375,
+              "tier2": 0.978125
+            },
+            "18": {
+              "tier1": 0.95625,
+              "tier2": 1.0
+            },
+            "24": {
+              "tier1": 0.95625,
+              "tier2": 0.9875
+            },
+            "30": {
+              "tier1": 0.95625,
+              "tier2": 0.99375
+            },
+            "36": {
+              "tier1": 0.94375,
+              "tier2": 1.0
+            }
+          },
+          "tier2_media": 0.9839285714285715,
+          "treino_minimo_tier1": 0
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.45625,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.521875,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.590625,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.58125,
+              "tier2": 0.0125
+            },
+            "24": {
+              "tier1": 0.765625,
+              "tier2": 0.018750000000000003
+            },
+            "30": {
+              "tier1": 0.8187500000000001,
+              "tier2": 0.03125
+            },
+            "36": {
+              "tier1": 0.90625,
+              "tier2": 0.028124999999999997
+            }
+          },
+          "tier2_media": 0.01294642857142857,
+          "treino_minimo_tier1": 6
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.6812499999999999,
+              "tier2": 0.903125
+            },
+            "6": {
+              "tier1": 0.8,
+              "tier2": 0.965625
+            },
+            "12": {
+              "tier1": 0.853125,
+              "tier2": 0.940625
+            },
+            "18": {
+              "tier1": 0.871875,
+              "tier2": 0.971875
+            },
+            "24": {
+              "tier1": 0.878125,
+              "tier2": 0.984375
+            },
+            "30": {
+              "tier1": 0.884375,
+              "tier2": 0.978125
+            },
+            "36": {
+              "tier1": 0.9343750000000001,
+              "tier2": 0.984375
+            }
+          },
+          "tier2_media": 0.9611607142857144,
+          "treino_minimo_tier1": 0
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.51875,
+              "tier2": 0.00625
+            },
+            "6": {
+              "tier1": 0.40625,
+              "tier2": 0.009375000000000001
+            },
+            "12": {
+              "tier1": 0.5125,
+              "tier2": 0.0125
+            },
+            "18": {
+              "tier1": 0.5,
+              "tier2": 0.028125
+            },
+            "24": {
+              "tier1": 0.575,
+              "tier2": 0.03125
+            },
+            "30": {
+              "tier1": 0.58125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.603125,
+              "tier2": 0.025
+            }
+          },
+          "tier2_media": 0.016071428571428573,
+          "treino_minimo_tier1": 0
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": true,
+              "b": true
+            },
+            "muralha": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.584,
+              false
+            ],
+            "v21c": [
+              0.571,
+              false
+            ]
+          },
+          "t1_0": 0.913,
+          "t2_media": 0.984
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": false,
+              "b": true
+            },
+            "vigia": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": 6,
+          "s1": {
+            "v21": [
+              0.082,
+              false
+            ],
+            "v21c": [
+              0.072,
+              false
+            ]
+          },
+          "t1_0": 0.456,
+          "t2_media": 0.013
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": true,
+              "b": false
+            },
+            "furioso": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.736,
+              false
+            ],
+            "v21c": [
+              0.722,
+              false
+            ]
+          },
+          "t1_0": 0.681,
+          "t2_media": 0.961
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": true,
+              "b": true
+            },
+            "sentinela": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.289,
+              false
+            ],
+            "v21c": [
+              0.26,
+              false
+            ]
+          },
+          "t1_0": 0.519,
+          "t2_media": 0.016
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.583984375,
+            "por_forma": {
+              "duelista": 0.928125,
+              "emboscador": 0.0,
+              "espelho": 0.796875,
+              "furioso": 0.94375,
+              "muralha": 0.05,
+              "sentinela": 0.0,
+              "tita": 0.9625,
+              "vigia": 0.990625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.570703125,
+            "por_forma": {
+              "duelista": 0.915625,
+              "emboscador": 0.0,
+              "espelho": 0.765625,
+              "furioso": 0.94375,
+              "muralha": 0.009375,
+              "sentinela": 0.0,
+              "tita": 0.9375,
+              "vigia": 0.99375
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.082421875,
+            "por_forma": {
+              "duelista": 0.153125,
+              "emboscador": 0.0,
+              "espelho": 0.018750000000000003,
+              "furioso": 0.0,
+              "muralha": 0.44375000000000003,
+              "sentinela": 0.0,
+              "tita": 0.0375,
+              "vigia": 0.00625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.072265625,
+            "por_forma": {
+              "duelista": 0.121875,
+              "emboscador": 0.0,
+              "espelho": 0.034375,
+              "furioso": 0.0,
+              "muralha": 0.328125,
+              "sentinela": 0.0,
+              "tita": 0.06875,
+              "vigia": 0.025
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.735546875,
+            "por_forma": {
+              "duelista": 0.878125,
+              "emboscador": 0.99375,
+              "espelho": 0.3375,
+              "furioso": 0.66875,
+              "muralha": 0.309375,
+              "sentinela": 0.9875,
+              "tita": 0.890625,
+              "vigia": 0.81875
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.722265625,
+            "por_forma": {
+              "duelista": 0.8625,
+              "emboscador": 1.0,
+              "espelho": 0.25,
+              "furioso": 0.6937500000000001,
+              "muralha": 0.203125,
+              "sentinela": 1.0,
+              "tita": 0.965625,
+              "vigia": 0.803125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.28867187499999997,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.703125,
+              "espelho": 0.5125,
+              "furioso": 0.0,
+              "muralha": 0.425,
+              "sentinela": 0.66875,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.259765625,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.690625,
+              "espelho": 0.459375,
+              "furioso": 0.0,
+              "muralha": 0.278125,
+              "sentinela": 0.65,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    },
+    "colosso_forca2": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.9125000000000001,
+              "tier2": 0.959375
+            },
+            "6": {
+              "tier1": 0.94375,
+              "tier2": 0.96875
+            },
+            "12": {
+              "tier1": 0.9375,
+              "tier2": 0.978125
+            },
+            "18": {
+              "tier1": 0.95625,
+              "tier2": 1.0
+            },
+            "24": {
+              "tier1": 0.95625,
+              "tier2": 0.9875
+            },
+            "30": {
+              "tier1": 0.95625,
+              "tier2": 0.99375
+            },
+            "36": {
+              "tier1": 0.94375,
+              "tier2": 1.0
+            }
+          },
+          "tier2_media": 0.9839285714285715,
+          "treino_minimo_tier1": 0
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.50625,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.553125,
+              "tier2": 0.0125
+            },
+            "12": {
+              "tier1": 0.653125,
+              "tier2": 0.003125
+            },
+            "18": {
+              "tier1": 0.74375,
+              "tier2": 0.003125
+            },
+            "24": {
+              "tier1": 0.821875,
+              "tier2": 0.021875
+            },
+            "30": {
+              "tier1": 0.88125,
+              "tier2": 0.037500000000000006
+            },
+            "36": {
+              "tier1": 0.90625,
+              "tier2": 0.0125
+            }
+          },
+          "tier2_media": 0.012946428571428572,
+          "treino_minimo_tier1": 0
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.6812499999999999,
+              "tier2": 0.903125
+            },
+            "6": {
+              "tier1": 0.8,
+              "tier2": 0.965625
+            },
+            "12": {
+              "tier1": 0.853125,
+              "tier2": 0.940625
+            },
+            "18": {
+              "tier1": 0.871875,
+              "tier2": 0.971875
+            },
+            "24": {
+              "tier1": 0.878125,
+              "tier2": 0.984375
+            },
+            "30": {
+              "tier1": 0.884375,
+              "tier2": 0.978125
+            },
+            "36": {
+              "tier1": 0.9343750000000001,
+              "tier2": 0.984375
+            }
+          },
+          "tier2_media": 0.9611607142857144,
+          "treino_minimo_tier1": 0
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.51875,
+              "tier2": 0.00625
+            },
+            "6": {
+              "tier1": 0.40625,
+              "tier2": 0.009375000000000001
+            },
+            "12": {
+              "tier1": 0.5125,
+              "tier2": 0.0125
+            },
+            "18": {
+              "tier1": 0.5,
+              "tier2": 0.028125
+            },
+            "24": {
+              "tier1": 0.575,
+              "tier2": 0.03125
+            },
+            "30": {
+              "tier1": 0.58125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.603125,
+              "tier2": 0.025
+            }
+          },
+          "tier2_media": 0.016071428571428573,
+          "treino_minimo_tier1": 0
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": true,
+              "b": true
+            },
+            "muralha": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.584,
+              false
+            ],
+            "v21c": [
+              0.571,
+              false
+            ]
+          },
+          "t1_0": 0.913,
+          "t2_media": 0.984
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": true,
+              "b": true
+            },
+            "vigia": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.105,
+              false
+            ],
+            "v21c": [
+              0.101,
+              false
+            ]
+          },
+          "t1_0": 0.506,
+          "t2_media": 0.013
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": true,
+              "b": false
+            },
+            "furioso": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.736,
+              false
+            ],
+            "v21c": [
+              0.722,
+              false
+            ]
+          },
+          "t1_0": 0.681,
+          "t2_media": 0.961
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": true,
+              "b": true
+            },
+            "sentinela": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.289,
+              false
+            ],
+            "v21c": [
+              0.26,
+              false
+            ]
+          },
+          "t1_0": 0.519,
+          "t2_media": 0.016
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.583984375,
+            "por_forma": {
+              "duelista": 0.928125,
+              "emboscador": 0.0,
+              "espelho": 0.796875,
+              "furioso": 0.94375,
+              "muralha": 0.05,
+              "sentinela": 0.0,
+              "tita": 0.9625,
+              "vigia": 0.990625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.570703125,
+            "por_forma": {
+              "duelista": 0.915625,
+              "emboscador": 0.0,
+              "espelho": 0.765625,
+              "furioso": 0.94375,
+              "muralha": 0.009375,
+              "sentinela": 0.0,
+              "tita": 0.9375,
+              "vigia": 0.99375
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.105078125,
+            "por_forma": {
+              "duelista": 0.190625,
+              "emboscador": 0.0,
+              "espelho": 0.018750000000000003,
+              "furioso": 0.0,
+              "muralha": 0.46249999999999997,
+              "sentinela": 0.0,
+              "tita": 0.15,
+              "vigia": 0.018750000000000003
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.101171875,
+            "por_forma": {
+              "duelista": 0.203125,
+              "emboscador": 0.0,
+              "espelho": 0.01875,
+              "furioso": 0.0,
+              "muralha": 0.403125,
+              "sentinela": 0.0,
+              "tita": 0.159375,
+              "vigia": 0.025
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.735546875,
+            "por_forma": {
+              "duelista": 0.878125,
+              "emboscador": 0.99375,
+              "espelho": 0.3375,
+              "furioso": 0.66875,
+              "muralha": 0.309375,
+              "sentinela": 0.9875,
+              "tita": 0.890625,
+              "vigia": 0.81875
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.722265625,
+            "por_forma": {
+              "duelista": 0.8625,
+              "emboscador": 1.0,
+              "espelho": 0.25,
+              "furioso": 0.6937500000000001,
+              "muralha": 0.203125,
+              "sentinela": 1.0,
+              "tita": 0.965625,
+              "vigia": 0.803125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.28867187499999997,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.703125,
+              "espelho": 0.5125,
+              "furioso": 0.0,
+              "muralha": 0.425,
+              "sentinela": 0.66875,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.259765625,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.690625,
+              "espelho": 0.459375,
+              "furioso": 0.0,
+              "muralha": 0.278125,
+              "sentinela": 0.65,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    },
+    "colosso_forca_pesado": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.9125000000000001,
+              "tier2": 0.959375
+            },
+            "6": {
+              "tier1": 0.94375,
+              "tier2": 0.96875
+            },
+            "12": {
+              "tier1": 0.9375,
+              "tier2": 0.978125
+            },
+            "18": {
+              "tier1": 0.95625,
+              "tier2": 1.0
+            },
+            "24": {
+              "tier1": 0.95625,
+              "tier2": 0.9875
+            },
+            "30": {
+              "tier1": 0.95625,
+              "tier2": 0.99375
+            },
+            "36": {
+              "tier1": 0.94375,
+              "tier2": 1.0
+            }
+          },
+          "tier2_media": 0.9839285714285715,
+          "treino_minimo_tier1": 0
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.128125,
+              "tier2": 0.003125
+            },
+            "6": {
+              "tier1": 0.13125,
+              "tier2": 0.003125
+            },
+            "12": {
+              "tier1": 0.20625,
+              "tier2": 0.015625
+            },
+            "18": {
+              "tier1": 0.23125,
+              "tier2": 0.003125
+            },
+            "24": {
+              "tier1": 0.240625,
+              "tier2": 0.0125
+            },
+            "30": {
+              "tier1": 0.328125,
+              "tier2": 0.018750000000000003
+            },
+            "36": {
+              "tier1": 0.340625,
+              "tier2": 0.034375
+            }
+          },
+          "tier2_media": 0.012946428571428572,
+          "treino_minimo_tier1": null
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.6812499999999999,
+              "tier2": 0.903125
+            },
+            "6": {
+              "tier1": 0.8,
+              "tier2": 0.965625
+            },
+            "12": {
+              "tier1": 0.853125,
+              "tier2": 0.940625
+            },
+            "18": {
+              "tier1": 0.871875,
+              "tier2": 0.971875
+            },
+            "24": {
+              "tier1": 0.878125,
+              "tier2": 0.984375
+            },
+            "30": {
+              "tier1": 0.884375,
+              "tier2": 0.978125
+            },
+            "36": {
+              "tier1": 0.9343750000000001,
+              "tier2": 0.984375
+            }
+          },
+          "tier2_media": 0.9611607142857144,
+          "treino_minimo_tier1": 0
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.51875,
+              "tier2": 0.00625
+            },
+            "6": {
+              "tier1": 0.40625,
+              "tier2": 0.009375000000000001
+            },
+            "12": {
+              "tier1": 0.5125,
+              "tier2": 0.0125
+            },
+            "18": {
+              "tier1": 0.5,
+              "tier2": 0.028125
+            },
+            "24": {
+              "tier1": 0.575,
+              "tier2": 0.03125
+            },
+            "30": {
+              "tier1": 0.58125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.603125,
+              "tier2": 0.025
+            }
+          },
+          "tier2_media": 0.016071428571428573,
+          "treino_minimo_tier1": 0
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": true,
+              "b": true
+            },
+            "muralha": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.584,
+              false
+            ],
+            "v21c": [
+              0.571,
+              false
+            ]
+          },
+          "t1_0": 0.913,
+          "t2_media": 0.984
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": false,
+              "b": true
+            },
+            "vigia": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.15,
+              false
+            ],
+            "v21c": [
+              0.164,
+              false
+            ]
+          },
+          "t1_0": 0.128,
+          "t2_media": 0.013
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": true,
+              "b": false
+            },
+            "furioso": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.736,
+              false
+            ],
+            "v21c": [
+              0.722,
+              false
+            ]
+          },
+          "t1_0": 0.681,
+          "t2_media": 0.961
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": true,
+              "b": true
+            },
+            "sentinela": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.289,
+              false
+            ],
+            "v21c": [
+              0.26,
+              false
+            ]
+          },
+          "t1_0": 0.519,
+          "t2_media": 0.016
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.583984375,
+            "por_forma": {
+              "duelista": 0.928125,
+              "emboscador": 0.0,
+              "espelho": 0.796875,
+              "furioso": 0.94375,
+              "muralha": 0.05,
+              "sentinela": 0.0,
+              "tita": 0.9625,
+              "vigia": 0.990625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.570703125,
+            "por_forma": {
+              "duelista": 0.915625,
+              "emboscador": 0.0,
+              "espelho": 0.765625,
+              "furioso": 0.94375,
+              "muralha": 0.009375,
+              "sentinela": 0.0,
+              "tita": 0.9375,
+              "vigia": 0.99375
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.15,
+            "por_forma": {
+              "duelista": 0.20625,
+              "emboscador": 0.0,
+              "espelho": 0.13125,
+              "furioso": 0.0,
+              "muralha": 0.70625,
+              "sentinela": 0.0,
+              "tita": 0.15625,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.1640625,
+            "por_forma": {
+              "duelista": 0.22187500000000002,
+              "emboscador": 0.025,
+              "espelho": 0.14375,
+              "furioso": 0.0,
+              "muralha": 0.725,
+              "sentinela": 0.025,
+              "tita": 0.171875,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.735546875,
+            "por_forma": {
+              "duelista": 0.878125,
+              "emboscador": 0.99375,
+              "espelho": 0.3375,
+              "furioso": 0.66875,
+              "muralha": 0.309375,
+              "sentinela": 0.9875,
+              "tita": 0.890625,
+              "vigia": 0.81875
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.722265625,
+            "por_forma": {
+              "duelista": 0.8625,
+              "emboscador": 1.0,
+              "espelho": 0.25,
+              "furioso": 0.6937500000000001,
+              "muralha": 0.203125,
+              "sentinela": 1.0,
+              "tita": 0.965625,
+              "vigia": 0.803125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.28867187499999997,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.703125,
+              "espelho": 0.5125,
+              "furioso": 0.0,
+              "muralha": 0.425,
+              "sentinela": 0.66875,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.259765625,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.690625,
+              "espelho": 0.459375,
+              "furioso": 0.0,
+              "muralha": 0.278125,
+              "sentinela": 0.65,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    },
+    "colosso_sem_regen": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.9125000000000001,
+              "tier2": 0.959375
+            },
+            "6": {
+              "tier1": 0.94375,
+              "tier2": 0.96875
+            },
+            "12": {
+              "tier1": 0.9375,
+              "tier2": 0.978125
+            },
+            "18": {
+              "tier1": 0.95625,
+              "tier2": 1.0
+            },
+            "24": {
+              "tier1": 0.95625,
+              "tier2": 0.9875
+            },
+            "30": {
+              "tier1": 0.95625,
+              "tier2": 0.99375
+            },
+            "36": {
+              "tier1": 0.94375,
+              "tier2": 1.0
+            }
+          },
+          "tier2_media": 0.9839285714285715,
+          "treino_minimo_tier1": 0
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.771875,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.815625,
+              "tier2": 0.00625
+            },
+            "12": {
+              "tier1": 0.884375,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.95625,
+              "tier2": 0.00625
+            },
+            "24": {
+              "tier1": 0.99375,
+              "tier2": 0.025
+            },
+            "30": {
+              "tier1": 0.98125,
+              "tier2": 0.034375
+            },
+            "36": {
+              "tier1": 0.9875,
+              "tier2": 0.040625
+            }
+          },
+          "tier2_media": 0.016071428571428573,
+          "treino_minimo_tier1": 0
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.6812499999999999,
+              "tier2": 0.903125
+            },
+            "6": {
+              "tier1": 0.8,
+              "tier2": 0.965625
+            },
+            "12": {
+              "tier1": 0.853125,
+              "tier2": 0.940625
+            },
+            "18": {
+              "tier1": 0.871875,
+              "tier2": 0.971875
+            },
+            "24": {
+              "tier1": 0.878125,
+              "tier2": 0.984375
+            },
+            "30": {
+              "tier1": 0.884375,
+              "tier2": 0.978125
+            },
+            "36": {
+              "tier1": 0.9343750000000001,
+              "tier2": 0.984375
+            }
+          },
+          "tier2_media": 0.9611607142857144,
+          "treino_minimo_tier1": 0
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.51875,
+              "tier2": 0.00625
+            },
+            "6": {
+              "tier1": 0.40625,
+              "tier2": 0.009375000000000001
+            },
+            "12": {
+              "tier1": 0.5125,
+              "tier2": 0.0125
+            },
+            "18": {
+              "tier1": 0.5,
+              "tier2": 0.028125
+            },
+            "24": {
+              "tier1": 0.575,
+              "tier2": 0.03125
+            },
+            "30": {
+              "tier1": 0.58125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.603125,
+              "tier2": 0.025
+            }
+          },
+          "tier2_media": 0.016071428571428573,
+          "treino_minimo_tier1": 0
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": true,
+              "b": true
+            },
+            "muralha": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.584,
+              false
+            ],
+            "v21c": [
+              0.571,
+              false
+            ]
+          },
+          "t1_0": 0.913,
+          "t2_media": 0.984
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": true,
+              "b": true
+            },
+            "vigia": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.176,
+              false
+            ],
+            "v21c": [
+              0.169,
+              false
+            ]
+          },
+          "t1_0": 0.772,
+          "t2_media": 0.016
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": true,
+              "b": false
+            },
+            "furioso": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.736,
+              false
+            ],
+            "v21c": [
+              0.722,
+              false
+            ]
+          },
+          "t1_0": 0.681,
+          "t2_media": 0.961
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": true,
+              "b": true
+            },
+            "sentinela": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.289,
+              false
+            ],
+            "v21c": [
+              0.26,
+              false
+            ]
+          },
+          "t1_0": 0.519,
+          "t2_media": 0.016
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.583984375,
+            "por_forma": {
+              "duelista": 0.928125,
+              "emboscador": 0.0,
+              "espelho": 0.796875,
+              "furioso": 0.94375,
+              "muralha": 0.05,
+              "sentinela": 0.0,
+              "tita": 0.9625,
+              "vigia": 0.990625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.570703125,
+            "por_forma": {
+              "duelista": 0.915625,
+              "emboscador": 0.0,
+              "espelho": 0.765625,
+              "furioso": 0.94375,
+              "muralha": 0.009375,
+              "sentinela": 0.0,
+              "tita": 0.9375,
+              "vigia": 0.99375
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.176171875,
+            "por_forma": {
+              "duelista": 0.253125,
+              "emboscador": 0.0,
+              "espelho": 0.084375,
+              "furioso": 0.00625,
+              "muralha": 0.86875,
+              "sentinela": 0.0,
+              "tita": 0.153125,
+              "vigia": 0.04375
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.169140625,
+            "por_forma": {
+              "duelista": 0.209375,
+              "emboscador": 0.0,
+              "espelho": 0.096875,
+              "furioso": 0.00625,
+              "muralha": 0.7625,
+              "sentinela": 0.0,
+              "tita": 0.240625,
+              "vigia": 0.037500000000000006
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.735546875,
+            "por_forma": {
+              "duelista": 0.878125,
+              "emboscador": 0.99375,
+              "espelho": 0.3375,
+              "furioso": 0.66875,
+              "muralha": 0.309375,
+              "sentinela": 0.9875,
+              "tita": 0.890625,
+              "vigia": 0.81875
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.722265625,
+            "por_forma": {
+              "duelista": 0.8625,
+              "emboscador": 1.0,
+              "espelho": 0.25,
+              "furioso": 0.6937500000000001,
+              "muralha": 0.203125,
+              "sentinela": 1.0,
+              "tita": 0.965625,
+              "vigia": 0.803125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.28867187499999997,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.703125,
+              "espelho": 0.5125,
+              "furioso": 0.0,
+              "muralha": 0.425,
+              "sentinela": 0.66875,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.259765625,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.690625,
+              "espelho": 0.459375,
+              "furioso": 0.0,
+              "muralha": 0.278125,
+              "sentinela": 0.65,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    },
+    "pesado": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.00625,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.0125,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.053125,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.11562499999999999,
+              "tier2": 0.0
+            },
+            "24": {
+              "tier1": 0.09375,
+              "tier2": 0.0
+            },
+            "30": {
+              "tier1": 0.103125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.11875,
+              "tier2": 0.00625
+            }
+          },
+          "tier2_media": 0.0008928571428571429,
+          "treino_minimo_tier1": null
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.125,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.084375,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.175,
+              "tier2": 0.003125
+            },
+            "18": {
+              "tier1": 0.1875,
+              "tier2": 0.0
+            },
+            "24": {
+              "tier1": 0.246875,
+              "tier2": 0.0
+            },
+            "30": {
+              "tier1": 0.303125,
+              "tier2": 0.01875
+            },
+            "36": {
+              "tier1": 0.303125,
+              "tier2": 0.01875
+            }
+          },
+          "tier2_media": 0.005803571428571429,
+          "treino_minimo_tier1": null
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.265625,
+              "tier2": 0.018750000000000003
+            },
+            "6": {
+              "tier1": 0.325,
+              "tier2": 0.028124999999999997
+            },
+            "12": {
+              "tier1": 0.465625,
+              "tier2": 0.046875
+            },
+            "18": {
+              "tier1": 0.378125,
+              "tier2": 0.071875
+            },
+            "24": {
+              "tier1": 0.490625,
+              "tier2": 0.078125
+            },
+            "30": {
+              "tier1": 0.51875,
+              "tier2": 0.09375
+            },
+            "36": {
+              "tier1": 0.49687499999999996,
+              "tier2": 0.09375
+            }
+          },
+          "tier2_media": 0.06160714285714286,
+          "treino_minimo_tier1": 30
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.034375,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.003125,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.00625,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.040625,
+              "tier2": 0.0
+            },
+            "24": {
+              "tier1": 0.0625,
+              "tier2": 0.0
+            },
+            "30": {
+              "tier1": 0.090625,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.09375,
+              "tier2": 0.0
+            }
+          },
+          "tier2_media": 0.0,
+          "treino_minimo_tier1": null
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": false,
+              "b": true
+            },
+            "muralha": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.049,
+              false
+            ],
+            "v21c": [
+              0.048,
+              false
+            ]
+          },
+          "t1_0": 0.006,
+          "t2_media": 0.001
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": false,
+              "b": true
+            },
+            "vigia": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.146,
+              false
+            ],
+            "v21c": [
+              0.145,
+              false
+            ]
+          },
+          "t1_0": 0.125,
+          "t2_media": 0.006
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": false,
+              "b": true
+            },
+            "furioso": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": 30,
+          "s1": {
+            "v21": [
+              0.213,
+              false
+            ],
+            "v21c": [
+              0.201,
+              false
+            ]
+          },
+          "t1_0": 0.266,
+          "t2_media": 0.062
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": false,
+              "b": true
+            },
+            "sentinela": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.014,
+              false
+            ],
+            "v21c": [
+              0.018,
+              false
+            ]
+          },
+          "t1_0": 0.034,
+          "t2_media": 0.0
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.048828125,
+            "por_forma": {
+              "duelista": 0.01875,
+              "emboscador": 0.0,
+              "espelho": 0.00625,
+              "furioso": 0.0,
+              "muralha": 0.359375,
+              "sentinela": 0.0,
+              "tita": 0.00625,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.048046875,
+            "por_forma": {
+              "duelista": 0.009375000000000001,
+              "emboscador": 0.0,
+              "espelho": 0.015625,
+              "furioso": 0.0,
+              "muralha": 0.340625,
+              "sentinela": 0.0,
+              "tita": 0.018750000000000003,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.145703125,
+            "por_forma": {
+              "duelista": 0.18437499999999998,
+              "emboscador": 0.0,
+              "espelho": 0.121875,
+              "furioso": 0.0,
+              "muralha": 0.73125,
+              "sentinela": 0.0,
+              "tita": 0.12812500000000002,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.144921875,
+            "por_forma": {
+              "duelista": 0.159375,
+              "emboscador": 0.00625,
+              "espelho": 0.10625,
+              "furioso": 0.0,
+              "muralha": 0.73125,
+              "sentinela": 0.025,
+              "tita": 0.13125,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.21328125,
+            "por_forma": {
+              "duelista": 0.4625,
+              "emboscador": 0.0,
+              "espelho": 0.0625,
+              "furioso": 0.021875,
+              "muralha": 0.359375,
+              "sentinela": 0.0,
+              "tita": 0.79375,
+              "vigia": 0.00625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.201171875,
+            "por_forma": {
+              "duelista": 0.4625,
+              "emboscador": 0.003125,
+              "espelho": 0.0375,
+              "furioso": 0.021875,
+              "muralha": 0.321875,
+              "sentinela": 0.0,
+              "tita": 0.75,
+              "vigia": 0.0125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.013671875,
+            "por_forma": {
+              "duelista": 0.00625,
+              "emboscador": 0.0,
+              "espelho": 0.0,
+              "furioso": 0.0,
+              "muralha": 0.090625,
+              "sentinela": 0.0,
+              "tita": 0.0125,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.017578125,
+            "por_forma": {
+              "duelista": 0.021875,
+              "emboscador": 0.0,
+              "espelho": 0.0,
+              "furioso": 0.0,
+              "muralha": 0.1125,
+              "sentinela": 0.0,
+              "tita": 0.00625,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    },
+    "pesado_esquiva": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.00625,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.0125,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.053125,
+              "tier2": 0.003125
+            },
+            "18": {
+              "tier1": 0.11562499999999999,
+              "tier2": 0.003125
+            },
+            "24": {
+              "tier1": 0.09375,
+              "tier2": 0.0
+            },
+            "30": {
+              "tier1": 0.103125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.121875,
+              "tier2": 0.00625
+            }
+          },
+          "tier2_media": 0.0017857142857142859,
+          "treino_minimo_tier1": null
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.125,
+              "tier2": 0.003125
+            },
+            "6": {
+              "tier1": 0.078125,
+              "tier2": 0.0125
+            },
+            "12": {
+              "tier1": 0.175,
+              "tier2": 0.009375
+            },
+            "18": {
+              "tier1": 0.18125,
+              "tier2": 0.009375000000000001
+            },
+            "24": {
+              "tier1": 0.234375,
+              "tier2": 0.009375000000000001
+            },
+            "30": {
+              "tier1": 0.296875,
+              "tier2": 0.025
+            },
+            "36": {
+              "tier1": 0.290625,
+              "tier2": 0.037500000000000006
+            }
+          },
+          "tier2_media": 0.01517857142857143,
+          "treino_minimo_tier1": null
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.265625,
+              "tier2": 0.018750000000000003
+            },
+            "6": {
+              "tier1": 0.325,
+              "tier2": 0.028124999999999997
+            },
+            "12": {
+              "tier1": 0.465625,
+              "tier2": 0.046875
+            },
+            "18": {
+              "tier1": 0.378125,
+              "tier2": 0.071875
+            },
+            "24": {
+              "tier1": 0.490625,
+              "tier2": 0.078125
+            },
+            "30": {
+              "tier1": 0.51875,
+              "tier2": 0.09375
+            },
+            "36": {
+              "tier1": 0.49687499999999996,
+              "tier2": 0.09375
+            }
+          },
+          "tier2_media": 0.06160714285714286,
+          "treino_minimo_tier1": 30
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.025,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.003125,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.009375,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.04375,
+              "tier2": 0.0
+            },
+            "24": {
+              "tier1": 0.071875,
+              "tier2": 0.0
+            },
+            "30": {
+              "tier1": 0.090625,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.096875,
+              "tier2": 0.0
+            }
+          },
+          "tier2_media": 0.0,
+          "treino_minimo_tier1": null
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": false,
+              "b": true
+            },
+            "muralha": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.054,
+              false
+            ],
+            "v21c": [
+              0.055,
+              false
+            ]
+          },
+          "t1_0": 0.006,
+          "t2_media": 0.002
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": false,
+              "b": true
+            },
+            "vigia": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.207,
+              false
+            ],
+            "v21c": [
+              0.197,
+              false
+            ]
+          },
+          "t1_0": 0.125,
+          "t2_media": 0.015
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": false,
+              "b": true
+            },
+            "furioso": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": 30,
+          "s1": {
+            "v21": [
+              0.213,
+              false
+            ],
+            "v21c": [
+              0.201,
+              false
+            ]
+          },
+          "t1_0": 0.266,
+          "t2_media": 0.062
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": false,
+              "b": true
+            },
+            "sentinela": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": null,
+          "s1": {
+            "v21": [
+              0.016,
+              false
+            ],
+            "v21c": [
+              0.02,
+              false
+            ]
+          },
+          "t1_0": 0.025,
+          "t2_media": 0.0
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.053906249999999996,
+            "por_forma": {
+              "duelista": 0.025,
+              "emboscador": 0.0,
+              "espelho": 0.00625,
+              "furioso": 0.0,
+              "muralha": 0.378125,
+              "sentinela": 0.0,
+              "tita": 0.015625,
+              "vigia": 0.00625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.0546875,
+            "por_forma": {
+              "duelista": 0.009375000000000001,
+              "emboscador": 0.0,
+              "espelho": 0.015625,
+              "furioso": 0.0,
+              "muralha": 0.38125,
+              "sentinela": 0.0,
+              "tita": 0.03125,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.20703125,
+            "por_forma": {
+              "duelista": 0.35625,
+              "emboscador": 0.0,
+              "espelho": 0.109375,
+              "furioso": 0.0,
+              "muralha": 0.925,
+              "sentinela": 0.0,
+              "tita": 0.246875,
+              "vigia": 0.018750000000000003
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.197265625,
+            "por_forma": {
+              "duelista": 0.28750000000000003,
+              "emboscador": 0.00625,
+              "espelho": 0.1,
+              "furioso": 0.0,
+              "muralha": 0.9,
+              "sentinela": 0.03125,
+              "tita": 0.23125,
+              "vigia": 0.021875
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.21328125,
+            "por_forma": {
+              "duelista": 0.4625,
+              "emboscador": 0.0,
+              "espelho": 0.0625,
+              "furioso": 0.021875,
+              "muralha": 0.359375,
+              "sentinela": 0.0,
+              "tita": 0.79375,
+              "vigia": 0.00625
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.201171875,
+            "por_forma": {
+              "duelista": 0.4625,
+              "emboscador": 0.003125,
+              "espelho": 0.0375,
+              "furioso": 0.021875,
+              "muralha": 0.321875,
+              "sentinela": 0.0,
+              "tita": 0.75,
+              "vigia": 0.0125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.015625,
+            "por_forma": {
+              "duelista": 0.00625,
+              "emboscador": 0.0,
+              "espelho": 0.0,
+              "furioso": 0.0,
+              "muralha": 0.109375,
+              "sentinela": 0.0,
+              "tita": 0.009375,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.01953125,
+            "por_forma": {
+              "duelista": 0.025,
+              "emboscador": 0.0,
+              "espelho": 0.0,
+              "furioso": 0.0,
+              "muralha": 0.121875,
+              "sentinela": 0.0,
+              "tita": 0.009375000000000001,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    },
+    "sem_leitura": {
+      "S1_ok": true,
+      "S2_ok": false,
+      "curvas": {
+        "bastiao_rachado": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.28125,
+              "tier2": 0.128125
+            },
+            "6": {
+              "tier1": 0.359375,
+              "tier2": 0.18125
+            },
+            "12": {
+              "tier1": 0.453125,
+              "tier2": 0.3
+            },
+            "18": {
+              "tier1": 0.590625,
+              "tier2": 0.4625
+            },
+            "24": {
+              "tier1": 0.70625,
+              "tier2": 0.709375
+            },
+            "30": {
+              "tier1": 0.725,
+              "tier2": 0.825
+            },
+            "36": {
+              "tier1": 0.78125,
+              "tier2": 0.84375
+            }
+          },
+          "tier2_media": 0.4928571428571428,
+          "treino_minimo_tier1": 18
+        },
+        "colosso_partido": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.4625,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.50625,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.603125,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.584375,
+              "tier2": 0.0125
+            },
+            "24": {
+              "tier1": 0.771875,
+              "tier2": 0.00625
+            },
+            "30": {
+              "tier1": 0.8187500000000001,
+              "tier2": 0.00625
+            },
+            "36": {
+              "tier1": 0.909375,
+              "tier2": 0.0
+            }
+          },
+          "tier2_media": 0.0035714285714285718,
+          "treino_minimo_tier1": 6
+        },
+        "devastador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.6812499999999999,
+              "tier2": 0.903125
+            },
+            "6": {
+              "tier1": 0.8,
+              "tier2": 0.965625
+            },
+            "12": {
+              "tier1": 0.853125,
+              "tier2": 0.940625
+            },
+            "18": {
+              "tier1": 0.871875,
+              "tier2": 0.971875
+            },
+            "24": {
+              "tier1": 0.878125,
+              "tier2": 0.984375
+            },
+            "30": {
+              "tier1": 0.884375,
+              "tier2": 0.978125
+            },
+            "36": {
+              "tier1": 0.9343750000000001,
+              "tier2": 0.984375
+            }
+          },
+          "tier2_media": 0.9611607142857144,
+          "treino_minimo_tier1": 0
+        },
+        "predador": {
+          "por_nivel": {
+            "0": {
+              "tier1": 0.51875,
+              "tier2": 0.0
+            },
+            "6": {
+              "tier1": 0.40625,
+              "tier2": 0.0
+            },
+            "12": {
+              "tier1": 0.5125,
+              "tier2": 0.0
+            },
+            "18": {
+              "tier1": 0.5,
+              "tier2": 0.0
+            },
+            "24": {
+              "tier1": 0.575,
+              "tier2": 0.0
+            },
+            "30": {
+              "tier1": 0.58125,
+              "tier2": 0.0
+            },
+            "36": {
+              "tier1": 0.603125,
+              "tier2": 0.0
+            }
+          },
+          "tier2_media": 0.0,
+          "treino_minimo_tier1": 0
+        }
+      },
+      "por_sombria": {
+        "bastiao_rachado": {
+          "comparacao": {
+            "espelho": {
+              "a": false,
+              "b": true
+            },
+            "muralha": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": 18,
+          "s1": {
+            "v21": [
+              0.095,
+              false
+            ],
+            "v21c": [
+              0.123,
+              false
+            ]
+          },
+          "t1_0": 0.281,
+          "t2_media": 0.493
+        },
+        "colosso_partido": {
+          "comparacao": {
+            "tita": {
+              "a": false,
+              "b": true
+            },
+            "vigia": {
+              "a": false,
+              "b": true
+            }
+          },
+          "minimo_t1": 6,
+          "s1": {
+            "v21": [
+              0.075,
+              false
+            ],
+            "v21c": [
+              0.07,
+              false
+            ]
+          },
+          "t1_0": 0.463,
+          "t2_media": 0.004
+        },
+        "devastador": {
+          "comparacao": {
+            "duelista": {
+              "a": true,
+              "b": false
+            },
+            "furioso": {
+              "a": true,
+              "b": false
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.736,
+              false
+            ],
+            "v21c": [
+              0.722,
+              false
+            ]
+          },
+          "t1_0": 0.681,
+          "t2_media": 0.961
+        },
+        "predador": {
+          "comparacao": {
+            "emboscador": {
+              "a": true,
+              "b": true
+            },
+            "sentinela": {
+              "a": true,
+              "b": true
+            }
+          },
+          "minimo_t1": 0,
+          "s1": {
+            "v21": [
+              0.28,
+              false
+            ],
+            "v21c": [
+              0.254,
+              false
+            ]
+          },
+          "t1_0": 0.519,
+          "t2_media": 0.0
+        }
+      },
+      "s1": {
+        "bastiao_rachado": {
+          "v21": {
+            "media": 0.09453125,
+            "por_forma": {
+              "duelista": 0.19687500000000002,
+              "emboscador": 0.0,
+              "espelho": 0.31875,
+              "furioso": 0.015625,
+              "muralha": 0.0125,
+              "sentinela": 0.0,
+              "tita": 0.053125,
+              "vigia": 0.15937500000000002
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.12343749999999999,
+            "por_forma": {
+              "duelista": 0.26875,
+              "emboscador": 0.0,
+              "espelho": 0.328125,
+              "furioso": 0.084375,
+              "muralha": 0.0,
+              "sentinela": 0.0,
+              "tita": 0.05,
+              "vigia": 0.25625
+            },
+            "vence_todos": false
+          }
+        },
+        "colosso_partido": {
+          "v21": {
+            "media": 0.07500000000000001,
+            "por_forma": {
+              "duelista": 0.096875,
+              "emboscador": 0.0,
+              "espelho": 0.018750000000000003,
+              "furioso": 0.0,
+              "muralha": 0.415625,
+              "sentinela": 0.0,
+              "tita": 0.06875,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.0703125,
+            "por_forma": {
+              "duelista": 0.09375,
+              "emboscador": 0.0,
+              "espelho": 0.03125,
+              "furioso": 0.0,
+              "muralha": 0.340625,
+              "sentinela": 0.0,
+              "tita": 0.0875,
+              "vigia": 0.009375000000000001
+            },
+            "vence_todos": false
+          }
+        },
+        "devastador": {
+          "v21": {
+            "media": 0.735546875,
+            "por_forma": {
+              "duelista": 0.878125,
+              "emboscador": 0.99375,
+              "espelho": 0.3375,
+              "furioso": 0.66875,
+              "muralha": 0.309375,
+              "sentinela": 0.9875,
+              "tita": 0.890625,
+              "vigia": 0.81875
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.722265625,
+            "por_forma": {
+              "duelista": 0.8625,
+              "emboscador": 1.0,
+              "espelho": 0.25,
+              "furioso": 0.6937500000000001,
+              "muralha": 0.203125,
+              "sentinela": 1.0,
+              "tita": 0.965625,
+              "vigia": 0.803125
+            },
+            "vence_todos": false
+          }
+        },
+        "predador": {
+          "v21": {
+            "media": 0.280078125,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.696875,
+              "espelho": 0.5125,
+              "furioso": 0.0,
+              "muralha": 0.3625,
+              "sentinela": 0.66875,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          },
+          "v21c": {
+            "media": 0.25390625,
+            "por_forma": {
+              "duelista": 0.0,
+              "emboscador": 0.690625,
+              "espelho": 0.459375,
+              "furioso": 0.0,
+              "muralha": 0.23125,
+              "sentinela": 0.65,
+              "tita": 0.0,
+              "vigia": 0.0
+            },
+            "vence_todos": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1602 @@
+{
+  "aleatorio@50001": {
+    "braco": "aleatorio",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50001,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 29.814233654764625,
+    "vinculo_final": 0.3513264577542454
+  },
+  "aleatorio@50002": {
+    "braco": "aleatorio",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/brigao/furioso"
+    },
+    "ovo": 50002,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 29.770437295999997,
+    "vinculo_final": 0.5218059160330255
+  },
+  "aleatorio@50003": {
+    "braco": "aleatorio",
+    "condicao": 0.9564166666666682,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/espelho"
+    },
+    "ovo": 50003,
+    "saude_final": 0.06416666666668264,
+    "sombria": false,
+    "treino_total": 29.965048031375,
+    "vinculo_final": 0.4738100563574351
+  },
+  "aleatorio@50004": {
+    "braco": "aleatorio",
+    "condicao": 1.0465000000000004,
+    "especie": "limo",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/brigao/duelista"
+    },
+    "ovo": 50004,
+    "saude_final": 0.9650000000000039,
+    "sombria": false,
+    "treino_total": 32.788032008235994,
+    "vinculo_final": 0.492495122180695
+  },
+  "aleatorio@50005": {
+    "braco": "aleatorio",
+    "condicao": 0.9975166666666734,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "ovo": 50005,
+    "saude_final": 0.475166666666734,
+    "sombria": false,
+    "treino_total": 28.863893763680004,
+    "vinculo_final": 0.369069935250852
+  },
+  "aleatorio@50006": {
+    "braco": "aleatorio",
+    "condicao": 1.03125,
+    "especie": "limo",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/espelho"
+    },
+    "ovo": 50006,
+    "saude_final": 0.8125000000000006,
+    "sombria": false,
+    "treino_total": 30.550941800750003,
+    "vinculo_final": 0.3943832950973417
+  },
+  "aleatorio@50007": {
+    "braco": "aleatorio",
+    "condicao": 0.95,
+    "especie": "limo",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/brigao/furioso"
+    },
+    "ovo": 50007,
+    "saude_final": 0.0,
+    "sombria": false,
+    "treino_total": 32.56019935,
+    "vinculo_final": 0.5320549518790689
+  },
+  "aleatorio@50008": {
+    "braco": "aleatorio",
+    "condicao": 0.9717000000000054,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/furioso"
+    },
+    "ovo": 50008,
+    "saude_final": 0.21700000000005482,
+    "sombria": false,
+    "treino_total": 34.627852499999996,
+    "vinculo_final": 0.7140113703685755
+  },
+  "aleatorio@50009": {
+    "braco": "aleatorio",
+    "condicao": 0.9575,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50009,
+    "saude_final": 0.07500000000000005,
+    "sombria": false,
+    "treino_total": 27.2530316985,
+    "vinculo_final": 0.6728419563281148
+  },
+  "aleatorio@50010": {
+    "braco": "aleatorio",
+    "condicao": 0.95,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/espelho"
+    },
+    "ovo": 50010,
+    "saude_final": 0.0,
+    "sombria": false,
+    "treino_total": 29.097820300000002,
+    "vinculo_final": 0.49232934221377656
+  },
+  "aleatorio@50011": {
+    "braco": "aleatorio",
+    "condicao": 0.9605,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50011,
+    "saude_final": 0.1050000000000005,
+    "sombria": false,
+    "treino_total": 22.29385,
+    "vinculo_final": 0.7071807487129662
+  },
+  "aleatorio@50012": {
+    "braco": "aleatorio",
+    "condicao": 1.0055333333333383,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/emboscador"
+    },
+    "ovo": 50012,
+    "saude_final": 0.5553333333333823,
+    "sombria": false,
+    "treino_total": 33.345123678250005,
+    "vinculo_final": 0.6033262981014869
+  },
+  "aleatorio@50013": {
+    "braco": "aleatorio",
+    "condicao": 0.9758333333333347,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "vigia",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/vigia"
+    },
+    "ovo": 50013,
+    "saude_final": 0.2583333333333473,
+    "sombria": false,
+    "treino_total": 28.535999999999998,
+    "vinculo_final": 0.6396407739019353
+  },
+  "aleatorio@50014": {
+    "braco": "aleatorio",
+    "condicao": 1.0273333333333314,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50014,
+    "saude_final": 0.7733333333333147,
+    "sombria": false,
+    "treino_total": 30.4236138,
+    "vinculo_final": 0.4634083085192843
+  },
+  "aleatorio@50015": {
+    "braco": "aleatorio",
+    "condicao": 0.986416666666667,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "ovo": 50015,
+    "saude_final": 0.36416666666667047,
+    "sombria": false,
+    "treino_total": 31.814653421503003,
+    "vinculo_final": 0.549903228305766
+  },
+  "aleatorio@50016": {
+    "braco": "aleatorio",
+    "condicao": 1.037766666666668,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/espelho"
+    },
+    "ovo": 50016,
+    "saude_final": 0.8776666666666801,
+    "sombria": false,
+    "treino_total": 33.78659546875,
+    "vinculo_final": 0.4919217903573163
+  },
+  "aleatorio@50017": {
+    "braco": "aleatorio",
+    "condicao": 0.95,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/muralha"
+    },
+    "ovo": 50017,
+    "saude_final": 0.0,
+    "sombria": false,
+    "treino_total": 31.689630738035,
+    "vinculo_final": 0.6691623984279831
+  },
+  "aleatorio@50018": {
+    "braco": "aleatorio",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "ovo": 50018,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.8885769878,
+    "vinculo_final": 0.4910798398004586
+  },
+  "aleatorio@50019": {
+    "braco": "aleatorio",
+    "condicao": 0.95,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50019,
+    "saude_final": 0.0,
+    "sombria": false,
+    "treino_total": 35.208651643237495,
+    "vinculo_final": 0.5796032640639494
+  },
+  "aleatorio@50020": {
+    "braco": "aleatorio",
+    "condicao": 0.957,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/sentinela"
+    },
+    "ovo": 50020,
+    "saude_final": 0.06999999999999998,
+    "sombria": false,
+    "treino_total": 33.592063477564125,
+    "vinculo_final": 0.7665147826209293
+  },
+  "atencioso@50001": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50001,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.210495,
+    "vinculo_final": 0.4667132121779203
+  },
+  "atencioso@50002": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50002,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.913247499999997,
+    "vinculo_final": 0.5451200038355932
+  },
+  "atencioso@50003": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50003,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.970114378981254,
+    "vinculo_final": 0.4917605062743937
+  },
+  "atencioso@50004": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/sentinela"
+    },
+    "ovo": 50004,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.3805475,
+    "vinculo_final": 0.6306198744523466
+  },
+  "atencioso@50005": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/emboscador"
+    },
+    "ovo": 50005,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 29.462069415000002,
+    "vinculo_final": 0.4425357081757128
+  },
+  "atencioso@50006": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/emboscador"
+    },
+    "ovo": 50006,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.985757500000002,
+    "vinculo_final": 0.6273231840782562
+  },
+  "atencioso@50007": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/emboscador"
+    },
+    "ovo": 50007,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.9132475,
+    "vinculo_final": 0.5606814517927207
+  },
+  "atencioso@50008": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/muralha"
+    },
+    "ovo": 50008,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.610430472,
+    "vinculo_final": 0.5633182697425161
+  },
+  "atencioso@50009": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/colosso/tita"
+    },
+    "ovo": 50009,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.987682465,
+    "vinculo_final": 0.5323640079419848
+  },
+  "atencioso@50010": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50010,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.005407,
+    "vinculo_final": 0.6019835591269065
+  },
+  "atencioso@50011": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50011,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.69743,
+    "vinculo_final": 0.6830901780041541
+  },
+  "atencioso@50012": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/muralha"
+    },
+    "ovo": 50012,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.3828735,
+    "vinculo_final": 0.6601404539590958
+  },
+  "atencioso@50013": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/sentinela"
+    },
+    "ovo": 50013,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.9955208,
+    "vinculo_final": 0.5343977808837637
+  },
+  "atencioso@50014": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50014,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 29.864327499999998,
+    "vinculo_final": 0.42379523260923196
+  },
+  "atencioso@50015": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "ovo": 50015,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.15446925,
+    "vinculo_final": 0.4074364073123872
+  },
+  "atencioso@50016": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/espelho"
+    },
+    "ovo": 50016,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.68696575,
+    "vinculo_final": 0.635571056627192
+  },
+  "atencioso@50017": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/emboscador"
+    },
+    "ovo": 50017,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.329395,
+    "vinculo_final": 0.519080707212555
+  },
+  "atencioso@50018": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/sentinela"
+    },
+    "ovo": 50018,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.15446925,
+    "vinculo_final": 0.6164799239759756
+  },
+  "atencioso@50019": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50019,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.06851575,
+    "vinculo_final": 0.6312720529252084
+  },
+  "atencioso@50020": {
+    "braco": "atencioso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/emboscador"
+    },
+    "ovo": 50020,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 34.05476602792562,
+    "vinculo_final": 0.545216477614477
+  },
+  "exigente@50001": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50001,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 36.0,
+    "vinculo_final": 0.5786455499122789
+  },
+  "exigente@50002": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "colosso_partido",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/colosso/colosso_partido"
+    },
+    "ovo": 50002,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 31.0211644344,
+    "vinculo_final": 0.09671791666666667
+  },
+  "exigente@50003": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/espelho"
+    },
+    "ovo": 50003,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 31.303285155862504,
+    "vinculo_final": 0.11622560944359087
+  },
+  "exigente@50004": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "predador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/predador"
+    },
+    "ovo": 50004,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.47110217214080174
+  },
+  "exigente@50005": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/emboscador"
+    },
+    "ovo": 50005,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 36.0,
+    "vinculo_final": 0.275365215984307
+  },
+  "exigente@50006": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "predador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/predador"
+    },
+    "ovo": 50006,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 33.79540027078125,
+    "vinculo_final": 0.38624718396548574
+  },
+  "exigente@50007": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "predador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/predador"
+    },
+    "ovo": 50007,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.4351491703791278
+  },
+  "exigente@50008": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "bastiao_rachado",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/bastiao_rachado"
+    },
+    "ovo": 50008,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.40661738689795307
+  },
+  "exigente@50009": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/sentinela"
+    },
+    "ovo": 50009,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 33.76900427741875,
+    "vinculo_final": 0.3446609013399063
+  },
+  "exigente@50010": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/emboscador"
+    },
+    "ovo": 50010,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 34.56250265534375,
+    "vinculo_final": 0.19468223554112263
+  },
+  "exigente@50011": {
+    "braco": "exigente",
+    "condicao": 0.9987500000000055,
+    "especie": "limo",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/brigao/furioso"
+    },
+    "ovo": 50011,
+    "saude_final": 0.48750000000005506,
+    "sombria": false,
+    "treino_total": 34.22,
+    "vinculo_final": 0.0
+  },
+  "exigente@50012": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "predador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/predador"
+    },
+    "ovo": 50012,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.1271176593177674
+  },
+  "exigente@50013": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/emboscador"
+    },
+    "ovo": 50013,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 36.0,
+    "vinculo_final": 0.4081299780037504
+  },
+  "exigente@50014": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "bastiao_rachado",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/bastiao_rachado"
+    },
+    "ovo": 50014,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.34036337695071284
+  },
+  "exigente@50015": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "predador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/predador"
+    },
+    "ovo": 50015,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 35.99999999999999,
+    "vinculo_final": 0.3648743887660658
+  },
+  "exigente@50016": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "bastiao_rachado",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/bastiao_rachado"
+    },
+    "ovo": 50016,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.3128326565684557
+  },
+  "exigente@50017": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "devastador",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/devastador"
+    },
+    "ovo": 50017,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.18499051260090324
+  },
+  "exigente@50018": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "devastador",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/devastador"
+    },
+    "ovo": 50018,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.4164699184310715
+  },
+  "exigente@50019": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "bastiao_rachado",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/bastiao_rachado"
+    },
+    "ovo": 50019,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.1805139399959981
+  },
+  "exigente@50020": {
+    "braco": "exigente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "predador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/predador"
+    },
+    "ovo": 50020,
+    "saude_final": 1.0,
+    "sombria": true,
+    "treino_total": 36.0,
+    "vinculo_final": 0.36435720120457477
+  },
+  "incoerente@50001": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/colosso/tita"
+    },
+    "ovo": 50001,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.14201,
+    "vinculo_final": 0.47221248393678505
+  },
+  "incoerente@50002": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50002,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.910349999999998,
+    "vinculo_final": 0.361621861821495
+  },
+  "incoerente@50003": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50003,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.914658935299997,
+    "vinculo_final": 0.3184256860562614
+  },
+  "incoerente@50004": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50004,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.8470275,
+    "vinculo_final": 0.45097649905771653
+  },
+  "incoerente@50005": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/muralha"
+    },
+    "ovo": 50005,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 32.588519415,
+    "vinculo_final": 0.3258118719917254
+  },
+  "incoerente@50006": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/brigao/duelista"
+    },
+    "ovo": 50006,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.4530275,
+    "vinculo_final": 0.4036739881064646
+  },
+  "incoerente@50007": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "emboscador",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/emboscador"
+    },
+    "ovo": 50007,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 30.186748435062498,
+    "vinculo_final": 0.515679698339788
+  },
+  "incoerente@50008": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/tita"
+    },
+    "ovo": 50008,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.3703698,
+    "vinculo_final": 0.29075300412669214
+  },
+  "incoerente@50009": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/colosso/tita"
+    },
+    "ovo": 50009,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.178941999999996,
+    "vinculo_final": 0.5591128623814617
+  },
+  "incoerente@50010": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50010,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.433361875,
+    "vinculo_final": 0.4298632354931473
+  },
+  "incoerente@50011": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/espelho"
+    },
+    "ovo": 50011,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 23.84805,
+    "vinculo_final": 0.49593363994088024
+  },
+  "incoerente@50012": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/muralha"
+    },
+    "ovo": 50012,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.15446925,
+    "vinculo_final": 0.38630247191900324
+  },
+  "incoerente@50013": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/tita"
+    },
+    "ovo": 50013,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 30.202153332162503,
+    "vinculo_final": 0.4571909536361418
+  },
+  "incoerente@50014": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/colosso/tita"
+    },
+    "ovo": 50014,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.919877000000003,
+    "vinculo_final": 0.38842959772906216
+  },
+  "incoerente@50015": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/muralha"
+    },
+    "ovo": 50015,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.154469250000002,
+    "vinculo_final": 0.4915062972327475
+  },
+  "incoerente@50016": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/guardiao/espelho"
+    },
+    "ovo": 50016,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 31.63878541,
+    "vinculo_final": 0.31718698704071346
+  },
+  "incoerente@50017": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/espelho"
+    },
+    "ovo": 50017,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 30.3416722400875,
+    "vinculo_final": 0.4027940154488629
+  },
+  "incoerente@50018": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/espelho"
+    },
+    "ovo": 50018,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.966011233750002,
+    "vinculo_final": 0.5013765046095333
+  },
+  "incoerente@50019": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/sentinela"
+    },
+    "ovo": 50019,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 26.44373,
+    "vinculo_final": 0.5238076649784597
+  },
+  "incoerente@50020": {
+    "braco": "incoerente",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "espelho",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/espelho"
+    },
+    "ovo": 50020,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.15446925,
+    "vinculo_final": 0.3716076831631387
+  },
+  "relapso@50001": {
+    "braco": "relapso",
+    "condicao": 1.0357000000000016,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50001,
+    "saude_final": 0.8570000000000157,
+    "sombria": false,
+    "treino_total": 26.23858,
+    "vinculo_final": 0.5351852863637124
+  },
+  "relapso@50002": {
+    "braco": "relapso",
+    "condicao": 1.0250166666666694,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50002,
+    "saude_final": 0.7501666666666942,
+    "sombria": false,
+    "treino_total": 28.910350000000005,
+    "vinculo_final": 0.46584291732567557
+  },
+  "relapso@50003": {
+    "braco": "relapso",
+    "condicao": 0.9800000000000009,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/guardiao/muralha"
+    },
+    "ovo": 50003,
+    "saude_final": 0.30000000000000887,
+    "sombria": false,
+    "treino_total": 26.346314,
+    "vinculo_final": 0.5647494413919659
+  },
+  "relapso@50004": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "limo",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/cacador/sentinela"
+    },
+    "ovo": 50004,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 32.11136938,
+    "vinculo_final": 0.6591061844850093
+  },
+  "relapso@50005": {
+    "braco": "relapso",
+    "condicao": 1.022916666666666,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/cacador/sentinela"
+    },
+    "ovo": 50005,
+    "saude_final": 0.7291666666666601,
+    "sombria": false,
+    "treino_total": 27.68696575,
+    "vinculo_final": 0.31717684052836675
+  },
+  "relapso@50006": {
+    "braco": "relapso",
+    "condicao": 0.9906666666666732,
+    "especie": "limo",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/guardiao/muralha"
+    },
+    "ovo": 50006,
+    "saude_final": 0.4066666666667325,
+    "sombria": false,
+    "treino_total": 26.4530275,
+    "vinculo_final": 0.6027929531419169
+  },
+  "relapso@50007": {
+    "braco": "relapso",
+    "condicao": 1.0252666666666694,
+    "especie": "limo",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/brigao/furioso"
+    },
+    "ovo": 50007,
+    "saude_final": 0.7526666666666939,
+    "sombria": false,
+    "treino_total": 32.77178617125,
+    "vinculo_final": 0.45382165722040196
+  },
+  "relapso@50008": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "muralha",
+      "linha": "guardiao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/guardiao/muralha"
+    },
+    "ovo": 50008,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 32.119170370000006,
+    "vinculo_final": 0.5260472268988301
+  },
+  "relapso@50009": {
+    "braco": "relapso",
+    "condicao": 1.029766666666669,
+    "especie": "limo",
+    "forma": {
+      "adulta": "vigia",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/colosso/vigia"
+    },
+    "ovo": 50009,
+    "saude_final": 0.797666666666689,
+    "sombria": false,
+    "treino_total": 28.570320000000002,
+    "vinculo_final": 0.4993032195168397
+  },
+  "relapso@50010": {
+    "braco": "relapso",
+    "condicao": 1.0178000000000047,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/cacador/sentinela"
+    },
+    "ovo": 50010,
+    "saude_final": 0.6780000000000477,
+    "sombria": false,
+    "treino_total": 28.540649648,
+    "vinculo_final": 0.511500410468593
+  },
+  "relapso@50011": {
+    "braco": "relapso",
+    "condicao": 0.9588333333333331,
+    "especie": "limo",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "limo/arisco/colosso/tita"
+    },
+    "ovo": 50011,
+    "saude_final": 0.08833333333333132,
+    "sombria": false,
+    "treino_total": 21.0604,
+    "vinculo_final": 0.4000894178432027
+  },
+  "relapso@50012": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "ovo": 50012,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.934313998037503,
+    "vinculo_final": 0.5299062823967877
+  },
+  "relapso@50013": {
+    "braco": "relapso",
+    "condicao": 1.0382000000000013,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "vigia",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/vigia"
+    },
+    "ovo": 50013,
+    "saude_final": 0.882000000000013,
+    "sombria": false,
+    "treino_total": 26.5715198,
+    "vinculo_final": 0.5154405013237332
+  },
+  "relapso@50014": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "vigia",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/colosso/vigia"
+    },
+    "ovo": 50014,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 29.003851750000003,
+    "vinculo_final": 0.38216126249053994
+  },
+  "relapso@50015": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/tita"
+    },
+    "ovo": 50015,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 27.489339871250003,
+    "vinculo_final": 0.6319719557674627
+  },
+  "relapso@50016": {
+    "braco": "relapso",
+    "condicao": 1.0339500000000017,
+    "especie": "cirro",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "cirro/arisco/brigao/duelista"
+    },
+    "ovo": 50016,
+    "saude_final": 0.8395000000000177,
+    "sombria": false,
+    "treino_total": 27.68696575,
+    "vinculo_final": 0.4815692353515057
+  },
+  "relapso@50017": {
+    "braco": "relapso",
+    "condicao": 1.0454000000000006,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "tita",
+      "linha": "colosso",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/colosso/tita"
+    },
+    "ovo": 50017,
+    "saude_final": 0.9540000000000051,
+    "sombria": false,
+    "treino_total": 26.4373075,
+    "vinculo_final": 0.3953588269299255
+  },
+  "relapso@50018": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "duelista",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/brigao/duelista"
+    },
+    "ovo": 50018,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.2570377625,
+    "vinculo_final": 0.4524897568260874
+  },
+  "relapso@50019": {
+    "braco": "relapso",
+    "condicao": 1.05,
+    "especie": "brasa",
+    "forma": {
+      "adulta": "furioso",
+      "linha": "brigao",
+      "ramo": "arisco",
+      "rotulo": "brasa/arisco/brigao/furioso"
+    },
+    "ovo": 50019,
+    "saude_final": 1.0,
+    "sombria": false,
+    "treino_total": 28.84631,
+    "vinculo_final": 0.4807613468030397
+  },
+  "relapso@50020": {
+    "braco": "relapso",
+    "condicao": 1.039950000000001,
+    "especie": "ferrugem",
+    "forma": {
+      "adulta": "sentinela",
+      "linha": "cacador",
+      "ramo": "arisco",
+      "rotulo": "ferrugem/arisco/cacador/sentinela"
+    },
+    "ovo": 50020,
+    "saude_final": 0.8995000000000111,
+    "sombria": false,
+    "treino_total": 30.74008369,
+    "vinculo_final": 0.2573183571826467
+  }
+}

@@ -1,0 +1,40 @@
+{
+ "arquivos": {
+  "./gabaritos/mundo_python.json": "ecfae59ac23014e679b4b65b8d1022b51a6a2e926ad853e2eb9ab295aa99871b",
+  "./gabaritos/lobos_python.json": "2b828fbc5d71e2265feeaf6fcdb8ea489ef98ae7a3ba957958bc4ff99123fe97"
+ },
+ "poc01a": [
+  {
+   "semente": 101,
+   "ticks": 1500,
+   "hash": "60a50162"
+  },
+  {
+   "semente": 202,
+   "ticks": 1500,
+   "hash": "b291b37d"
+  },
+  {
+   "semente": 303,
+   "ticks": 3000,
+   "hash": "8e1288db"
+  }
+ ],
+ "poc02": [
+  {
+   "semente": 101,
+   "ticks": 3000,
+   "hash": "662f2642"
+  },
+  {
+   "semente": 202,
+   "ticks": 3000,
+   "hash": "5cad90bf"
+  },
+  {
+   "semente": 303,
+   "ticks": 3000,
+   "hash": "9c94f602"
+  }
+ ]
+}

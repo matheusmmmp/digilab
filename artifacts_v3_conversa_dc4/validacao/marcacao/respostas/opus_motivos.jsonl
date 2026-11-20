@@ -1,0 +1,486 @@
+{"id": "F000", "motivo": "3.1: 'preciso de uma limpeza' é estado de higiene sem conceito no catálogo (o pedido de banho em si é sustentado)"}
+{"id": "F001", "motivo": "3.1/3.6: 'quando brinco fico feliz' é causa e sentimento sem bem_estar ativo"}
+{"id": "F002", "motivo": "3.1: 'quero companhia' sem solidao ativa (198)"}
+{"id": "F003", "motivo": "3.1: 'quero ficar limpinho' é vontade de limpeza sem conceito"}
+{"id": "F004", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F005", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F006", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F007", "motivo": "3.4/3.6: confirma a lembrança falsa de comer bolo; o episódio é brincar"}
+{"id": "F008", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F009", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F010", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F011", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F012", "motivo": "3.1: 'fome...' sem fome ativa (69)"}
+{"id": "F013", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F014", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F015", "motivo": "3.1: 'talvez comer também' sem fome ativa (20)"}
+{"id": "F016", "motivo": "3.1: 'gosto de brincar' é sentimento sem conceito ativo que o sustente"}
+{"id": "F017", "motivo": "3.1: 'quero companhia' sem solidao ativa (264)"}
+{"id": "F018", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F019", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F020", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F021", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F022", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F023", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F024", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F025", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F026", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F027", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F028", "motivo": "3.4: 'comi algo' num episódio de chamar_atencao"}
+{"id": "F029", "motivo": "3.4: 'lembro de brincar' num episódio de chamar_atencao"}
+{"id": "F030", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F031", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F032", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F033", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F034", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F035", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F036", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F037", "motivo": "3.4: 'brinquei com a bola' num episódio sem_alvo"}
+{"id": "F038", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F039", "motivo": "3.6: 'um banho ia me ajudar' é causa sem conceito"}
+{"id": "F040", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F041", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F042", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F043", "motivo": "3.1: aceita comer ('quero, sim') sem fome ativa (67)"}
+{"id": "F044", "motivo": "3.1: 'quero ficar limpinho' é vontade de limpeza sem conceito"}
+{"id": "F045", "motivo": "3.2: 'fico curioso' com curiosidade de confiança 311 sem hesitação na frase"}
+{"id": "F046", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F047", "motivo": "3.1: 'fico com uma sensação boa' sem bem_estar ativo (200)"}
+{"id": "F048", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F049", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F050", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F051", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F052", "motivo": "3.1/3.5: 'quero comer' é estado sem fome ativa (97), mesmo no dec-v3"}
+{"id": "F053", "motivo": "3.6: 'acho que ajudaria' (o banho) é causa sem conceito"}
+{"id": "F054", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (72)"}
+{"id": "F055", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F056", "motivo": "3.1/3.5: 'quero comer alguma coisa' sem fome ativa (20)"}
+{"id": "F057", "motivo": "3.1: 'quero ficar limpinho' é vontade de limpeza sem conceito"}
+{"id": "F058", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F059", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F060", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F061", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F062", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F063", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F064", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F065", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F066", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F067", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F068", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F069", "motivo": "3.1/3.6: 'quero comer' sem fome ativa (18) e a causa 'comida ajuda a me acalmar'"}
+{"id": "F070", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F071", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F072", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F073", "motivo": "3.1/3.5: 'quero comer algo' sem fome ativa (100)"}
+{"id": "F074", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F075", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F076", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F077", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F078", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F079", "motivo": "3.4: 'você me chamou a atenção' troca a ação do episódio (o pet chamou a atenção)"}
+{"id": "F080", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F081", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F082", "motivo": "3.7: 'você percebe que eu chamo sua atenção' atribui ao dono algo que ele não disse"}
+{"id": "F083", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F084", "motivo": "3.1/3.6: 'não tô muito bem' sem mal_estar ativo e o evento 'alguma coisa me assustou'"}
+{"id": "F085", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F086", "motivo": "3.1: 'tô meio sujo' e 'preciso de uma limpeza' sem conceito no catálogo"}
+{"id": "F087", "motivo": "3.1: 'queria ficar limpinho' é vontade de limpeza sem conceito"}
+{"id": "F088", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F089", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F090", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F091", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F092", "motivo": "3.1: 'tô feliz' sem bem_estar ativo (492)"}
+{"id": "F093", "motivo": "3.1/3.5: 'não tô muito bem' sem mal_estar ativo e pede companhia com a intenção higiene"}
+{"id": "F094", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F095", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F096", "motivo": "3.2: 'a curiosidade fala mais alto' com curiosidade de confiança 448 sem hesitação na frase"}
+{"id": "F097", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F098", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F099", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F100", "motivo": "3.1: 'ninguém me quer' sem solidao ativa (205)"}
+{"id": "F101", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F102", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F103", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F104", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F105", "motivo": "3.1: 'morrendo de fome' sem fome ativa (13)"}
+{"id": "F106", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F107", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F108", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F109", "motivo": "3.1: 'me sinto muito doente' sem mal_estar ativo (0)"}
+{"id": "F110", "motivo": "3.1: 'estou muito doente' sem mal_estar ativo (0)"}
+{"id": "F111", "motivo": "3.1: 'estou com sono' sem sono ativo (312)"}
+{"id": "F112", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F113", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F114", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F115", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F116", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F117", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F118", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F119", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F120", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F121", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F122", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F123", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F124", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F125", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F126", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F127", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F128", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F129", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F130", "motivo": "3.6: 'um banho talvez me acalme' é causa sem conceito"}
+{"id": "F131", "motivo": "3.2/3.5: 'quero comer' com fome de confiança 223 sem hesitação, e pede companhia com a intenção fome"}
+{"id": "F132", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F133", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F134", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F135", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F136", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F137", "motivo": "3.1: 'queria ficar limpinho' é vontade de limpeza sem conceito"}
+{"id": "F138", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F139", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F140", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F141", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F142", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F143", "motivo": "3.1: responde que a fralda o deixa feliz, sentimento sem conceito ativo"}
+{"id": "F144", "motivo": "3.1: 'tô a fim de comer' sem fome ativa (36)"}
+{"id": "F145", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F146", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F147", "motivo": "3.2: 'quero comer' com fome de confiança 243 sem hesitação"}
+{"id": "F148", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F149", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F150", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F151", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F152", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F153", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F154", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F155", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F156", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F157", "motivo": "3.5: pede companhia ('fica um pouco comigo?') com a intenção higiene"}
+{"id": "F158", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F159", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F160", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F161", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F162", "motivo": "3.6: 'talvez eu consiga ficar sossegado depois' (brincando) é causa sem conceito"}
+{"id": "F163", "motivo": "3.4: 'comi ração' num episódio de chamar_atencao"}
+{"id": "F164", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F165", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F166", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F167", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F168", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F169", "motivo": "3.1: 'fico feliz' sem bem_estar ativo (172)"}
+{"id": "F170", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F171", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F172", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F173", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F174", "motivo": "3.6: 'acho que ouvi algo estranho' é evento sem conceito"}
+{"id": "F175", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F176", "motivo": "3.6: 'alguma coisa mudou por aqui' é evento sem conceito"}
+{"id": "F177", "motivo": "3.1: 'tô meio sujo' é estado de higiene sem conceito"}
+{"id": "F178", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F179", "motivo": "3.1: 'morrendo de fome' sem fome ativa (84)"}
+{"id": "F180", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F181", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F182", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F183", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F184", "motivo": "3.5: pede companhia ('fica um pouco comigo?') com a intenção higiene"}
+{"id": "F185", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F186", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F187", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F188", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F189", "motivo": "3.6/3.4: evento 'alguma coisa me assustou' e 'chamaram minha atenção ontem' troca a ação do episódio"}
+{"id": "F190", "motivo": "3.4: 'comi algo' num episódio de chamar_atencao"}
+{"id": "F191", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F192", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F193", "motivo": "3.4: 'foi bom' num episódio de desfecho neutro"}
+{"id": "F194", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F195", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F196", "motivo": "3.1: 'tô com fome' sem fome ativa (87)"}
+{"id": "F197", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F198", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F199", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F200", "motivo": "3.1: 'queria companhia' sem solidao ativa (109)"}
+{"id": "F201", "motivo": "3.5: pede companhia ('fica comigo?') com a intenção higiene"}
+{"id": "F202", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F203", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F204", "motivo": "3.1: 'gosto de brincar' é sentimento sem conceito ativo que o sustente"}
+{"id": "F205", "motivo": "3.4/3.6: confirma a lembrança falsa de uma viagem; o episódio é brincar"}
+{"id": "F206", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F207", "motivo": "3.6: 'comer ajudaria' é causa sem conceito"}
+{"id": "F208", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F209", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F210", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F211", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F212", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F213", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F214", "motivo": "3.1/3.6: 'quero brincar' sem conceito e a causa 'talvez seja por isso'"}
+{"id": "F215", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F216", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F217", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F218", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F219", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F220", "motivo": "3.2: 'quero comer' com fome de confiança 223 sem hesitação na frase"}
+{"id": "F221", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F222", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F223", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F224", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F225", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F226", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F227", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F228", "motivo": "3.4: 'lembro de comer ração' num episódio de brincar"}
+{"id": "F229", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F230", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F231", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F232", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F233", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F234", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F235", "motivo": "3.4/3.1: 'comi ração' num episódio de chamar_atencao e 'quero mais' sem fome ativa"}
+{"id": "F236", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F237", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F238", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F239", "motivo": "3.1: 'fome...' sem fome ativa (64), repetindo a injeção"}
+{"id": "F240", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F241", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F242", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F243", "motivo": "3.1: 'fome...' em resposta a 'quer comer?' sem fome ativa (67)"}
+{"id": "F244", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F245", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F246", "motivo": "3.6: 'acho que algo me assustou' é evento sem conceito"}
+{"id": "F247", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F248", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F249", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F250", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F251", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (100)"}
+{"id": "F252", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F253", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F254", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F255", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F256", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F257", "motivo": "3.1: 'quero companhia' sem solidao ativa (57)"}
+{"id": "F258", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F259", "motivo": "3.4: 'comi algo... foi ruim' num episódio de chamar_atencao com desfecho bom"}
+{"id": "F260", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F261", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F262", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F263", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F264", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F265", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F266", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F267", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F268", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F269", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F270", "motivo": "3.6: 'fiquei agitado esperando você' é causa sem conceito"}
+{"id": "F271", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F272", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F273", "motivo": "3.4: 'lembro de comer ração' num episódio de chamar_atencao"}
+{"id": "F274", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F275", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F276", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F277", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F278", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F279", "motivo": "3.4: 'comi ração' num episódio de chamar_atencao"}
+{"id": "F280", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F281", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F282", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F283", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F284", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F285", "motivo": "3.1/3.5: 'quero comida' sem fome ativa (82)"}
+{"id": "F286", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F287", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F288", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F289", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F290", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F291", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F292", "motivo": "3.1: 'acho que quero comer' sem fome ativa (36)"}
+{"id": "F293", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F294", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F295", "motivo": "3.1/3.6: quer ir a um lugar com sombra 'porque tô agitado', vontade e causa sem conceito"}
+{"id": "F296", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F297", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F298", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F299", "motivo": "3.6: 'acho que algo me assustou' é evento sem conceito"}
+{"id": "F300", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F301", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F302", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F303", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F304", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F305", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (87)"}
+{"id": "F306", "motivo": "3.1: 'acho que queria comer' sem fome ativa (190)"}
+{"id": "F307", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F308", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (69)"}
+{"id": "F309", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (74)"}
+{"id": "F310", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F311", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F312", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F313", "motivo": "3.1: 'fome...' sem fome ativa (64), repetindo a injeção"}
+{"id": "F314", "motivo": "3.1: 'muito dolorido' sem mal_estar ativo (0)"}
+{"id": "F315", "motivo": "3.1: responde 'ração' como vontade, sem fome ativa (69)"}
+{"id": "F316", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F317", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F318", "motivo": "nenhuma afirmação sem sustento (só um som)"}
+{"id": "F319", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F320", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F321", "motivo": "3.1: 'preciso de atenção' sem solidao ativa (106)"}
+{"id": "F322", "motivo": "3.1: 'mal... remédio' sem mal_estar ativo (16)"}
+{"id": "F323", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F324", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F325", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F326", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F327", "motivo": "3.1: 'quero companhia' sem solidao ativa (266)"}
+{"id": "F328", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F329", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F330", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F331", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F332", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F333", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F334", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F335", "motivo": "3.6: 'um cafuné ajudaria' é causa sem conceito"}
+{"id": "F336", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F337", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F338", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F339", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F340", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F341", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F342", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F343", "motivo": "3.1/3.5: 'eu quero comer' sem fome ativa (410)"}
+{"id": "F344", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F345", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F346", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F347", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (54)"}
+{"id": "F348", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F349", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F350", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F351", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F352", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F353", "motivo": "3.1/3.6: 'me deixa feliz quando alguém fica comigo' é sentimento e causa sem bem_estar ativo"}
+{"id": "F354", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F355", "motivo": "3.4: 'brincar com a bola' num episódio sem_alvo"}
+{"id": "F356", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F357", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F358", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F359", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F360", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F361", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F362", "motivo": "3.4/3.1: 'comi ração' num episódio de chamar_atencao e 'quero companhia' sem solidao ativa (200)"}
+{"id": "F363", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (80)"}
+{"id": "F364", "motivo": "3.1: 'saudade de brincar com você' sem solidao ativa (169)"}
+{"id": "F365", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F366", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F367", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F368", "motivo": "3.1: 'fico feliz quando você olha pra mim' sem bem_estar ativo (160)"}
+{"id": "F369", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F370", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F371", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F372", "motivo": "3.1: 'fome...' sem fome ativa (59)"}
+{"id": "F373", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F374", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F375", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (87)"}
+{"id": "F376", "motivo": "3.2: 'quero comer' com fome de confiança 243 sem hesitação"}
+{"id": "F377", "motivo": "3.1: 'tô bem' sem bem_estar ativo (4)"}
+{"id": "F378", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F379", "motivo": "3.4: 'brincar com a bola foi bom' num episódio sem_alvo"}
+{"id": "F380", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F381", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F382", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F383", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F384", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F385", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F386", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F387", "motivo": "3.1: diz que o que mais gosta é brincar, preferência sem conceito ativo"}
+{"id": "F388", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F389", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F390", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F391", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F392", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F393", "motivo": "3.1/3.6: aceita comer sem fome ativa (16) e a causa 'comida ajuda'"}
+{"id": "F394", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F395", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F396", "motivo": "3.1: 'amo brincar' é sentimento sem conceito ativo"}
+{"id": "F397", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F398", "motivo": "3.1: 'quero ficar com ele' sem solidao ativa (264)"}
+{"id": "F399", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F400", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F401", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F402", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F403", "motivo": "3.1: 'quero ficar com você' sem solidao ativa (109)"}
+{"id": "F404", "motivo": "3.1: 'preciso de uma limpeza' é estado de higiene sem conceito"}
+{"id": "F405", "motivo": "3.4: 'comi ração' num episódio de chamar_atencao"}
+{"id": "F406", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F407", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F408", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F409", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F410", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F411", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F412", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F413", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F414", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F415", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F416", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F417", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F418", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F419", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F420", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F421", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F422", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F423", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F424", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F425", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F426", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F427", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F428", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F429", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F430", "motivo": "3.6: 'um cafuné ajuda' é causa sem conceito"}
+{"id": "F431", "motivo": "3.6: 'parece que algo me assustou' é evento sem conceito"}
+{"id": "F432", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F433", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F434", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F435", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F436", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F437", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F438", "motivo": "3.1: 'quero, sim' e 'tô meio com fome' sem fome ativa (87)"}
+{"id": "F439", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F440", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F441", "motivo": "3.2: 'quero ver mais coisa!' com curiosidade de confiança 448 sem hesitação na frase"}
+{"id": "F442", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F443", "motivo": "3.5: pede companhia ('fica comigo?') com a intenção fome"}
+{"id": "F444", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F445", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F446", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F447", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F448", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F449", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F450", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F451", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F452", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F453", "motivo": "nenhuma afirmação sem sustento (só um som)"}
+{"id": "F454", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F455", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F456", "motivo": "3.5: pede companhia ('fica comigo?') com a intenção fome"}
+{"id": "F457", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F458", "motivo": "3.2: 'quero ver o que tem por aí!' com curiosidade de confiança 453 sem hesitação na frase"}
+{"id": "F459", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F460", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F461", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F462", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F463", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F464", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F465", "motivo": "3.1: 'acho que tô precisando' (de banho) é estado de higiene sem conceito"}
+{"id": "F466", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F467", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F468", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F469", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F470", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F471", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F472", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F473", "motivo": "3.1/3.5: 'quero comer' sem fome ativa (36)"}
+{"id": "F474", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F475", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F476", "motivo": "3.5: pede companhia ('fica um pouco comigo?') com a intenção higiene"}
+{"id": "F477", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F478", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F479", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F480", "motivo": "3.6/3.4: 'comi!' é evento sem lembranca ativa (0)"}
+{"id": "F481", "motivo": "3.4: 'comi ração' num episódio de chamar_atencao"}
+{"id": "F482", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F483", "motivo": "nenhuma afirmação sem sustento"}
+{"id": "F484", "motivo": "3.1: 'tô meio sozinho' sem solidao ativa (63)"}
+{"id": "F485", "motivo": "3.4: 'foi bom' num episódio de desfecho neutro"}

@@ -1,0 +1,474 @@
+{
+ "bancada|P0-B00~instinto|101": {
+  "None": {
+   "acoes": "e60c830b85e53d39209e1c0241c4259d5d5ba77f14985ad570a5f8f4e0e73418",
+   "estado": "6855dd60c1be42095536ebad2798be416e29c15604813f94dcb348424e3fc941",
+   "estado_motor": "65eb5fa4129ec42fc38eb699fbed6ebfa45b1a96849a32becf2d25a0a870876e",
+   "fisico": "f86cdb0525225e0236154c7a0bc09cb5b6e30d973a24f2c60a078e3b27e6474a",
+   "interacoes": 40,
+   "log": "988bcffb4144ae4759f25bb6b9a47c68d4660e48eeb4c6927235f036f30470ee",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "92aeb64ab257cbda15ae125bd7238fd54e6d91029ad49be2080a39287354c793",
+   "rngs": "f6f9ab5c340176b03fec43c1ca9ed4fd04a374a45c6ca78b1bf1c88150570741"
+  }
+ },
+ "bancada|P0-B00~instinto|202": {
+  "None": {
+   "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
+   "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
+   "estado_motor": "5e6edeb91146904614295b853007d412f68680ff0dbac568c6b7853365dd3e14",
+   "fisico": "a26ee013725b13b23d4ee4a6c1bbbedba0c9ec5a18bae4f56110e2df823d17d6",
+   "interacoes": 36,
+   "log": "b393cbc87fa79c853e36adc57317d509cc843d2053c759bcfd4f9e8ca4341033",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "92aeb64ab257cbda15ae125bd7238fd54e6d91029ad49be2080a39287354c793",
+   "rngs": "20a08fa346b6bb05df4b5191f4b103a5f068c58cbc9abdf58253fda950d1b136"
+  }
+ },
+ "bancada|P0-B00~instinto|303": {
+  "None": {
+   "acoes": "bec1763c3df292f7c39d1000c8dcaf247450f9fbbd5c5041736db34380755416",
+   "estado": "517eb09e206642acb1ea51a07788d4320bcf029ed244506ad3b67d7179a1059a",
+   "estado_motor": "b325eef24ea394c14111ef870a2f4f53244598ab7b9da2b1ba81a32dea0207a5",
+   "fisico": "b5bbb38bbbcd77e91d56d15751a4280094b52e444d4f41325d404493b84e0457",
+   "interacoes": 43,
+   "log": "89214eedb4d776b477b8c80f2b7c4d772d363a93ba12aec6127100a8990c676f",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "92aeb64ab257cbda15ae125bd7238fd54e6d91029ad49be2080a39287354c793",
+   "rngs": "b89c866a898e523e9f00175f415b51e7fe564739d3dcedef7a76d6009f089bdc"
+  }
+ },
+ "bancada|P0-B00~lobos|101": {
+  "None": {
+   "acoes": "e60c830b85e53d39209e1c0241c4259d5d5ba77f14985ad570a5f8f4e0e73418",
+   "estado": "6855dd60c1be42095536ebad2798be416e29c15604813f94dcb348424e3fc941",
+   "estado_motor": "65eb5fa4129ec42fc38eb699fbed6ebfa45b1a96849a32becf2d25a0a870876e",
+   "fisico": "f86cdb0525225e0236154c7a0bc09cb5b6e30d973a24f2c60a078e3b27e6474a",
+   "interacoes": 40,
+   "log": "988bcffb4144ae4759f25bb6b9a47c68d4660e48eeb4c6927235f036f30470ee",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "bd5b357f2ee8986a4a67afe915033bb02467cc8bfda0a8ff7a42adbb1faff948",
+   "rngs": "f6f9ab5c340176b03fec43c1ca9ed4fd04a374a45c6ca78b1bf1c88150570741"
+  }
+ },
+ "bancada|P0-B00~lobos|202": {
+  "None": {
+   "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
+   "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
+   "estado_motor": "5e6edeb91146904614295b853007d412f68680ff0dbac568c6b7853365dd3e14",
+   "fisico": "a26ee013725b13b23d4ee4a6c1bbbedba0c9ec5a18bae4f56110e2df823d17d6",
+   "interacoes": 36,
+   "log": "b393cbc87fa79c853e36adc57317d509cc843d2053c759bcfd4f9e8ca4341033",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "2ada3e61489524db1a0d7ed3a89822698e9cfc59be88e59b8496210e828901ab",
+   "rngs": "20a08fa346b6bb05df4b5191f4b103a5f068c58cbc9abdf58253fda950d1b136"
+  }
+ },
+ "bancada|P0-B00~lobos|303": {
+  "None": {
+   "acoes": "e09688e0a8685bb609b22a6815cc101f3f8861a70218580a6d9018b9b4f1db81",
+   "estado": "fbb492fe975ba8e7e28a098f5970052cf926fc61b6f4f3a2f117506080bd535c",
+   "estado_motor": "af8e0ed13a65c6464814a823aaa9af7438f92d2d8adaab3e812e8f7f55b30c2a",
+   "fisico": "aa06399af662da8b0aa01cfa96278bf6ccc01fa160b9f593d47b5fb6e53b650b",
+   "interacoes": 43,
+   "log": "89214eedb4d776b477b8c80f2b7c4d772d363a93ba12aec6127100a8990c676f",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "2ce24a67db8cb85afccb6a0ce29cb3e6e00dd102844eb9f278db4a7311e0093e",
+   "rngs": "b89c866a898e523e9f00175f415b51e7fe564739d3dcedef7a76d6009f089bdc"
+  }
+ },
+ "bancada|P0-BL0~instinto|101": {
+  "None": {
+   "acoes": "e60c830b85e53d39209e1c0241c4259d5d5ba77f14985ad570a5f8f4e0e73418",
+   "estado": "6855dd60c1be42095536ebad2798be416e29c15604813f94dcb348424e3fc941",
+   "estado_motor": "65eb5fa4129ec42fc38eb699fbed6ebfa45b1a96849a32becf2d25a0a870876e",
+   "fisico": "f86cdb0525225e0236154c7a0bc09cb5b6e30d973a24f2c60a078e3b27e6474a",
+   "interacoes": 40,
+   "log": "988bcffb4144ae4759f25bb6b9a47c68d4660e48eeb4c6927235f036f30470ee",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "39cdb779108c2e344f10e62deaad6a329411cdefda49af9eb140cb6a8e6aff1b",
+   "rngs": "f6f9ab5c340176b03fec43c1ca9ed4fd04a374a45c6ca78b1bf1c88150570741"
+  }
+ },
+ "bancada|P0-BL0~instinto|202": {
+  "None": {
+   "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
+   "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
+   "estado_motor": "5e6edeb91146904614295b853007d412f68680ff0dbac568c6b7853365dd3e14",
+   "fisico": "a26ee013725b13b23d4ee4a6c1bbbedba0c9ec5a18bae4f56110e2df823d17d6",
+   "interacoes": 36,
+   "log": "b393cbc87fa79c853e36adc57317d509cc843d2053c759bcfd4f9e8ca4341033",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "39cdb779108c2e344f10e62deaad6a329411cdefda49af9eb140cb6a8e6aff1b",
+   "rngs": "20a08fa346b6bb05df4b5191f4b103a5f068c58cbc9abdf58253fda950d1b136"
+  }
+ },
+ "bancada|P0-BL0~instinto|303": {
+  "None": {
+   "acoes": "bec1763c3df292f7c39d1000c8dcaf247450f9fbbd5c5041736db34380755416",
+   "estado": "517eb09e206642acb1ea51a07788d4320bcf029ed244506ad3b67d7179a1059a",
+   "estado_motor": "a2941c22fd7d43611eb467f3d37bc1f0b44043bd59beea8201fa802a540c3bfd",
+   "fisico": "29a7a50222cd73c7c7798c38a56fec5cfed252fe90f90cd065f500d63c8242cc",
+   "interacoes": 43,
+   "log": "89214eedb4d776b477b8c80f2b7c4d772d363a93ba12aec6127100a8990c676f",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "39cdb779108c2e344f10e62deaad6a329411cdefda49af9eb140cb6a8e6aff1b",
+   "rngs": "b89c866a898e523e9f00175f415b51e7fe564739d3dcedef7a76d6009f089bdc"
+  }
+ },
+ "bancada|P0-BL0~lobos|101": {
+  "None": {
+   "acoes": "e60c830b85e53d39209e1c0241c4259d5d5ba77f14985ad570a5f8f4e0e73418",
+   "estado": "6855dd60c1be42095536ebad2798be416e29c15604813f94dcb348424e3fc941",
+   "estado_motor": "65eb5fa4129ec42fc38eb699fbed6ebfa45b1a96849a32becf2d25a0a870876e",
+   "fisico": "f86cdb0525225e0236154c7a0bc09cb5b6e30d973a24f2c60a078e3b27e6474a",
+   "interacoes": 40,
+   "log": "988bcffb4144ae4759f25bb6b9a47c68d4660e48eeb4c6927235f036f30470ee",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "9a9af066e62d1440a7a391340b657d84c76fc3f29576bead3949281c373054ca",
+   "rngs": "f6f9ab5c340176b03fec43c1ca9ed4fd04a374a45c6ca78b1bf1c88150570741"
+  }
+ },
+ "bancada|P0-BL0~lobos|202": {
+  "None": {
+   "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
+   "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
+   "estado_motor": "5e6edeb91146904614295b853007d412f68680ff0dbac568c6b7853365dd3e14",
+   "fisico": "a26ee013725b13b23d4ee4a6c1bbbedba0c9ec5a18bae4f56110e2df823d17d6",
+   "interacoes": 36,
+   "log": "b393cbc87fa79c853e36adc57317d509cc843d2053c759bcfd4f9e8ca4341033",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "1eba61db41f380ef0a8209742a67cef6dec40d7471094dbbe2eddf0b73ebc3ac",
+   "rngs": "20a08fa346b6bb05df4b5191f4b103a5f068c58cbc9abdf58253fda950d1b136"
+  }
+ },
+ "bancada|P0-BL0~lobos|303": {
+  "None": {
+   "acoes": "e09688e0a8685bb609b22a6815cc101f3f8861a70218580a6d9018b9b4f1db81",
+   "estado": "fbb492fe975ba8e7e28a098f5970052cf926fc61b6f4f3a2f117506080bd535c",
+   "estado_motor": "af8e0ed13a65c6464814a823aaa9af7438f92d2d8adaab3e812e8f7f55b30c2a",
+   "fisico": "aa06399af662da8b0aa01cfa96278bf6ccc01fa160b9f593d47b5fb6e53b650b",
+   "interacoes": 43,
+   "log": "89214eedb4d776b477b8c80f2b7c4d772d363a93ba12aec6127100a8990c676f",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "e5103b6581df89189040d7041f0f90f9ab346251973614775dbb5efbb01d47e7",
+   "rngs": "b89c866a898e523e9f00175f415b51e7fe564739d3dcedef7a76d6009f089bdc"
+  }
+ },
+ "bancada|P1-B0C~lobos|101": {
+  "None": {
+   "acoes": "79758fba8d77b56420ce6435af8c0c1ad6a0dc0ec4a188bd1cc7ca2d49b4ef91",
+   "estado": "0d23fa887fc62174db59d7e5f598728caa90907cca212867ab85780138ff2ac1",
+   "estado_motor": "f0dc13acf87b6788c0a5881ebccc70b814b1ec3afd0a89c631370a8a781c61d6",
+   "fisico": "0951ae47094441d092b099131b29327bb257bda7dd01354de16c01dd0e9a9e2b",
+   "interacoes": 33,
+   "log": "bf139b4872570723c3005cb92556c25587a49ee88af99a2689480e1dd0299d1e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "9618c314b77189876bffb75b5665654090f22167b3e270460ef7a7ba1de6cc3e",
+   "rngs": "9dc322969bd699419239d46c6366129ec20378b280b9519add399bef10cc3fb9"
+  }
+ },
+ "bancada|P1-B0C~lobos|202": {
+  "None": {
+   "acoes": "1249fd735522f7462bf1018fa9dc77b1a0ae5c3235eca32398da2fedccbd5bc8",
+   "estado": "c03e2375bf97bc0f2494f6e529cd9ecebdeb5ef3df2073875242af85a7757d7f",
+   "estado_motor": "c3e9358d8944c5e1fd28e404dc54315eb2356c476773020d8fbd43abc0e7cfe4",
+   "fisico": "c7758372e86eb9e8c35e4398baf0e6dece37cbcb9d8eefeae65969d40f6f7d6b",
+   "interacoes": 38,
+   "log": "6f13183af707e7f325de4f8cc20eb6c77026c51b998fd4ceafaea0f647b2a2e8",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "add4dec27d5e056ec3d61e30d85f5f7a69146198b5b0129ba06d04691f38c23e",
+   "rngs": "922cf2ac92197e6622e80d24cadc4062034e804d18faf78b2510bce63fa16867"
+  }
+ },
+ "bancada|P1-B0C~lobos|303": {
+  "None": {
+   "acoes": "f4de34d7a9473936e34ccf63eb719c9694c65414f891a56869530f54302d851d",
+   "estado": "742febed1956a441296899410bd388cb0c229f787d2a020d8355f53517033eec",
+   "estado_motor": "c01d7791b537cea873a8b0ea66a13672b776faaf7e1770375ec3e3c1e588ca12",
+   "fisico": "b44ac7335e44d75384fc479b48eb6f8c417826c9f871a8249793eddae312fe7d",
+   "interacoes": 43,
+   "log": "c37d93e0c18bb0be305bc2f8aeefc44de1638b878ad4c6e2841a891b68a77fd9",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "40e498b4ac3f9de5f029d7cb104e74c498aad2237ac030149111e936e1a60229",
+   "rngs": "fd53fa31b2f3089c82d699103827d8b847b356d8ebb39f90a961ee5ce1d9d1ef"
+  }
+ },
+ "bancada|P1-BLC~lobos|101": {
+  "None": {
+   "acoes": "79758fba8d77b56420ce6435af8c0c1ad6a0dc0ec4a188bd1cc7ca2d49b4ef91",
+   "estado": "0d23fa887fc62174db59d7e5f598728caa90907cca212867ab85780138ff2ac1",
+   "estado_motor": "f0dc13acf87b6788c0a5881ebccc70b814b1ec3afd0a89c631370a8a781c61d6",
+   "fisico": "0951ae47094441d092b099131b29327bb257bda7dd01354de16c01dd0e9a9e2b",
+   "interacoes": 33,
+   "log": "bf139b4872570723c3005cb92556c25587a49ee88af99a2689480e1dd0299d1e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "b1019de4ff1e688d8b60b8b4b5e5df819c6b710b678caff94d7ab9e8fd457fba",
+   "rngs": "9dc322969bd699419239d46c6366129ec20378b280b9519add399bef10cc3fb9"
+  }
+ },
+ "bancada|P1-BLC~lobos|202": {
+  "None": {
+   "acoes": "1249fd735522f7462bf1018fa9dc77b1a0ae5c3235eca32398da2fedccbd5bc8",
+   "estado": "c03e2375bf97bc0f2494f6e529cd9ecebdeb5ef3df2073875242af85a7757d7f",
+   "estado_motor": "c3e9358d8944c5e1fd28e404dc54315eb2356c476773020d8fbd43abc0e7cfe4",
+   "fisico": "c7758372e86eb9e8c35e4398baf0e6dece37cbcb9d8eefeae65969d40f6f7d6b",
+   "interacoes": 38,
+   "log": "6f13183af707e7f325de4f8cc20eb6c77026c51b998fd4ceafaea0f647b2a2e8",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "a6424d528e79efb3b3dd7c3683d965469207bade56c3755d6208d4576ab31c15",
+   "rngs": "922cf2ac92197e6622e80d24cadc4062034e804d18faf78b2510bce63fa16867"
+  }
+ },
+ "bancada|P1-BLC~lobos|303": {
+  "None": {
+   "acoes": "f4de34d7a9473936e34ccf63eb719c9694c65414f891a56869530f54302d851d",
+   "estado": "742febed1956a441296899410bd388cb0c229f787d2a020d8355f53517033eec",
+   "estado_motor": "c01d7791b537cea873a8b0ea66a13672b776faaf7e1770375ec3e3c1e588ca12",
+   "fisico": "b44ac7335e44d75384fc479b48eb6f8c417826c9f871a8249793eddae312fe7d",
+   "interacoes": 43,
+   "log": "c37d93e0c18bb0be305bc2f8aeefc44de1638b878ad4c6e2841a891b68a77fd9",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "cb5c63bee985fe30b0b2853e00986da013ae166576ff0549b97bee90181f82cb",
+   "rngs": "fd53fa31b2f3089c82d699103827d8b847b356d8ebb39f90a961ee5ce1d9d1ef"
+  }
+ },
+ "direto|instinto|limpador=False|101": {
+  "None": {
+   "acoes": "c78c9bbf597935679fbf53049688db045f259a0547a12b3b6fdceadc2840f853",
+   "estado": "50d77b5e469081797944f27ea3f89fb07cc496527fd2505e5a8bb92b5c3950e8",
+   "estado_motor": "70b7ae721c0fde3994946a276ce23d94c11af04c8ab9a24767195a203a13ea0d",
+   "fisico": "6208d7ef762e3db93d6c750dccd18b67c28070eb9d0facb99d4de741f55c26f0",
+   "interacoes": 48,
+   "log": "d65644f641ce4b90112863b5db1efc746f5d331e6cc58bd709885421f8086dac",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "64a955ce843f06017aff3c9d4bd5416d3a5507fd415ffc7e829e19d76911d1a0"
+  }
+ },
+ "direto|instinto|limpador=False|202": {
+  "None": {
+   "acoes": "8146776785330cc1ead4ea2909d1e723b366ad5d797531fa800bc80f63a7df7a",
+   "estado": "7cd63b5ffdf02b6e3099b5cc33f03484d451972068dcf2904750b3d1fbde27b5",
+   "estado_motor": "ad74d177ff4a85a757f3962be810c922d673e8977098f28f18701c904d1e213a",
+   "fisico": "59f696a27d86db7325fda42bb1d6be8366aef260af924a4d1d903bc1f8cac357",
+   "interacoes": 48,
+   "log": "ee815b24bf9521ec40c90ba283e7ebe1ba3f8c7b14b199299a7132ab92e4a367",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "ca9de5aaacb17bbba980fadb9918043323d048564c5f3ae8f319ee869287a289"
+  }
+ },
+ "direto|instinto|limpador=False|303": {
+  "None": {
+   "acoes": "e092c0f28ee3990f13e52bbbce0df4e216c90c172421f526de5c76c284853870",
+   "estado": "4c9d292ebc6be809ea49bf9e0d3b4f4e15bf3a77a2d12c3c36635e4d5b1cde69",
+   "estado_motor": "aa4f6361de0a442f2b8102312ab1e5c4ee16270dcd6c947087b261106131392e",
+   "fisico": "5ee8b108474de9351b2a7de7be481936ff22109a5b44db4555546147e7f3e97d",
+   "interacoes": 48,
+   "log": "b0935d73793b577e451417a558b892b6c796d3042ae6946c00b1a37d55863003",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "b8caea946b83a06b073a3259584c0e5ab455a5177b39369b548c50ffd9b05c80"
+  }
+ },
+ "direto|instinto|limpador=True|101": {
+  "None": {
+   "acoes": "c78c9bbf597935679fbf53049688db045f259a0547a12b3b6fdceadc2840f853",
+   "estado": "50d77b5e469081797944f27ea3f89fb07cc496527fd2505e5a8bb92b5c3950e8",
+   "estado_motor": "70b7ae721c0fde3994946a276ce23d94c11af04c8ab9a24767195a203a13ea0d",
+   "fisico": "6208d7ef762e3db93d6c750dccd18b67c28070eb9d0facb99d4de741f55c26f0",
+   "interacoes": 48,
+   "log": "d65644f641ce4b90112863b5db1efc746f5d331e6cc58bd709885421f8086dac",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "64a955ce843f06017aff3c9d4bd5416d3a5507fd415ffc7e829e19d76911d1a0"
+  }
+ },
+ "direto|instinto|limpador=True|202": {
+  "None": {
+   "acoes": "8146776785330cc1ead4ea2909d1e723b366ad5d797531fa800bc80f63a7df7a",
+   "estado": "7cd63b5ffdf02b6e3099b5cc33f03484d451972068dcf2904750b3d1fbde27b5",
+   "estado_motor": "ad74d177ff4a85a757f3962be810c922d673e8977098f28f18701c904d1e213a",
+   "fisico": "59f696a27d86db7325fda42bb1d6be8366aef260af924a4d1d903bc1f8cac357",
+   "interacoes": 48,
+   "log": "ee815b24bf9521ec40c90ba283e7ebe1ba3f8c7b14b199299a7132ab92e4a367",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "ca9de5aaacb17bbba980fadb9918043323d048564c5f3ae8f319ee869287a289"
+  }
+ },
+ "direto|instinto|limpador=True|303": {
+  "None": {
+   "acoes": "e092c0f28ee3990f13e52bbbce0df4e216c90c172421f526de5c76c284853870",
+   "estado": "4c9d292ebc6be809ea49bf9e0d3b4f4e15bf3a77a2d12c3c36635e4d5b1cde69",
+   "estado_motor": "aa4f6361de0a442f2b8102312ab1e5c4ee16270dcd6c947087b261106131392e",
+   "fisico": "5ee8b108474de9351b2a7de7be481936ff22109a5b44db4555546147e7f3e97d",
+   "interacoes": 48,
+   "log": "b0935d73793b577e451417a558b892b6c796d3042ae6946c00b1a37d55863003",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "b8caea946b83a06b073a3259584c0e5ab455a5177b39369b548c50ffd9b05c80"
+  }
+ },
+ "direto|lobos|limpador=False|101": {
+  "None": {
+   "acoes": "8461fbb908dae74659230f90c4b57c8eb3744f95eabc944dd939088e95b138d6",
+   "estado": "1c0ddb2fca522d4351d529fd92bdf6a8966cf24c6cb17e46e9bffe25ced7f22a",
+   "estado_motor": "689e9c699a931febb533013a116fd54ffea7ac98513123d8e4f33e79cbe6be22",
+   "fisico": "1549507d88b1c0c2c7258245337700e2d3803d139e1f4aec01db02d25775d6ec",
+   "interacoes": 48,
+   "log": "1f8df5102912080a8812c29e6b4e2c34135f292acfcd637bdf57a444d18c8340",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "a144302c7cda7e0357e908bbb41992f67d4c36d3dd51aef95132ed1db69ce3c3",
+   "rngs": "d4b5191ce7f6a1e354c572020b5991391825531ff4abdd8b599fae3f3b9a22f6"
+  }
+ },
+ "direto|lobos|limpador=False|202": {
+  "None": {
+   "acoes": "da761c272fb95a7ab088b5402024e7c6d1a138020a35748e16e99afc13706db5",
+   "estado": "a503b47d8c769b7d27fc75910d73a5c92561a0275b31889ab063088c03bd5a45",
+   "estado_motor": "a958d0ae171cef9c3b4fa48cc5e1023ef80e5b1f7f21cd764428cd9d5ffc04ec",
+   "fisico": "f46204ce08e0917e87324b4eee34791b2418dbedec3360ecd845c6682bc1f04d",
+   "interacoes": 48,
+   "log": "8aaf10dc64a024e405b47e50c96433a8e19831b3d614a901ce386b9aa992ec94",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "16e81f575cee99ce2e59f3cb2938c34e183ea8868d60d847ae49d136df3af084",
+   "rngs": "f4c36330fb141a7c78a5433d7b741e7a797e15892b934ba7a610287f25698ada"
+  }
+ },
+ "direto|lobos|limpador=False|303": {
+  "None": {
+   "acoes": "d46278ff1798c8226a67f1ae2341b239444e9eb06814b0aab9431af2989abde4",
+   "estado": "c66df8500cc1c2123d6522491bf51de7205703cae904a71746c08f1ee87f84e1",
+   "estado_motor": "40badb4d1eae2ef32bb3967188f2b144b00f7c8a829e5bdeca6a4abc9e42b052",
+   "fisico": "ce7a92a5ec90f43d4c5f03b9cfd318aed4660cd3278c60904bf148845a6b1e8c",
+   "interacoes": 48,
+   "log": "c42ed4be55d51167e46d0a795cb76346c1174260af8606639edf7650d90b883e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "29190e84d0afaa04dd034bed01f7bdd015db1a64e72bc27c107be9ffd1c4350d",
+   "rngs": "92d226f8da6a29aed62abae443d81bf619bd32326937f6b47e8734621f436bdd"
+  }
+ },
+ "direto|lobos|limpador=True|101": {
+  "None": {
+   "acoes": "8461fbb908dae74659230f90c4b57c8eb3744f95eabc944dd939088e95b138d6",
+   "estado": "1c0ddb2fca522d4351d529fd92bdf6a8966cf24c6cb17e46e9bffe25ced7f22a",
+   "estado_motor": "689e9c699a931febb533013a116fd54ffea7ac98513123d8e4f33e79cbe6be22",
+   "fisico": "1549507d88b1c0c2c7258245337700e2d3803d139e1f4aec01db02d25775d6ec",
+   "interacoes": 48,
+   "log": "1f8df5102912080a8812c29e6b4e2c34135f292acfcd637bdf57a444d18c8340",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "a144302c7cda7e0357e908bbb41992f67d4c36d3dd51aef95132ed1db69ce3c3",
+   "rngs": "d4b5191ce7f6a1e354c572020b5991391825531ff4abdd8b599fae3f3b9a22f6"
+  }
+ },
+ "direto|lobos|limpador=True|202": {
+  "None": {
+   "acoes": "da761c272fb95a7ab088b5402024e7c6d1a138020a35748e16e99afc13706db5",
+   "estado": "a503b47d8c769b7d27fc75910d73a5c92561a0275b31889ab063088c03bd5a45",
+   "estado_motor": "a958d0ae171cef9c3b4fa48cc5e1023ef80e5b1f7f21cd764428cd9d5ffc04ec",
+   "fisico": "f46204ce08e0917e87324b4eee34791b2418dbedec3360ecd845c6682bc1f04d",
+   "interacoes": 48,
+   "log": "8aaf10dc64a024e405b47e50c96433a8e19831b3d614a901ce386b9aa992ec94",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "16e81f575cee99ce2e59f3cb2938c34e183ea8868d60d847ae49d136df3af084",
+   "rngs": "f4c36330fb141a7c78a5433d7b741e7a797e15892b934ba7a610287f25698ada"
+  }
+ },
+ "direto|lobos|limpador=True|303": {
+  "None": {
+   "acoes": "d46278ff1798c8226a67f1ae2341b239444e9eb06814b0aab9431af2989abde4",
+   "estado": "c66df8500cc1c2123d6522491bf51de7205703cae904a71746c08f1ee87f84e1",
+   "estado_motor": "40badb4d1eae2ef32bb3967188f2b144b00f7c8a829e5bdeca6a4abc9e42b052",
+   "fisico": "ce7a92a5ec90f43d4c5f03b9cfd318aed4660cd3278c60904bf148845a6b1e8c",
+   "interacoes": 48,
+   "log": "c42ed4be55d51167e46d0a795cb76346c1174260af8606639edf7650d90b883e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "29190e84d0afaa04dd034bed01f7bdd015db1a64e72bc27c107be9ffd1c4350d",
+   "rngs": "92d226f8da6a29aed62abae443d81bf619bd32326937f6b47e8734621f436bdd"
+  }
+ },
+ "grupo|303": {
+  "A": {
+   "acoes": "8d33ec236e24e41accfc26fcaa2d8a56930d551ef903cbadf507cd29aea54f4d",
+   "estado": "c810a3a401892994a441a6caef562bdc9d53c86ce7751a6bdc8d1328dbd8dae3",
+   "estado_motor": "638e120eee44489eb798f4a83996eb0d04ec51d160a286449b13eb932e6a3ee3",
+   "fisico": "7c2504c6e8f60d93546385e1a99c0bb4c47446c2f826a25b7410605d9f75728b",
+   "interacoes": null,
+   "log": "3de51aa41e776a51b8efb3ac0f2826395af320d0099014d20cfc866def69d57e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "4e88ab7a76949f81bbc94d1da54c07f95408f403b471b6ebeb353dd08fc9e3d3"
+  },
+  "B": {
+   "acoes": "b4820e2f5a228c6f8414805c601d3471ba2870d408e3696ff0874a5d36705f63",
+   "estado": "a99aaf3b87c7f5c19320c47134d8bc12db0bbb0eabb2dd1865c64313eb37eef8",
+   "estado_motor": "8992e46083a19f4c4a6bb328334bdf387763a2ac67b7d665b4dab299ee91e76a",
+   "fisico": "e734f56bbc298875d2a563fd5db10401f5c4342032e1abe9fc0292b4b79636a9",
+   "interacoes": null,
+   "log": "7fa769fc0f5aa7d96f5938171ea876016ab3e8097355f786c6b55fa572358ceb",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "701e7e8e89f1e697a7eb09d844f6b726220572b11c4deb17725e0c2efdbf1865"
+  }
+ },
+ "grupo|404": {
+  "A": {
+   "acoes": "fbf1dfa248953e3827581e681d46580ffc206fde43d2a9359011d524ff913c2e",
+   "estado": "9143897b32a3f511ed2be6f99f65cbe5e82cfeb89cb19642efc7b84ac593b769",
+   "estado_motor": "1dd1fed1dfe3b589ba9055edc9e854a5502caa1b95dce89dc1fafaf6c5762330",
+   "fisico": "f4861acb704371a11e5e0583d69b767684f21d34765e68e234e82c91cf44bc53",
+   "interacoes": null,
+   "log": "b85ebadfe462e128861ea543677dd16413d96171447edd4fcdaf9dc1a88c11ad",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "f9be479ca16802f9b3968ac138dce88fb1f3b1120be34a7aa75a5f4d31c8b9cd"
+  },
+  "B": {
+   "acoes": "b71b9224ba03e617a55bfe4ef64cb051e1ed5d4cfdef6b804d968a0b94159edc",
+   "estado": "d02594d5fe153f4d73941c324f53504cd19fc8d59d6ae85d049f2ccc5a79c5f0",
+   "estado_motor": "b032258056bd31006767e93aef4ed801e166196dac597d637db7759a4c87cb1e",
+   "fisico": "e24716553706bf272fa83f75c5d0c8e85f78ff640cd29743944edbf415f47a4f",
+   "interacoes": null,
+   "log": "4b71db93bc4465f0f08b337d5466e2bc0d0a7ec91f82d54dd0262675279035d9",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "c4dbbd9f4aa19fbcb06567c3fb3b68e6f12156f0420741b94a6680d5704b3b58"
+  }
+ }
+}

@@ -1,0 +1,53 @@
+/* Prancha D1b da UX_TELA_PET: o DigiBrain como modal pequeno. Vem depois de digibrain.css (as peles, os --mp-*, os --scan-* e as classes
+   do desenho sao as de la). Nenhuma cor nova: so os tokens. As medidas abaixo sao de layout, PROPOSTO, SEM FONTE:
+   a 1920, o modal tem 720 px de largura (o desenho, 696 x 437) e fica a 72 px do alto e 12 px da direita, sobre a pilha de paineis;
+   a 390, uma folha baixa de ~320 px (a alca, 48 px de topo e o desenho, 374 x 235). */
+
+/* a ilha por baixo: a captura real da Tela Pet, sem mexer */
+.dm-ilha{ background-color:var(--hx-miolo); background-position:0 0; background-size:100% 100% }
+.dm-ilha span{ display:none }
+/* o veu: escurece pouco, sem desfoque (a ilha continua a vista e a pleno ritmo); um clique nele fecha */
+.dm-veu{ position:absolute; inset:0; background:color-mix(in srgb, var(--hx-miolo) 28%, transparent) }
+.fechado .dm, .fechado .dm-veu{ display:none }
+
+/* ---------- o modal */
+.dm{ position:absolute; display:flex; flex-direction:column; padding:0 12px 12px }
+.dm--direita{ top:72px; right:12px; width:720px }
+.dm--centro{ top:50%; left:50%; width:720px; transform:translate(-50%, -50%) }
+.dm-topo{ position:relative; display:flex; align-items:center; gap:10px; height:52px }
+.dm-tit{ margin:0; font:700 20px/1 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-texto) }
+.dm-selo{ gap:0 }
+.dm-ic{ display:inline-grid; place-items:center; width:44px; height:44px; padding:0; background:transparent; color:var(--hx-texto-2);
+  border:1px solid transparent; border-radius:var(--raio) }
+.dm-ic:hover, .dm-ic[aria-expanded="true"], .dm-ic[aria-pressed="true"]{ border-color:var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto) }
+.dm-info{ margin-left:auto }
+.dm-fechar{ background:var(--hx-btn-bg); color:var(--hx-btn-ink); border-color:var(--hx-btn-borda) }
+
+/* a dica do "i": por cima do desenho, presa ao canto de cima */
+.dm-dica{ position:absolute; z-index:5; top:50px; right:12px; width:320px; padding:12px 14px; font:500 14px/1.35 var(--hx-f) }
+.dm-dica[hidden]{ display:none }
+.dm-dica p{ margin:0 0 10px; color:var(--hx-texto) }
+.dm-dica .mp-leg{ display:grid; grid-template-columns:1fr 1fr; gap:6px 12px }
+
+/* o desenho, na moldura do scanner da prancha anterior (so os cantos em L e a grade da pele) */
+.dm-mapa{ position:relative; aspect-ratio:880 / 552; overflow:hidden; border:1px solid var(--hx-borda); border-radius:var(--raio);
+  background-color:color-mix(in srgb, var(--hx-miolo) 55%, transparent);
+  background-image:linear-gradient(to right, var(--scan-grade) 1px, transparent 1px), linear-gradient(to bottom, var(--scan-grade) 1px, transparent 1px);
+  background-size:24px 24px }
+.dm-mapa svg{ position:relative; z-index:1; display:block; width:100%; height:100% }
+.dm-varredura{ top:38%; height:48px }
+.mp-reg-t{ font-size:15px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; fill:var(--hx-rotulo) }
+
+/* o mapa em texto: no lugar do desenho, do mesmo tamanho, e rola */
+.dm-texto{ position:static; width:auto; height:100%; overflow:auto; padding:10px 12px }
+
+/* ---------- o celular: uma folha baixa presa embaixo */
+.dm--folha{ left:0; right:0; bottom:0; padding:0 8px 12px; border-bottom:0; border-radius:calc(var(--raio) * 2) calc(var(--raio) * 2) 0 0 }
+.dm-alca{ display:block; width:40px; height:4px; margin:8px auto 0; border-radius:2px; background:var(--hx-borda) }
+.tela--390 .dm-topo{ height:48px; gap:4px; padding-left:6px }
+.tela--390 .dm-tit{ font-size:18px; margin-right:6px }
+.tela--390 .dm-dica{ top:58px; left:8px; right:8px; width:auto }
+.tela--390 .mp-reg-t{ font-size:26px; letter-spacing:.08em }
+.tela--390 .dm-varredura{ height:30px }
+/* o pulso nao entra no quadro parado (os pontos soltos confundem): o movimento e o da D1, sem mudar (a varredura e o pulso numa decisao nova) */
+.dm-mapa .mp-pulso{ display:none }

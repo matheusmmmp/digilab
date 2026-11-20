@@ -1,0 +1,101 @@
+{
+  "cfg": {
+    "bases": [
+      18101,
+      18202,
+      18303,
+      18404,
+      18505
+    ],
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 20261004
+    },
+    "conjunto": "calibracao",
+    "descricao": "V2, REVISAO-APRENDIZ (docs/PLANO_ANALISE_V2_REVISAO_APRENDIZ.md): diagnostico do aprendiz, uma alavanca por vez (teto T, janela J, exposicao X), P0/P1/P3 em casado_frutas e descasado, atencioso, so sementes de calibracao.",
+    "dias": 14,
+    "k": 4,
+    "orcamento": 224,
+    "pontos": {
+      "J1": {
+        "lobos": {
+          "traco_decisoes": 2,
+          "traco_fator": 512
+        }
+      },
+      "J2": {
+        "lobos": {
+          "traco_decisoes": 4,
+          "traco_fator": 768
+        }
+      },
+      "J3": {
+        "lobos": {
+          "traco_decisoes": 8,
+          "traco_fator": 896
+        }
+      },
+      "T1": {
+        "lobos": {
+          "teto": 2048
+        }
+      },
+      "T2": {
+        "lobos": {
+          "teto": 4096
+        }
+      },
+      "T3": {
+        "lobos": {
+          "teto": 16384
+        }
+      },
+      "X1": {
+        "frutas": {
+          "w_fruta": 12.0
+        }
+      },
+      "X2": {
+        "frutas": {
+          "w_fruta": 24.0
+        }
+      },
+      "X3": {
+        "frutas": {
+          "horarios_oferta": [
+            540,
+            630,
+            720,
+            810,
+            900,
+            990,
+            1080,
+            1170
+          ]
+        }
+      },
+      "base": {}
+    },
+    "saida": "artifacts_v2_revisao/calibracao",
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    }
+  },
+  "config": "experiments\\configs\\v2_revisao\\calibracao.json",
+  "config_sha256": "e23e6d86f29c25cf1898a31369f676724062901488aaa722bd6077e4be0c2795",
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "plano_sha256": "b222aa17a1baa6a6498c33554b7b1d6381d3eea19da215b01f747c444cd43786",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0",
+  "sha256": {
+    "digilab/config.py": "afb79a69f844141e5c5fe018dfbc9c18dec60dd1d53a945b4c41e772e5e81647",
+    "digilab/metrics.py": "4e2b476e35988bfd52c1c3c3f86e26c87ba2d0e36a0125b75c9b8ed515a63490",
+    "digilab/motivo.py": "29b95f66ddc3ef80654c3ef2ea3a0d05f8144485c14cdfcfebcf80529922da50",
+    "digilab/policies/lobos.py": "239101163a40bdb2000a3e4c8132d3962ffd25e4c3cb597230eb06ecaf3bfce7",
+    "experiments/bancada_v2.py": "5163179c5f551acd73b5b510cf3b1bbc492ffff385863ae6939d82c5a4b0e799",
+    "experiments/run_revisao_aprendiz.py": "f845ca25c7982f969fca324d9db0e62259576fc71096e75379210b364cecccf2"
+  }
+}

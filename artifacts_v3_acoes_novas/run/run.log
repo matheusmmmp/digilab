@@ -1,0 +1,135 @@
+{
+ "modo": "acoes_novas",
+ "vidas": 3200,
+ "premissas": {
+  "P-PASSEIO": {
+   "n": 200,
+   "media": 0.0836058550281034,
+   "dp": 0.009299068014941035,
+   "ic95": {
+    "ic_inferior": 0.08230920800707396,
+    "ic_superior": 0.08490250204913284
+   },
+   "classe": {
+    "classe": "> 0",
+    "sinal": null,
+    "motivo": null
+   },
+   "motivo": null,
+   "passa": true,
+   "limiar": 0.01
+  },
+  "G-ELEGIVEL-EP": {
+   "por_braco": {
+    "LAB": {
+     "frac_vidas": 1.0,
+     "vidas": 800,
+     "limiar": 0.8,
+     "passa": true
+    },
+    "LAB+P": {
+     "frac_vidas": 0.99875,
+     "vidas": 800,
+     "limiar": 0.8,
+     "passa": true
+    }
+   },
+   "passa": true
+  },
+  "conclusivo": true
+ },
+ "guarda": {
+  "contraste": "G-COMEDOURO-AN: LAB+P - LAB, a taxa por episodio, nas 4 celulas do comedouro",
+  "n": 200,
+  "n_grupos": 5,
+  "media": -0.02629994747619557,
+  "teste": "t sobre as unidades (A4.4.6)",
+  "p_unilateral": 0.9999997778276405,
+  "ic95": {
+   "ic_inferior": -0.03623163984434224,
+   "ic_superior": -0.0163682551080489,
+   "nivel": 0.95
+  },
+  "t": -5.221904950005905,
+  "gl": 199,
+  "motivo": null,
+  "g1": -0.09431985564506441,
+  "ressalva_assimetria": null,
+  "bootstrap": {
+   "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+   "p_unilateral": 1.0,
+   "ic95": {
+    "ic_inferior": -0.034965278292686676,
+    "ic_superior": -0.01763461665970446,
+    "nivel": 0.95
+   },
+   "ic90": {
+    "ic_inferior": -0.03356540073267803,
+    "ic_superior": -0.019237357348883044,
+    "nivel": 0.9
+   },
+   "motivo": null
+  },
+  "classe": {
+   "classe": "< 0",
+   "sinal": null,
+   "motivo": null
+  },
+  "margem": 0.018,
+  "margem_efetiva": 0.014170489215223238,
+  "falha": true
+ },
+ "movimento": {
+  "contraste": "MOV: LAB+P - LAB, a fracao das decisoes fora do dormir que saem do lugar, nas 8 celulas",
+  "n": 200,
+  "n_grupos": 5,
+  "media": 0.023627778430646066,
+  "teste": "t sobre as unidades (A4.4.6)",
+  "p_unilateral": 3.3233712621746437e-32,
+  "ic95": {
+   "ic_inferior": 0.02033439113284155,
+   "ic_superior": 0.02692116572845058,
+   "nivel": 0.95
+  },
+  "t": 14.147425762376365,
+  "gl": 199,
+  "motivo": null,
+  "g1": 0.2719075991507116,
+  "ressalva_assimetria": null,
+  "bootstrap": {
+   "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+   "p_unilateral": 0.0,
+   "ic95": {
+    "ic_inferior": 0.022673768270919395,
+    "ic_superior": 0.024631092183350647,
+    "nivel": 0.95
+   },
+   "ic90": {
+    "ic_inferior": 0.022744061533242557,
+    "ic_superior": 0.024560798921027485,
+    "nivel": 0.9
+   },
+   "motivo": null
+  },
+  "classe": {
+   "classe": "> 0",
+   "sinal": null,
+   "motivo": null
+  },
+  "margem": 0.018,
+  "margem_efetiva": 0.0046989885968246985,
+  "move": true,
+  "classe_so_descricao": true
+ },
+ "leitura": {
+  "G-COMEDOURO-AN": "< 0",
+  "sinal_da_guarda": null,
+  "MOV_move": true,
+  "ressalva_da_guarda": null,
+  "linha": 2,
+  "o_que_diria": "a guarda falha: nestas condicoes, o passeio tira o pet do comedouro",
+  "an5_pode_rodar": false,
+  "o_que_se_faz": "registrado como esta; a passeio fica desligada; a AN5 nao roda"
+ }
+}
+saida=0

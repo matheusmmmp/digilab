@@ -1,0 +1,31 @@
+{
+  "descricao": "Registro da calibracao do combate V2.1. Feita SO com as sementes de calibracao [3101, 3202, 3303, 3404, 3505]; as de validacao nao foram usadas antes de congelar.",
+  "data": "2026-09-24",
+  "evidencia": "artifacts_combate_v21/calibracao_varredura.jsonl (10 variantes, N=20 por par por semente; experiments/calibrar_v21.py com experiments/configs/calibracao/variantes_v21.json) e artifacts_combate_v21/calibracao/ (bateria rapida, N=40, sem E5)",
+  "procedimento": "Rodada 1 (bots e regras, olhando a matriz e partidas rastreadas): os bots do colosso preparavam o pesado sem pele_dura e eram interrompidos; a resposta declarada por oponente_frequente quase nunca disparava; o parry nao punia a investida; o disparo marcado anulava o contra_golpe do espelho. Rodada 2 (numeros): 10 variantes de conversao de stats, custo de pele_dura, reflexo do espelho e multiplicador do adolescente. Parou apos 2 rodadas para nao sobreajustar.",
+  "ajustes": [
+    {"campo": "fracao_espelho_disparo", "de": 0.5, "para": 1.0,
+     "motivo": "com 0.5 o espelho recebe ~12 do disparo marcado e devolve ~6; a passiva nao vale contra o cacador. Com 1.0 o espelho entra no suporte do E1."}
+  ],
+  "revisoes_de_regra": [
+    "parry: defender contra investida anula o dano E o avanco (o investidor fica em medio com o guts gasto); antes so anulava o dano e a investida chegava perto de graca",
+    "disparo marcado ignora a REDUCAO de defender/contra_golpe, mas o contra_golpe do espelho ainda devolve o dano"
+  ],
+  "revisoes_de_bot": [
+    "vigia: oponente_vai_preparar -> golpe_rapido (interrompe) no lugar de recuar; pele_dura com guts >= 40 (era 60, nunca alcancado)",
+    "tita e colosso adolescente: pele_dura com guts >= 40 (era 60)",
+    "muralha: reescrito como parede contra corpo a corpo (contra_golpe contra golpe rapido, parry contra investida)",
+    "respostas declaradas do E3: regras incondicionais que o oponente poe no topo quando sabe que enfrenta a tecnica (antes: oponente_frequente, quase nunca verdadeiro)"
+  ],
+  "testado_e_nao_adotado": [
+    "hp 80+2*vigor e 85+1.5*vigor: estreitam as especies (0.34-0.64 -> 0.43-0.57) mas trocam a dominante (ferrugem ou brasa) e derrubam o suporte do E1",
+    "guarda 1.2-0.02*guarda, regen 2+0.6*rec, forca/mira 0.8+0.02*stat: nao tiram a especie dominante",
+    "custo_pele_dura 12: colosso continua fraco (media ~0.3)",
+    "multiplicador do adolescente 0.9 e 1.0: menos formas dentro da faixa do E4 (a diferenca adulto x adolescente vem mais dos gambits e da passiva que do estagio)"
+  ],
+  "nao_resolvido_por_numeros": [
+    "E2: com as especies do catalogo, uma especie de corpo a corpo (ferrugem ou brasa) vence as outras; 6 dos 8 arquetipos lutam de perto e a soma de stats nao gera ciclo entre especies",
+    "E1: o suporte oscila entre 3 e 4 conforme a amostra (ciclo furioso > cacador > espelho > furioso; o resto entra com peso pequeno)",
+    "E4: varia de ~0.6 a 1.0 por forma; vigia, tita, muralha e sentinela esmagam o adolescente da propria linha"
+  ]
+}

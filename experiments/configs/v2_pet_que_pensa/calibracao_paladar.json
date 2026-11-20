@@ -1,0 +1,74 @@
+{
+  "descricao": "Calibracao do pet que pensa com o paladar (PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 3: A3.2 a A3.5; PJ-3 a PJ-6). Quatro passos pelo orquestrador run_v2_calibracao_pet_que_pensa_paladar.py: (1) o ganho_gosto na grade {S/2, S, 2S}, o P1 so na fase 1, a fracao de fruta madura entre os consumos no mapa nos dias 4 a 6, o menor ponto com a media em [0,25; 0,60] (senao o mais perto, com o desvio); (2) o g_plano pela regra da secao 5 sem mudanca, com o ganho_gosto do passo 1; (3) a G-REVAL-POSSIVEL por unidade, sem vida; (4) o piloto, so com ela passando. As 20 unidades das bases 49101...49505 (K_u = 4, prefixo pet_que_pensa). O paladar ligado nos tres lugares (o mundo, o corpo e o cerebro), o genoma do paladar da unidade e a x como a fruta de maior valor inato (PJ-1). O resto e a config da calibracao sem o paladar. NAO rodada: precisa do sim do Matheus.",
+  "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+  "tipo": "pet_que_pensa",
+  "d_a": 7,
+  "janela": 3,
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "paladar": true,
+  "unidades": {
+    "bases": [
+      49101,
+      49202,
+      49303,
+      49404,
+      49505
+    ],
+    "k": 4,
+    "prefixo": "pet_que_pensa"
+  },
+  "calibracao_ganho_gosto": {
+    "grade": [
+      512,
+      1024,
+      2048
+    ],
+    "dias": [
+      4,
+      6
+    ],
+    "faixa": [
+      0.25,
+      0.6
+    ]
+  },
+  "calibracao_g_plano": {
+    "grade": [
+      256,
+      512,
+      1024
+    ],
+    "dias": [
+      4,
+      6
+    ],
+    "faixa": [
+      0.1,
+      0.4
+    ]
+  }
+}

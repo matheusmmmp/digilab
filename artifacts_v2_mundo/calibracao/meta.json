@@ -1,0 +1,433 @@
+{
+  "bancada": {
+    "bancada_sha256": "ace8f23fb4eaa676dd7b6c5324150bc5a3ddebf6a7ff7b79fd579eef8abdecd4",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 0,
+      "w0_pedido": 0
+    },
+    "config": {
+      "acoplados": [
+        {
+          "destino": "P0",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        },
+        {
+          "destino": "P1",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        }
+      ],
+      "bootstrap": {
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "semente": 4242
+      },
+      "bracos": [
+        "P0",
+        "P0z",
+        "P1"
+      ],
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4
+      },
+      "dias": 14,
+      "donos": [
+        "atencioso",
+        "relapso",
+        "aleatorio",
+        "incoerente"
+      ],
+      "lobos": {
+        "memoria_ganho": 512
+      },
+      "lugares": [
+        "comedouro",
+        "perto",
+        "longe"
+      ],
+      "montagem": "completa",
+      "mundo": {
+        "mult_queda": 0.5
+      },
+      "mundos": [
+        "fisico"
+      ],
+      "orcamento": 224,
+      "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+      "ponto": "T3",
+      "sonda": {
+        "amostras": 200,
+        "estados": 64,
+        "semente": 9001
+      },
+      "unidades": {
+        "bases": [
+          31101,
+          31202,
+          31303,
+          31404,
+          31505
+        ],
+        "k": 4,
+        "prefixo": "mundo"
+      }
+    },
+    "config_sha256": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+    "metrics_sha256": "42df894783f9034943d3219bc429602886ea5d1051f6dc3c2ef7fd225943a465",
+    "mundo_sha256": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "python": "3.13.0"
+  },
+  "chaves_desligadas_conferidas": {
+    "0.5": {
+      "P0": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      },
+      "P0z": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      },
+      "P1": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      }
+    },
+    "1": {
+      "P0": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      },
+      "P0z": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      },
+      "P1": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      }
+    },
+    "2": {
+      "P0": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      },
+      "P0z": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      },
+      "P1": {
+        "alvo_aprendido": false,
+        "banheiro": null,
+        "corpo": null,
+        "entradas_sociais": false,
+        "modelo_outros": false,
+        "presenca_fruta_mundo": false
+      }
+    }
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "chaves_desligadas": {
+      "alvo_aprendido": "desligado: o P1 usa os alvos padrao do motor (secao 3)",
+      "banheiro": "ConfigBanheiro desligada: nenhum braco do plano tem o banheiro (secao 3)",
+      "calendario_informacao_pedido": "desligados (secao 2)",
+      "corpo": "sem regime: o corpo (W-TAREFA-CORPO) e outra frente; o plano usa o Estado de hoje (secao 2, R-7)",
+      "entradas_sociais": "desligadas: sem grupo",
+      "gestos": "desligados: os donos so cuidam (PMF-3)",
+      "grupo": "desligado: um pet por mundo",
+      "julgamento_fruta": "desligado (secao 2)",
+      "metabolismo": "desligado: so existe com o corpo",
+      "modelo_outros": "desligado: sem grupo",
+      "pesos_janela": "desligada: e o P1-cw do corpo",
+      "presenca_fruta_mundo": "desligada: o plano nao a pede; no mundo iguais o humor da fruta e zero e os canais rodam sem ela (#269)",
+      "rede_de_si": "desligada: so observa e nao e do plano"
+    },
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "descricao": "Calibracao do mundo fisico (PLANO_ANALISE_V2_MUNDO_FISICO, secao 6 e adendo 1, A1.4; autorizada pelo Matheus em 2026-10-12): so o P0 e o P0z, m em {1/2, 1, 2} sobre o p_queda do jardim e da mata (ConfigMundo.mult_queda), nas 20 unidades das bases 31101...31505 (K = 4, prefixo mundo), 12 celulas (4 donos x 3 lugares), 3 x 12 x 2 = 72 vidas por unidade. Regra: o menor m com o limite inferior do IC95 de (P0z - P0) em D_FE acima de 0; sem nenhum, para. No m escolhido, o piloto do N (A1.4): P1, P0^ac e P1^ac (acoplados ao P0z da mesma celula), 36 vidas por unidade, o Delta_MF, o bootstrap de poder (K de 4 a 10, 2.000 replicas) e o custo. O resto do mundo nos valores da tarefa; as chaves novas que o plano nao pede ficam desligadas (chaves_desligadas).",
+    "dias": 14,
+    "donos": [
+      "atencioso",
+      "relapso",
+      "aleatorio",
+      "incoerente"
+    ],
+    "grade_m": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "lobos": {
+      "memoria_ganho": 512
+    },
+    "lugares": [
+      "comedouro",
+      "perto",
+      "longe"
+    ],
+    "montagem": "completa",
+    "mundo": "fisico",
+    "orcamento": 224,
+    "piloto": {
+      "acoplados": [
+        {
+          "destino": "P0",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        },
+        {
+          "destino": "P1",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        }
+      ],
+      "bracos": [
+        "P1"
+      ]
+    },
+    "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+    "poder": {
+      "alfa": 0.025,
+      "alfas_relato": [
+        0.01,
+        0.05
+      ],
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "replicas": 2000
+    },
+    "ponto": "T3",
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    },
+    "unidades": {
+      "bases": [
+        31101,
+        31202,
+        31303,
+        31404,
+        31505
+      ],
+      "k": 4,
+      "prefixo": "mundo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_mundo/calibracao.json",
+  "config_sha256": "1f079cf380eb4dc7262a5dcfbbf85c96ae37011a4319ae8b57ea12ddef83363a",
+  "duracao_s": 1797.5348420143127,
+  "fim": "2026-10-12T06:58:03",
+  "git_head": "1a748cd3654be1b8775a6c0232f7edd0166f9a2f",
+  "git_limpo": true,
+  "grade_parede_s": 990.6020229999995,
+  "inicio": "2026-10-12T06:28:06",
+  "modo": "calibracao",
+  "orquestrador_sha256": "0322f2527acc3b15c8f7959b4e54c990717ed088be829f235f332a3c6cec84a1",
+  "piloto_parede_s": 806.062754599996,
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+  "plano_sha256": "4567609a4708b28cf2a556384fbcf884a9154bd9a0f54f5d5ef2e8c76c6a24f8",
+  "processos": 8,
+  "python": "3.13.0",
+  "sha256": {
+    "config": "1f079cf380eb4dc7262a5dcfbbf85c96ae37011a4319ae8b57ea12ddef83363a",
+    "config.py": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos.py": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+    "mundo.py": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+    "plano": "4567609a4708b28cf2a556384fbcf884a9154bd9a0f54f5d5ef2e8c76c6a24f8"
+  },
+  "unidades": [
+    {
+      "base": 31101,
+      "genoma": 4394448482497364374,
+      "k": 0,
+      "semente": 11016845603886905062
+    },
+    {
+      "base": 31101,
+      "genoma": 13212515553838766836,
+      "k": 1,
+      "semente": 10796354199351168200
+    },
+    {
+      "base": 31101,
+      "genoma": 16342401351462639570,
+      "k": 2,
+      "semente": 18429686383698833762
+    },
+    {
+      "base": 31101,
+      "genoma": 18279970559205770096,
+      "k": 3,
+      "semente": 15157410986917832252
+    },
+    {
+      "base": 31202,
+      "genoma": 17651903049962202953,
+      "k": 0,
+      "semente": 10638108069603961130
+    },
+    {
+      "base": 31202,
+      "genoma": 14743873903613890709,
+      "k": 1,
+      "semente": 4044669000192566216
+    },
+    {
+      "base": 31202,
+      "genoma": 13143944025413254401,
+      "k": 2,
+      "semente": 8110577183607130521
+    },
+    {
+      "base": 31202,
+      "genoma": 2452499074659383431,
+      "k": 3,
+      "semente": 13260389315197269779
+    },
+    {
+      "base": 31303,
+      "genoma": 13985467736640743237,
+      "k": 0,
+      "semente": 2200863914633920674
+    },
+    {
+      "base": 31303,
+      "genoma": 14462396168294481977,
+      "k": 1,
+      "semente": 15978053203114197007
+    },
+    {
+      "base": 31303,
+      "genoma": 10085434638572330124,
+      "k": 2,
+      "semente": 10112174431706616573
+    },
+    {
+      "base": 31303,
+      "genoma": 11343799872625657952,
+      "k": 3,
+      "semente": 14677409130900272223
+    },
+    {
+      "base": 31404,
+      "genoma": 468397698062847364,
+      "k": 0,
+      "semente": 16388913757759220423
+    },
+    {
+      "base": 31404,
+      "genoma": 2727977424245517065,
+      "k": 1,
+      "semente": 12235948959862444927
+    },
+    {
+      "base": 31404,
+      "genoma": 16924355967461062631,
+      "k": 2,
+      "semente": 12807162598658505619
+    },
+    {
+      "base": 31404,
+      "genoma": 1137519385812576121,
+      "k": 3,
+      "semente": 4957917208964329902
+    },
+    {
+      "base": 31505,
+      "genoma": 13189981877509450741,
+      "k": 0,
+      "semente": 14599077747320009882
+    },
+    {
+      "base": 31505,
+      "genoma": 11427410609200528396,
+      "k": 1,
+      "semente": 7365230073607071008
+    },
+    {
+      "base": 31505,
+      "genoma": 1635260936055331325,
+      "k": 2,
+      "semente": 10730302796863197785
+    },
+    {
+      "base": 31505,
+      "genoma": 17141849833882766860,
+      "k": 3,
+      "semente": 13580210408594646735
+    }
+  ]
+}

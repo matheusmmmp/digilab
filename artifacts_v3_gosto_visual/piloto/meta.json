@@ -1,0 +1,102 @@
+{
+  "artefatos_sha256": {
+    "analise.json": "210cecbf3d85c0c7b5211a7e4ceb11ade7c7c1d2d2d005fca4dda2b378dd16c3",
+    "custo.json": "a57650f23d32847635df571eb3277b844b97181be5bb315567aa7dacb7de9a0f",
+    "medidas.json": "fd1429aa1eba3a71121f9d062841caa57c030248087de0f44376ae42536bad44"
+  },
+  "bootstrap": 2000,
+  "config": {
+    "descricao": "GOSTO_VISUAL, GV3: o piloto (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secao 6): so o custo e a conferencia de que o pet olha nas sondas; nada se ajusta. Nao roda antes do plano APROVADO pelo Matheus.",
+    "dias": 14,
+    "fase": "gosto_visual",
+    "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+    "unidades": {
+      "bases": [
+        89101,
+        89202
+      ],
+      "k": 2
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_gosto_visual/piloto.json",
+  "config_sha256": "55c801e0f390a5e4a760423177f77afcddd5b363993c45d669d424e42ad35ce4",
+  "dias_sonda": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "donos": [
+    "nenhum",
+    "calmo",
+    "agitado"
+  ],
+  "duracao_s": 126.76628613471985,
+  "fase": "gosto_visual",
+  "fim": "2026-11-11T23:37:05",
+  "genomas": [
+    "proprio",
+    "vazio"
+  ],
+  "git_head": "487360403e720857c6096254aab33f8e8cb85084",
+  "git_limpo": true,
+  "inicio": "2026-11-11T23:34:59",
+  "modo": "piloto",
+  "orquestrador_sha256": "479baf22d36dd08ee570e4bcbd304942d12c1d38b9ad9582b5674c9915aa8031",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+  "plano_sha256": "010d268721ac4eae16a0f6aa543ab3100434c28851884a1b7168d0315de7f146",
+  "processos": 4,
+  "python": "3.13.0",
+  "replicas": 3,
+  "sha256": {
+    "config.py": "f893b54c51911a380f58f19712a8f5e8b43d02701620d39084cbb99f3be7070c",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "c2bcc4a17ed51c983a44dbe1c5f7638d15a8338987dc9563170221d943c980b7",
+    "digibrain/afeto.py": "a378bc9fe333486f09fc5cb65e192fb283fda389d3156f5e1476492a20d3bba6",
+    "digibrain/arb.py": "cf2864fd07309522fa2666023f865722096fae4fdae909923230ac8234f809cb",
+    "digibrain/decodificador.py": "743764f0b230862f88d99ea3e997b4b27b1da6604b0f796fbb912cd4577df1f8",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "9d5faebe98a81fb984baf3af2030c5ebaa07923680a51e65bf598c5ce434d435",
+    "digibrain/mem.py": "d0d61e22032cf339b568aa7dd7e6a57cb5173eaca3beb66f8f0c70b4c9068169",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "6745c38a6840678b7dabf7e669c155822b6c9ecc527f73633389e00acabb1f0d",
+    "digibrain/sens.py": "49bef79d715f781394b5480d7c4f3381fe098acd7340b577092ab9b62b333ba8",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd",
+    "mundo.py": "706426e4c2714cbaad47cf88032118fe0d702632ec48496f62f4df6407121c97",
+    "tv.py": "e93312921b2feef9ed15d596dd05921b3fb184cbd060f3cc77bc06f1f24f28ba"
+  },
+  "sonda_sha256": "d3eee15766dc1cbfa616854997dd55ae4571c1ec94a6a327464c8dad7067b5d3",
+  "unidades": [
+    {
+      "base": 89101,
+      "genoma": 3119766803607587497,
+      "k": 0,
+      "semente": 4351627794403565496
+    },
+    {
+      "base": 89101,
+      "genoma": 17089125114584994568,
+      "k": 1,
+      "semente": 15212423524273828103
+    },
+    {
+      "base": 89202,
+      "genoma": 1717151772264831396,
+      "k": 0,
+      "semente": 1949441411074888793
+    },
+    {
+      "base": 89202,
+      "genoma": 2889337807512055278,
+      "k": 1,
+      "semente": 18421694223698019327
+    }
+  ],
+  "vidas_parede_s": 125.76815680001164
+}

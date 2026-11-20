@@ -1,0 +1,7 @@
+{
+ "teto_da_sessao": 36,
+ "antes": 86,
+ "depois_da_multivista": 80,
+ "depois_da_malha": 50,
+ "gasto": {"multivista": 6, "malha": 30, "total": 36}
+}

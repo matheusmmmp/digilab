@@ -1,0 +1,21 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": [
+  "ref_maquete_b.png"
+ ],
+ "prompt_base": "Concept art of a single prop for a cozy 3D island game for children with an anime digital-world look. Match the art style of the reference image: anime background art, bright saturated colors, cel shading with crisp dark ink outlines. Unlike a flat toy, show rich hand-painted detail: painted texture variation inside every color area, visible materials (stone blocks, wood grain, canvas seams, chipped paint), small wear, moss and little plants where it fits, soft gradients and highlights. Painterly anime background-art finish: soft brush strokes inside each color area, believable materials rather than plastic, a thin light rim highlight on the edges facing the sky, and most of the detail on the main feature of the object. Chunky readable silhouette, slightly toy-like proportions, friendly and inviting, nothing scary. No text, no letters, no numbers, no logo, no brand, no symbols, no characters, no creatures. Show only the object, the full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow.",
+ "variantes": [
+  {
+   "nome": "esboco_1_vagao_madeira",
+   "prompt": "A single old wooden railway passenger wagon in red with a cream curved roof, round windows, iron wheels and a short piece of rail track with wooden sleepers and grass between the rails."
+  },
+  {
+   "nome": "esboco_2_locomotiva",
+   "prompt": "A small old steam locomotive in dark green and red with brass details and a tall chimney, iron wheels, on a short piece of rail track with wooden sleepers and some grass."
+  },
+  {
+   "nome": "esboco_3_bonde",
+   "prompt": "A small vintage tram car in cream and teal with big windows, a pantograph on the roof, iron wheels on a short piece of rail track overgrown with grass and flowers."
+  }
+ ]
+}

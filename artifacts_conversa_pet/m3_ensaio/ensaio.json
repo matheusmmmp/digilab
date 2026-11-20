@@ -1,0 +1,286 @@
+{
+ "adolescente": {
+  "livre-v2": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Dormindo.",
+    "fatos": [
+     "R1"
+    ],
+    "lat": 23.674876300006872,
+    "erro": null
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Hum.",
+    "fatos": [],
+    "lat": 8.577160800021375,
+    "erro": null
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Hum.",
+    "fatos": [],
+    "lat": 4.681453500001226,
+    "erro": null
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Não me liga.",
+    "fatos": [
+     "E2",
+     "M1",
+     "R1"
+    ],
+    "lat": 5.565878800000064,
+    "erro": null
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Humm.",
+    "fatos": [],
+    "lat": 5.027829200000269,
+    "erro": null
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Não lembra.",
+    "fatos": [],
+    "lat": 4.93757910002023,
+    "erro": null
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Ainda não.",
+    "fatos": [
+     "E1",
+     "D1",
+     "R1"
+    ],
+    "lat": 5.974877300002845,
+    "erro": null
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "…",
+    "fatos": [],
+    "lat": null,
+    "erro": "chamada: HTTPError: HTTP Error 500: Internal Server Error"
+   }
+  ],
+  "conversa-v1": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Mais ou menos. Estou com muita fome e meio cansado. E você, como foi o dia?",
+    "fatos": [
+     "E1",
+     "R1"
+    ],
+    "lat": 19.683535500022117,
+    "erro": null
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Matheus, hum. E o que você quer?",
+    "fatos": [],
+    "lat": 5.139566699974239,
+    "erro": null
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Não. Você me disse o nome há pouco tempo?",
+    "fatos": [],
+    "lat": 5.8787303999997675,
+    "erro": null
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Você me deixou esperando há uns 22 minutos. Aí o humor cai.",
+    "fatos": [
+     "M1",
+     "E1"
+    ],
+    "lat": 6.497716900019441,
+    "erro": null
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Poxa, difícil como? Eu estou mal-humorado, mas quero saber.",
+    "fatos": [
+     "E1"
+    ],
+    "lat": 5.83104610000737,
+    "erro": null
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Disso eu não lembro.",
+    "fatos": [],
+    "lat": 4.980926799995359,
+    "erro": null
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Finalmente! Você vai me dar comida?",
+    "fatos": [
+     "D1"
+    ],
+    "lat": 5.57097969998722,
+    "erro": null
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Eu sou um Growlmon. E tenho muita fome.",
+    "fatos": [
+     "I1",
+     "E1"
+    ],
+    "lat": 7.115613500005566,
+    "erro": null
+   }
+  ]
+ },
+ "adulto": {
+  "livre-v2": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "…",
+    "fatos": [],
+    "lat": null,
+    "erro": "chamada: HTTPError: HTTP Error 500: Internal Server Error"
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Humm...",
+    "fatos": [],
+    "lat": 14.160111100005452,
+    "erro": null
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Hummm... não.",
+    "fatos": [
+     "M1",
+     "T1"
+    ],
+    "lat": 5.627833999984432,
+    "erro": null
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Não sei. Você me deixou esperando.",
+    "fatos": [
+     "M1",
+     "E2"
+    ],
+    "lat": 6.148260799993295,
+    "erro": null
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Hmm...",
+    "fatos": [],
+    "lat": 5.248377199983224,
+    "erro": null
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Não sei.",
+    "fatos": [],
+    "lat": 5.604261900007259,
+    "erro": null
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Comi?",
+    "fatos": [
+     "E1",
+     "D1"
+    ],
+    "lat": 5.241787300008582,
+    "erro": null
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Fome.",
+    "fatos": [
+     "E1",
+     "D1"
+    ],
+    "lat": 5.724071100004949,
+    "erro": null
+   }
+  ],
+  "conversa-v1": [
+   {
+    "jogador": "oi! tudo bem com você?",
+    "pet": "Estou meio cansado e com fome, mas respondo.",
+    "fatos": [
+     "E1",
+     "E2",
+     "M1"
+    ],
+    "lat": 7.727397600014228,
+    "erro": null
+   },
+   {
+    "jogador": "eu sou o Matheus, prazer",
+    "pet": "Prazer, Matheus.",
+    "fatos": [],
+    "lat": 4.949367199995322,
+    "erro": null
+   },
+   {
+    "jogador": "lembra meu nome?",
+    "pet": "Não, não lembro. Você me disse agora?",
+    "fatos": [],
+    "lat": 5.604196899977978,
+    "erro": null
+   },
+   {
+    "jogador": "por que você está bravo?",
+    "pet": "Você me deixou esperando há uns 22 minutos, e eu estou com fome. Ainda estou meio azedo.",
+    "fatos": [
+     "M1",
+     "E1"
+    ],
+    "lat": 7.195939600002021,
+    "erro": null
+   },
+   {
+    "jogador": "hoje meu dia foi difícil no trabalho",
+    "pet": "Sinto muito.",
+    "fatos": [],
+    "lat": 4.788667299988447,
+    "erro": null
+   },
+   {
+    "jogador": "você lutou ontem, né?",
+    "pet": "Disso eu não lembro.",
+    "fatos": [],
+    "lat": 6.359583699988434,
+    "erro": null
+   },
+   {
+    "jogador": "vai comer",
+    "pet": "Finalmente!",
+    "fatos": [
+     "D1"
+    ],
+    "lat": 5.006592699995963,
+    "erro": null
+   },
+   {
+    "jogador": "me conta alguma coisa sobre você",
+    "pet": "Sou um WarGrowlmon e sou bem teimoso. Agora só penso em comer.",
+    "fatos": [
+     "I1",
+     "T1",
+     "D1"
+    ],
+    "lat": 7.547177200001897,
+    "erro": null
+   }
+  ]
+ }
+}

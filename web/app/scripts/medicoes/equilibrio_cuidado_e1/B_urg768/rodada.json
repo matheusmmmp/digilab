@@ -1,0 +1,18 @@
+{
+ "nome": "B_urg768",
+ "bloco": "B",
+ "tenta": "urgencia_lambda = 768",
+ "opcoes": {
+  "ajuste": {
+   "cerebro": {
+    "guarda_fome_brincar": false,
+    "comer_bebe": false,
+    "w_comer_bebe": 512
+   },
+   "lambda_acordar": null,
+   "urgencia_lambda": 768,
+   "vies_brincar": null,
+   "w_bola_do_dono": null
+  }
+ }
+}

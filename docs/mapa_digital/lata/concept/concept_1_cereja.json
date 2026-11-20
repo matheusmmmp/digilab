@@ -1,0 +1,9 @@
+{
+ "id": "01a1b333-2715-7241-a197-60befe5695bf",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single giant soda can standing upright, as a landmark prop for a cozy low-poly 3D island game for children with an anime digital-world look, cute and friendly, nothing dirty, dented, rusty or scary. Match the art style of the reference images: simple chunky rounded shapes, toy-like proportions, flat cel shading with two tones, soft saturated colors, clean flat color areas. A classic aluminium drink can with a silver top rim and pull tab, closed, no brand, no logo, no text, no letters, no numbers, only simple big graphic shapes and a fruit picture. Show only the can, full object in frame, three-quarter view from slightly below, on a plain light grey background, no ground, no shadow, no characters. Pastel rainbow stripes of soft color blocks (mint, lilac, yellow, pink) with a big cute pair of red cherries on the front.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794007837379,
+ "finished_at": 1794007855478
+}

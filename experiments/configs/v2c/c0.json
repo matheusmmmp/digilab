@@ -1,0 +1,20 @@
+{
+  "descricao": "TAREFA_CORRECAO_COMBATE, etapa c0: V2 original nas sementes de calibracao (linha de base da tabela mudanca x gate). CALIBRACAO.",
+  "saida": "artifacts_combate_v2c/calibracao/c0",
+  "sementes_calibracao": [
+    1101,
+    1202,
+    1303,
+    1404,
+    1505
+  ],
+  "sementes_validacao": [
+    2101,
+    2202,
+    2303,
+    2404,
+    2505
+  ],
+  "conjunto": "calibracao",
+  "partidas_por_par_por_semente": 200
+}

@@ -1,0 +1,108 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-10-30",
+ "commit": "71bcdacf",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p1",
+ "metas": {
+  "P-1": {
+   "vizinhos": {
+    "rookie_champion": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 2560,
+     "razao_E": 0.3886,
+     "vitorias_por_par": {}
+    },
+    "champion_ultimate": {
+     "pontos": 0.0545,
+     "vitorias": 0.0545,
+     "lutas": 10240,
+     "razao_E": 0.5572,
+     "vitorias_por_par": {
+      "brigao x sentinela": 280,
+      "brigao x emboscador": 228,
+      "brigao x tita": 4,
+      "guardiao x sentinela": 16,
+      "cacador x furioso": 1,
+      "cacador x muralha": 4,
+      "colosso x espelho": 8,
+      "colosso x muralha": 8,
+      "colosso x emboscador": 7,
+      "colosso x tita": 2
+     }
+    },
+    "ultimate_mega": {
+     "pontos": 0.0399,
+     "vitorias": 0.0397,
+     "lutas": 20480,
+     "razao_E": 0.2848,
+     "vitorias_por_par": {
+      "duelista x sentinela": 12,
+      "duelista x emboscador": 86,
+      "furioso x sentinela": 195,
+      "furioso x emboscador": 215,
+      "sentinela x muralha": 92,
+      "emboscador x muralha": 166,
+      "vigia x sentinela": 8,
+      "vigia x emboscador": 14,
+      "tita x sentinela": 4,
+      "tita x emboscador": 22
+     }
+    }
+   },
+   "dois_estagios": {
+    "rookie_ultimate": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 5120,
+     "razao_E": 0.1088,
+     "vitorias_por_par": {}
+    },
+    "champion_mega": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 10240,
+     "razao_E": 0.0606,
+     "vitorias_por_par": {}
+    }
+   },
+   "passa": true
+  }
+ },
+ "custo_s": 26.1915
+}

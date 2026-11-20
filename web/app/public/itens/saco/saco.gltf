@@ -1,0 +1,223 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": true,
+   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
+   "tarefas_meshy": {
+    "concept": "01a1af2c-3fa0-7264-a175-6920b4b47da3",
+    "vistas": "01a1af3f-3e92-70db-b11a-29f25b30c481",
+    "malha": "01a1b0a9-cb9a-76c6-a7de-52c1b9f4abe1"
+   },
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, cortada no Blender em duas pecas (suporte e saco, pela corrente) e com a cor chapada na paleta do concept",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0,
+    1
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "suporte"
+  },
+  {
+   "mesh": 1,
+   "name": "saco"
+  }
+ ],
+ "materials": [
+  {
+   "name": "saco",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "suporte",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  },
+  {
+   "name": "saco",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 4,
+      "NORMAL": 5,
+      "TEXCOORD_0": 6
+     },
+     "indices": 7,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "saco_cor",
+   "uri": "saco_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 2213,
+   "max": [
+    0.4250120222568512,
+    1.901595115661621,
+    0.3262230157852173
+   ],
+   "min": [
+    -0.5166119933128357,
+    0,
+    -0.3262230157852173
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 2213,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 2213,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 3153,
+   "type": "SCALAR"
+  },
+  {
+   "bufferView": 4,
+   "componentType": 5126,
+   "count": 2029,
+   "max": [
+    0.5166119933128357,
+    1.6515100002288818,
+    0.23798000812530518
+   ],
+   "min": [
+    -0.1507290154695511,
+    0.24318110942840576,
+    -0.22088190913200378
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 5,
+   "componentType": 5126,
+   "count": 2029,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 6,
+   "componentType": 5126,
+   "count": 2029,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 7,
+   "componentType": 5123,
+   "count": 3093,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 26556,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 26556,
+   "byteOffset": 26556,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 17704,
+   "byteOffset": 53112,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 6306,
+   "byteOffset": 70816,
+   "target": 34963
+  },
+  {
+   "buffer": 0,
+   "byteLength": 24348,
+   "byteOffset": 77124,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 24348,
+   "byteOffset": 101472,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 16232,
+   "byteOffset": 125820,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 6186,
+   "byteOffset": 142052,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 148240,
+   "uri": "saco.bin"
+  }
+ ]
+}

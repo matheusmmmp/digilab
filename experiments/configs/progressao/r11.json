@@ -1,0 +1,266 @@
+{
+  "descricao": "rodada 11: varredura de estilos para o tier3 (cobertura por linha)",
+  "tier": "tier3",
+  "npcs": {
+    "v21:duelista@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:duelista",
+      "epsilon": 0.05
+    },
+    "v21:duelista@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:duelista",
+      "epsilon": 0.05
+    },
+    "v21:duelista@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:furioso@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:furioso",
+      "epsilon": 0.05
+    },
+    "v21:furioso@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:furioso",
+      "epsilon": 0.05
+    },
+    "v21:furioso@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:espelho@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:espelho",
+      "epsilon": 0.05
+    },
+    "v21:espelho@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:espelho",
+      "epsilon": 0.05
+    },
+    "v21:espelho@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:muralha@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:muralha",
+      "epsilon": 0.05
+    },
+    "v21:muralha@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:muralha",
+      "epsilon": 0.05
+    },
+    "v21:muralha@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.05
+    },
+    "v21:sentinela@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.05
+    },
+    "v21:sentinela@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.05
+    },
+    "v21:emboscador@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.05
+    },
+    "v21:emboscador@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:vigia@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:vigia",
+      "epsilon": 0.05
+    },
+    "v21:vigia@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:vigia",
+      "epsilon": 0.05
+    },
+    "v21:vigia@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:tita@120|e0.05": {
+      "total": 120,
+      "estilo": "v21:tita",
+      "epsilon": 0.05
+    },
+    "v21:tita@120|e0.2": {
+      "total": 120,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@150|e0.05": {
+      "total": 150,
+      "estilo": "v21:tita",
+      "epsilon": 0.05
+    },
+    "v21:tita@150|e0.2": {
+      "total": 150,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@120|e0.05": {
+      "total": 120,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.05
+    },
+    "v2c:tartaruga@120|e0.2": {
+      "total": 120,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@150|e0.05": {
+      "total": 150,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.05
+    },
+    "v2c:tartaruga@150|e0.2": {
+      "total": 150,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@120|e0.05": {
+      "total": 120,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.05
+    },
+    "v2c:contragolpe@120|e0.2": {
+      "total": 120,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@150|e0.05": {
+      "total": 150,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.05
+    },
+    "v2c:contragolpe@150|e0.2": {
+      "total": 150,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@120|e0.05": {
+      "total": 120,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.05
+    },
+    "v2c:atirador@120|e0.2": {
+      "total": 120,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@150|e0.05": {
+      "total": 150,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.05
+    },
+    "v2c:atirador@150|e0.2": {
+      "total": 150,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@120|e0.05": {
+      "total": 120,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.05
+    },
+    "v2c:agressivo@120|e0.2": {
+      "total": 120,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@150|e0.05": {
+      "total": 150,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.05
+    },
+    "v2c:agressivo@150|e0.2": {
+      "total": 150,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@120|e0.05": {
+      "total": 120,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.05
+    },
+    "v2:adaptativo@120|e0.2": {
+      "total": 120,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@150|e0.05": {
+      "total": 150,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.05
+    },
+    "v2:adaptativo@150|e0.2": {
+      "total": 150,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    }
+  }
+}

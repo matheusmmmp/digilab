@@ -1,0 +1,72 @@
+{
+  "braco": "aleatorio",
+  "carater_adulto": {
+    "atento": -0.2734375,
+    "impetuoso": -0.09374999999999992,
+    "paciente": 0.615625,
+    "resistente": -0.15468750000000003
+  },
+  "condicao": 0.95,
+  "dono": {
+    "carinho_no_slot": 10,
+    "treino": 64
+  },
+  "enroladas": 20,
+  "especie": "cirro",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "muralha",
+    "linha": "guardiao",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/guardiao/muralha"
+  },
+  "obediencia_cuidado": 0.7345679012345678,
+  "ovo": 707,
+  "sessoes": 64,
+  "sombria": false,
+  "treino": {
+    "enroladas": 20,
+    "especie": "cirro",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 4,
+      "ignoradas": 8
+    },
+    "pontos": {
+      "folego": 4.979979999999999,
+      "forca": 4.52928700768725,
+      "guarda": 4.5207623738016,
+      "mira": 2.4,
+      "recuperacao": 5.070823340105051,
+      "vigor": 5.9854801034061005
+    },
+    "pontos_estagio": {
+      "adolescente": 4.681341575,
+      "adulto": 14.0,
+      "crianca": 8.80499125
+    },
+    "sessoes": 64,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 27.486332825,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.7029226113226617
+}

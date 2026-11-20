@@ -1,0 +1,72 @@
+{
+  "braco": "incoerente",
+  "carater_adulto": {
+    "atento": -0.6171875,
+    "impetuoso": 0.0015625000000000274,
+    "paciente": 0.7765625,
+    "resistente": -0.16249999999999992
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 23,
+    "treino": 51
+  },
+  "enroladas": 3,
+  "especie": "ferrugem",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "espelho",
+    "linha": "guardiao",
+    "ramo": "arisco",
+    "rotulo": "ferrugem/arisco/guardiao/espelho"
+  },
+  "obediencia_cuidado": 0.9478260869565217,
+  "ovo": 505,
+  "sessoes": 51,
+  "sombria": false,
+  "treino": {
+    "enroladas": 3,
+    "especie": "ferrugem",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 15,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.729839936136988,
+      "forca": 5.523968,
+      "guarda": 5.311037423999999,
+      "mira": 2.345381936251254,
+      "recuperacao": 4.345448831870357,
+      "vigor": 5.8987931217414
+    },
+    "pontos_estagio": {
+      "adolescente": 7.158841750000001,
+      "adulto": 14.0,
+      "crianca": 6.995627499999999
+    },
+    "sessoes": 51,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 28.15446925,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.4389336085550017
+}

@@ -1,0 +1,120 @@
+{
+ "escolhido": 0.01,
+ "fechou": true,
+ "grade": [
+  0.01,
+  0.03,
+  0.1
+ ],
+ "parametro": "taxa_ator",
+ "pontos": {
+  "0.01": {
+   "ponto": {
+    "lambda_elegibilidade": 0.8,
+    "taxa_ator": 0.01,
+    "taxa_critico": 0.03,
+    "w0_info": 0.0
+   },
+   "por_condicao": {
+    "casado_frutas": {
+     "deriva_fim": 0.00018316758642486754,
+     "deriva_meio": 6.791715772407202e-05,
+     "razao_deriva": 2.696926558220016,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    },
+    "descasado": {
+     "deriva_fim": 0.00018146214118382274,
+     "deriva_meio": 6.761691241644831e-05,
+     "razao_deriva": 2.683679788071493,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    },
+    "mutavel": {
+     "deriva_fim": 0.00018426805874600894,
+     "deriva_meio": 6.791715772407202e-05,
+     "razao_deriva": 2.713129714506566,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    }
+   },
+   "razao_media": 2.6979120202660254,
+   "vidas": 60,
+   "vidas_no_limite": 0
+  },
+  "0.03": {
+   "ponto": {
+    "lambda_elegibilidade": 0.8,
+    "taxa_ator": 0.03,
+    "taxa_critico": 0.03,
+    "w0_info": 0.0
+   },
+   "por_condicao": {
+    "casado_frutas": {
+     "deriva_fim": 0.0012643033292775194,
+     "deriva_meio": 0.0003498687492240013,
+     "razao_deriva": 3.6136503534016895,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    },
+    "descasado": {
+     "deriva_fim": 0.0012879290774502983,
+     "deriva_meio": 0.0003564531828269053,
+     "razao_deriva": 3.613178783357141,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    },
+    "mutavel": {
+     "deriva_fim": 0.0012693473482304888,
+     "deriva_meio": 0.0003498687492240013,
+     "razao_deriva": 3.628067242489832,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    }
+   },
+   "razao_media": 3.6182987930828876,
+   "vidas": 60,
+   "vidas_no_limite": 0
+  },
+  "0.1": {
+   "ponto": {
+    "lambda_elegibilidade": 0.8,
+    "taxa_ator": 0.1,
+    "taxa_critico": 0.03,
+    "w0_info": 0.0
+   },
+   "por_condicao": {
+    "casado_frutas": {
+     "deriva_fim": 0.014481586645723545,
+     "deriva_meio": 0.003536810548626146,
+     "razao_deriva": 4.094532756737235,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    },
+    "descasado": {
+     "deriva_fim": 0.01613765342529027,
+     "deriva_meio": 0.003962828193500076,
+     "razao_deriva": 4.072256640285246,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    },
+    "mutavel": {
+     "deriva_fim": 0.015882563757424435,
+     "deriva_meio": 0.003536810548626146,
+     "razao_deriva": 4.490645890997449,
+     "vidas": 20,
+     "vidas_no_limite": 0
+    }
+   },
+   "razao_media": 4.219145096006643,
+   "vidas": 60,
+   "vidas_no_limite": 0
+  }
+ },
+ "regra": "nenhuma vida com logit no limite, menor razao da deriva; empate, o menor valor",
+ "sem_limite": [
+  0.01,
+  0.03,
+  0.1
+ ]
+}

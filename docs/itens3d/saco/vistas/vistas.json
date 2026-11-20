@@ -1,0 +1,14 @@
+{
+ "id": "01a1af3f-3e92-70db-b11a-29f25b30c481",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "The same punching bag training stand from the reference, exactly the same parts, materials and colors (green bamboo post and arm tied with rope, mossy rock base, tan canvas bag with rope bands, short metal chain) and the same flat three-tone toon style, shown as separate clean views of the whole object: front, side and back. Full object in frame, no shadow, no ground, no text.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793941520302,
+ "finished_at": 1793941547362,
+ "saldo": {
+  "antes": 1016,
+  "depois": 1010
+ }
+}

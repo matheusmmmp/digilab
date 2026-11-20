@@ -1,0 +1,14 @@
+{
+  "nota": "cada ramo e vivido duas vezes (G-I7-1); o tempo do ramo e o das duas",
+  "parede_max_pet_s": 138.54026889998931,
+  "parede_media_pet_s": 109.4215387077766,
+  "pets": 360,
+  "por_ramo_media_s": {
+    "A": 6.26798861811096,
+    "E": 6.281135687722191,
+    "E0": 6.105463372611687,
+    "G": 6.152778971666703,
+    "N": 6.14717437972229
+  },
+  "total_parede_s": 9891.813728399982
+}

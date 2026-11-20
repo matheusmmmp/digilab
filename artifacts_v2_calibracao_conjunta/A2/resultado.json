@@ -1,0 +1,119 @@
+{
+ "escolhido": 256,
+ "etapa": "A2",
+ "fechou": false,
+ "limiar": 0.0,
+ "medida": "deferencia na fome_moderada, dias 1-10 (G-ARB)",
+ "onde": "P0+ped, iguais_frutas",
+ "parametro": "w0_pedido",
+ "passam": [],
+ "pontos": {
+  "256": {
+   "ic": {
+    "ic_inferior": null,
+    "ic_superior": null,
+    "media": null,
+    "n": 0,
+    "sem_valor": 20
+   },
+   "segundos": 106.48549230000935,
+   "valores": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "vidas": 20,
+   "violacoes_urgentes": 0
+  },
+  "512": {
+   "ic": {
+    "ic_inferior": null,
+    "ic_superior": null,
+    "media": null,
+    "n": 0,
+    "sem_valor": 20
+   },
+   "segundos": 111.94769689999521,
+   "valores": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "vidas": 20,
+   "violacoes_urgentes": 0
+  },
+  "768": {
+   "ic": {
+    "ic_inferior": null,
+    "ic_superior": null,
+    "media": null,
+    "n": 0,
+    "sem_valor": 20
+   },
+   "segundos": 113.50277970000752,
+   "valores": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "vidas": 20,
+   "violacoes_urgentes": 0
+  }
+ },
+ "referencia": {
+  "segundos": 97.5997853000008,
+  "vidas": 20
+ },
+ "regra": "reserva: nenhum ponto com IC; o menor valor"
+}

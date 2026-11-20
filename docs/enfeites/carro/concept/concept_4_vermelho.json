@@ -1,0 +1,9 @@
+{
+ "id": "01a1b145-a080-7207-b5bd-fed777e31587",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single small old car abandoned in nature, as a prop for a cozy low-poly 3D island game for children, cute and friendly, nothing dirty, rusty, broken or scary. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, toy-like proportions, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. The car is generic, with no brand, no logo, no license plate text. Nature has taken it gently: moss, grass and small flowers growing on it. Show only the car, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no characters. A small cute rounded hatchback in cherry red, a green vine climbing over one side, a little round bird sitting on the roof and small mushrooms near the wheels.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793975492952,
+ "finished_at": 1793975504938
+}

@@ -1,0 +1,11 @@
+DigiLab: o portao da arena, o lugar do Lutar (portao.gltf, portao.bin, portao_cor.png, portao_luz.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/portao.py no repositorio do DigiLab).
+A malha (os pilares, as pedras do arco, o portal, as flamulas, o musgo) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
+
+O desenho segue o esboco do objeto (docs/objetos3d/portao/esbocos/esboco_1_pedra_blocos.png), gerado pela Meshy para o DigiLab e usado so como referencia de desenho:
+nenhum pixel e nenhum vertice dele esta nestes arquivos. O portao de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/portao/.
+
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.

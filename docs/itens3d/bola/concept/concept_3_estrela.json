@@ -1,0 +1,9 @@
+{
+ "id": "01a1aef6-227b-7416-9e85-63d607abb34e",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single toy ball prop for a cozy low-poly 3D island game. Match exactly the art style of the reference screenshots: simple rounded shapes, flat toon shading with three tones, soft saturated pastel colors, no outlines, no realistic texture. Show only the ball, centered, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters. The ball is coral red with a single big cream star on the side and a thin cream band around the middle.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793936728755,
+ "finished_at": 1793936744082
+}

@@ -1,0 +1,12 @@
+DigiLab: o ceu pintado do estilo Digital (ceu.jpg)
+
+Procedencia: imagem gerada por IA, com o gerador Meshy (meshy.ai, Image to Image, nano-banana-2), no plano Pro pago, na conta do Matheus,
+em 2026-11-06. Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente. Os termos
+proibem tirar a marca de IA (secao 2.4): a marca fica neste arquivo.
+
+Como foi feito (docs/TAREFA_V3_MAPA_DIGITAL.md e docs/mapa_digital/ceu/ no repositorio): a referencia de estilo e a maquete A da propria
+ilha (gerada de uma captura nossa, sem o pet); o pedido descreve so o ceu (azul saturado, nuvens cumulo enormes, fundo de anime pintado),
+sem imagem de terceiros. A tarefa da Meshy esta em docs/mapa_digital/ceu/ceu.json. A imagem foi salva em JPG (qualidade 88), com a saturacao
+a 85 % (o revisor achou o azul forte demais).
+
+Uso: no jogo DigiLab, publicado. Credito: "Ceu do mapa Digital gerado com a Meshy (meshy.ai)".

@@ -1,0 +1,192 @@
+{
+ "descricao": "Calibracao dos NPCs da Montanha Espiral (pets v5): motor web, escala ligada.",
+ "conjunto": "validacao",
+ "sementes": [
+  4101,
+  4202,
+  4303,
+  4404,
+  4505
+ ],
+ "n_por_semente": 10,
+ "metas": {
+  "sem_treino_max": 0.3,
+  "com_treino_min": 0.8
+ },
+ "treino_tipico": {
+  "mega": 40,
+  "ultimate": 36
+ },
+ "espiral": {
+  "npc_v5_puppetmon": {
+   "fator": 2.1,
+   "sem": 0.2363,
+   "com": 0.8931,
+   "passa": true,
+   "folga": 0.0637,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0,
+     "com": 0.7725
+    },
+    "furioso": {
+     "sem": 0,
+     "com": 0.91
+    },
+    "espelho": {
+     "sem": 0.0075,
+     "com": 0.7875
+    },
+    "muralha": {
+     "sem": 0.08,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0.855,
+     "com": 1
+    },
+    "emboscador": {
+     "sem": 0.9475,
+     "com": 1
+    },
+    "vigia": {
+     "sem": 0,
+     "com": 0.745
+    },
+    "tita": {
+     "sem": 0,
+     "com": 0.93
+    }
+   }
+  },
+  "npc_v5_machinedramon": {
+   "fator": 2,
+   "sem": 0.2666,
+   "com": 0.8528,
+   "passa": true,
+   "folga": 0.0334,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.035,
+     "com": 0.67
+    },
+    "furioso": {
+     "sem": 0.0875,
+     "com": 0.9775
+    },
+    "espelho": {
+     "sem": 0.005,
+     "com": 0.9475
+    },
+    "muralha": {
+     "sem": 0,
+     "com": 0.905
+    },
+    "sentinela": {
+     "sem": 0.98,
+     "com": 1
+    },
+    "emboscador": {
+     "sem": 0.995,
+     "com": 1
+    },
+    "vigia": {
+     "sem": 0.025,
+     "com": 0.6725
+    },
+    "tita": {
+     "sem": 0.005,
+     "com": 0.65
+    }
+   }
+  },
+  "npc_v5_piedmon": {
+   "fator": 1.2,
+   "sem": 0.155,
+   "com": 0.9413,
+   "passa": true,
+   "folga": 0.1412,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.2275,
+     "com": 1
+    },
+    "furioso": {
+     "sem": 0.1675,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0.1975,
+     "com": 1
+    },
+    "muralha": {
+     "sem": 0.14,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0.005,
+     "com": 0.73
+    },
+    "emboscador": {
+     "sem": 0,
+     "com": 0.8
+    },
+    "vigia": {
+     "sem": 0.0975,
+     "com": 1
+    },
+    "tita": {
+     "sem": 0.405,
+     "com": 1
+    }
+   }
+  }
+ },
+ "cidadela": {
+  "npc_v5_myotismon": {
+   "fator": 1.2,
+   "sem": 0.1706,
+   "com": 0.9209,
+   "passa": true,
+   "folga": 0.1209,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.34,
+     "com": 1
+    },
+    "furioso": {
+     "sem": 0.2625,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0.1675,
+     "com": 1
+    },
+    "muralha": {
+     "sem": 0.1525,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0.015,
+     "com": 0.625
+    },
+    "emboscador": {
+     "sem": 0,
+     "com": 0.7425
+    },
+    "vigia": {
+     "sem": 0.1325,
+     "com": 1
+    },
+    "tita": {
+     "sem": 0.295,
+     "com": 1
+    }
+   }
+  }
+ }
+}

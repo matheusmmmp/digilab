@@ -1,0 +1,11 @@
+DigiLab: o trilho com o vagao, um marco da ilha (trilho.gltf, trilho.bin, trilho_cor.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/trilho.py no repositorio do DigiLab).
+A malha (os dormentes, os trilhos, as rodas, o chassi, a caixa, as escotilhas, o teto de lona) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
+
+O desenho segue o esboco do objeto (docs/objetos3d/trem/esbocos/esboco_1_vagao_madeira.png), gerado pela Meshy para o DigiLab e usado so como referencia de desenho:
+nenhum pixel e nenhum vertice dele esta nestes arquivos. O vagao de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_MUNDO_ENFEITES.md e em docs/objetos3d/trem/.
+
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.

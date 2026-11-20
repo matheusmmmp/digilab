@@ -1,0 +1,1163 @@
+{
+  "ambientes": {
+    "amb1": 4191614944181459658,
+    "amb2": 5678104034858167368,
+    "amb3": 12492458540646580215,
+    "amb4": 4549560591322958326
+  },
+  "medidas": {
+    "acerto_ultimos_7": {
+      "celulas": {
+        "cuidado": {
+          "4101": {
+            "alpha": 0.453125,
+            "beta": -0.8968812080291553
+          },
+          "4202": {
+            "alpha": 0.49255952380952384,
+            "beta": 1.2870044240777132
+          },
+          "4303": {
+            "alpha": 0.4802827380952381,
+            "beta": 5.905412487355446
+          },
+          "4404": {
+            "alpha": 0.4851190476190476,
+            "beta": 3.2211673227626827
+          },
+          "4505": {
+            "alpha": 0.5037202380952381,
+            "beta": -2.0186225640150735
+          }
+        },
+        "ensino": {
+          "4101": {
+            "alpha": 0.7209821428571428,
+            "beta": 1.5798710558067595
+          },
+          "4202": {
+            "alpha": 0.7444196428571429,
+            "beta": 0.5895723391549159
+          },
+          "4303": {
+            "alpha": 0.7202380952380952,
+            "beta": -1.2409355157158388
+          },
+          "4404": {
+            "alpha": 0.7287946428571428,
+            "beta": 3.388441335267101
+          },
+          "4505": {
+            "alpha": 0.6919642857142857,
+            "beta": 5.967020511633034
+          }
+        },
+        "instinto": {
+          "4101": {
+            "alpha": 0.5747767857142857,
+            "beta": -0.013710984631514982
+          },
+          "4202": {
+            "alpha": 0.5680803571428571,
+            "beta": -0.557397228552973
+          },
+          "4303": {
+            "alpha": 0.5807291666666666,
+            "beta": 0.38482163532436486
+          },
+          "4404": {
+            "alpha": 0.5866815476190476,
+            "beta": -1.7284981292123243
+          },
+          "4505": {
+            "alpha": 0.5818452380952381,
+            "beta": -0.8672654812250932
+          }
+        }
+      },
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": -0.10937499999999996,
+          "ic_superior": -0.08124999999999995,
+          "media": -0.09546130952380949,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -0.44493059194891094,
+          "ic_superior": 4.556982852128572,
+          "media": 2.0560261300898306,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "4101": {
+            "alpha": -0.1216517857142857,
+            "beta": -0.8831702233976403
+          },
+          "4202": {
+            "alpha": -0.07552083333333326,
+            "beta": 1.8444016526306863
+          },
+          "4303": {
+            "alpha": -0.10044642857142855,
+            "beta": 5.520590852031081
+          },
+          "4404": {
+            "alpha": -0.10156249999999994,
+            "beta": 4.949665451975007
+          },
+          "4505": {
+            "alpha": -0.078125,
+            "beta": -1.1513570827899802
+          }
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.21130952380952378,
+          "ic_superior": 0.25825892857142857,
+          "media": 0.23831845238095237,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -3.7590035465747045,
+          "ic_superior": 4.6853542309051885,
+          "media": 0.5571778527988717,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "4101": {
+            "alpha": 0.2678571428571428,
+            "beta": 2.4767522638359147
+          },
+          "4202": {
+            "alpha": 0.25186011904761907,
+            "beta": -0.6974320849227973
+          },
+          "4303": {
+            "alpha": 0.23995535714285715,
+            "beta": -7.146348003071285
+          },
+          "4404": {
+            "alpha": 0.24367559523809518,
+            "beta": 0.1672740125044183
+          },
+          "4505": {
+            "alpha": 0.18824404761904756,
+            "beta": 7.985643075648108
+          }
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.12336309523809522,
+          "ic_superior": 0.16294642857142863,
+          "media": 0.14285714285714285,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.12720137475472906,
+          "ic_superior": 5.353353402152339,
+          "media": 2.6132039828887024,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "4101": {
+            "alpha": 0.1462053571428571,
+            "beta": 1.5935820404382743
+          },
+          "4202": {
+            "alpha": 0.1763392857142858,
+            "beta": 1.146969567707889
+          },
+          "4303": {
+            "alpha": 0.1395089285714286,
+            "beta": -1.6257571510402036
+          },
+          "4404": {
+            "alpha": 0.14211309523809523,
+            "beta": 5.116939464479425
+          },
+          "4505": {
+            "alpha": 0.11011904761904756,
+            "beta": 6.834285992858128
+          }
+        }
+      },
+      "medias": {
+        "cuidado": {
+          "alpha": 0.4829613095238095,
+          "beta": 1.4996160924303226
+        },
+        "ensino": {
+          "alpha": 0.7212797619047618,
+          "beta": 2.0567939452291943
+        },
+        "instinto": {
+          "alpha": 0.5784226190476189,
+          "beta": -0.5564100376595081
+        }
+      },
+      "valores": {
+        "cuidado": {
+          "4101": {
+            "amb1": 0.4761904761904762,
+            "amb2": 0.44642857142857145,
+            "amb3": 0.46279761904761907,
+            "amb4": 0.42708333333333337
+          },
+          "4202": {
+            "amb1": 0.4851190476190476,
+            "amb2": 0.511904761904762,
+            "amb3": 0.4806547619047619,
+            "amb4": 0.4925595238095238
+          },
+          "4303": {
+            "amb1": 0.4226190476190476,
+            "amb2": 0.5610119047619048,
+            "amb3": 0.42410714285714285,
+            "amb4": 0.5133928571428571
+          },
+          "4404": {
+            "amb1": 0.5014880952380952,
+            "amb2": 0.4970238095238095,
+            "amb3": 0.44345238095238093,
+            "amb4": 0.49851190476190477
+          },
+          "4505": {
+            "amb1": 0.556547619047619,
+            "amb2": 0.4880952380952381,
+            "amb3": 0.5252976190476191,
+            "amb4": 0.4449404761904762
+          }
+        },
+        "ensino": {
+          "4101": {
+            "amb1": 0.7455357142857143,
+            "amb2": 0.6994047619047619,
+            "amb3": 0.6919642857142857,
+            "amb4": 0.7470238095238095
+          },
+          "4202": {
+            "amb1": 0.7544642857142857,
+            "amb2": 0.7366071428571429,
+            "amb3": 0.7336309523809524,
+            "amb4": 0.7529761904761905
+          },
+          "4303": {
+            "amb1": 0.6607142857142857,
+            "amb2": 0.7410714285714286,
+            "amb3": 0.7455357142857143,
+            "amb4": 0.7336309523809524
+          },
+          "4404": {
+            "amb1": 0.7514880952380952,
+            "amb2": 0.7455357142857143,
+            "amb3": 0.6860119047619048,
+            "amb4": 0.7321428571428571
+          },
+          "4505": {
+            "amb1": 0.6919642857142857,
+            "amb2": 0.7098214285714286,
+            "amb3": 0.6145833333333333,
+            "amb4": 0.7514880952380952
+          }
+        },
+        "instinto": {
+          "4101": {
+            "amb1": 0.5773809523809524,
+            "amb2": 0.5833333333333333,
+            "amb3": 0.5773809523809524,
+            "amb4": 0.5610119047619048
+          },
+          "4202": {
+            "amb1": 0.5610119047619048,
+            "amb2": 0.5625,
+            "amb3": 0.5744047619047619,
+            "amb4": 0.5744047619047619
+          },
+          "4303": {
+            "amb1": 0.5833333333333333,
+            "amb2": 0.587797619047619,
+            "amb3": 0.5773809523809524,
+            "amb4": 0.5744047619047619
+          },
+          "4404": {
+            "amb1": 0.59375,
+            "amb2": 0.5654761904761905,
+            "amb3": 0.6041666666666666,
+            "amb4": 0.5833333333333333
+          },
+          "4505": {
+            "amb1": 0.5848214285714286,
+            "amb2": 0.5818452380952381,
+            "amb3": 0.59375,
+            "amb4": 0.5669642857142857
+          }
+        }
+      },
+      "z": {
+        "amb1": 0.0022073412698412342,
+        "amb2": 0.006969246031745979,
+        "amb3": -0.011879960317460303,
+        "amb4": 0.0027033730158729785
+      }
+    },
+    "jsd_vs_instinto": {
+      "celulas": {
+        "cuidado": {
+          "4101": {
+            "alpha": 0.0035175610142224424,
+            "beta": -0.8672866626587709
+          },
+          "4202": {
+            "alpha": 0.004389223664168235,
+            "beta": 0.17938534378865542
+          },
+          "4303": {
+            "alpha": 0.0025197778059534407,
+            "beta": 0.2996545387416627
+          },
+          "4404": {
+            "alpha": 0.0032837935388149025,
+            "beta": 0.3405475738189662
+          },
+          "4505": {
+            "alpha": 0.004946746955188844,
+            "beta": 0.31085981299167176
+          }
+        },
+        "ensino": {
+          "4101": {
+            "alpha": 0.022854532602936947,
+            "beta": 0.5814618531103464
+          },
+          "4202": {
+            "alpha": 0.030910578151280954,
+            "beta": 5.199525319642505
+          },
+          "4303": {
+            "alpha": 0.028997873467482508,
+            "beta": 3.1369134201171143
+          },
+          "4404": {
+            "alpha": 0.023412293093523308,
+            "beta": -0.17924162992107848
+          },
+          "4505": {
+            "alpha": 0.030647233940677764,
+            "beta": 5.998180430368927
+          }
+        },
+        "instinto": {
+          "4101": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "4202": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "4303": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "4404": {
+            "alpha": 0.0,
+            "beta": 0.0
+          },
+          "4505": {
+            "alpha": 0.0,
+            "beta": 0.0
+          }
+        }
+      },
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.0030249407407518256,
+          "ic_superior": 0.004502651613709934,
+          "media": 0.003731420595669573,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -0.41638541407373814,
+          "ic_superior": 0.32049386247258776,
+          "media": 0.05263212133643704,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "4101": {
+            "alpha": 0.0035175610142224424,
+            "beta": -0.8672866626587709
+          },
+          "4202": {
+            "alpha": 0.004389223664168235,
+            "beta": 0.17938534378865542
+          },
+          "4303": {
+            "alpha": 0.0025197778059534407,
+            "beta": 0.2996545387416627
+          },
+          "4404": {
+            "alpha": 0.0032837935388149025,
+            "beta": 0.3405475738189662
+          },
+          "4505": {
+            "alpha": 0.004946746955188844,
+            "beta": 0.31085981299167176
+          }
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.020923501996476197,
+          "ic_superior": 0.0263398774565545,
+          "media": 0.023633081655510722,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.9390355010867193,
+          "ic_superior": 4.850436013567532,
+          "media": 2.8947357573271257,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "4101": {
+            "alpha": 0.019336971588714506,
+            "beta": 1.4487485157691173
+          },
+          "4202": {
+            "alpha": 0.02652135448711272,
+            "beta": 5.02013997585385
+          },
+          "4303": {
+            "alpha": 0.026478095661529068,
+            "beta": 2.8372588813754516
+          },
+          "4404": {
+            "alpha": 0.020128499554708405,
+            "beta": -0.5197892037400447
+          },
+          "4505": {
+            "alpha": 0.02570048698548892,
+            "beta": 5.687320617377255
+          }
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.024306304972080604,
+          "ic_superior": 0.03042269953027999,
+          "media": 0.027364502251180294,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.7882707732991301,
+          "ic_superior": 5.106464984027996,
+          "media": 2.9473678786635626,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "por_ovo": {
+          "4101": {
+            "alpha": 0.022854532602936947,
+            "beta": 0.5814618531103464
+          },
+          "4202": {
+            "alpha": 0.030910578151280954,
+            "beta": 5.199525319642505
+          },
+          "4303": {
+            "alpha": 0.028997873467482508,
+            "beta": 3.1369134201171143
+          },
+          "4404": {
+            "alpha": 0.023412293093523308,
+            "beta": -0.17924162992107848
+          },
+          "4505": {
+            "alpha": 0.030647233940677764,
+            "beta": 5.998180430368927
+          }
+        }
+      },
+      "medias": {
+        "cuidado": {
+          "alpha": 0.003731420595669573,
+          "beta": 0.05263212133643704
+        },
+        "ensino": {
+          "alpha": 0.027364502251180294,
+          "beta": 2.9473678786635626
+        },
+        "instinto": {
+          "alpha": 0.0,
+          "beta": 0.0
+        }
+      },
+      "valores": {
+        "cuidado": {
+          "4101": {
+            "amb1": 0.004584737330813925,
+            "amb2": 0.004577558733705655,
+            "amb3": 0.004691959345819925,
+            "amb4": 0.00021598864655026547
+          },
+          "4202": {
+            "amb1": 0.0036974556379210377,
+            "amb2": 0.004558461515671585,
+            "amb3": 0.004732471820346146,
+            "amb4": 0.0045685056827341735
+          },
+          "4303": {
+            "amb1": 0.0003455329057247416,
+            "amb2": 0.004686406220246957,
+            "amb3": 0.00024042671293049767,
+            "amb4": 0.004806745384911567
+          },
+          "4404": {
+            "amb1": 0.004600776913871564,
+            "amb2": 0.0008363884520351362,
+            "amb3": 0.003028639858963157,
+            "amb4": 0.004669368930389752
+          },
+          "4505": {
+            "amb1": 0.004558461515671585,
+            "amb2": 0.004562586784712462,
+            "amb3": 0.0045685056827341735,
+            "amb4": 0.006097433837637155
+          }
+        },
+        "ensino": {
+          "4101": {
+            "amb1": 0.02415981771073758,
+            "amb2": 0.019032610529331445,
+            "amb3": 0.02525541933119257,
+            "amb4": 0.022970282840486193
+          },
+          "4202": {
+            "amb1": 0.023353585228236752,
+            "amb2": 0.025518801769156597,
+            "amb3": 0.025284072574465074,
+            "amb4": 0.0494858530332654
+          },
+          "4303": {
+            "amb1": 0.02020727868643421,
+            "amb2": 0.02531149606786671,
+            "amb3": 0.046356103858566616,
+            "amb4": 0.02411661525706249
+          },
+          "4404": {
+            "amb1": 0.023584108288169314,
+            "amb2": 0.023929319136165222,
+            "amb3": 0.02269813260878354,
+            "amb4": 0.023437612340975158
+          },
+          "4505": {
+            "amb1": 0.020507774564967024,
+            "amb2": 0.02327366182985695,
+            "amb3": 0.03510814498421458,
+            "amb4": 0.0436993543836725
+          }
+        },
+        "instinto": {
+          "4101": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "4202": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "4303": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "4404": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          },
+          "4505": {
+            "amb1": 0.0,
+            "amb2": 0.0,
+            "amb3": 0.0,
+            "amb4": 0.0
+          }
+        }
+      },
+      "z": {
+        "amb1": -0.0017253390301134406,
+        "amb2": -0.0012794882130333744,
+        "amb3": 0.0010989508362511287,
+        "amb4": 0.001905876406895688
+      }
+    }
+  },
+  "ovos": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "vidas": {
+    "cuidado-amb1@4101": {
+      "acerto_ultimos_7": 0.4761904761904762,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 74,
+      "ovo": 4101,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 0
+    },
+    "cuidado-amb1@4202": {
+      "acerto_ultimos_7": 0.4851190476190476,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 78,
+      "ovo": 4202,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 0
+    },
+    "cuidado-amb1@4303": {
+      "acerto_ultimos_7": 0.4226190476190476,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 79,
+      "ovo": 4303,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 0
+    },
+    "cuidado-amb1@4404": {
+      "acerto_ultimos_7": 0.5014880952380952,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 77,
+      "ovo": 4404,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 0
+    },
+    "cuidado-amb1@4505": {
+      "acerto_ultimos_7": 0.556547619047619,
+      "ambiente": "amb1",
+      "condicao": "cuidado",
+      "interacoes": 78,
+      "ovo": 4505,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 0
+    },
+    "cuidado-amb2@4101": {
+      "acerto_ultimos_7": 0.44642857142857145,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 87,
+      "ovo": 4101,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 0
+    },
+    "cuidado-amb2@4202": {
+      "acerto_ultimos_7": 0.511904761904762,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 86,
+      "ovo": 4202,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 0
+    },
+    "cuidado-amb2@4303": {
+      "acerto_ultimos_7": 0.5610119047619048,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 83,
+      "ovo": 4303,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 0
+    },
+    "cuidado-amb2@4404": {
+      "acerto_ultimos_7": 0.4970238095238095,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 85,
+      "ovo": 4404,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 0
+    },
+    "cuidado-amb2@4505": {
+      "acerto_ultimos_7": 0.4880952380952381,
+      "ambiente": "amb2",
+      "condicao": "cuidado",
+      "interacoes": 84,
+      "ovo": 4505,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 0
+    },
+    "cuidado-amb3@4101": {
+      "acerto_ultimos_7": 0.46279761904761907,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 90,
+      "ovo": 4101,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 0
+    },
+    "cuidado-amb3@4202": {
+      "acerto_ultimos_7": 0.4806547619047619,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 80,
+      "ovo": 4202,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 0
+    },
+    "cuidado-amb3@4303": {
+      "acerto_ultimos_7": 0.42410714285714285,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 79,
+      "ovo": 4303,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 0
+    },
+    "cuidado-amb3@4404": {
+      "acerto_ultimos_7": 0.44345238095238093,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 82,
+      "ovo": 4404,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 0
+    },
+    "cuidado-amb3@4505": {
+      "acerto_ultimos_7": 0.5252976190476191,
+      "ambiente": "amb3",
+      "condicao": "cuidado",
+      "interacoes": 97,
+      "ovo": 4505,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 0
+    },
+    "cuidado-amb4@4101": {
+      "acerto_ultimos_7": 0.42708333333333337,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 76,
+      "ovo": 4101,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 0
+    },
+    "cuidado-amb4@4202": {
+      "acerto_ultimos_7": 0.4925595238095238,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 78,
+      "ovo": 4202,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 0
+    },
+    "cuidado-amb4@4303": {
+      "acerto_ultimos_7": 0.5133928571428571,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 79,
+      "ovo": 4303,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 0
+    },
+    "cuidado-amb4@4404": {
+      "acerto_ultimos_7": 0.49851190476190477,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 77,
+      "ovo": 4404,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 0
+    },
+    "cuidado-amb4@4505": {
+      "acerto_ultimos_7": 0.4449404761904762,
+      "ambiente": "amb4",
+      "condicao": "cuidado",
+      "interacoes": 96,
+      "ovo": 4505,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 0
+    },
+    "ensino-amb1@4101": {
+      "acerto_ultimos_7": 0.7455357142857143,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 150
+    },
+    "ensino-amb1@4202": {
+      "acerto_ultimos_7": 0.7544642857142857,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 146
+    },
+    "ensino-amb1@4303": {
+      "acerto_ultimos_7": 0.6607142857142857,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 145
+    },
+    "ensino-amb1@4404": {
+      "acerto_ultimos_7": 0.7514880952380952,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 147
+    },
+    "ensino-amb1@4505": {
+      "acerto_ultimos_7": 0.6919642857142857,
+      "ambiente": "amb1",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 146
+    },
+    "ensino-amb2@4101": {
+      "acerto_ultimos_7": 0.6994047619047619,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 137
+    },
+    "ensino-amb2@4202": {
+      "acerto_ultimos_7": 0.7366071428571429,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 138
+    },
+    "ensino-amb2@4303": {
+      "acerto_ultimos_7": 0.7410714285714286,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 141
+    },
+    "ensino-amb2@4404": {
+      "acerto_ultimos_7": 0.7455357142857143,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 139
+    },
+    "ensino-amb2@4505": {
+      "acerto_ultimos_7": 0.7098214285714286,
+      "ambiente": "amb2",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 140
+    },
+    "ensino-amb3@4101": {
+      "acerto_ultimos_7": 0.6919642857142857,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 134
+    },
+    "ensino-amb3@4202": {
+      "acerto_ultimos_7": 0.7336309523809524,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 144
+    },
+    "ensino-amb3@4303": {
+      "acerto_ultimos_7": 0.7455357142857143,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 145
+    },
+    "ensino-amb3@4404": {
+      "acerto_ultimos_7": 0.6860119047619048,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 142
+    },
+    "ensino-amb3@4505": {
+      "acerto_ultimos_7": 0.6145833333333333,
+      "ambiente": "amb3",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 127
+    },
+    "ensino-amb4@4101": {
+      "acerto_ultimos_7": 0.7470238095238095,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 148
+    },
+    "ensino-amb4@4202": {
+      "acerto_ultimos_7": 0.7529761904761905,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 146
+    },
+    "ensino-amb4@4303": {
+      "acerto_ultimos_7": 0.7336309523809524,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 145
+    },
+    "ensino-amb4@4404": {
+      "acerto_ultimos_7": 0.7321428571428571,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 147
+    },
+    "ensino-amb4@4505": {
+      "acerto_ultimos_7": 0.7514880952380952,
+      "ambiente": "amb4",
+      "condicao": "ensino",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 128
+    },
+    "instinto-amb1@4101": {
+      "acerto_ultimos_7": 0.5773809523809524,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 141
+    },
+    "instinto-amb1@4202": {
+      "acerto_ultimos_7": 0.5610119047619048,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 144
+    },
+    "instinto-amb1@4303": {
+      "acerto_ultimos_7": 0.5833333333333333,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 144
+    },
+    "instinto-amb1@4404": {
+      "acerto_ultimos_7": 0.59375,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 139
+    },
+    "instinto-amb1@4505": {
+      "acerto_ultimos_7": 0.5848214285714286,
+      "ambiente": "amb1",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 4191614944181459658,
+      "sinais": 141
+    },
+    "instinto-amb2@4101": {
+      "acerto_ultimos_7": 0.5833333333333333,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 140
+    },
+    "instinto-amb2@4202": {
+      "acerto_ultimos_7": 0.5625,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 136
+    },
+    "instinto-amb2@4303": {
+      "acerto_ultimos_7": 0.587797619047619,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 139
+    },
+    "instinto-amb2@4404": {
+      "acerto_ultimos_7": 0.5654761904761905,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 136
+    },
+    "instinto-amb2@4505": {
+      "acerto_ultimos_7": 0.5818452380952381,
+      "ambiente": "amb2",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 5678104034858167368,
+      "sinais": 138
+    },
+    "instinto-amb3@4101": {
+      "acerto_ultimos_7": 0.5773809523809524,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 143
+    },
+    "instinto-amb3@4202": {
+      "acerto_ultimos_7": 0.5744047619047619,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 144
+    },
+    "instinto-amb3@4303": {
+      "acerto_ultimos_7": 0.5773809523809524,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 145
+    },
+    "instinto-amb3@4404": {
+      "acerto_ultimos_7": 0.6041666666666666,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 140
+    },
+    "instinto-amb3@4505": {
+      "acerto_ultimos_7": 0.59375,
+      "ambiente": "amb3",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 12492458540646580215,
+      "sinais": 144
+    },
+    "instinto-amb4@4101": {
+      "acerto_ultimos_7": 0.5610119047619048,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4101,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 143
+    },
+    "instinto-amb4@4202": {
+      "acerto_ultimos_7": 0.5744047619047619,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4202,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 145
+    },
+    "instinto-amb4@4303": {
+      "acerto_ultimos_7": 0.5744047619047619,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4303,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 142
+    },
+    "instinto-amb4@4404": {
+      "acerto_ultimos_7": 0.5833333333333333,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4404,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 139
+    },
+    "instinto-amb4@4505": {
+      "acerto_ultimos_7": 0.5669642857142857,
+      "ambiente": "amb4",
+      "condicao": "instinto",
+      "interacoes": 224,
+      "ovo": 4505,
+      "semente_ambiente": 4549560591322958326,
+      "sinais": 137
+    }
+  }
+}

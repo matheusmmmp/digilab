@@ -1,0 +1,276 @@
+{
+ "semente": 101,
+ "ticks": 3000,
+ "decisoes_fechadas": 199,
+ "hash": "662f2642",
+ "intencoes": {
+  "descansar:descansou": 68,
+  "aproximar:hora": 42,
+  "aproximar:chegou": 10,
+  "empurrar:hora": 16,
+  "consumir:hora": 3,
+  "consumir:chegou": 3,
+  "empurrar:bloqueado": 57
+ },
+ "chamadas_corpo": {
+  "passo": 3000,
+  "andar": 74,
+  "bola": 73,
+  "consumo": 3
+ },
+ "decisoes_que_comeram": 3,
+ "decisoes_com_empurrao": 72,
+ "cadeia_comida": {
+  "n": 34,
+  "tick": 510,
+  "observacao": {
+   "vistos": [
+    {
+     "ref": 1,
+     "categoria": "comida",
+     "distancia": 16,
+     "setor": 0
+    }
+   ],
+   "obstaculos": [
+    32,
+    24,
+    17,
+    24,
+    32,
+    32,
+    32,
+    32
+   ],
+   "contato": [],
+   "resultado": {
+    "parou_por": "hora",
+    "comeu": false,
+    "empurrou": false,
+    "bola_afastou": null
+   },
+   "corpo": {
+    "fome": 333,
+    "higiene": 676,
+    "energia": 349,
+    "humor": 435,
+    "saude": 1024,
+    "tedio": 399,
+    "solidao": 353,
+    "estresse": 0,
+    "dor": 0,
+    "susto": 0
+   }
+  },
+  "intencao": {
+   "tipo": "consumir",
+   "ref": 1
+  },
+  "executada": {
+   "ticks": 2,
+   "distancia": 4,
+   "parou_por": "chegou"
+  },
+  "fisico": {
+   "pet_de": [
+    200,
+    169
+   ],
+   "pet_para": [
+    204,
+    169
+   ],
+   "bola_de": [
+    188,
+    80
+   ],
+   "bola_para": [
+    188,
+    80
+   ],
+   "comeu": 1,
+   "empurroes": 0,
+   "contatos": []
+  },
+  "corpo_antes": {
+   "fome": 333,
+   "higiene": 676,
+   "energia": 349,
+   "humor": 435,
+   "saude": 1024,
+   "tedio": 399,
+   "solidao": 353,
+   "estresse": 0,
+   "dor": 0,
+   "susto": 0
+  },
+  "corpo_depois": {
+   "fome": 781,
+   "higiene": 666,
+   "energia": 331,
+   "humor": 422,
+   "saude": 1024,
+   "tedio": 430,
+   "solidao": 369,
+   "estresse": 0,
+   "dor": 0,
+   "susto": 0
+  },
+  "percebido": {
+   "parou_por": "chegou",
+   "comeu": true,
+   "empurrou": false,
+   "bola_afastou": null
+  },
+  "consequencia": {
+   "fome": 418432,
+   "higiene": -7060,
+   "energia": -24624,
+   "tedio": -25699,
+   "solidao": -11552,
+   "estresse": 0,
+   "dor": 0
+  }
+ },
+ "cadeia_bola": {
+  "n": 27,
+  "tick": 405,
+  "observacao": {
+   "vistos": [
+    {
+     "ref": 1,
+     "categoria": "bola",
+     "distancia": 46,
+     "setor": 0
+    }
+   ],
+   "obstaculos": [
+    32,
+    18,
+    23,
+    32,
+    28,
+    20,
+    28,
+    32
+   ],
+   "contato": [],
+   "resultado": {
+    "parou_por": "descansou",
+    "comeu": false,
+    "empurrou": false,
+    "bola_afastou": 0
+   },
+   "corpo": {
+    "fome": 422,
+    "higiene": 748,
+    "energia": 364,
+    "humor": 371,
+    "saude": 1024,
+    "tedio": 553,
+    "solidao": 276,
+    "estresse": 0,
+    "dor": 0,
+    "susto": 0
+   }
+  },
+  "intencao": {
+   "tipo": "empurrar",
+   "ref": 1
+  },
+  "executada": {
+   "ticks": 15,
+   "distancia": 52,
+   "parou_por": "hora"
+  },
+  "fisico": {
+   "pet_de": [
+    117,
+    26
+   ],
+   "pet_para": [
+    160,
+    63
+   ],
+   "bola_de": [
+    152,
+    56
+   ],
+   "bola_para": [
+    185,
+    78
+   ],
+   "comeu": 0,
+   "empurroes": 2,
+   "contatos": [
+    {
+     "categoria": "bola",
+     "setor": 2
+    }
+   ]
+  },
+  "corpo_antes": {
+   "fome": 422,
+   "higiene": 748,
+   "energia": 364,
+   "humor": 371,
+   "saude": 1024,
+   "tedio": 553,
+   "solidao": 276,
+   "estresse": 0,
+   "dor": 0,
+   "susto": 0
+  },
+  "corpo_depois": {
+   "fome": 410,
+   "higiene": 737,
+   "energia": 324,
+   "humor": 512,
+   "saude": 1024,
+   "tedio": 276,
+   "solidao": 292,
+   "estresse": 0,
+   "dor": 0,
+   "susto": 0
+  },
+  "percebido": {
+   "parou_por": "hora",
+   "comeu": false,
+   "empurrou": true,
+   "bola_afastou": -17
+  },
+  "consequencia": {
+   "fome": -14592,
+   "higiene": -6193,
+   "energia": -54400,
+   "tedio": 229633,
+   "solidao": -9088,
+   "estresse": 0,
+   "dor": 0
+  }
+ },
+ "receptores_no_comeco": {
+  "fome": 768,
+  "higiene": 1024,
+  "energia": 922,
+  "humor": 717,
+  "saude": 1024,
+  "tedio": 0,
+  "solidao": 0,
+  "estresse": 0,
+  "dor": 0,
+  "susto": 0
+ },
+ "receptores_no_fim": {
+  "fome": 0,
+  "higiene": 0,
+  "energia": 363,
+  "humor": 998,
+  "saude": 148,
+  "tedio": 1024,
+  "solidao": 1024,
+  "estresse": 1023,
+  "dor": 0,
+  "susto": 0
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "descricao": "Calibracao do cerebro B (adendo 1.1 de docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md): etapas B-A, B-B, B-C e B-D em cadeia e o piloto do nao aprende; unidades derivadas das bases 28101...28505 com K = 4 (20 unidades), prefixo comparacao-cerebros, 14 dias, o dono atencioso, as pecas comuns no ponto da K2 do A (ganho 4, T3, K4, montagem completa).",
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "unidades": {"bases": [28101, 28202, 28303, 28404, 28505], "k": 4, "prefixo": "comparacao-cerebros"},
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "ganho": 4,
+  "sonda": {"estados": 64, "amostras": 200, "semente": 9001},
+  "bootstrap": {"reamostragens": 10000, "semente": 4242, "nivel": 0.95},
+  "saida": "artifacts_v2_comparacao_cerebros/calibracao_B"
+}

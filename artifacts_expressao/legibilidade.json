@@ -1,0 +1,815 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "diarios/partida079_agressivo_x_adaptativo_adolescente.txt": "10b7cd69491e53a8afc2d9ce05c9aa0950bc4916055792f4594da46bb252bafd",
+    "diarios/partida079_agressivo_x_adaptativo_adulto.txt": "49b0ebfa0afbeeb7597148608dbee1cb8fd97fb415d2bd2e1dc0315c21af76e6",
+    "diarios/partida079_agressivo_x_adaptativo_bebe.txt": "85611478338a9ceca04f0d61846f72c7d535875bae43ce26c84c6df58ac165da",
+    "diarios/partida079_agressivo_x_adaptativo_crianca.txt": "2f4e44bfc2e95e783ef13cce8f72af1778abc8e34c5fd32736004d3e20bd9ed1",
+    "diarios/partida100_tartaruga_x_atirador_adolescente.txt": "3fa19bf62607c1215a41314b0b3f95e4f2950a4dac0ad793fe5f59c9fc465169",
+    "diarios/partida100_tartaruga_x_atirador_adulto.txt": "bd9923e8edbcafa3e668c117dafd8906595692bb85a15b5a383219d66a2633b1",
+    "diarios/partida100_tartaruga_x_atirador_bebe.txt": "af68bbf5e642aa8a1107cd6766a03f0f23ae03c3a60f9343f59a657df9af2b77",
+    "diarios/partida100_tartaruga_x_atirador_crianca.txt": "04d2851d695f947f7583055da1ec4bb7f26a32a5e8518903a28253f4aceb1ea6",
+    "diarios/partida172_contragolpe_x_oraculo_adolescente.txt": "eb854dbf75568de94ceb7cbbee802f1683b1b23f65d56f3533580b97e19c9ce0",
+    "diarios/partida172_contragolpe_x_oraculo_adulto.txt": "36ffce46e2ba152a92a1d007fbffa9d638e82500ff9ce8038b777c2ded7cb00f",
+    "diarios/partida172_contragolpe_x_oraculo_bebe.txt": "b2491e80999df8e7e4ccd09547a23bfc8bd48ea12b9a006fc2d97eb6a91ba473",
+    "diarios/partida172_contragolpe_x_oraculo_crianca.txt": "2ba09e8c3194f632e3ce373368b42b0738ca2eb62a0f431b1d40850051fb47ea",
+    "diarios/vida_aleatorio-bandit@101.txt": "9d13aa31c43d685955eec76b5337eca73e0c1ea53263e30f0c4acd69a5171d26",
+    "diarios/vida_aleatorio-bandit_memoria@101.txt": "23583733d36a1b2b38fc76b5965b559d4dcc0eafa3c9f154828c18baee10c189",
+    "diarios/vida_aleatorio-instinto@101.txt": "d8efb40bd77b5ce6fe7fb3ce0286593d4470ade7e7b8702486e433c3daa093d2",
+    "diarios/vida_atencioso-bandit@101.txt": "56424c8168e1dd529f2588740ef4337190ea9df51b674bed39848b00849dc5ce",
+    "diarios/vida_atencioso-bandit_memoria@101.txt": "44c264a33d84d2d6871c14a78887885d2d0056bc12dc4748384cccc1ce368b8b",
+    "diarios/vida_atencioso-instinto@101.txt": "ed586a9907298c94666939993c1af5a3c040e59b6d3946bba8e6613e6448bc4a",
+    "diarios/vida_incoerente-bandit@101.txt": "e814f4360a9aeba7f48e50db45804d1264185476ece1158f3b25f383bca663e4",
+    "diarios/vida_incoerente-bandit_memoria@101.txt": "e90b7db853e24817e77c3e2443511f0f9457cb596b8acaf6a416822b51892fac",
+    "diarios/vida_incoerente-instinto@101.txt": "1f0d4ec5be2ce2661bb791be5ff6fffabe4dfd5f5294a06cc934b87dcb6e69e2",
+    "diarios/vida_relapso-bandit@101.txt": "926d88d2653bd0b27432a3f6e7bf1cd00462de0d51a4f9832add1a7f8f40092a",
+    "diarios/vida_relapso-bandit_memoria@101.txt": "ceafbc6c0ad9d36ecc0e8ae73d0b64d8e5ce285a64e82b096ebc6aea7f7c4115",
+    "diarios/vida_relapso-instinto@101.txt": "fb77dc7c83d32cd5a4d6df3b3205da9e31126eb61956e0b91520717b1de1db99"
+  },
+  "aviso": "a bateria do combate V2 esta REPROVADA (G4, G5); a Parte A foi feita mesmo assim por decisao do pesquisador (docs/REGISTRO_DESVIOS.md)",
+  "combate": {
+    "partidas": 28000,
+    "partidas_por_par_por_semente": 200,
+    "por_bot": {
+      "adaptativo": {
+        "decisoes": 175773,
+        "disparos_por_regra": {
+          "0": 5603,
+          "1": 17814,
+          "2": 12842,
+          "3": 1402,
+          "4": 13325,
+          "5": 27698,
+          "6": 51095,
+          "7": 20018,
+          "8": 3
+        },
+        "fracoes": {
+          "exploracao": 0.04484192680332019,
+          "pesado_automatico": 0.10292251938579873,
+          "regra_com_fator": 0.8522184863431813,
+          "regra_final_sempre": 1.706746769981738e-05
+        },
+        "regras_que_nunca_disparam": []
+      },
+      "agressivo": {
+        "decisoes": 129945,
+        "disparos_por_regra": {
+          "0": 399,
+          "1": 16245,
+          "2": 51023,
+          "3": 15024,
+          "4": 519
+        },
+        "fracoes": {
+          "exploracao": 0.03415291084689676,
+          "pesado_automatico": 0.325499249682558,
+          "regra_com_fator": 0.5207356958713302,
+          "regra_final_sempre": 0.003993997460464043,
+          "regra_sem_fator": 0.11561814613875102
+        },
+        "regras_que_nunca_disparam": []
+      },
+      "aleatorio": {
+        "decisoes": 210800,
+        "disparos_por_regra": {
+          "0": 0
+        },
+        "fracoes": {
+          "exploracao": 0.9511954459203036,
+          "pesado_automatico": 0.048804554079696395
+        },
+        "regras_que_nunca_disparam": [
+          {
+            "indice": 0,
+            "regra": {
+              "entao": "defender",
+              "se": [
+                {
+                  "nome": "sempre",
+                  "params": []
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "atirador": {
+        "decisoes": 185902,
+        "disparos_por_regra": {
+          "0": 227,
+          "1": 41782,
+          "2": 108,
+          "3": 108673,
+          "4": 25573
+        },
+        "fracoes": {
+          "exploracao": 0.04996718701251197,
+          "pesado_automatico": 0.0013447945691816118,
+          "regra_com_fator": 0.22655485148088778,
+          "regra_final_sempre": 0.13756172607072545,
+          "regra_sem_fator": 0.5845714408666932
+        },
+        "regras_que_nunca_disparam": []
+      },
+      "contragolpe": {
+        "decisoes": 302157,
+        "disparos_por_regra": {
+          "0": 46837,
+          "1": 0,
+          "2": 1125,
+          "3": 0,
+          "4": 344,
+          "5": 183,
+          "6": 26488,
+          "7": 209450
+        },
+        "fracoes": {
+          "exploracao": 0.04941470824769904,
+          "pesado_automatico": 0.009263396181455337,
+          "regra_com_fator": 0.24813921239620462,
+          "regra_final_sempre": 0.693182683174641
+        },
+        "regras_que_nunca_disparam": [
+          {
+            "indice": 1,
+            "regra": {
+              "entao": "defender",
+              "se": [
+                {
+                  "nome": "oponente_preparando",
+                  "params": []
+                }
+              ]
+            }
+          },
+          {
+            "indice": 3,
+            "regra": {
+              "entao": "golpe_rapido",
+              "se": [
+                {
+                  "nome": "oponente_guts_abaixo",
+                  "params": [
+                    20
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "oraculo": {
+        "decisoes": 189452,
+        "fracoes": {
+          "exploracao": 0.04314021493570931,
+          "oraculo": 0.8190887401558178,
+          "pesado_automatico": 0.13777104490847286
+        },
+        "nota": "oraculo: referencia FORA da linguagem de gambits; motivo 'oraculo' nao tem fator"
+      },
+      "tartaruga": {
+        "decisoes": 249581,
+        "disparos_por_regra": {
+          "0": 120,
+          "1": 0,
+          "2": 8120,
+          "3": 12816,
+          "4": 137,
+          "5": 215120
+        },
+        "fracoes": {
+          "exploracao": 0.05028828316258049,
+          "pesado_automatico": 0.0028728148376679316,
+          "regra_com_fator": 0.08491431639427681,
+          "regra_final_sempre": 0.8619245856054748
+        },
+        "regras_que_nunca_disparam": [
+          {
+            "indice": 1,
+            "regra": {
+              "entao": "golpe_rapido",
+              "se": [
+                {
+                  "nome": "oponente_guts_abaixo",
+                  "params": [
+                    20
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "sementes_validacao": [
+      2101,
+      2202,
+      2303,
+      2404,
+      2505
+    ]
+  },
+  "descricao": "Legibilidade do motivo (TAREFA_MEMORIA_EXPRESSAO, Parte A). Somente leitura.",
+  "diarios": [
+    "diarios/vida_aleatorio-bandit@101.txt",
+    "diarios/vida_aleatorio-instinto@101.txt",
+    "diarios/vida_atencioso-bandit@101.txt",
+    "diarios/vida_atencioso-instinto@101.txt",
+    "diarios/vida_incoerente-bandit@101.txt",
+    "diarios/vida_incoerente-instinto@101.txt",
+    "diarios/vida_relapso-bandit@101.txt",
+    "diarios/vida_relapso-instinto@101.txt",
+    "diarios/vida_aleatorio-bandit_memoria@101.txt",
+    "diarios/vida_atencioso-bandit_memoria@101.txt",
+    "diarios/vida_incoerente-bandit_memoria@101.txt",
+    "diarios/vida_relapso-bandit_memoria@101.txt",
+    "diarios/partida079_agressivo_x_adaptativo_bebe.txt",
+    "diarios/partida079_agressivo_x_adaptativo_crianca.txt",
+    "diarios/partida079_agressivo_x_adaptativo_adolescente.txt",
+    "diarios/partida079_agressivo_x_adaptativo_adulto.txt",
+    "diarios/partida172_contragolpe_x_oraculo_bebe.txt",
+    "diarios/partida172_contragolpe_x_oraculo_crianca.txt",
+    "diarios/partida172_contragolpe_x_oraculo_adolescente.txt",
+    "diarios/partida172_contragolpe_x_oraculo_adulto.txt",
+    "diarios/partida100_tartaruga_x_atirador_bebe.txt",
+    "diarios/partida100_tartaruga_x_atirador_crianca.txt",
+    "diarios/partida100_tartaruga_x_atirador_adolescente.txt",
+    "diarios/partida100_tartaruga_x_atirador_adulto.txt"
+  ],
+  "vida": {
+    "aleatorio-bandit": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "hora",
+          371,
+          0.05520833333333333
+        ],
+        [
+          "habito",
+          307,
+          0.04568452380952381
+        ],
+        [
+          "saude",
+          239,
+          0.03556547619047619
+        ],
+        [
+          "humor",
+          233,
+          0.03467261904761905
+        ],
+        [
+          "higiene",
+          194,
+          0.02886904761904762
+        ],
+        [
+          "fome",
+          174,
+          0.025892857142857145
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.0034226190476190476,
+      "fracao_com_fator": 0.14151785714285714,
+      "fracao_dois_fatores": 0.1412202380952381,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.14151785714285714,
+      "politica": "bandit",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "aleatorio-instinto": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "energia",
+          2125,
+          0.3162202380952381
+        ],
+        [
+          "dormindo",
+          1817,
+          0.27038690476190474
+        ],
+        [
+          "fome",
+          1444,
+          0.2148809523809524
+        ],
+        [
+          "higiene",
+          1251,
+          0.1861607142857143
+        ],
+        [
+          "hora",
+          176,
+          0.02619047619047619
+        ],
+        [
+          "tempo_sem_cuidado",
+          114,
+          0.016964285714285713
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.016964285714285713,
+      "fracao_com_fator": 0.6816964285714285,
+      "fracao_dois_fatores": 0.35,
+      "fracao_formula_literal_com_fator": null,
+      "fracao_valor_decidiu": null,
+      "politica": "instinto",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "atencioso-bandit": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "energia",
+          505,
+          0.07514880952380952
+        ],
+        [
+          "hora",
+          400,
+          0.05952380952380952
+        ],
+        [
+          "saude",
+          343,
+          0.051041666666666666
+        ],
+        [
+          "habito",
+          342,
+          0.05089285714285714
+        ],
+        [
+          "humor",
+          306,
+          0.045535714285714284
+        ],
+        [
+          "higiene",
+          285,
+          0.04241071428571429
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.001488095238095238,
+      "fracao_com_fator": 0.1849702380952381,
+      "fracao_dois_fatores": 0.18452380952380953,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.1849702380952381,
+      "politica": "bandit",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "atencioso-instinto": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "energia",
+          2268,
+          0.3375
+        ],
+        [
+          "dormindo",
+          1978,
+          0.2943452380952381
+        ],
+        [
+          "hora",
+          162,
+          0.024107142857142858
+        ],
+        [
+          "tempo_sem_cuidado",
+          33,
+          0.004910714285714286
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.004910714285714286,
+      "fracao_com_fator": 0.3424107142857143,
+      "fracao_dois_fatores": 0.31845238095238093,
+      "fracao_formula_literal_com_fator": null,
+      "fracao_valor_decidiu": null,
+      "politica": "instinto",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "incoerente-bandit": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "hora",
+          422,
+          0.06279761904761905
+        ],
+        [
+          "saude",
+          303,
+          0.045089285714285714
+        ],
+        [
+          "habito",
+          298,
+          0.0443452380952381
+        ],
+        [
+          "higiene",
+          294,
+          0.04375
+        ],
+        [
+          "fome",
+          292,
+          0.04345238095238095
+        ],
+        [
+          "humor",
+          260,
+          0.03869047619047619
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.0010416666666666667,
+      "fracao_com_fator": 0.15892857142857142,
+      "fracao_dois_fatores": 0.15833333333333333,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.15892857142857142,
+      "politica": "bandit",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "incoerente-instinto": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "energia",
+          2272,
+          0.3380952380952381
+        ],
+        [
+          "dormindo",
+          1981,
+          0.2947916666666667
+        ],
+        [
+          "hora",
+          158,
+          0.02351190476190476
+        ],
+        [
+          "tempo_sem_cuidado",
+          11,
+          0.001636904761904762
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.001636904761904762,
+      "fracao_com_fator": 0.33973214285714287,
+      "fracao_dois_fatores": 0.3183035714285714,
+      "fracao_formula_literal_com_fator": null,
+      "fracao_valor_decidiu": null,
+      "politica": "instinto",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "relapso-bandit": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "hora",
+          325,
+          0.04836309523809524
+        ],
+        [
+          "saude",
+          267,
+          0.039732142857142855
+        ],
+        [
+          "humor",
+          257,
+          0.03824404761904762
+        ],
+        [
+          "habito",
+          255,
+          0.03794642857142857
+        ],
+        [
+          "higiene",
+          223,
+          0.03318452380952381
+        ],
+        [
+          "fome",
+          172,
+          0.025595238095238095
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.009375,
+      "fracao_com_fator": 0.13288690476190476,
+      "fracao_dois_fatores": 0.1324404761904762,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.13288690476190476,
+      "politica": "bandit",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "relapso-instinto": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "energia",
+          2100,
+          0.3125
+        ],
+        [
+          "tempo_sem_cuidado",
+          2086,
+          0.3104166666666667
+        ],
+        [
+          "dormindo",
+          1796,
+          0.26726190476190476
+        ],
+        [
+          "fome",
+          874,
+          0.13005952380952382
+        ],
+        [
+          "higiene",
+          356,
+          0.052976190476190475
+        ],
+        [
+          "hora",
+          188,
+          0.027976190476190477
+        ]
+      ],
+      "fracao_cita_memoria": 0.0,
+      "fracao_com_evento_ref": 0.3080357142857143,
+      "fracao_com_fator": 0.7569940476190476,
+      "fracao_dois_fatores": 0.3461309523809524,
+      "fracao_formula_literal_com_fator": null,
+      "fracao_valor_decidiu": null,
+      "politica": "instinto",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    }
+  },
+  "vida_com_memoria": {
+    "aleatorio-bandit_memoria": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "hora",
+          363,
+          0.054017857142857145
+        ],
+        [
+          "habito",
+          304,
+          0.04523809523809524
+        ],
+        [
+          "humor",
+          211,
+          0.03139880952380952
+        ],
+        [
+          "saude",
+          209,
+          0.031101190476190477
+        ],
+        [
+          "latencia_fome",
+          180,
+          0.026785714285714284
+        ],
+        [
+          "latencia_higiene",
+          154,
+          0.022916666666666665
+        ]
+      ],
+      "fracao_cita_memoria": 0.060714285714285714,
+      "fracao_com_evento_ref": 0.046130952380952384,
+      "fracao_com_fator": 0.15982142857142856,
+      "fracao_dois_fatores": 0.15967261904761904,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.15982142857142856,
+      "politica": "bandit_memoria",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "atencioso-bandit_memoria": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "energia",
+          456,
+          0.06785714285714285
+        ],
+        [
+          "habito",
+          355,
+          0.05282738095238095
+        ],
+        [
+          "saude",
+          349,
+          0.05193452380952381
+        ],
+        [
+          "hora",
+          339,
+          0.05044642857142857
+        ],
+        [
+          "humor",
+          312,
+          0.04642857142857143
+        ],
+        [
+          "fome",
+          277,
+          0.041220238095238095
+        ]
+      ],
+      "fracao_cita_memoria": 0.030952380952380953,
+      "fracao_com_evento_ref": 0.03139880952380952,
+      "fracao_com_fator": 0.19270833333333334,
+      "fracao_dois_fatores": 0.19270833333333334,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.19270833333333334,
+      "politica": "bandit_memoria",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "incoerente-bandit_memoria": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "hora",
+          470,
+          0.06994047619047619
+        ],
+        [
+          "habito",
+          318,
+          0.04732142857142857
+        ],
+        [
+          "saude",
+          303,
+          0.045089285714285714
+        ],
+        [
+          "humor",
+          281,
+          0.04181547619047619
+        ],
+        [
+          "fome",
+          269,
+          0.0400297619047619
+        ],
+        [
+          "higiene",
+          238,
+          0.035416666666666666
+        ]
+      ],
+      "fracao_cita_memoria": 0.03407738095238095,
+      "fracao_com_evento_ref": 0.034375,
+      "fracao_com_fator": 0.17663690476190477,
+      "fracao_dois_fatores": 0.17663690476190477,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.17663690476190477,
+      "politica": "bandit_memoria",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "relapso-bandit_memoria": {
+      "decisoes": 6720,
+      "fatores_mais_frequentes": [
+        [
+          "hora",
+          296,
+          0.04404761904761905
+        ],
+        [
+          "saude",
+          263,
+          0.03913690476190476
+        ],
+        [
+          "habito",
+          259,
+          0.03854166666666667
+        ],
+        [
+          "humor",
+          237,
+          0.03526785714285714
+        ],
+        [
+          "higiene",
+          188,
+          0.027976190476190477
+        ],
+        [
+          "fome",
+          154,
+          0.022916666666666665
+        ]
+      ],
+      "fracao_cita_memoria": 0.03571428571428571,
+      "fracao_com_evento_ref": 0.04255952380952381,
+      "fracao_com_fator": 0.14836309523809524,
+      "fracao_dois_fatores": 0.14821428571428572,
+      "fracao_formula_literal_com_fator": 1.0,
+      "fracao_valor_decidiu": 0.14836309523809524,
+      "politica": "bandit_memoria",
+      "sementes": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    }
+  }
+}

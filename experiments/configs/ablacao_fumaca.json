@@ -1,0 +1,13 @@
+{
+  "descricao": "Fumaca da ablacao. NAO CANONICO: so para checar que o fluxo roda.",
+  "protocolo": "arena-v1-ablacao",
+  "saida": "artifacts_fumaca_ablacao",
+  "protocolo_substituicoes": {
+    "dias_simulados": 2,
+    "orcamento_interacoes": 32,
+    "partidas_por_par": 2,
+    "estados_sonda": 8,
+    "amostras_por_estado": 40,
+    "bootstrap_reamostragens": 500
+  }
+}

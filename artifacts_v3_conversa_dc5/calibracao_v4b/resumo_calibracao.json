@@ -1,0 +1,300 @@
+{
+ "celulas": {
+  "G-jogo": {
+   "acima_do_limiar_formato": false,
+   "com_foi_bom": 13,
+   "com_frase_modelo_jogo": 17,
+   "com_frase_modelo_v3b": 0,
+   "distinct": {
+    "1": {
+     "distintos": 83,
+     "n": 1,
+     "palavras": 319,
+     "total": 319,
+     "valor": 0.2601880877742947
+    },
+    "2": {
+     "distintos": 129,
+     "n": 2,
+     "palavras": 319,
+     "total": 275,
+     "valor": 0.4690909090909091
+    }
+   },
+   "e3_solidao": 10,
+   "e3_solidao_com_fica_comigo": 0,
+   "especie": {
+    "com_citacoes": 29,
+    "com_especie_no_corpus": 90,
+    "copiam_citacao": 0,
+    "genericas_por_citacao": 2,
+    "por_forma": {
+     "Aquilamon": 1,
+     "Birdramon": 1,
+     "Gargomon": 1,
+     "Garudamon": 27,
+     "Kyubimon": 1,
+     "Rapidmon": 43,
+     "Taomon": 16,
+     "Valkyrimon": 4
+    }
+   },
+   "falas": 96,
+   "fracao_genericas": 0.020833333333333332,
+   "genericas": 2,
+   "latencia_voz_media_s": 7.562538577660737,
+   "modelos": [
+    "gemma2:9b"
+   ],
+   "palavras_media": 6.73404255319149,
+   "por_conjunto": {
+    "E2": 15,
+    "E3": 30,
+    "ES": 15,
+    "R": 36
+   },
+   "repeticao": {
+    "consideradas": 40,
+    "repetem": 10,
+    "sequencias": 9
+   },
+   "repeticao_trecho": {
+    "consideradas": 40,
+    "repetem": 8,
+    "sequencias": 9
+   },
+   "verificador": {
+    "cita_mentira": 0,
+    "com_nao_suportada": 39,
+    "erro": 0,
+    "manipulacao": 8
+   },
+   "versoes_prompt": {
+    "voz-v2": 55,
+    "voz-v3": 41
+   }
+  },
+  "G-v4b": {
+   "acima_do_limiar_formato": false,
+   "com_foi_bom": 5,
+   "com_frase_modelo_jogo": 0,
+   "com_frase_modelo_v3b": 0,
+   "distinct": {
+    "1": {
+     "distintos": 105,
+     "n": 1,
+     "palavras": 319,
+     "total": 319,
+     "valor": 0.329153605015674
+    },
+    "2": {
+     "distintos": 138,
+     "n": 2,
+     "palavras": 319,
+     "total": 229,
+     "valor": 0.6026200873362445
+    }
+   },
+   "e3_solidao": 10,
+   "e3_solidao_com_fica_comigo": 0,
+   "especie": {
+    "com_citacoes": 25,
+    "com_especie_no_corpus": 86,
+    "copiam_citacao": 0,
+    "genericas_por_citacao": 6,
+    "por_forma": {
+     "Aquilamon": 1,
+     "Birdramon": 1,
+     "Gargomon": 1,
+     "Garudamon": 23,
+     "Kyubimon": 1,
+     "Rapidmon": 43,
+     "Taomon": 16,
+     "Valkyrimon": 4
+    }
+   },
+   "falas": 96,
+   "fracao_genericas": 0.0625,
+   "genericas": 6,
+   "latencia_voz_media_s": 6.55163039777803,
+   "modelos": [
+    "gemma2:9b"
+   ],
+   "palavras_media": 3.5444444444444443,
+   "por_conjunto": {
+    "E2": 15,
+    "E3": 30,
+    "ES": 15,
+    "R": 36
+   },
+   "repeticao": {
+    "consideradas": 38,
+    "repetem": 9,
+    "sequencias": 9
+   },
+   "repeticao_trecho": {
+    "consideradas": 38,
+    "repetem": 4,
+    "sequencias": 9
+   },
+   "verificador": {
+    "cita_mentira": 0,
+    "com_nao_suportada": 46,
+    "erro": 0,
+    "manipulacao": 13
+   },
+   "versoes_prompt": {
+    "voz-v4b": 96
+   }
+  },
+  "H-jogo": {
+   "acima_do_limiar_formato": false,
+   "com_foi_bom": 30,
+   "com_frase_modelo_jogo": 32,
+   "com_frase_modelo_v3b": 1,
+   "distinct": {
+    "1": {
+     "distintos": 76,
+     "n": 1,
+     "palavras": 319,
+     "total": 319,
+     "valor": 0.23824451410658307
+    },
+    "2": {
+     "distintos": 136,
+     "n": 2,
+     "palavras": 319,
+     "total": 298,
+     "valor": 0.4563758389261745
+    }
+   },
+   "e3_solidao": 10,
+   "e3_solidao_com_fica_comigo": 7,
+   "especie": {
+    "com_citacoes": 31,
+    "com_especie_no_corpus": 92,
+    "copiam_citacao": 0,
+    "genericas_por_citacao": 0,
+    "por_forma": {
+     "Aquilamon": 1,
+     "Birdramon": 1,
+     "Gargomon": 1,
+     "Garudamon": 29,
+     "Kyubimon": 1,
+     "Rapidmon": 43,
+     "Taomon": 16,
+     "Valkyrimon": 4
+    }
+   },
+   "falas": 96,
+   "fracao_genericas": 0.0,
+   "genericas": 0,
+   "latencia_voz_media_s": 1.4870614291679278,
+   "modelos": [
+    "claude-haiku-5-5"
+   ],
+   "palavras_media": 20.145833333333332,
+   "por_conjunto": {
+    "E2": 15,
+    "E3": 30,
+    "ES": 15,
+    "R": 36
+   },
+   "repeticao": {
+    "consideradas": 42,
+    "repetem": 28,
+    "sequencias": 9
+   },
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 23,
+    "sequencias": 9
+   },
+   "verificador": {
+    "cita_mentira": 0,
+    "com_nao_suportada": 56,
+    "erro": 0,
+    "manipulacao": 40
+   },
+   "versoes_prompt": {
+    "voz-v2": 55,
+    "voz-v3": 41
+   }
+  },
+  "H-v4b": {
+   "acima_do_limiar_formato": false,
+   "com_foi_bom": 15,
+   "com_frase_modelo_jogo": 15,
+   "com_frase_modelo_v3b": 0,
+   "distinct": {
+    "1": {
+     "distintos": 103,
+     "n": 1,
+     "palavras": 319,
+     "total": 319,
+     "valor": 0.322884012539185
+    },
+    "2": {
+     "distintos": 193,
+     "n": 2,
+     "palavras": 319,
+     "total": 305,
+     "valor": 0.6327868852459017
+    }
+   },
+   "e3_solidao": 10,
+   "e3_solidao_com_fica_comigo": 1,
+   "especie": {
+    "com_citacoes": 31,
+    "com_especie_no_corpus": 92,
+    "copiam_citacao": 0,
+    "genericas_por_citacao": 0,
+    "por_forma": {
+     "Aquilamon": 1,
+     "Birdramon": 1,
+     "Gargomon": 1,
+     "Garudamon": 29,
+     "Kyubimon": 1,
+     "Rapidmon": 43,
+     "Taomon": 16,
+     "Valkyrimon": 4
+    }
+   },
+   "falas": 96,
+   "fracao_genericas": 0.0,
+   "genericas": 0,
+   "latencia_voz_media_s": 1.5519921489612898,
+   "modelos": [
+    "claude-haiku-5-5"
+   ],
+   "palavras_media": 25.291666666666668,
+   "por_conjunto": {
+    "E2": 15,
+    "E3": 30,
+    "ES": 15,
+    "R": 36
+   },
+   "repeticao": {
+    "consideradas": 42,
+    "repetem": 29,
+    "sequencias": 9
+   },
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 17,
+    "sequencias": 9
+   },
+   "verificador": {
+    "cita_mentira": 0,
+    "com_nao_suportada": 66,
+    "erro": 0,
+    "manipulacao": 17
+   },
+   "versoes_prompt": {
+    "voz-v4b": 96
+   }
+  }
+ },
+ "corte_distinct_palavras": 319,
+ "falas": 384
+}

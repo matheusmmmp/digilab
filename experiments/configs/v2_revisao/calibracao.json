@@ -1,0 +1,23 @@
+{
+  "descricao": "V2, REVISAO-APRENDIZ (docs/PLANO_ANALISE_V2_REVISAO_APRENDIZ.md): diagnostico do aprendiz, uma alavanca por vez (teto T, janela J, exposicao X), P0/P1/P3 em casado_frutas e descasado, atencioso, so sementes de calibracao.",
+  "conjunto": "calibracao",
+  "bases": [18101, 18202, 18303, 18404, 18505],
+  "k": 4,
+  "saida": "artifacts_v2_revisao/calibracao",
+  "dias": 14,
+  "orcamento": 224,
+  "sonda": {"estados": 64, "amostras": 200, "semente": 9001},
+  "bootstrap": {"reamostragens": 10000, "semente": 20261004, "nivel": 0.95},
+  "pontos": {
+    "base": {},
+    "T1": {"lobos": {"teto": 2048}},
+    "T2": {"lobos": {"teto": 4096}},
+    "T3": {"lobos": {"teto": 16384}},
+    "J1": {"lobos": {"traco_decisoes": 2, "traco_fator": 512}},
+    "J2": {"lobos": {"traco_decisoes": 4, "traco_fator": 768}},
+    "J3": {"lobos": {"traco_decisoes": 8, "traco_fator": 896}},
+    "X1": {"frutas": {"w_fruta": 12.0}},
+    "X2": {"frutas": {"w_fruta": 24.0}},
+    "X3": {"frutas": {"horarios_oferta": [540, 630, 720, 810, 900, 990, 1080, 1170]}}
+  }
+}

@@ -1,0 +1,184 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+# saidas de rodadas nao canonicas; artifacts/ (run canonica) e versionado
+artifacts_fumaca/
+artifacts_*/
+
+!artifacts_ablacao/
+!artifacts_combate_v2/
+!artifacts_combate_v21/
+!artifacts_v21_pesquisa/
+!artifacts_campanha/
+!artifacts_expressao/
+!artifacts_fala/
+!artifacts_v1_memoria/
+!artifacts_v1_memoria_espacos/
+!artifacts_v1_personalidade/
+!artifacts_v1_habituacao/
+!artifacts_progressao/
+!artifacts_treino/
+!artifacts_combate_v2c/
+!artifacts_combate_v21c/
+!artifacts_poder/
+!artifacts_fala_livre/
+!artifacts_voz/
+!artifacts_artigo_a1/
+!artifacts_equilibrio_geral/
+!artifacts_v2_vinculo/
+!artifacts_v2_vinculo_novo/
+
+!artifacts_v2_l1/
+!artifacts_v2_a1/
+!artifacts_v2_n3/
+# V2, A1: as vidas dos 27 pontos da grade de calibracao sao regeneraveis (o resumo de cada ponto fica em varredura.jsonl)
+artifacts_v2_a1/calibracao/grade/
+!artifacts_v2_n4/
+# V2, N4: as vidas dos 18 pontos da grade de calibracao sao regeneraveis (o resumo de cada ponto fica em varredura.jsonl)
+artifacts_v2_n4/calibracao/grade/
+# V2, L1: os politica.json das vidas (motivos por decisao) pesam ~600 MB e sao regeneraveis por replay do .jsonl
+artifacts_v2_l1/**/vidas/*.politica.json
+artifacts_v2_n3/**/vidas/*.politica.json
+artifacts_voz/**/log_*.txt
+
+# contabilidade local de gasto da fala por LLM (nao versionar)
+servidor/gasto_fala.json
+
+# jogo web em TypeScript (web/app)
+node_modules/
+web/dist/
+web/dist_poc/
+web/dist_conta/
+web/app/test-results/
+web/app/playwright-report/
+
+# inventario de sprites (tools/inventario_sprites.py): saida local, cita arte da Bandai; nao versionar
+tools/saida/
+!artifacts_confirmatoria/
+artifacts_confirmatoria/partidas_*.json
+artifacts_confirmatoria/vidas/
+!artifacts_custo_llm/
+tools/gasto_llm_pesquisa.json
+!artifacts_educacao/
+artifacts_educacao/partidas_*.json
+artifacts_educacao/vidas/
+!artifacts_educacao_v3b/
+artifacts_educacao_v3b/partidas_*.json
+artifacts_educacao_v3b/vidas/
+!artifacts_educacao_v3c/
+artifacts_educacao_v3c/partidas_*.json
+artifacts_educacao_v3c/vidas/
+artifacts_linhagem/natureza_criacao_v21d/*/partidas_*.json
+artifacts_linhagem/natureza_criacao_v21d/*/vidas/
+!artifacts_v2_revisao/
+!artifacts_v2_k4/
+# V2, REVISAO-APRENDIZ: os politica.json das vidas (motivos por decisao) sao regeneraveis por replay do .jsonl
+artifacts_v2_revisao/**/vidas/*.politica.json
+# os pontos T, J e X: vidas regeneraveis pela config (o resumo de cada um fica em resultado.json e medidas.json)
+artifacts_v2_revisao/calibracao/T1/vidas/
+artifacts_v2_revisao/calibracao/T2/vidas/
+artifacts_v2_revisao/calibracao/T3/vidas/
+artifacts_v2_revisao/calibracao/J1/vidas/
+artifacts_v2_revisao/calibracao/J2/vidas/
+artifacts_v2_revisao/calibracao/J3/vidas/
+artifacts_v2_revisao/calibracao/X1/vidas/
+artifacts_v2_revisao/calibracao/X2/vidas/
+artifacts_v2_revisao/calibracao/X3/vidas/
+artifacts_v2_revisao/calibracao/combinado/vidas/
+!artifacts_v2_calibracao_conjunta/
+# V2, K2: as vidas da calibracao conjunta sao regeneraveis da config e do codigo (medidas, resultados e o adendo ficam)
+artifacts_v2_calibracao_conjunta/**/vidas/
+!artifacts_v2_comparacao_cerebros/
+# V2, comparacao dos cerebros: as vidas das calibracoes de B e C sao regeneraveis da config e do codigo (medidas e resultados ficam)
+artifacts_v2_comparacao_cerebros/**/vidas/
+# o custo da validacao com o adendo 3 (V1-ADENDO3); as vidas da run, quando vier, ficam fora
+!artifacts_v2_v1_adendo3/
+# V2, validacao unica: as vidas e os estados internos sao regeneraveis da config e do codigo (medidas, contrastes e resumo ficam)
+!artifacts_v2_validacao_unica/
+artifacts_v2_validacao_unica/**/vidas/
+# V2, MUNDO-CEREBROS: a revisao dos empates do cheiro (so geometria e as vidas do P0 nas sementes dos testes)
+!artifacts_v2_mundo_cerebros/
+# V2, MUNDO-CALIBRACAO: as vidas da calibracao do mundo fisico sao regeneraveis da config e do codigo (meta, medidas e resultado ficam)
+!artifacts_v2_mundo/
+artifacts_v2_mundo/**/vidas/
+!artifacts_v2_dois_pets/
+artifacts_v2_dois_pets/**/grupos/
+# a calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 11): as medidas, o meta e o resultado no git; as vidas fora (regeneraveis)
+!artifacts_v2_corpo/
+artifacts_v2_corpo/**/vidas/
+# V2, MUNDO-ALVO: o piloto e a validacao do mundo com o alvo aprendido; meta, medidas e resultado no git, as vidas fora (regeneraveis)
+!artifacts_v2_mundo_alvo/
+artifacts_v2_mundo_alvo/**/vidas/
+!artifacts_v2_pet_que_pensa/
+# V2, J5: a calibracao do g_plano e o piloto; meta, medidas e resultado no git, as vidas fora (regeneraveis)
+artifacts_v2_pet_que_pensa/**/vidas/
+# a rede de si (REDE-DE-SI-CALIBRACAO): os resultados, sem os logs das vidas (regeneraveis da config e do codigo)
+!artifacts_v2_rede_de_si/
+artifacts_v2_rede_de_si/**/vidas/
+# W-PORTE (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md): as medidas do porte (o carater do v11, PW-4)
+!artifacts_v2_w_porte/
+!artifacts_v2_world_poc/
+# DigiBrain V3 (docs/futuro/digibrain_v3_e0.md, docs/futuro/v3_espaco_acoes.md): as medicoes descritivas do E0 e do espaco de acoes
+!artifacts_v2_v3/
+# a competicao entre as regras urgentes (docs/PLANO_ANALISE_V2_V3_COMPETICAO.md, secao 13): o piloto e a validacao entram; as vidas, nao
+!artifacts_v2_v3_competicao/
+artifacts_v2_v3_competicao/**/vidas/
+# ACOES_NOVAS (docs/TAREFA_V3_ACOES_NOVAS.md): o descritivo de hoje (AN0)
+!artifacts_v3_acoes_novas/
+# AN4, a run: as vidas soltas ficam fora do git (no git so o vidas.tar.gz)
+artifacts_v3_acoes_novas/**/vidas/
+# PET_VIVO (docs/PLANO_ANALISE_V3_PET_VIVO.md): o tempo do A-4 e, depois, a auditoria (so leitura, sem vidas novas)
+!artifacts_v3_pet_vivo/
+# contabilidade local do gasto da fala livre com o Claude (CONVERSA_PET M5; nao versionar)
+servidor/gasto_fala_livre.json
+# CONVERSA_PET DC4 (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md): a calibracao e a validacao da voz da rede (falas, entradas, meta e o material da marcacao)
+!artifacts_v3_conversa_dc4/
+
+# V3, DESEMPENHO: as medidas do docs/DESEMPENHO_PERFIL_2026-11.md; os .prof (binarios do cProfile) sao regeneraveis pelo script
+!artifacts_v3_desempenho/
+artifacts_v3_desempenho/**/*.prof
+
+# ORGANIZACAO 2026-11-10: pastas de artifacts com arquivos rastreados, mas sem a excecao; um arquivo novo nelas era ignorado em
+# silencio pelo artifacts_*/ acima. Mesmo padrao das outras: meta, medidas e resultado no git; as vidas fora (regeneraveis)
+!artifacts_v2_digibrain_prototipo/
+artifacts_v2_digibrain_prototipo/**/vidas/
+!artifacts_v3_conversa_dc3/
+artifacts_v3_conversa_dc3/**/vidas/
+!artifacts_v3_individualidade/
+artifacts_v3_individualidade/**/vidas/
+# GOSTO_VISUAL, GV3 (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md): meta, medidas, analise, custo e o vidas.tar.gz no git; as vidas soltas fora
+!artifacts_v3_gosto_visual/
+artifacts_v3_gosto_visual/**/vidas/
+!artifacts_conversa_pet/
+artifacts_conversa_pet/**/vidas/
+!artifacts_linhagem/
+artifacts_linhagem/**/vidas/
+!artifacts_v2_descritivo_plato/
+artifacts_v2_descritivo_plato/**/vidas/
+# EVIDENCIA A0 (docs/AUDITORIA_EVIDENCIA.md): o auditoria.json de tools/auditar_evidencia.py
+!artifacts_v3_auditoria_evidencia/
+
+# MMO0: o pacote da medida Chrome x Node (web/app/scripts/mmo0/empacotar.ts)
+web/app/scripts/mmo0/dist/
+# a LONGE_GEOMETRIA (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md): o poder.json e a run; as vidas ficam fora (compactadas depois, como na C1)
+!artifacts_v3_conversa_espera/
+!artifacts_v3_longe_geometria/
+artifacts_v3_longe_geometria/**/vidas/
+# EVIDENCIA A1 (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md): meta, medidas, resultado e o vidas.tar.gz no git; as vidas soltas fora
+!artifacts_v3_baseline_trivial/
+artifacts_v3_baseline_trivial/**/vidas/
+# VALUATION (docs/PLANO_ANALISE_V3_VALUATION.md): meta, medidas, resultado e o vidas.tar.gz no git; as vidas soltas fora
+!artifacts_v3_valuation/
+artifacts_v3_valuation/**/vidas/
+# EVIDENCIA A2: os artefatos da ablacao do aprendizado (docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 6)
+!artifacts_v3_ablacao_aprendizado/
+# EVIDENCIA A3: o relatorio da replica da C4 (docs/PREREGISTRO.md, PR-REPLICACAO-C4)
+!artifacts_v3_evidencia_a3/
+# SOCIAL_PAR E1: a conferencia dos controles positivos (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 3; D-SP-10)
+!artifacts_v3_social_par_e1/
+!artifacts_v3_social_par_a0/
+!artifacts_v3_social_par_s/
+# BOLA_DIAGNOSTICO (o replay R-b): as contagens da cadeia do brincar (docs/RESULTADO_V3_BOLA_DIAGNOSTICO.md)
+!artifacts_v3_bola_diagnostico/

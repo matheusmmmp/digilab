@@ -1,0 +1,1262 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/grade_lideres_r2.py",
+ "faixa": "calibracao2",
+ "arenas": {
+  "cidadela": [
+   {
+    "variante": "l2_cid_defende",
+    "fator": 0.6,
+    "sem": 0.315,
+    "com": 0.825,
+    "pior": 0.35,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.265
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 0.7,
+    "sem": 0.1,
+    "com": 0.805,
+    "pior": 0.32,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.18
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 0.8,
+    "sem": 0.0288,
+    "com": 0.79,
+    "pior": 0.31,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.19
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 0.9,
+    "sem": 0.0113,
+    "com": 0.7588,
+    "pior": 0.29,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.21
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.0,
+    "sem": 0.0088,
+    "com": 0.6938,
+    "pior": 0.18,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.32
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.1,
+    "sem": 0.0075,
+    "com": 0.645,
+    "pior": 0.17,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.33
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.2,
+    "sem": 0.01,
+    "com": 0.5975,
+    "pior": 0.14,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.36
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.3,
+    "sem": 0.01,
+    "com": 0.5337,
+    "pior": 0.11,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.39
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.4,
+    "sem": 0.0087,
+    "com": 0.4537,
+    "pior": 0.04,
+    "pior_forma": "vigia",
+    "passa": false,
+    "folga": -0.46
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.5,
+    "sem": 0.0087,
+    "com": 0.3587,
+    "pior": 0.01,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.49
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.6,
+    "sem": 0.0063,
+    "com": 0.2225,
+    "pior": 0.01,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.5775
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.7,
+    "sem": 0.0025,
+    "com": 0.1275,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.6725
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.8,
+    "sem": 0.0025,
+    "com": 0.0713,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7287
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 1.9,
+    "sem": 0,
+    "com": 0.0413,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7587
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.0,
+    "sem": 0,
+    "com": 0.0238,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7762
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.1,
+    "sem": 0,
+    "com": 0.0188,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7812
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.2,
+    "sem": 0,
+    "com": 0.0163,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7837
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.3,
+    "sem": 0,
+    "com": 0.015,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.785
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.4,
+    "sem": 0,
+    "com": 0.015,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.785
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.5,
+    "sem": 0,
+    "com": 0.0163,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7837
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.6,
+    "sem": 0,
+    "com": 0.0163,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7837
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.7,
+    "sem": 0,
+    "com": 0.015,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.785
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.8,
+    "sem": 0,
+    "com": 0.0138,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7862
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 2.9,
+    "sem": 0,
+    "com": 0.0125,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7875
+   },
+   {
+    "variante": "l2_cid_defende",
+    "fator": 3.0,
+    "sem": 0,
+    "com": 0.015,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.785
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 0.6,
+    "sem": 0.3225,
+    "com": 0.825,
+    "pior": 0.35,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.2725
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 0.7,
+    "sem": 0.1,
+    "com": 0.8113,
+    "pior": 0.32,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.18
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 0.8,
+    "sem": 0.0263,
+    "com": 0.7988,
+    "pior": 0.31,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.19
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 0.9,
+    "sem": 0.0113,
+    "com": 0.7787,
+    "pior": 0.29,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.21
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.0,
+    "sem": 0.0063,
+    "com": 0.7163,
+    "pior": 0.17,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.33
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.1,
+    "sem": 0.0063,
+    "com": 0.665,
+    "pior": 0.16,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.34
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.2,
+    "sem": 0.0063,
+    "com": 0.615,
+    "pior": 0.14,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.36
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.3,
+    "sem": 0.005,
+    "com": 0.5475,
+    "pior": 0.11,
+    "pior_forma": "vigia",
+    "passa": false,
+    "folga": -0.39
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.4,
+    "sem": 0.005,
+    "com": 0.4613,
+    "pior": 0.04,
+    "pior_forma": "vigia",
+    "passa": false,
+    "folga": -0.46
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.5,
+    "sem": 0.0013,
+    "com": 0.3663,
+    "pior": 0.03,
+    "pior_forma": "vigia",
+    "passa": false,
+    "folga": -0.47
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.6,
+    "sem": 0,
+    "com": 0.2213,
+    "pior": 0.01,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.5787
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.7,
+    "sem": 0,
+    "com": 0.1263,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.6737
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.8,
+    "sem": 0,
+    "com": 0.07,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.73
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 1.9,
+    "sem": 0,
+    "com": 0.0388,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7612
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.0,
+    "sem": 0,
+    "com": 0.02,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.78
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.1,
+    "sem": 0,
+    "com": 0.0138,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7862
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.2,
+    "sem": 0,
+    "com": 0.0113,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7887
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.3,
+    "sem": 0,
+    "com": 0.0113,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7887
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.4,
+    "sem": 0,
+    "com": 0.0113,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7887
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.5,
+    "sem": 0,
+    "com": 0.0113,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7887
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.6,
+    "sem": 0,
+    "com": 0.0113,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7887
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.7,
+    "sem": 0,
+    "com": 0.0113,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7887
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.8,
+    "sem": 0,
+    "com": 0.01,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.79
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 2.9,
+    "sem": 0,
+    "com": 0.01,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.79
+   },
+   {
+    "variante": "l2_cid_sem_finta",
+    "fator": 3.0,
+    "sem": 0,
+    "com": 0.0088,
+    "pior": 0,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.7912
+   }
+  ],
+  "espiral": [
+   {
+    "variante": "l2_esp_defende",
+    "fator": 0.6,
+    "sem": 0.7913,
+    "com": 0.9238,
+    "pior": 0.71,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.7413
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 0.7,
+    "sem": 0.7388,
+    "com": 0.9125,
+    "pior": 0.69,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.6888
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 0.8,
+    "sem": 0.6438,
+    "com": 0.9088,
+    "pior": 0.68,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.5938
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 0.9,
+    "sem": 0.5575,
+    "com": 0.9038,
+    "pior": 0.67,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.5075
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.0,
+    "sem": 0.4413,
+    "com": 0.8925,
+    "pior": 0.64,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.3913
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.1,
+    "sem": 0.3188,
+    "com": 0.8763,
+    "pior": 0.56,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.2688
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.2,
+    "sem": 0.1775,
+    "com": 0.8663,
+    "pior": 0.53,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.1275
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.3,
+    "sem": 0.0838,
+    "com": 0.8588,
+    "pior": 0.49,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.0338
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.4,
+    "sem": 0.0475,
+    "com": 0.8413,
+    "pior": 0.44,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.06
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.5,
+    "sem": 0.0425,
+    "com": 0.8275,
+    "pior": 0.42,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.08
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.6,
+    "sem": 0.0338,
+    "com": 0.815,
+    "pior": 0.39,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.11
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.7,
+    "sem": 0.0238,
+    "com": 0.7925,
+    "pior": 0.37,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.13
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.8,
+    "sem": 0.0225,
+    "com": 0.7787,
+    "pior": 0.37,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.13
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 1.9,
+    "sem": 0.0175,
+    "com": 0.7637,
+    "pior": 0.36,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.14
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.0,
+    "sem": 0.0163,
+    "com": 0.7375,
+    "pior": 0.33,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.17
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.1,
+    "sem": 0.0138,
+    "com": 0.7013,
+    "pior": 0.28,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.22
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.2,
+    "sem": 0.0125,
+    "com": 0.665,
+    "pior": 0.21,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.29
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.3,
+    "sem": 0.0125,
+    "com": 0.6212,
+    "pior": 0.15,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.35
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.4,
+    "sem": 0.0125,
+    "com": 0.5912,
+    "pior": 0.14,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.36
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.5,
+    "sem": 0.0125,
+    "com": 0.5538,
+    "pior": 0.12,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.38
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.6,
+    "sem": 0.0125,
+    "com": 0.51,
+    "pior": 0.1,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.4
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.7,
+    "sem": 0.0125,
+    "com": 0.4575,
+    "pior": 0.08,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.42
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.8,
+    "sem": 0.0125,
+    "com": 0.4037,
+    "pior": 0.06,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.44
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 2.9,
+    "sem": 0.01,
+    "com": 0.345,
+    "pior": 0.04,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.46
+   },
+   {
+    "variante": "l2_esp_defende",
+    "fator": 3.0,
+    "sem": 0.01,
+    "com": 0.2775,
+    "pior": 0.02,
+    "pior_forma": "duelista",
+    "passa": false,
+    "folga": -0.5225
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 0.6,
+    "sem": 0.8,
+    "com": 0.9238,
+    "pior": 0.71,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.75
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 0.7,
+    "sem": 0.75,
+    "com": 0.9125,
+    "pior": 0.69,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.7
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 0.8,
+    "sem": 0.6588,
+    "com": 0.9088,
+    "pior": 0.68,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.6088
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 0.9,
+    "sem": 0.5638,
+    "com": 0.9038,
+    "pior": 0.67,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.5138
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.0,
+    "sem": 0.4463,
+    "com": 0.8925,
+    "pior": 0.64,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.3963
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.1,
+    "sem": 0.3225,
+    "com": 0.8763,
+    "pior": 0.56,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.2725
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.2,
+    "sem": 0.175,
+    "com": 0.8663,
+    "pior": 0.53,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.125
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.3,
+    "sem": 0.08,
+    "com": 0.8588,
+    "pior": 0.48,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.03
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.4,
+    "sem": 0.0438,
+    "com": 0.8438,
+    "pior": 0.43,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.07
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.5,
+    "sem": 0.0375,
+    "com": 0.8338,
+    "pior": 0.41,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.09
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.6,
+    "sem": 0.0288,
+    "com": 0.82,
+    "pior": 0.38,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.12
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.7,
+    "sem": 0.0175,
+    "com": 0.8025,
+    "pior": 0.36,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.14
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.8,
+    "sem": 0.015,
+    "com": 0.79,
+    "pior": 0.36,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.14
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 1.9,
+    "sem": 0.01,
+    "com": 0.7713,
+    "pior": 0.35,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.15
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.0,
+    "sem": 0.0088,
+    "com": 0.7475,
+    "pior": 0.32,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.18
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.1,
+    "sem": 0.0075,
+    "com": 0.7125,
+    "pior": 0.28,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.22
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.2,
+    "sem": 0.0075,
+    "com": 0.6725,
+    "pior": 0.19,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.31
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.3,
+    "sem": 0.0075,
+    "com": 0.6275,
+    "pior": 0.12,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.38
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.4,
+    "sem": 0.005,
+    "com": 0.595,
+    "pior": 0.11,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.39
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.5,
+    "sem": 0.0038,
+    "com": 0.5538,
+    "pior": 0.1,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.4
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.6,
+    "sem": 0.0038,
+    "com": 0.5125,
+    "pior": 0.08,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.42
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.7,
+    "sem": 0.0038,
+    "com": 0.4588,
+    "pior": 0.08,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.42
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.8,
+    "sem": 0.0038,
+    "com": 0.4075,
+    "pior": 0.07,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.43
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 2.9,
+    "sem": 0.0013,
+    "com": 0.3488,
+    "pior": 0.07,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.4512
+   },
+   {
+    "variante": "l2_esp_sem_finta",
+    "fator": 3.0,
+    "sem": 0.0013,
+    "com": 0.28,
+    "pior": 0.06,
+    "pior_forma": "vigia",
+    "passa": false,
+    "folga": -0.52
+   }
+  ],
+  "lago": [
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 0.6,
+    "sem": 0.8725,
+    "com": 0.9288,
+    "pior": 0.66,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.8225
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 0.7,
+    "sem": 0.83,
+    "com": 0.9238,
+    "pior": 0.64,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.78
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 0.8,
+    "sem": 0.77,
+    "com": 0.9213,
+    "pior": 0.63,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.72
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 0.9,
+    "sem": 0.67,
+    "com": 0.9125,
+    "pior": 0.6,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.62
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.0,
+    "sem": 0.5313,
+    "com": 0.9025,
+    "pior": 0.56,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.4813
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.1,
+    "sem": 0.3838,
+    "com": 0.89,
+    "pior": 0.51,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.3338
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.2,
+    "sem": 0.2588,
+    "com": 0.8825,
+    "pior": 0.47,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.2088
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.3,
+    "sem": 0.155,
+    "com": 0.88,
+    "pior": 0.47,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.105
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.4,
+    "sem": 0.1025,
+    "com": 0.8788,
+    "pior": 0.46,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.0525
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.5,
+    "sem": 0.0713,
+    "com": 0.8738,
+    "pior": 0.44,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.06
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.6,
+    "sem": 0.0475,
+    "com": 0.8738,
+    "pior": 0.44,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.06
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.7,
+    "sem": 0.035,
+    "com": 0.865,
+    "pior": 0.44,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.06
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.8,
+    "sem": 0.025,
+    "com": 0.8563,
+    "pior": 0.43,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.07
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 1.9,
+    "sem": 0.0163,
+    "com": 0.8263,
+    "pior": 0.32,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.18
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.0,
+    "sem": 0.0113,
+    "com": 0.805,
+    "pior": 0.3,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.2
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.1,
+    "sem": 0.0088,
+    "com": 0.765,
+    "pior": 0.23,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.27
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.2,
+    "sem": 0.0088,
+    "com": 0.7225,
+    "pior": 0.22,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.28
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.3,
+    "sem": 0.0088,
+    "com": 0.68,
+    "pior": 0.22,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.28
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.4,
+    "sem": 0.0075,
+    "com": 0.63,
+    "pior": 0.21,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.29
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.5,
+    "sem": 0.0075,
+    "com": 0.5613,
+    "pior": 0.21,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.29
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.6,
+    "sem": 0.0063,
+    "com": 0.505,
+    "pior": 0.19,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.31
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.7,
+    "sem": 0.0063,
+    "com": 0.45,
+    "pior": 0.18,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.35
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.8,
+    "sem": 0.0038,
+    "com": 0.3962,
+    "pior": 0.17,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.4038
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 2.9,
+    "sem": 0.0025,
+    "com": 0.3525,
+    "pior": 0.15,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.4475
+   },
+   {
+    "variante": "l2_lago_sem_persegue",
+    "fator": 3.0,
+    "sem": 0.0013,
+    "com": 0.29,
+    "pior": 0.13,
+    "pior_forma": "sentinela",
+    "passa": false,
+    "folga": -0.51
+   }
+  ]
+ }
+}

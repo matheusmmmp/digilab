@@ -1,0 +1,689 @@
+/* Tamer: o jogador (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 4 e 5; so no jogo). As medalhas sao dele, nao do pet, e
+   sobrevivem ao pet. Registro proprio, com event sourcing como o do pet: a chave CHAVE-tamer guarda so os eventos
+   {versao, log}; o estado (quais medalhas, com que pet) e reconstruido reprocessando o registro. Evento desconhecido
+   falha alto. O formato do save do pet nao muda.
+
+   O motor do pet NUNCA le o Tamer por fora (o replay do pet tem de dar o mesmo resultado sozinho): quando o Tamer tem
+   mais medalhas do que o pet ativo conhece, o app grava no registro do pet o evento "u" (Motor.liberar), e o motor
+   re-verifica a evolucao nessa hora. Um pet guardado recebe o "u" quando volta a ser o ativo.
+
+   Itens (medalhas, parte 3; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13): o inventario tambem e do Tamer. Registro versao 2 (a versao 1,
+   so com medalhas, continua abrindo): eventos "item" (o item da medalha, na primeira vitoria contra o lider, e a carta da revanche) e
+   "carta_usada". O chip nao se gasta (qualquer pet do Tamer pode ter uma copia equipada); a carta sai do inventario quando vale numa
+   luta. No registro do pet entram "i" (equipar, desequipar) e "k" (a carta da proxima luta): o motor do pet continua sem ler o Tamer.
+
+   O titulo (a Liga dos Lideres na Fronteira, medalhas parte 4a; docs/DESIGN_FRONTEIRA.md, secao 2): registro versao 3 (le a 1 e a 2).
+   Evento "campeao": o pet venceu as 6 lutas da Liga (o motor do pet conta os titulos dele, Motor.liga, a partir do evento de luta "l"
+   da Liga). Um por pet (o primeiro titulo dele), so depois das 6 medalhas; o primeiro do registro e o titulo do Tamer (a medalha de
+   ouro).
+
+   Os recordes (as instalacoes da Fronteira, medalhas parte 4b; docs/DESIGN_FRONTEIRA.md, secao 3): registro versao 4 (le a 1, a 2 e a 3).
+   Evento "recorde": a maior sequencia de vitorias numa instalacao (Torre de Batalha, Palacio), com o pet que fez. So entra quando passa o
+   recorde que o Tamer ja tem, e so depois do titulo. O motor do pet conta as sequencias dele (Motor.instalacoes, a partir do evento de luta
+   "l" da instalacao); o pet conhece o titulo do Tamer pelo evento "f" do registro dele (Motor.abrirFronteira), gravado aqui, como o "u".
+
+   A Fabrica e o Salao (medalhas parte 4c; docs/DESIGN_FRONTEIRA.md, secoes 3 e 4): registro versao 5 (le 1 a 4).
+   - Fabrica (motor/fabrica.ts): nenhum pet do jogador luta, entao a tentativa inteira fica SO aqui e se refaz sozinha a partir daqui:
+     "fabrica" (o comeco da tentativa n, com a semente dela, que sai do numero da tentativa, e o alugado escolhido entre os 3), "fabrica_luta"
+     (a luta k, com a semente dela; o replay joga a luta de novo) e "fabrica_troca" (depois da vitoria k, o alugado vira o rival derrotado).
+     O recorde (a maior sequencia de series vencidas) sai das tentativas, sem evento proprio.
+   - Salao (motor/salao.ts): cada pet luta no registro DELE (evento "l" {r: "salao", s}); aqui fica a tentativa, "salao": os pets (um por
+     estagio, na ordem), a tentativa de cada um no Salao, a semente (que sai do registro dele; o replay confere a conta) e quem venceu. O
+     recorde (quantos estagios venceu seguidos, ate 4) sai das tentativas.
+
+   A Fabrica dos v9 (rodada de equilibrio geral, fase 3; motor/fabrica.ts): registro versao 6 (le 1 a 5). O evento "fabrica" ganha o campo
+   `v`, a versao das regras da tentativa (VERSOES_FABRICA): sem ele, a Fabrica de antes (V21D, fator 1, a troca nao cura), e as tentativas
+   ja gravadas se refazem iguais; as tentativas novas gravam `v: 9` (VERSAO_FABRICA_ATUAL: V21E, o fator dos rivais dos v9, a troca com a
+   vida cheia). Versao desconhecida falha alto.
+
+   A Fabrica em tempo real (COMBATE-TR, etapa R2; D-4, decisao do Matheus de 2026-10-29): registro versao 7. As tentativas novas gravam
+   `v: 13` (VERSAO_FABRICA_TR: a luta em tempo real dos pets v13), e o registro 7 so aceita essas. As tentativas antigas (v ausente ou 9)
+   saem do registro no descarte unico 6 (descartarPetsAntigos), com aviso na tela; o recorde da Fabrica recomeca. O resto do Tamer (as
+   medalhas, os itens, o titulo, os recordes das instalacoes, o Salao) fica. Os registros 1 a 6 ainda se leem (com a Fabrica de antes).
+
+   A Fabrica da luta da POC (LUTA_POC, LP2b e LP4): registro versao 8, so com as tentativas `v: 21`. O combate por turnos saiu na LP4, e as
+   tentativas v13 e v14 nao se refazem mais: saem do registro no descarte 8 (descartarPetsAntigos), que guarda o registro de antes no arquivo
+   dos descartados e conta as tentativas no aviso da luta nova; o recorde da Fabrica recomeca. O resto do Tamer fica. PROPOSTA da LP4.
+
+   Os Bits, a moeda (docs/PLANO_V3_MOEDA.md, etapa MO1; M-1 a M-10 decididas pelo Matheus em 2026-11-10): registro versao 9 (le 1 a 8).
+   Evento "bits": um feito que valeu moeda (o id dele, o pet, o valor, a origem, o tick do pet e a hora de parede). A conta do feito e do
+   valor e a de src/bits.ts; aqui so se confere que o mesmo feito nao entra duas vezes. O saldo nao e guardado: e a soma dos "bits" (a MO2 e
+   a MO3 trazem o gasto, o evento "compra"). Nada disso entra no registro do pet.
+
+   O nivel 10 no registro (docs/PLANO_V3_MMO.md, etapa MMO2; P-5 opcao T e MMO-13, APROVADAS): registro versao 10 (le 1 a 9). Evento
+   "nivel": um marco do nivel do Tamer que o servidor precisa conferir. Hoje so o marco 10, o primeiro Mega de um pet do jogador (o pet, a
+   forma e o tick da evolucao dele). Os marcos 1 a 9 continuam so na vista (src/nivel.ts, MMO-15). O servidor confere o evento refazendo o
+   log do pet (marcoConfere). Um registro de antes da 10 com o evento falha alto.
+
+   O reset (docs/PLANO_V3_MMO.md, etapa MMO8, secao 9; MMO-17 a MMO-19 APROVADAS): registro versao 11 (le 1 a 10), atras da chave
+   RESET_LIGADO (ligada desde as telas, 2026-11-19; desligada, o jogo grava a 10, byte a byte como antes; test/mmo8_tamer_hoje.test.ts). Evento "reset": o pet ativo se
+   aposentou em Geracoes (pelo reset ou pelo cruzamento), com a semente dele, o hash do registro dele na hora (o SHA-256 do JSON do log, o
+   mesmo do pedido da semente), quantos eventos o registro tinha, o estagio, a forma, o nivel do reset (0 a 3, nivelDoReset em
+   src/ranking/pontos.ts), o tick e a hora. Um por pet. O servidor confere o nivel refazendo o log do aposentado. Os Bits do reset sao a
+   origem nova "reset" do evento "bits" (MMO-19, uma linha nova da M-2), um reset pago por semana de relogio (MMO-18). Um registro de antes
+   da 11 com o reset (ou com os Bits do reset) falha alto. */
+import {
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
+  cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, temEfeito, type Estagio, type Evolucao, type IdInstalacao, type Medalha,
+} from "../motor/index.ts";
+import { CHAVE, type Armazenamento } from "./chave.ts";
+import { BITS, ORIGENS_BITS, ORIGENS_DO_TAMER, bitsDaMedalha, feitosDoPet, type OrigemBits } from "./bits.ts";
+import { BONUS_RESET, NIVEIS_RESET, semanaDe, type NivelReset } from "./ranking/pontos.ts";
+
+export const CHAVE_TAMER = CHAVE + "-tamer";
+/** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
+export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
+/** aviso pendente do descarte 6 (a luta em tempo real, pets v13): JSON {pets, fabrica}, quantos pets e quantas tentativas da Fabrica sairam
+    (sai quando o jogador le) */
+export const CHAVE_AVISO_TR = CHAVE + "-aviso-tr";
+/** os saves dos pets que o descarte 6 tirou, como estavam ({semente, log, versao}[]): o aviso oferece baixar o arquivo deles. Fica ate o
+    jogador baixar ou dispensar */
+export const CHAVE_DESCARTADOS = CHAVE + "-descartados";
+/** aviso pendente dos descartes 7 e 8 (a luta da POC, pets v21; LUTA_POC, LP2, LP4 e LP-6): JSON {pets, fabrica} */
+export const CHAVE_AVISO_POC = CHAVE + "-aviso-poc";
+/** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
+    recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
+    Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4; a v: 14 da B2 e a v: 21 da LP2b cabiam
+    nele); 8 = so a Fabrica da luta da POC (v: 21; LUTA_POC, LP4); 9 = e os Bits (evento "bits", MOEDA, MO1); 10 = e o marco do nivel 10 (evento "nivel",
+    MMO2). Grava a 10; le as dez (da 7 em diante so com as tentativas v: 21: as outras saem no descarte 8) */
+export const VERSAO_TAMER = 10;
+/** 11 = e o reset (evento "reset" e os Bits de origem "reset", MMO8). So se grava com a chave RESET_LIGADO, ou quando o registro ja tem o
+    reset (versaoTamerDe) */
+export const VERSAO_TAMER_RESET = 11;
+export const VERSOES_TAMER: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+/** a versao do registro que traz o evento "nivel" */
+const VERSAO_TAMER_NIVEL = 10;
+/** a chave do reset (MMO8): ligada com as telas (a prancha docs/PLANO_UX_RESET.md, UX-RS-1 a 7 APROVADAS em 2026-11-19). Ligada, o registro
+    do Tamer sai na versao 11; desligada, na 10, byte a byte como antes (test/mmo8_tamer_hoje.test.ts confere os dois) */
+export const RESET_LIGADO = true;
+/** o registro tem o reset (o evento ou os Bits dele): so cabe da versao 11 em diante */
+const temReset = (log: readonly EventoTamer[]): boolean =>
+  log.some(ev => Array.isArray(ev) && (ev[0] === "reset" || (ev[0] === "bits" && (ev[1] as BitsGanhos | undefined)?.origem === "reset")));
+/** a versao em que o registro se grava: a 11 com a chave ligada ou com o reset no registro; a 10, sem */
+export const versaoTamerDe = (log: readonly EventoTamer[], ligado: boolean = RESET_LIGADO): number =>
+  ligado || temReset(log) ? VERSAO_TAMER_RESET : VERSAO_TAMER;
+/** os marcos do nivel do Tamer que vao para o registro (o resto fica so na vista): o 10, o primeiro Mega (MMO-13) */
+export const MARCOS_NO_REGISTRO: readonly number[] = [10];
+/** o marco do primeiro Mega */
+export const MARCO_MEGA = 10;
+/** os eventos da Fabrica no registro do Tamer */
+const EVENTOS_FABRICA = ["fabrica", "fabrica_luta", "fabrica_troca"];
+
+/** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
+export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
+/** um item ganho: qual, o contador dos itens (1 = o primeiro), a hora de parede, de onde veio (o item da medalha do lider, ou a carta
+    da revanche contra ele) e o pet (semente, forma, estagio e tick dele; a espera da revanche conta no relogio do pet) */
+export interface ItemGanho { id: string; n: number; quando: number; origem: "medalha" | "revanche"; lider: string; pet: number; forma: string; est: Estagio; tick: number }
+/** uma carta que valeu numa luta (sai do inventario) */
+export interface CartaUsada { id: string; quando: number; pet: number; tick: number }
+/** Bits ganhos por um feito (src/bits.ts): o id do feito, o pet (semente; 0 no nivel do Tamer), o valor, a origem, o tick do pet e a hora */
+export interface BitsGanhos { id: string; pet: number; valor: number; origem: OrigemBits; tick: number; quando: number }
+/** um titulo da Liga dos Lideres: o contador (1 = o primeiro, o titulo do Tamer), a hora de parede e o pet que venceu as 6 (semente,
+    forma e tick dele) */
+export interface Campeao { n: number; quando: number; pet: number; forma: string; tick: number }
+/** um recorde numa instalacao da Fronteira: qual, o valor (a sequencia de vitorias), a hora de parede e o pet que fez (semente, forma e
+    tick dele) */
+export interface Recorde { inst: IdInstalacao; valor: number; quando: number; pet: number; forma: string; tick: number }
+/** Fabrica: o comeco da tentativa n (1 = a primeira), a semente dela (sementeFabrica(n)), o alugado escolhido (0 a 2) e a versao das regras
+    (registro versao 6; sem ela, a Fabrica de antes, que saiu com o combate por turnos: o registro nao a refaz, so o descarte a tira) */
+export interface InicioFabrica { n: number; s: number; alugado: number; quando: number; v?: number }
+/** Fabrica: a luta k (0 = a primeira) da tentativa n, com a semente dela (sementeLutaFabrica) */
+export interface EventoLutaFabrica { n: number; k: number; s: number; quando: number }
+/** Fabrica: depois da vitoria k da tentativa n, o alugado vira o rival derrotado */
+export interface TrocaFabrica { n: number; k: number; quando: number }
+/** Salao: a luta de um pet (o estagio, a semente e a forma dele, a tentativa dele no Salao, a semente da luta, o tick dele e se venceu) */
+export interface LutaSalao { est: Estagio; pet: number; forma: string; k: number; s: number; tick: number; venceu: boolean }
+/** Salao: uma tentativa (n = 1 a primeira), as lutas na ordem dos estagios, ate a primeira que nao foi vitoria */
+export interface TentativaSalao { n: number; quando: number; lutas: LutaSalao[] }
+/** um marco do nivel do Tamer no registro (MMO2): qual (hoje so o 10), a hora de parede e o pet que o fez (semente, forma e o tick da
+    evolucao a Mega, que o servidor acha no log dele) */
+export interface MarcoNivel { n: number; quando: number; pet: number; forma: string; tick: number }
+/** o pet se aposentou (MMO8): a semente, o hash do registro dele (SHA-256 do JSON do log inteiro, hexadecimal), quantos eventos, o estagio
+    e a forma a que chegou, o nivel do reset (0 a 3), o tick do pet, a hora de parede e por onde: o reset ou o cruzamento (o pai ativo) */
+export interface ResetPet { pet: number; hash: string; eventos: number; est: Estagio; forma: string; nivel: NivelReset; tick: number; quando: number; por: "reset" | "cruzamento" }
+export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde]
+  | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao] | ["bits", BitsGanhos]
+  | ["nivel", MarcoNivel] | ["reset", ResetPet];
+/** um recorde da Fabrica ou do Salao, tirado das tentativas: o valor, a tentativa que o fez (a primeira que chegou nele) e a hora de parede */
+export interface RecordeTentativa { valor: number; n: number; quando: number }
+const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
+
+export class Tamer {
+  log: EventoTamer[] = [];
+  /** estado reconstruido: as medalhas na ordem em que foram ganhas */
+  medalhas: MedalhaGanha[] = [];
+  /** os itens ganhos, na ordem, e as cartas usadas */
+  itens: ItemGanho[] = [];
+  usadas: CartaUsada[] = [];
+  /** os titulos da Liga, na ordem (um por pet) */
+  campeoes: Campeao[] = [];
+  /** os recordes das instalacoes, na ordem em que foram batidos (o ultimo de cada instalacao e o recorde dela) */
+  recordes: Recorde[] = [];
+  /** as tentativas da Fabrica, refeitas do registro (a ultima pode estar em andamento), e a hora de parede de cada luta delas */
+  fabrica: TentativaFabrica[] = [];
+  private quandoFabrica: number[][] = [];
+  /** as tentativas do Salao */
+  salao: TentativaSalao[] = [];
+  /** os Bits ganhos, na ordem, e as chaves dos feitos ja pagos (o mesmo feito nao paga duas vezes) */
+  ganhos: BitsGanhos[] = [];
+  private pagos = new Set<string>();
+  /** os marcos do nivel que estao no registro (MMO2; hoje so o 10) */
+  marcos: MarcoNivel[] = [];
+  /** os resets, na ordem (um por pet; MMO8) */
+  resets: ResetPet[] = [];
+  /** o saldo de Bits: a soma do que se ganhou (o gasto chega na MO2) */
+  get bits(): number { return this.ganhos.reduce((s, g) => s + g.valor, 0); }
+  /** o feito ja foi pago: os do Tamer (a medalha, o nivel) pelo id; os do pet pelo pet e pelo id */
+  pago(origem: OrigemBits, id: string, pet: number): boolean { return this.pagos.has(chaveFeito(origem, id, pet)); }
+  /** a tentativa da Fabrica em andamento (null: nenhuma; a ultima acabou) */
+  get fabricaAtual(): TentativaFabrica | null { const t = this.fabrica[this.fabrica.length - 1]; return t && !t.acabou ? t : null; }
+  /** o recorde da Fabrica: a maior sequencia de series vencidas numa tentativa (null: nenhuma serie vencida ainda) */
+  get recordeFabrica(): RecordeTentativa | null {
+    let r: RecordeTentativa | null = null;
+    this.fabrica.forEach((t, i) => {
+      if (t.series < 1 || (r && t.series <= r.valor)) return;
+      /* a hora da vitoria que fechou a ultima serie contada */
+      r = { valor: t.series, n: t.n, quando: this.quandoFabrica[i][t.series * LUTAS_SERIE_FABRICA - 1] };
+    });
+    return r;
+  }
+  /** o recorde do Salao: quantos estagios seguidos uma tentativa venceu (null: nenhum ainda) */
+  get recordeSalao(): RecordeTentativa | null {
+    let r: RecordeTentativa | null = null;
+    for (const t of this.salao) {
+      const v = t.lutas.filter(x => x.venceu).length;
+      if (v >= 1 && (!r || v > r.valor)) r = { valor: v, n: t.n, quando: t.quando };
+    }
+    return r;
+  }
+  get n(): number { return this.medalhas.length; }
+  /** o titulo do Tamer: o primeiro campeao (null: ainda nao venceu a Liga) */
+  get titulo(): Campeao | null { return this.campeoes[0] ?? null; }
+  /** o titulo que o pet (semente) deu ao Tamer (null: nenhum) */
+  tituloDe(pet: number): Campeao | null { return this.campeoes.find(x => x.pet === pet) ?? null; }
+  /** o recorde do Tamer na instalacao (null: nenhuma vitoria la ainda) */
+  recorde(inst: IdInstalacao): Recorde | null { return [...this.recordes].reverse().find(x => x.inst === inst) ?? null; }
+  tem(id: string): boolean { return this.medalhas.some(x => x.id === id); }
+  ganha(id: string): MedalhaGanha | null { return this.medalhas.find(x => x.id === id) ?? null; }
+  /** o Tamer tem o chip (chip nao se gasta) */
+  temChip(id: string): boolean { return this.itens.some(x => x.id === id) && itemDe(id).tipo !== "carta"; }
+  /** quantas cartas desse tipo o Tamer tem agora (ganhas menos usadas) */
+  cartas(id: string): number { return this.itens.filter(x => x.id === id).length - this.usadas.filter(x => x.id === id).length; }
+  /** o item que a medalha do lider ja deu (null: ainda nao) */
+  itemDaMedalha(lider: string): ItemGanho | null { return this.itens.find(x => x.origem === "medalha" && x.lider === lider) ?? null; }
+  /** a ultima carta de revanche que o pet ganhou do lider (a espera conta dela) */
+  ultimaRevanche(lider: string, pet: number): ItemGanho | null {
+    return [...this.itens].reverse().find(x => x.origem === "revanche" && x.lider === lider && x.pet === pet) ?? null;
+  }
+
+  /** um evento do registro (replay): confere tudo antes de aplicar */
+  aplicar(ev: EventoTamer): void {
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao", "bits", "nivel", "reset"].includes(ev[0]))
+      throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
+    if (ev[0] === "nivel") { this._nivel(ev[1]); return; }
+    if (ev[0] === "reset") { this._reset(ev[1]); return; }
+    if (ev[0] === "item") { this._item(ev[1]); return; }
+    if (ev[0] === "bits") { this._bits(ev[1]); return; }
+    if (ev[0] === "fabrica") { this._fabrica(ev[1]); return; }
+    if (ev[0] === "fabrica_luta") { this._fabricaLuta(ev[1]); return; }
+    if (ev[0] === "fabrica_troca") { this._fabricaTroca(ev[1]); return; }
+    if (ev[0] === "salao") { this._salao(ev[1]); return; }
+    if (ev[0] === "campeao") { this._campeao(ev[1]); return; }
+    if (ev[0] === "recorde") { this._recorde(ev[1]); return; }
+    if (ev[0] === "carta_usada") { this._usada(ev[1]); return; }
+    const x = ev[1];
+    if (!x || !MEDALHA_POR_ID[x.id]) throw new Error("medalha desconhecida no registro do Tamer: " + JSON.stringify(x?.id));
+    if (this.tem(x.id)) throw new Error(`medalha repetida no registro do Tamer: ${x.id}`);
+    if (x.n !== this.n + 1) throw new Error(`contador fora de ordem no registro do Tamer: ${x.n} (esperado ${this.n + 1})`);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`medalha ${x.id} sem ${k} no registro do Tamer`);
+    if (typeof x.forma !== "string") throw new Error(`medalha ${x.id} sem a forma do pet no registro do Tamer`);
+    this.medalhas.push({ ...x });
+  }
+  private _item(x: ItemGanho): void {
+    if (!x || typeof x.id !== "string") throw new Error("item sem id no registro do Tamer");
+    const it = itemDe(x.id), md = medalhaDoLider(x.lider);
+    if (x.n !== this.itens.length + 1) throw new Error(`contador de itens fora de ordem no registro do Tamer: ${x.n} (esperado ${this.itens.length + 1})`);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`item ${x.id} sem ${k} no registro do Tamer`);
+    if (typeof x.forma !== "string" || !ESTAGIOS.includes(x.est)) throw new Error(`item ${x.id} sem a forma e o estágio do pet no registro do Tamer`);
+    if (!md) throw new Error(`item ${x.id} de quem não é líder: ${JSON.stringify(x.lider)}`);
+    if (!this.tem(md.id)) throw new Error(`item ${x.id} antes da ${md.nome} no registro do Tamer`);
+    if (x.origem === "medalha") {
+      if (ITEM_DA_MEDALHA[md.id] !== x.id) throw new Error(`a ${md.nome} dá ${itemDe(ITEM_DA_MEDALHA[md.id]).nome}, não ${it.nome}`);
+      if (this.itemDaMedalha(x.lider)) throw new Error(`item da ${md.nome} repetido no registro do Tamer`);
+    } else if (x.origem === "revanche") {
+      if (CARTA_DA_REVANCHE[md.id] !== x.id) throw new Error(`a revanche contra o ${NPC[x.lider]!.nome} dá ${itemDe(CARTA_DA_REVANCHE[md.id]).nome}, não ${it.nome}`);
+      const est = LUGARES_V6[md.lugar].est;
+      if (x.est !== est) throw new Error(`carta de revanche com um pet fora do nível da arena (${x.est}, a arena pede ${est})`);
+      const ult = this.ultimaRevanche(x.lider, x.pet);
+      if (ult && x.tick - ult.tick < CIT.espera) throw new Error(`carta de revanche antes da espera: ${x.tick - ult.tick} min de ${CIT.espera}`);
+    } else throw new Error(`origem de item desconhecida no registro do Tamer: ${JSON.stringify(x.origem)}`);
+    this.itens.push({ ...x });
+  }
+  private _bits(x: BitsGanhos): void {
+    this._campos(x, "Bits", ["pet", "valor", "tick", "quando"]);
+    if (typeof x.id !== "string" || !x.id) throw new Error("Bits sem o id do feito no registro do Tamer");
+    if (!ORIGENS_BITS.includes(x.origem)) throw new Error(`Bits de origem desconhecida no registro do Tamer: ${JSON.stringify(x.origem)}`);
+    if (!Number.isInteger(x.valor) || x.valor < 1) throw new Error(`Bits com valor inválido no registro do Tamer: ${JSON.stringify(x.valor)}`);
+    const k = chaveFeito(x.origem, x.id, x.pet);
+    if (this.pagos.has(k)) throw new Error(`o mesmo feito pago duas vezes no registro do Tamer: ${k}`);
+    this.pagos.add(k);
+    this.ganhos.push({ ...x });
+  }
+  private _nivel(x: MarcoNivel): void {
+    this._campos(x, "Marco do nível", ["n", "quando", "pet", "tick"]);
+    if (!MARCOS_NO_REGISTRO.includes(x.n)) throw new Error(`marco do nível que não vai ao registro do Tamer: ${JSON.stringify(x.n)}`);
+    if (typeof x.forma !== "string" || !x.forma) throw new Error(`marco ${x.n} sem a forma do pet no registro do Tamer`);
+    if (!Number.isInteger(x.pet) || !Number.isInteger(x.tick)) throw new Error(`marco ${x.n} com o pet ou o tick inválido no registro do Tamer`);
+    if (this.marco(x.n)) throw new Error(`marco ${x.n} repetido no registro do Tamer`);
+    this.marcos.push({ ...x });
+  }
+  private _reset(x: ResetPet): void {
+    this._campos(x, "Reset", ["pet", "eventos", "nivel", "tick", "quando"]);
+    if (!Number.isInteger(x.pet) || !Number.isInteger(x.eventos) || x.eventos < 0) throw new Error("reset com o pet ou os eventos inválidos no registro do Tamer");
+    if (typeof x.hash !== "string" || !/^[0-9a-f]{64}$/.test(x.hash)) throw new Error(`reset do pet ${x.pet} sem o hash do registro dele no registro do Tamer`);
+    if (!ESTAGIOS.includes(x.est) || typeof x.forma !== "string" || !x.forma) throw new Error(`reset do pet ${x.pet} sem o estágio e a forma no registro do Tamer`);
+    if (!NIVEIS_RESET.includes(x.nivel)) throw new Error(`reset do pet ${x.pet} com o nível ${JSON.stringify(x.nivel)}, desconhecido, no registro do Tamer`);
+    if (x.por !== "reset" && x.por !== "cruzamento") throw new Error(`reset do pet ${x.pet} por ${JSON.stringify(x.por)}, desconhecido, no registro do Tamer`);
+    if (this.resetDe(x.pet)) throw new Error(`reset repetido do pet ${x.pet} no registro do Tamer`);
+    this.resets.push({ ...x });
+  }
+  /** o reset do pet (null: ele nao se aposentou por aqui) */
+  resetDe(pet: number): ResetPet | null { return this.resets.find(x => x.pet === pet) ?? null; }
+  /** grava o reset do pet agora (quem chama confere o nivel: src/reset.ts) */
+  resetar(x: Omit<ResetPet, "quando">, quando: number = Date.now()): ResetPet {
+    this._gravar(["reset", { ...x, quando }]);
+    return this.resets[this.resets.length - 1];
+  }
+  /** a semana de relogio (Brasilia) ja tem um reset pago em Bits (MMO-18: um por semana) */
+  semanaDoResetPago(quando: number): boolean {
+    const s = semanaDe(quando);
+    return this.ganhos.some(g => g.origem === "reset" && semanaDe(g.quando) === s);
+  }
+  /** o marco n do nivel, se esta no registro */
+  marco(n: number): MarcoNivel | null { return this.marcos.find(x => x.n === n) ?? null; }
+  /** grava o marco n do nivel agora, com o pet m e o tick dado (o da evolucao que fez o marco) */
+  ganharMarco(n: number, m: Motor, tick: number, forma: string, quando: number = Date.now()): MarcoNivel {
+    this._gravar(["nivel", { n, quando, pet: m.semente, forma, tick }]);
+    return this.marcos[this.marcos.length - 1];
+  }
+  /** paga o feito agora (grava o evento "bits") */
+  ganharBits(x: Omit<BitsGanhos, "quando">, quando: number = Date.now()): BitsGanhos {
+    this._gravar(["bits", { ...x, quando }]);
+    return this.ganhos[this.ganhos.length - 1];
+  }
+  private _usada(x: CartaUsada): void {
+    if (!x || typeof x.id !== "string") throw new Error("carta usada sem id no registro do Tamer");
+    const c = cartaDe(x.id);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`carta usada ${x.id} sem ${k} no registro do Tamer`);
+    if (this.cartas(x.id) < 1) throw new Error(`${c.nome} usada sem estar no inventário do Tamer`);
+    this.usadas.push({ ...x });
+  }
+  private _campeao(x: Campeao): void {
+    if (!x || typeof x !== "object") throw new Error("título sem dados no registro do Tamer");
+    if (this.n < MEDALHAS_LIGA) throw new Error(`título da Liga antes das ${MEDALHAS_LIGA} medalhas no registro do Tamer (tem ${this.n})`);
+    if (x.n !== this.campeoes.length + 1) throw new Error(`contador de títulos fora de ordem no registro do Tamer: ${x.n} (esperado ${this.campeoes.length + 1})`);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`título sem ${k} no registro do Tamer`);
+    if (typeof x.forma !== "string") throw new Error("título sem a forma do pet no registro do Tamer");
+    if (this.tituloDe(x.pet)) throw new Error(`título repetido para o mesmo pet no registro do Tamer (${x.pet})`);
+    this.campeoes.push({ ...x });
+  }
+  private _recorde(x: Recorde): void {
+    if (!x || typeof x !== "object") throw new Error("recorde sem dados no registro do Tamer");
+    if (typeof x.inst !== "string" || !ehInstalacao(x.inst)) throw new Error("recorde de instalação desconhecida no registro do Tamer: " + JSON.stringify(x.inst));
+    if (!this.titulo) throw new Error("recorde da Fronteira antes do título da Liga no registro do Tamer");
+    if (!Number.isInteger(x.valor) || x.valor < 1) throw new Error(`recorde inválido no registro do Tamer: ${JSON.stringify(x.valor)}`);
+    const antes = this.recorde(x.inst);
+    if (antes && x.valor <= antes.valor) throw new Error(`recorde que não passa o anterior no registro do Tamer (${x.inst}: ${x.valor}, o recorde era ${antes.valor})`);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`recorde sem ${k} no registro do Tamer`);
+    if (typeof x.forma !== "string") throw new Error("recorde sem a forma do pet no registro do Tamer");
+    this.recordes.push({ ...x });
+  }
+  /* ------------------------------------------------ a Fabrica (motor/fabrica.ts) */
+  private _campos(x: object | null | undefined, o: string, campos: readonly string[]): void {
+    if (!x || typeof x !== "object") throw new Error(`${o} sem dados no registro do Tamer`);
+    for (const k of campos) if (!Number.isFinite((x as Record<string, unknown>)[k])) throw new Error(`${o} sem ${k} no registro do Tamer`);
+  }
+  private _fabrica(x: InicioFabrica): void {
+    this._campos(x, "tentativa da Fábrica", ["n", "s", "alugado", "quando"]);
+    if (!this.titulo) throw new Error("tentativa da Fábrica antes do título da Liga no registro do Tamer");
+    if (x.n !== this.fabrica.length + 1) throw new Error(`tentativa da Fábrica fora de ordem no registro do Tamer: ${x.n} (esperada ${this.fabrica.length + 1})`);
+    const atual = this.fabricaAtual;
+    if (atual) throw new Error(`tentativa ${x.n} da Fábrica com a ${atual.n} ainda em andamento no registro do Tamer`);
+    if (x.s !== sementeFabrica(x.n)) throw new Error(`a tentativa ${x.n} da Fábrica tem a semente ${sementeFabrica(x.n)}, não ${x.s}, no registro do Tamer`);
+    if (x.v !== undefined && !VERSOES_FABRICA.includes(x.v)) throw new Error(`a tentativa ${x.n} da Fábrica com as regras da versão ${JSON.stringify(x.v)}, desconhecida, no registro do Tamer`);
+    if (x.v === undefined) throw new Error(`a tentativa ${x.n} da Fábrica é de antes do combate em tempo real (sem a versão das regras) e não se refaz mais; o descarte a tira do registro do Tamer`);
+    this.fabrica.push(new TentativaFabrica(x.n, x.alugado, x.v));
+    this.quandoFabrica.push([]);
+  }
+  private _fabricaEmAndamento(n: number, o: string): TentativaFabrica {
+    const t = this.fabricaAtual;
+    if (!t || t.n !== n) throw new Error(`${o} da tentativa ${n} da Fábrica, que não está em andamento no registro do Tamer`);
+    return t;
+  }
+  private _fabricaLuta(x: EventoLutaFabrica): void {
+    this._campos(x, "luta da Fábrica", ["n", "k", "s", "quando"]);
+    const t = this._fabricaEmAndamento(x.n, "luta");
+    if (x.k !== t.lutas.length) throw new Error(`luta ${x.k} da tentativa ${x.n} da Fábrica fora de ordem no registro do Tamer (esperada ${t.lutas.length})`);
+    t.lutar(x.s);
+    this.quandoFabrica[this.fabrica.length - 1].push(x.quando);
+  }
+  private _fabricaTroca(x: TrocaFabrica): void {
+    this._campos(x, "troca da Fábrica", ["n", "k", "quando"]);
+    const t = this._fabricaEmAndamento(x.n, "troca");
+    if (x.k !== t.lutas.length - 1) throw new Error(`troca da Fábrica depois da luta ${x.k}, mas a última luta da tentativa ${x.n} é a ${t.lutas.length - 1}`);
+    t.trocar();
+  }
+  /** a tentativa nova da Fabrica, com o alugado escolhido (0 a 2) entre os 3 dela, nas regras de hoje (VERSAO_FABRICA_ATUAL) */
+  alugarFabrica(escolha: number, quando: number = Date.now(), versao: number = VERSAO_FABRICA_ATUAL): TentativaFabrica {
+    const n = this.fabrica.length + 1;
+    if (!VERSOES_FABRICA.includes(versao)) throw new Error(`versão das regras da Fábrica desconhecida: ${versao}`);
+    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando, v: versao }]);
+    return this.fabrica[this.fabrica.length - 1];
+  }
+  /** a proxima luta da tentativa em andamento (grava e joga) */
+  lutarFabrica(quando: number = Date.now()): TentativaFabrica["lutas"][number] {
+    const t = this.fabricaAtual, p = t?.proxima();
+    if (!t || !p) throw new Error("nenhuma tentativa da Fábrica em andamento");
+    this._gravar(["fabrica_luta", { n: t.n, k: p.k, s: p.s, quando }]);
+    return t.lutas[t.lutas.length - 1];
+  }
+  /** troca o alugado pelo rival que ele acabou de derrotar */
+  trocarFabrica(quando: number = Date.now()): void {
+    const t = this.fabricaAtual;
+    if (!t) throw new Error("nenhuma tentativa da Fábrica em andamento");
+    this._gravar(["fabrica_troca", { n: t.n, k: t.lutas.length - 1, quando }]);
+  }
+  /* ------------------------------------------------ o Salao (motor/salao.ts) */
+  private _salao(x: TentativaSalao): void {
+    this._campos(x, "tentativa do Salão", ["n", "quando"]);
+    if (!this.titulo) throw new Error("tentativa do Salão antes do título da Liga no registro do Tamer");
+    if (x.n !== this.salao.length + 1) throw new Error(`tentativa do Salão fora de ordem no registro do Tamer: ${x.n} (esperada ${this.salao.length + 1})`);
+    const L = x.lutas;
+    if (!Array.isArray(L) || L.length < 1 || L.length > ESTAGIOS_SALAO.length) throw new Error(`tentativa ${x.n} do Salão sem as lutas no registro do Tamer`);
+    L.forEach((l, i) => {
+      this._campos(l, `luta ${i + 1} da tentativa ${x.n} do Salão`, ["pet", "k", "s", "tick"]);
+      if (l.est !== ESTAGIOS_SALAO[i]) throw new Error(`a luta ${i + 1} do Salão é do estágio ${ESTAGIOS_SALAO[i]}, não ${JSON.stringify(l.est)}, no registro do Tamer`);
+      if (typeof l.forma !== "string" || typeof l.venceu !== "boolean") throw new Error(`luta ${i + 1} do Salão sem a forma ou o resultado no registro do Tamer`);
+      if (l.s !== sementeSalao(l.pet, l.k)) throw new Error(`a luta ${l.k} do pet ${l.pet} no Salão tem a semente ${sementeSalao(l.pet, l.k)}, não ${l.s}, no registro do Tamer`);
+      if (!l.venceu && i < L.length - 1) throw new Error(`a tentativa ${x.n} do Salão segue depois de uma derrota no registro do Tamer`);
+    });
+    if (L.length < ESTAGIOS_SALAO.length && L[L.length - 1].venceu) throw new Error(`a tentativa ${x.n} do Salão parou numa vitória no registro do Tamer`);
+    if (new Set(L.map(l => l.pet)).size !== L.length) throw new Error(`o mesmo pet em dois estágios na tentativa ${x.n} do Salão no registro do Tamer`);
+    this.salao.push({ n: x.n, quando: x.quando, lutas: L.map(l => ({ ...l })) });
+  }
+  /** a tentativa do Salao que acabou de acontecer (as lutas ja estao nos registros dos pets): grava */
+  registrarSalao(lutas: LutaSalao[], quando: number = Date.now()): TentativaSalao {
+    this._gravar(["salao", { n: this.salao.length + 1, quando, lutas: lutas.map(l => ({ ...l })) }]);
+    return this.salao[this.salao.length - 1];
+  }
+  /** o pet m fez uma sequencia de `valor` vitorias na instalacao, maior que o recorde do Tamer: grava o recorde novo */
+  baterRecorde(inst: IdInstalacao, valor: number, m: Motor, quando: number = Date.now()): Recorde {
+    this._gravar(["recorde", { inst, valor, quando, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }]);
+    return this.recordes[this.recordes.length - 1];
+  }
+  private _gravar(ev: EventoTamer): void { this.aplicar(ev); this.log.push(ev); }
+  /** o pet m venceu a Liga: grava o titulo (o primeiro dele) */
+  ganharTitulo(m: Motor, quando: number = Date.now()): Campeao {
+    this._gravar(["campeao", { n: this.campeoes.length + 1, quando, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }]);
+    return this.campeoes[this.campeoes.length - 1];
+  }
+  /** o item da medalha do lider, agora, com o pet m */
+  ganharItem(id: string, origem: ItemGanho["origem"], lider: string, m: Motor, quando: number = Date.now()): ItemGanho {
+    this._gravar(["item", { id, n: this.itens.length + 1, quando, origem, lider, pet: m.semente, forma: nomeForma(m.forma), est: m.estagioAtual, tick: m.e.tick }]);
+    return this.itens[this.itens.length - 1];
+  }
+  /** a carta valeu numa luta do pet m (o app grava logo depois da luta que a usou) */
+  usarCarta(id: string, m: Motor, quando: number = Date.now()): void {
+    this._gravar(["carta_usada", { id, quando, pet: m.semente, tick: m.e.tick }]);
+  }
+  /** ganha a medalha agora, com o pet m (grava o evento e aplica) */
+  ganhar(id: string, m: Motor, quando: number = Date.now()): MedalhaGanha {
+    const ev: EventoTamer = ["medalha", { id, n: this.n + 1, quando, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }];
+    this.aplicar(ev);
+    this.log.push(ev);
+    return this.medalhas[this.n - 1];
+  }
+  static reproduzir(log: readonly EventoTamer[]): Tamer {
+    const t = new Tamer();
+    for (const ev of log) t.aplicar(ev);
+    t.log = log.map(ev => JSON.parse(JSON.stringify(ev)) as EventoTamer);
+    return t;
+  }
+}
+
+const chaveFeito = (origem: OrigemBits, id: string, pet: number): string => ORIGENS_DO_TAMER.includes(origem) ? id : `${pet}:${id}`;
+
+/** os Bits que o pet e o Tamer acabaram de ganhar (src/bits.ts): os feitos do pet ainda nao pagos e a 1a medalha de cada lider. Conferir
+    de novo nao paga duas vezes. Devolve os ganhos novos (ja aplicados) */
+export function conferirBits(t: Tamer, m: Motor, quando: number = Date.now()): BitsGanhos[] {
+  const novos: BitsGanhos[] = [];
+  for (const f of feitosDoPet(m)) if (!t.pago(f.origem, f.id, m.semente))
+    novos.push(t.ganharBits({ id: f.id, pet: m.semente, valor: f.valor, origem: f.origem, tick: f.tick }, quando));
+  for (const g of t.medalhas) {
+    const id = "medalha:" + g.id;
+    if (!t.pago("lider", id, g.pet)) novos.push(t.ganharBits({ id, pet: g.pet, valor: bitsDaMedalha(g.id), origem: "lider", tick: g.tick }, quando));
+  }
+  return novos;
+}
+/** os Bits dos niveis do Tamer de 1 ate `nivel` ainda nao pagos (o nivel e so da vista, nivelTela.ts: quem chama e ela). Devolve os novos */
+export function conferirBitsDoNivel(t: Tamer, nivel: number, quando: number = Date.now()): BitsGanhos[] {
+  const novos: BitsGanhos[] = [];
+  for (let n = 1; n <= nivel; n++) if (!t.pago("nivel", "nivel:" + n, 0))
+    novos.push(t.ganharBits({ id: "nivel:" + n, pet: 0, valor: BITS.nivel, origem: "nivel", tick: 0 }, quando));
+  return novos;
+}
+
+/** os Bits do reset (MMO-18 e MMO-19): o bonus do nivel, se a semana de relogio ainda nao tem um reset pago. Sem bonus (nivel 0) ou com a
+    semana ja paga, nada. Devolve o ganho novo (ja aplicado) ou null */
+export function pagarReset(t: Tamer, r: ResetPet, quando: number = Date.now()): BitsGanhos | null {
+  const valor = BONUS_RESET[r.nivel].bits;
+  if (valor < 1 || t.semanaDoResetPago(quando) || t.pago("reset", "reset:" + r.pet, r.pet)) return null;
+  return t.ganharBits({ id: "reset:" + r.pet, pet: r.pet, valor, origem: "reset", tick: r.tick }, quando);
+}
+/** le o registro do Tamer (sem a chave: um Tamer novo, sem medalhas). Registro que nao reproduz falha alto */
+export function lerTamer(armaz: Armazenamento): Tamer {
+  const l = lerLogTamer(armaz);
+  return l ? Tamer.reproduzir(l.log) : new Tamer();
+}
+/** o registro do Tamer como esta, sem refazer os eventos (null: sem a chave); a versao e o formato conferem. O descarte usa este para
+    tirar a Fabrica de antes (que nao se refaz mais) antes de reproduzir */
+function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[] } | null {
+  if (armaz.getItem(CHAVE_TAMER) === null) return null;
+  const l = lerLogTamerCru(armaz)!;
+  /* os registros 7 e 8 so tem a Fabrica que ainda se refaz (a da luta da POC): uma tentativa de outra versao neles sobrou de um descarte
+     que nao rodou, e o registro nao abre (falha alto; o descarte 8 a tira) */
+  /* o marco do nivel so existe da versao 10 em diante: num registro de antes, falha alto */
+  if (l.versao < VERSAO_TAMER_NIVEL && l.log.some(ev => Array.isArray(ev) && ev[0] === "nivel"))
+    throw new Error(`o registro ${l.versao} do Tamer tem o marco do nível, que só existe da versão ${VERSAO_TAMER_NIVEL} em diante`);
+  /* o reset so existe da versao 11 em diante (MMO8) */
+  if (l.versao < VERSAO_TAMER_RESET && temReset(l.log))
+    throw new Error(`o registro ${l.versao} do Tamer tem o reset, que só existe da versão ${VERSAO_TAMER_RESET} em diante`);
+  if (l.versao >= 7) for (const ev of l.log)
+    if (Array.isArray(ev) && ev[0] === "fabrica" && !VERSOES_FABRICA.includes((ev[1] as InicioFabrica).v as number))
+      throw new Error(`o registro ${l.versao} do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
+  return l;
+}
+/** o registro do Tamer como esta, so com a versao e o formato conferidos (o descarte le por aqui antes de tirar a Fabrica de antes) */
+function lerLogTamerCru(armaz: Armazenamento): { versao: number; log: EventoTamer[] } | null {
+  const bruto = armaz.getItem(CHAVE_TAMER);
+  if (bruto === null) return null;
+  let d: unknown;
+  try { d = JSON.parse(bruto); } catch (err) { throw new Error("o registro do Tamer não é JSON: " + (err instanceof Error ? err.message : String(err))); }
+  const s = d as { versao?: unknown; log?: unknown };
+  if (!VERSOES_TAMER.includes(s.versao as number) || !Array.isArray(s.log)) throw new Error("o registro do Tamer não tem versão " + VERSOES_TAMER.join(" ou ") + " e eventos");
+  return { versao: s.versao as number, log: s.log as EventoTamer[] };
+}
+/** o registro do Tamer sem a Fabrica de antes (os descartes 6 e 8): com alguma tentativa de regras que nao se refazem mais, saem TODAS as
+    tentativas da Fabrica (as da luta da POC tambem: a semente de cada uma sai do numero dela, que mudaria sem as de antes). Devolve o
+    registro novo e quantas tentativas sairam (0: o registro fica como esta) */
+export function semFabricaAntiga(log: readonly EventoTamer[]): { log: EventoTamer[]; tentativas: number } {
+  const inicios = log.filter(ev => ev[0] === "fabrica") as ["fabrica", InicioFabrica][];
+  if (!inicios.some(ev => !VERSOES_FABRICA.includes(ev[1].v as number))) return { log: [...log], tentativas: 0 };
+  return { log: log.filter(ev => !EVENTOS_FABRICA.includes(ev[0])), tentativas: inicios.length };
+}
+/** `ligado`: a chave do reset (o padrao e a RESET_LIGADO; o teste do gabarito da MMO8 grava tambem com ela desligada) */
+export const textoTamer = (t: Tamer, ligado: boolean = RESET_LIGADO): string => JSON.stringify({ versao: versaoTamerDe(t.log, ligado), log: t.log });
+export function gravarTamer(armaz: Armazenamento, t: Tamer, ligado: boolean = RESET_LIGADO): void { armaz.setItem(CHAVE_TAMER, textoTamer(t, ligado)); }
+
+/** medalhas que o pet acabou de ganhar para o Tamer: a primeira vitoria dele contra um lider cuja medalha o Tamer
+    ainda nao tem. Devolve as medalhas novas (ja aplicadas ao Tamer) */
+export function conferirMedalhas(t: Tamer, m: Motor, quando: number = Date.now()): MedalhaGanha[] {
+  const novas: MedalhaGanha[] = [];
+  for (const md of MEDALHAS) if (!t.tem(md.id) && (m.campanha[md.lider] ?? 0) > 0) novas.push(t.ganhar(md.id, m, quando));
+  return novas;
+}
+/** itens das medalhas: o Tamer que tem a medalha e ainda nao tem o item dela ganha agora (na mesma hora da medalha; um Tamer de antes
+    desta parte recebe na abertura). Devolve os itens novos (ja aplicados) */
+export function conferirItensDasMedalhas(t: Tamer, m: Motor, quando: number = Date.now()): ItemGanho[] {
+  const novos: ItemGanho[] = [];
+  for (const g of t.medalhas) {
+    const md = MEDALHA_POR_ID[g.id];
+    /* desde a LP4 (LUTA_POC) so o chip de stat (o item que ainda faz efeito); os chips de regra ja ganhos ficam no registro, sem efeito */
+    if (!t.itemDaMedalha(md.lider) && temEfeito(itemDe(ITEM_DA_MEDALHA[md.id]))) novos.push(t.ganharItem(ITEM_DA_MEDALHA[md.id], "medalha", md.lider, m, quando));
+  }
+  return novos;
+}
+/** o titulo que o pet acabou de dar ao Tamer: a primeira vez que ele venceu a Liga dos Lideres (o motor conta os titulos do pet pelo
+    evento de luta da Liga). So com as 6 medalhas no Tamer. Devolve o titulo novo (ja aplicado) ou null */
+export function conferirCampeao(t: Tamer, m: Motor, quando: number = Date.now()): Campeao | null {
+  if (m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
+  return t.ganharTitulo(m, quando);
+}
+/** a evolucao a Mega de um pet (a primeira; null: o pet nunca chegou ao Mega) */
+export const evolucaoMega = (m: Motor): Evolucao | null => m.evolucoes.find(x => x.estagio === "mega") ?? null;
+/** o marco 10 (o primeiro Mega; MMO2, MMO-13): o primeiro pet dos dados que chegou ao Mega, se o registro ainda nao tem o marco. Quem
+    chama passa so os pets do jogador (sem o de exemplo intocado). Devolve o marco novo (ja aplicado) ou null */
+export function conferirMarcoMega(t: Tamer, pets: readonly Motor[], quando: number = Date.now()): MarcoNivel | null {
+  if (t.marco(MARCO_MEGA)) return null;
+  for (const m of pets) {
+    const ev = evolucaoMega(m);
+    if (ev) return t.ganharMarco(MARCO_MEGA, m, ev.tick, nomeForma(ev.forma), quando);
+  }
+  return null;
+}
+/** a conferencia do servidor (MMO3): o pet refeito do log dele (a semente do marco) tem a evolucao a Mega no tick do marco */
+export function marcoConfere(x: MarcoNivel, m: Motor): boolean {
+  if (x.n !== MARCO_MEGA || m.semente !== x.pet) return false;
+  const ev = evolucaoMega(m);
+  return !!ev && ev.tick === x.tick && nomeForma(ev.forma) === x.forma;
+}
+/** os recordes que o pet acabou de dar ao Tamer: a maior sequencia dele numa instalacao da Fronteira, quando passa a do Tamer (o motor
+    conta as sequencias do pet pelo evento de luta da instalacao). So depois do titulo. Devolve os recordes novos (ja aplicados) */
+export function conferirRecordes(t: Tamer, m: Motor, quando: number = Date.now()): Recorde[] {
+  if (!t.titulo) return [];
+  const novos: Recorde[] = [];
+  for (const x of INSTALACOES) {
+    const v = m.instalacoes[x.id].recorde;
+    if (v > (t.recorde(x.id)?.valor ?? 0)) novos.push(t.baterRecorde(x.id, v, m, quando));
+  }
+  return novos;
+}
+/** o pet passa a conhecer as medalhas do Tamer (evento "u" no registro dele) e, com as 6 e o titulo do Tamer, a Fronteira aberta (evento
+    "f": as instalacoes). Pet morto: nada. Devolve true se o registro do pet mudou */
+export function sincronizarPet(t: Tamer, m: Motor): boolean {
+  if (m.morte) return false;
+  let mudou = false;
+  try {
+    if (m.medalhas < t.n) { m.liberar(t.n); mudou = true; }
+    if (t.titulo && !m.fronteira && m.medalhas >= MEDALHAS_LIGA && !m.morte) { m.abrirFronteira(); mudou = true; }
+  } catch (err) { if (err instanceof PetMorto) return mudou; throw err; }
+  return mudou;
+}
+
+/* ------------------------------------------------ descarte unico dos pets antigos */
+/** marcador do descarte unico: a versao do descarte que ja rodou neste navegador. 1 = medalhas do Tamer (2026-09-29: os
+    pets v1-v5 saem); 2 = combate V21D nos pets v6 (2026-09-30, docs/VALIDACAO_V21D.md: os v6 de antes mudariam de
+    comportamento no replay e saem tambem); 3 = arenas com lideres (2026-09-30, DESIGN_MEDALHAS_ARENAS parte 2: as lutas
+    de arena mudam no replay dos v6 de antes, e saem de novo); 4 = escala dos pets v6 (2026-09-30, CESC_V6: as lutas da
+    campanha e das arenas mudam no replay dos v6 de antes, e eles saem de novo); 5 = limite de turnos do desafiado (2026-09-30: as
+    lutas dos v6 que chegam ao limite mudam de resultado no replay, e eles saem de novo); 6 = a luta em tempo real (2026-10-29, COMBATE-TR,
+    E2 e D-4: os pets v1-v12 lutavam por turnos e saem; o Tamer fica, sem a Fabrica de antes, e os saves descartados ficam guardados para
+    o aviso oferecer o arquivo). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou antes do marcador existir),
+    senao 0 */
+export const CHAVE_DESCARTE = CHAVE + "-descarte";
+export const VERSAO_DESCARTE = 6;
+/** 7 = a luta da POC (LUTA_POC, LP2 e LP-6, decisao do Matheus de 2026-11-08): os pets v13 a v19 lutavam pelo combate de antes e saem; o
+    Tamer fica inteiro (as medalhas, os itens, o titulo e os recordes). Rodou com a chave da luta da POC ligada (?luta_poc=1, LP2 e LP3) */
+export const VERSAO_DESCARTE_POC = 7;
+/** 8 = o combate por turnos saiu (LUTA_POC, LP4; PROPOSTA): o 7 para quem ainda nao o rodou e, no Tamer, as tentativas da Fabrica de antes
+    (v13 e v14, que nao se refazem mais) saem, com o registro de antes guardado no arquivo dos descartados. Desde a LP4 e o descarte de todos */
+export const VERSAO_DESCARTE_LP4 = 8;
+/** cada descarte apaga os pets ate esta versao (inclusive) */
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6, 6: 12, 7: 19, 8: 19 };
+
+/** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
+    (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma
+    vez por versao do descarte (CHAVE_DESCARTE). Save que nao e JSON fica como esta (o app mostra o erro e nao grava por
+    cima, como sempre). Devolve quantos pets sairam, ou null se ja tinha rodado. As geracoes aposentadas (Diario ·
+    Geracoes, so para ver) ficam. Sem pet nenhum para descartar, o Tamer que ja existe fica como esta (sem aviso). */
+export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: string): void }, chaveGuardados: string, lutaPoc = false): number | null {
+  const marca = armaz.getItem(CHAVE_DESCARTE), tinhaTamer = armaz.getItem(CHAVE_TAMER) !== null;
+  const feito = marca !== null ? Number(marca) : tinhaTamer ? 1 : 0;
+  if (!Number.isInteger(feito) || feito < 0 || feito > VERSAO_DESCARTE_LP4) throw new Error(`marcador do descarte inválido: ${JSON.stringify(marca)}`);
+  /* o descarte que esta aba pede: o 8 com a luta da POC (LP4: sempre, LUTA_POC_LIGADA), o 6 sem ela (so os testes de antes) */
+  const alvo = lutaPoc ? VERSAO_DESCARTE_LP4 : VERSAO_DESCARTE;
+  if (feito >= alvo) return null;
+  const ate = DESCARTA_ATE[alvo];
+  const antigo = (txt: string | null): boolean => {
+    if (txt === null) return false;
+    try { const d = JSON.parse(txt) as { versao?: number } | null; return !!d && (d.versao ?? 1) <= ate; } catch { return false; }
+  };
+  let descartados = 0;
+  const saves: unknown[] = [];
+  const ativo = armaz.getItem(CHAVE);
+  if (antigo(ativo)) { saves.push(JSON.parse(ativo!)); armaz.removeItem(CHAVE); descartados++; }
+  const bg = armaz.getItem(chaveGuardados);
+  if (bg !== null) {
+    let g: unknown = null;
+    try { g = JSON.parse(bg); } catch { /* guardados ilegiveis: ficam para o erro de sempre */ }
+    if (Array.isArray(g)) {
+      const ficam = g.filter(x => !antigo(JSON.stringify(x)));
+      saves.push(...g.filter(x => antigo(JSON.stringify(x))));
+      descartados += g.length - ficam.length;
+      if (ficam.length !== g.length) armaz.setItem(chaveGuardados, JSON.stringify(ficam));
+    }
+  }
+  /* sem a chave dos guardados, a escada de exemplo (pets v3) seria semeada logo depois: fica vazia de proposito */
+  if (descartados && armaz.getItem(chaveGuardados) === null) armaz.setItem(chaveGuardados, "[]");
+  /* o descarte 6 (D-4): o Tamer fica, sem a Fabrica de antes; os saves descartados ficam para o arquivo; o aviso conta os dois */
+  let fabrica = 0;
+  /* a parte do Tamer: a do descarte 6 (a Fabrica de antes sai; sem registro, um Tamer novo) e a do 8 (a Fabrica do combate por turnos sai).
+     O 7 nao mexia no Tamer (LP-6). O registro de antes, quando muda, vai para o arquivo dos descartados */
+  if (feito < VERSAO_DESCARTE || (alvo === VERSAO_DESCARTE_LP4 && feito < VERSAO_DESCARTE_LP4)) {
+    if (tinhaTamer) {
+      const antes = lerLogTamerCru(armaz)!, r = semFabricaAntiga(antes.log);
+      fabrica = r.tentativas;
+      if (fabrica && alvo === VERSAO_DESCARTE_LP4) saves.push({ tamer: antes });
+      /* o 6 sempre regrava (o registro passa a versao de hoje); o 8 so quando tira alguma tentativa: sem ela o Tamer fica byte a byte */
+      if (feito < VERSAO_DESCARTE || fabrica) gravarTamer(armaz, Tamer.reproduzir(r.log));
+    } else if (feito < VERSAO_DESCARTE) gravarTamer(armaz, new Tamer());
+  }
+  if (saves.length) {
+    let ja: unknown[] = [];
+    try { const x = JSON.parse(armaz.getItem(CHAVE_DESCARTADOS) ?? "[]"); if (Array.isArray(x)) ja = x; } catch { /* ilegivel: recomeca */ }
+    armaz.setItem(CHAVE_DESCARTADOS, JSON.stringify([...ja, ...saves]));
+  }
+  armaz.setItem(CHAVE_DESCARTE, String(alvo));
+  if (descartados || fabrica) armaz.setItem(alvo === VERSAO_DESCARTE_LP4 ? CHAVE_AVISO_POC : CHAVE_AVISO_TR, JSON.stringify({ pets: descartados, fabrica }));
+  return descartados;
+}
+
+/* ------------------------------------------------ textos da tela (Evolucao, Campanha, Medalhas) */
+/** as medalhas que ainda faltam ao Tamer para chegar a `precisa`, na ordem da tabela */
+export function medalhasQueFaltam(t: Tamer, precisa: number): Medalha[] {
+  return MEDALHAS.filter(x => !t.tem(x.id)).slice(0, Math.max(0, precisa - t.n));
+}
+/** "na Campina", "no Lago": o lugar da campanha v6 com a preposicao (so o Lago e masculino) */
+export const noLugar = (nome: string): string => `${nome === "Lago" ? "no" : "na"} ${nome}`;
+/** onde a medalha se ganha: o lider da arena dela (na Cidadela, tres vezes seguidas) */
+export const comoGanhar = (md: Medalha): string => {
+  const n = ARENA_POR_ID[md.id]?.lutas ?? 1;
+  return `vença o ${NPC[md.lider]!.nome}${n > 1 ? ` ${n === 3 ? "três" : n} vezes seguidas` : ""} ${noLugar(LUGARES_V6[md.lugar].nome)}`;
+};
+/** "Falta a Medalha da Campina: vença o Gazimon na Campina." (ou a lista, quando falta mais de uma) */
+export function textoFalta(t: Tamer, precisa: number): string {
+  const f = medalhasQueFaltam(t, precisa);
+  if (!f.length) return "";
+  if (f.length === 1) return `Falta a ${f[0].nome}: ${comoGanhar(f[0])}.`;
+  return `Faltam ${f.length} medalhas: ` + f.map(x => `${x.nome} (${comoGanhar(x)})`).join(", ").replace(/, ([^,]*)$/, " e $1") + ".";
+}

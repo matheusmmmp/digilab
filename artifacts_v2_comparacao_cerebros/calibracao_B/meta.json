@@ -1,0 +1,44 @@
+{
+ "cerebro_sha256": "160569bfbd70bf924269c3ac360d21acb7e10226e88ceae3b3712b4f2eba770d",
+ "config": {
+  "bootstrap": {
+   "nivel": 0.95,
+   "reamostragens": 10000,
+   "semente": 4242
+  },
+  "descricao": "Calibracao do cerebro B (adendo 1.1 de docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md): etapas B-A, B-B, B-C e B-D em cadeia e o piloto do nao aprende; unidades derivadas das bases 28101...28505 com K = 4 (20 unidades), prefixo comparacao-cerebros, 14 dias, o dono atencioso, as pecas comuns no ponto da K2 do A (ganho 4, T3, K4, montagem completa).",
+  "dias": 14,
+  "ganho": 4,
+  "orcamento": 224,
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "ponto": "T3",
+  "saida": "artifacts_v2_comparacao_cerebros/calibracao_B",
+  "sonda": {
+   "amostras": 200,
+   "estados": 64,
+   "semente": 9001
+  },
+  "unidades": {
+   "bases": [
+    28101,
+    28202,
+    28303,
+    28404,
+    28505
+   ],
+   "k": 4,
+   "prefixo": "comparacao-cerebros"
+  }
+ },
+ "modo": "calibracao",
+ "orquestrador_sha256": "43f03cc9e21f2a4a3c80f2cddb4f9d9929453056ef496232917bcd4b57dfd759",
+ "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+ "plano_sha256": "9cc6b8d198267e034b3c53323b3273111eb5fa253f4ec8c862c8cdda4eae61fd",
+ "plataforma": "Windows-11-10.0.26200-SP0",
+ "python": "3.13.0",
+ "segundos": 1492.8838468999993,
+ "teto_segundos": 60372.966507200035,
+ "teto_vidas": 1260,
+ "vidas": 660,
+ "vidas_planejadas": 660
+}

@@ -1,0 +1,130 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-10-30",
+ "commit": "a25ec021",
+ "node": "v24.19.0",
+ "faixa": "calibracao2",
+ "bases": [
+  72101,
+  72202,
+  72303,
+  72404,
+  72505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.8,
+   "floresta": 1.5,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.4,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.2,
+   "torre": 0.8,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.2,
+   "adolescente": 1.6,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "cartas": {},
+ "parte": "i3",
+ "metas": {
+  "I-3": {
+   "formas": {
+    "duelista": {
+     "sem_item": 0.2654,
+     "com_item": 0.2718,
+     "combinacao": [
+      "chip_forca",
+      "chip_recuo",
+      "chip_perseguidor"
+     ]
+    },
+    "furioso": {
+     "sem_item": 0.5911,
+     "com_item": 0.6143,
+     "combinacao": [
+      "chip_forca"
+     ]
+    },
+    "espelho": {
+     "sem_item": 0.4561,
+     "com_item": 0.4561,
+     "combinacao": []
+    },
+    "muralha": {
+     "sem_item": 0.5621,
+     "com_item": 0.6107,
+     "combinacao": [
+      "chip_forca",
+      "chip_guarda",
+      "chip_perseguidor"
+     ]
+    },
+    "sentinela": {
+     "sem_item": 0.4239,
+     "com_item": 0.4221,
+     "combinacao": [
+      "chip_forca"
+     ]
+    },
+    "emboscador": {
+     "sem_item": 0.4779,
+     "com_item": 0.4779,
+     "combinacao": []
+    },
+    "vigia": {
+     "sem_item": 0.4864,
+     "com_item": 0.5096,
+     "combinacao": [
+      "chip_forca",
+      "chip_guarda"
+     ]
+    },
+    "tita": {
+     "sem_item": 0.7371,
+     "com_item": 0.7254,
+     "combinacao": [
+      "chip_forca"
+     ]
+    }
+   },
+   "max": 0.7254,
+   "passa": false
+  }
+ },
+ "custo_s": 35.4931
+}
