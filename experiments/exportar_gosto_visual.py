@@ -189,7 +189,7 @@ def _grafo() -> dict:
 
 def gerar() -> dict:
     return {"versao": 1, "canais": list(CANAIS_TELA), "config_tela": asdict(TELA), "config_tv": asdict(ConfigTV(ligada=True)),
-            "config_olhar": E.paraj(asdict(CONFIG_OLHAR)), "config_digibrain": E.paraj(asdict(config_vida())),
+            "config_olhar": E.paraj(asdict(CONFIG_OLHAR)), "config_digibrain": E.paraj(E.config_digibrain_json(config_vida())),
             "genomas": {str(s): genoma_visao(s).para_dict() for s in (101, 202, 303, 404, 505)},
             "genoma_vazio": genoma_visao_vazio().para_dict(), "grades": [_grade(s) for s in (101, 202)], "resumo": _resumo(),
             "grafo": _grafo(), "vidas": [_vida(f, s) for f in FONTES for s in SEMENTES]}

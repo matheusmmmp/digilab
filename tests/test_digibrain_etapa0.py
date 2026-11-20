@@ -109,10 +109,14 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # a run do PV-2 (o adendo 2): so le a escala dos inatos e o
                                                                              # DigiBrain das vidas do pv2.py (D-PV2R-1)
                                                                              "experiments/run_v3_pet_vivo_pv2.py",
+                                                                             # o PET_VIVO SONO (#1041): o replay monta o modular; faltava aqui (o teste falhava na main)
+                                                                             "experiments/run_v3_pet_vivo_sono.py",
                                                                              # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
                                                                              "experiments/run_v3_elogio.py",
                                                                              # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
                                                                              "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py",
+                                                                             # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
+                                                                             "experiments/run_v3_social_par_md.py",
                                                                              "experiments/run_v3_corpo_acoplamento.py"}
 
 
