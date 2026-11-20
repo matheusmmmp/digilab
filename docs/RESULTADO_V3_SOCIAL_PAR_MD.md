@@ -8,9 +8,16 @@
   - **O git não estava limpo (`git_limpo: false` no `meta.json`).** A única mudança era a linha `"plano"` que faltava no `run.json` (a
     D-SP-75). Nenhum parâmetro do experimento mudou. A mudança entra neste PR, e o `config_sha256` do `meta.json` (`807e504a…`) é o
     do `run.json` commitado aqui.
-  - **Com o `git_limpo: false`, o `tools/replicar_run.py` recusa replicar esta run.** Ou se aceita o resultado com essa ressalva, ou
-    se roda a mesma config de novo com a árvore limpa e se confere que o `medidas.json` e o `resultado.json` têm os mesmos sha256. A
-    run é determinística, e a segunda rodada não seria uma segunda amostra. A decisão é do Matheus.
+  - **A réplica com a árvore limpa (pedida pelo Matheus em 2026-11-20, "Sim, rodar de novo"):** a mesma config rodou de novo, de
+    18:37:03 às 19:50:21, numa worktree destacada no commit 60062de4 (o 3ed5fdd6 mais a linha `plano`), com `git_limpo: true` e
+    `--saida` numa pasta à parte.
+    - Saiu igual byte a byte: o `medidas.json` (`c6b61b90…`) e o `resultado.json` (`604bc9ce…`) têm os mesmos sha256, e os 2.000
+      arquivos de `vidas/` são iguais (`cmp`, 0 diferentes).
+    - No `meta.json`, só mudam o horário, a parede, o `git_head`, o `git_limpo` e o `--saida` do comando.
+    - O meta da réplica está em `artifacts_v3_social_par_md/run/meta_replica_limpa.json` (sha256 `1176b419…`). O `meta.json` continua
+      o da primeira rodada.
+    - **O que fica:** a run foi conferida, mas não passa pelo `tools/replicar_run.py`. A ferramenta recusa um comando que já tenha
+      `--saida`, e a run não está na tabela `RUNS` dela.
   - São 2.000 pares: 4 mecanismos × 2 braços × (200 bases, 105001…105200, k = 1, mais 50 pares do G-DET, 105301…105350).
 - **Artefatos:** `artifacts_v3_social_par_md/run/`, com o `meta.json`, o `medidas.json` (sha256 `c6b61b90…`), o `resultado.json`
   (sha256 `604bc9ce…`) e os 2.000 pares em `vidas/`. A pasta fica fora do git (`.gitignore`, `artifacts_*/`), como a da S3.
