@@ -2,7 +2,8 @@
 
 **Status: APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", na sessão da CORPO, sobre as D-C4-2 a D-C4-12 desta versão, com as
 recomendações). Esta é a versão com a primária de bem-estar que ele decidiu, o "Tempo bem". A direção é dele ("Levar o DTB à C4", o
-CHECKPOINT da C3). **As D-C4-1 a D-C4-12 estão DECIDIDAS.** Nenhuma vida desta run existe, e a faixa ainda não foi reservada.
+CHECKPOINT da C3). **As D-C4-1 a D-C4-12 estão DECIDIDAS.** Nenhuma vida desta run existe. A faixa 107001…107800 foi aprovada pela
+coordenadora, e a entrada dela no `faixas.py` vai com o código.
 
 **O que aconteceu com a primeira versão:** em 2026-11-20 o Matheus respondeu "Aprovo todas" à versão que tinha a taxa por episódio como
 primária. No mesmo dia, respondeu na Gerência "Sim, decidir antes" (a medida primária antes do plano da C4) e, perguntado na sessão da
@@ -63,7 +64,7 @@ k = 1, derivação `digibrain_prototipo`), 14 dias e orçamento 16. Cada unidade
 |---|---|
 | bloco I | 2 braços × 12 células × 200 unidades = **4 800 vidas** |
 | bloco II | 2 braços × 500 pares, o instrumento da C3 (SOCIAL_PAR A0, só VIVO, 5 dias); 500 pares pela conta da seção 5.3 (D-C4-5) |
-| faixa | **pedida ao coordenador, ainda não reservada** (D-C4-7): 200 bases para o bloco I e 500 para o bloco II (prefixo `corpo_par`) |
+| faixa | **107001…107800, aprovada pela coordenadora em 2026-11-20** (D-C4-7): as bases 107001…107200 para o bloco I e as 107301…107800 (prefixo `corpo_par`) para o bloco II. A entrada no `faixas.py` vai no PR do código |
 | custo | cerca de 1 h a 1 h 40 min com 4 processos: a C2 fez 9 600 vidas em 2 h 6 min, e a C3, com a máquina dividida, em 3 h 4 min. Os 1 000 pares somam cerca de 9 min (400 pares levaram 3 min 29 s na C3) |
 | processos | no máximo 4, uma run de pesquisa por vez |
 | disco | o worker confere o espaço livre no `D:` antes de soltar a run (piso de 10 GB, SEM FONTE; a pasta crua da C3 ocupou 0,7 GB). No fim, empacota, confere os `.tar.gz` contra as pastas e apaga as pastas |
@@ -153,7 +154,7 @@ replay (`artifacts_v3_corpo/c3_tempo_bem/resumo.json`); as outras, do `artifacts
 
 **O contraste:** DTB − CTRL, pareado por unidade, com o t (`orq.contraste_t`) e as classes da A6.6.
 
-**A primária, o "Tempo bem"** (a decisão do Matheus de 2026-11-20; a forma exata é a D-C4-11):
+**A primária, o "Tempo bem"** (a D-MP-1 do `docs/registro/2026-11.md`, decidida pelo Matheus em 2026-11-20; a forma exata é a D-C4-11):
 - **O que é:** a fração das decisões da vida, nos dias 1 a 14, em que o pet está sem privação e sem exaustão
   (`digilab.metrics.tempo_bem_nas_decisoes`).
 - **As duas regras são as das medidas de hoje:** sem privação é fome, higiene e energia em 0,15 ou mais (a do
