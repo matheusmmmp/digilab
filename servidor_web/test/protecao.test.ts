@@ -53,7 +53,9 @@ const postarJson = (nav: Navegador, caminho: string, dados: unknown, extra: Reco
 describe("o robots.txt", () => {
   it("o do jogo é o gerado da lista (node scripts/gerar_robots.ts) e recusa cada robô de IA", () => {
     const arquivo = fileURLToPath(new URL("../../web/app/public/robots.txt", import.meta.url));
-    const texto = readFileSync(arquivo, "utf8");
+    const texto = readFileSync(arquivo, "utf8").replace(/
+/g, "
+");  /* o checkout do Windows pode trazer CRLF */
     expect(texto, "rode node scripts/gerar_robots.ts").toBe(robotsDoJogo());
     for (const r of ROBOS_DE_IA) expect(texto).toContain(`User-agent: ${r}\n`);
     expect(texto).toMatch(/User-agent: DuckAssistBot\nDisallow: \/\n/);
