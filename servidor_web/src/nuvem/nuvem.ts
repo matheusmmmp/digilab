@@ -11,7 +11,7 @@
      GET  /nuvem/copias                as cópias de 30 dias; POST /nuvem/copias/:id/restaurar (5.6)
 
    As regras:
-     - O PACOTE é um por conta, como no aparelho: o save do pet do jogador e as outras chaves da CN0 (D-CONTA-180). "A vez por pet" é a
+     - O PACOTE é um por conta, como no aparelho: o save do pet do jogador e as outras chaves da CN0 (D-CONTA-181). "A vez por pet" é a
        vez deste pacote. Trocar o pet ativo (um ovo novo, um pet guardado) manda o save inteiro, e o de antes vai para as cópias.
      - A VEZ: um aparelho só escreve com a vez, ou com a vez livre (expirada ou de ninguém). Ela se renova a cada pedido de quem a tem e
        expira em VEZ_EXPIRA_MS sem sinal. "Jogar aqui" toma a vez.

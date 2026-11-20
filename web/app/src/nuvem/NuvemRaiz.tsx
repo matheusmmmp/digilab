@@ -71,7 +71,10 @@ export function NuvemRaiz() {
     /* ao esconder a aba: grava o que está pendente e manda */
     const esconder = () => { if (document.visibilityState === "hidden") { gravarPendente(); void sincronizar().catch((err: unknown) => console.error(err)); } };
     document.addEventListener("visibilitychange", esconder);
-    return () => { clearInterval(t); document.removeEventListener("visibilitychange", esconder); desligarConta(); };
+    /* "sincronize agora", sem esperar o intervalo (o e2e da nuvem, e2e_conta/nuvem.spec.ts): o mesmo sincronizar de sempre */
+    const agora = () => { void sincronizar().catch((err: unknown) => console.error(err)); };
+    addEventListener("digilab-nuvem-sincronizar", agora);
+    return () => { clearInterval(t); document.removeEventListener("visibilitychange", esconder); removeEventListener("digilab-nuvem-sincronizar", agora); desligarConta(); };
   }, []);
   const travado = nv !== null && soVer();
   useEffect(() => { document.documentElement.classList.toggle("nv-so-ver", travado); }, [travado]);

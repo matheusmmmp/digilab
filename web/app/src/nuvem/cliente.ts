@@ -325,6 +325,8 @@ export async function levarParaConta(escolha: EscolhaLevar): Promise<void> {
   NV.ocupado = true; avisar();
   try {
     let pacote = lerPacoteLocal();
+    /* "os da nuvem" num aparelho sem save: não há o que guardar nas cópias; só se baixa o pacote da nuvem */
+    if (!pacote && escolha === "nuvem") { await puxarTudo(); return; }
     if (!pacote) throw new Error("este aparelho ainda não tem pet para levar");
     if (escolha === "os_dois") pacote = await juntarOsDois(pacote);
     const r = await chamar("POST", "/nuvem/levar", { protocolo: PROTOCOLO_NUVEM, escolha, pacote });

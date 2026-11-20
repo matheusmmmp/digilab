@@ -296,8 +296,6 @@ export function App() {
     <div className={"app app--habitat " + (lugar ? "app--painel app--lugar" : painel ? "app--painel" : "app--pet")}>
       <div className="avisos">
       <AvisoSom />
-      {/* o save na nuvem (CN3): so com a chave no build; sem ela, nada */}
-      <NuvemRaiz />
       {jogo.erroSave && (
         <div className="aviso" role="alert">
           O save deste navegador não abriu, e o app não vai gravar por cima dele.
@@ -345,6 +343,8 @@ export function App() {
       {(escolhendoBrasao || ovoDoReset) && !boasVindas && !descartados && !avisoTR && !avisoPoc && <EscolherBrasao podeVoltar={!aindaSemPet && !ovoDoReset} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
       {avisoTR && !boasVindas && !descartados && <AvisoCombateTR aviso={avisoTR} fechar={() => setAvisoTR(null)} />}
+      {/* o save na nuvem (CN3): so com a chave no build; sem ela, nada. Fora da faixa .avisos, que nao recebe o toque */}
+      <NuvemRaiz />
       {avisoPoc && !avisoTR && !boasVindas && !descartados && <AvisoLutaPoc aviso={avisoPoc} fechar={() => setAvisoPoc(null)} />}
       {her && !desk && <Heranca pai2={her.pai2} fim={irPet} />}
       {aposentando && !desk && <Aposentar />}
