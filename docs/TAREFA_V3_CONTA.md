@@ -162,7 +162,7 @@ prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). B
 
 O código e o roteiro, sem contratar nada (a seção 6: contratar é do Matheus). O roteiro, com a ordem do que contratar, os segredos, a VPS, o
 backup, os assets, o deploy e os preços do dia, está em `docs/infra/DEPLOY_CN5.md`. As decisões D-CONTA-197 a 205 estão em
-`docs/registro/2026-11.md`, todas PROPOSTAS.
+`docs/registro/2026-11.md`, DECIDIDAS pelo Matheus em 2026-11-20 pela recomendação ("Aprovo as recomendações").
 
 - **O servidor:** a borda `cloudflare` (`--borda`, `DIGILAB_BORDA`): só em `127.0.0.1`, só o pedido que passou pelo Cloudflare Tunnel, e a
   conta local não sobe (`servidor_web/src/app.ts`, `test/borda.test.ts`). Sem a opção, a regra de sempre.
