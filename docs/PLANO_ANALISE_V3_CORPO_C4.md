@@ -1,9 +1,13 @@
 # Plano de análise V3: a validação do teto baixo (CORPO C4)
 
-**Status: APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", na sessão da CORPO, sobre as D-C4-1 a D-C4-9 com as recomendações). A
-direção tinha chegado repassada pelo coordenador, com as palavras dele: "Levar o DTB à C4" (o CHECKPOINT da C3, sobre o
-`docs/RESULTADO_V3_CORPO_C3.md`). **As D-C4-1 a D-C4-9 estão DECIDIDAS. A D-C4-10, os pisos das premissas, foi escrita depois do "Aprovo
-todas" e está ABERTA.** Nenhuma vida desta run existe. A faixa de sementes é pedida ao coordenador (D-C4-7).
+**Status: PROPOSTO. Espera a decisão da medida primária de bem-estar.** A direção é do Matheus ("Levar o DTB à C4", o CHECKPOINT da C3,
+repassada pelo coordenador em 2026-11-20). Em 2026-11-20 ele respondeu "Aprovo todas" a este plano na sessão da CORPO e, na Gerência,
+"Sim, decidir antes" à pergunta de decidir a medida primária de bem-estar antes de aprovar o plano da C4. Perguntado qual valia, respondeu
+**"Decidir a medida antes"**. Por isso a aprovação está suspensa: a D-C4-1 fica DECIDIDA, e as D-C4-2 a D-C4-10 ficam ABERTAS até a medida
+ser decidida e a seção 6 ser conferida contra ela. Nenhuma vida desta run existe, e a faixa não foi reservada.
+
+**O que a decisão da medida pode mudar aqui:** a seção 6 (o que é o primário e o que é guarda), a D-C4-2 (a leitura por célula) e, se a
+medida nova tiver outro desvio-padrão, a conta da precisão da seção 5.3. O resto do plano não depende dela.
 
 ## 0. A trava e o que já foi visto
 
@@ -54,7 +58,7 @@ k = 1, derivação `digibrain_prototipo`), 14 dias e orçamento 16. Cada unidade
 |---|---|
 | bloco I | 2 braços × 12 células × 200 unidades = **4 800 vidas** |
 | bloco II | 2 braços × 500 pares, o instrumento da C3 (SOCIAL_PAR A0, só VIVO, 5 dias); 500 pares pela conta da seção 5.3 (D-C4-5) |
-| faixa | **pedida ao coordenador, ainda não reservada** (D-C4-7): 200 bases para o bloco I e 500 para o bloco II (prefixo `corpo_par`) |
+| faixa | **não reservada; o pedido espera a aprovação** (D-C4-7): 200 bases para o bloco I e 500 para o bloco II (prefixo `corpo_par`) |
 | custo | cerca de 1 h a 1 h 40 min com 4 processos: a C2 fez 9 600 vidas em 2 h 6 min, e a C3, com a máquina dividida, em 3 h 4 min. Os 1 000 pares somam cerca de 9 min (400 pares levaram 3 min 29 s na C3) |
 | processos | no máximo 4, uma run de pesquisa por vez |
 | disco | o worker confere o espaço livre no `D:` antes de soltar a run (piso de 10 GB, SEM FONTE; a pasta crua da C3 ocupou 0,7 GB). No fim, empacota, confere os `.tar.gz` contra as pastas e apaga as pastas |
@@ -206,8 +210,8 @@ próprio, o `custos.json`. Assim o `medidas.json` de uma réplica sai igual byte
 
 Cada uma com a recomendação e o custo de errar.
 
-- **D-C4-1 (DECIDIDA pelo Matheus em 2026-11-20: "Levar o DTB à C4", repassada pelo coordenador, e "Aprovo todas"), a direção:** levar o DTB à C4.
-- **D-C4-2 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas": a opção 1, a ressalva), como ler a célula do aleatório no comedouro.** As três opções eram:
+- **D-C4-1 (DECIDIDA pelo Matheus em 2026-11-20: "Levar o DTB à C4", repassada pelo coordenador), a direção:** levar o DTB à C4.
+- **D-C4-2 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), como ler a célula do aleatório no comedouro.** As três opções eram:
   1. **a ressalva (recomendada):** a regra vinculante continua a da C3 (a média das seis células), e a saúde por célula entra como uma
      leitura à parte, que não reprova mas muda o veredito para "confirma com ressalva";
   2. **a guarda por célula:** qualquer das 6 células em "< 0" reprova. Se a C3 se repetir (−0,048, além de δ), o desfecho previsto é
@@ -216,24 +220,24 @@ Cada uma com a recomendação e o custo de errar.
   - **Por que a 1:** a validação fica com a mesma regra da run que escolheu o braço, e a célula não some na média.
   - **O custo de errar:** com a 1, um "confirma com ressalva" ainda pede uma decisão sua depois da run. Com a 2, o DTB cai por uma célula
     em que o pet já vive mal no CTRL (saúde 0,419). Com a 3, o número não tem fonte e foi visto antes.
-- **D-C4-3 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), a D e o DTL fora da run.** Recomendação: fora. Só o CTRL e o DTB, e a run custa a metade.
+- **D-C4-3 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), a D e o DTL fora da run.** Recomendação: fora. Só o CTRL e o DTB, e a run custa a metade.
   - **O custo de errar:** a C4 não mostra, nas mesmas sementes, o DTB contra a D. Essa comparação fica só na C3 (descritiva).
-- **D-C4-4 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), a bola.** Recomendação: tirar o S1 dos pares, como recomenda o R-b (#1038), e levar os chutes por vida de um pet,
+- **D-C4-4 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), a bola.** Recomendação: tirar o S1 dos pares, como recomenda o R-b (#1038), e levar os chutes por vida de um pet,
   por lugar, como descritivo.
   - **Por que não como guarda:** não há desvio-padrão de DTB − CTRL para os chutes em nenhuma run anterior, e uma guarda nova decidiria a
     validação sem ter sido vista na escolha.
   - **O custo de errar:** se o DTB reduzir o brincar com a bola, isso aparece no descritivo e vai a você, mas não muda o veredito.
-- **D-C4-5 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), 500 pares no bloco II.** Recomendação: 500. Com 100, o S2 tende a sair "indeterminado" (seção 5.3).
+- **D-C4-5 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), 500 pares no bloco II.** Recomendação: 500. Com 100, o S2 tende a sair "indeterminado" (seção 5.3).
   - **O custo de errar:** cerca de 9 min de máquina e 400 bases a mais na faixa.
-- **D-C4-6 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas"), os tamanhos do bloco I:** os da C3, com 200 unidades, 14 dias e δ = 0,032 (SEM FONTE). A precisão cabe (seção 5.3).
+- **D-C4-6 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), os tamanhos do bloco I:** os da C3, com 200 unidades, 14 dias e δ = 0,032 (SEM FONTE). A precisão cabe (seção 5.3).
   - **O custo de errar:** nenhum previsto; a célula do relapso no longe pode sair "indeterminado" na leitura por célula.
-- **D-C4-7 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas"; a faixa em si ainda não foi reservada), a faixa:** 700 bases novas (200 e 500), pedidas ao coordenador, e na tabela antes da run.
-- **D-C4-8 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), o relógio fora do `medidas.json`.** Recomendação: sim, num `custos.json`.
+- **D-C4-7 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), a faixa:** 700 bases novas (200 e 500), pedidas ao coordenador, e na tabela antes da run.
+- **D-C4-8 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), o relógio fora do `medidas.json`.** Recomendação: sim, num `custos.json`.
   - **O custo de errar:** sem isso, toda réplica "diverge" pelos tempos, como a da C4 do modular.
-- **D-C4-9 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), as 12 células oficiais, com as 11 distintas ao lado.** Recomendação: manter as 12, pela mesma regra da C3.
+- **D-C4-9 (ABERTA; o "Aprovo todas" de 2026-11-20 está suspenso até a medida primária), as 12 células oficiais, com as 11 distintas ao lado.** Recomendação: manter as 12, pela mesma regra da C3.
   - **O custo de errar:** o atencioso pesa duas vezes nas médias do comedouro. A sensibilidade mostra se isso muda a leitura.
 
-- **D-C4-10 (ABERTA; escrita depois do "Aprovo todas"), os pisos das premissas** da seção 5.2: 8 episódios por vida, 2 % de vidas sem
+- **D-C4-10 (ABERTA; escrita depois do "Aprovo todas", nunca aprovada), os pisos das premissas** da seção 5.2: 8 episódios por vida, 2 % de vidas sem
   episódio, 0,10 dos ticks no teto, 90 % dos pares com a janela e, para os chutes, 1 por vida e 50 % das vidas. Todos PROPOSTOS e SEM
   FONTE, escolhidos abaixo do que a contagem e a C3 mostraram. Recomendação: aceitar.
   - **O custo de errar:** um piso alto demais deixa "inconclusiva por premissa" uma medida que estava boa; um baixo demais deixa passar
