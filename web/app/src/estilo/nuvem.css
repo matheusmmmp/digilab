@@ -1,0 +1,40 @@
+/* O save na nuvem (CN3; a prancha docs/pranchas/ux-conta-nuvem/nuvem.css, UX-NV-1 a 6 APROVADAS). Só com os tokens --hx-* das peles: nenhuma
+   cor nova. Os tamanhos são PROPOSTOS, SEM FONTE (os da prancha). */
+.nv-aviso{ width:min(94vw,520px) }
+.nv-painel{ display:grid; gap:12px; padding:18px 20px 20px }
+.nv-cab{ display:flex; align-items:center; justify-content:space-between }
+.nv-linha{ display:flex; align-items:flex-start; gap:6px }
+.nv-linha svg{ width:16px; height:16px; flex:none; margin-top:1px }
+.nv-lista{ display:grid; gap:4px; margin:0; padding:0; list-style:none }
+.nv-lista li{ display:flex; align-items:baseline; gap:8px; min-height:28px; font:500 15px/1.25 var(--hx-f) }
+.nv-lista small{ color:var(--hx-sec); font-size:13px }
+.nv-lados{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+@media (max-width:479px){ .nv-lados{ grid-template-columns:1fr } }
+.nv-lado{ display:grid; align-content:start; gap:4px; padding:10px 12px; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto); text-align:left; font:500 14px/1.25 var(--hx-f) }
+.nv-lado small{ color:var(--hx-sec) }
+.nv-opcoes{ display:grid; gap:6px; margin-top:6px }
+.nv-op{ display:flex; align-items:flex-start; gap:10px; min-height:48px; padding:10px 12px; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto); text-align:left; font:500 14px/1.25 var(--hx-f); cursor:pointer }
+.nv-op small{ display:block; color:var(--hx-sec); font-size:13px; margin-top:2px }
+.nv-op[aria-checked="true"]{ border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.nv-op:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.nv-radio{ flex:none; width:16px; height:16px; margin-top:2px; border:2px solid var(--hx-borda-topo); border-radius:50% }
+.nv-op[aria-checked="true"] .nv-radio{ border-color:var(--hx-escolhido-borda); background:radial-gradient(circle, var(--hx-escolhido-borda) 0 40%, transparent 45%) }
+
+/* o estado no relógio: o lugar do "salvo" (UX-NV-3); o ícone e a palavra, nunca só a cor */
+.nv-chip{ display:flex; align-items:center }
+.nv-chip > span, .nv-chip-bt{ display:inline-flex; align-items:center; gap:4px; color:inherit; font:inherit }
+.nv-chip-bt{ min-height:32px; padding:0; border:0; background:none; cursor:pointer }
+.nv-chip-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.nv-chip small{ margin-left:2px; color:var(--hx-sec) }
+.nv-chip.ok svg{ color:var(--hx-ok) }
+.nv-chip.alerta svg{ color:var(--hx-alerta, var(--hx-texto-2)) }
+.mm-relogio .nv-chip svg{ width:18px; height:18px }
+
+/* o "só ver" (UX-NV-5): as ações ficam apagadas e não respondem ao toque; a trava do registro é a do src/jogo.ts */
+html.nv-so-ver .acoes-pet, html.nv-so-ver .pet-dock, html.nv-so-ver .dock-bt{ opacity:.45; pointer-events:none; filter:grayscale(.6) }
+
+/* as cópias do save (Ajustes › Conta) */
+.nv-copias-sec{ display:grid; gap:8px }
+.nv-copias{ display:grid; gap:6px; margin:0; padding:0; list-style:none }
+.nv-copias li{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--hx-borda); font:500 14px/1.25 var(--hx-f) }
+.nv-copias li small{ display:block; color:var(--hx-sec); font-size:13px }

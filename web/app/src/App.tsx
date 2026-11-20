@@ -23,6 +23,7 @@ import { TelaItens } from "./telas/crescer/TelaItens.tsx";
 import { TelaMedalhas } from "./telas/lutar/TelaMedalhas.tsx";
 import { TelaFronteira } from "./telas/lutar/TelaFronteira.tsx";
 import { AvisoSom } from "./componentes/AvisoSom.tsx";
+import { NuvemRaiz } from "./nuvem/NuvemRaiz.tsx";
 import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { AvisoCombateTR, avisoTRPendente } from "./componentes/AvisoCombateTR.tsx";
 import { AvisoLutaPoc, avisoPocPendente } from "./componentes/AvisoLutaPoc.tsx";
@@ -342,6 +343,8 @@ export function App() {
       {(escolhendoBrasao || ovoDoReset) && !boasVindas && !descartados && !avisoTR && !avisoPoc && <EscolherBrasao podeVoltar={!aindaSemPet && !ovoDoReset} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
       {avisoTR && !boasVindas && !descartados && <AvisoCombateTR aviso={avisoTR} fechar={() => setAvisoTR(null)} />}
+      {/* o save na nuvem (CN3): so com a chave no build; sem ela, nada. Fora da faixa .avisos, que nao recebe o toque */}
+      <NuvemRaiz />
       {avisoPoc && !avisoTR && !boasVindas && !descartados && <AvisoLutaPoc aviso={avisoPoc} fechar={() => setAvisoPoc(null)} />}
       {her && !desk && <Heranca pai2={her.pai2} fim={irPet} />}
       {aposentando && !desk && <Aposentar />}
