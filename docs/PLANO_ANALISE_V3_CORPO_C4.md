@@ -1,12 +1,13 @@
 # Plano de análise V3: a validação do teto baixo (CORPO C4)
 
-**Status: PROPOSTO.** Reescrito em 2026-11-20 com a primária de bem-estar que o Matheus decidiu, o "Tempo bem". A direção é dele ("Levar
-o DTB à C4", o CHECKPOINT da C3). **A D-C4-1 está DECIDIDA; as D-C4-2 a D-C4-12 estão ABERTAS**, e a aprovação deste plano é dele.
-Nenhuma vida desta run existe, e a faixa não foi reservada.
+**Status: APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", na sessão da CORPO, sobre as D-C4-2 a D-C4-12 desta versão, com as
+recomendações). Esta é a versão com a primária de bem-estar que ele decidiu, o "Tempo bem". A direção é dele ("Levar o DTB à C4", o
+CHECKPOINT da C3). **As D-C4-1 a D-C4-12 estão DECIDIDAS.** Nenhuma vida desta run existe, e a faixa ainda não foi reservada.
 
 **O que aconteceu com a primeira versão:** em 2026-11-20 o Matheus respondeu "Aprovo todas" à versão que tinha a taxa por episódio como
 primária. No mesmo dia, respondeu na Gerência "Sim, decidir antes" (a medida primária antes do plano da C4) e, perguntado na sessão da
-CORPO qual das duas valia, "Decidir a medida antes". Aquela aprovação não vale para esta versão.
+CORPO qual das duas valia, "Decidir a medida antes". Aquela aprovação não valeu para esta versão; a que vale é a de cima, dada
+depois do replay do "Tempo bem" e do plano reescrito.
 
 ## 0. A trava e o que já foi visto
 
@@ -62,7 +63,7 @@ k = 1, derivação `digibrain_prototipo`), 14 dias e orçamento 16. Cada unidade
 |---|---|
 | bloco I | 2 braços × 12 células × 200 unidades = **4 800 vidas** |
 | bloco II | 2 braços × 500 pares, o instrumento da C3 (SOCIAL_PAR A0, só VIVO, 5 dias); 500 pares pela conta da seção 5.3 (D-C4-5) |
-| faixa | **não reservada; o pedido espera a aprovação** (D-C4-7): 200 bases para o bloco I e 500 para o bloco II (prefixo `corpo_par`) |
+| faixa | **pedida ao coordenador, ainda não reservada** (D-C4-7): 200 bases para o bloco I e 500 para o bloco II (prefixo `corpo_par`) |
 | custo | cerca de 1 h a 1 h 40 min com 4 processos: a C2 fez 9 600 vidas em 2 h 6 min, e a C3, com a máquina dividida, em 3 h 4 min. Os 1 000 pares somam cerca de 9 min (400 pares levaram 3 min 29 s na C3) |
 | processos | no máximo 4, uma run de pesquisa por vez |
 | disco | o worker confere o espaço livre no `D:` antes de soltar a run (piso de 10 GB, SEM FONTE; a pasta crua da C3 ocupou 0,7 GB). No fim, empacota, confere os `.tar.gz` contra as pastas e apaga as pastas |
@@ -90,7 +91,7 @@ Nenhuma vida fica em 0 nem em 1 (o piso e o teto da medida). O nível mais alto 
 505 (k = 1), 14 dias, as 12 células, 20 vidas por braço e lugar; os pares, 5 por braço, 5 dias. Os chutes foram contados à parte, nas
 mesmas sementes (a soma do `brincou_com_bola` das decisões do motor). São sementes de teste: nada aqui é resultado.
 
-| evento | de que medida é a premissa | CTRL | DTB | o piso na run (PROPOSTO, SEM FONTE; D-C4-10) |
+| evento | de que medida é a premissa | CTRL | DTB | o piso na run (SEM FONTE; D-C4-10, aceito em 2026-11-20) |
 |---|---|---|---|---|
 | vidas com o "Tempo bem" em 0 ou em 1 | a primária | 0 de 2 400 (na C3) | 0 de 2 400 (na C3) | no máximo 5 % das vidas em cada braço |
 | episódios de fome por vida, `longe_fixo` | a guarda da taxa por episódio | 13,3 (mínimo 1; nenhuma vida sem episódio) | 15,8 (mínimo 1; nenhuma sem) | média ≥ 8 por vida em cada braço, e no máximo 2 % das vidas sem episódio |
@@ -225,7 +226,7 @@ próprio, o `custos.json`. Assim o `medidas.json` de uma réplica sai igual byte
 Cada uma com a recomendação e o custo de errar.
 
 - **D-C4-1 (DECIDIDA pelo Matheus em 2026-11-20: "Levar o DTB à C4", repassada pelo coordenador), a direção:** levar o DTB à C4.
-- **D-C4-2 (ABERTA), como ler a célula do aleatório no comedouro.** Três opções:
+- **D-C4-2 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas": a opção 1, a ressalva), como ler a célula do aleatório no comedouro.** As três opções eram:
   1. **a ressalva (recomendada):** a guarda da saúde continua a média das seis células, e a saúde por célula entra como uma leitura à
      parte, que não reprova mas muda o veredito para "confirma com ressalva";
   2. **a guarda por célula:** qualquer das 6 células em "< 0" reprova. Se a C3 se repetir (−0,048, além de δ), o desfecho previsto é
@@ -236,34 +237,34 @@ Cada uma com a recomendação e o custo de errar.
     em que o pet já vive mal no CTRL (saúde 0,419). Com a 3, o número não tem fonte e foi visto antes.
   - **Um dado novo do replay:** nessa célula o "Tempo bem" do DTB é igual ao do CTRL (−0,001 [−0,004; +0,002]). A saúde cai sem o tempo em
     privação subir. Por isso a primária sozinha não enxerga essa célula, e a leitura por célula continua necessária.
-- **D-C4-3 (ABERTA), a D e o DTL fora da run.** Recomendação: fora. Só o CTRL e o DTB, e a run custa a metade.
+- **D-C4-3 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), a D e o DTL fora da run.** Recomendação: fora. Só o CTRL e o DTB, e a run custa a metade.
   - **O custo de errar:** a C4 não mostra, nas mesmas sementes, o DTB contra a D. Essa comparação fica só na C3 (descritiva).
-- **D-C4-4 (ABERTA), a bola.** Recomendação: tirar o S1 dos pares, como recomenda o R-b (#1038), e levar os chutes por vida de um pet,
+- **D-C4-4 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), a bola.** Recomendação: tirar o S1 dos pares, como recomenda o R-b (#1038), e levar os chutes por vida de um pet,
   por lugar, como descritivo.
   - **Por que não como guarda:** não há desvio-padrão de DTB − CTRL para os chutes em nenhuma run anterior.
   - **O custo de errar:** se o DTB reduzir o brincar com a bola, isso aparece no descritivo e vai a você, mas não muda o veredito.
-- **D-C4-5 (ABERTA), 500 pares no bloco II.** Recomendação: 500. Com 100, o S2 tende a sair "indeterminado" (seção 5.3).
+- **D-C4-5 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), 500 pares no bloco II.** Recomendação: 500. Com 100, o S2 tende a sair "indeterminado" (seção 5.3).
   - **O custo de errar:** cerca de 9 min de máquina e 400 bases a mais na faixa.
-- **D-C4-6 (ABERTA), os tamanhos do bloco I:** os da C3, com 200 unidades, 14 dias e δ = 0,032 (SEM FONTE). A precisão cabe (seção 5.3).
+- **D-C4-6 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), os tamanhos do bloco I:** os da C3, com 200 unidades, 14 dias e δ = 0,032 (SEM FONTE). A precisão cabe (seção 5.3).
   - **O custo de errar:** a primária caberia com menos unidades; as 200 ficam pelas guardas. A célula do relapso no longe pode sair
     "indeterminado" na leitura por célula.
-- **D-C4-7 (ABERTA), a faixa:** 700 bases novas (200 e 500), pedidas ao coordenador depois da aprovação, e na tabela antes da run.
-- **D-C4-8 (ABERTA), o relógio fora do `medidas.json`.** Recomendação: sim, num `custos.json`.
+- **D-C4-7 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), a faixa:** 700 bases novas (200 e 500), pedidas ao coordenador depois da aprovação, e na tabela antes da run.
+- **D-C4-8 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), o relógio fora do `medidas.json`.** Recomendação: sim, num `custos.json`.
   - **O custo de errar:** sem isso, toda réplica "diverge" pelos tempos, como a da C4 do modular.
-- **D-C4-9 (ABERTA), as 12 células e as 11 distintas.** Recomendação: a primária tem de sair "> 0" nas duas; as guardas usam as 12, com
+- **D-C4-9 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), as 12 células e as 11 distintas.** Recomendação: a primária tem de sair "> 0" nas duas; as guardas usam as 12, com
   as 11 ao lado.
   - **O custo de errar:** exigir as duas é mais duro que exigir só as 12. Na C3 as duas saíram quase iguais (+0,062 e +0,063).
-- **D-C4-10 (ABERTA), os pisos das premissas** da seção 5.2: 5 % de vidas no piso ou no teto do "Tempo bem", 8 episódios por vida, 2 % de
+- **D-C4-10 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), os pisos das premissas** da seção 5.2: 5 % de vidas no piso ou no teto do "Tempo bem", 8 episódios por vida, 2 % de
   vidas sem episódio, 0,10 dos ticks no teto, 90 % dos pares com a janela e, para os chutes, 1 por vida e 50 % das vidas. Todos
-  PROPOSTOS e SEM FONTE, escolhidos abaixo do que a contagem e a C3 mostraram. Recomendação: aceitar.
+  SEM FONTE, escolhidos abaixo do que a contagem e a C3 mostraram. Recomendação: aceitar.
   - **O custo de errar:** um piso alto demais deixa "inconclusiva por premissa" uma medida que estava boa; um baixo demais deixa passar
     uma medida que quase não tem evento.
-- **D-C4-11 (ABERTA), a forma exata do "Tempo bem".** A decisão diz "a fração das decisões sem privação e sem exaustão, nos dias 1 a
+- **D-C4-11 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), a forma exata do "Tempo bem".** A decisão diz "a fração das decisões sem privação e sem exaustão, nos dias 1 a
   14". Este plano a escreve assim: os limiares de hoje (0,15 e 0,25), a média das células por unidade, δ = 0,032 e α = 0,025 unilateral.
   Recomendação: aceitar.
   - **O custo de errar:** o δ foi pensado para a taxa por episódio e não tem fonte para esta fração. Na C3, o efeito (+0,062) é quase o
     dobro dele, e o IC é estreito; um δ menor não mudaria a classe das 12 células, mas mudaria a do comedouro (+0,030, hoje "≈ 0").
-- **D-C4-12 (ABERTA), as guardas.** A decisão nomeia duas: a saúde dos dias 8 a 14 e a taxa por episódio. Este plano propõe mais duas: o
+- **D-C4-12 (DECIDIDA pelo Matheus em 2026-11-20, "Aprovo todas", com a recomendação), as guardas.** A decisão nomeia duas: a saúde dos dias 8 a 14 e a taxa por episódio. Este plano propõe mais duas: o
   "Tempo bem" por lugar e o S2. Recomendação: as quatro.
   - **Por quê:** a D reprovou por um lugar só, o comedouro, e a média das 12 células esconderia isso. O S2 é a única medida do substrato
     social.

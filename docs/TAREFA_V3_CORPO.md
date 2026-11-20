@@ -179,7 +179,7 @@ ligado no jogo.
 ## 16. O plano da C4, a validação do teto baixo (2026-11-20)
 
 O CHECKPOINT da C3 chegou repassado pelo coordenador, com as palavras do Matheus: "Levar o DTB à C4". O plano é o
-`docs/PLANO_ANALISE_V3_CORPO_C4.md`, **PROPOSTO**.
+`docs/PLANO_ANALISE_V3_CORPO_C4.md`, **APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", sobre a versão com o "Tempo bem").
 - **A primeira versão** tinha a taxa por episódio como primária. O Matheus respondeu "Aprovo todas" e, em seguida, "Decidir a medida
   antes". Aquela aprovação não vale mais.
 - **A primária nova, o "Tempo bem"** (decisão dele de 2026-11-20): a fração das decisões sem privação e sem exaustão, nos dias 1 a 14. A
@@ -190,4 +190,4 @@ O CHECKPOINT da C3 chegou repassado pelo coordenador, com as palavras do Matheus
   1. Nas 12 células, DTB − CTRL dá +0,062 [+0,058; +0,066]. Esse número não é a validação: a C3 escolheu o braço.
 - **O plano reescrito:** o CTRL e o DTB em sementes novas, nas 12 células × 200 unidades e 500 pares. A primária é o "Tempo bem" nas 12
   e nas 11 células; as guardas são a saúde, a taxa por episódio, o "Tempo bem" por lugar e o S2; a saúde por célula entra como ressalva.
-  As D-C4-2 a D-C4-12 estão abertas. Nenhuma vida antes do plano aprovado na `main`, da faixa e do código.
+  As D-C4-1 a D-C4-12 estão decididas. Nenhuma vida antes do plano na `main`, da faixa e do código.
