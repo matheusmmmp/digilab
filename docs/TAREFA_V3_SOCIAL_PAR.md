@@ -187,3 +187,40 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   até ele antes de qualquer aprendizado. O Matheus escolheu a opção (a) (D-SP-63): o código fica, e o plano da medida ganha o braço de
   controle M1 com o incentivo social em 0.
 - **O que falta:** o código do M2 (M1-5) e o plano da medida, com os braços M1 e M1+M2.
+
+## M2: a espec da companhia no corpo (2026-11-19)
+
+- **A espec:** `docs/ESPEC_SOCIAL_PAR_M2.md`. O emissor `companhia` baixa a solidão quando outro pet está em contato (até 1 célula),
+  lido só da posição, atrás da `ConfigCompanhia`, desligada.
+- **As decisões M2-1 a M2-6** ficam para o checkpoint do M2 (D-SP-65).
+- **O que falta:** o "aprovado" da espec; depois, o código do M2 e o plano da medida com os braços M1, M1-inc0 e M1+M2.
+
+## M2: o código da companhia (2026-11-19)
+
+- **O checkpoint do M2:** o Matheus aprovou a espec (D-SP-67). O gabarito foi gravado antes, em `tests/gabaritos/social_m2_de_hoje.json`.
+- **A `ConfigCompanhia`, desligada:** o emissor `companhia` no grafo, com um gatilho novo e sem ler químico. O `Corpo.passo(..., companhia=n)`,
+  o motor que recebe a contagem do grupo a cada tick, e o grupo que conta o contato com as posições do começo do tick.
+- **O achado e o conserto (D-SP-68):** a consequência chegava ao cérebro antes de a companhia agir. Pela opção (a), as unidades sociais
+  leem o corpo da decisão seguinte, como a fala.
+- **Os testes:** `tests/test_corpo_companhia.py`.
+- **O que falta:** o plano da medida, com os braços M1, M1-inc0 e M1+M2.
+
+## MD: o plano da medida do M1 e do M2 (2026-11-19)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md`, PROPOSTO. É o instrumento da S3 com os braços M1, M1-inc0, M1+M2 e M1-inc0+M2,
+  no B1 e no C, com o G-DET em cada célula e a premissa PM-1 (D-SP-70 a D-SP-72).
+- **O que falta:** o "aprovado" do plano (MD-1 a MD-8) e a faixa pelo coordenador; depois, o código da medida (MD1) e a run (MD2).
+
+## MD1: o código da medida (2026-11-19)
+
+- **O checkpoint:** o Matheus aprovou o plano da medida (D-SP-73). O gabarito foi gravado antes, em `tests/gabaritos/social_md_de_hoje.json`.
+- **A subchave `incentivo_social_zero`,** desligada: o incentivo das unidades sociais em 0, o controle do D-SP-63 e do MD-2.
+- **O orquestrador `experiments/run_v3_social_par_md.py`:** os quatro mecanismos × o B1 e o C, com o G-DET em cada célula, a PM-1, os
+  contrastes C-APR e C-APR1 e a regra de leitura da seção 7. As configs estão em `experiments/configs/v3_social_par_md/`, e a faixa
+  105001…105400 no `faixas.py` (D-SP-74).
+- **Os testes:** `tests/test_social_par_md.py`, com o G2, o incentivo em 0, as travas, o G-S3-IGUAL, o G-GRAV-COMP, o retrato e a PM-1, a
+  fumaça e o determinismo.
+- **O checkpoint:** o código foi APROVADO pelo Matheus em 2026-11-20 ("Aprovado", no #1034), com a leitura da PM-1 na VIVO, no
+  gancho do t0 (D-SP-74).
+- **O que falta:** a run (MD2), num PR próprio, uma vez. Ela espera a cadeia até a `main` (o `pre_run` exige o plano na `origin/main`)
+  e o ok do coordenador para a faixa.

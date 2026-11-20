@@ -96,8 +96,9 @@ consequencia ganham `conceitos` e `termo_conceitos`; com o mito, o motivo ganha 
 **O outro** (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secoes 3.2 a 3.5; a subchave `unidades_sociais`): o M-SENS le o outro da percepcao
 social, o M-IMPULSO poe as unidades `explorar/seguir:<id>` e `explorar/onde_comeu:<id>` no fim do explorar, e a intencao de uma delas guarda o
 tipo e o ponto do outro (o mesmo do candidato do motor). O `escolher_alvo` acha o candidato do motor por tipo e ponto (o `Alvo` do motor
-nao muda: o id do outro fica com o motor). Na consequencia, o P1 da classe do tipo (`consequencia_p1`, com a acao `explorar`). Desligada,
-nenhum campo novo.
+nao muda: o id do outro fica com o motor). Na consequencia, o P1 da classe do tipo (`consequencia_p1`, com a acao `explorar`), com o corpo
+de depois lido na decisao seguinte, como a fala (D-SP-68): o intervalo contem os ticks em que a companhia do corpo (SOCIAL_PAR M2) age, e o
+r_n, o V e o E da opcao social leem o mesmo corpo. Desligada, nenhum campo novo.
 
 **O registro** (secao 7): cada decisao guarda o seu motivo em `motivos` (derivado, nunca no log): as unidades com os termos, os pesos, o
 u, a escolha, o afeto, o estado, a memoria, as sondas e, no fechamento, a consequencia."""
@@ -832,6 +833,8 @@ class DigiBrain:
             if p["unidade"]["chave"][1] not in CONTEUDOS_FALA:
                 raise RuntimeError(f"a fala da decisao {p['k']} sem conteudo com a fala_unidades ligada")
             pc1 = obs_seguinte.corpo
+        elif self.cd.unidades_sociais and p["unidade"]["tipo"] in TIPOS_ALVO_SOCIAIS:   # o SOCIAL_PAR M2 (D-SP-68): o intervalo inteiro
+            pc1 = obs_seguinte.corpo                  # a companhia anda tick a tick, depois da acao: o corpo da decisao seguinte
         pm1 = p["transicao"].observacao_seguinte.mundo
         if pc1 is None or pm1 is None:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")

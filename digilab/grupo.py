@@ -67,7 +67,7 @@ from typing import Callable
 
 from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo
 from .config import CONFIG_COOPERACAO, ConfigCooperacao, ConfigMundo, ConfigSentidos
-from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
+from .config import CONFIG_COMPANHIA, CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
 from .config import CONFIG_INTERVENCAO_SOCIAL, ConfigIntervencaoSocial
 from .cooperacao import TIPOS_MADUROS, Cooperacao
 from .donos import Visao
@@ -262,6 +262,9 @@ class Grupo:
         if motor._estado.tick != 0 or len(motor.log):
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
         self._conferir_orgaos(motor)
+        for outro in self.motores.values():      # o SOCIAL_PAR M2: a companhia e do mundo comum, a mesma em todos os pets
+            if getattr(outro, "ccp", CONFIG_COMPANHIA) != getattr(motor, "ccp", CONFIG_COMPANHIA):
+                raise ValueError(f"a ConfigCompanhia diferente entre os pets: {outro.ccp} x {motor.ccp}")
         if motor.ctv != self.ctv or motor.ctj != self.ctj:
             raise TVSemChave("os pets do grupo vem com a ConfigTV e a ConfigTVJogo do grupo (a TV e do mundo comum)")
         motor._grupo, motor.ident = self, ident
@@ -298,6 +301,8 @@ class Grupo:
             decidem = [i for i in presentes if self.motores[i]._estado.tick >= self.motores[i]._proxima_decisao]
             ordem = self._sortear(decidem) if len(decidem) >= 2 else decidem
             n_contatos, n_disputas = len(self.contatos), len(self.disputas)
+            if self._companhia_ligada():             # o SOCIAL_PAR M2: a companhia com as posicoes do comeco do tick (M2-3)
+                self._contar_companhia(presentes)
             for i in ordem + [i for i in presentes if i not in decidem]:
                 self.motores[i]._um_tick()
                 if self.coop is not None and i in decidem:
@@ -316,6 +321,22 @@ class Grupo:
             m._fechar_avanco()
             if m._estado.tick + m.entrada_mundo != self.tick:     # o relogio do pet anda com o do mundo
                 raise RuntimeError(f"o relogio do pet {i} saiu do relogio do mundo")
+
+    # ------------------------------------------------------------ a companhia no corpo (SOCIAL_PAR M2; docs/ESPEC_SOCIAL_PAR_M2.md, 3.1)
+    def _companhia_ligada(self) -> bool:
+        """a ConfigCompanhia dos pets do grupo (a mesma em todos, conferida na entrada) esta ligada"""
+        m = next(iter(self.motores.values()), None)
+        return m is not None and getattr(m, "ccp", CONFIG_COMPANHIA).ligada
+
+    def _contar_companhia(self, presentes: list[str]) -> None:
+        """entrega a cada pet presente quantos outros estao em contato (as celulas a ate `raio_celulas` em Chebyshev), com as posicoes
+        do comeco do tick, todas de uma vez: a ordem em que os pets andam nao muda a companhia de nenhum. So le a posicao de cada motor
+        (nenhum quimico do outro: sem laco entre os corpos)"""
+        cmf = self.mundo.cmf
+        raio = self.motores[presentes[0]].ccp.raio_celulas
+        pos = {i: tuple(self.motores[i].pet) for i in presentes}
+        for i in presentes:
+            self.motores[i]._companhia = sum(1 for j in presentes if j != i and em_contato(pos[i], pos[j], cmf, raio))
 
     # ------------------------------------------------------------ a cooperacao (CO3): o que a medida le, sem mudar nada
     def _posicoes_e_raios(self, presentes: list[str]) -> tuple[dict, dict]:
