@@ -16,6 +16,10 @@ Matheus confere de novo na tela de compra.
 **O que este plano não faz:** não muda o `servidor_web/`, o `web/app/`, o CI nem o motor. As mudanças de código que o deploy pede estão
 listadas (seção 4) e vão em PRs próprios.
 
+**O PR do código (#1057, branch `v3-cn5`):** escrito em paralelo por outra sessão, traz o `--borda cloudflare` (o Tunnel), o roteiro em
+`docs/infra/DEPLOY_CN5.md`, o workflow `publicar` e a lista dos assets (`web/app/scripts/assets_publicos.ts`), com as D-CONTA-197 a 205.
+Este plano fica com a lista do Matheus, os preços, o que a CN4 entrega antes e as D-CONTA-206 a 209. Onde os dois divergem, a seção 8 diz.
+
 ## 1. O que o Matheus cria ou contrata, em ordem
 
 Cada linha diz onde (o endereço oficial), o que escolher, o que anotar e **onde guardar**. "Guardar" é sempre um destes três lugares, e
@@ -86,7 +90,7 @@ endereço velho (RC-7).
   Não conferido no Free: o Matheus vê no painel, depois de criar a zona.
 - **O Bot Fight Mode** (grátis): desafia o tráfego que parece robô no domínio inteiro, **não se ajusta e não se pula por regra de WAF**, e
   pode desafiar o tráfego de API ([fonte](https://developers.cloudflare.com/bots/get-started/bot-fight-mode/)). **Isso pesa:** o jogo chama a
-  API por `fetch`, e o desafio quebra a sincronização. A recomendação está na seção 4 (D-CONTA-199).
+  API por `fetch`, e o desafio quebra a sincronização. A recomendação está na seção 4 (D-CONTA-207).
 - **O `robots.txt` gerenciado pela Cloudflare:** nenhuma página lida fala dele. Não conferido; o `robots.txt` do jogo é da CN4 de qualquer
   jeito.
 - **O limite de pedidos e as regras de WAF do Free:** a tabela de planos só diz "Cloudflare Rules: 70 rules" no Free, sem separar o limite
@@ -106,7 +110,7 @@ endereço velho (RC-7).
 ## 3. O roteiro do deploy (depois que as contas existirem)
 
 **O desenho:** o jogo e a página de entrada no Cloudflare Pages; a API no Lightsail, **sem nenhuma porta aberta para a internet além do
-SSH**, ligada à Cloudflare por um **Cloudflare Tunnel** (`cloudflared`), que sai da VPS para a borda (D-CONTA-197). O servidor continua
+SSH**, ligada à Cloudflare por um **Cloudflare Tunnel** (`cloudflared`), que sai da VPS para a borda (a D-CONTA-197 do PR #1057, `--borda cloudflare`). O servidor continua
 escutando só em `127.0.0.1`, como hoje. Os endereços seguem a seção 8.1 do `docs/ROADMAP_V3_CONTA.md` (RC-6): o jogo em `dominio/jogo/`,
 a API em `api.dominio`, os assets em `assets.dominio`.
 
@@ -196,7 +200,7 @@ O `cloudflared` roda como serviço próprio (o instalador da Cloudflare cria) e 
    teste (o HSTS é difícil de desfazer).
 3. **O Pages:** um projeto, publicado pelo CI (seção 3.6) com o `wrangler pages deploy`; a página de entrada na raiz, o jogo em `/jogo/`.
 4. **Os robôs:** as políticas de IA (seção 2.1) com **Treino bloqueado, Agente bloqueado na API, Busca permitida** nas páginas públicas
-   (PI-6); o **Bot Fight Mode desligado** até a CN4 decidir (D-CONTA-199).
+   (PI-6); o **Bot Fight Mode desligado** até a CN4 decidir (D-CONTA-207).
 5. **O cache:** o Pages cuida do jogo; a API sem cache (`Cache-Control: no-store` já é o caso nas rotas da conta: a conferir no PR do
    deploy).
 
@@ -274,12 +278,12 @@ Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abr
 | **a `/api/fala` só com sessão e com a cota** | hoje a fala responde a quem chamar, só com o teto TOTAL. Publicada, um robô gasta os US$ 2 do teto em pouco tempo e deixa os convidados sem fala. A sessão obrigatória e a cota por conta e por dia (CN-8, CN-16; PROPOSTO: 30) | `servidor_web/src/app.ts`, `fala.ts` | **CN4** |
 | **o `robots.txt` e o aviso de mineração** | o Pages publica o jogo na hora; sem o arquivo, o primeiro robô honesto já coleta (PI-6) | `web/app/public/` e a página de entrada | **CN4** (PI3) |
 | **os assets fora de um caminho fixo** | o jogo pede o atlas em `../../../Assets/...`, relativo à página. No deploy, ou o atlas vai num caminho fixo (o download em lote que a CN-9 quer evitar), ou já sai por URL assinada | `web/app/src/` (os pedidos do atlas, dos sons, da arena e da evolução) e uma rota nova no servidor | **CN4** (a URL assinada) |
-| **o Turnstile na entrada da conta** | as contas em massa (CN-9); a conta já é só por convite, então o risco é menor que o da fala | as telas da conta e `servidor_web/src/conta/rotas.ts` | **CN4**; pode ir junto (seção 4.2) se o Matheus aceitar a D-CONTA-198 |
+| **o Turnstile na entrada da conta** | as contas em massa (CN-9); a conta já é só por convite, então o risco é menor que o da fala | as telas da conta e `servidor_web/src/conta/rotas.ts` | **CN4**; pode ir junto (seção 4.2) se o Matheus aceitar a D-CONTA-206 |
 
 ### 4.2 Podem ir junto ou depois do primeiro deploy
 
 - **O Sentry no código** (o servidor e o jogo): ajuda, mas o Better Stack já avisa se cair. Junto ou logo depois.
-- **O Turnstile na conta** (se a D-CONTA-198 for aceita): a lista de convidados já segura as contas em massa no teste.
+- **O Turnstile na conta** (se a D-CONTA-206 for aceita): a lista de convidados já segura as contas em massa no teste.
 - **As políticas de IA da Cloudflare:** é configuração do painel, não código; vão no dia do deploy.
 - **O registro dos pets no R2 (CN3):** hoje os registros ficam no SQLite, que o Litestream copia. Mover para o R2 é só se o banco crescer.
 - **A página de entrada e o aviso da mudança de endereço (RC-7):** a página já tem PR próprio; o aviso pode vir no primeiro deploy.
@@ -291,7 +295,7 @@ Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abr
 | **o repositório é PÚBLICO** (a PI1 é do Matheus) | tudo que entra num commit fica público para sempre (a PI-3 decidiu não reescrever o histórico) | este plano e o PR do deploy só dizem **nomes** de variáveis e de secrets, nunca valores; **nem o domínio, nem o IP, nem a lista de convidados, nem o id da conta da Cloudflare** vão no repositório (o domínio vai nos secrets e variáveis do GitHub e no ambiente). A recomendação é fazer a PI1 antes da linha 1 da seção 1 |
 | **um segredo commitado por engano** | a chave fica no histórico | revogar na hora (não basta apagar o commit); o GitHub avisa algumas chaves (o secret scanning), não todas |
 | **a fala aberta antes da CN4** | o teto de US$ 2 some num dia, e a fala vira template | o deploy só depois da sessão e da cota (seção 4.1); o limite mensal no console da Anthropic (linha 9) |
-| **o Bot Fight Mode quebrando a API** | a sincronização falha com o desafio | desligado até a CN4; ou só nas páginas (D-CONTA-199) |
+| **o Bot Fight Mode quebrando a API** | a sincronização falha com o desafio | desligado até a CN4; ou só nas páginas (D-CONTA-207) |
 | **a cópia que não restaura** | perder os pets dos convidados | o teste de restauração antes do primeiro convidado (seção 3.5) |
 | **o preço de São Paulo diferente da lista** | a conta do mês sobe | o Matheus confere na tela de criar a instância (seção 2); se passar de US$ 15, avisar antes de criar |
 | **os kits que não se redistribuem no bucket** | violar a EULA de um kit | o script dos assets só manda a lista do `vite.config.ts` (seção 3.6) |
@@ -300,15 +304,15 @@ Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abr
 
 ## 6. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar; as três também no registro (D-CONTA-197 a 199).
+Cada uma com a recomendação e o custo de errar; a do Tunnel é a D-CONTA-197 do PR #1057; as outras duas estão no registro (D-CONTA-206 e 207).
 
-- **D-CONTA-197. A ligação da VPS com a Cloudflare: o Cloudflare Tunnel.** Nenhuma porta aberta além do SSH, o servidor segue em
+- **A ligação da VPS com a Cloudflare: o Cloudflare Tunnel** (a D-CONTA-197, no PR #1057, com o código). Nenhuma porta aberta além do SSH, o servidor segue em
   `127.0.0.1`, e o IP da VPS não aparece no DNS. A outra opção é abrir a 443 com um proxy (Caddy ou nginx) e o certificado de origem da
   Cloudflare, com o firewall só para os IPs da Cloudflare. Custo de errar: baixo; trocar é configuração. O Tunnel ser grátis não foi
   conferido hoje.
-- **D-CONTA-198. O Turnstile da conta: junto com a CN4 ou logo depois do primeiro deploy.** Recomendação: **depois**, porque a lista de
+- **D-CONTA-206. O Turnstile da conta: junto com a CN4 ou logo depois do primeiro deploy.** Recomendação: **depois**, porque a lista de
   convidados já impede as contas em massa no teste; a cota da fala e o `robots.txt` vêm antes. Custo de errar: baixo.
-- **D-CONTA-199. O Bot Fight Mode: desligado no começo.** Ele desafia a API e não se ajusta no Free (seção 2.1); as políticas de IA cobrem
+- **D-CONTA-207. O Bot Fight Mode: desligado no começo.** Ele desafia a API e não se ajusta no Free (seção 2.1); as políticas de IA cobrem
   os robôs declarados, e a cota da fala, o resto. Custo de errar: médio; ligado, a sincronização dos convidados pode falhar sem aviso
   claro.
 - **O domínio** (seção 1.1): recomendação `.com.br` no registro.br. O nome é do Matheus.
@@ -320,3 +324,17 @@ Cada uma com a recomendação e o custo de errar; as três também no registro (
 3. **A conta da AWS** com o alerta de gasto (linha 6). **A instância** (linha 7) só quando a CN4 estiver pronta, para não pagar a VPS
    parada.
 4. **A chave da Anthropic do servidor e os apps OAuth** (linhas 9 a 11): precisam do domínio (o callback).
+
+## 8. Onde este plano diverge do PR #1057
+
+- **Os assets antes da CN4 (a D-CONTA-199 do #1057):** o #1057 propõe o bucket dos assets **público, num caminho fixo**, até a CN4. Este
+  plano (seção 4.1) põe a URL assinada **antes** do primeiro deploy, porque o caminho fixo é o download em lote que a CN-9 quis evitar, e
+  o repositório público diz qual é a lista. Os dois deixam a escolha com o Matheus; a recomendação daqui é publicar os assets só com a CN4,
+  ou, se o jogo tiver de abrir antes, com o domínio dos assets fora de qualquer texto do repositório. Custo de errar: médio (o atlas do
+  Digimon UP baixável).
+- **O excedente de tráfego em São Paulo (a D-CONTA-204 do #1057):** o #1057 dá US$ 0,15/GB. A leitura daqui (seção 2) é que esse número da
+  página do Lightsail é do **armazenamento de objetos** do Lightsail, e que a FAQ não lista São Paulo para a instância. Não pesa na conta.
+- **O Sentry (a D-CONTA-200 do #1057):** o #1057 deixa o Sentry fora por ora. Este plano o põe como "junto ou depois" (seção 4.2), não como
+  bloqueio: não há contradição, e a linha 12 da seção 1 pode esperar.
+- **O workflow:** a seção 3.6 descreve o deploy pelo CI sem arquivo novo (D-CONTA-209); o #1057 já traz o workflow `publicar`. Vale o do
+  #1057; a seção 3.6 fica como a lista do que ele precisa ter (o manual primeiro, o retorno automático, os secrets no ambiente `teste`).

@@ -166,4 +166,4 @@ que o Matheus cria ou contrata (onde, o que escolher, o que anotar e onde guarda
 Render a US$ 25 sem a América do Sul; a Magalu e o preço exato de São Paulo, não conferidos), o roteiro do deploy (a VPS, o Tunnel, o
 systemd, o Litestream, a restauração testada, o CI descrito e não criado, como desligar) e o que a CN4 entrega antes. Dois achados no
 código: o `servidor_web` recusa com 403 todo pedido vindo pela Cloudflare, e o jogo chama a fala no endereço da página; os dois pedem
-mudança antes do primeiro deploy. Os desvios são D-CONTA-197 a 202.
+mudança antes do primeiro deploy (o primeiro já está no PR #1057, do código). Os desvios são D-CONTA-206 a 209.
