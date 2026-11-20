@@ -230,7 +230,7 @@ não mexeu no repositório; eu corrigi o que ela apontou e pedi nova rodada.
 - **A rodada 4:** as cinco margens e o foco do fechar ficaram iguais. Ao medir a caixa de todas as peças, ela achou quatro sobras que
   não tinham sido medidas (o DigiBrain 8 px à direita das janelas, a altura do chamado, as ações do celular e a largura dos Bits).
 - **A rodada 5:** as quatro sobras ficaram iguais: 62 de 73 itens iguais, 10 por decisão do Matheus e 1 a consertar (o espaçamento de dentro do DigiBrain). Esse último e o topo dos painéis alinhado com o trilho (uma recomendação dela) foram acertados depois da rodada e conferidos só por medida da autora, não por nova rodada.
-- **Os relatórios** (a lista, as três rodadas e os recortes) estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\revisao\`,
+- **Os relatórios** (a lista, as cinco rodadas e os recortes) estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\revisao\`,
   com um resumo no vault (`10 Auditoria/Revisão da pele Estêncil contra a prancha 2026-11-20`).
 - **O limite dela:** foi medida por pixel a caixa de fora de cada peça fixa da HUD; o espaçamento de dentro dos painéis foi julgado
   pela forma, pela letra, pela cor e pela ordem das peças, não por pixel.
