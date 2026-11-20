@@ -29,23 +29,34 @@ describe("EscolhaPele", () => {
     expect(s).toMatch(/role="radio" aria-checked="false" tabindex="-1" class="[^"]*mc-opcao--pele-xcom"/);
     expect(s).toContain("<b>Sci-fi</b>");
     expect(s).toContain("<b>Militar</b>");
+    /* a Estencil (PE1 das peles de rua): o terceiro cartao, com a etiqueta de previa; as outras duas sem etiqueta */
+    expect(s).toMatch(/role="radio" aria-checked="false" tabindex="-1" class="[^"]*mc-opcao--pele-estencil"/);
+    expect(s).toContain('<b>Estêncil</b><span class="mc-etq">prévia</span>');
+    expect(s.match(/class="mc-etq"/g)).toHaveLength(1);
+    expect(s).toContain('class="mc-opcoes mc-opcoes--3"');
     expect(s.replace(/class="[^"]*"/g, "")).not.toMatch(/xcom/i);
   });
   it("escolher a Militar marca o cartao dela e muda o data-pele na hora", () => {
     escolherPele("xcom");
     expect(html.dataset.pele).toBe("xcom");
     expect(renderToStaticMarkup(h(EscolhaPele))).toMatch(/aria-checked="true" tabindex="0" class="[^"]*mc-opcao--pele-xcom"/);
+    escolherPele("estencil");
+    expect(html.dataset.pele).toBe("estencil");
+    expect(renderToStaticMarkup(h(EscolhaPele))).toMatch(/aria-checked="true" tabindex="0" class="[^"]*mc-opcao--pele-estencil"/);
     escolherPele("vidro");
   });
   it("o resumo de Aparencia (a linha Visual dos Ajustes desde 2026-11-01) mostra a pele e o tema", () => {
     expect(resumoAparencia("vidro", "sistema")).toBe("pele Sci-fi · tema do sistema");
     expect(resumoAparencia("xcom", "escuro")).toBe("pele Militar · tema escuro");
+    expect(resumoAparencia("estencil", "claro")).toBe("pele Estêncil · tema claro");
     expect(tela).toContain("resumo={resumoVisual(pele, tema, habitat, !!m.mundo)}");
   });
   it("a previa e so CSS (sem imagem), uma por pele, e a secao vem antes do Tema do habitat", () => {
     for (const p of PELES) expect(css).toContain(`.mc-opcao--pele-${p} .mc-pele-prev{`);
     const bloco = css.slice(css.indexOf(".mc-pele-prev"), css.indexOf("/* interruptor"));
     expect(bloco).not.toMatch(/url\(/);
+    /* a etiqueta do cartao nao tem cor propria: usa a do texto do cartao, escolhido ou nao */
+    expect(css).toMatch(/\.mc-etq\{[^}]*border:1px solid currentColor/);
     expect(tela.indexOf("<EscolhaPele />")).toBeGreaterThan(0);
     expect(tela.indexOf("<EscolhaPele />")).toBeLessThan(tela.indexOf("Tema do habitat"));
   });

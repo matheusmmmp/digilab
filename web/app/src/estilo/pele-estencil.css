@@ -1,0 +1,792 @@
+/* Pele Estencil (id estencil) dos menus: docs/PLANO_UX_PELES_RUA.md, modelo 1 (cartaz de rua). Os tokens --hx-* e --hud-* da pele ficam em
+   tokens.css; aqui mora o que nao cabe em token: a FORMA do desenho aprovado (docs/pranchas/ux-peles-rua/estencil.css), escrita sobre a
+   estrutura real do jogo. Tudo sob :root[data-pele="estencil"]. Sem animacao. Nenhuma cor aqui fora dos tokens.
+   Nada aqui toca o habitat nem o pet.
+   A caixa do desenho: contorno de osso de 2 px, canto de cima a direita e de baixo a esquerda cortados, sombra dura. No jogo ela e feita com
+   os dois pseudo-elementos da peca (o ::before e o contorno, o ::after e o miolo) e um drop-shadow na peca, porque um clip-path na propria
+   peca cortaria a sombra. */
+
+/* ====================================================================== 1. a caixa (topo, janelas, aviso) */
+:root[data-pele="estencil"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits),
+:root[data-pele="estencil"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card){
+  border:1px solid transparent; background:none; clip-path:none; box-shadow:none;
+  filter:drop-shadow(5px 5px 0 var(--hx-sombra-cor));
+}
+:root[data-pele="estencil"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits)::before,
+:root[data-pele="estencil"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card)::before{
+  content:""; position:absolute; inset:-1px; width:auto; height:auto; z-index:-2; pointer-events:none; background:var(--hx-borda);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch)));
+}
+:root[data-pele="estencil"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits)::after,
+:root[data-pele="estencil"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card)::after{
+  content:""; position:absolute; inset:1px; width:auto; height:auto; z-index:-1; pointer-events:none; background:var(--hx-miolo);
+  clip-path:polygon(0 0, calc(100% - var(--ch) + 1px) 0, 100% calc(var(--ch) - 1px), 100% 100%, calc(var(--ch) - 1px) 100%, 0 calc(100% - var(--ch) + 1px));
+}
+
+/* ====================================================================== 2. o topo */
+:root[data-pele="estencil"] .topo-hab{ gap:16px }
+/* o cartao do pet: o retrato com o canto cortado, o nome na letra vazada, a linha de baixo em caixa alta espacada */
+:root[data-pele="estencil"] .topo-pet{ gap:12px; min-height:56px; padding:4px 14px 4px 6px }
+:root[data-pele="estencil"] .topo-retrato{ width:46px; height:46px; border:0; background:var(--hx-miolo-2);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) }
+:root[data-pele="estencil"] .topo-pet-txt{ gap:5px }
+:root[data-pele="estencil"] .topo-pet-nome b{ max-width:220px; font:400 21px/1 var(--hx-f-tit); letter-spacing:.05em; text-transform:uppercase }
+:root[data-pele="estencil"] .topo-pet-sub{ gap:6px; font:600 13px/1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-sec) }
+:root[data-pele="estencil"] .topo-pet-sub .dl-tag{ letter-spacing:inherit; text-transform:inherit }
+:root[data-pele="estencil"] .tamer-nv--topo{ margin-left:12px; padding:3px 8px 2px; border-width:1.5px; font:700 11px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase }
+/* o "agora": o rotulo num bloco de vermelhao que acompanha o corte da caixa, o que ele faz em caixa alta */
+:root[data-pele="estencil"] .pet-agora{ gap:12px; padding:0 12px 0 0; filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] .pet-agora .agora-rot{ align-self:stretch; display:flex; align-items:center; margin:1px 2px 1px 1px; padding:0 24px 0 13px;
+  background:var(--hx-btn-bg); color:var(--hx-btn-ink); font:700 13px/1 var(--hx-f); letter-spacing:.16em;
+  clip-path:polygon(0 0, 100% 0, calc(100% - 13px) 100%, 7px 100%, 0 calc(100% - 7px)) }
+:root[data-pele="estencil"] .pet-agora .agora-acao{ font:700 18px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="estencil"] .pet-agora .agora-ponto{ display:none }
+:root[data-pele="estencil"] .pet-agora .agora-neutro{ font:500 14px/1.1 var(--hx-f); color:var(--hx-sec) }
+:root[data-pele="estencil"] .pet-agora .agora-seta{ color:var(--hx-texto) }
+/* a marca: uma placa de tinta com o contorno de osso e a sombra de vermelhao, entre duas riscas de sinalizacao */
+:root[data-pele="estencil"] .topo-logo{ position:relative; gap:0; margin-top:6px; padding:9px 12px 7px 16px; font:400 30px/1 var(--hx-f-tit); letter-spacing:.14em;
+  color:var(--hx-borda); background:var(--hx-miolo); box-shadow:0 0 0 2px var(--hx-borda), 6px 6px 0 2px var(--hx-btn-bg) }
+:root[data-pele="estencil"] .topo-logo-marca, :root[data-pele="estencil"] .topo-logo::after{ content:""; position:absolute; top:50%; width:40px; height:14px; margin-top:-7px;
+  background:var(--hud-risca), var(--hx-miolo); box-shadow:0 0 0 2px var(--hx-miolo); clip-path:none; filter:none }
+:root[data-pele="estencil"] .topo-logo-marca{ right:calc(100% + 14px) }
+:root[data-pele="estencil"] .topo-logo::after{ left:calc(100% + 20px) }
+/* o relogio: o dia pequeno em cima da hora grande; o salvo com o quadrado de estado no lugar da nuvem */
+:root[data-pele="estencil"] .topo-relogio{ gap:14px; min-height:56px; padding:4px 16px 4px 14px }
+:root[data-pele="estencil"] .topo-sol{ display:none }
+:root[data-pele="estencil"] .topo-hora-txt{ gap:4px }
+:root[data-pele="estencil"] .topo-dia{ font:700 12px/1 var(--hx-f); letter-spacing:.16em; text-transform:uppercase; color:var(--hx-sec) }
+:root[data-pele="estencil"] .topo-hora{ font:700 30px/.9 var(--hx-f-num); letter-spacing:.02em }
+:root[data-pele="estencil"] .topo-relogio .pet-salvo{ gap:7px; padding-left:0; border-left:0; font:700 12px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase; color:var(--hx-sec) }
+:root[data-pele="estencil"] .topo-relogio .pet-salvo svg{ display:none }
+:root[data-pele="estencil"] .topo-relogio .pet-salvo::before{ content:""; width:9px; height:9px; flex:none; background:var(--hx-ok) }
+:root[data-pele="estencil"] .topo-relogio .pet-salvo.erro::before{ background:var(--hx-perigo) }
+:root[data-pele="estencil"] .topo-bits{ gap:9px; min-height:56px; padding:4px 16px 4px 14px }
+:root[data-pele="estencil"] .topo-bits svg{ width:22px; height:22px }
+:root[data-pele="estencil"] .topo-bits b{ font:700 24px/1 var(--hx-f-num); color:var(--hx-texto) }
+
+/* ====================================================================== 3. o trilho (>= 900 px): a caixa no ::before e no ::after */
+@media (min-width:900px){
+  :root[data-pele="estencil"]{ --nav-larg:84px }
+  :root[data-pele="estencil"] body .hx-nav{ --ch:var(--hud-ch); top:calc(var(--casca-topo) + 34px); gap:4px; padding:7px; filter:drop-shadow(5px 5px 0 var(--hx-sombra-cor)) }
+  :root[data-pele="estencil"] body .hx-nav::before{ z-index:-2; border:0; background:var(--hx-borda); box-shadow:none }
+  :root[data-pele="estencil"] body .hx-nav::after{ top:2px; left:2px; right:2px; bottom:2px; width:auto; height:auto; z-index:-1; background:var(--hx-miolo);
+    clip-path:polygon(0 0, calc(100% - var(--ch) + 1px) 0, 100% calc(var(--ch) - 1px), 100% 100%, calc(var(--ch) - 1px) 100%, 0 calc(100% - var(--ch) + 1px)) }
+  :root[data-pele="estencil"] body .hx-nav .hx-nav__bt{ min-height:58px; gap:7px; clip-path:none; color:var(--hx-texto-2); font:700 11px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase }
+  :root[data-pele="estencil"] body .hx-nav .hx-nav__bt:hover{ color:var(--hx-texto) }
+  :root[data-pele="estencil"] body .hx-nav .hx-nav__rot{ font:inherit; letter-spacing:inherit; margin-right:-.14em }
+  :root[data-pele="estencil"] body .hx-nav .hx-nav__ic{ width:22px; height:22px }
+  /* o destino aberto: osso com o texto de tinta, o canto de cima cortado e a barra de vermelhao a esquerda */
+  :root[data-pele="estencil"] body .hx-nav .hx-nav__bt[aria-current="page"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink);
+    clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); box-shadow:inset 6px 0 0 var(--hx-btn-bg) }
+}
+
+/* ====================================================================== 4. as janelas da direita */
+/* a folga da sombra: a pilha rola, e sem ela a sombra da direita e a de baixo ficariam cortadas */
+:root[data-pele="estencil"] .pet-hud{ box-sizing:border-box; gap:13px; right:5px; width:calc(var(--hud-larg) + 7px); padding:0 7px 7px 0; counter-reset:es-janela }
+:root[data-pele="estencil"] .pet-hud .hud-painel{ counter-increment:es-janela }
+/* o cabecalho: o indice em vermelhao (a ordem das janelas na pilha), o icone em osso, o titulo na letra vazada */
+:root[data-pele="estencil"] .hud-painel__bt{ gap:9px; min-height:50px; padding:6px 12px 6px 10px }
+:root[data-pele="estencil"] .hud-painel[data-aberto="true"] .hud-painel__bt{ min-height:46px }
+:root[data-pele="estencil"] .hud-painel__bt::before{ content:counter(es-janela, decimal-leading-zero); flex:none; padding:5px 11px 4px; background:var(--hx-btn-bg); color:var(--hx-btn-ink);
+  font:700 13px/1 var(--hx-f); letter-spacing:.06em; clip-path:polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%) }
+:root[data-pele="estencil"] .hud-painel__ic{ color:var(--hx-borda) }
+:root[data-pele="estencil"] .hud-painel__txt{ gap:3px }
+:root[data-pele="estencil"] .hud-painel__tit{ font:400 17px/1 var(--hx-f-tit); letter-spacing:.06em }
+:root[data-pele="estencil"] .hud-painel__resumo{ font:600 13px/1.15 var(--hx-f); letter-spacing:.03em }
+:root[data-pele="estencil"] .hud-painel__bt .hud-risca{ flex:0 1 40px; min-width:0; max-width:40px; height:10px; margin-left:2px; opacity:.85 }
+:root[data-pele="estencil"] .hud-painel[data-aberto="false"] .hud-risca{ display:none }
+:root[data-pele="estencil"] .hud-painel__seta{ margin-left:auto; color:var(--hx-texto); transform:none }
+:root[data-pele="estencil"] .hud-painel[data-aberto="false"] .hud-painel__seta{ transform:rotate(-90deg) }
+:root[data-pele="estencil"] .hud-painel__corpo{ margin:0 1px; padding:12px 12px 14px; border-top:2px solid var(--hx-borda) }
+/* as linhas das necessidades: o rotulo em caixa alta, a barra em segmentos, o numero grande */
+:root[data-pele="estencil"] :is(.app--pet, .app--habitat) :is(.pet-hud, .pet-painel) .necessidades4{ gap:9px }
+:root[data-pele="estencil"] .nec-linha{ gap:9px }
+:root[data-pele="estencil"] .nec-ic{ width:17px; height:17px; color:var(--hx-borda) }
+:root[data-pele="estencil"] .nec-linha:has(.hx-medidor--alerta) .nec-ic{ color:var(--hx-alerta) }
+:root[data-pele="estencil"] .nec-linha:has(.hx-medidor--perigo) .nec-ic{ color:var(--hx-perigo) }
+:root[data-pele="estencil"] .nec-linha .hx-medidor{ gap:10px }
+:root[data-pele="estencil"] .nec-linha .hx-medidor__rot{ min-width:66px; font:700 13px/1 var(--hx-f); letter-spacing:.12em; color:var(--hx-texto-2) }
+:root[data-pele="estencil"] .nec-linha .hx-medidor__txt{ min-width:2.5em; font:700 17px/1 var(--hx-f-num); color:var(--hx-texto) }
+:root[data-pele="estencil"] .hx-medidor__trilho{ border:0; -webkit-mask:var(--hx-mascara); mask:var(--hx-mascara) }
+:root[data-pele="estencil"] .hx-medidor__barra{ -webkit-mask-image:none; mask-image:none }
+:root[data-pele="estencil"] .hud-detalhes{ gap:4px; color:var(--hx-sec); font:700 12px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase }
+:root[data-pele="estencil"] .det-estado-mais{ border-top:2px dashed var(--hx-miolo-2) }
+
+/* ====================================================================== 5. o aviso, a fala e o pedido */
+/* o aviso do meio: do tamanho do texto, com o "Estado" num paralelogramo; quando o pet pede algo (data-pede), a caixa vira a cor da
+   necessidade, com o contorno e o texto de tinta */
+:root[data-pele="estencil"] .pet-alerta{ width:max-content; max-width:min(400px, calc(100% - 24px)) }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade{ gap:10px; width:auto; max-width:100%; padding:2px 3px 2px 12px }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-ic{ border:0; background:none }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-txt b{ font:700 16px/1 var(--hx-f); letter-spacing:.12em }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-ver{ align-self:stretch; gap:4px; margin-left:4px; padding:0 14px 0 20px; background:var(--hx-miolo-2); color:var(--hx-texto);
+  font:700 12px/1 var(--hx-f); letter-spacing:.14em; clip-path:polygon(10px 0, 100% 0, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] body .pet-tela .pet-alerta .pet-prioridade[data-pede]::before{ background:var(--hx-miolo) }
+:root[data-pele="estencil"] body .pet-tela .pet-alerta .pet-prioridade[data-pede]::after{ background:var(--hx-necessidade) }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-pede] .pet-prioridade-txt b{ color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-pede] .pet-prioridade-ver{ background:var(--hx-miolo); color:var(--hx-texto) }
+/* o pedido aberto (o cartao do chamado): a caixa com o contorno no vermelhao e o botao em paralelogramo */
+:root[data-pele="estencil"] body .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte)::before{ background:var(--hx-btn-bg) }
+:root[data-pele="estencil"] .pet-alerta .chamado b{ font:700 16px/1.1 var(--hx-f); letter-spacing:.12em }
+/* a fala: uma caixa clara (osso) com o contorno e o texto de tinta, e o rabo embaixo a esquerda. O ::before e o contorno com o rabo; o
+   ::after e o miolo com o rabo de dentro */
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala.dl-balao{ --ch:9px; --rabo:15px; margin-bottom:var(--rabo); padding:9px 16px 9px; border:1px solid transparent; background:none;
+  clip-path:none; color:var(--hx-escolhido-ink); font:600 18px/1.2 var(--hx-f); letter-spacing:.02em; filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala.dl-balao::before{ content:""; position:absolute; inset:-1px -1px calc(-1px - var(--rabo)) -1px; width:auto; height:auto; z-index:-2;
+  pointer-events:none; background:var(--hx-miolo);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% calc(100% - var(--rabo)), 52px calc(100% - var(--rabo)), 27px 100%, 27px calc(100% - var(--rabo)),
+    var(--ch) calc(100% - var(--rabo)), 0 calc(100% - var(--rabo) - var(--ch))) }
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala.dl-balao::after{ content:""; position:absolute; inset:1px 1px calc(1px - var(--rabo)) 1px; z-index:-1; pointer-events:none;
+  background:var(--hx-escolhido);
+  clip-path:polygon(0 0, calc(100% - var(--ch) + 1px) 0, 100% calc(var(--ch) - 1px), 100% calc(100% - var(--rabo)), 45px calc(100% - var(--rabo)), 27px calc(100% - 5px), 27px calc(100% - var(--rabo)),
+    calc(var(--ch) - 1px) calc(100% - var(--rabo)), 0 calc(100% - var(--rabo) - var(--ch) + 1px)) }
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala.dl-balao--sombria::after{ background:var(--hx-sombrio) }
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala .balao-txt{ font-size:18px }
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala small{ color:var(--hx-miolo-2); font:700 11px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
+:root[data-pele="estencil"] .app--pet .pet-balcao .cena-fala .dl-balao-tag{ color:var(--hx-miolo-2); border-color:var(--hx-miolo-2) }
+
+/* ====================================================================== 6. as acoes de baixo */
+:root[data-pele="estencil"] .pet-dock .dock{ --ch:var(--hud-ch); gap:0; padding:6px 10px; border:1px solid transparent; background:none; filter:drop-shadow(5px 5px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] .pet-dock .dock::before{ inset:-1px; width:auto; height:auto; z-index:-2; background:var(--hx-borda);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch))) }
+:root[data-pele="estencil"] .pet-dock .dock::after{ content:""; position:absolute; inset:1px; z-index:-1; pointer-events:none; background:var(--hx-miolo);
+  clip-path:polygon(0 0, calc(100% - var(--ch) + 1px) 0, 100% calc(var(--ch) - 1px), 100% 100%, calc(var(--ch) - 1px) 100%, 0 calc(100% - var(--ch) + 1px)) }
+/* cada acao: sem caixa, o icone e o rotulo em caixa alta; entre uma e outra, um traco inclinado */
+:root[data-pele="estencil"] .pet-dock .dock .dock-bt{ position:relative; gap:6px; min-height:56px; padding:4px 10px; border:0; background:none; clip-path:none;
+  color:var(--hx-texto); font:700 12px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+:root[data-pele="estencil"] .pet-dock .dock .dock-bt:hover{ background:var(--hx-tecla-hover) }
+:root[data-pele="estencil"] .pet-dock .dock .dock-bt + .dock-bt::after{ content:""; position:absolute; left:-1px; top:11px; bottom:11px; width:2px; background:var(--hx-borda); opacity:.32;
+  transform:skewX(-16deg); pointer-events:none }
+:root[data-pele="estencil"] .pet-dock .dock .acao-reserva{ font:700 9px/1 var(--hx-f); letter-spacing:.14em; color:var(--hx-sec) }
+:root[data-pele="estencil"] .pet-dock .dock .acao-destaque--sugerida, :root[data-pele="estencil"] .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink);
+  clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .pet-dock .dock .acao-destaque--sugerida .acao-reserva{ color:var(--hx-escolhido-ink) }
+@media (min-width:1500px){ :root[data-pele="estencil"] .pet-dock .dock .dock-bt{ min-width:108px } }
+
+/* ====================================================================== 7. o minimapa: oito lados, o contorno de osso e a sombra dura */
+/* a caixa cresce 5 px para a direita e para baixo (a sombra): o recorte e a uniao do octogono com ele mesmo deslocado; o desenho do mapa
+   (o canvas, 176 px no estilo dele) e as marcas nao mudam de lugar */
+:root[data-pele="estencil"] .minimapa-caixa{ --m:calc(100% - 5px); right:11px; bottom:11px; width:181px; height:181px; border:0; border-radius:0; box-shadow:none; background:var(--hx-sombra-cor);
+  clip-path:polygon(calc(var(--m) * .29) 0, calc(var(--m) * .71) 0, var(--m) calc(var(--m) * .29), 100% calc(var(--m) * .29 + 5px), 100% calc(var(--m) * .71 + 5px),
+    calc(var(--m) * .71 + 5px) 100%, calc(var(--m) * .29 + 5px) 100%, 5px calc(var(--m) * .71 + 5px), 0 calc(var(--m) * .71), 0 calc(var(--m) * .29)) }
+:root[data-pele="estencil"] .minimapa-caixa .minimapa{ inset:0 auto auto 0; clip-path:polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%); filter:grayscale(1) contrast(1.35) brightness(.5) }
+/* o contorno: um anel de osso por cima do mapa (a regra par-impar do recorte deixa o meio vazado) */
+:root[data-pele="estencil"] .minimapa-caixa::after{ content:""; position:absolute; left:0; top:0; width:var(--m); height:var(--m); pointer-events:none; background:var(--hx-borda);
+  clip-path:polygon(evenodd, 29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%, 29% 0,
+    calc(29% + 1.3px) 3px, 3px calc(29% + 1.3px), 3px calc(71% - 1.3px), calc(29% + 1.3px) calc(100% - 3px), calc(71% - 1.3px) calc(100% - 3px), calc(100% - 3px) calc(71% - 1.3px),
+    calc(100% - 3px) calc(29% + 1.3px), calc(71% - 1.3px) 3px, calc(29% + 1.3px) 3px) }
+:root[data-pele="estencil"] .minimapa-ic{ background:var(--hx-borda); border-color:var(--hx-miolo); color:var(--hx-miolo) }
+:root[data-pele="estencil"] .minimapa-n{ left:calc(50% - 2.5px); top:9px; border:0; background:none; color:var(--hx-texto); font:700 11px/1 var(--hx-f); letter-spacing:.14em }
+:root[data-pele="estencil"] .minimapa-pet{ border-radius:0; background:var(--hx-btn-bg); border-color:var(--hx-borda) }
+:root[data-pele="estencil"] .minimapa-pet.chama{ box-shadow:0 0 0 4px color-mix(in srgb, var(--hx-btn-bg) 45%, transparent) }
+
+/* ====================================================================== 8. o painel dos lugares e dos destinos */
+/* a caixa grande: o mesmo contorno com os dois cantos cortados e a sombra dura; o miolo e do ::after, e a folha fica sem fundo proprio para
+   nao cobrir o corte de baixo */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel){ filter:drop-shadow(6px 6px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) > .hx-painel{ --ch:16px; position:relative; z-index:0; border:2px solid transparent; background:none; box-shadow:none }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) > .hx-painel::before{ content:""; position:absolute; inset:-2px; z-index:-2; pointer-events:none; background:var(--hx-borda);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch))) }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) > .hx-painel::after{ content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; background:var(--hx-miolo);
+  clip-path:polygon(0 0, calc(100% - var(--ch) + 1px) 0, 100% calc(var(--ch) - 1px), 100% 100%, calc(var(--ch) - 1px) 100%, 0 calc(100% - var(--ch) + 1px)) }
+:root[data-pele="estencil"] .painel-tela--lugar-folha > .hx-painel{ --ch:0px }
+:root[data-pele="estencil"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha){ background:none }
+/* o cabecalho: o icone num bloco de vermelhao, o titulo grande na letra vazada, o fechar recuado com o canto cortado */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab{ border-bottom:0 }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab::before{ display:none }
+:root[data-pele="estencil"] .hx-painel__tit{ gap:13px; padding:12px 66px 0 14px; color:var(--hx-btn-ink) }
+:root[data-pele="estencil"] .hx-painel__tit > svg{ box-sizing:border-box; width:36px; height:36px; flex:none; padding:7px; background:var(--hx-btn-bg);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .hx-painel__tit-txt{ gap:5px }
+:root[data-pele="estencil"] .painel-tela .hx-painel__titulo{ font:400 30px/.95 var(--hx-f-tit); letter-spacing:.08em }
+:root[data-pele="estencil"] .hx-painel__tit-txt small{ font:600 12px/1 var(--hx-f); letter-spacing:.16em; text-transform:uppercase }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad{ top:10px; right:10px; border:0; background:var(--hx-miolo-2); clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+/* as abas: paralelogramos sobre uma linha de osso, todas com o nome a vista (no jogo o nome das nao escolhidas e a dica; aqui ela vira o
+   rotulo). O paralelogramo e o ::before da aba, para a dica da aba trancada poder sair da caixa */
+:root[data-pele="estencil"] .painel-tela--lugar .hx-painel__cab > .hx-abas.lugar-abas{ gap:0; margin:12px 14px 0; padding:0; border-bottom:2px solid var(--hx-borda) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba{ z-index:0; gap:8px; height:44px; padding:0 17px; border:0; background:none; box-shadow:none; color:var(--hx-texto-2);
+  font:700 14px/1 var(--hx-f); letter-spacing:.12em }
+:root[data-pele="estencil"] .lugar-abas .hx-aba::before{ content:""; position:absolute; inset:0 1px; z-index:-1; background:var(--hx-miolo-2); clip-path:polygon(11px 0, 100% 0, calc(100% - 11px) 100%, 0 100%) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:hover{ color:var(--hx-texto) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba[aria-selected="true"]{ padding:0 17px; background:none; color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba[aria-selected="true"]::before{ background:var(--hx-escolhido) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba--trancada::before{ background:repeating-linear-gradient(-45deg, transparent 0 6px, var(--hx-tecla-hover) 6px 9px), var(--hx-miolo) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba .hx-aba__dica, :root[data-pele="estencil"] .lugar-abas .hx-aba:hover .hx-aba__dica, :root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible .hx-aba__dica{
+  display:inline; position:static; transform:none; padding:0; border:0; background:none; box-shadow:none; color:inherit; font:inherit; letter-spacing:inherit; text-transform:inherit }
+:root[data-pele="estencil"] .lugar-abas .hx-aba .hx-aba__dica b{ display:inline; font:inherit }
+:root[data-pele="estencil"] .lugar-abas .hx-aba .hx-aba__dica small{ display:none; position:absolute; z-index:3; left:50%; top:50px; transform:translateX(-50%); padding:6px 10px; white-space:nowrap;
+  background:var(--hx-miolo); border:2px solid var(--hx-borda); color:var(--hx-texto); font:600 12px/1.25 var(--hx-f); letter-spacing:.04em; text-transform:none }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:hover .hx-aba__dica small, :root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible .hx-aba__dica small{ display:block }
+:root[data-pele="estencil"] .lugar-abas .hx-aba__nv{ border:1.5px solid var(--hx-alerta); background:none; color:var(--hx-alerta); font:700 10px/1 var(--hx-f); letter-spacing:.12em; padding:2px 4px 1px }
+/* o miolo de um lugar: o destaque com a barra de vermelhao, os cartoes com o canto cortado, as barras em segmentos */
+:root[data-pele="estencil"] .lg-destaque{ border:0; background:var(--hx-miolo-2); box-shadow:inset 10px 0 0 var(--hx-btn-bg); padding:15px 16px 13px 26px }
+:root[data-pele="estencil"] .lg-destaque :is(.trn2-estado, .lg-grande){ font:400 30px/1 var(--hx-f-tit); letter-spacing:.06em; text-transform:uppercase }
+:root[data-pele="estencil"] .lg-sec{ font:600 14px/1.2 var(--hx-f); letter-spacing:.03em }
+:root[data-pele="estencil"] .lg-etq{ border-width:1.5px; letter-spacing:.14em }
+:root[data-pele="estencil"] .trn2-grade .treino-ex{ gap:5px; padding:12px 12px 10px; border:0; background:var(--hx-miolo-2); clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .trn2-grade .treino-ex:hover:not(:disabled){ background:var(--hx-tecla-hover) }
+:root[data-pele="estencil"] .trn2-grade .treino-ex b{ font:700 18px/1.1 var(--hx-f); letter-spacing:.05em; text-transform:uppercase }
+:root[data-pele="estencil"] .trn2-grade .treino-ex small{ font:500 13px/1.2 var(--hx-f); color:var(--hx-sec) }
+:root[data-pele="estencil"] .trn2-grade .lg-etq{ right:14px; top:8px; padding:0; border:0; color:var(--hx-texto) }
+:root[data-pele="estencil"] .trn2-grade .lg-etq svg{ width:16px; height:16px; fill:currentColor }
+:root[data-pele="estencil"] .trn2-med{ grid-template-columns:104px 1fr 40px }
+:root[data-pele="estencil"] .trn2-med .lg-rot{ font:700 13px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase }
+:root[data-pele="estencil"] .trn2-med em{ font:700 17px/1 var(--hx-f-num); color:var(--hx-texto) }
+:root[data-pele="estencil"] .trn2-barra{ border:0 }
+:root[data-pele="estencil"] .trn2-barra::after{ content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(90deg, transparent 0 9px, var(--hx-miolo) 9px 12px) }
+:root[data-pele="estencil"] .trn2-barra .lim{ z-index:1; top:-4px; bottom:-4px; background:var(--hx-btn-bg) }
+:root[data-pele="estencil"] .lg-como{ border-top:2px dashed var(--hx-miolo-2) }
+:root[data-pele="estencil"] .lg-como summary{ font:700 13px/1 var(--hx-f); letter-spacing:.14em }
+
+/* ====================================================================== 9. o conteudo das telas no painel: os --dl-* e --ui-* na tinta e no osso */
+:root[data-pele="estencil"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha, .scan--lab .scan-texto){
+  --dl-hex:var(--hx-miolo-2); --dl-surface:var(--hx-miolo); --dl-surface-2:var(--hx-miolo-2);
+  --dl-border:var(--hx-sec); --dl-border-shadow:var(--hx-chao); --dl-navy:var(--hx-miolo-2); --dl-navy-deep:var(--hx-chao);
+  --dl-action:var(--hx-btn-bg); --dl-action-press:var(--hx-btn-bg-hover); --dl-action-ink:var(--hx-btn-ink); --dl-action-lite:var(--hx-btn-bg-hover);
+  --dl-disabled:var(--hx-miolo-2); --dl-disabled-ink:var(--hx-sec); --dl-rim:var(--hx-miolo); --dl-plate:var(--hx-miolo-2); --dl-plate-hi:var(--hx-sec);
+  --dl-sec-bg:var(--hx-miolo); --dl-sec-edge:var(--hx-borda); --dl-sec-press:var(--hx-miolo-2); --dl-sec-shadow:var(--hx-chao);
+  --dl-none-ink:var(--hx-texto-2); --dl-none-edge:var(--hx-sec); --dl-none-bg:var(--hx-miolo); --dl-palco-tit:color-mix(in srgb, var(--hx-chao) 75%, transparent);
+  --ui-border:var(--hx-sec); --ui-surface:var(--hx-miolo); --ui-surface-2:var(--hx-miolo-2);
+  --ui-primary:var(--hx-borda); --ui-primary-hover:var(--hx-texto); --ui-primary-ink:var(--hx-escolhido-ink); --ui-primary-soft:var(--hx-miolo-2);
+  --ui-primary-forte:var(--hx-btn-bg); --ui-primary-forte-hover:var(--hx-btn-bg-hover);
+  --ui-navy:var(--hx-chao); --ui-navy-2:var(--hx-miolo-2); --ui-navy-ink:var(--hx-texto-2); --ui-bar-track:var(--hx-medidor-trilho); --ui-foco:0 0 0 2px var(--hx-foco);
+}
+/* o texto do botao de acao (--hx-btn-ink) e a tinta escura, para ler sobre o vermelhao; nos dois lugares em que o jogo usa esse texto FORA
+   do botao, sobre fundo escuro, ele sumiria */
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha .dl-tag--ativo{ color:var(--hx-btn-bg) }
+:root[data-pele="estencil"] .res.ab-hx .res-faixa--vit{ background-color:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+
+/* ====================================================================== 10. os icones em traco das acoes e dos exercicios */
+/* no desenho as acoes de baixo e os exercicios levam icones em traco, na cor do texto; no jogo sao figuras coloridas. Aqui a figura some e
+   o traco entra como mascara no ::before, na cor do texto. Os tracos sao os mesmos da prancha (docs/pranchas/ux-lugares-menus/gerar.py).
+   Uma acao ou um exercicio que nao esteja nesta lista continua com a figura do jogo. */
+:root[data-pele="estencil"] .pet-dock .dock-bt:is([data-acao="alimentar"], [data-acao="brincar"], [data-acao="limpar"], [data-acao="acariciar"], [data-acao="tapa"], [data-acao="tratar_lesao"]) > :is(img, svg){ display:none }
+:root[data-pele="estencil"] .pet-dock .dock-bt:is([data-acao="alimentar"], [data-acao="brincar"], [data-acao="limpar"], [data-acao="acariciar"], [data-acao="tapa"], [data-acao="tratar_lesao"])::before{ content:""; width:22px; height:22px; flex:none; background:currentColor;
+  -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+:root[data-pele="estencil"] .pet-dock .dock-bt[data-acao="alimentar"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15.4 15.6a5 5 0 1 0-7-7c-1.6 1.6-1.7 3.4-1.4 5l-2.8 2.8a2 2 0 1 0 2.4 2.4l2.8-2.8c1.6.3 3.4.2 5-1.4z'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-dock .dock-bt[data-acao="brincar"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-dock .dock-bt[data-acao="limpar"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-dock .dock-bt[data-acao="acariciar"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V5a1.5 1.5 0 0 1 3 0v6M11 10V4a1.5 1.5 0 0 1 3 0v7M14 10V5a1.5 1.5 0 0 1 3 0v8c0 4-3 7-6 7s-5-2-6-4l-2-4a1.5 1.5 0 0 1 2.6-1.5L8 13'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-dock .dock-bt[data-acao="tapa"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l10 18H2z'/%3E%3Cpath d='M12 10v5M12 18v.5'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-dock .dock-bt[data-acao="tratar_lesao"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 9c0 5-8 11-8 11S4 14 4 9a4 4 0 0 1 8-1 4 4 0 0 1 8 1z'/%3E%3Cpath d='M3 12h5l2-3 3 6 2-3h6'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .trn2-grade .treino-ex:is([data-ex="levantar_pedra"], [data-ex="corrida"], [data-ex="alvo"], [data-ex="esquiva"], [data-ex="meditar"], [data-ex="resistencia"]) > .treino-ic{ display:none }
+:root[data-pele="estencil"] .trn2-grade .treino-ex:is([data-ex="levantar_pedra"], [data-ex="corrida"], [data-ex="alvo"], [data-ex="esquiva"], [data-ex="meditar"], [data-ex="resistencia"])::before{ content:""; width:26px; height:26px; flex:none; margin-bottom:5px; background:currentColor;
+  -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+:root[data-pele="estencil"] .trn2-grade .treino-ex[data-ex="levantar_pedra"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .trn2-grade .treino-ex[data-ex="corrida"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4c2 0 3 2 3 5s-1 4-3 4-3-1-3-4 1-5 3-5zM17 10c2 0 3 2 3 5s-1 4-3 4-3-1-3-4 1-5 3-5z'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .trn2-grade .treino-ex[data-ex="alvo"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 2v4M12 18v4M2 12h4M18 12h4'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .trn2-grade .treino-ex[data-ex="esquiva"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .trn2-grade .treino-ex[data-ex="meditar"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='3'/%3E%3Cpath d='M12 12v9M7 16c3 0 5 1 5 5M17 16c-3 0-5 1-5 5'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .trn2-grade .treino-ex[data-ex="resistencia"]{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z'/%3E%3C/svg%3E") }
+
+/* ====================================================================== 11. ajustes da forma, depois da primeira comparacao com a prancha */
+/* as janelas que abrem um painel (DigiBrain, TV) ja trazem a seta para a direita: nao giram */
+:root[data-pele="estencil"] .hud-painel.hud-painel--abre[data-aberto] .hud-painel__seta{ transform:none }
+/* o "x" do painel: o traco maior */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad{ font-size:28px; font-weight:400 }
+/* o botao trancado (Forcar): um paralelogramo riscado, com o nivel na cor do alerta */
+:root[data-pele="estencil"] .fechado-trancado{ position:relative; z-index:0; gap:9px; padding:6px 20px 6px 22px; border:0; background:none; color:var(--hx-texto-2);
+  font:700 15px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+:root[data-pele="estencil"] .fechado-trancado::before{ content:""; position:absolute; inset:0; z-index:-2; background:var(--hx-sec); clip-path:polygon(11px 0, 100% 0, calc(100% - 11px) 100%, 0 100%) }
+:root[data-pele="estencil"] .fechado-trancado::after{ content:""; position:absolute; inset:2px 3px; z-index:-1; clip-path:polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  background:repeating-linear-gradient(-45deg, transparent 0 6px, var(--hx-tecla-hover) 6px 9px), var(--hx-miolo) }
+:root[data-pele="estencil"] .fechado-trancado svg{ color:var(--hx-texto-2) }
+:root[data-pele="estencil"] .fechado-trancado .nivel-nv{ margin-left:4px; padding:3px 6px 2px; border:1.5px solid var(--hx-alerta); background:none; color:var(--hx-alerta);
+  font:700 11px/1 var(--hx-f); letter-spacing:.14em }
+:root[data-pele="estencil"] .fechado-trancado .nivel-nv svg{ color:inherit }
+/* o "como funciona": uma linha tracejada em cima, sem caixa e sem a setinha do details */
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details.lg-como{ padding:4px 2px 0; border:0; border-top:2px dashed var(--hx-miolo-2); background:none }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details.lg-como > summary{ color:var(--hx-sec); font:700 13px/1 var(--hx-f); letter-spacing:.14em }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details.lg-como > summary::before{ content:none }
+/* a placa do lugar e o fio ate o painel */
+:root[data-pele="estencil"] .lugar-placa{ padding:6px 13px 5px 9px; border:2px solid var(--hx-borda); background:var(--hx-miolo); font:700 14px/1 var(--hx-f); letter-spacing:.14em;
+  box-shadow:4px 4px 0 var(--hx-sombra-cor) }
+:root[data-pele="estencil"] .lugar-placa svg{ color:var(--hx-btn-bg) }
+:root[data-pele="estencil"] .lugar-conector path{ stroke:var(--hx-borda); stroke-width:2 }
+:root[data-pele="estencil"] .lugar-conector circle{ fill:var(--hx-btn-bg) }
+/* as etiquetas dos objetos da ilha: tinta, contorno de osso de 2 px e sombra dura */
+:root[data-pele="estencil"] :is(.obj-etq, .obj-selo, .obj-cartao){ border:2px solid var(--hx-borda); border-radius:0; background:var(--hx-miolo); box-shadow:4px 4px 0 var(--hx-sombra-cor) }
+:root[data-pele="estencil"] .obj-etq{ font:700 14px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+:root[data-pele="estencil"] :is(.obj-etq, .obj-selo) svg{ color:var(--hx-btn-bg) }
+:root[data-pele="estencil"] .obj-etq--alvo{ border-color:var(--hx-btn-bg) }
+
+/* ====================================================================== 12. os botoes: paralelogramos */
+/* o botao de acao: vermelhao cheio, texto de tinta, sem a hachura de cima */
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao){ border:0; padding:0 26px; background:var(--hx-btn-bg); color:var(--hx-btn-ink); font:700 15px/1 var(--hx-f); letter-spacing:.12em;
+  text-transform:uppercase; clip-path:polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%) }
+:root[data-pele="estencil"] .hx-continuar::before{ display:none }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):hover{ background:var(--hx-btn-bg-hover) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):focus-visible{ outline:2px solid var(--hx-btn-ink); outline-offset:-5px }
+/* o botao comum: o contorno de osso num paralelogramo (o ::before e o contorno, o ::after e o miolo) */
+:root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt), :root[data-pele="estencil"] .rg2-bt:not(.rg2-bt--acao){ position:relative; z-index:0; border:0; padding:0 22px;
+  background:none; color:var(--hx-texto); font:700 14px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+:root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)::before, :root[data-pele="estencil"] .rg2-bt:not(.rg2-bt--acao)::before{ content:""; position:absolute; inset:0; z-index:-2;
+  background:var(--hx-borda); clip-path:polygon(11px 0, 100% 0, calc(100% - 11px) 100%, 0 100%) }
+:root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)::after, :root[data-pele="estencil"] .rg2-bt:not(.rg2-bt--acao)::after{ content:""; position:absolute; inset:2px 3px; z-index:-1;
+  background:var(--hx-miolo); clip-path:polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%) }
+:root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt):hover::after, :root[data-pele="estencil"] .rg2-bt:not(.rg2-bt--acao):hover::after{ background:var(--hx-miolo-2) }
+:root[data-pele="estencil"] .rg2-bt--perigo:not(.rg2-bt--acao){ color:var(--hx-perigo) }
+:root[data-pele="estencil"] .rg2-bt--perigo:not(.rg2-bt--acao)::before{ background:var(--hx-perigo) }
+
+/* ====================================================================== 13. Lutar (a Arena) */
+:root[data-pele="estencil"] .painel-tela__folha .hx-painel.poc-lugar{ gap:14px; padding:2px 14px 16px; border:0; background:none }
+:root[data-pele="estencil"] .poc-lugar h2{ color:var(--hx-sec); font:700 12px/1 var(--hx-f); letter-spacing:.16em }
+:root[data-pele="estencil"] .poc-lugar .poc-nota{ color:var(--hx-texto-2); font:500 15px/1.35 var(--hx-f) }
+:root[data-pele="estencil"] .poc-pet{ gap:12px; font:400 20px/1 var(--hx-f-tit); letter-spacing:.06em; text-transform:uppercase }
+:root[data-pele="estencil"] .poc-ret{ border:0; background:none }
+:root[data-pele="estencil"] .poc-grupo legend{ color:var(--hx-sec); font:700 12px/1 var(--hx-f); letter-spacing:.16em }
+:root[data-pele="estencil"] :is(.poc-rival, .poc-mapa){ border:0; background:var(--hx-miolo-2); color:var(--hx-texto); clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] :is(.poc-rival, .poc-mapa):hover:not(:disabled, [aria-checked="true"]){ background:linear-gradient(var(--hx-tecla-hover), var(--hx-tecla-hover)), var(--hx-miolo-2) }
+:root[data-pele="estencil"] .poc-rival{ min-height:52px; gap:10px; font:700 15px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="estencil"] .poc-mapa{ padding:9px 12px 8px 14px; gap:4px }
+:root[data-pele="estencil"] .poc-mapa b{ font:700 15px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="estencil"] :is(.poc-rival, .poc-mapa)[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); box-shadow:inset 6px 0 0 var(--hx-btn-bg) }
+:root[data-pele="estencil"] :is(.poc-rival, .poc-mapa):focus-visible{ outline-offset:-3px }
+:root[data-pele="estencil"] .poc-lutar{ min-height:52px; font-size:16px }
+
+/* ====================================================================== 14. Diario (o Registro) */
+:root[data-pele="estencil"] .rg2-par small{ color:var(--hx-sec); font:700 11px/1 var(--hx-f); letter-spacing:.16em; text-transform:uppercase }
+:root[data-pele="estencil"] .rg2-par .lg-num{ font:700 22px/1 var(--hx-f-num) }
+/* o codice: a caixa tracejada e riscada, com o titulo na letra vazada */
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details.codice{ padding:12px 14px; border:2px dashed var(--hx-sec); box-shadow:none;
+  background:repeating-linear-gradient(-45deg, transparent 0 6px, var(--hx-tecla) 6px 9px) }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details.codice > summary{ align-items:center; gap:5px; color:var(--hx-texto) }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details.codice > summary::before{ content:none }
+:root[data-pele="estencil"] .codice-tit{ font:400 20px/1 var(--hx-f-tit); letter-spacing:.08em }
+:root[data-pele="estencil"] .codice-cab small{ color:var(--hx-sec); font:700 11px/1 var(--hx-f); letter-spacing:.14em }
+/* os filtros: paralelogramos; o ligado em osso */
+:root[data-pele="estencil"] .rg2-filtros{ gap:4px }
+:root[data-pele="estencil"] .rg2-filtro{ padding:0 18px; border:0; background:var(--hx-miolo-2); color:var(--hx-texto-2); font:700 12px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase;
+  clip-path:polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%) }
+:root[data-pele="estencil"] .rg2-filtro[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] .rg2-filtro:focus-visible{ outline-offset:-4px }
+/* as linhas do registro: sem caixa, um fio entre uma e outra */
+:root[data-pele="estencil"] .rg2-log{ border:0 }
+:root[data-pele="estencil"] .rg2-linha{ border:0; border-bottom:1px solid var(--hx-miolo-2); background:none }
+:root[data-pele="estencil"] .rg2-linha:hover{ background:var(--hx-miolo-2) }
+:root[data-pele="estencil"] .rg2-t{ color:var(--hx-sec); font:700 13px/1 var(--hx-f-num); letter-spacing:.04em }
+:root[data-pele="estencil"] .rg2-txt{ font:600 16px/1.2 var(--hx-f) }
+
+/* ====================================================================== 15. Ajustes */
+/* a linha: uma faixa de tinta clara com o canto cortado e o nome em caixa alta; a linha nova leva a barra do alerta */
+:root[data-pele="estencil"] .aj-lista{ gap:8px; padding:14px 14px 18px }
+:root[data-pele="estencil"] .aj{ min-height:50px; padding:4px 10px 4px 14px; border:0; background:var(--hx-miolo-2); clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .aj:hover{ background:linear-gradient(var(--hx-tecla-hover), var(--hx-tecla-hover)), var(--hx-miolo-2) }
+:root[data-pele="estencil"] .aj:focus-within, :root[data-pele="estencil"] .aj:focus-visible{ outline-offset:-3px }
+:root[data-pele="estencil"] .aj--novo{ box-shadow:inset 4px 0 0 var(--hx-alerta) }
+:root[data-pele="estencil"] .aj-ic{ color:var(--hx-texto) }
+:root[data-pele="estencil"] .aj-nome b{ font:700 15px/1.15 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+:root[data-pele="estencil"] .aj-seta{ color:var(--hx-texto-2) }
+/* a chave: um retangulo com o botao quadrado de um lado; ligada, vermelhao com o botao de tinta a direita */
+:root[data-pele="estencil"] .aj input[type="checkbox"]{ -webkit-appearance:none; appearance:none; width:56px; height:32px; margin:6px 0; border:2px solid var(--hx-sec); border-radius:0;
+  background:linear-gradient(var(--hx-sec), var(--hx-sec)) left 5px center / 20px 18px no-repeat, var(--hx-miolo) }
+:root[data-pele="estencil"] .aj input[type="checkbox"]:checked{ border-color:var(--hx-borda);
+  background:linear-gradient(var(--hx-miolo), var(--hx-miolo)) right 5px center / 20px 18px no-repeat, var(--hx-btn-bg) }
+:root[data-pele="estencil"] .aj input[type="checkbox"]:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+/* os volumes: sem caixa; o trilho fino de osso ate o cursor (um losango de vermelhao) e apagado depois dele. O trilho e a imagem de
+   borda do proprio cursor, que se estende para os dois lados */
+:root[data-pele="estencil"] .aj--volume{ min-height:0; padding:2px 6px 2px 10px; background:none; clip-path:none }
+:root[data-pele="estencil"] .aj--volume:hover{ background:none }
+:root[data-pele="estencil"] .aj--volume .aj-nome{ color:var(--hx-texto-2); font:700 13px/1 var(--hx-f); letter-spacing:.14em; text-transform:uppercase }
+:root[data-pele="estencil"] .aj--volume .aj-nome b{ color:var(--hx-texto); font:700 15px/1 var(--hx-f-num); letter-spacing:.04em }
+:root[data-pele="estencil"] .aj--volume input[type="range"]{ -webkit-appearance:none; appearance:none; min-height:34px; height:34px; margin:0; background:none; overflow:hidden }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-webkit-slider-runnable-track{ height:16px; background:none }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-moz-range-track{ height:16px; background:none }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:16px; height:16px; border:0; border-radius:0;
+  background:linear-gradient(to top left, var(--hx-btn-bg) 50%, transparent 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, var(--hx-btn-bg) 50%, transparent 50%) top right / 50% 50% no-repeat,
+    linear-gradient(to bottom left, var(--hx-btn-bg) 50%, transparent 50%) bottom left / 50% 50% no-repeat, linear-gradient(to bottom right, var(--hx-btn-bg) 50%, transparent 50%) bottom right / 50% 50% no-repeat;
+  border-image:linear-gradient(90deg, var(--hx-borda) 50%, var(--hx-medidor-trilho) 0) 0 1 / calc(50% - 2px) 100vw / 0 100vw }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-moz-range-thumb{ width:16px; height:16px; border:0; border-radius:0;
+  background:linear-gradient(to top left, var(--hx-btn-bg) 50%, transparent 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, var(--hx-btn-bg) 50%, transparent 50%) top right / 50% 50% no-repeat,
+    linear-gradient(to bottom left, var(--hx-btn-bg) 50%, transparent 50%) bottom left / 50% 50% no-repeat, linear-gradient(to bottom right, var(--hx-btn-bg) 50%, transparent 50%) bottom right / 50% 50% no-repeat;
+  border-image:linear-gradient(90deg, var(--hx-borda) 50%, var(--hx-medidor-trilho) 0) 0 1 / calc(50% - 2px) 100vw / 0 100vw }
+/* dentro de uma parte: o voltar em paralelogramo e o nome da parte na letra vazada; os cartoes de escolha com o canto cortado */
+:root[data-pele="estencil"] .mc-cfg > .mc-linha{ gap:14px }
+:root[data-pele="estencil"] .mc-cfg > .mc-linha .mc-bloco__tit{ margin:0; color:var(--hx-texto); font:400 22px/1 var(--hx-f-tit); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="estencil"] .mc-sec{ color:var(--hx-sec); font:700 12px/1 var(--hx-f); letter-spacing:.16em }
+:root[data-pele="estencil"] .mc-opcao{ border:0; background:var(--hx-miolo-2); clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .mc-opcao:hover:not([aria-checked="true"]){ background:linear-gradient(var(--hx-tecla-hover), var(--hx-tecla-hover)), var(--hx-miolo-2) }
+:root[data-pele="estencil"] .mc-opcao b{ letter-spacing:.1em }
+:root[data-pele="estencil"] .mc-opcao[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); box-shadow:inset 6px 0 0 var(--hx-btn-bg) }
+:root[data-pele="estencil"] .mc-opcao:focus-visible{ outline-offset:-3px }
+
+/* ====================================================================== 16. o resto do miolo das telas: cantos retos e as caixas de abrir */
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha :is(.lem, .lem-trilho, .lem-trilho i){ border-radius:0 }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha .lem--vazio{ color:var(--hx-sec) }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details:not(.lg-como, .codice){ border:2px solid var(--hx-miolo-2); background:none }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha details:not(.lg-como, .codice) > summary{ color:var(--hx-texto); font-weight:700; letter-spacing:.12em }
+/* o miolo do painel acompanha o corte de baixo da caixa (o que rola nao sai pelo canto) */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) > .hx-painel > .hx-painel__corpo{ clip-path:polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 calc(100% - 15px)) }
+:root[data-pele="estencil"] .painel-tela--lugar-folha > .hx-painel > .hx-painel__corpo{ clip-path:none }
+
+/* ====================================================================== 17. o chamado e o DigiBrain aberto */
+/* o chamado (o pet chama voce): o cartao na cor da necessidade, com o contorno, o texto e o botao de tinta */
+:root[data-pele="estencil"] body .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte)::before{ background:var(--hx-miolo) }
+:root[data-pele="estencil"] body .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte)::after{ background:var(--hx-necessidade) }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) b{ color:var(--hx-escolhido-ink); font:400 20px/1 var(--hx-f-tit); letter-spacing:.06em }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) :is(.dl-apoio, .chamado-ic){ color:var(--hx-escolhido-ink); font-weight:700 }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .hx-continuar{ background:var(--hx-miolo); color:var(--hx-texto) }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .hx-continuar:focus-visible{ outline-color:var(--hx-foco) }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .dl-seg i{ background:color-mix(in srgb, var(--hx-miolo) 28%, transparent) }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .dl-seg i.on{ background:var(--hx-miolo) }
+/* o DigiBrain aberto: a caixa com o contorno de 2 px e a sombra dura, o titulo na letra vazada, os botoes de tinta clara com o canto cortado */
+:root[data-pele="estencil"] .scan .scan-cx{ border:2px solid var(--hx-borda); background:var(--hx-miolo); box-shadow:5px 5px 0 var(--hx-sombra-cor) }
+:root[data-pele="estencil"] .scan .scan-tit-nome{ font:400 20px/1 var(--hx-f-tit); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="estencil"] .scan .scan-tit svg.lucide{ color:var(--hx-btn-bg) }
+:root[data-pele="estencil"] .scan .scan-ic, :root[data-pele="estencil"] .scan .scan-fechar, :root[data-pele="estencil"] .scan .scan-fechar:hover{ border:0; background:var(--hx-miolo-2); color:var(--hx-texto);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .scan .scan-ic:hover, :root[data-pele="estencil"] .scan .scan-ic[aria-expanded="true"], :root[data-pele="estencil"] .scan .scan-ic[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] .scan .scan-topo{ gap:6px }
+:root[data-pele="estencil"] .scan .db-selo--vivo i{ border-radius:0 }
+/* a folha do celular nao leva a sombra (ela ocupa a largura toda) */
+:root[data-pele="estencil"] .painel-tela--lugar-folha{ filter:none }
+/* o painel do pet (o porque da fala, as ultimas acoes abertas): a mesma caixa, com o titulo menor */
+:root[data-pele="estencil"] .pet-painel{ width:min(330px, calc(100% - 78px)) }
+:root[data-pele="estencil"] .pet-painel .hx-painel__cab{ min-height:58px }
+:root[data-pele="estencil"] .pet-painel .hx-painel__titulo{ padding:14px 62px 10px 14px; font:400 19px/1.05 var(--hx-f-tit); letter-spacing:.08em }
+:root[data-pele="estencil"] .pet-painel .pet-painel__folha{ padding:4px 14px 16px }
+
+/* ############################################################################################################################
+   18. A REVISAO 1 (sessao revisora, 2026-11-20): o jogo conferido contra a prancha, peca por peca. O que ela apontou esta aqui.
+   ############################################################################################################################ */
+
+/* ---------- 18.1 as medidas da prancha no computador: topo de 60 px, trilho de 88, janelas de 320, a marca no centro da tela */
+@media (min-width:900px){
+  :root[data-pele="estencil"]{ --nav-larg:88px; --hud-larg:320px }
+  :root[data-pele="estencil"] .topo-hab{ padding:14px 14px 0 }
+  :root[data-pele="estencil"] :is(.topo-pet, .topo-relogio, .topo-bits){ min-height:60px }
+  /* a etiqueta do Tamer: a direita do cartao, no meio da altura */
+  :root[data-pele="estencil"] .topo-pet{ padding-right:112px }
+  :root[data-pele="estencil"] .tamer-nv--topo{ position:absolute; right:14px; top:50%; translate:0 -50%; margin:0 }
+  /* a marca fica no centro da tela, fora da fila: nao anda com a largura do "agora" */
+  :root[data-pele="estencil"] .topo-logo{ position:absolute; left:50%; top:14px; margin:6px 0 0; translate:-50% 0 }
+  :root[data-pele="estencil"] .topo-logo ~ .topo-relogio{ margin-left:auto }
+  /* o "agora": 44 px, no meio da altura do cartao, e para antes das riscas da marca (o porque encurta com reticencias) */
+  :root[data-pele="estencil"] .topo-agora > .pet-agora{ top:8px; min-height:44px; height:44px; max-width:clamp(180px, calc(50vw - 590px), 420px) }
+  :root[data-pele="estencil"] .pet-agora .agora-meio{ flex:0 1 auto; overflow:hidden }
+  /* o aviso e o chamado descem para baixo da sombra da marca; as janelas e o DigiBrain, para baixo da sombra do relogio */
+  :root[data-pele="estencil"] .pet-alerta{ top:calc(var(--casca-topo) + 32px) }
+  :root[data-pele="estencil"] .pet-hud{ top:calc(var(--casca-topo) + 34px); max-height:calc(100% - var(--casca-topo) - 114px) }
+  :root[data-pele="estencil"] .scan{ top:calc(var(--casca-topo) + 34px) }
+}
+/* em telas mais estreitas a marca perde as riscas, o "agora" perde o porque, e abaixo de 1250 px a marca sai (nao cabe sem encostar) */
+@media (min-width:900px) and (max-width:1699px){
+  :root[data-pele="estencil"] .topo-logo-marca, :root[data-pele="estencil"] .topo-logo::after{ display:none }
+  :root[data-pele="estencil"] .pet-agora .agora-meio{ display:none }
+}
+@media (min-width:900px) and (max-width:1499px){ :root[data-pele="estencil"] .topo-logo{ padding:7px 9px 5px 13px; font-size:24px } }
+@media (min-width:900px) and (max-width:1249px){ :root[data-pele="estencil"] .topo-logo{ display:none } }
+/* as janelas fechadas com 48 px; o numero das necessidades sem o "%" */
+:root[data-pele="estencil"] .hud-painel__bt{ min-height:46px; padding-top:4px; padding-bottom:4px }
+:root[data-pele="estencil"] .hud-painel[data-aberto="true"] .hud-painel__bt{ min-height:44px }
+:root[data-pele="estencil"] .nec-linha .hx-medidor__pct{ display:none }
+:root[data-pele="estencil"] .nec-linha .hx-medidor__txt{ min-width:2em }
+/* as acoes de baixo com 72 px */
+:root[data-pele="estencil"] .pet-dock .dock .dock-bt{ gap:4px; min-height:58px; padding:2px 10px }
+
+/* ---------- 18.2 o aviso do meio: 44 px, o icone em traco, o "Estado" num paralelogramo de 34 px recuado */
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade{ min-height:44px; padding:2px 5px 2px 12px }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-ver{ align-self:center; height:34px; margin-left:6px; padding:0 15px 0 17px; clip-path:polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%) }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-ic{ width:22px; height:22px; font-size:0; color:var(--hx-texto) }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-pede] .pet-prioridade-ic{ color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-ic > *{ display:none }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade-ic::before{ content:""; width:22px; height:22px; background:currentColor; --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+  -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-pede] .pet-prioridade-ic::before{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l10 18H2z'/%3E%3Cpath d='M12 10v5M12 18v.5'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-acao="alimentar"] .pet-prioridade-ic::before{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15.4 15.6a5 5 0 1 0-7-7c-1.6 1.6-1.7 3.4-1.4 5l-2.8 2.8a2 2 0 1 0 2.4 2.4l2.8-2.8c1.6.3 3.4.2 5-1.4z'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-acao="brincar"] .pet-prioridade-ic::before{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-acao="limpar"] .pet-prioridade-ic::before{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-acao="acariciar"] .pet-prioridade-ic::before{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V5a1.5 1.5 0 0 1 3 0v6M11 10V4a1.5 1.5 0 0 1 3 0v7M14 10V5a1.5 1.5 0 0 1 3 0v8c0 4-3 7-6 7s-5-2-6-4l-2-4a1.5 1.5 0 0 1 2.6-1.5L8 13'/%3E%3C/svg%3E") }
+:root[data-pele="estencil"] .pet-alerta .pet-prioridade[data-acao="tratar_lesao"] .pet-prioridade-ic::before{ --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 9c0 5-8 11-8 11S4 14 4 9a4 4 0 0 1 8-1 4 4 0 0 1 8 1z'/%3E%3Cpath d='M3 12h5l2-3 3 6 2-3h6'/%3E%3C/svg%3E") }
+/* o chamado: 340 px, o icone em traco de 28 px, o botao de 54 px em tinta */
+:root[data-pele="estencil"] .pet-alerta:has(.chamado){ width:min(340px, calc(100% - 24px)) }
+:root[data-pele="estencil"] .pet-alerta .chamado.dl-card{ gap:10px 12px; padding:14px 14px 14px }
+:root[data-pele="estencil"] .pet-alerta .chamado-ic{ font-size:0 }
+:root[data-pele="estencil"] .pet-alerta .chamado-ic > *{ display:none }
+:root[data-pele="estencil"] .pet-alerta .chamado-ic::before{ content:""; width:28px; height:28px; background:currentColor; --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l10 18H2z'/%3E%3Cpath d='M12 10v5M12 18v.5'/%3E%3C/svg%3E");
+  -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+:root[data-pele="estencil"] .pet-alerta .chamado .hx-continuar{ min-height:54px }
+
+/* ---------- 18.3 o botao principal: o paralelogramo de vermelhao com o contorno de osso de 2 px (o ::before e o contorno, o ::after e o miolo) */
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao){ position:relative; z-index:0; background:none; clip-path:none }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):hover{ background:none }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao)::before{ content:""; display:block; position:absolute; inset:0; width:auto; height:auto; z-index:-2; pointer-events:none;
+  background:var(--hx-borda); clip-path:polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao)::after{ content:""; position:absolute; inset:2px 3px; z-index:-1; pointer-events:none; background:var(--hx-btn-bg);
+  clip-path:polygon(11px 0, 100% 0, calc(100% - 11px) 100%, 0 100%) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):hover::after{ background:var(--hx-btn-bg-hover) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):focus-visible{ outline:3px solid var(--hx-foco); outline-offset:4px }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .hx-continuar{ background:none }
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .hx-continuar::before,
+:root[data-pele="estencil"] .pet-alerta .chamado:not(.chamado--morte) .hx-continuar::after{ background:var(--hx-miolo) }
+:root[data-pele="estencil"] .poc-lutar{ min-height:54px; margin-bottom:4px }
+/* os estados da prancha: com o mouse o botao sobe e a sombra aparece; pressionado, afunda; nada pisca */
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn):hover:not(:disabled){ translate:-1px -2px; filter:drop-shadow(3px 4px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn):active:not(:disabled){ translate:2px 2px; filter:none }
+:root[data-pele="estencil"] :is(.aj:not(.aj--volume), .mc-opcao, .poc-rival, .poc-mapa, .trn2-grade .treino-ex):hover:not(:disabled, [aria-checked="true"]){ box-shadow:inset 0 -3px 0 var(--hx-borda) }
+:root[data-pele="estencil"] .aj--novo:hover{ box-shadow:inset 4px 0 0 var(--hx-alerta), inset 0 -3px 0 var(--hx-borda) }
+:root[data-pele="estencil"] .pet-dock .dock .dock-bt:active{ translate:0 2px; background:color-mix(in srgb, var(--hx-borda) 30%, var(--hx-miolo-2)) }
+/* o foco: 3 px; por dentro nas pecas de canto cortado; na aba (inclinada dos dois lados), duas barras */
+:root[data-pele="estencil"] :is(.aj, .mc-opcao, .poc-rival, .poc-mapa, .trn2-grade .treino-ex):focus-visible, :root[data-pele="estencil"] .aj:focus-within{ outline:3px solid var(--hx-foco); outline-offset:-5px }
+:root[data-pele="estencil"] :is(.mc-opcao, .poc-rival, .poc-mapa)[aria-checked="true"]:focus-visible{ outline-color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible{ outline:0; box-shadow:inset 0 5px 0 var(--hx-foco), inset 0 -5px 0 var(--hx-foco) }
+:root[data-pele="estencil"] .rg2-bt:not(.rg2-bt--acao):focus-visible, :root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt):focus-visible{ outline:3px solid var(--hx-foco); outline-offset:4px }
+
+/* ---------- 18.4 o fechar: um "x" de traco de 16 px; a aba trancada apagada, com o cadeado na etiqueta */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad > span{ display:none }
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad::before{ content:""; width:18px; height:18px; background:currentColor; --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E");
+  -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+:root[data-pele="estencil"] .lugar-abas .hx-aba--trancada:not([aria-selected="true"]){ color:var(--hx-sec) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba__nv{ display:inline-flex; align-items:center; gap:3px }
+:root[data-pele="estencil"] .lugar-abas .hx-aba__nv::before{ content:""; width:10px; height:10px; background:currentColor; --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='1'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E");
+  -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+
+/* ---------- 18.5 Crescer > Treinar: o destaque com 72 px e o rotulo, as duas barras afastadas, o "0/10" pequeno */
+:root[data-pele="estencil"] .trn2-tela > .lg-destaque{ min-height:72px; padding-top:32px; padding-bottom:10px }
+:root[data-pele="estencil"] .trn2-tela > .lg-destaque::before{ content:"Treino" / ""; position:absolute; left:26px; top:13px; color:var(--hx-sec); font:700 11px/1 var(--hx-f); letter-spacing:.16em; text-transform:uppercase }
+:root[data-pele="estencil"] .trn2-cansaco{ gap:14px !important }
+:root[data-pele="estencil"] .trn2-tela .lg-sec .lg-num{ color:var(--hx-sec); font:600 14px/1.2 var(--hx-f-num) }
+
+/* ---------- 18.6 Lutar > Arena: os retratos num quadro de tinta (40 px nas opcoes, 52 px no pet) */
+:root[data-pele="estencil"] .poc-ret{ background:var(--hx-miolo) }
+:root[data-pele="estencil"] .poc-ret img{ width:36px; height:36px; max-width:none; max-height:none; object-fit:contain }
+:root[data-pele="estencil"] :is(.poc-rival, .poc-mapa)[aria-checked="true"] .poc-ret{ background:var(--hx-miolo-2) }
+:root[data-pele="estencil"] .poc-pet .poc-ret{ width:52px; height:52px; background:var(--hx-miolo-2) }
+:root[data-pele="estencil"] .poc-pet .poc-ret img{ width:46px; height:46px }
+
+/* ---------- 18.7 Diario > Registro: a linha do que VOCE fez tem fundo e marca; os icones das outras, na cor secundaria */
+:root[data-pele="estencil"] .rg2-par .lg-num{ font-size:24px }
+:root[data-pele="estencil"] .rg2-tipo{ color:var(--hx-sec) }
+:root[data-pele="estencil"] .rg2-linha[data-tipo="voce"]{ background:var(--hx-miolo-2); box-shadow:inset 5px 0 0 var(--hx-btn-bg) }
+:root[data-pele="estencil"] .rg2-linha[data-tipo="voce"] .rg2-tipo{ color:var(--hx-btn-bg) }
+
+/* ---------- 18.8 Ajustes: o ladrilho de vermelhao com a engrenagem antes do titulo; os volumes numa linha so; o voltar maior */
+:root[data-pele="estencil"] .painel-tela--ajustes .hx-painel__titulo{ position:relative; display:flex; align-items:center; gap:13px }
+:root[data-pele="estencil"] .painel-tela--ajustes .hx-painel__titulo::before{ content:""; width:36px; height:36px; flex:none; background:var(--hx-btn-bg);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%) }
+:root[data-pele="estencil"] .painel-tela--ajustes .hx-painel__titulo::after{ content:""; position:absolute; left:19px; top:50%; width:22px; height:22px; translate:0 -50%; background:var(--hx-btn-ink);
+  --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1'/%3E%3C/svg%3E"); -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+:root[data-pele="estencil"] .aj--volume{ grid-template-columns:28px max-content minmax(0,1fr) max-content; column-gap:12px; padding:0 4px 0 10px }
+:root[data-pele="estencil"] .aj--volume .aj-nome{ display:contents }
+:root[data-pele="estencil"] .aj--volume .aj-nome b{ order:3; min-width:3.2em; text-align:right }
+:root[data-pele="estencil"] .aj--volume input[type="range"]{ order:2; grid-column:auto; min-height:40px; height:40px }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-webkit-slider-runnable-track{ height:20px }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-moz-range-track{ height:20px }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-webkit-slider-thumb{ width:20px; height:20px;
+  border-image:linear-gradient(90deg, var(--hx-borda) 50%, var(--hx-medidor-trilho) 0) 0 1 / calc(50% - 3px) 100vw / 0 100vw }
+:root[data-pele="estencil"] .aj--volume input[type="range"]::-moz-range-thumb{ width:20px; height:20px;
+  border-image:linear-gradient(90deg, var(--hx-borda) 50%, var(--hx-medidor-trilho) 0) 0 1 / calc(50% - 3px) 100vw / 0 100vw }
+:root[data-pele="estencil"] .mc-cfg > .mc-linha .mc-voltar{ font-size:15px }
+:root[data-pele="estencil"] .mc-cfg > .mc-linha .mc-voltar > span{ font-size:26px; line-height:.5; margin-top:-4px }
+
+/* ---------- 18.9 o DigiBrain aberto: a caixa com os dois cortes, a moldura da rede com fio de 2 px e cortes, a faixa de baixo sem fio.
+   A caixa de uma peca so (o ::before): o contorno e o miolo sao camadas do fundo, e os dois tracos diagonais fecham os cortes */
+:root[data-pele="estencil"] .scan .scan-in.scan-cx{ --ch:14px; border:0; background:none; box-shadow:none; filter:drop-shadow(5px 5px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] .scan .scan-in.scan-cx::before{ content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    linear-gradient(45deg, transparent calc(50% - 2px), var(--hx-borda) calc(50% - 2px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat,
+    linear-gradient(45deg, transparent 50%, var(--hx-borda) 50% calc(50% + 2px), transparent calc(50% + 2px)) left bottom / var(--ch) var(--ch) no-repeat,
+    linear-gradient(var(--hx-miolo), var(--hx-miolo)) center / calc(100% - 4px) calc(100% - 4px) no-repeat,
+    var(--hx-borda);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch))) }
+:root[data-pele="estencil"] .scan .scan-topo{ padding:2px 4px 0 6px }
+:root[data-pele="estencil"] .scan .scan-moldura{ --ch:14px; border:0; box-shadow:inset 0 0 0 2px var(--hx-borda);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch))) }
+:root[data-pele="estencil"] .scan .scan-moldura::after{ content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:
+    linear-gradient(45deg, transparent calc(50% - 2px), var(--hx-borda) calc(50% - 2px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat,
+    linear-gradient(45deg, transparent 50%, var(--hx-borda) 50% calc(50% + 2px), transparent calc(50% + 2px)) left bottom / var(--ch) var(--ch) no-repeat }
+:root[data-pele="estencil"] .scan .scan-canto{ display:none }
+:root[data-pele="estencil"] .scan .scan-faixa{ border:0; background:var(--hx-miolo-2) }
+:root[data-pele="estencil"] .scan .scan-estado{ border-left:0 }
+
+/* ---------- 18.10 a placa do lugar: canto reto com os dois cortes de 9 px, icone e texto na mesma linha, 36 px */
+:root[data-pele="estencil"] .lugar-placa{ --ch:9px; display:inline-flex; flex-direction:row; align-items:center; gap:8px; height:36px; padding:0 14px 0 11px; border:0; border-radius:0;
+  background:none; box-shadow:none; color:var(--hx-texto); filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor)) }
+:root[data-pele="estencil"] .lugar-placa::before{ content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    linear-gradient(45deg, transparent calc(50% - 2px), var(--hx-borda) calc(50% - 2px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat,
+    linear-gradient(45deg, transparent 50%, var(--hx-borda) 50% calc(50% + 2px), transparent calc(50% + 2px)) left bottom / var(--ch) var(--ch) no-repeat,
+    linear-gradient(var(--hx-miolo), var(--hx-miolo)) center / calc(100% - 4px) calc(100% - 4px) no-repeat,
+    var(--hx-borda);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch))) }
+:root[data-pele="estencil"] .lugar-placa svg{ width:18px; height:18px }
+
+/* ---------- 18.11 o minimapa: 196 px (a peca inteira cresce junto), o fundo de tinta no octogono inteiro (sem as faixas pretas) */
+@media (min-width:900px){ :root[data-pele="estencil"] .minimapa-caixa{ zoom:1.114 } }
+:root[data-pele="estencil"] .minimapa-caixa .minimapa{ filter:grayscale(1) contrast(.45) brightness(.5) }
+
+/* ---------- 18.12 as abas com o nome de todas so no computador: no celular o nome das nao escolhidas sai (como no jogo) */
+@media (max-width:899px){
+  :root[data-pele="estencil"] .lugar-abas .hx-aba .hx-aba__dica, :root[data-pele="estencil"] .lugar-abas .hx-aba:hover .hx-aba__dica,
+  :root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible .hx-aba__dica{ display:none }
+  :root[data-pele="estencil"] .lugar-abas .hx-aba{ padding:0 15px }
+  :root[data-pele="estencil"] .lugar-abas .hx-aba__nv{ display:none }
+}
+
+/* ---------- 18.13 o celular (abaixo de 900 px): a caixa pequena da prancha (corte de 9 px, contorno de osso de 2 px, sombra de 4 px) no
+   retrato, no relogio, nos destinos, no "agora" e nas acoes; as acoes saem do vermelhao para a tinta, com o icone em osso */
+@media (max-width:899px){
+  :root[data-pele="estencil"] body .mm-topo :is(.mm-retrato, .mm-relogio), :root[data-pele="estencil"] body .mm-coluna .mm-bt, :root[data-pele="estencil"] body .mm-coluna .topo-bt.mm-bt, :root[data-pele="estencil"] body .mm-agora,
+  :root[data-pele="estencil"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt), :root[data-pele="estencil"] body .mm-aviso.hx-chip--necessidade{
+    --ch:9px; --es-miolo:var(--hx-miolo); --es-contorno:var(--hx-borda); border:0; border-radius:0; background:none; box-shadow:none; color:var(--hx-texto);
+    filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor)) }
+  :root[data-pele="estencil"] body .mm-topo :is(.mm-retrato, .mm-relogio)::before, :root[data-pele="estencil"] body .mm-coluna .mm-bt::before, :root[data-pele="estencil"] body .mm-coluna .topo-bt.mm-bt::before, :root[data-pele="estencil"] body .mm-agora::before,
+  :root[data-pele="estencil"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt)::before, :root[data-pele="estencil"] body .mm-aviso.hx-chip--necessidade::before{
+    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:
+      linear-gradient(45deg, transparent calc(50% - 2px), var(--es-contorno) calc(50% - 2px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat,
+      linear-gradient(45deg, transparent 50%, var(--es-contorno) 50% calc(50% + 2px), transparent calc(50% + 2px)) left bottom / var(--ch) var(--ch) no-repeat,
+      linear-gradient(var(--es-miolo), var(--es-miolo)) center / calc(100% - 4px) calc(100% - 4px) no-repeat,
+      var(--es-contorno);
+    clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch))) }
+  /* o retrato de 58 px; a hora de 22 px numa caixa de 38 px */
+  :root[data-pele="estencil"] body .mm-topo .mm-retrato{ width:58px; height:58px; padding:5px; --es-miolo:var(--hx-miolo-2) }
+  :root[data-pele="estencil"] body .mm-topo .mm-retrato[aria-expanded="true"]{ --es-contorno:var(--hx-btn-bg) }
+  :root[data-pele="estencil"] body .mm-topo .mm-relogio{ top:24px; left:84px; height:38px; overflow:visible; align-items:center; gap:8px; padding:0 12px }
+  :root[data-pele="estencil"] .mm-relogio small{ font:700 12px/1 var(--hx-f); letter-spacing:.14em; color:var(--hx-sec) }
+  :root[data-pele="estencil"] .mm-relogio > b{ font:700 22px/1 var(--hx-f-num); color:var(--hx-texto) }
+  :root[data-pele="estencil"] .mm-relogio .mm-bits{ border-left:2px solid var(--hx-miolo-2) }
+  :root[data-pele="estencil"] .mm-relogio .mm-bits b{ color:var(--hx-texto) }
+  /* os destinos de 50 px, 12 px de vao; o atual com o miolo de osso */
+  :root[data-pele="estencil"] body .mm-coluna{ gap:12px }
+  :root[data-pele="estencil"] body .mm-coluna .mm-destinos{ gap:12px }
+  :root[data-pele="estencil"] body .mm-coluna .mm-bt, :root[data-pele="estencil"] body .mm-coluna .topo-bt.mm-bt{ width:50px; height:50px }
+  :root[data-pele="estencil"] body .mm-coluna .mm-bt svg{ width:24px; height:24px }
+  :root[data-pele="estencil"] body .mm-coluna .mm-bt[aria-current="page"]{ --es-miolo:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+  /* as acoes de 64 px: tinta, contorno de osso, icone em osso; a sugerida leva o contorno da necessidade */
+  :root[data-pele="estencil"] body .pet-dock .mm-acao{ width:64px; height:64px }
+  :root[data-pele="estencil"] body .pet-dock .mm-acao svg{ width:28px; height:28px }
+  :root[data-pele="estencil"] body .pet-dock .mm-acao.acao-destaque--sugerida{ width:64px; height:64px; --es-contorno:var(--hx-necessidade); color:var(--hx-necessidade) }
+  :root[data-pele="estencil"] body .pet-dock .mm-acao.acao-destaque--sugerida svg{ width:28px; height:28px }
+  :root[data-pele="estencil"] body .pet-dock :is(.mm-acao, .mm-extra).acao-destaque--aprendida{ --es-contorno:var(--hx-aprendido); color:var(--hx-aprendido) }
+  :root[data-pele="estencil"] body .pet-dock .mm-extra.mm-sug:not(.mm-sug--aprendida){ --es-contorno:var(--hx-necessidade); color:var(--hx-necessidade) }
+  :root[data-pele="estencil"] body .pet-dock .acao-mais[aria-expanded="true"]{ --es-miolo:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+  /* o aviso da necessidade: a caixa rosa com o contorno e o texto de tinta */
+  :root[data-pele="estencil"] body .mm-aviso.hx-chip--necessidade{ --es-miolo:var(--hx-necessidade); --es-contorno:var(--hx-miolo); padding:0 14px; color:var(--hx-escolhido-ink);
+    font:700 15px/1 var(--hx-f); letter-spacing:.1em }
+  /* o foco e o toque: sem o halo redondo das outras peles */
+  :root[data-pele="estencil"] body .mm-bt:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px; box-shadow:none !important }
+  /* a folha de um lugar: o titulo de 24 px; os exercicios em duas colunas, sem icone, com 54 px */
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .hx-painel__titulo{ font-size:24px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-grade{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-grade .treino-ex{ min-height:54px; gap:3px; padding:9px 10px 8px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-grade .treino-ex::before{ display:none }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-grade .treino-ex b{ font-size:14px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-grade .treino-ex small{ font-size:12px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-grade .lg-etq{ right:10px; top:7px }
+}
+
+/* ---------- 18.14 acertos depois de olhar as capturas da rodada: o chamado largo so no computador; os retratos da Arena maiores dentro
+   do quadro; o botao comum ligado (o modo da fala em Conversar) em osso */
+@media (max-width:899px){ :root[data-pele="estencil"] .pet-alerta:has(.chamado){ width:auto } }
+:root[data-pele="estencil"] .poc-ret{ overflow:hidden }
+:root[data-pele="estencil"] .poc-ret img{ scale:1.7; transform-origin:50% 55% }
+:root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)[aria-pressed="true"]{ color:var(--hx-escolhido-ink) }
+:root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)[aria-pressed="true"]::after{ background:var(--hx-escolhido) }
+
+/* ############################################################################################################################
+   19. A REVISAO 2 (sessao revisora, 2026-11-20): 52 de 73 iguais; aqui vao os 11 consertos e a peca diferente que ela apontou.
+   ############################################################################################################################ */
+
+/* ---------- 19.1 Lutar > Arena: o botao Lutar inteiro a vista (o painel desce mais, o rotulo repetido "Arena" sai da vista e o botao
+   fica preso a base enquanto a lista rola); os retratos enchem o quadro (a tela entrega o sprite recortado nesta pele) */
+:root[data-pele="estencil"] .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 36px) }
+:root[data-pele="estencil"] .poc-lugar > h2{ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap }
+:root[data-pele="estencil"] .poc-lugar .poc-lutar, :root[data-pele="estencil"] .poc-lugar .poc-lutar:hover{ position:sticky; bottom:0; background:var(--hx-miolo) }
+:root[data-pele="estencil"] .poc-ret img{ scale:none; width:36px; height:36px; object-fit:contain; object-position:center bottom }
+:root[data-pele="estencil"] .poc-pet .poc-ret{ background:none }
+:root[data-pele="estencil"] .poc-pet .poc-ret img{ width:50px; height:50px }
+
+/* ---------- 19.2 o minimapa: o mapa em esquema (a agua some no fundo de tinta, a terra em tinta clara, a costa em osso). Quem pinta e
+   o Minimapa.tsx, pelos tokens --hx-mapa-terra e --hx-mapa-costa; o filtro cinza sai */
+:root[data-pele="estencil"] .minimapa-caixa .minimapa{ filter:none }
+
+/* ---------- 19.3 o botao de perigo (o "Novo ovo" da zona de risco): contorno e texto na cor do perigo, o miolo riscado */
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao){ color:var(--hx-perigo) }
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao)::before{ background:var(--hx-perigo) }
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao)::after,
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao):hover::after{
+  background:repeating-linear-gradient(-45deg, transparent 0 6px, color-mix(in srgb, var(--hx-perigo) 16%, transparent) 6px 9px), var(--hx-miolo) }
+
+/* ---------- 19.4 os estados que faltavam: a aba clareia com o mouse e o foco dela sao duas barras de 5 px cortadas na inclinacao (as
+   barras vao no ::before, que e o paralelogramo); o botao principal pressionado escurece */
+:root[data-pele="estencil"] .lugar-abas .hx-aba:hover:not([aria-selected="true"])::before{ background:linear-gradient(var(--hx-tecla-hover), var(--hx-tecla-hover)), var(--hx-miolo-2) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible{ outline:0; box-shadow:none }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible::before{ box-shadow:inset 0 5px 0 var(--hx-foco), inset 0 -5px 0 var(--hx-foco) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):active:not(:disabled)::after{ background:var(--hx-btn-bg); filter:brightness(.86) }
+
+/* ---------- 19.5 o chamado: o arco que sobrava em cima do icone (a sombra interna da caixinha do icone de antes) */
+:root[data-pele="estencil"] .pet-alerta .chamado-ic{ border-radius:0; box-shadow:none }
+
+/* ---------- 19.6 Ajustes: os tres volumes comecam no mesmo x (o nome numa coluna fixa); a seta do voltar em traco de 16 px; o painel
+   com 440 px, para nao encostar nas acoes de baixo */
+:root[data-pele="estencil"] .aj--volume{ grid-template-columns:28px 72px minmax(0,1fr) max-content }
+:root[data-pele="estencil"] .mc-cfg > .mc-linha .mc-voltar > span{ width:16px; height:16px; margin:0 2px 0 -4px; font-size:0; line-height:0; rotate:180deg; background:currentColor;
+  --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E"); -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+@media (min-width:900px){ :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ width:min(440px, calc(46vw - 36px - var(--nav-larg, 0px))) } }
+
+/* ---------- 19.7 o DigiBrain: a rede fica como e (PR-6: escura, nas cores do scan de hoje), dentro da moldura da pele */
+:root[data-pele="estencil"] .scan .scan-moldura{ --scan-malha:var(--es-rede-malha); --scan-grade:var(--es-rede-grade); background-color:var(--es-rede-fundo) }
+:root[data-pele="estencil"] .scan .scan-canto{ display:block; border-color:var(--es-rede-malha) }
+
+/* ---------- 19.8 o celular: o destaque da folha com 56 px e a palavra a 24 px */
+@media (max-width:899px){
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque{ min-height:56px; padding-top:25px; padding-bottom:7px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque::before{ top:9px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .lg-destaque :is(.trn2-estado, .lg-grande){ font-size:24px }
+}
+
+/* ############################################################################################################################
+   20. A REVISAO 3 (sessao revisora, 2026-11-20): 60 de 73 iguais, nenhuma peca diferente; sobraram cinco margens (6 a 22 px).
+   ############################################################################################################################ */
+@media (min-width:900px){
+  /* a pilha das janelas 8 px para a esquerda (16 px da sombra ate a borda da tela, como na prancha) */
+  :root[data-pele="estencil"] .pet-hud{ right:13px }
+  /* as acoes de baixo 8 px para cima */
+  :root[data-pele="estencil"] .pet-dock{ bottom:20px }
+  /* o minimapa 6 px para a esquerda e para cima (a medida e a da peca, que cresce 1,114 vez) */
+  :root[data-pele="estencil"] .minimapa-caixa{ right:16.4px; bottom:16.4px }
+}
+/* a risca a direita da marca encosta na sombra de vermelhao */
+:root[data-pele="estencil"] .topo-logo::after{ left:calc(100% + 10px) }
+/* Lutar > Arena: a folga embaixo do botao Lutar, de 37 para 15 px */
+:root[data-pele="estencil"] .painel-tela__folha .hx-painel.poc-lugar{ padding-bottom:0 }
+:root[data-pele="estencil"] .poc-lugar .poc-lutar{ margin-bottom:0 }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha:has(> .poc-lugar){ padding-bottom:14px }
+/* o fechar tem o canto cortado: o foco vai por dentro (a revisora viu o contorno por fora no celular) */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:-5px }
+
+/* ############################################################################################################################
+   21. A REVISAO 4 (sessao revisora, 2026-11-20): as cinco margens iguais; a medida de todas as caixas mostrou quatro sobras.
+   ############################################################################################################################ */
+@media (min-width:900px){
+  /* o DigiBrain aberto alinhado com a pilha das janelas (acaba em x 1899) e com 430 px */
+  :root[data-pele="estencil"] .scan{ right:20px; --scan-larg:min(430px, calc(100vw - 24px), calc((100dvh - var(--scan-fora)) * 880 / 552 + 16px)) }
+  /* os Bits com 86 px, acabando onde a prancha acaba */
+  :root[data-pele="estencil"] .topo-hab{ padding-right:18px }
+  :root[data-pele="estencil"] .topo-bits{ gap:7px; padding:4px 13px 4px 12px }
+  /* o painel de Ajustes 10 px para a direita, como na prancha */
+  :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ left:calc(var(--nav-larg, 0px) + 34px) }
+}
+/* o chamado com 116 px: menos folga embaixo e em cima do botao */
+:root[data-pele="estencil"] .pet-alerta .chamado.dl-card{ gap:8px 12px; padding:14px 14px 10px }
+/* no celular, as acoes 5 px mais baixas */
+@media (max-width:899px){ :root[data-pele="estencil"] .app--pet .pet-dock{ bottom:calc(25px + env(safe-area-inset-bottom, 0px)) } }
+
+/* ############################################################################################################################
+   22. A REVISAO 5 (sessao revisora, 2026-11-20): 62 de 73 iguais; sobrou o espacamento de dentro do DigiBrain. E o topo dos
+   paineis alinhado com o trilho (y 98), que ela recomendou.
+   ############################################################################################################################ */
+:root[data-pele="estencil"] .scan .scan-in.scan-cx{ padding:4px 10px 10px }
+:root[data-pele="estencil"] .scan .scan-topo{ margin-bottom:7px }
+:root[data-pele="estencil"] .scan .scan-corpo{ gap:10px }
+:root[data-pele="estencil"] .scan .scan-faixa{ height:51px }
+@media (min-width:900px){
+  :root[data-pele="estencil"] .painel-tela--lugar-lado, :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ top:calc(var(--casca-topo) + 34px) }
+  :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--d-crescer{ max-height:calc(100dvh - var(--casca-topo) - 46px) }
+  :root[data-pele="estencil"] .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 50px) }
+  /* Ajustes acaba 14 px acima das acoes de baixo, e a lista rola por dentro */
+  :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ max-height:calc(100dvh - var(--casca-topo) - 140px) }
+}

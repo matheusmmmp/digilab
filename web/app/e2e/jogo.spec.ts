@@ -1510,6 +1510,11 @@ test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao 
   await expect(holo).toBeFocused();
   expect(await pele()).toBe("vidro");
   await page.keyboard.press("End");
+  /* o ultimo cartao e a Estencil (PE1 das peles de rua, 2026-11-20); a seta para a esquerda volta ao Militar */
+  const estencil = grupo.getByRole("radio", { name: /Estêncil/ });
+  await expect(estencil).toBeFocused();
+  expect(await pele()).toBe("estencil");
+  await page.keyboard.press("ArrowLeft");
   await expect(militar).toBeFocused();
   expect(await pele()).toBe("xcom");
 

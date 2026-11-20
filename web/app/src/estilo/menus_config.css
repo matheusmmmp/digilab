@@ -63,6 +63,14 @@
 .mc-opcao--pele-vidro .mc-pele-prev i:nth-child(1){ top:4px; height:2px; background:#5FD4FF; box-shadow:0 0 6px #5FD4FF }
 .mc-opcao--pele-vidro .mc-pele-prev i:nth-child(2){ background:linear-gradient(180deg, rgba(58,168,255,.4), rgba(58,168,255,.16)); border:1px solid #5FD4FF; box-shadow:inset 0 0 6px rgba(95,212,255,.45) }
 .mc-opcao--pele-vidro .mc-pele-prev i:nth-child(3){ background:rgba(58,168,255,.26); border:1px solid #5FD4FF }
+/* a Estencil (PE1 das peles de rua, docs/PLANO_UX_PELES_RUA.md): tinta, contorno de osso com o canto cortado, as riscas, a barra de osso e o
+   botao em vermelhao inclinado; as cores fixas sao as dos tokens dela (tokens.css) */
+.mc-opcao--pele-estencil .mc-pele-prev{ background:#17191F; box-shadow:inset 0 0 0 2px #F0EADB; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px)) }
+.mc-opcao--pele-estencil .mc-pele-prev i:nth-child(1){ height:5px; background:repeating-linear-gradient(-45deg, #F0EADB 0 2px, transparent 2px 4px) }
+.mc-opcao--pele-estencil .mc-pele-prev i:nth-child(2){ background:#F0EADB }
+.mc-opcao--pele-estencil .mc-pele-prev i:nth-child(3){ background:#FF4B2B; clip-path:polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%) }
+/* a etiqueta do cartao (a pele em previa): a cor e a do texto do cartao, escolhido ou nao */
+.mc-etq{ display:inline-flex; align-items:center; min-height:20px; padding:1px 7px; border:1px solid currentColor; font:700 11px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
 
 /* interruptor: a linha inteira e o alvo */
 .mc-interruptor{ display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:56px; padding:8px 12px; background:var(--hx-miolo);

@@ -12,7 +12,7 @@ import { VISTA, andar, irPara, seguirPet, useCameraLivre, type Par, type VistaPu
 import { motivoDoCais, useCais, useNivel } from "../../nivelTela.ts";
 import { PECAS, PECA_DO_LUGAR, nivelDaPeca, pecaAberta } from "../../nivel.ts";
 import {
-  LIMIAR_ARRASTO, MINIMAPA_PX, ZOOM_PASSO, celulaParaPx, corComAlfa, corDoNumero, dentroDoCirculo, janelaDe, limitarZoom, passoDaSeta,
+  LIMIAR_ARRASTO, MINIMAPA_PX, ZOOM_PASSO, celulaParaPx, corComAlfa, corDoNumero, dentroDoCirculo, esquemaDoMapa, janelaDe, limitarZoom, passoDaSeta,
   pontasDoCone, pxParaCelula, type Janela,
 } from "./minimapaGeo.ts";
 
@@ -32,10 +32,27 @@ function bitmapDe(img: ImageData): HTMLCanvasElement {
   return c;
 }
 
+/** o mapa em esquema, para a pele que define --hx-mapa-terra: a agua nao e pintada (fica o fundo), a terra numa cor e a costa noutra.
+    Um canvas pequeno por imagem e por par de cores */
+const esquemas = new WeakMap<ImageData, { chave: string; c: HTMLCanvasElement }>();
+function bitmapEsquema(img: ImageData, agua: readonly [number, number, number], terra: string, costa: string): HTMLCanvasElement {
+  const chave = terra + "|" + costa, pronto = esquemas.get(img);
+  if (pronto && pronto.chave === chave) return pronto.c;
+  const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+  const x = c.getContext("2d"); if (!x) throw new Error("minimapa: sem canvas 2d");
+  const tipos = esquemaDoMapa(img.data, img.width, img.height, agua);
+  for (const [tipo, cor] of [[1, terra], [2, costa || terra]] as const) {
+    x.fillStyle = cor;
+    for (let i = 0; i < tipos.length; i++) if (tipos[i] === tipo) x.fillRect(i % img.width, Math.floor(i / img.width), 1, 1);
+  }
+  esquemas.set(img, { chave, c });
+  return c;
+}
+
 /** as cores dos tokens da pele de agora (lidas a cada redesenho: a pele pode mudar) */
 function lerTokens() {
   const cs = getComputedStyle(document.documentElement), t = (n: string) => cs.getPropertyValue(n).trim();
-  return { fundo: t("--hud-fundo-2"), miolo: t("--hx-miolo"), texto2: t("--hx-texto-2"), foco: t("--hx-foco") };
+  return { fundo: t("--hud-fundo-2"), miolo: t("--hx-miolo"), texto2: t("--hx-texto-2"), foco: t("--hx-foco"), terra: t("--hx-mapa-terra"), costa: t("--hx-mapa-costa") };
 }
 
 interface Estado { chama: boolean; solta: boolean; podeSoltar: boolean }
@@ -49,7 +66,7 @@ function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada,
   ctx.fillStyle = k.fundo; ctx.fillRect(0, 0, MINIMAPA_PX, MINIMAPA_PX);
   ctx.imageSmoothingEnabled = false;
   const img = v.mapa.imagem, [dx, dy] = px([v.mapa.x0, v.mapa.z0]);
-  ctx.drawImage(bitmapDe(img), dx, dy, img.width * j.ppc, img.height * j.ppc);
+  ctx.drawImage(k.terra && v.mapa.agua ? bitmapEsquema(img, v.mapa.agua, k.terra, k.costa) : bitmapDe(img), dx, dy, img.width * j.ppc, img.height * j.ppc);
 
   const ponto = (c: Par, preench: string, traco: string) => {
     const p = px(c); if (!dentroDoCirculo(p, -4)) return;

@@ -14,7 +14,7 @@ export function MedidorHx({ valor, max, rotulo, tom = "neutro", mostrarTexto = t
       role="meter" aria-label={rotulo} aria-valuemin={0} aria-valuemax={max} aria-valuenow={v} aria-valuetext={texto}>
       <span className="hx-medidor__rot" aria-hidden="true">{rotulo}</span>
       <span className="hx-medidor__trilho" aria-hidden="true"><span className="hx-medidor__barra" style={{ display: "block", width: `${(v / max) * 100}%` }} /></span>
-      {mostrarTexto && <span className="hx-medidor__txt" aria-hidden="true">{texto}</span>}
+      {mostrarTexto && <span className="hx-medidor__txt" aria-hidden="true">{porcento ? <>{texto.slice(0, -1)}<span className="hx-medidor__pct">%</span></> : texto}</span>}
     </div>
   );
 }

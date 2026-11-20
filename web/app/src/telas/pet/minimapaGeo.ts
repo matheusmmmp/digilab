@@ -83,3 +83,18 @@ export function corComAlfa(cor: string, alfa: number): string {
 }
 /** a cena guarda a cor como numero 0xRRGGBB: vira "rgb(r, g, b)" */
 export const corDoNumero = (n: number): string => `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`;
+
+/** o mapa em esquema, para a pele que o pede (o token --hx-mapa-terra): de cada pixel RGBA da ilha vista de cima, 0 = agua (a cor `agua`
+ *  exata), 1 = terra, 2 = costa (terra com agua num dos quatro lados, ou na beira da imagem). So a conta; quem pinta e o Minimapa */
+export function esquemaDoMapa(dados: ArrayLike<number>, larg: number, prof: number, agua: readonly [number, number, number]): Uint8Array {
+  if (dados.length !== larg * prof * 4) throw new Error(`esquemaDoMapa: ${dados.length} bytes para ${larg} x ${prof}`);
+  const ehAgua = (i: number): boolean => dados[i * 4] === agua[0] && dados[i * 4 + 1] === agua[1] && dados[i * 4 + 2] === agua[2];
+  const tipos = new Uint8Array(larg * prof);
+  for (let z = 0; z < prof; z++) for (let x = 0; x < larg; x++) {
+    const i = z * larg + x;
+    if (ehAgua(i)) continue;
+    const beira = x === 0 || z === 0 || x === larg - 1 || z === prof - 1;
+    tipos[i] = beira || ehAgua(i - 1) || ehAgua(i + 1) || ehAgua(i - larg) || ehAgua(i + larg) ? 2 : 1;
+  }
+  return tipos;
+}

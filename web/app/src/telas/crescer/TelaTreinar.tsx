@@ -147,7 +147,7 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
         {EXERCICIOS.map(ex => {
           const [pri, sec] = CTR.exercicios[ex], des = bebe || !pode || lutando || nascendo > 0, forte = apt[pri] > 1;
           return (
-            <button type="button" key={ex} className={`treino-ex${t.forcaria ? " forcar" : ""}`} disabled={des}
+            <button type="button" key={ex} className={`treino-ex${t.forcaria ? " forcar" : ""}`} data-ex={ex} disabled={des}
               aria-label={`${t.forcaria ? "Forçar" : "Treinar"} ${NOME_EXERCICIO[ex]}${forte ? ": aptidão" : ""}${t.forcaria ? ": gera sobrecarga" : ""}, +${n1(CTR.ganhoPri * mult)} ${NOME_STAT[pri]} +${n1(CTR.ganhoSec * mult)} ${NOME_STAT[sec]}`}
               onClick={() => (t.forcaria ? setConfirmar(ex) : treinar(ex))}>
               {forte && <span className="lg-etq lg-etq--alerta"><Star aria-hidden="true" /></span>}
