@@ -2875,13 +2875,18 @@ class ConfigDigibrain:
                                              # GV-19): o comportamento `olhar`, a classe `tela` do M-SENS e o canal `gosto_visual` (ConfigOlhar)
     unidades_sociais: bool = False           # PROPOSTO, SEM FONTE como valor (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secao 2, M1-1 aprovada
                                              # em 2026-11-19): o outro no M-SENS e as unidades explorar/seguir e explorar/onde_comeu
+    incentivo_social_zero: bool = False      # PROPOSTO, SEM FONTE como valor (SOCIAL_PAR MD, o braco de controle do D-SP-63 e o MD-2;
+                                             # docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, secao 2): o incentivo das unidades sociais vale 0
+                                             # na decisao, e o P1 segue aprendendo o desfecho; so com a `unidades_sociais`
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
                      "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem", "passeio",
-                     "fala_unidades", "olhar", "unidades_sociais"):
+                     "fala_unidades", "olhar", "unidades_sociais", "incentivo_social_zero"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.incentivo_social_zero and not self.unidades_sociais:
+            raise ValueError("incentivo_social_zero so vale com a unidades_sociais (docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, secao 2)")
         if self.unidades_sociais and (self.fala_unidades or self.olhar or self.passeio):
             raise ValueError("unidades_sociais nao se combina com a fala_unidades, o olhar nem o passeio "
                              "(docs/ESPEC_SOCIAL_PAR_M1.md, secao 2: PROPOSTO, sem teste da combinacao)")
