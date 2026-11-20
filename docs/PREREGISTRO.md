@@ -32,6 +32,8 @@ link para o plano commitado.
 | [PR-COOP-A1](#pr-coop-a1--a-cooperação-com-o-irmão-aleatório) | a cooperação com o irmão aleatório | EMERGE e DOSE não confirmam; CUSTO confirma | não |
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
+| [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
+| [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | a rodar | não |
 
 ## PR-C1 — o longe regular
 
@@ -209,6 +211,41 @@ o resultado. O texto que vale é o do plano, no commit citado.
 | o que refutaria | pela regra de leitura: "há o que creditar além do sono" ou "indeterminado" na L-ALÉM contrariam o desfecho esperado; "apaga o sono" numa candidata a tira do R2 |
 | resultado | [RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md): L-SONO "preserva o sono" nas cinco candidatas; L-ALÉM "só o sono"; a H-MÓVEL não se confirma |
 | artefatos | [`artifacts_v3_pet_vivo/ra/run/`](../artifacts_v3_pet_vivo/ra/run/): `meta.json`, `resultado.json` `4c645a0a…`, `medidas.json.gz` `605d64c0…` |
+
+## PR-SOCIAL-PAR-S — o substrato do social
+
+**Esta seção entrou depois da run** (a regra do D-RB-13 chegou à `main` depois dela): o plano estava commitado e APROVADO antes. O texto
+que vale é o do plano, no commit citado.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_SOCIAL_PAR_S.md`](https://github.com/matheusmmmp/digilab/blob/4e54244e15223ec10c716968be4ea4bfcbe062b7/docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md), commit `4e54244e15223ec10c716968be4ea4bfcbe062b7` (2026-11-18 17:43, com o adendo 1 APROVADO), ancestral do commit da run `e9f4368e` (2026-11-19 00:52) |
+| hipótese | as previsões PROPOSTAS da seção 7: no B1, o G-DET passa e o D_A dos pets de hoje dá ≈ 0; no C, o G-DET passa por pouco ou falha; no B2, a PB-1 passa ou fica perto. "Nada disso muda a leitura" |
+| células | 3 braços (C, B1 fora da casa, B2 a bola perto) × 1 dono (atencioso) × 1 lugar (comedouro); cinco vidas por par (base, base-OUTRA, VIVO, GRAV, OUTRA); d0 = 5 (adendo 1) (seções 2, 4 e 11) |
+| sementes | 103001…103200 (200 bases, k = 1, prefixo `social_par_s`) e o G-DET em 103301…103350 (`social_par_s_det`): 750 pares (seção 4) |
+| contraste primário | D_A = T\*c_VIVO − T\*c_GRAV (o tempo até o contato), IC95 pelo t sobre as bases, δ_A = 4 (SEM FONTE); o G-DET com o `SeguidorPuro` no lugar de P, que passa com o IC todo abaixo de −δ_A (seções 3, 5 e 6) |
+| regra de leitura | a tabela da seção 7, em ordem: o G-DET falha, "o substrato não deixa ver"; passa e D_A ≈ 0, "nulo com um instrumento que vê"; passa e fora de ±δ_A, "o social aparece"; indeterminado, registrado como está. O conjunto decide pelo B1 |
+| regra de parada | não declarada no plano; a mais perto: os gates do código (seção 8), e o orquestrador para no primeiro par em que o G-INSTR ou o G1 falha |
+| o que refutaria | pela regra de leitura: o G-DET falhando no B1, ou o D_A do B1 fora do ≈ 0, contrariam a previsão do B1 |
+| resultado | [RESULTADO_V3_SOCIAL_PAR_S.md](RESULTADO_V3_SOCIAL_PAR_S.md): o G-DET passa nos três braços; o D_A ≈ 0 nos três (B1 −0,815 [−1,775; +0,145], n = 200); "nulo com um instrumento que vê"; o B inconclusivo por premissa nos três |
+| artefatos | [`artifacts_v3_social_par_s/run/`](../artifacts_v3_social_par_s/run/): `meta.json`, `resultado.json` `9c74ebc2…`, `medidas.json` `5fa7767d…`, os 750 pares em `vidas/` |
+
+## PR-SOCIAL-PAR-MD — a medida do M1 e do M2
+
+**Esta seção entrou antes da run** (D-RB-13).
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_SOCIAL_PAR_MD.md`](https://github.com/matheusmmmp/digilab/blob/523089d60ee7ee96f4e7c5ce9825c5d6d2f2acdc/docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md), commit `523089d60ee7ee96f4e7c5ce9825c5d6d2f2acdc` (2026-11-19 18:35, o APROVADO, "Aprovado"); o código da medida aprovado em 2026-11-20 (#1034) |
+| hipótese | as previsões PROPOSTAS da seção 7: o M1 e o M1-inc0 dão D_A ≈ 0 no C e no B1 (no B1, o M1 pode sair de ≈ 0 pelo `onde_comeu`); o M1+M2 passa a PM-1 e dá D_A < 0 no B1, com o C-APR < 0; o M1-inc0+M2 dá ≈ 0. "Nada disso muda a leitura" |
+| células | 8: 4 mecanismos (M1, M1-inc0, M1+M2, M1-inc0+M2) × 2 substratos (B1, o principal, e C); o instrumento da S3 sem mudança; o G-DET em cada célula (seções 2 e 3) |
+| sementes | 105001…105200 (200 bases, k = 1, prefixo `social_par_md`, as mesmas nas oito células) e o G-DET em 105301…105350 (`social_par_md_det`) (seção 4) |
+| contraste primário | o D_A de cada célula, como na S3 (δ_A = 4, SEM FONTE); a atribuição pelos contrastes pareados C-APR = D_A(M1+M2) − D_A(M1-inc0+M2) e C-APR1 = D_A(M1) − D_A(M1-inc0); a premissa PM-1 nos braços com o M2 (o limiar de 50 % SEM FONTE) (seções 5 a 7) |
+| regra de leitura | a tabela da seção 7, em ordem: o G-DET falha, "o substrato não deixa ver"; a PM-1 falha e ≈ 0, "inconclusivo por premissa"; ≈ 0, "nulo com um instrumento que vê"; fora de ±δ_A, "o parceiro responde"; indeterminado, registrado como está. A atribuição e o conjunto pelo B1 |
+| regra de parada | não declarada no plano; a mais perto: o código (MD1) e a run (MD2) em PRs separados (MD-8), e o orquestrador para no primeiro par em que o G-INSTR ou o G1 falha |
+| o que refutaria | pela regra de leitura: no B1, o M1+M2 em "nulo com um instrumento que vê", ou o C-APR ≈ 0, contrariam a previsão |
+| resultado | a rodar |
+| artefatos | a rodar (`artifacts_v3_social_par_md/run/`) |
 
 ## Como replicar uma run (`tools/replicar_run.py`)
 
