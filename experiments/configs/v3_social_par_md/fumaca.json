@@ -1,0 +1,26 @@
+{
+ "modo": "fumaca",
+ "mecanismos": [
+  "M1",
+  "M1-inc0",
+  "M1+M2",
+  "M1-inc0+M2"
+ ],
+ "bracos": [
+  "B1",
+  "C"
+ ],
+ "unidades": {
+  "bases": [
+   101,
+   202
+  ],
+  "k": 1
+ },
+ "det": {
+  "bases": [
+   303
+  ],
+  "k": 1
+ }
+}
