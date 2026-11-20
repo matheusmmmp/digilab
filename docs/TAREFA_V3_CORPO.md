@@ -191,3 +191,23 @@ O CHECKPOINT da C3 chegou repassado pelo coordenador, com as palavras do Matheus
 - **O plano reescrito:** o CTRL e o DTB em sementes novas, nas 12 células × 200 unidades e 500 pares. A primária é o "Tempo bem" nas 12
   e nas 11 células; as guardas são a saúde, a taxa por episódio, o "Tempo bem" por lugar e o S2; a saúde por célula entra como ressalva.
   As D-C4-1 a D-C4-12 estão decididas. Nenhuma vida antes do plano na `main`, da faixa e do código.
+
+## 17. O código da C4 (2026-11-20)
+
+Pelo `docs/PLANO_ANALISE_V3_CORPO_C4.md`, seção 8. Nenhuma vida da faixa rodou.
+- **O orquestrador:** o `experiments/run_v3_corpo_c4.py`, um arquivo próprio para o `run_v3_corpo_c3.py` ficar intacto. As vidas são as
+  da C3 (`C3.viver` e `C3.par`), só com o CTRL e o DTB. Cada vida grava também o "Tempo bem" (dias 1 a 14 e 8 a 14) e os chutes.
+- **A análise:** a primária nas 12 e nas 11 células, as sete guardas (a saúde nas 12 e nas 6 células, a taxa por episódio, o "Tempo bem"
+  nos três lugares e o S2), a saúde por célula, as premissas contra os pisos e a leitura da seção 6. O descritivo traz as oito guardas da
+  C3, por lugar e por dono, os chutes, as 11 células e os números da C3 ao lado.
+- **O relógio:** o tempo de cada vida vai para o `custos.json`. O teste roda a fumaça duas vezes e confere que o `medidas.json` e o
+  `resultado.json` saem iguais byte a byte.
+- **O pacote:** o orquestrador confere cada `.tar.gz` contra a pasta crua, arquivo a arquivo, e só então apaga a pasta. Antes da run,
+  confere o `pre_run` e os 10 GB livres no disco.
+- **A faixa:** a 107001…107800 entrou no `experiments/bancada/faixas.py`, aprovada pela coordenadora. As configs ficam em
+  `experiments/configs/v3_corpo_c4/`.
+- **O pré-registro:** a seção `PR-CORPO-C4` do `docs/PREREGISTRO.md`, com o link para o plano no commit aprovado (`dc53e4cc`).
+- **Os testes:** `tests/test_run_v3_corpo_c4.py`, 20 testes (a regra de leitura caso a caso, as premissas, a trava, o pacote e a fumaça).
+- **Nada mudou no `digilab/` nem no web.**
+
+**O que falta:** o plano (#1039) e este código na `main`, o `pre_run` e a run, uma vez.

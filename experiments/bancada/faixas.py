@@ -238,6 +238,11 @@ FAIXAS_RESERVADAS = (
                      "(docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 4; D-C3-7, reservada pelo coordenador em 2026-11-19; nenhuma vida antes da "
                      "aprovacao do plano pelo Matheus; a 106xxx conferida livre no faixas.py, nas configs e nos planos de todos os branches "
                      "remotos em 2026-11-19)"),
+    (107001, 107800, "CORPO C4, a validacao do teto baixo: o bloco I nas bases 107001...107200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 107301...107800 (k = 1, 500 pares, prefixo corpo_par), os bracos CTRL e DTB "
+                     "(docs/PLANO_ANALISE_V3_CORPO_C4.md, secao 4; D-C4-5 e D-C4-7, o plano aprovado pelo Matheus em 2026-11-20, \"Aprovo "
+                     "todas\"; a faixa aprovada pela coordenadora em 2026-11-20, conferida livre na origin/main (682e7e5c) e no faixas.py de "
+                     "todos os PRs abertos)"),
     (105001, 105400, "SOCIAL_PAR MD, a medida do M1 e do M2: a run 105001...105200 (200 bases, k = 1, prefixo social_par_md, as mesmas "
                      "nas oito celulas) e o G-DET 105301...105350 (prefixo social_par_md_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, "
                      "secao 4; MD-5, aprovada pelo Matheus em 2026-11-19, \"Aprovado\"; a 104xxx ja e da CORPO; conferida livre no "
