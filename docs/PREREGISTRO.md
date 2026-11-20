@@ -211,6 +211,24 @@ a run rodou (`f720d684`). O que vale como registro anterior é o plano, no commi
 | comando | `python tools/replicar_run.py c4 a287ba20fafdc1fbbf9be7100f89d9c90f466948 --relatorio artifacts_v3_evidencia_a3/replica_c4.json` |
 | resultado | a seção "A réplica da C4" abaixo |
 
+## PR-PET-VIVO-RA — a linha de base do intervalo (replay)
+
+**Esta seção entrou depois do replay** (D-RB-13): o plano estava commitado e APROVADO antes, mas a seção do índice só foi escrita com
+o resultado. O texto que vale é o do plano, no commit citado.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_RA.md`](https://github.com/matheusmmmp/digilab/blob/4492a0f6070911602a8848043f8ad7c0f298643a/docs/PLANO_ANALISE_V3_PET_VIVO_RA.md), commit `4492a0f6070911602a8848043f8ad7c0f298643a` (2026-11-19 18:38, o APROVADO), ancestral do commit do replay `1688bca9` (2026-11-19 21:18) |
+| hipótese | as perguntas Q-SONO e Q-ALÉM; H-MÓVEL (a média móvel curta apaga o sono, a longa o preserva), H-ESTADO (o resto do ocioso encolhe com o estado do corpo) e H-ALÉM (o η² do acordado abaixo de 0,05 em toda linha de base). "O desfecho esperado é 'só o sono'" (seção 1) |
+| células | as mesmas 5 120 vidas do R1, rejogadas: o HOJE e o OLF-0 da run do PV-2 (3 lugares, n 200) e o HOJE da checagem do v38 (2 lugares, n 40); 7 linhas de base (GLOBAL, CTX, FASE, ESTADO, MÓVEL com k 4, 16 e 96) (seções 3 e 4) |
+| sementes | nenhuma nova e nenhuma faixa nova: as da run do PV-2 (bases 26101…26505, k 40) (seção 3) |
+| contraste primário | **nenhum:** "nenhuma medida é gate"; o IC95 por lugar contra os cortes da regra (seção 6) |
+| regra de leitura | L-SONO, por linha de base: o limite de baixo do resto do dormir > 0 nos 3 lugares, "preserva o sono"; o de cima ≤ 0 em algum, "apaga". L-ALÉM: o limite de baixo do η² do acordado > 0,05 em 2 lugares na ESTADO, "há o que creditar além do sono"; o de cima < 0,05 nos 3 lugares na GLOBAL, FASE, ESTADO e MÓVEL, "só o sono"; senão "indeterminado". O corte de 0,05 é SEM FONTE (seção 6) |
+| regra de parada | roda uma vez; as conferências (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ, C-IGUAL-R1) falham alto antes de qualquer medida; com a projeção da fumaça acima de 2 h o replay não roda e o plano volta ao Matheus (seções 3 e 8) |
+| o que refutaria | pela regra de leitura: "há o que creditar além do sono" ou "indeterminado" na L-ALÉM contrariam o desfecho esperado; "apaga o sono" numa candidata a tira do R2 |
+| resultado | [RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md): L-SONO "preserva o sono" nas cinco candidatas; L-ALÉM "só o sono"; a H-MÓVEL não se confirma |
+| artefatos | [`artifacts_v3_pet_vivo/ra/run/`](../artifacts_v3_pet_vivo/ra/run/): `meta.json`, `resultado.json` `4c645a0a…`, `medidas.json.gz` `605d64c0…` |
+
 ## Como replicar uma run (`tools/replicar_run.py`)
 
 ```bash
