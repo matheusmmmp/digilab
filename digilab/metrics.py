@@ -2120,6 +2120,21 @@ def tempo_bem_nas_decisoes(decisoes: Sequence[tuple[int, float, float, float]], 
     return {"n": len(sel), "frac": bem / len(sel), "frac_privacao": privacao / len(sel), "frac_exaustao": exaustao / len(sel)}
 
 
+def fome_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[int, int], limiar: float = 0.5) -> dict:
+    """A fome do pet nas decisoes da janela (o descritivo da C4 acrescentado depois da aprovacao; docs/RESULTADO_V3_CORPO_C4.md):
+    `decisoes` = (tick, fome) no tick de cada decisao, na escala 0-1 da `Observacao`, em que 1 e saciado. A fome aqui e o
+    complemento, 1 - fome da `Observacao` (a fracao do quimico da fome sobre a capacidade). Devolve a fome media e a fracao das
+    decisoes com a fome acima de `limiar` (0,5 = o teto C/2 do braco DTB), isto e, com a `Observacao` abaixo de 1 - `limiar`.
+    Falha alto sem decisao."""
+    ini, fim = _checar_janela(janela)
+    if not 0.0 <= limiar <= 1.0:
+        raise ValueError(f"limiar fora de [0, 1]: {limiar!r}")
+    sel = [_escala01("fome", f) for t, f in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("fome sem decisao na janela")
+    return {"n": len(sel), "media": 1.0 - sum(sel) / len(sel), "frac_acima": sum(1 for f in sel if f < 1.0 - limiar) / len(sel)}
+
+
 # --- o prototipo do DigiBrain modular (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, secao 4; PROPOSTAS na etapa 1a)
 MODULOS_SONDA = ("incentivo", "habito", "memoria", "persistencia", "afeto")    # as sondas "quem decidiu" da espec, secao 7
 
@@ -3732,3 +3747,37 @@ def medidas_caminho_sono(motivos: Sequence[dict], lambda_sono: int, passo: int) 
             "acordado": {"n": acordado_n,
                          "chance_dormir": None if acordado_n == 0 else float(acordado_chance / acordado_n),
                          "dormir_candidato": None if acordado_n == 0 else acordado_candidato / acordado_n}}
+
+
+# ================================================================== o teste de recompensa (docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md, secao 6)
+def tempo_acordado(acoes: Sequence[str], inicio: int = 0, fim: int | None = None) -> dict:
+    """O T_ACORDADO: a fracao das decisoes [inicio, fim) em que o pet nao escolheu dormir (`acoes`: o comportamento escolhido em cada
+    decisao, na ordem). Falha alto sem decisao na janela."""
+    sel = list(acoes)[inicio:fim]
+    if not sel:
+        raise ValueError("tempo acordado sem decisao na janela")
+    if any(type(a) is not str for a in sel):
+        raise TypeError("tempo acordado: cada decisao e o nome do comportamento")
+    acordado = sum(1 for a in sel if a != "dormir")
+    return {"n": len(sel), "acordado": acordado, "frac": acordado / len(sel)}
+
+
+def medidas_carinho(elogios: Sequence[dict]) -> dict:
+    """Os carinhos creditados numa vida com a ConfigElogio ligada (`DigiBrain.elogios`): quantos, quantos com o sinal 0 e com o sinal
+    negativo, os creditos (um por decisao na janela) e os que mudaram a linha do habito (o P2 com `abs` > 0; a P-DOSE do plano). O
+    carinho antes da primeira decisao nao tem sinal nem credito e conta em `sem_decisao`."""
+    n = zero = negativo = sem_decisao = creditos = movem = 0
+    for e in elogios:
+        n += 1
+        if "f_n" not in e:
+            if e["creditos"]:
+                raise ValueError("carinho com credito e sem sinal")
+            sem_decisao += 1
+            continue
+        zero += e["f_n"] == 0
+        negativo += e["f_n"] < 0
+        for cr in e["creditos"]:
+            creditos += 1
+            movem += cr["p2"] is not None and cr["p2"]["abs"] > 0
+    return {"n": n, "sinal_zero": zero, "sinal_negativo": negativo, "sem_decisao": sem_decisao, "creditos": creditos,
+            "creditos_movem": movem, "fracao_movem": None if creditos == 0 else movem / creditos}

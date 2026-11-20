@@ -1,0 +1,4630 @@
+{
+  "descritivo": {
+    "as_oito_guardas_da_c3": {
+      "exaustao_12_celulas": {
+        "classe": {
+          "classe": "< 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.022248027496157046,
+        "ic95": {
+          "ic_inferior": -0.0983297835750793,
+          "ic_superior": -0.09212532555190481
+        },
+        "lugar": "as 12 celulas",
+        "media": -0.09522755456349205,
+        "motivo": null,
+        "n": 200
+      },
+      "exaustao_longe_fixo": {
+        "classe": {
+          "classe": "< 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.0497440525484591,
+        "ic95": {
+          "ic_inferior": -0.10674835830026778,
+          "ic_superior": -0.09287589765211317
+        },
+        "lugar": "longe_fixo",
+        "media": -0.09981212797619048,
+        "motivo": null,
+        "n": 200
+      },
+      "privacao_12_celulas": {
+        "classe": {
+          "classe": "< 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.04892782206686319,
+        "ic95": {
+          "ic_inferior": -0.06118811586913475,
+          "ic_superior": -0.047543282940389064
+        },
+        "lugar": "as 12 celulas",
+        "media": -0.05436569940476191,
+        "motivo": null,
+        "n": 200
+      },
+      "privacao_comedouro": {
+        "classe": {
+          "classe": "≈ 0",
+          "motivo": null,
+          "sinal": "+"
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.023806353611514747,
+        "ic95": {
+          "ic_inferior": 0.001987400155275489,
+          "ic_superior": 0.008626439130438797
+        },
+        "lugar": "comedouro",
+        "media": 0.005306919642857143,
+        "motivo": null,
+        "n": 200
+      },
+      "privacao_longe": {
+        "classe": {
+          "classe": "< 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.10706708833736064,
+        "ic95": {
+          "ic_inferior": -0.09967256539851445,
+          "ic_superior": -0.0698140417443427
+        },
+        "lugar": "longe",
+        "media": -0.08474330357142858,
+        "motivo": null,
+        "n": 200
+      },
+      "privacao_longe_fixo": {
+        "classe": {
+          "classe": "< 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.10274057401663195,
+        "ic95": {
+          "ic_inferior": -0.09798669394555497,
+          "ic_superior": -0.0693347346258736
+        },
+        "lugar": "longe_fixo",
+        "media": -0.08366071428571428,
+        "motivo": null,
+        "n": 200
+      },
+      "saude_12_celulas": {
+        "classe": {
+          "classe": "> 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.054972040613203675,
+        "ic95": {
+          "ic_inferior": 0.04856179463796704,
+          "ic_superior": 0.06389221970561762
+        },
+        "lugar": "as 12 celulas",
+        "media": 0.056227007171792326,
+        "motivo": null,
+        "n": 200
+      },
+      "saude_sem_comida": {
+        "classe": {
+          "classe": "≈ 0",
+          "motivo": null,
+          "sinal": "+"
+        },
+        "contraste": "DTB - CTRL",
+        "dp": 0.06063323627868722,
+        "ic95": {
+          "ic_inferior": 0.004868973397172079,
+          "ic_superior": 0.02177817442028824
+        },
+        "lugar": "as celulas do relapso e do aleatorio",
+        "media": 0.013323573908730159,
+        "motivo": null,
+        "n": 200
+      }
+    },
+    "bloco_II": {
+      "CTRL": {
+        "fracao_janela_cabe": 1.0,
+        "pares": 500,
+        "t_reencontro_media": 10.788
+      },
+      "DTB": {
+        "fracao_janela_cabe": 1.0,
+        "pares": 500,
+        "t_reencontro_media": 7.486
+      }
+    },
+    "chutes": {
+      "comedouro": {
+        "DTB - CTRL": {
+          "dp": 0.08623912064514712,
+          "ic95": {
+            "ic_inferior": -0.022025043660403577,
+            "ic_superior": 0.0020250436604035763
+          },
+          "media": -0.01,
+          "motivo": null,
+          "n": 200
+        },
+        "fracao_vidas_com_chute": {
+          "CTRL": 0.01125,
+          "DTB": 0.00375
+        },
+        "niveis": {
+          "CTRL": 0.015,
+          "DTB": 0.005
+        }
+      },
+      "longe": {
+        "DTB - CTRL": {
+          "dp": 1.386682893539897,
+          "ic95": {
+            "ic_inferior": 0.24164317756015566,
+            "ic_superior": 0.6283568224398444
+          },
+          "media": 0.435,
+          "motivo": null,
+          "n": 200
+        },
+        "fracao_vidas_com_chute": {
+          "CTRL": 0.4175,
+          "DTB": 0.46875
+        },
+        "niveis": {
+          "CTRL": 0.94875,
+          "DTB": 1.38375
+        }
+      },
+      "longe_fixo": {
+        "DTB - CTRL": {
+          "dp": 1.274207187739275,
+          "ic95": {
+            "ic_inferior": 0.05107660826850552,
+            "ic_superior": 0.4064233917314945
+          },
+          "media": 0.22875,
+          "motivo": null,
+          "n": 200
+        },
+        "fracao_vidas_com_chute": {
+          "CTRL": 0.80875,
+          "DTB": 0.85625
+        },
+        "niveis": {
+          "CTRL": 2.49375,
+          "DTB": 2.7225
+        }
+      }
+    },
+    "comparacao_com_a_c3": {
+      "S2_tempo_ate_o_reencontro": {
+        "ic95": {
+          "ic_inferior": -4.526592566996455,
+          "ic_superior": -0.15340743300354465
+        },
+        "media": -2.34
+      },
+      "fontes_sha256": {
+        "c3/resultado.json": "b326081209127999bf9982872a2da772a57ffb45eb69b663b2d945a89dd0b21d",
+        "c3_tempo_bem/resumo.json": "45373085a8b78b2089918415bc2d47ec91c63f1e9987f1126d4ebcfa02f4595f"
+      },
+      "guardas_da_c3": {
+        "exaustao_12_celulas": {
+          "ic95": {
+            "ic_inferior": -0.09830000794196576,
+            "ic_superior": -0.09201869245485965
+          },
+          "media": -0.0951593501984127
+        },
+        "exaustao_longe_fixo": {
+          "ic95": {
+            "ic_inferior": -0.1056020642468927,
+            "ic_superior": -0.09245225122929779
+          },
+          "media": -0.09902715773809524
+        },
+        "privacao_12_celulas": {
+          "ic95": {
+            "ic_inferior": -0.05685948621947278,
+            "ic_superior": -0.04398624790751134
+          },
+          "media": -0.05042286706349206
+        },
+        "privacao_comedouro": {
+          "ic95": {
+            "ic_inferior": 0.002301032510201012,
+            "ic_superior": 0.008480217489798988
+          },
+          "media": 0.005390625
+        },
+        "privacao_longe": {
+          "ic95": {
+            "ic_inferior": -0.10128926667821649,
+            "ic_superior": -0.07249421546464067
+          },
+          "media": -0.08689174107142858
+        },
+        "privacao_longe_fixo": {
+          "ic95": {
+            "ic_inferior": -0.0824648816143797,
+            "ic_superior": -0.057070088623715536
+          },
+          "media": -0.06976748511904762
+        },
+        "saude_12_celulas": {
+          "ic95": {
+            "ic_inferior": 0.043533883746838135,
+            "ic_superior": 0.05825789122009308
+          },
+          "media": 0.05089588748346561
+        },
+        "saude_sem_comida": {
+          "ic95": {
+            "ic_inferior": -0.0015475344883580378,
+            "ic_superior": 0.01516480011335804
+          },
+          "media": 0.0068086328125000015
+        }
+      },
+      "taxa_por_episodio_longe_fixo": {
+        "ic95": {
+          "ic_inferior": 0.104886857982678,
+          "ic_superior": 0.1348201294803687,
+          "nivel": 0.95
+        },
+        "media": 0.11985349373152335
+      },
+      "tempo_bem": {
+        "as 11 celulas": {
+          "ic95": {
+            "ic_inferior": 0.05859277167169491,
+            "ic_superior": 0.06768901945384623
+          },
+          "media": 0.06314089556277057
+        },
+        "as 12 celulas": {
+          "ic95": {
+            "ic_inferior": 0.05778349435911005,
+            "ic_superior": 0.06625358401390581
+          },
+          "media": 0.06201853918650793
+        },
+        "comedouro": {
+          "ic95": {
+            "ic_inferior": 0.027668855353082993,
+            "ic_superior": 0.031799150599297964
+          },
+          "media": 0.029734002976190478
+        },
+        "longe": {
+          "ic95": {
+            "ic_inferior": 0.06529835752029872,
+            "ic_superior": 0.08123996093208222
+          },
+          "media": 0.07326915922619047
+        },
+        "longe_fixo": {
+          "ic95": {
+            "ic_inferior": 0.07364235355254227,
+            "ic_superior": 0.09246255716174347
+          },
+          "media": 0.08305245535714287
+        }
+      }
+    },
+    "guardas_11_celulas": {
+      "S2_tempo_ate_o_reencontro": {
+        "classe": {
+          "classe": "< 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "ic95": {
+          "ic_inferior": -4.313833805305855,
+          "ic_superior": -2.290166194694145
+        },
+        "media": -3.302,
+        "passa": true
+      },
+      "saude_12_celulas": {
+        "classe": {
+          "classe": "> 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "ic95": {
+          "ic_inferior": 0.05261093585368358,
+          "ic_superior": 0.06933544401644628
+        },
+        "media": 0.06097318993506493,
+        "passa": true
+      },
+      "saude_sem_comida": {
+        "classe": {
+          "classe": "≈ 0",
+          "motivo": null,
+          "sinal": "+"
+        },
+        "ic95": {
+          "ic_inferior": 0.004868973397172079,
+          "ic_superior": 0.02177817442028824
+        },
+        "media": 0.013323573908730159,
+        "passa": true
+      },
+      "taxa_por_episodio_longe_fixo": {
+        "classe": {
+          "classe": "> 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "ic95": {
+          "ic_inferior": 0.11193592496069159,
+          "ic_superior": 0.13970575922380293
+        },
+        "media": 0.12582084209224725,
+        "passa": true
+      },
+      "tempo_bem_comedouro": {
+        "classe": {
+          "classe": "≈ 0",
+          "motivo": null,
+          "sinal": "+"
+        },
+        "ic95": {
+          "ic_inferior": 0.020586225910015403,
+          "ic_superior": 0.024694032026492542
+        },
+        "media": 0.022640128968253972,
+        "passa": true
+      },
+      "tempo_bem_longe": {
+        "classe": {
+          "classe": "> 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "ic95": {
+          "ic_inferior": 0.06208258521598466,
+          "ic_superior": 0.07798251895068198
+        },
+        "media": 0.07003255208333332,
+        "passa": true
+      },
+      "tempo_bem_longe_fixo": {
+        "classe": {
+          "classe": "> 0",
+          "motivo": null,
+          "sinal": null
+        },
+        "ic95": {
+          "ic_inferior": 0.07768769204438664,
+          "ic_superior": 0.09838373652704194
+        },
+        "media": 0.08803571428571429,
+        "passa": true
+      }
+    },
+    "incoerente_igual_ao_atencioso": {
+      "CTRL|comedouro": {
+        "iguais": 200,
+        "vidas": 200
+      },
+      "CTRL|longe": {
+        "iguais": 0,
+        "vidas": 200
+      },
+      "CTRL|longe_fixo": {
+        "iguais": 0,
+        "vidas": 200
+      },
+      "DTB|comedouro": {
+        "iguais": 200,
+        "vidas": 200
+      },
+      "DTB|longe": {
+        "iguais": 0,
+        "vidas": 200
+      },
+      "DTB|longe_fixo": {
+        "iguais": 0,
+        "vidas": 200
+      }
+    },
+    "por_dono": {
+      "aleatorio|comedouro": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.1736397240519698,
+            "ic95": {
+              "ic_inferior": -0.024212042600678628,
+              "ic_superior": 0.024212042600678628
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.015,
+            "DTB": 0.015
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.029471066942521155,
+            "ic95": {
+              "ic_inferior": -0.08279243367719775,
+              "ic_superior": -0.07457363775137367
+            },
+            "media": -0.07868303571428571,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.26272321428571427,
+            "DTB": 0.18404017857142857
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.03549795564893068,
+            "ic95": {
+              "ic_inferior": 0.02078682955537566,
+              "ic_superior": 0.03068638473033863
+            },
+            "media": 0.025736607142857144,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4690550595238095,
+            "DTB": 0.49479166666666663
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.04404899333659962,
+            "ic95": {
+              "ic_inferior": -0.0032849776110027524,
+              "ic_superior": 0.008999263325288463
+            },
+            "media": 0.002857142857142856,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.612857142857143,
+            "DTB": 2.6157142857142857
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.08093665457753406,
+            "ic95": {
+              "ic_inferior": -0.06058591941381302,
+              "ic_superior": -0.03801456669729809
+            },
+            "media": -0.049300243055555554,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.39648605034722223,
+            "DTB": 0.3471858072916667
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.024780246231031866,
+            "ic95": {
+              "ic_inferior": -0.00491737107251765,
+              "ic_superior": 0.001993263929660508
+            },
+            "media": -0.0014620535714285707,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.48823660714285716,
+            "DTB": 0.4867745535714285
+          }
+        }
+      },
+      "aleatorio|longe": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 1.7806257722226526,
+            "ic95": {
+              "ic_inferior": -0.2632875810146858,
+              "ic_superior": 0.23328758101468583
+            },
+            "media": -0.015,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.865,
+            "DTB": 0.85
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.04235668771687178,
+            "ic95": {
+              "ic_inferior": -0.1222082314398438,
+              "ic_superior": -0.11039593522682287
+            },
+            "media": -0.11630208333333333,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3649330357142857,
+            "DTB": 0.24863095238095237
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.08345918658590724,
+            "ic95": {
+              "ic_inferior": -0.03238890224150326,
+              "ic_superior": -0.009114073948972935
+            },
+            "media": -0.020751488095238097,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6154315476190476,
+            "DTB": 0.5946800595238095
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.24472278628892,
+            "ic95": {
+              "ic_inferior": 0.11016196432392159,
+              "ic_superior": 0.178409464247507
+            },
+            "media": 0.1442857142857143,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 1.7789285714285714,
+            "DTB": 1.9232142857142858
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.11862864785568482,
+            "ic95": {
+              "ic_inferior": -0.0014769624050372451,
+              "ic_superior": 0.03160581161138645
+            },
+            "media": 0.015064424603174604,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.17090175843253966,
+            "DTB": 0.1859661830357143
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.05392626421834703,
+            "ic95": {
+              "ic_inferior": 0.024891323122898983,
+              "ic_superior": 0.03993010544852959
+            },
+            "media": 0.032410714285714286,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.33310267857142856,
+            "DTB": 0.36551339285714285
+          }
+        }
+      },
+      "aleatorio|longe_fixo": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 2.2763752814750364,
+            "ic95": {
+              "ic_inferior": -0.22241409168393658,
+              "ic_superior": 0.4124140916839366
+            },
+            "media": 0.095,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.085,
+            "DTB": 2.18
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.03995240522646981,
+            "ic95": {
+              "ic_inferior": -0.09621077979263333,
+              "ic_superior": -0.08506898211212856
+            },
+            "media": -0.09063988095238094,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.30277529761904765,
+            "DTB": 0.2121354166666667
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.06585748428529706,
+            "ic95": {
+              "ic_inferior": -0.0033274064517371943,
+              "ic_superior": 0.015038715975546714
+            },
+            "media": 0.00585565476190476,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5247767857142857,
+            "DTB": 0.5306324404761905
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.21520024994085796,
+            "ic95": {
+              "ic_inferior": 0.09713568195473443,
+              "ic_superior": 0.15715003233097985
+            },
+            "media": 0.12714285714285714,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.1735714285714285,
+            "DTB": 2.3007142857142857
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.11500490649795904,
+            "ic95": {
+              "ic_inferior": -0.02173145055011284,
+              "ic_superior": 0.010340746185033476
+            },
+            "media": -0.005695352182539682,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.29928159226190476,
+            "DTB": 0.29358624007936507
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.049979273559551805,
+            "ic95": {
+              "ic_inferior": 0.017257161314334284,
+              "ic_superior": 0.031195219638046664
+            },
+            "media": 0.024226190476190474,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.401108630952381,
+            "DTB": 0.4253348214285715
+          }
+        }
+      },
+      "atencioso|comedouro": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.0
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.0349596958978922,
+            "ic95": {
+              "ic_inferior": -0.05390746161261248,
+              "ic_superior": -0.04415801457786371
+            },
+            "media": -0.049032738095238095,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.09989583333333334,
+            "DTB": 0.050863095238095235
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.04052355854332648,
+            "ic95": {
+              "ic_inferior": -0.020509170488417404,
+              "ic_superior": -0.009208091416344499
+            },
+            "media": -0.014858630952380951,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.01673363095238095,
+            "DTB": 0.001875
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.3774594594439794,
+            "ic95": {
+              "ic_inferior": 0.7602248056314083,
+              "ic_superior": 0.8654894800828772
+            },
+            "media": 0.8128571428571427,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 5.24,
+            "DTB": 6.052857142857143
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.017739339735553087,
+            "ic95": {
+              "ic_inferior": 0.001545451901600158,
+              "ic_superior": 0.006492541649987144
+            },
+            "media": 0.004018996775793651,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.9958051450892857,
+            "DTB": 0.9998241418650794
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.029856241820384176,
+            "ic95": {
+              "ic_inferior": 0.04379820339819193,
+              "ic_superior": 0.05212441564942712
+            },
+            "media": 0.047961309523809524,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.9010193452380952,
+            "DTB": 0.9489806547619049
+          }
+        }
+      },
+      "atencioso|longe": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 3.545366428957364,
+            "ic95": {
+              "ic_inferior": 0.12063983281129981,
+              "ic_superior": 1.1093601671887001
+            },
+            "media": 0.615,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 1.22,
+            "DTB": 1.835
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.1125484648733712,
+            "ic95": {
+              "ic_inferior": -0.1513260165920996,
+              "ic_superior": -0.11993886436028134
+            },
+            "media": -0.13563244047619047,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2630282738095238,
+            "DTB": 0.12739583333333335
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.3206335350268666,
+            "ic95": {
+              "ic_inferior": -0.17221606260549757,
+              "ic_superior": -0.08279881834688338
+            },
+            "media": -0.12750744047619048,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5581696428571429,
+            "DTB": 0.43066220238095243
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.7673391381174841,
+            "ic95": {
+              "ic_inferior": 0.4301463273873275,
+              "ic_superior": 0.6441393868983868
+            },
+            "media": 0.5371428571428571,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.9214285714285717,
+            "DTB": 3.458571428571428
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.3160772383166657,
+            "ic95": {
+              "ic_inferior": 0.0750744845012791,
+              "ic_superior": 0.1632210834550701
+            },
+            "media": 0.1191477839781746,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5450026860119048,
+            "DTB": 0.6641504699900794
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.17514953411922007,
+            "ic95": {
+              "ic_inferior": 0.06513100335126709,
+              "ic_superior": 0.11397613950587576
+            },
+            "media": 0.08955357142857143,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6630505952380952,
+            "DTB": 0.7526041666666667
+          }
+        }
+      },
+      "atencioso|longe_fixo": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 2.5090739848211996,
+            "ic95": {
+              "ic_inferior": -0.24486122294552343,
+              "ic_superior": 0.4548612229455234
+            },
+            "media": 0.105,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.81,
+            "DTB": 2.915
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.1259250997622098,
+            "ic95": {
+              "ic_inferior": -0.1422016496172382,
+              "ic_superior": -0.10708406466847609
+            },
+            "media": -0.12464285714285714,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.18534970238095239,
+            "DTB": 0.06070684523809524
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.26601216281423434,
+            "ic95": {
+              "ic_inferior": -0.22247921099264503,
+              "ic_superior": -0.14829459853116447
+            },
+            "media": -0.18538690476190475,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3396577380952381,
+            "DTB": 0.15427083333333333
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.8752792308314706,
+            "ic95": {
+              "ic_inferior": 0.9672381923831914,
+              "ic_superior": 1.211333236188237
+            },
+            "media": 1.0892857142857142,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 3.6028571428571428,
+            "DTB": 4.692142857142858
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.2720527968006949,
+            "ic95": {
+              "ic_inferior": 0.14101081419171263,
+              "ic_superior": 0.2168800191416207
+            },
+            "media": 0.17894541666666666,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7026213913690477,
+            "DTB": 0.8815668080357143
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.18226915350569955,
+            "ic95": {
+              "ic_inferior": 0.12937263012601383,
+              "ic_superior": 0.180203262731129
+            },
+            "media": 0.1547879464285714,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.72453125,
+            "DTB": 0.8793191964285714
+          }
+        }
+      },
+      "incoerente|comedouro": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.0
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.0349596958978922,
+            "ic95": {
+              "ic_inferior": -0.05390746161261248,
+              "ic_superior": -0.04415801457786371
+            },
+            "media": -0.049032738095238095,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.09989583333333334,
+            "DTB": 0.050863095238095235
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.04052355854332648,
+            "ic95": {
+              "ic_inferior": -0.020509170488417404,
+              "ic_superior": -0.009208091416344499
+            },
+            "media": -0.014858630952380951,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.01673363095238095,
+            "DTB": 0.001875
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.3774594594439794,
+            "ic95": {
+              "ic_inferior": 0.7602248056314083,
+              "ic_superior": 0.8654894800828772
+            },
+            "media": 0.8128571428571427,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 5.24,
+            "DTB": 6.052857142857143
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.017739339735553087,
+            "ic95": {
+              "ic_inferior": 0.001545451901600158,
+              "ic_superior": 0.006492541649987144
+            },
+            "media": 0.004018996775793651,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.9958051450892857,
+            "DTB": 0.9998241418650794
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.029856241820384176,
+            "ic95": {
+              "ic_inferior": 0.04379820339819193,
+              "ic_superior": 0.05212441564942712
+            },
+            "media": 0.047961309523809524,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.9010193452380952,
+            "DTB": 0.9489806547619049
+          }
+        }
+      },
+      "incoerente|longe": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 3.4595690613792147,
+            "ic95": {
+              "ic_inferior": 0.30260327913770896,
+              "ic_superior": 1.2673967208622912
+            },
+            "media": 0.785,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 1.01,
+            "DTB": 1.795
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.09761856628726416,
+            "ic95": {
+              "ic_inferior": -0.16181862041493789,
+              "ic_superior": -0.1345950700612526
+            },
+            "media": -0.14820684523809524,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2714657738095238,
+            "DTB": 0.12325892857142857
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.26567568639948186,
+            "ic95": {
+              "ic_inferior": -0.19084747183639006,
+              "ic_superior": -0.11675669483027655
+            },
+            "media": -0.1538020833333333,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.567953869047619,
+            "DTB": 0.4141517857142857
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.6366252939894745,
+            "ic95": {
+              "ic_inferior": 0.5398014260682609,
+              "ic_superior": 0.7173414310745962
+            },
+            "media": 0.6285714285714286,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.864642857142857,
+            "DTB": 3.4932142857142856
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.26184471176551105,
+            "ic95": {
+              "ic_inferior": 0.11290771630170184,
+              "ic_superior": 0.18593012348004417
+            },
+            "media": 0.149418919890873,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5339486594742063,
+            "DTB": 0.6833675793650794
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.14596480624310273,
+            "ic95": {
+              "ic_inferior": 0.08764913537163642,
+              "ic_superior": 0.1283553289140779
+            },
+            "media": 0.10800223214285715,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6558370535714286,
+            "DTB": 0.7638392857142857
+          }
+        }
+      },
+      "incoerente|longe_fixo": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 2.8642265919178334,
+            "ic95": {
+              "ic_inferior": 0.2656168712825455,
+              "ic_superior": 1.0643831287174546
+            },
+            "media": 0.665,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.35,
+            "DTB": 3.015
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.1105049971313634,
+            "ic95": {
+              "ic_inferior": -0.12433720970382955,
+              "ic_superior": -0.0935199331533133
+            },
+            "media": -0.10892857142857143,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.17354910714285715,
+            "DTB": 0.0646205357142857
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.23191243783259308,
+            "ic95": {
+              "ic_inferior": -0.17856517424004298,
+              "ic_superior": -0.11389018290281415
+            },
+            "media": -0.14622767857142857,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.31754464285714284,
+            "DTB": 0.17131696428571427
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.7988685466169446,
+            "ic95": {
+              "ic_inferior": 0.860035631888754,
+              "ic_superior": 1.0828215109683892
+            },
+            "media": 0.9714285714285715,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 3.655357142857143,
+            "DTB": 4.626785714285714
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.22841426490324987,
+            "ic95": {
+              "ic_inferior": 0.10738281243505624,
+              "ic_superior": 0.17108224460859453
+            },
+            "media": 0.13923252852182538,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7216370523313492,
+            "DTB": 0.8608695808531747
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.1563160828345918,
+            "ic95": {
+              "ic_inferior": 0.10764178199133528,
+              "ic_superior": 0.15123470610390283
+            },
+            "media": 0.12943824404761906,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7375669642857143,
+            "DTB": 0.8670052083333333
+          }
+        }
+      },
+      "relapso|comedouro": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.29806747743678386,
+            "ic95": {
+              "ic_inferior": -0.08156204751521176,
+              "ic_superior": 0.0015620475152117522
+            },
+            "media": -0.04,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.045,
+            "DTB": 0.005
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.021899415340426418,
+            "ic95": {
+              "ic_inferior": -0.06739141671483508,
+              "ic_superior": -0.061284178523260166
+            },
+            "media": -0.06433779761904762,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.22067708333333333,
+            "DTB": 0.1563392857142857
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.027589021850045387,
+            "ic95": {
+              "ic_inferior": 0.021361364697605568,
+              "ic_superior": 0.029055301969061104
+            },
+            "media": 0.025208333333333336,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.12951636904761904,
+            "DTB": 0.15472470238095237
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.02947033536623397,
+            "ic95": {
+              "ic_inferior": 0.0012478469040464206,
+              "ic_superior": 0.00946643881023931
+            },
+            "media": 0.005357142857142865,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.985,
+            "DTB": 2.990357142857143
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.01223161250188606,
+            "ic95": {
+              "ic_inferior": -0.009627066703326175,
+              "ic_superior": -0.0062159541300071675
+            },
+            "media": -0.007921510416666671,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.9649864012896825,
+            "DTB": 0.9570648908730159
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.020062969933028727,
+            "ic95": {
+              "ic_inferior": 0.01862358283735839,
+              "ic_superior": 0.024218679067403513
+            },
+            "media": 0.021421130952380952,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7387574404761905,
+            "DTB": 0.7601785714285714
+          }
+        }
+      },
+      "relapso|longe": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 2.0197454936938173,
+            "ic95": {
+              "ic_inferior": 0.07336995132975949,
+              "ic_superior": 0.6366300486702405
+            },
+            "media": 0.355,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7,
+            "DTB": 1.055
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.047318370895711885,
+            "ic95": {
+              "ic_inferior": -0.1088524614789072,
+              "ic_superior": -0.09565646709252137
+            },
+            "media": -0.10225446428571429,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.34216517857142853,
+            "DTB": 0.23991071428571428
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.1105722133608878,
+            "ic95": {
+              "ic_inferior": -0.05233021317866518,
+              "ic_superior": -0.021494191583239577
+            },
+            "media": -0.03691220238095238,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.42904761904761907,
+            "DTB": 0.3921354166666666
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.26255545243534334,
+            "ic95": {
+              "ic_inferior": 0.10374683473719698,
+              "ic_superior": 0.17696745097708866
+            },
+            "media": 0.14035714285714282,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.1242857142857146,
+            "DTB": 2.2646428571428574
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.2654981816599166,
+            "ic95": {
+              "ic_inferior": 0.05148582824487256,
+              "ic_superior": 0.12552710330274652
+            },
+            "media": 0.08850646577380954,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4416468563988095,
+            "DTB": 0.5301533221726191
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.07207132155906683,
+            "ic95": {
+              "ic_inferior": 0.040114181831768396,
+              "ic_superior": 0.06021319912061255
+            },
+            "media": 0.05016369047619047,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4604910714285715,
+            "DTB": 0.5106547619047619
+          }
+        }
+      },
+      "relapso|longe_fixo": {
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 2.3971297744967615,
+            "ic95": {
+              "ic_inferior": -0.28425190310772286,
+              "ic_superior": 0.38425190310772284
+            },
+            "media": 0.05,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.73,
+            "DTB": 2.78
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.04423530707254566,
+            "ic95": {
+              "ic_inferior": -0.08120530213544186,
+              "ic_superior": -0.0688691026264629
+            },
+            "media": -0.07503720238095238,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.26183035714285713,
+            "DTB": 0.18679315476190475
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.08263172146738461,
+            "ic95": {
+              "ic_inferior": -0.02040596231836616,
+              "ic_superior": 0.0026381051755090187
+            },
+            "media": -0.00888392857142857,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.27500744047619047,
+            "DTB": 0.2661235119047619
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.23198031197072888,
+            "ic95": {
+              "ic_inferior": 0.11086732578550271,
+              "ic_superior": 0.17556124564306871
+            },
+            "media": 0.1432142857142857,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.5539285714285715,
+            "DTB": 2.697142857142857
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.1392725931402719,
+            "ic95": {
+              "ic_inferior": 0.019867713342489293,
+              "ic_superior": 0.058707604117828174
+            },
+            "media": 0.039287658730158735,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7731154489087301,
+            "DTB": 0.8124031076388889
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.059198106123512326,
+            "ic95": {
+              "ic_inferior": 0.03543598790925208,
+              "ic_superior": 0.051944964471700314
+            },
+            "media": 0.043690476190476196,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5887872023809524,
+            "DTB": 0.6324776785714286
+          }
+        }
+      }
+    },
+    "por_lugar": {
+      "11_celulas": {
+        "brincar": {
+          "DTB - CTRL": {
+            "dp": 2.6397495231079287,
+            "ic95": {
+              "ic_inferior": 16.387826682015827,
+              "ic_superior": 17.12399149980235
+            },
+            "media": 16.75590909090909,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 26.39909090909091,
+            "DTB": 43.155
+          }
+        },
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.6581897874124129,
+            "ic95": {
+              "ic_inferior": 0.14595035209941387,
+              "ic_superior": 0.3295041933551316
+            },
+            "media": 0.23772727272727273,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 1.257272727272727,
+            "DTB": 1.495
+          }
+        },
+        "comer_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.01889028743862862,
+            "ic95": {
+              "ic_inferior": 0.04539043783420768,
+              "ic_superior": 0.05065850015923476
+            },
+            "media": 0.04802446899672122,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.1862144147312204,
+            "DTB": 0.23423888372794163
+          }
+        },
+        "comer_no_topo_perdeu": {
+          "DTB - CTRL": {
+            "dp": 0.020332520062000547,
+            "ic95": {
+              "ic_inferior": 0.019592550379147124,
+              "ic_superior": 0.025262817878224333
+            },
+            "media": 0.02242768412868573,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.11658090906067387,
+            "DTB": 0.13900859318935957
+          }
+        },
+        "comer_trocado_no_reflexo": {
+          "DTB - CTRL": {
+            "dp": 1.787463437647825,
+            "ic95": {
+              "ic_inferior": -6.6519682867623535,
+              "ic_superior": -6.153486258692191
+            },
+            "media": -6.402727272727272,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 14.405,
+            "DTB": 8.002272727272727
+          }
+        },
+        "conflitos": {
+          "DTB - CTRL": {
+            "dp": 0.017855932423544944,
+            "ic95": {
+              "ic_inferior": -0.07253884187241195,
+              "ic_superior": -0.06755923713191704
+            },
+            "media": -0.0700490395021645,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.16426102543290041,
+            "DTB": 0.09421198593073593
+          }
+        },
+        "dormir_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.01859856884527474,
+            "ic95": {
+              "ic_inferior": -0.1453861120147259,
+              "ic_superior": -0.14019940322844987
+            },
+            "media": -0.14279275762158788,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4444390744669742,
+            "DTB": 0.3016463168453864
+          }
+        },
+        "episodios_por_vida": {
+          "DTB - CTRL": {
+            "dp": 1.0313044224804495,
+            "ic95": {
+              "ic_inferior": 3.418469304710898,
+              "ic_superior": 3.706076149834557
+            },
+            "media": 3.5622727272727275,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 13.858636363636363,
+            "DTB": 17.420909090909092
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.023519634807383297,
+            "ic95": {
+              "ic_inferior": -0.10270662321407129,
+              "ic_superior": -0.09614754345259538
+            },
+            "media": -0.09942708333333333,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2498538961038961,
+            "DTB": 0.15042681277056277
+          }
+        },
+        "exaustao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.017025102493296237,
+            "ic95": {
+              "ic_inferior": -0.08525138785194383,
+              "ic_superior": -0.08050348227792628
+            },
+            "media": -0.08287743506493506,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.21213440205627707,
+            "DTB": 0.129256966991342
+          }
+        },
+        "fracao_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.016839640173813952,
+            "ic95": {
+              "ic_inferior": -0.08437223994807384,
+              "ic_superior": -0.07967605550647162
+            },
+            "media": -0.08202414772727273,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.21006155303030305,
+            "DTB": 0.12803740530303032
+          }
+        },
+        "fracao_fome_urgente_na_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.038737495333249584,
+            "ic95": {
+              "ic_inferior": -0.07801064378945015,
+              "ic_superior": -0.06720765625450666
+            },
+            "media": -0.0726091500219784,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6760613734035427,
+            "DTB": 0.6039755476346276
+          }
+        },
+        "fracao_fome_urgente_na_energia_boa": {
+          "DTB - CTRL": {
+            "dp": 0.03170527671218752,
+            "ic95": {
+              "ic_inferior": 0.0060349058104184295,
+              "ic_superior": 0.014876770937916943
+            },
+            "media": 0.010455838374167687,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.30143857144225145,
+            "DTB": 0.31189440981641914
+          }
+        },
+        "fracao_ticks_combustivel_abaixo": {
+          "DTB - CTRL": {
+            "dp": 0.021238829845100938,
+            "ic95": {
+              "ic_inferior": -0.07019777706091249,
+              "ic_superior": -0.06427476081787539
+            },
+            "media": -0.06723626893939394,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5296371527777778,
+            "DTB": 0.46240088383838385
+          }
+        },
+        "fracao_ticks_dormindo": {
+          "DTB - CTRL": {
+            "dp": 0.005836660225678183,
+            "ic95": {
+              "ic_inferior": -0.08938399787080552,
+              "ic_superior": -0.08775628892573127
+            },
+            "media": -0.0885701433982684,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.46511478625541125,
+            "DTB": 0.37654464285714284
+          }
+        },
+        "fracao_ticks_teto": {
+          "DTB - CTRL": {
+            "dp": 0.03864891273388164,
+            "ic95": {
+              "ic_inferior": 0.38351316234000504,
+              "ic_superior": 0.3942914462458535
+            },
+            "media": 0.38890230429292927,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.38890230429292927
+          }
+        },
+        "janela_vencida": {
+          "DTB - CTRL": {
+            "dp": 0.053270126002039335,
+            "ic95": {
+              "ic_inferior": -0.10376891724644692,
+              "ic_superior": -0.08891311662655112
+            },
+            "media": -0.09634101693649902,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3913535962374577,
+            "DTB": 0.2950125793009587
+          }
+        },
+        "latencia_media": {
+          "DTB - CTRL": {
+            "dp": 6.011602680911374,
+            "ic95": {
+              "ic_inferior": -4.60932814882745,
+              "ic_superior": -2.9328318170892533
+            },
+            "media": -3.7710799829583515,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 49.317653475122185,
+            "DTB": 45.535796457163194
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.05311652729240013,
+            "ic95": {
+              "ic_inferior": -0.06536373383627105,
+              "ic_superior": -0.05055076832823111
+            },
+            "media": -0.05795725108225108,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3857176677489178,
+            "DTB": 0.32776041666666667
+          }
+        },
+        "privacao_com_higiene": {
+          "DTB - CTRL": {
+            "dp": 0.05163320796428894,
+            "ic95": {
+              "ic_inferior": -0.05440270846257044,
+              "ic_superior": -0.04000340625604427
+            },
+            "media": -0.047203057359307354,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2281270292207792,
+            "DTB": 0.18092397186147186
+          }
+        },
+        "privacao_fome_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.05298856885460562,
+            "ic95": {
+              "ic_inferior": -0.06556842939721426,
+              "ic_superior": -0.05079114852486367
+            },
+            "media": -0.05817978896103896,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3229261363636363,
+            "DTB": 0.2647463474025974
+          }
+        },
+        "privacao_fome_e_energia": {
+          "DTB - CTRL": {
+            "dp": 0.000680474889236651,
+            "ic95": {
+              "ic_inferior": -0.001167665704505244,
+              "ic_superior": -0.0009778970660575263
+            },
+            "media": -0.0010727813852813852,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.001890557359307359,
+            "DTB": 0.0008177759740259739
+          }
+        },
+        "privacao_so_energia": {
+          "DTB - CTRL": {
+            "dp": 0.0005001284785905029,
+            "ic95": {
+              "ic_inferior": -0.0006068042066464773,
+              "ic_superior": -0.0004673299924877216
+            },
+            "media": -0.0005370670995670995,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0011174242424242425,
+            "DTB": 0.0005803571428571428
+          }
+        },
+        "privacao_so_fome": {
+          "DTB - CTRL": {
+            "dp": 0.018674459458567532,
+            "ic95": {
+              "ic_inferior": -0.011839596630811747,
+              "ic_superior": -0.006631723715508599
+            },
+            "media": -0.009235660173160173,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.15477069805194804,
+            "DTB": 0.14553503787878788
+          }
+        },
+        "privacao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.03569215474633921,
+            "ic95": {
+              "ic_inferior": -0.045787868300650514,
+              "ic_superior": -0.0358341555088733
+            },
+            "media": -0.040811011904761905,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3128199404761905,
+            "DTB": 0.27200892857142855
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.15981473253237807,
+            "ic95": {
+              "ic_inferior": 0.39612478279114044,
+              "ic_superior": 0.44069339902704147
+            },
+            "media": 0.41840909090909095,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.9557142857142855,
+            "DTB": 3.374123376623377
+          }
+        },
+        "reflexos": {
+          "DTB - CTRL": {
+            "dp": 22.632476393605952,
+            "ic95": {
+              "ic_inferior": -113.39629049021124,
+              "ic_superior": -107.08461860069784
+            },
+            "media": -110.24045454545454,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 282.32272727272726,
+            "DTB": 172.0822727272727
+          }
+        },
+        "saude_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.06012270575944508,
+            "ic95": {
+              "ic_inferior": -0.06748987941095155,
+              "ic_superior": -0.05072305348948135
+            },
+            "media": -0.05910646645021645,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.27760416666666665,
+            "DTB": 0.2184977002164502
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.0599709621815558,
+            "ic95": {
+              "ic_inferior": 0.05261093585368358,
+              "ic_superior": 0.06933544401644628
+            },
+            "media": 0.06097318993506493,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5950393674467893,
+            "DTB": 0.6560125573818543
+          }
+        },
+        "taxa_por_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.05245411755822636,
+            "ic95": {
+              "ic_inferior": 0.08913010937958035,
+              "ic_superior": 0.10375834420124672
+            },
+            "media": 0.09644422679041353,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6049056237841465,
+            "DTB": 0.7013498505745599
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.03393398526618285,
+            "ic95": {
+              "ic_inferior": 0.05892225013248951,
+              "ic_superior": 0.06838565030041092
+            },
+            "media": 0.06365395021645022,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6084080762987013,
+            "DTB": 0.6720620265151516
+          }
+        },
+        "tempo_bem_8_14": {
+          "DTB - CTRL": {
+            "dp": 0.05052724451200012,
+            "ic95": {
+              "ic_inferior": 0.07304249555423381,
+              "ic_superior": 0.08713337024663198
+            },
+            "media": 0.0800879329004329,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5310058170995671,
+            "DTB": 0.61109375
+          }
+        }
+      },
+      "12_celulas": {
+        "brincar": {
+          "DTB - CTRL": {
+            "dp": 2.6593046079841596,
+            "ic95": {
+              "ic_inferior": 19.02044086166353,
+              "ic_superior": 19.76205913833647
+            },
+            "media": 19.39125,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 26.732916666666664,
+            "DTB": 46.12416666666667
+          }
+        },
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.6033406384613784,
+            "ic95": {
+              "ic_inferior": 0.13378782275779605,
+              "ic_superior": 0.3020455105755373
+            },
+            "media": 0.21791666666666668,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 1.1525,
+            "DTB": 1.3704166666666666
+          }
+        },
+        "comer_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.0189675532097813,
+            "ic95": {
+              "ic_inferior": 0.04737523262475854,
+              "ic_superior": 0.0526648425783935
+            },
+            "media": 0.05002003760157602,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.18984339234470926,
+            "DTB": 0.23986342994628526
+          }
+        },
+        "comer_no_topo_perdeu": {
+          "DTB - CTRL": {
+            "dp": 0.01939531980756954,
+            "ic95": {
+              "ic_inferior": 0.02004453849701905,
+              "ic_superior": 0.025453442617300995
+            },
+            "media": 0.022748990557160023,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.11017257330646744,
+            "DTB": 0.13292156386362747
+          }
+        },
+        "comer_trocado_no_reflexo": {
+          "DTB - CTRL": {
+            "dp": 1.6637767554116538,
+            "ic95": {
+              "ic_inferior": -6.281577676217622,
+              "ic_superior": -5.817588990449045
+            },
+            "media": -6.0495833333333335,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 13.473333333333333,
+            "DTB": 7.42375
+          }
+        },
+        "conflitos": {
+          "DTB - CTRL": {
+            "dp": 0.01636460242702289,
+            "ic95": {
+              "ic_inferior": -0.06705088894308286,
+              "ic_superior": -0.06248718149342509
+            },
+            "media": -0.06476903521825397,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.1512149677579365,
+            "DTB": 0.08644593253968255
+          }
+        },
+        "dormir_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.01924172581428826,
+            "ic95": {
+              "ic_inferior": -0.15015766693482668,
+              "ic_superior": -0.14479159661111796
+            },
+            "media": -0.14747463177297232,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4435966158774765,
+            "DTB": 0.2961219841045042
+          }
+        },
+        "episodios_por_vida": {
+          "DTB - CTRL": {
+            "dp": 0.9803519768961206,
+            "ic95": {
+              "ic_inferior": 3.6337179708016345,
+              "ic_superior": 3.907115362531699
+            },
+            "media": 3.7704166666666667,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 13.925416666666667,
+            "DTB": 17.695833333333333
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.022248027496157046,
+            "ic95": {
+              "ic_inferior": -0.0983297835750793,
+              "ic_superior": -0.09212532555190481
+            },
+            "media": -0.09522755456349205,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.23735739087301588,
+            "DTB": 0.1421298363095238
+          }
+        },
+        "exaustao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.015960301667455552,
+            "ic95": {
+              "ic_inferior": -0.08177160963245797,
+              "ic_superior": -0.07732065227230392
+            },
+            "media": -0.07954613095238094,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.202218501984127,
+            "DTB": 0.12267237103174602
+          }
+        },
+        "fracao_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.01577907714626103,
+            "ic95": {
+              "ic_inferior": -0.08092943769625122,
+              "ic_superior": -0.07652901964501863
+            },
+            "media": -0.07872922867063492,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.20023592509920637,
+            "DTB": 0.12150669642857143
+          }
+        },
+        "fracao_fome_urgente_na_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.037120764368682495,
+            "ic95": {
+              "ic_inferior": -0.07662385267126245,
+              "ic_superior": -0.06627173384394511
+            },
+            "media": -0.07144779325760378,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6263165313533883,
+            "DTB": 0.5553007557616413
+          }
+        },
+        "fracao_fome_urgente_na_energia_boa": {
+          "DTB - CTRL": {
+            "dp": 0.0290497046572824,
+            "ic95": {
+              "ic_inferior": 0.004894873537782575,
+              "ic_superior": 0.012996161310950686
+            },
+            "media": 0.00894551742436663,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2772925651544551,
+            "DTB": 0.2862380825788217
+          }
+        },
+        "fracao_ticks_combustivel_abaixo": {
+          "DTB - CTRL": {
+            "dp": 0.01982936964327501,
+            "ic95": {
+              "ic_inferior": -0.0769763054598078,
+              "ic_superior": -0.07144635492379009
+            },
+            "media": -0.07421133019179894,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5217870577050264,
+            "DTB": 0.4475757275132275
+          }
+        },
+        "fracao_ticks_dormindo": {
+          "DTB - CTRL": {
+            "dp": 0.0054587127413305335,
+            "ic95": {
+              "ic_inferior": -0.08844834406606597,
+              "ic_superior": -0.08692603589425149
+            },
+            "media": -0.08768718998015873,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4650753141534391,
+            "DTB": 0.37738812417328044
+          }
+        },
+        "fracao_ticks_teto": {
+          "DTB - CTRL": {
+            "dp": 0.03549210403374969,
+            "ic95": {
+              "ic_inferior": 0.3569302132861483,
+              "ic_superior": 0.3668281365815766
+            },
+            "media": 0.36187917493386246,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.36187917493386246
+          }
+        },
+        "janela_vencida": {
+          "DTB - CTRL": {
+            "dp": 0.05016191520481966,
+            "ic95": {
+              "ic_inferior": -0.10162390581035019,
+              "ic_superior": -0.08763491297473361
+            },
+            "media": -0.0946294093925419,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3673512919583733,
+            "DTB": 0.2727218825658314
+          }
+        },
+        "latencia_media": {
+          "DTB - CTRL": {
+            "dp": 5.71892309116583,
+            "ic95": {
+              "ic_inferior": -4.757289875332846,
+              "ic_superior": -3.162415081914388
+            },
+            "media": -3.9598524786236173,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 49.590711993637704,
+            "DTB": 45.616141813087744
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.04892782206686319,
+            "ic95": {
+              "ic_inferior": -0.06118811586913475,
+              "ic_superior": -0.047543282940389064
+            },
+            "media": -0.05436569940476191,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.35496899801587306,
+            "DTB": 0.3006032986111111
+          }
+        },
+        "privacao_com_higiene": {
+          "DTB - CTRL": {
+            "dp": 0.04758955573180127,
+            "ic95": {
+              "ic_inferior": -0.05101639112577135,
+              "ic_superior": -0.03774476958851435
+            },
+            "media": -0.04438058035714285,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.21036334325396827,
+            "DTB": 0.16598276289682543
+          }
+        },
+        "privacao_fome_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.04858958124622517,
+            "ic95": {
+              "ic_inferior": -0.06047006917903708,
+              "ic_superior": -0.04691956375747086
+            },
+            "media": -0.05369481646825397,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2964279513888889,
+            "DTB": 0.2427331349206349
+          }
+        },
+        "privacao_fome_e_energia": {
+          "DTB - CTRL": {
+            "dp": 0.0006237847534431747,
+            "ic95": {
+              "ic_inferior": -0.0010716025541467559,
+              "ic_superior": -0.0008976434775992758
+            },
+            "media": -0.0009846230158730158,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0017342509920634918,
+            "DTB": 0.0007496279761904762
+          }
+        },
+        "privacao_so_energia": {
+          "DTB - CTRL": {
+            "dp": 0.00048658829029241335,
+            "ic95": {
+              "ic_inferior": -0.0006234046406533019,
+              "ic_superior": -0.0004877064704578092
+            },
+            "media": -0.0005555555555555556,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.001089409722222222,
+            "DTB": 0.0005338541666666666
+          }
+        },
+        "privacao_so_fome": {
+          "DTB - CTRL": {
+            "dp": 0.017102183999031666,
+            "ic95": {
+              "ic_inferior": -0.010913346740973953,
+              "ic_superior": -0.006143944925692715
+            },
+            "media": -0.008528645833333334,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.14195436507936507,
+            "DTB": 0.13342571924603175
+          }
+        },
+        "privacao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.03278337416016441,
+            "ic95": {
+              "ic_inferior": -0.04263642690082544,
+              "ic_superior": -0.0334939054404444
+            },
+            "media": -0.03806516617063492,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2874903893849206,
+            "DTB": 0.24942522321428573
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.15771123189332673,
+            "ic95": {
+              "ic_inferior": 0.42928876251764087,
+              "ic_superior": 0.4732707612918829
+            },
+            "media": 0.4512797619047619,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 3.146071428571428,
+            "DTB": 3.5973511904761906
+          }
+        },
+        "reflexos": {
+          "DTB - CTRL": {
+            "dp": 21.207079684574822,
+            "ic95": {
+              "ic_inferior": -108.76916426376164,
+              "ic_superior": -102.85500240290503
+            },
+            "media": -105.81208333333333,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 269.1170833333333,
+            "DTB": 163.305
+          }
+        },
+        "saude_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.05509111225275806,
+            "ic95": {
+              "ic_inferior": -0.061919166881356485,
+              "ic_superior": -0.04655553549959589
+            },
+            "media": -0.054237351190476187,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2545269097222222,
+            "DTB": 0.20028955853174604
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.054972040613203675,
+            "ic95": {
+              "ic_inferior": 0.04856179463796704,
+              "ic_superior": 0.06389221970561762
+            },
+            "media": 0.056227007171792326,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.628436515583664,
+            "DTB": 0.6846635227554563
+          }
+        },
+        "taxa_por_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.04944424622924651,
+            "ic95": {
+              "ic_inferior": 0.08795776226556622,
+              "ic_superior": 0.1017466138961143
+            },
+            "media": 0.09485218808084026,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6290317074638581,
+            "DTB": 0.7238838955446983
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.03134141633248341,
+            "ic95": {
+              "ic_inferior": 0.0579760336984975,
+              "ic_superior": 0.0667164266189628
+            },
+            "media": 0.062346230158730157,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6327923487103174,
+            "DTB": 0.6951385788690476
+          }
+        },
+        "tempo_bem_8_14": {
+          "DTB - CTRL": {
+            "dp": 0.04699412972434489,
+            "ic95": {
+              "ic_inferior": 0.07177682756715749,
+              "ic_superior": 0.08488239862331869
+            },
+            "media": 0.07832961309523809,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5608054315476191,
+            "DTB": 0.6391350446428572
+          }
+        }
+      },
+      "comedouro": {
+        "brincar": {
+          "DTB - CTRL": {
+            "dp": 4.497277233233772,
+            "ic95": {
+              "ic_inferior": 22.947906928108637,
+              "ic_superior": 24.202093071891362
+            },
+            "media": 23.575,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 21.5675,
+            "DTB": 45.1425
+          }
+        },
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 0.08623912064514712,
+            "ic95": {
+              "ic_inferior": -0.022025043660403577,
+              "ic_superior": 0.0020250436604035763
+            },
+            "media": -0.01,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.015,
+            "DTB": 0.005
+          }
+        },
+        "comer_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.042593382410117626,
+            "ic95": {
+              "ic_inferior": 0.0656225004406897,
+              "ic_superior": 0.0775008053049857
+            },
+            "media": 0.0715616528728377,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.255401493551304,
+            "DTB": 0.32696314642414165
+          }
+        },
+        "comer_no_topo_perdeu": {
+          "DTB - CTRL": {
+            "dp": 0.04079907832791652,
+            "ic95": {
+              "ic_inferior": 0.023519601346237616,
+              "ic_superior": 0.03489751648561304
+            },
+            "media": 0.029208558915925328,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.15045786578212414,
+            "DTB": 0.17966642469804944
+          }
+        },
+        "comer_trocado_no_reflexo": {
+          "DTB - CTRL": {
+            "dp": 1.2232559885681489,
+            "ic95": {
+              "ic_inferior": -1.9343188388325405,
+              "ic_superior": -1.5931811611674593
+            },
+            "media": -1.76375,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.645,
+            "DTB": 0.88125
+          }
+        },
+        "conflitos": {
+          "DTB - CTRL": {
+            "dp": 0.0083033997721764,
+            "ic95": {
+              "ic_inferior": -0.02754453139979567,
+              "ic_superior": -0.02522890610020433
+            },
+            "media": -0.02638671875,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.08195405505952381,
+            "DTB": 0.05556733630952381
+          }
+        },
+        "dormir_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.03377659515435444,
+            "ic95": {
+              "ic_inferior": -0.1712117485544233,
+              "ic_superior": -0.16179224083234997
+            },
+            "media": -0.16650199469338664,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.47347600179729066,
+            "DTB": 0.306974007103904
+          }
+        },
+        "episodios_por_vida": {
+          "DTB - CTRL": {
+            "dp": 1.6107322026467392,
+            "ic95": {
+              "ic_inferior": 3.3466521038578967,
+              "ic_superior": 3.7958478961421034
+            },
+            "media": 3.57125,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 17.17875,
+            "DTB": 20.75
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.019780984984594685,
+            "ic95": {
+              "ic_inferior": -0.06302980597032198,
+              "ic_superior": -0.057513348791582784
+            },
+            "media": -0.06027157738095238,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.17079799107142857,
+            "DTB": 0.11052641369047618
+          }
+        },
+        "exaustao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.013044526991885583,
+            "ic95": {
+              "ic_inferior": -0.05590465925794811,
+              "ic_superior": -0.05226684371824237
+            },
+            "media": -0.05408575148809524,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.15589657738095236,
+            "DTB": 0.10181082589285713
+          }
+        },
+        "fracao_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.01287893678380506,
+            "ic95": {
+              "ic_inferior": -0.05530307260304068,
+              "ic_superior": -0.05171143632553074
+            },
+            "media": -0.05350725446428571,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.15428850446428571,
+            "DTB": 0.10078125
+          }
+        },
+        "fracao_fome_urgente_na_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.03915950491251489,
+            "ic95": {
+              "ic_inferior": -0.030392424650979723,
+              "ic_superior": -0.019471748448113585
+            },
+            "media": -0.024932086549546654,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3940497992616138,
+            "DTB": 0.36911771271206717
+          }
+        },
+        "fracao_fome_urgente_na_energia_boa": {
+          "DTB - CTRL": {
+            "dp": 0.01214915024120768,
+            "ic95": {
+              "ic_inferior": 0.039612993814804355,
+              "ic_superior": 0.043001109579306786
+            },
+            "media": 0.04130705169705557,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.14990102697964633,
+            "DTB": 0.19120807867670186
+          }
+        },
+        "fracao_ticks_combustivel_abaixo": {
+          "DTB - CTRL": {
+            "dp": 0.013983300487876923,
+            "ic95": {
+              "ic_inferior": -0.0760825593255438,
+              "ic_superior": -0.07218294166651969
+            },
+            "media": -0.07413275049603174,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4654322296626984,
+            "DTB": 0.39129947916666663
+          }
+        },
+        "fracao_ticks_dormindo": {
+          "DTB - CTRL": {
+            "dp": 0.004538684762225885,
+            "ic95": {
+              "ic_inferior": -0.08169487083909266,
+              "ic_superior": -0.08042913709741528
+            },
+            "media": -0.08106200396825397,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4671305183531746,
+            "DTB": 0.3860685143849206
+          }
+        },
+        "fracao_ticks_teto": {
+          "DTB - CTRL": {
+            "dp": 0.020893073789970185,
+            "ic95": {
+              "ic_inferior": 0.26442264104422775,
+              "ic_superior": 0.2702492339557723
+            },
+            "media": 0.2673359375,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.2673359375
+          }
+        },
+        "janela_vencida": {
+          "DTB - CTRL": {
+            "dp": 0.05670719116261522,
+            "ic95": {
+              "ic_inferior": -0.07716123868293687,
+              "ic_superior": -0.06134692043646081
+            },
+            "media": -0.06925407955969884,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.11258970279831139,
+            "DTB": 0.04333562323861255
+          }
+        },
+        "latencia_media": {
+          "DTB - CTRL": {
+            "dp": 6.239704481994037,
+            "ic95": {
+              "ic_inferior": -6.824967699154726,
+              "ic_superior": -5.084859074143683
+            },
+            "media": -5.9549133866492046,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 46.242649828245874,
+            "DTB": 40.287736441596664
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.023806353611514747,
+            "ic95": {
+              "ic_inferior": 0.001987400155275489,
+              "ic_superior": 0.008626439130438797
+            },
+            "media": 0.005306919642857143,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.15800967261904764,
+            "DTB": 0.16331659226190476
+          }
+        },
+        "privacao_com_higiene": {
+          "DTB - CTRL": {
+            "dp": 0.02103294203551917,
+            "ic95": {
+              "ic_inferior": -0.0037791536246361886,
+              "ic_superior": 0.0020864452913028552
+            },
+            "media": -0.0008463541666666666,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.07378720238095238,
+            "DTB": 0.07294084821428572
+          }
+        },
+        "privacao_fome_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.015307379926434366,
+            "ic95": {
+              "ic_inferior": 0.009738703553625142,
+              "ic_superior": 0.014007576208279622
+            },
+            "media": 0.011873139880952382,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.10956845238095238,
+            "DTB": 0.12144159226190476
+          }
+        },
+        "privacao_fome_e_energia": {
+          "DTB - CTRL": {
+            "dp": 0.0008005649646769563,
+            "ic95": {
+              "ic_inferior": -0.0007366294853334821,
+              "ic_superior": -0.0005133705146665179
+            },
+            "media": -0.000625,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0011755952380952382,
+            "DTB": 0.000550595238095238
+          }
+        },
+        "privacao_so_energia": {
+          "DTB - CTRL": {
+            "dp": 0.0009057874637762948,
+            "ic95": {
+              "ic_inferior": -0.0010414801120457889,
+              "ic_superior": -0.0007888770308113538
+            },
+            "media": -0.0009151785714285713,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0014192708333333331,
+            "DTB": 0.0005040922619047618
+          }
+        },
+        "privacao_so_fome": {
+          "DTB - CTRL": {
+            "dp": 0.01142504246067054,
+            "ic95": {
+              "ic_inferior": 0.006070601013035577,
+              "ic_superior": 0.009256779939345374
+            },
+            "media": 0.007663690476190476,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.08174665178571429,
+            "DTB": 0.08941034226190477
+          }
+        },
+        "privacao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.013162195859218491,
+            "ic95": {
+              "ic_inferior": 0.006379900447193979,
+              "ic_superior": 0.010050531100425067
+            },
+            "media": 0.008215215773809523,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.14149646577380953,
+            "DTB": 0.14971168154761905
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.18988680565443447,
+            "ic95": {
+              "ic_inferior": 0.3820046334455527,
+              "ic_superior": 0.434959652268733
+            },
+            "media": 0.40848214285714285,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 4.019464285714285,
+            "DTB": 4.4279464285714285
+          }
+        },
+        "reflexos": {
+          "DTB - CTRL": {
+            "dp": 17.309291037434,
+            "ic95": {
+              "ic_inferior": -74.32732957848667,
+              "ic_superior": -69.50017042151332
+            },
+            "media": -71.91375,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 207.36375,
+            "DTB": 135.45
+          }
+        },
+        "saude_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.02497698356243351,
+            "ic95": {
+              "ic_inferior": 0.009474839048970693,
+              "ic_superior": 0.01644033952245788
+            },
+            "media": 0.012957589285714286,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.08335379464285714,
+            "DTB": 0.09631138392857143
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.022979753099033516,
+            "ic95": {
+              "ic_inferior": -0.015500199627682424,
+              "ic_superior": -0.009091680332635037
+            },
+            "media": -0.01229593998015873,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.8382706854538691,
+            "DTB": 0.8259747454737103
+          }
+        },
+        "taxa_por_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.057003520522895916,
+            "ic95": {
+              "ic_inferior": 0.0625823532894295,
+              "ic_superior": 0.07847931091043946
+            },
+            "media": 0.07053083209993448,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.8848220107770252,
+            "DTB": 0.9553528428769595
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.01703014999197935,
+            "ic95": {
+              "ic_inferior": 0.026595767505072122,
+              "ic_superior": 0.031345080709213595
+            },
+            "media": 0.02897042410714286,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7572581845238094,
+            "DTB": 0.7862286086309525
+          }
+        },
+        "tempo_bem_8_14": {
+          "DTB - CTRL": {
+            "dp": 0.0290966299603646,
+            "ic95": {
+              "ic_inferior": 0.031221830782106504,
+              "ic_superior": 0.0393362049321792
+            },
+            "media": 0.03527901785714285,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.7327994791666668,
+            "DTB": 0.7680784970238095
+          }
+        }
+      },
+      "longe": {
+        "brincar": {
+          "DTB - CTRL": {
+            "dp": 5.073697446526987,
+            "ic95": {
+              "ic_inferior": 13.785031824794315,
+              "ic_superior": 15.199968175205685
+            },
+            "media": 14.4925,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 28.995,
+            "DTB": 43.4875
+          }
+        },
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 1.386682893539897,
+            "ic95": {
+              "ic_inferior": 0.24164317756015566,
+              "ic_superior": 0.6283568224398444
+            },
+            "media": 0.435,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.94875,
+            "DTB": 1.38375
+          }
+        },
+        "comer_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.02809023018443046,
+            "ic95": {
+              "ic_inferior": 0.02214713628208866,
+              "ic_superior": 0.02998084891439785
+            },
+            "media": 0.026063992598243255,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.1501840471435319,
+            "DTB": 0.17624803974177514
+          }
+        },
+        "comer_no_topo_perdeu": {
+          "DTB - CTRL": {
+            "dp": 0.028499113671424464,
+            "ic95": {
+              "ic_inferior": 0.009131475341496663,
+              "ic_superior": 0.017079216079527212
+            },
+            "media": 0.013105345710511938,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.08654443235140005,
+            "DTB": 0.09964977806191198
+          }
+        },
+        "comer_trocado_no_reflexo": {
+          "DTB - CTRL": {
+            "dp": 3.7307218036030774,
+            "ic95": {
+              "ic_inferior": -11.027705821181122,
+              "ic_superior": -9.987294178818878
+            },
+            "media": -10.5075,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 24.5675,
+            "DTB": 14.06
+          }
+        },
+        "conflitos": {
+          "DTB - CTRL": {
+            "dp": 0.0247527263900875,
+            "ic95": {
+              "ic_inferior": -0.09463172571464136,
+              "ic_superior": -0.08772876535678721
+            },
+            "media": -0.09118024553571429,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.21258370535714285,
+            "DTB": 0.12140345982142858
+          }
+        },
+        "dormir_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.021548521126881624,
+            "ic95": {
+              "ic_inferior": -0.14035213535001928,
+              "ic_superior": -0.13434275340295365
+            },
+            "media": -0.13734744437648647,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.43856860132271236,
+            "DTB": 0.3012211569462259
+          }
+        },
+        "episodios_por_vida": {
+          "DTB - CTRL": {
+            "dp": 1.8499418536292014,
+            "ic95": {
+              "ic_inferior": 3.095797096576571,
+              "ic_superior": 3.6117029034234287
+            },
+            "media": 3.35375,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 11.55,
+            "DTB": 14.90375
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.039882464492489104,
+            "ic95": {
+              "ic_inferior": -0.1311601047506312,
+              "ic_superior": -0.12003781191603549
+            },
+            "media": -0.12559895833333334,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3103980654761905,
+            "DTB": 0.18479910714285716
+          }
+        },
+        "exaustao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.02377889961750219,
+            "ic95": {
+              "ic_inferior": -0.10081476128748564,
+              "ic_superior": -0.09418337859346675
+            },
+            "media": -0.09749906994047619,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.24967168898809525,
+            "DTB": 0.15217261904761906
+          }
+        },
+        "fracao_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.02359752437460231,
+            "ic95": {
+              "ic_inferior": -0.09977198549758619,
+              "ic_superior": -0.09319118414527096
+            },
+            "media": -0.09648158482142857,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.24727678571428574,
+            "DTB": 0.15079520089285714
+          }
+        },
+        "fracao_fome_urgente_na_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.06882740572294996,
+            "ic95": {
+              "ic_inferior": -0.08685539969573798,
+              "ic_superior": -0.0676610351739481
+            },
+            "media": -0.07725821743484304,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.8358082664865291,
+            "DTB": 0.758550049051686
+          }
+        },
+        "fracao_fome_urgente_na_energia_boa": {
+          "DTB - CTRL": {
+            "dp": 0.05211541066751133,
+            "ic95": {
+              "ic_inferior": 0.0006702992296390388,
+              "ic_superior": 0.015204076568008765
+            },
+            "media": 0.007937187898823903,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3780665868721232,
+            "DTB": 0.3860037747709471
+          }
+        },
+        "fracao_ticks_combustivel_abaixo": {
+          "DTB - CTRL": {
+            "dp": 0.04010028955648467,
+            "ic95": {
+              "ic_inferior": -0.0580497289177141,
+              "ic_superior": -0.04686668973307954
+            },
+            "media": -0.05245820932539682,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5659205109126983,
+            "DTB": 0.5134623015873016
+          }
+        },
+        "fracao_ticks_dormindo": {
+          "DTB - CTRL": {
+            "dp": 0.0063442965292449536,
+            "ic95": {
+              "ic_inferior": -0.09482009232764964,
+              "ic_superior": -0.09305081541044559
+            },
+            "media": -0.09393545386904761,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4658828125,
+            "DTB": 0.3719473586309524
+          }
+        },
+        "fracao_ticks_teto": {
+          "DTB - CTRL": {
+            "dp": 0.045609685908085354,
+            "ic95": {
+              "ic_inferior": 0.45638102048977075,
+              "ic_superior": 0.4691005023276896
+            },
+            "media": 0.46274076140873016,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.46274076140873016
+          }
+        },
+        "janela_vencida": {
+          "DTB - CTRL": {
+            "dp": 0.09353574152586956,
+            "ic95": {
+              "ic_inferior": -0.10095005839721072,
+              "ic_superior": -0.07486511302108695
+            },
+            "media": -0.08790758570914883,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.565942308809182,
+            "DTB": 0.47803472310003303
+          }
+        },
+        "latencia_media": {
+          "DTB - CTRL": {
+            "dp": 12.633412923949246,
+            "ic95": {
+              "ic_inferior": -3.131367466824205,
+              "ic_superior": 0.3917979099541411
+            },
+            "media": -1.3697847784350319,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 52.49896110935633,
+            "DTB": 51.0427917759338
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.10706708833736064,
+            "ic95": {
+              "ic_inferior": -0.09967256539851445,
+              "ic_superior": -0.0698140417443427
+            },
+            "media": -0.08474330357142858,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5426506696428571,
+            "DTB": 0.45790736607142857
+          }
+        },
+        "privacao_com_higiene": {
+          "DTB - CTRL": {
+            "dp": 0.10063553030075645,
+            "ic95": {
+              "ic_inferior": -0.07131668195534792,
+              "ic_superior": -0.043251770425604456
+            },
+            "media": -0.057284226190476184,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3312574404761905,
+            "DTB": 0.27397321428571425
+          }
+        },
+        "privacao_fome_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.10590325189294604,
+            "ic95": {
+              "ic_inferior": -0.10459212716301954,
+              "ic_superior": -0.0750581704560281
+            },
+            "media": -0.08982514880952382,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.47130208333333334,
+            "DTB": 0.38147693452380954
+          }
+        },
+        "privacao_fome_e_energia": {
+          "DTB - CTRL": {
+            "dp": 0.001119765301290564,
+            "ic95": {
+              "ic_inferior": -0.0015791293360199984,
+              "ic_superior": -0.001266852806837144
+            },
+            "media": -0.0014229910714285711,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.002349330357142857,
+            "DTB": 0.0009263392857142857
+          }
+        },
+        "privacao_so_energia": {
+          "DTB - CTRL": {
+            "dp": 0.000798544757780248,
+            "ic95": {
+              "ic_inferior": -0.00047407100523323524,
+              "ic_superior": -0.00025137542333819325
+            },
+            "media": -0.00036272321428571424,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0009319196428571428,
+            "DTB": 0.0005691964285714286
+          }
+        },
+        "privacao_so_fome": {
+          "DTB - CTRL": {
+            "dp": 0.03801988596669889,
+            "ic95": {
+              "ic_inferior": -0.031116163619580424,
+              "ic_superior": -0.02051330066613386
+            },
+            "media": -0.025814732142857143,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.20834449404761904,
+            "DTB": 0.1825297619047619
+          }
+        },
+        "privacao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.058117041936785095,
+            "ic95": {
+              "ic_inferior": -0.06070140268752438,
+              "ic_superior": -0.04449390981247562
+            },
+            "media": -0.05259765625,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4007300967261904,
+            "DTB": 0.3481324404761905
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.24934663301940338,
+            "ic95": {
+              "ic_inferior": 0.32782079403438263,
+              "ic_superior": 0.3973577773941887
+            },
+            "media": 0.36258928571428567,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.4223214285714287,
+            "DTB": 2.7849107142857146
+          }
+        },
+        "reflexos": {
+          "DTB - CTRL": {
+            "dp": 31.715072759465507,
+            "ic95": {
+              "ic_inferior": -134.09354850875582,
+              "ic_superior": -125.24895149124416
+            },
+            "media": -129.67125,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 332.34,
+            "DTB": 202.66875
+          }
+        },
+        "saude_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.12512628541465923,
+            "ic95": {
+              "ic_inferior": -0.11220373149703339,
+              "ic_superior": -0.0773089173124904
+            },
+            "media": -0.0947563244047619,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.42061197916666665,
+            "DTB": 0.32585565476190476
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.12609629036478076,
+            "ic95": {
+              "ic_inferior": 0.07545173554606888,
+              "ic_superior": 0.110617061576947
+            },
+            "media": 0.09303439856150794,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.42287499007936513,
+            "DTB": 0.515909388640873
+          }
+        },
+        "taxa_por_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.09220739658191217,
+            "ic95": {
+              "ic_inferior": 0.07534763963527426,
+              "ic_superior": 0.10106214046540386
+            },
+            "media": 0.08820489005033906,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4298676956267417,
+            "DTB": 0.5180725856770807
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.05701419231064927,
+            "ic95": {
+              "ic_inferior": 0.06208258521598466,
+              "ic_superior": 0.07798251895068198
+            },
+            "media": 0.07003255208333332,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.528120349702381,
+            "DTB": 0.5981529017857143
+          }
+        },
+        "tempo_bem_8_14": {
+          "DTB - CTRL": {
+            "dp": 0.10342912497265842,
+            "ic95": {
+              "ic_inferior": 0.08341841169294376,
+              "ic_superior": 0.11226239187848483
+            },
+            "media": 0.09784040178571429,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3869698660714285,
+            "DTB": 0.4848102678571429
+          }
+        }
+      },
+      "longe_fixo": {
+        "brincar": {
+          "DTB - CTRL": {
+            "dp": 5.454496410574016,
+            "ic95": {
+              "ic_inferior": 19.345683832441818,
+              "ic_superior": 20.86681616755818
+            },
+            "media": 20.10625,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 29.63625,
+            "DTB": 49.7425
+          }
+        },
+        "chutes": {
+          "DTB - CTRL": {
+            "dp": 1.274207187739275,
+            "ic95": {
+              "ic_inferior": 0.05107660826850552,
+              "ic_superior": 0.4064233917314945
+            },
+            "media": 0.22875,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.49375,
+            "DTB": 2.7225
+          }
+        },
+        "comer_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.0269039883116399,
+            "ic95": {
+              "ic_inferior": 0.04868301866781864,
+              "ic_superior": 0.056185915999475575
+            },
+            "media": 0.05243446733364711,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.1639446363392919,
+            "DTB": 0.21637910367293903
+          }
+        },
+        "comer_no_topo_perdeu": {
+          "DTB - CTRL": {
+            "dp": 0.02835657568395685,
+            "ic95": {
+              "ic_inferior": 0.021979071942724845,
+              "ic_superior": 0.02988706214736077
+            },
+            "media": 0.025933067045042807,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.09351542178587816,
+            "DTB": 0.11944848883092096
+          }
+        },
+        "comer_trocado_no_reflexo": {
+          "DTB - CTRL": {
+            "dp": 2.608811653072339,
+            "ic95": {
+              "ic_inferior": -6.241268482276725,
+              "ic_superior": -5.513731517723276
+            },
+            "media": -5.8775,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 13.2075,
+            "DTB": 7.33
+          }
+        },
+        "conflitos": {
+          "DTB - CTRL": {
+            "dp": 0.04127364264149749,
+            "ic95": {
+              "ic_inferior": -0.0824952714199456,
+              "ic_superior": -0.07098501131814965
+            },
+            "media": -0.07674014136904762,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.15910714285714286,
+            "DTB": 0.08236700148809524
+          }
+        },
+        "dormir_no_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.03595986765382998,
+            "ic95": {
+              "ic_inferior": -0.14358864210025332,
+              "ic_superior": -0.13356027039783444
+            },
+            "media": -0.13857445624904388,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4187452445124265,
+            "DTB": 0.2801707882633826
+          }
+        },
+        "episodios_por_vida": {
+          "DTB - CTRL": {
+            "dp": 1.8432270253102765,
+            "ic95": {
+              "ic_inferior": 4.129233401389319,
+              "ic_superior": 4.643266598610682
+            },
+            "media": 4.38625,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 13.0475,
+            "DTB": 17.43375
+          }
+        },
+        "exaustao": {
+          "DTB - CTRL": {
+            "dp": 0.0497440525484591,
+            "ic95": {
+              "ic_inferior": -0.10674835830026778,
+              "ic_superior": -0.09287589765211317
+            },
+            "media": -0.09981212797619048,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.23087611607142858,
+            "DTB": 0.13106398809523812
+          }
+        },
+        "exaustao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.03799417988788375,
+            "ic95": {
+              "ic_inferior": -0.0923514184911938,
+              "ic_superior": -0.08175572436594905
+            },
+            "media": -0.08705357142857142,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.20108723958333333,
+            "DTB": 0.1140336681547619
+          }
+        },
+        "fracao_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.03764280522002961,
+            "ic95": {
+              "ic_inferior": -0.0914476986727855,
+              "ic_superior": -0.08094999477959545
+            },
+            "media": -0.08619884672619048,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.19914248511904764,
+            "DTB": 0.11294363839285713
+          }
+        },
+        "fracao_fome_urgente_na_energia_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.09146881646146747,
+            "ic95": {
+              "ic_inferior": -0.12488622676035066,
+              "ic_superior": -0.09937769876780594
+            },
+            "media": -0.1121319627640783,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6490915283120222,
+            "DTB": 0.5381900895525112
+          }
+        },
+        "fracao_fome_urgente_na_energia_boa": {
+          "DTB - CTRL": {
+            "dp": 0.06797101876078261,
+            "ic95": {
+              "ic_inferior": -0.0318854563691934,
+              "ic_superior": -0.012929918276365776
+            },
+            "media": -0.022407687322779587,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3039100816115958,
+            "DTB": 0.2815023942888162
+          }
+        },
+        "fracao_ticks_combustivel_abaixo": {
+          "DTB - CTRL": {
+            "dp": 0.04279214378608203,
+            "ic95": {
+              "ic_inferior": -0.10200989815127467,
+              "ic_superior": -0.09007616335666183
+            },
+            "media": -0.09604303075396825,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5340084325396826,
+            "DTB": 0.43796540178571425
+          }
+        },
+        "fracao_ticks_dormindo": {
+          "DTB - CTRL": {
+            "dp": 0.013063913504544607,
+            "ic95": {
+              "ic_inferior": -0.08988572309703305,
+              "ic_superior": -0.08624250110931617
+            },
+            "media": -0.08806411210317461,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.46221261160714283,
+            "DTB": 0.3741484995039683
+          }
+        },
+        "fracao_ticks_teto": {
+          "DTB - CTRL": {
+            "dp": 0.08068297533913839,
+            "ic95": {
+              "ic_inferior": 0.3443105221577738,
+              "ic_superior": 0.3668111296279405
+            },
+            "media": 0.35556082589285715,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0,
+            "DTB": 0.35556082589285715
+          }
+        },
+        "janela_vencida": {
+          "DTB - CTRL": {
+            "dp": 0.10076375974193821,
+            "ic95": {
+              "ic_inferior": -0.14077689877976893,
+              "ic_superior": -0.11267622703778711
+            },
+            "media": -0.126726562908778,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.4235218642676266,
+            "DTB": 0.29679530135884863
+          }
+        },
+        "latencia_media": {
+          "DTB - CTRL": {
+            "dp": 9.567333983354198,
+            "ic95": {
+              "ic_inferior": -5.925485481760758,
+              "ic_superior": -3.257378293217176
+            },
+            "media": -4.591431887488967,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 50.18858869949635,
+            "DTB": 45.55431464424581
+          }
+        },
+        "privacao": {
+          "DTB - CTRL": {
+            "dp": 0.10274057401663195,
+            "ic95": {
+              "ic_inferior": -0.09798669394555497,
+              "ic_superior": -0.0693347346258736
+            },
+            "media": -0.08366071428571428,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.3642466517857143,
+            "DTB": 0.2805859375
+          }
+        },
+        "privacao_com_higiene": {
+          "DTB - CTRL": {
+            "dp": 0.10122325053250125,
+            "ic95": {
+              "ic_inferior": -0.08912556723878906,
+              "ic_superior": -0.06089675418978235
+            },
+            "media": -0.07501116071428571,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.2260453869047619,
+            "DTB": 0.15103422619047618
+          }
+        },
+        "privacao_fome_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.10462073743324961,
+            "ic95": {
+              "ic_inferior": -0.09772058708537369,
+              "ic_superior": -0.06854429386700726
+            },
+            "media": -0.08313244047619048,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.30841331845238096,
+            "DTB": 0.22528087797619048
+          }
+        },
+        "privacao_fome_e_energia": {
+          "DTB - CTRL": {
+            "dp": 0.0010413311101710823,
+            "ic95": {
+              "ic_inferior": -0.0010510795038854183,
+              "ic_superior": -0.000760676448495534
+            },
+            "media": -0.0009058779761904761,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0016778273809523808,
+            "DTB": 0.0007719494047619046
+          }
+        },
+        "privacao_so_energia": {
+          "DTB - CTRL": {
+            "dp": 0.0007368126610709324,
+            "ic95": {
+              "ic_inferior": -0.000491504848065145,
+              "ic_superior": -0.00028602491383961695
+            },
+            "media": -0.00038876488095238097,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.0009170386904761904,
+            "DTB": 0.0005282738095238095
+          }
+        },
+        "privacao_so_fome": {
+          "DTB - CTRL": {
+            "dp": 0.02822926335989458,
+            "ic95": {
+              "ic_inferior": -0.011371138710861622,
+              "ic_superior": -0.0034986529558050433
+            },
+            "media": -0.007434895833333333,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.1357719494047619,
+            "DTB": 0.12833705357142858
+          }
+        },
+        "privacao_vida": {
+          "DTB - CTRL": {
+            "dp": 0.07901630605474677,
+            "ic95": {
+              "ic_inferior": -0.08083096409834539,
+              "ic_superior": -0.05879515197308319
+            },
+            "media": -0.06981305803571429,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.32024460565476187,
+            "DTB": 0.2504315476190476
+          }
+        },
+        "refeicoes_por_dia": {
+          "DTB - CTRL": {
+            "dp": 0.3489419959672161,
+            "ic95": {
+              "ic_inferior": 0.5341119489533497,
+              "ic_superior": 0.6314237653323647
+            },
+            "media": 0.5827678571428572,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 2.996428571428572,
+            "DTB": 3.579196428571428
+          }
+        },
+        "reflexos": {
+          "DTB - CTRL": {
+            "dp": 50.59193021571979,
+            "ic95": {
+              "ic_inferior": -122.9057070162237,
+              "ic_superior": -108.79679298377629
+            },
+            "media": -115.85125,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 267.6475,
+            "DTB": 151.79625
+          }
+        },
+        "saude_baixa": {
+          "DTB - CTRL": {
+            "dp": 0.11238397562227985,
+            "ic95": {
+              "ic_inferior": -0.09658395845285611,
+              "ic_superior": -0.06524267845190579
+            },
+            "media": -0.08091331845238095,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.25961495535714285,
+            "DTB": 0.1787016369047619
+          }
+        },
+        "saude_media": {
+          "DTB - CTRL": {
+            "dp": 0.10927992857963077,
+            "ic95": {
+              "ic_inferior": 0.0727047462384816,
+              "ic_superior": 0.10318037962957398
+            },
+            "media": 0.08794256293402779,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.624163871217758,
+            "DTB": 0.7121064341517856
+          }
+        },
+        "taxa_por_episodio": {
+          "DTB - CTRL": {
+            "dp": 0.09957743834219993,
+            "ic95": {
+              "ic_inferior": 0.11193592496069159,
+              "ic_superior": 0.13970575922380293
+            },
+            "media": 0.12582084209224725,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5724054159878077,
+            "DTB": 0.6982262580800548
+          }
+        },
+        "tempo_bem": {
+          "DTB - CTRL": {
+            "dp": 0.07421214955310784,
+            "ic95": {
+              "ic_inferior": 0.07768769204438664,
+              "ic_superior": 0.09838373652704194
+            },
+            "media": 0.08803571428571429,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.6129985119047618,
+            "DTB": 0.7010342261904762
+          }
+        },
+        "tempo_bem_8_14": {
+          "DTB - CTRL": {
+            "dp": 0.09724119794795784,
+            "ic95": {
+              "ic_inferior": 0.08831026409759546,
+              "ic_superior": 0.11542857518811886
+            },
+            "media": 0.10186941964285716,
+            "motivo": null,
+            "n": 200
+          },
+          "niveis": {
+            "CTRL": 0.5626469494047619,
+            "DTB": 0.664516369047619
+          }
+        }
+      }
+    }
+  },
+  "fase": "corpo_c4",
+  "guardas": {
+    "S2_tempo_ate_o_reencontro": {
+      "classe": {
+        "classe": "< 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "delta": 1.0788,
+      "dp": 11.515729244823367,
+      "ic95": {
+        "ic_inferior": -4.313833805305855,
+        "ic_superior": -2.290166194694145
+      },
+      "media": -3.302,
+      "n": 500,
+      "nivel_ctrl": 10.788,
+      "passa": true,
+      "reprova_com": "> 0"
+    },
+    "saude_12_celulas": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.054972040613203675,
+      "ic95": {
+        "ic_inferior": 0.04856179463796704,
+        "ic_superior": 0.06389221970561762
+      },
+      "lugar": "as 12 celulas",
+      "media": 0.056227007171792326,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "saude_sem_comida": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": "+"
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.06063323627868722,
+      "ic95": {
+        "ic_inferior": 0.004868973397172079,
+        "ic_superior": 0.02177817442028824
+      },
+      "lugar": "as celulas do relapso e do aleatorio",
+      "media": 0.013323573908730159,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "taxa_por_episodio_longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.09957743834219993,
+      "ic95": {
+        "ic_inferior": 0.11193592496069159,
+        "ic_superior": 0.13970575922380293
+      },
+      "lugar": "longe_fixo",
+      "media": 0.12582084209224725,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "tempo_bem_comedouro": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": "+"
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.01703014999197935,
+      "ic95": {
+        "ic_inferior": 0.026595767505072122,
+        "ic_superior": 0.031345080709213595
+      },
+      "lugar": "comedouro",
+      "media": 0.02897042410714286,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "tempo_bem_longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.05701419231064927,
+      "ic95": {
+        "ic_inferior": 0.06208258521598466,
+        "ic_superior": 0.07798251895068198
+      },
+      "lugar": "longe",
+      "media": 0.07003255208333332,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "tempo_bem_longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.07421214955310784,
+      "ic95": {
+        "ic_inferior": 0.07768769204438664,
+        "ic_superior": 0.09838373652704194
+      },
+      "lugar": "longe_fixo",
+      "media": 0.08803571428571429,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    }
+  },
+  "modo": "corpo_c4",
+  "nao_demonstra": [
+    "nada sobre o jogo web (a chave fica desligada nele)",
+    "nada sobre outro teto alem de C/2",
+    "nada sobre a E e a C5 com o teto",
+    "nada sobre o social alem do substrato: nenhum mecanismo social entra"
+  ],
+  "pares": 1000,
+  "plano": "docs/PLANO_ANALISE_V3_CORPO_C4.md",
+  "premissas": {
+    "chutes_no_longe_fixo": {
+      "cumpre": true,
+      "mede": "descritivo_dos_chutes",
+      "piso": {
+        "com_chute_min": 0.5,
+        "media_min": 1.0
+      },
+      "valores": {
+        "com_chute": 0.80875,
+        "media": 2.49375
+      }
+    },
+    "episodios_de_fome": {
+      "cumpre": true,
+      "mede": "taxa_por_episodio_longe_fixo",
+      "piso": {
+        "media_min": 8.0,
+        "sem_episodio_max": 0.02
+      },
+      "valores": {
+        "CTRL": {
+          "media": 13.0475,
+          "sem_episodio": 0.0
+        },
+        "DTB": {
+          "media": 17.43375,
+          "sem_episodio": 0.0
+        }
+      }
+    },
+    "janela_do_reencontro": {
+      "cumpre": true,
+      "mede": "S2_tempo_ate_o_reencontro",
+      "piso": {
+        "min": 0.9
+      },
+      "valores": {
+        "CTRL": 1.0,
+        "DTB": 1.0
+      }
+    },
+    "ponte_no_teto": {
+      "cumpre": true,
+      "mede": "braco",
+      "piso": {
+        "min": 0.1
+      },
+      "valores": {
+        "comedouro": 0.2673359375,
+        "longe": 0.46274076140873016,
+        "longe_fixo": 0.35556082589285715
+      }
+    },
+    "tempo_bem_fora_do_piso_e_do_teto": {
+      "cumpre": true,
+      "mede": "primaria",
+      "piso": {
+        "max": 0.05
+      },
+      "valores": {
+        "CTRL": 0.0,
+        "DTB": 0.0008333333333333334
+      }
+    }
+  },
+  "primaria": {
+    "11_celulas": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.05974736201298701,
+          "ic_superior": 0.06761329816017315,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.05892214556277056,
+          "ic_superior": 0.06831540854978355,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL, o Tempo bem dos dias 1 a 14, 11_celulas",
+      "g1": 0.5953138831183374,
+      "gl": 199,
+      "ic95": {
+        "ic_inferior": 0.05892225013248951,
+        "ic_superior": 0.06838565030041092,
+        "nivel": 0.95
+      },
+      "margem": 0.032,
+      "media": 0.06365395021645022,
+      "motivo": null,
+      "n": 200,
+      "n_grupos": 200,
+      "niveis": {
+        "CTRL": 0.6084080762987013,
+        "DTB": 0.6720620265151516
+      },
+      "p_unilateral": 1.451762436921214e-67,
+      "ressalva_assimetria": null,
+      "t": 26.52805999312908,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "12_celulas": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.05874255952380952,
+          "ic_superior": 0.06601004464285715,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.05797371031746032,
+          "ic_superior": 0.06666449652777778,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL, o Tempo bem dos dias 1 a 14, 12_celulas",
+      "g1": 0.6265517946143796,
+      "gl": 199,
+      "ic95": {
+        "ic_inferior": 0.0579760336984975,
+        "ic_superior": 0.0667164266189628,
+        "nivel": 0.95
+      },
+      "margem": 0.032,
+      "media": 0.062346230158730157,
+      "motivo": null,
+      "n": 200,
+      "n_grupos": 200,
+      "niveis": {
+        "CTRL": 0.6327923487103174,
+        "DTB": 0.6951385788690476
+      },
+      "p_unilateral": 1.4140500955045434e-71,
+      "ressalva_assimetria": null,
+      "t": 28.13238665347969,
+      "teste": "t sobre as unidades (A4.4.6)"
+    }
+  },
+  "saude_por_celula": {
+    "aleatorio|comedouro": {
+      "classe": {
+        "classe": "< 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.08093665457753406,
+      "ic95": {
+        "ic_inferior": -0.06058591941381302,
+        "ic_superior": -0.03801456669729809
+      },
+      "lugar": "aleatorio|comedouro",
+      "media": -0.049300243055555554,
+      "motivo": null,
+      "n": 200,
+      "passa": false,
+      "reprova_com": "< 0"
+    },
+    "aleatorio|longe": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.11862864785568482,
+      "ic95": {
+        "ic_inferior": -0.0014769624050372451,
+        "ic_superior": 0.03160581161138645
+      },
+      "lugar": "aleatorio|longe",
+      "media": 0.015064424603174604,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "aleatorio|longe_fixo": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.11500490649795904,
+      "ic95": {
+        "ic_inferior": -0.02173145055011284,
+        "ic_superior": 0.010340746185033476
+      },
+      "lugar": "aleatorio|longe_fixo",
+      "media": -0.005695352182539682,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "relapso|comedouro": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": "-"
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.01223161250188606,
+      "ic95": {
+        "ic_inferior": -0.009627066703326175,
+        "ic_superior": -0.0062159541300071675
+      },
+      "lugar": "relapso|comedouro",
+      "media": -0.007921510416666671,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "relapso|longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.2654981816599166,
+      "ic95": {
+        "ic_inferior": 0.05148582824487256,
+        "ic_superior": 0.12552710330274652
+      },
+      "lugar": "relapso|longe",
+      "media": 0.08850646577380954,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    },
+    "relapso|longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.1392725931402719,
+      "ic95": {
+        "ic_inferior": 0.019867713342489293,
+        "ic_superior": 0.058707604117828174
+      },
+      "lugar": "relapso|longe_fixo",
+      "media": 0.039287658730158735,
+      "motivo": null,
+      "n": 200,
+      "passa": true,
+      "reprova_com": "< 0"
+    }
+  },
+  "unidades": 200,
+  "unidades_par": 500,
+  "veredito": {
+    "celulas_em_ressalva": [
+      "aleatorio|comedouro"
+    ],
+    "inconclusivas_por_premissa": [],
+    "leitura": "confirma com ressalva",
+    "motivo": "alguma celula do relapso ou do aleatorio com a saude < 0",
+    "premissas_descumpridas": [],
+    "proximo": "confirma vai a C5; confirma com ressalva volta ao Matheus com a celula; o resto fica registrado e o corpo fica o de hoje",
+    "reprovadas": []
+  },
+  "vidas": 4800
+}

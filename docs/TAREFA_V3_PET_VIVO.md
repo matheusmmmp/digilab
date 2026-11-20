@@ -367,3 +367,42 @@ replay rodou uma vez, 49 min com 4 processos, sobre as mesmas 5 120 vidas. O res
   de dormir passam pelo sorteio.
 - **Desvios:** D-SN-9 a D-SN-13.
 - **Próximo:** a decisão do Matheus sobre o teste de recompensa (outra run, com plano próprio).
+
+## O plano do teste de recompensa (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-plano`)
+
+O pedido do Matheus (2026-11-20): "Sim, faz o plano do teste de recompensa". O plano está em
+[PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md](PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), **APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", D-RC-7). Nada rodou e nenhum código mudou.
+
+- **A pergunta:** se o dono acariciar o pet depois de cada decisão de comer ou de brincar, o pet passa mais tempo acordado?
+- **O mecanismo é o que já existe:** o carinho pelo corpo e o crédito da `ConfigElogio`. Nada novo no cérebro, no corpo nem no motor.
+- **Os braços:** R0 (o pet de hoje), R-CORPO (o carinho sem o crédito), R-CB (o carinho com o crédito, g = 2S, W = 1) e R-SORT (o
+  mesmo número de carinhos em passos sorteados).
+- **O pet:** o v38, com o sono que segura, nas 12 células da C4, 200 unidades, 9 600 vidas, cerca de 2,3 h com 4 processos.
+- **As medidas:** o T_ACORDADO responde a pergunta; o "Tempo bem" (D-MP-1) sai ao lado. Nenhuma é gate.
+- **O desfecho esperado, escrito antes:** "não: dorme mais ou fica igual". Nas sementes dos testes, o pet com o carinho ficou de
+  0,001 a 0,037 menos tempo acordado.
+- **O pré-registro** (`PR-PET-VIVO-RECOMPENSA`) entra com o plano, antes da run.
+- **Desvios:** D-RC-1 a D-RC-7.
+- **Próximo:** a faixa com o coordenador; o PR do código e a run, uma vez.
+
+## O código do teste de recompensa (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-codigo`, empilhado no #1048)
+
+O código da seção 8 do [plano do teste de recompensa](PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), APROVADO pelo Matheus em 2026-11-20
+("Aprovo todas"). **A run não rodou.**
+
+- **Os braços:** `experiments/recompensa.py`. O dono do carinho (`DonoRecompensa`) e os quatro braços sobre o `pv2.fabricas` com
+  `v38=True`. A dose é g = 2S e W = 1. O R-SORT tem a rng própria (`recompensa-sorteado`). Nada muda no cérebro, no corpo nem no
+  motor.
+- **As medidas:** `metrics.tempo_acordado` (o T_ACORDADO) e `metrics.medidas_carinho` (os créditos e os que mudam o hábito). O
+  resto já existia.
+- **O orquestrador:** `experiments/run_v3_pet_vivo_recompensa.py`, com as configs `recompensa.json` e `recompensa_fumaca.json`. Faz
+  as conferências da seção 5 (C-G1, C-HOJE, C-CORPO, C-HORA, C-MESMO-N), as premissas e as três regras de leitura. Recusa rodar sem
+  o plano APROVADO, sem a faixa na tabela, com a pasta de saída existente, sem o `pre_run` e com menos de 10 GB livres.
+- **A faixa:** a 108001…108200 entrou no `experiments/bancada/faixas.py`. A coordenadora a confirmou em 2026-11-20 (D-RC-14).
+- **Os testes:** `tests/test_recompensa.py`, 19 testes: o carinho na hora conferido numa vida curta, o crédito na decisão
+  recompensada, o R0 igual ao v38 de hoje, o R-SORT com o mesmo número, o replay, as medidas à mão, as falhas altas e as regras de
+  leitura.
+- **A fumaça:** 48 vidas de 14 dias de uma semente dos testes passam em todas as conferências. A projeção é de 2,4 h com 4
+  processos, abaixo do corte de 4 h. Nenhuma medida foi lida nelas.
+- **Desvios:** D-RC-8 a D-RC-14.
+- **Próximo:** o merge do #1048 e deste PR; com o `pre_run` liberando, a run, uma vez.

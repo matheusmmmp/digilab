@@ -33,7 +33,7 @@ link para o plano commitado.
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
 | [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
-| [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | ainda não rodou | não |
+| [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | "confirma com ressalva" (a célula do aleatório no comedouro) | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | rodado em 2026-11-20 | não |
 
@@ -207,7 +207,7 @@ a run rodou (`f720d684`). O que vale como registro anterior é o plano, no commi
 
 ## PR-CORPO-C4 — a validação do teto baixo
 
-Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). O resultado e os artefatos entram aqui depois dela.
+Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). As linhas "resultado" e "artefatos" entraram depois dela, no mesmo dia; as outras não mudaram.
 
 | campo | valor |
 |---|---|
@@ -220,8 +220,8 @@ Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). O resultado e os arte
 | regra de parada | "A run roda uma vez. Nada se ajusta olhando para ela" (seção 4); "não confirma" ou "indeterminado" fica registrado e a run não se repete (seção 9) |
 | o que refutaria | pela regra de leitura: a primária "≈ 0" ou "< 0" nas 12 ou nas 11 células, ou "> 0" sem o p; ou alguma guarda reprovando |
 | já visto antes da run | o "Tempo bem" nas vidas da C3, que escolheu o braço: DTB − CTRL +0,062 [+0,058; +0,066] nas 12 células ([`artifacts_v3_corpo/c3_tempo_bem/`](../artifacts_v3_corpo/c3_tempo_bem/)); e a contagem nas sementes dos testes (seção 5.2) |
-| resultado | a run ainda não rodou |
-| artefatos | `artifacts_v3_corpo/c4/`, depois da run |
+| resultado | [RESULTADO_V3_CORPO_C4.md](RESULTADO_V3_CORPO_C4.md): **"confirma com ressalva"**. A primária "> 0" nas 12 células (+0,062 [+0,058; +0,067]) e nas 11 (+0,064 [+0,059; +0,068]), com p ≤ 0,025; nenhuma das sete guardas reprova; todas as premissas se cumprem; a saúde cai na célula do aleatório no comedouro (−0,049 [−0,061; −0,038]). As três hipóteses confirmam. O replay da fome (`artifacts_v3_corpo/c4_fome/`) é um descritivo acrescentado depois da aprovação e fora desta regra de leitura |
+| artefatos | [`artifacts_v3_corpo/c4/`](../artifacts_v3_corpo/c4/): `meta.json`, `resultado.json` `136c3048…`, `medidas.json` `c20881a8…`, `pares.json` `7cae1e19…`, `custos.json`, `vidas.tar.gz` `aabebacc…`, `pares.tar.gz` `35fc3804…`; run no commit `64a25595` |
 
 ## PR-REPLICACAO-C4 — a réplica da C4
 
@@ -267,6 +267,24 @@ e "artefatos" entraram depois do replay (2026-11-20).
 | o que refutaria | pela regra de leitura: "quase tudo reflexo" ou "misto" contrariam o desfecho esperado |
 | resultado | [RESULTADO_V3_PET_VIVO_SONO.md](RESULTADO_V3_PET_VIVO_SONO.md): "boa parte passa pelo sorteio: vale um teste de recompensa" (a F_PESOS de 0,376 a 0,543 no HOJE) |
 | artefatos | [`artifacts_v3_pet_vivo/sono/run/`](../artifacts_v3_pet_vivo/sono/run/): `meta.json`, `resultado.json` `6dfa6252…`, `medidas.json.gz` `f2fec4cd…`; o replay rodou em `682e7e5c` |
+
+## PR-PET-VIVO-RECOMPENSA — o carinho depois do comer e do brincar
+
+**Seção escrita antes da run** (2026-11-20). O plano foi APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas"). Nenhuma vida roda antes da faixa
+reservada e do código na `main`. As linhas "resultado" e "artefatos" entram depois da run.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md`](https://github.com/matheusmmmp/digilab/blob/5e83e59e2ed10bb72f26a078ca25047c5adea298/docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), commit `5e83e59e2ed10bb72f26a078ca25047c5adea298` (2026-11-20, o APROVADO; o PROPOSTO é o `ae8f1fb9`) |
+| hipótese | as perguntas Q-ACORDADO, Q-PORQUÊ e Q-BEM. "O desfecho esperado é 'não: dorme mais ou fica igual'", pelas sementes dos testes (seções 1 e 2.2) |
+| células | 4 braços (R0, R-CORPO, R-CB, R-SORT) × 4 donos × 3 lugares, o pet do v38, 14 dias; g = 2S e W = 1 fixos, sem calibração (seções 3 e 4) |
+| sementes | 108001…108200, PROPOSTA (200 unidades, k = 1; 9 600 vidas); a reservar pelo coordenador antes de qualquer vida (seção 4) |
+| contraste primário | D1 = R-CB − R0 no T_ACORDADO (a fração das decisões sem dormir, dias 1 a 14), na média das 12 células por unidade, IC95 pelo t, n 200; δ_A = 0,02, SEM FONTE. Ao lado: D2 = R-CB − R-SORT, D3 = R-CB − R-CORPO e o D1 no "Tempo bem", com a margem 0,032 (seções 6 e 7) |
+| regra de leitura | L-ACORDADO, em ordem: o limite de cima do D1 < 0, "não: com a recompensa o pet dorme mais"; o IC dentro de ±δ_A, "não: fica igual"; o limite de baixo > δ_A, "sim, fica mais tempo acordado"; senão "inconclusivo". A L-PORQUÊ e a L-BEM, na seção 7. Nenhuma medida é gate |
+| regra de parada | roda uma vez; as conferências (C-G1, C-HOJE, C-CORPO, C-HORA, C-MESMO-N) falham alto antes de qualquer medida; as premissas (P-EVENTO, P-DOSE, P-SINAL) ficam registradas e não param; com a projeção da fumaça acima de 4 h a run não roda e o plano volta ao Matheus (seções 5 e 9) |
+| o que refutaria | pela regra de leitura: "sim, fica mais tempo acordado" contraria o desfecho esperado |
+| resultado | a run não rodou |
+| artefatos | nenhum ainda |
 
 ## PR-SOCIAL-PAR-S — o substrato do social
 

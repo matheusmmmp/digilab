@@ -1,0 +1,14 @@
+{
+  "descricao": "A fumaca do teste de recompensa: 1 unidade das sementes dos testes, 14 dias, os 4 bracos nas 12 celulas (48 vidas), com todas as conferencias. So serve ao custo: nenhuma medida dela e lida.",
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md",
+  "fase": "recompensa",
+  "unidades": {
+    "bases": [
+      101
+    ],
+    "k": 1,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
