@@ -30,7 +30,7 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
                      "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto",
-                     "social_par_s", "social_par_s_det")
+                     "social_par_s", "social_par_s_det", "social_par_md", "social_par_md_det")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
                     (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
@@ -228,6 +228,10 @@ FAIXAS_RESERVADAS = (
                      "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
                      "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
                      "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
+    (105001, 105400, "SOCIAL_PAR MD, a medida do M1 e do M2: a run 105001...105200 (200 bases, k = 1, prefixo social_par_md, as mesmas "
+                     "nas oito celulas) e o G-DET 105301...105350 (prefixo social_par_md_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, "
+                     "secao 4; MD-5, aprovada pelo Matheus em 2026-11-19, \"Aprovado\"; a 104xxx ja e da CORPO; conferida livre no "
+                     "faixas.py, nas configs, nos planos, nas tarefas e nos resultados dos 1015 branches remotos em 2026-11-19)"),
 )
 
 
