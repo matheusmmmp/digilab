@@ -220,4 +220,7 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   105001…105400 no `faixas.py` (D-SP-74).
 - **Os testes:** `tests/test_social_par_md.py`, com o G2, o incentivo em 0, as travas, o G-S3-IGUAL, o G-GRAV-COMP, o retrato e a PM-1, a
   fumaça e o determinismo.
-- **O que falta:** a run (MD2), num PR próprio, uma vez.
+- **O checkpoint:** o código foi APROVADO pelo Matheus em 2026-11-20 ("Aprovado", no #1034), com a leitura da PM-1 na VIVO, no
+  gancho do t0 (D-SP-74).
+- **O que falta:** a run (MD2), num PR próprio, uma vez. Ela espera a cadeia até a `main` (o `pre_run` exige o plano na `origin/main`)
+  e o ok do coordenador para a faixa.
