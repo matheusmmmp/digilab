@@ -901,3 +901,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-19 — PET_VIVO: o plano do R-a, a linha de base do intervalo (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-plano`)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o código do R-a (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-codigo`)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o replay do R-a (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-resultado`)](registro/2026-11.md)
+- [2026-11-19 — CORPO: a run da C3 rodada (a ponte com teto)](registro/2026-11.md)
