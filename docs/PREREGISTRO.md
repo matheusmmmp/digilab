@@ -231,12 +231,12 @@ o resultado. O texto que vale é o do plano, no commit citado.
 
 ## PR-PET-VIVO-SONO — o sono pelo reflexo ou pelo sorteio (replay)
 
-**Seção escrita antes da run** (2026-11-20). O plano está PROPOSTO: a linha "plano" ganha o commit do APROVADO quando ele existir, e
-as linhas "resultado" e "artefatos" só depois do replay.
+**Seção escrita antes da run** (2026-11-20). O plano foi APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas"). As linhas "resultado"
+e "artefatos" entram só depois do replay.
 
 | campo | valor |
 |---|---|
-| plano | [`PLANO_ANALISE_V3_PET_VIVO_SONO.md`](https://github.com/matheusmmmp/digilab/blob/cd15ad7e389ad1ae5629909942f3ea978837b6e0/docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md), commit `cd15ad7e389ad1ae5629909942f3ea978837b6e0` (2026-11-20 11:06, PROPOSTO) |
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_SONO.md`](https://github.com/matheusmmmp/digilab/blob/53612fa2dc10e9184fa0f9a63027b540353883a7/docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md), commit `53612fa2dc10e9184fa0f9a63027b540353883a7` (2026-11-20, o APROVADO; o PROPOSTO é o `cd15ad7e`) |
 | hipótese | as perguntas Q-CAMINHO e Q-MARGEM. "O desfecho esperado é 'boa parte passa pelo sorteio'", pelas sementes dos testes (seções 1 e 2.2) |
 | células | as mesmas 5 120 vidas do R1 e do R-a, rejogadas: o HOJE e o OLF-0 da run do PV-2 (3 lugares, n 200) e o HOJE da checagem do v38 (2 lugares, n 40); os caminhos REFLEXO, SEGURA, SORTEIO e ÚNICO (seções 3 e 4) |
 | sementes | nenhuma nova e nenhuma faixa nova: as da run do PV-2 (bases 26101…26505, k 40) (seção 3) |
