@@ -51,6 +51,7 @@ node_modules/
 web/dist/
 web/dist_poc/
 web/dist_conta/
+web/dist_nuvem/
 web/app/test-results/
 web/app/playwright-report/
 

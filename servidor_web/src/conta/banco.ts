@@ -288,6 +288,76 @@ export const MIGRACOES: readonly string[] = [
     PRIMARY KEY (conta_id, feito)
   ) STRICT;
   `,
+  /* 9: o save na nuvem (CN3, servidor_web/src/nuvem/): o pacote da conta (o save do pet do jogador, um por conta como no aparelho, e as
+     outras chaves da CN0), com a posição confirmada (eventos e hash), o resumo (a forma e o tick, do replay) e a vez (o aparelho, desde,
+     até); as divergências (a outra história inteira, até a escolha); as cópias de 30 dias (a diária e as que guardam o que saiu do lugar);
+     e as histórias não escolhidas, que ficam em Gerações só para ver. O registro fica aqui, em texto, até o armazenamento de objetos da
+     CN5 (D-CONTA-180). Tudo pende da conta; a vez solta quando o aparelho é desconectado */
+  `
+  CREATE TABLE nuvem_pets (
+    conta_id       TEXT PRIMARY KEY REFERENCES contas(id) ON DELETE CASCADE,
+    semente        INTEGER NOT NULL,
+    versao         INTEGER NOT NULL,
+    grupo          INTEGER NOT NULL CHECK (grupo IN (0, 1)),
+    foco           TEXT,
+    log            TEXT NOT NULL,
+    eventos        INTEGER NOT NULL,
+    hash           TEXT NOT NULL,
+    firme          INTEGER NOT NULL,
+    hash_firme     TEXT NOT NULL,
+    extras         TEXT NOT NULL,
+    extras_hash    TEXT NOT NULL,
+    forma          TEXT NOT NULL,
+    tick           INTEGER NOT NULL,
+    atualizado_em  INTEGER NOT NULL,
+    atualizado_por TEXT,
+    vez_aparelho   TEXT REFERENCES aparelhos(id) ON DELETE SET NULL,
+    vez_desde      INTEGER,
+    vez_ate        INTEGER
+  ) STRICT;
+  CREATE TABLE nuvem_divergencias (
+    id             TEXT PRIMARY KEY,
+    conta_id       TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    criada_em      INTEGER NOT NULL,
+    aparelho_nome  TEXT NOT NULL,
+    save           TEXT NOT NULL,
+    extras         TEXT NOT NULL,
+    comum          INTEGER NOT NULL,
+    lados          TEXT NOT NULL,
+    resolvida_em   INTEGER,
+    fica           TEXT CHECK (fica IN ('nuvem', 'outra')),
+    CHECK ((resolvida_em IS NULL) = (fica IS NULL))
+  ) STRICT;
+  CREATE INDEX nuvem_divergencias_conta ON nuvem_divergencias(conta_id, resolvida_em);
+  CREATE TABLE nuvem_copias (
+    id         TEXT PRIMARY KEY,
+    conta_id   TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    feita_em   INTEGER NOT NULL,
+    dia        TEXT NOT NULL,
+    motivo     TEXT NOT NULL CHECK (motivo IN ('diaria', 'nao_escolhido', 'troca', 'antes_de_restaurar', 'historia', 'durante_divergencia')),
+    save       TEXT NOT NULL,
+    extras     TEXT NOT NULL,
+    eventos    INTEGER NOT NULL,
+    forma      TEXT NOT NULL,
+    tick       INTEGER NOT NULL,
+    apagar_em  INTEGER NOT NULL
+  ) STRICT;
+  CREATE INDEX nuvem_copias_conta ON nuvem_copias(conta_id, feita_em);
+  CREATE INDEX nuvem_copias_apagar ON nuvem_copias(apagar_em);
+  CREATE TABLE nuvem_historias (
+    id              TEXT PRIMARY KEY,
+    conta_id        TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    criada_em       INTEGER NOT NULL,
+    aparelho_nome   TEXT NOT NULL,
+    divergencia_id  TEXT NOT NULL,
+    save            TEXT NOT NULL,
+    extras          TEXT NOT NULL,
+    eventos         INTEGER NOT NULL,
+    forma           TEXT NOT NULL,
+    tick            INTEGER NOT NULL
+  ) STRICT;
+  CREATE INDEX nuvem_historias_conta ON nuvem_historias(conta_id, criada_em);
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;

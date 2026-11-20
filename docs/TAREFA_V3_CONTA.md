@@ -130,3 +130,30 @@ Pedido do Matheus: "Sim, as telas" (em resposta a "Começo as telas da conta no 
 - **O que falta:** os Termos e a Privacidade não existem (CN6); a marca oficial dos provedores (UX-CN-3); a troca do apelido depois de
   criada a conta (UX-CN-6, sem rota no servidor); o Google e o GitHub de verdade; o e2e no repositório; o revisor de acessibilidade.
   Os desvios estão no registro (D-CONTA-104 a 113).
+
+## A CN3 local: o save na nuvem (2026-11-20)
+
+Pedido pela sessão da conta: a CN3, local e sem deploy, pela seção 5 e as telas 3 a 5 do plano, as CN-3 a CN-5, a medida da CN0 e a
+prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). Branch `v3-cn3`. Os desvios são D-CONTA-180 a 195.
+
+- **A chave:** só com `VITE_DIGILAB_API` **e** `VITE_DIGILAB_NUVEM=1` no build. Desligada, o save sai byte a byte: o gabarito
+  (`web/app/test/gabaritos/cn3_save_desligado.json`, o roteiro do `src/jogo.ts` com o SHA-256 de cada gravação) foi gravado no commit
+  anterior ao código, e `test/nuvem_desligada.test.ts` confere.
+- **O servidor** (`servidor_web/src/nuvem/nuvem.ts`, a migração 9): `GET /nuvem`, `POST /nuvem/levar`, `/nuvem/vez`, `/nuvem/sync`,
+  `/nuvem/divergencia`, `GET /nuvem/pacote`, `/nuvem/historias`, `/nuvem/copias` e `POST /nuvem/copias/:id/restaurar`, com a sessão e o
+  CSRF da conta. A sincronização é por eventos, com o hash do registro até a ponta firme (D-CONTA-182) e o replay do registro inteiro a
+  cada escrita (422 para o que não reproduz). A vez por pacote, que expira em 10 min; a divergência guarda a outra história inteira até a
+  escolha, e a não escolhida vai para Gerações e para as cópias; as cópias diárias e as do que sai do lugar ficam 30 dias. O "baixar os
+  meus dados" traz a nuvem sem o registro; apagar a conta leva tudo.
+- **O jogo:** o cliente puro (`web/app/src/nuvem/cliente.ts`, o protocolo em `protocolo.ts`, dividido com o servidor), a trava do "só ver"
+  em `src/jogo.ts` (`travarAcoes`, D-CONTA-188) e as telas (`src/nuvem/NuvemRaiz.tsx`, `src/estilo/nuvem.css`): levar o pet, a conta que
+  já tem pets ("Guardar os dois" marcada), o outro aparelho ("Jogar aqui" e "Só ver"), as duas histórias ("Decidir depois"), atualize o
+  jogo, o servidor fora do ar (uma vez), entre de novo, o estado no lugar do "salvo" do relógio, as cópias com "Restaurar" em Ajustes ›
+  Conta e as outras histórias em Diário › Gerações.
+- **Os testes:** `servidor_web/test/nuvem.test.ts` (as rotas e o e2e dos quatro casos com dois aparelhos, duas instâncias do cliente do
+  jogo contra o servidor de verdade no processo); `web/app/test/nuvem_trava.test.ts` e `nuvem_desligada.test.ts`; e
+  `web/app/e2e_conta/nuvem.spec.ts`, os quatro casos no Chrome com dois contextos e o servidor de verdade no `route` (no `npm run
+  e2e:conta`, que agora monta também `web/dist_nuvem/`).
+- **O que falta:** o registro no armazenamento de objetos e o deploy (CN5); o grupo dos dois pets sem teste próprio; o sprite e a abertura
+  só-para-ver das histórias em Gerações; o revisor de acessibilidade; as capturas a 1920 e 390 das telas no jogo; a velocidade do tempo ao
+  abrir noutro aparelho (D-CONTA-38).

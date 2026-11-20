@@ -10,6 +10,7 @@
 
    Tudo aqui e tela: a conta nao toca o motor, o registro nem o save. As regras e as chamadas ficam em src/conta/conta.ts e, as das
    pontuacoes, em src/cais/pontuacoes.ts. */
+import { CopiasDoSave, OfertaLevar } from "../../nuvem/NuvemRaiz.tsx";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Anchor, Check, ChevronRight, Crown, Download, Info, LogOut, Monitor, Shuffle, Smartphone, Trash2, Trophy, TriangleAlert, UserRound } from "lucide-react";
 import { DIGIMON_DA_FORMA } from "../../../motor/index.ts";
@@ -251,6 +252,9 @@ function Perfil({ c }: { c: Conta }) {
             {a.atual ? <span className="ct-etq ok">aqui</span>
               : <button type="button" className="hx-btn" disabled={CT.ocupado} onClick={() => agir(() => desconectar(a.id))} aria-label={`Desconectar ${a.nome}`}>Desconectar</button>}
           </li>))}</ul></div>
+      {/* o save na nuvem (CN3): a oferta de levar o pet e as cópias; sem a chave, nada */}
+      <OfertaLevar />
+      <CopiasDoSave />
       <div><span className="ct-rot">Seus dados</span>
         <div className="ct-dados">
           <a className="hx-btn" href={enderecoDosDados()} download data-testid="ct-baixar"><Download aria-hidden="true" />Baixar meus dados</a>

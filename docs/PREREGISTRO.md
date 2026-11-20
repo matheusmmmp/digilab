@@ -33,6 +33,7 @@ link para o plano commitado.
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
 | [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
+| [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | ainda não rodou | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | a rodar | não |
 
@@ -203,6 +204,24 @@ a run rodou (`f720d684`). O que vale como registro anterior é o plano, no commi
 | o que refutaria | pela regra de leitura: o F fora do "> 0", ou alguma guarda do bem-estar reprovando, nos dois braços com teto |
 | resultado | [RESULTADO_V3_CORPO_C3.md](RESULTADO_V3_CORPO_C3.md): DTB +0,120 [+0,105; +0,135], n = 200, nenhuma guarda reprova, "ganho"; DTL +0,123 [+0,109; +0,138], três guardas reprovam, "perda". H1 se confirma; na H2, a privação e a saúde ficam perto do CTRL na média, e o F do DTB não se separa do da D (−0,004 [−0,015; +0,007]) |
 | artefatos | [`artifacts_v3_corpo/c3/`](../artifacts_v3_corpo/c3/): `resultado.json` `b3260812…`, `medidas.json.gz` `eeaebb24…` (descomprime no `825a122a…` do `meta.json`), `vidas.tar.gz` `03426106…`, `pares.tar.gz` `bdc7d30a…` |
+
+## PR-CORPO-C4 — a validação do teto baixo
+
+Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). O resultado e os artefatos entram aqui depois dela.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_CORPO_C4.md`](https://github.com/matheusmmmp/digilab/blob/dc53e4cc3334379d582e09af78ca6c413c9c7268/docs/PLANO_ANALISE_V3_CORPO_C4.md), APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas", D-C4-1 a D-C4-12), no commit `dc53e4cc3334379d582e09af78ca6c413c9c7268` |
+| hipótese | H1: DTB − CTRL no "Tempo bem" é "> 0", nas 12 células e nas 11 distintas. H2: nenhuma guarda reprova. H3: a saúde do DTB continua abaixo da do CTRL na célula do aleatório no comedouro ("< 0"), e por isso a previsão é "confirma com ressalva" (seção 1) |
+| células | as 12 da C4 do modular (4 donos × comedouro, longe e `longe_fixo`), das quais 11 distintas; braços CTRL e DTB (a ponte da D com teto em C/2, 225 000, SEM FONTE); 14 dias, orçamento 16; bloco II com 500 pares por braço, 5 dias (seções 2 a 4) |
+| sementes | 107001…107200 (200 unidades, k = 1, 4 800 vidas) e 107301…107800 (os pares), da faixa 107001…107800 (seção 4) |
+| contraste primário | DTB − CTRL no "Tempo bem" (a fração das decisões dos dias 1 a 14 sem privação e sem exaustão), a média das células por unidade, pareado, IC95 pelo t, p unilateral com α = 0,025; nas 12 células e nas 11 distintas, e só passa se sair "> 0" nas duas (seção 6) |
+| regra de leitura | a tabela da seção 6, com as classes de A6.6 e δ = 0,032 (SEM FONTE): "confirma", "confirma com ressalva" (alguma das 6 células do relapso e do aleatório com a saúde "< 0"), "não confirma" (a primária fora do "> 0", ou alguma guarda reprova: a saúde, a taxa por episódio, o "Tempo bem" por lugar, o S2) ou "indeterminado". Uma premissa da seção 5.2 abaixo do piso deixa a medida "inconclusiva por premissa" |
+| regra de parada | "A run roda uma vez. Nada se ajusta olhando para ela" (seção 4); "não confirma" ou "indeterminado" fica registrado e a run não se repete (seção 9) |
+| o que refutaria | pela regra de leitura: a primária "≈ 0" ou "< 0" nas 12 ou nas 11 células, ou "> 0" sem o p; ou alguma guarda reprovando |
+| já visto antes da run | o "Tempo bem" nas vidas da C3, que escolheu o braço: DTB − CTRL +0,062 [+0,058; +0,066] nas 12 células ([`artifacts_v3_corpo/c3_tempo_bem/`](../artifacts_v3_corpo/c3_tempo_bem/)); e a contagem nas sementes dos testes (seção 5.2) |
+| resultado | a run ainda não rodou |
+| artefatos | `artifacts_v3_corpo/c4/`, depois da run |
 
 ## PR-REPLICACAO-C4 — a réplica da C4
 
