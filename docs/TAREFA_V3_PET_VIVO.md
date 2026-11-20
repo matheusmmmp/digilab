@@ -333,3 +333,21 @@ nenhum código mudou.
 - **O pré-registro** (`PR-PET-VIVO-SONO`) entra com o plano, antes da run.
 - **Desvios:** D-SN-1 a D-SN-4.
 - **Próximo:** o PR do código e o replay, uma vez.
+
+## O código do R-sono (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-codigo`, empilhado no #1040)
+
+O código da seção 7 do [plano do R-sono](PLANO_ANALISE_V3_PET_VIVO_SONO.md), APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas").
+**O replay não rodou.**
+
+- **A medida:** `metrics.medidas_caminho_sono` lê o que o `motivo` já grava (o `reflexo`, o `u`, os pesos das unidades e a leitura
+  da energia do rastro) e dá, por vida, as decisões e os ticks de sono por caminho (REFLEXO, SEGURA, SORTEIO, ÚNICO), por caminho do
+  episódio, a F_PESOS, a margem no sorteio e a chance do dormir nas decisões acordadas. Nada muda no cérebro, no corpo nem no motor.
+- **O orquestrador:** `experiments/run_v3_pet_vivo_sono.py`, com a config `experiments/configs/v3_pet_vivo/sono.json`. Reusa a fonte
+  e as conferências do R1 e acrescenta a C-REFLEXO e a C-SOMA. Recusa rodar sem o plano APROVADO, com a pasta de saída existente,
+  sem o `pre_run` e com menos de 10 GB livres.
+- **Os testes:** `tests/test_caminho_sono.py`, 11 testes: os quatro caminhos e o episódio conferidos à mão, a margem à mão, as
+  conferências numa vida das sementes dos testes, as falhas altas e a regra de leitura.
+- **A fumaça:** 2 vidas reais do HOJE da run do PV-2 passam em todas as conferências, a 1,7 s por vida (a projeção de 0,60 h, abaixo
+  do corte de 2 h). Nenhuma medida do caminho do sono foi lida nelas.
+- **Desvios:** D-SN-5 a D-SN-8.
+- **Próximo:** o merge do #1040 e deste PR; com o `pre_run` liberando, o replay, uma vez.
