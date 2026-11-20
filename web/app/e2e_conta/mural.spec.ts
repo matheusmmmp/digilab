@@ -55,7 +55,7 @@ async function abrir(page: Page, w: number, h: number): Promise<{ sessao: boolea
   await page.setViewportSize({ width: w, height: h });
   await page.clock.setFixedTime(AGORA);
   const s = await servidorFalso(page);
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, save, nivel]) => {
     localStorage.clear();
     localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 7, log: [] }));

@@ -53,7 +53,7 @@ function comando(exe: string, args: string[]): { saida: string | null; motivo: s
 }
 
 async function semear(page: Page): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");                        /* uma pagina da mesma origem que nao e o app */
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");                        /* uma pagina da mesma origem que nao e o app */
   await page.evaluate(([chave, verifDepois]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");

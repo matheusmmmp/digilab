@@ -9,7 +9,7 @@ const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const save = (versao: number) => JSON.stringify({ semente: 4242, versao, log: [[480, "t", 120]] });
 
 async function semear(page: Page, s: string, descarte: string): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s, d]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", d); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");

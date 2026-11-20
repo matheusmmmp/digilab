@@ -25,7 +25,7 @@ const ABAS: [string, string, string][] = [
     (vazio, ou o dado) e o marcador do descarte (versao 8, a da LP4 da LUTA_POC) vao junto: com eles o app entende que o descarte unico
     ja rodou. Os saves destes testes sao v21 (os de antes nao abrem mais) */
 async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s, t, tm]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
     localStorage.setItem(chave + "-descarte", "8");
@@ -337,7 +337,7 @@ const SAVE_ANTIGO_V3 = { semente: 910303, versao: 3, log: [[480, "t", 300], [780
 const SAVE_ANTIGO_V19 = { semente: 6100, versao: 19, log: [[480, "t", 300], [780, "d", "acariciar"], [780, "t", 120]] };
 const lerTamer = (page: Page) => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-tamer") ?? "null"), CHAVE);
 test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece o arquivo e pede o brasão do ovo novo", async ({ page }) => {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([c, s]) => {
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
     localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", JSON.stringify([JSON.parse(s)]));
@@ -378,7 +378,7 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
 test("luta da POC: o pet v19 de antes sai com o aviso, e o Tamer fica com as medalhas", async ({ page }) => {
   const tamer = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_ANTIGO_V19.semente, forma: "Armadillomon", tick: 900 }],
     ["item", { id: "chip_forca", n: 1, quando: 1, origem: "medalha", lider: "npc_tier1_brutamontes", pet: SAVE_ANTIGO_V19.semente, forma: "Armadillomon", est: "crianca", tick: 900 }]] };
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([c, s, tm]) => {
     /* os descartes de antes ja rodaram (marcador 6): so falta o da luta da POC */
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
@@ -1259,7 +1259,7 @@ test("mundo: o Alimentar dos v12 é a reserva temporária, descrita assim, e põ
 });
 /* o ovo de um pet novo (v12) chocando na cena 3D: a contagem dos quadros do ovo continua no PalcoPet com a cena 3D (o conserto do #398) */
 test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([c, s]) => {
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
     localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]");
@@ -1386,7 +1386,7 @@ test("som: limpar pede a agua e a voz do pet", async ({ page }) => {
    como nos momentos. So o Brincar entra no registro: a bola e o chute saem do motor no replay */
 test("Brincar joga a bola e o pet chuta", async ({ page }) => {
   test.setTimeout(180_000);
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([c, s]) => {
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
     localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]");
@@ -1468,12 +1468,12 @@ test("som: o painel, o treino e a luta pedem os sons do Digimon UP", async ({ pa
   expect(erros).toEqual([]);
 });
 
-/* TAREFA_V2_UP_ATLAS: com a chave dos clipes ligada (?clipes_up=1) e o atlas de clipes ausente, o aviso do atlas aparece; nao cai calado no atlas atual */
-test("clipes do UP: ligados e sem o atlas de clipes, o aviso de atlas que não carregou", async ({ page }) => {
+/* TAREFA_V2_UP_ATLAS: sem o atlas de clipes (a unica fonte de sprite desde 2026-11-20), o aviso do atlas aparece; nao cai calado em outro atlas */
+test("clipes do UP: sem o atlas de clipes, o aviso de atlas que não carregou", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVES.champion);
   await page.route(/\/Assets\/digilab_atlas_up_clipes/, r => r.abort());
-  await page.goto(APP + "?clipes_up=1#/pet/estado");
+  await page.goto(APP + "#/pet/estado");
   await expect(page.getByText("Atlas de sprites não carregou.")).toBeVisible();
 });
 

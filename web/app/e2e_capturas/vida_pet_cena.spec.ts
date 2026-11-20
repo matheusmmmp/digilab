@@ -14,7 +14,7 @@ const TELAS: [number, number][] = [[390, 844], [1280, 800], [1920, 950]];
 test.skip(!process.env.DIGILAB_CAPTURAS_VIDA, "so com DIGILAB_CAPTURAS_VIDA=1");
 
 async function abrir(page: Page, save: object): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");

@@ -27,7 +27,7 @@ for (const [largura, altura] of [[390, 844], [1280, 800]] as const) {
   test(`os dois ovos chocam juntos, o irmao fica no topo e o foco troca, ${largura} px`, async ({ browser }) => {
     const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: largura, height: altura } });
     const page = await ctx.newPage(), erros = vigiarErros(page);
-    await page.goto("/Assets/digilab_atlas_up.json");
+    await page.goto("/Assets/digilab_atlas_up_pecas.json");
     await page.evaluate(c => { localStorage.clear(); localStorage.setItem(c + "-dicas-ligadas", "0"); }, CHAVE);
     await page.goto(APP + "#/inicio");
     await page.getByRole("button", { name: /começar/i }).click();
