@@ -224,7 +224,9 @@ relato é o `docs/RESULTADO_V3_CORPO_C4.md`.
   muda.
 - **As premissas se cumprem todas,** e cada medida repete a C3 dentro do intervalo.
 - **O replay da fome** (`experiments/run_v3_corpo_c4_fome.py`, com a métrica `fome_nas_decisoes`): um descritivo acrescentado depois da
-  aprovação, por escolha do Matheus ("Replay depois"). Está na fila, atrás da run de outra frente.
+  aprovação, por escolha do Matheus ("Replay depois"). Rodou em 2026-11-20 (35 min, as 4 800 vidas conferidas contra o log gravado;
+  `artifacts_v3_corpo/c4_fome/`). Nas 12 células, a fome média desce com o DTB (0,500 → 0,469) e o tempo com a fome acima de 0,5
+  também (0,446 → 0,432). No comedouro, com o relapso e o aleatório, a fome sobe. Fora da leitura, sem teste.
 
 **O programa para no CHECKPOINT da C4.** Pela seção 9 do plano, "confirma com ressalva" volta ao Matheus com a célula: aceitar a ressalva
 e seguir para a C5, pedir outra mudança, ou deixar o corpo como está. O T_B continua PROPOSTO e SEM FONTE. Nenhum braço está ligado no

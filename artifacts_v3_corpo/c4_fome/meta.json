@@ -1,0 +1,30 @@
+{
+  "artefatos_sha256": {
+    "fome.json": "2d7798673f00b8d8ff672d96d35ba168c3a22852bb4751921365aa8b01f48a4c",
+    "resumo.json": "215533cc7b831737e0aa98109cb41c6d71d4881125261187f57f2aca38f3c6c3"
+  },
+  "bracos": [
+    "CTRL",
+    "DTB"
+  ],
+  "comando": "python experiments/run_v3_corpo_c4_fome.py --config experiments/configs/v3_corpo_c4/run.json --processos 4",
+  "config_arquivo": "experiments/configs/v3_corpo_c4/run.json",
+  "config_sha256": "45aff50380f9a4e91e8f0bad6e29251f2abc8fbb556be4b3b302e6bdc881b5cf",
+  "duracao_s": 2093.1896886999984,
+  "fonte": "artifacts_v3_corpo/c4",
+  "fonte_sha256": {
+    "medidas.json": "c20881a8e10e539c66b30e33661bd4a985d1dc2e16b8da095790c9d57c06e8a7",
+    "meta.json": "070067a3ac5841a665d8ebe5368c36e46999a76f2767812c3d04cc4cb24c907d"
+  },
+  "git_head": "d5176552a46dc7b344d9bfa706b37b2b95a8f600",
+  "inicio": "2026-11-20T15:13:37",
+  "limiar_fome": 0.5,
+  "metrics_sha256": "f76a20fb58871a5c4ec90408b05f2bba75e6ac2fe34a81c40cde81e0af825fae",
+  "o_que_e": "replay da fome sobre as vidas da C4 (sem vida nova); descritivo acrescentado depois da aprovacao do plano",
+  "orquestrador_c3_sha256": "e389360a7d1ce063de744618bbb41195184dca6ed814f67d5e830c84c3baaf76",
+  "orquestrador_c4_sha256": "cedbd5e44424a87d0b3f72efcf707c7463a34fa112547364e6896ef2c6d60842",
+  "processos": 4,
+  "python": "3.13.0",
+  "script_sha256": "5a38c2464b6e4f394d90070a9e14c4c6f9be129715be9143eae989ccd349c681",
+  "vidas": 4800
+}
