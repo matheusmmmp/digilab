@@ -124,6 +124,8 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # lambda_sono); faltavam aqui (o teste falhava na main), acrescentados no PR do codigo da CORPO V1-a
                                                                              "experiments/recompensa.py", "experiments/run_v3_pet_vivo_recompensa.py",
                                                                              # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
+                                                                             # a PLASTICIDADE_EVOLUIDA, o E0: o pet v38 com os inatos da config e a ConfigDigibrain do braco
+                                                                             "experiments/run_v3_plasticidade_e0.py",
                                                                              "experiments/run_v3_social_par_md.py",
                                                                              "experiments/run_v3_corpo_acoplamento.py"}
 

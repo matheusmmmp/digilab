@@ -131,3 +131,24 @@ confirmatório.
 - Nada sobre a plasticidade evoluída funcionar no DigiBrain: o E0 só diz se há por onde buscar.
 - Nada sobre o jogo: nenhum número da config muda.
 - Nenhum número de resultado.
+
+## 9. O código do E0 (etapa de código, 2026-11-21)
+
+Escrito por uma sessão lateral da Gerência da V3 (Claude Code, Fable 5.2). **Nenhuma vida de pesquisa rodou.** Os desvios estão em
+`docs/registro/2026-11.md` (D-PE-7 a D-PE-15).
+
+- **O orquestrador:** `experiments/run_v3_plasticidade_e0.py`, com as configs em `experiments/configs/v3_plasticidade_e0/` (`run.json` e
+  `fumaca.json`). As 31 configs, os dois braços, as seis células (`comedouro`, `longe`, `longe_fixo` × atencioso e relapso), o pet v38
+  montado como no `experiments/pv2.py`.
+- **A medida:** `digilab.metrics.sensibilidade_um_por_vez` (o nível de cada braço, o valor do aprendizado pareado por unidade, os
+  contrastes contra a config de hoje com o IC95 e a conta do acaso) e `saude_nas_decisoes`.
+- **A leitura da seção 3** está no `ler` do orquestrador. Um caso que a tabela não previu sai como "fora da tabela da seção 3".
+- **As sementes:** a coordenadora reservou 110001…110200 para a tarefa; o E0 usa 110001…110010.
+- **Os testes:** `tests/test_run_v3_plasticidade_e0.py`.
+- **As referências:** `docs/referencias/v3_plasticidade_evoluida_referencias_verificadas.csv`.
+- **O custo medido na fumaça** (60 vidas de 14 dias, a semente 101, 2 processos, com a suíte de outra sessão rodando ao mesmo tempo):
+  6,9 s de parede e 3,7 s de CPU por vida, com o replay e as conferências. Para as 3 720 vidas com 4 processos, isso projeta 1,8 h pela
+  parede medida e cerca de 1 h pela CPU. A fumaça só serve ao custo; o artefato dela não foi commitado.
+- **Achado para decidir antes da run (D-PE-7):** o `beta_e`, o `g_min` e o `g_max` não chegam a nenhuma conta no pet v38, porque a
+  subchave `modula_g_apr` está desligada nele. As 6 configs deles repetem a de hoje (720 das 3 720 vidas). A lista da PE-3 não foi mudada.
+- **Falta para rodar:** a vez na máquina (depois do D0 do pet que pensa e da triagem da V1-a) e o ok do Matheus.

@@ -182,6 +182,8 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py", "experiments/run_v3_corpo_acoplamento.py",
                                                                              # a CORPO V1-a: o pet v38 da PET_VIVO no motor da sonda, com as chaves do corpo do braco (D-V1A-2)
                                                                              "experiments/run_v3_corpo_v1.py",
+                                                                             # a PLASTICIDADE_EVOLUIDA, o E0: o pet v38 com os inatos da config e a ConfigDigibrain do braco
+                                                                             "experiments/run_v3_plasticidade_e0.py",
                                                                              # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
                                                                              "experiments/run_v3_social_par_md.py",
                                                                              # os que ja citavam o pacote e faltavam aqui (o teste falhava na main, D-CO6b-4): o GOSTO_VISUAL
