@@ -186,3 +186,37 @@
 /* os botoes quadrados da borda direita (celular e painel fechado): um vidro cada, por cima da cena */
 :root[data-pele="vidro"] .pet-lado .pet-lado__bt:not([aria-pressed="true"]){ background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2));
   border-color:var(--hx-borda); box-shadow:var(--hud-brilho); -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque) }
+
+/* ---------- acertos contra as pranchas D (2026-11-21; docs/TAREFA_V3_UX_TELA_PET.md, secao 33): o botao principal, o "x" do fechar e a chave
+   dos Ajustes. As cores sao as da pele de hoje (a refeitura de 2026-10-31); so a forma muda. */
+:root[data-pele="vidro"]{
+  --vidro-x:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E");
+}
+/* o botao principal (G7): 13 px, 700, caixa alta, 2 px entre as letras, 48 px de altura e o canto de baixo a direita cortado (8 px). O
+   corte e um clip-path: a diagonal e desenhada no fundo, o brilho fica por dentro e o foco tambem (o de fora seria cortado). O Verificar do
+   Registro e o botao principal da tela e leva a mesma forma, na altura da linha dele */
+:root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao){
+  --ch:var(--hx-chanfro-p); --bp-fundo:var(--hx-btn-bg);
+  font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; box-shadow:inset 0 0 10px rgba(95,212,255,.28);
+  background:
+    linear-gradient(135deg, transparent calc(50% - 1px), var(--hx-btn-borda) calc(50% - 1px) 50%, transparent 50%) right bottom / var(--ch) var(--ch) no-repeat border-box,
+    var(--bp-fundo) border-box;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--ch)), calc(100% - var(--ch)) 100%, 0 100%);
+}
+:root[data-pele="vidro"] :where(.hx-continuar){ min-height:48px }
+:root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):hover:not(:disabled){ --bp-fundo:var(--hx-btn-bg-hover) }
+:root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):active:not(:disabled){ --bp-fundo:var(--hx-btn-borda); color:#06101A }
+:root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-5px }
+/* o "x" do fechar (G10): de traco fino; o "×" do texto sai da vista (o nome acessivel e o aria-label do botao) */
+:root[data-pele="vidro"] .hx-quad > span{ display:none }
+:root[data-pele="vidro"] .hx-quad::before{ content:""; width:20px; height:20px; background:currentColor;
+  -webkit-mask:var(--vidro-x) center / contain no-repeat; mask:var(--vidro-x) center / contain no-repeat }
+/* a chave dos Ajustes (F3): o interruptor retangular de 46 x 24 px no lugar da caixa de marcar; desligada, o cursor a esquerda no tom da
+   borda; ligada, o ciano dos destaques com o cursor escuro a direita e um brilho leve. A linha inteira continua sendo o alvo do toque */
+:root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]{
+  -webkit-appearance:none; appearance:none; flex:none; width:46px; height:24px; margin:0; border:1px solid var(--hx-borda); border-radius:0; cursor:pointer;
+  background:linear-gradient(var(--hx-borda), var(--hx-borda)) 3px 50% / 16px 16px no-repeat transparent }
+:root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:checked{ border-color:var(--hx-escolhido-borda); box-shadow:0 0 8px rgba(95,212,255,.45);
+  background:linear-gradient(#06101A, #06101A) calc(100% - 3px) 50% / 16px 16px no-repeat var(--hx-escolhido-borda) }
+:root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:disabled{ opacity:.5; cursor:not-allowed }
+:root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }

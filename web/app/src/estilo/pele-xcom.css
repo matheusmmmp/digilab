@@ -54,3 +54,29 @@
 :root[data-pele="xcom"] .ab-hx{ --dl-hex:rgba(150,160,150,.18) }
 :root[data-pele="xcom"] .ab-hx .bv-luz{ background:rgba(201,208,200,.06); box-shadow:0 0 0 14px rgba(201,208,200,.035), 0 0 0 30px rgba(201,208,200,.02) }
 :root[data-pele="xcom"] .ab-hx .cj-anel{ background:rgba(201,208,200,.08) }
+
+/* ---------- acertos contra as pranchas D (2026-11-21; docs/TAREFA_V3_UX_TELA_PET.md, secao 33): o fechar, o Verificar e a chave dos Ajustes.
+   As cores sao as da pele de hoje: o ciano palido da prancha virou o caqui do escolhido na refeitura de 2026-10-31. */
+:root[data-pele="xcom"]{
+  --xcom-x:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E");
+}
+/* o fechar (G10): destacado, com a borda de 2 px e o "x" de traco fino, os dois na cor do escolhido; o "×" do texto sai da vista (o nome
+   acessivel e o aria-label do botao) */
+:root[data-pele="xcom"] .hx-quad{ border:2px solid var(--hx-escolhido-borda); background:var(--hx-chao); color:var(--hx-escolhido-borda) }
+:root[data-pele="xcom"] .hx-quad:hover{ border-color:var(--hx-escolhido-borda); background:var(--hx-miolo-2) }
+:root[data-pele="xcom"] .hx-quad:active{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+:root[data-pele="xcom"] .hx-quad > span{ display:none }
+:root[data-pele="xcom"] .hx-quad::before{ content:""; width:20px; height:20px; background:currentColor;
+  -webkit-mask:var(--xcom-x) center / contain no-repeat; mask:var(--xcom-x) center / contain no-repeat }
+/* o Verificar do Registro (G7): o botao principal da pele, com a hachura verde no topo e em caixa alta */
+:root[data-pele="xcom"] .rg2-bt--acao{ position:relative; padding-top:6px; letter-spacing:.06em; text-transform:uppercase }
+:root[data-pele="xcom"] .rg2-bt--acao::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura-verde); pointer-events:none }
+/* a chave dos Ajustes (F3): o interruptor retangular de 46 x 24 px no lugar da caixa de marcar; desligada, o cursor a esquerda no tom da
+   borda; ligada, o bloco do escolhido com o cursor escuro a direita. A linha inteira continua sendo o alvo do toque */
+:root[data-pele="xcom"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]{
+  -webkit-appearance:none; appearance:none; flex:none; width:46px; height:24px; margin:0; border:1px solid var(--hx-borda-topo); border-radius:0; cursor:pointer;
+  background:linear-gradient(var(--hx-borda-topo), var(--hx-borda-topo)) 3px 50% / 16px 16px no-repeat transparent }
+:root[data-pele="xcom"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:checked{ border-color:var(--hx-escolhido-borda);
+  background:linear-gradient(var(--hx-escolhido-ink), var(--hx-escolhido-ink)) calc(100% - 3px) 50% / 16px 16px no-repeat var(--hx-escolhido-borda) }
+:root[data-pele="xcom"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:disabled{ opacity:.5; cursor:not-allowed }
+:root[data-pele="xcom"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }

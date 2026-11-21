@@ -284,3 +284,85 @@ describe("itens trancados do nivel do Tamer", () => {
     expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(3);
   });
 });
+
+/* os acertos do Vidro e do Militar contra as pranchas D (docs/TAREFA_V3_UX_TELA_PET.md, secao 33; 2026-11-21): o botao principal, o fechar e a
+   chave dos Ajustes. So CSS, cada peca sob a pele dela; a estrutura (DOM) e as cores dos tokens nao mudam. A janela Estado atual ficou de fora
+   por decisao do Matheus ("quero que deixe como esta no jogo atual"). O desenho na tela e conferido em e2e/pele_pranchas_d.spec.ts. */
+describe("acertos contra as pranchas D: o botao principal, o fechar e a chave", () => {
+  const xcomCss = readFileSync(new URL("../src/estilo/pele-xcom.css", import.meta.url), "utf8");
+  const semComentario = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, "");
+  /** o corpo da primeira regra cujo seletor e exatamente `sel` */
+  const regra = (css: string, sel: string) => { const s = semComentario(css), i = s.indexOf(sel + "{"); if (i < 0) throw new Error("sem a regra " + sel); return s.slice(i + sel.length + 1, s.indexOf("}", i)); };
+  const CHAVE = ':is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]';
+
+  it("Vidro: o botao principal em 13 px, caixa alta, 2 px entre as letras, 48 px de altura e so o canto de baixo a direita cortado", () => {
+    const b = regra(vidroCss, ':root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao)');
+    for (const p of ["font-size:13px", "font-weight:700", "letter-spacing:2px", "text-transform:uppercase"]) expect(b).toContain(p);
+    expect(b).toContain("clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--ch)), calc(100% - var(--ch)) 100%, 0 100%)");
+    expect(b).toContain("--ch:var(--hx-chanfro-p)");
+    expect(tokenVidro("hx-chanfro-p")).toBe("8px");
+    /* a diagonal do corte e desenhada no fundo (o clip-path corta a borda), e o fundo troca por uma variavel no hover e no toque */
+    expect(b).toMatch(/linear-gradient\(135deg, transparent calc\(50% - 1px\), var\(--hx-btn-borda\) calc\(50% - 1px\) 50%, transparent 50%\) right bottom/);
+    expect(b).toContain("var(--bp-fundo) border-box");
+    expect(regra(vidroCss, ':root[data-pele="vidro"] :where(.hx-continuar)')).toContain("min-height:48px");
+    /* o foco fica por dentro: o de fora seria cortado pelo clip-path */
+    expect(regra(vidroCss, ':root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):focus-visible')).toContain("outline-offset:-5px");
+    expect(contraste("#06101A", tokenVidro("hx-btn-borda"))).toBeGreaterThanOrEqual(4.5);   // o texto do toque sobre o ciano
+  });
+
+  it("Militar: o Verificar do Registro e o botao principal da pele, com a hachura verde no topo e em caixa alta", () => {
+    expect(regra(xcomCss, ':root[data-pele="xcom"] .rg2-bt--acao')).toContain("text-transform:uppercase");
+    const h = regra(xcomCss, ':root[data-pele="xcom"] .rg2-bt--acao::before');
+    expect(h).toContain("height:6px");
+    expect(h).toContain("background:var(--hx-hachura-verde)");
+    expect(hud).toMatch(/\.hx-continuar::before\{[^}]*height:6px; background:var\(--hx-hachura-verde\)/);   // a mesma do botao principal
+  });
+
+  it("o fechar: o x de traco fino nas duas peles (o × do texto sai da vista, o nome fica no aria-label); no Militar, a borda de 2 px do escolhido", () => {
+    for (const [css, pele] of [[vidroCss, "vidro"], [xcomCss, "xcom"]] as const) {
+      expect(regra(css, `:root[data-pele="${pele}"] .hx-quad > span`)).toContain("display:none");
+      const x = regra(css, `:root[data-pele="${pele}"] .hx-quad::before`);
+      for (const p of ["width:20px", "height:20px", "background:currentColor", `mask:var(--${pele}-x) center / contain no-repeat`]) expect(x, pele).toContain(p);
+      expect(semComentario(css)).toMatch(new RegExp(`--${pele}-x:url\\("data:image/svg\\+xml,[^"]*stroke-width='2\\.4'[^"]*M6 6l12 12M18 6L6 18`));
+    }
+    const m = regra(xcomCss, ':root[data-pele="xcom"] .hx-quad');
+    expect(m).toContain("border:2px solid var(--hx-escolhido-borda)");
+    expect(m).toContain("color:var(--hx-escolhido-borda)");
+    for (const f of [token("hx-chao"), token("hx-miolo-2")]) expect(contraste(token("hx-escolhido-borda"), f), f).toBeGreaterThanOrEqual(3);
+    /* o botao continua sendo o mesmo: o × e o aria-label */
+    expect(renderToStaticMarkup(h(PainelHx, { titulo: "Lutar", onFechar: () => {} }))).toContain('class="hx-quad" aria-label="Fechar"><span aria-hidden="true">×</span>');
+  });
+
+  it("a chave: o interruptor retangular de 46 x 24 px nas duas peles, so nos role=switch; a ligada cheia com o cursor escuro a direita", () => {
+    for (const [css, pele] of [[vidroCss, "vidro"], [xcomCss, "xcom"]] as const) {
+      const base = regra(css, `:root[data-pele="${pele}"] ${CHAVE}`);
+      for (const p of ["appearance:none", "width:46px", "height:24px", "border-radius:0", "3px 50% / 16px 16px no-repeat"]) expect(base, pele).toContain(p);
+      const ligada = regra(css, `:root[data-pele="${pele}"] ${CHAVE}:checked`);
+      expect(ligada, pele).toContain("calc(100% - 3px) 50% / 16px 16px no-repeat var(--hx-escolhido-borda)");
+      expect(regra(css, `:root[data-pele="${pele}"] ${CHAVE}:disabled`), pele).toContain("opacity:.5");
+      expect(regra(css, `:root[data-pele="${pele}"] ${CHAVE}:focus-visible`), pele).toContain("outline:2px solid var(--hx-foco)");
+      /* a caixa de marcar de verdade (o aceite da conta, o "entendi" do aposentar) nao e role=switch e fica como e */
+      expect(semComentario(css)).not.toMatch(/input\[type="checkbox"\](?!\[role="switch"\])/);
+    }
+    /* o cursor sobre a chave ligada, e a borda da desligada sobre a linha (a tecla sobre o miolo do painel) */
+    expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido-borda"))).toBeGreaterThanOrEqual(3);
+    expect(regra(xcomCss, `:root[data-pele="xcom"] ${CHAVE}:checked`)).toContain("linear-gradient(var(--hx-escolhido-ink), var(--hx-escolhido-ink))");
+    const [ri, gi, bi] = rgb(token("hx-miolo"))[0];
+    const linha = hex(sobre("rgba(255,255,255,.035)", [ri, gi, bi]));
+    expect(tokens).toContain("--hx-tecla:rgba(255,255,255,.035);");
+    expect(contraste(token("hx-borda-topo"), linha)).toBeGreaterThanOrEqual(3);
+    expect(regra(vidroCss, `:root[data-pele="vidro"] ${CHAVE}:checked`)).toContain("linear-gradient(#06101A, #06101A)");
+    expect(contraste("#06101A", tokenVidro("hx-escolhido-borda"))).toBeGreaterThanOrEqual(3);
+  });
+
+  it("pele-xcom.css: toda regra sob :root[data-pele=\"xcom\"], sem animacao nem transicao", () => {
+    const s = semComentario(xcomCss);
+    const seletores = [...s.matchAll(/(?:^|[}{])\s*([^{}@]+?)\s*\{/g)].map((m) => m[1]);
+    expect(seletores.length).toBeGreaterThan(15);
+    const partes = (sel: string) => { const r: string[] = []; let d = 0, ini = 0;
+      [...sel].forEach((c, i) => { if (c === "(") d++; else if (c === ")") d--; else if (c === "," && d === 0) { r.push(sel.slice(ini, i)); ini = i + 1; } });
+      return [...r, sel.slice(ini)]; };
+    for (const sel of seletores) for (const parte of partes(sel)) expect(parte.trim(), sel).toMatch(/^:root\[data-pele="xcom"\]/);
+    expect(s).not.toMatch(/animation|transition/);
+  });
+});
