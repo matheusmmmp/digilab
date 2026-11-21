@@ -117,6 +117,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py",
                                                                              # a CORPO V1-a: o pet v38 da PET_VIVO no motor da sonda, com as chaves do corpo do braco (D-V1A-2)
                                                                              "experiments/run_v3_corpo_v1.py",
+                                                                             # o PET_VIVO, o teste de recompensa (#1050): as vidas e o orquestrador so leem o CONFIG_DIGIBRAIN_INATOS (a escala e o
+                                                                             # lambda_sono); faltavam aqui (o teste falhava na main), acrescentados no PR do codigo da CORPO V1-a
+                                                                             "experiments/recompensa.py", "experiments/run_v3_pet_vivo_recompensa.py",
                                                                              # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
                                                                              "experiments/run_v3_social_par_md.py",
                                                                              "experiments/run_v3_corpo_acoplamento.py"}
