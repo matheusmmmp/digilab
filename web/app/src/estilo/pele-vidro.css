@@ -194,7 +194,7 @@
 }
 /* o botao principal (G7): 13 px, 700, caixa alta, 2 px entre as letras, 48 px de altura e o canto de baixo a direita cortado (8 px). O
    corte e um clip-path: a diagonal e desenhada no fundo, o brilho fica por dentro e o foco tambem (o de fora seria cortado). O Verificar do
-   Registro e o botao principal da tela e leva a mesma forma, na altura da linha dele */
+   Registro e o botao principal da tela e leva a mesma forma, na altura da linha dele; o Atender do chamado sobe aos 48 px */
 :root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao){
   --ch:var(--hx-chanfro-p); --bp-fundo:var(--hx-btn-bg);
   font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; box-shadow:inset 0 0 10px rgba(95,212,255,.28);
@@ -204,19 +204,22 @@
   clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--ch)), calc(100% - var(--ch)) 100%, 0 100%);
 }
 :root[data-pele="vidro"] :where(.hx-continuar){ min-height:48px }
+:root[data-pele="vidro"] .pet-alerta .chamado .hx-continuar{ min-height:48px }
 :root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):hover:not(:disabled){ --bp-fundo:var(--hx-btn-bg-hover) }
 :root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):active:not(:disabled){ --bp-fundo:var(--hx-btn-borda); color:#06101A }
 :root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-5px }
-/* o "x" do fechar (G10): de traco fino; o "×" do texto sai da vista (o nome acessivel e o aria-label do botao) */
+/* o "x" do fechar (G10): de traco fino; o "×" do texto sai da vista (o nome acessivel e o aria-label do botao). O anel de foco fica 8 px
+   para dentro: no canto do painel, o chanfro de 12 px cortava o de 3 px */
 :root[data-pele="vidro"] .hx-quad > span{ display:none }
+:root[data-pele="vidro"] .hx-quad:focus-visible{ outline-offset:-8px }
 :root[data-pele="vidro"] .hx-quad::before{ content:""; width:20px; height:20px; background:currentColor;
   -webkit-mask:var(--vidro-x) center / contain no-repeat; mask:var(--vidro-x) center / contain no-repeat }
 /* a chave dos Ajustes (F3): o interruptor retangular de 46 x 24 px no lugar da caixa de marcar; desligada, o cursor a esquerda no tom da
-   borda; ligada, o ciano dos destaques com o cursor escuro a direita e um brilho leve. A linha inteira continua sendo o alvo do toque */
+   borda; ligada, o ciano dos destaques com o cursor escuro a direita, sem brilho. A linha inteira continua sendo o alvo do toque */
 :root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]{
   -webkit-appearance:none; appearance:none; flex:none; width:46px; height:24px; margin:0; border:1px solid var(--hx-borda); border-radius:0; cursor:pointer;
   background:linear-gradient(var(--hx-borda), var(--hx-borda)) 3px 50% / 16px 16px no-repeat transparent }
-:root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:checked{ border-color:var(--hx-escolhido-borda); box-shadow:0 0 8px rgba(95,212,255,.45);
+:root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:checked{ border-color:var(--hx-escolhido-borda);
   background:linear-gradient(#06101A, #06101A) calc(100% - 3px) 50% / 16px 16px no-repeat var(--hx-escolhido-borda) }
 :root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:disabled{ opacity:.5; cursor:not-allowed }
 :root[data-pele="vidro"] :is(.aj, .mc-interruptor) input[type="checkbox"][role="switch"]:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }

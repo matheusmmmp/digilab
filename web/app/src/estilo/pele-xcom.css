@@ -68,8 +68,8 @@
 :root[data-pele="xcom"] .hx-quad > span{ display:none }
 :root[data-pele="xcom"] .hx-quad::before{ content:""; width:20px; height:20px; background:currentColor;
   -webkit-mask:var(--xcom-x) center / contain no-repeat; mask:var(--xcom-x) center / contain no-repeat }
-/* o Verificar do Registro (G7): o botao principal da pele, com a hachura verde no topo e em caixa alta */
-:root[data-pele="xcom"] .rg2-bt--acao{ position:relative; padding-top:6px; letter-spacing:.06em; text-transform:uppercase }
+/* o Verificar do Registro (G7): o botao principal da pele, com a hachura verde no topo, em caixa alta e com a letra de 16 px */
+:root[data-pele="xcom"] .rg2-bt--acao{ position:relative; padding-top:6px; font-size:16px; letter-spacing:.06em; text-transform:uppercase }
 :root[data-pele="xcom"] .rg2-bt--acao::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura-verde); pointer-events:none }
 /* a chave dos Ajustes (F3): o interruptor retangular de 46 x 24 px no lugar da caixa de marcar; desligada, o cursor a esquerda no tom da
    borda; ligada, o bloco do escolhido com o cursor escuro a direita. A linha inteira continua sendo o alvo do toque */

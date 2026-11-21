@@ -9,11 +9,13 @@ const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const SAVE = { semente: 4242, versao: 21, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "dc", { tipo: "racao", x: 168, y: 248 }], [840, "t", 60]] };
+/* o mesmo pet 106 minutos depois: ele chama (o cartao do chamado, com o Atender) */
+const SAVE_CHAMADO = { ...SAVE, log: [...SAVE.log, [900, "t", 106]] };
 /* o ciano dos destaques do Vidro (--hx-escolhido-borda) e o caqui do escolhido do Militar */
 const CHEIA = { vidro: "rgb(95, 212, 255)", xcom: "rgb(197, 207, 176)" } as const;
 type Pele = keyof typeof CHEIA;
 
-async function abrir(browser: Browser): Promise<{ page: Page; erros: string[]; fechar: () => Promise<void> }> {
+async function abrir(browser: Browser, save: object = SAVE): Promise<{ page: Page; erros: string[]; fechar: () => Promise<void> }> {
   const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 1536, height: 1024 } });
   const page = await ctx.newPage();
   await page.goto("/Assets/digilab_atlas_up_pecas.json");
@@ -21,7 +23,7 @@ async function abrir(browser: Browser): Promise<{ page: Page; erros: string[]; f
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
-  }, [CHAVE, JSON.stringify(SAVE)] as const);
+  }, [CHAVE, JSON.stringify(save)] as const);
   const erros: string[] = [];
   page.on("pageerror", e => erros.push("pageerror: " + e.message));
   page.on("console", m => { if (m.type() === "error" && !/favicon\.ico$/.test(m.location().url ?? "")) erros.push("console: " + m.text()); });
@@ -87,6 +89,12 @@ for (const pele of ["vidro", "xcom"] as const) {
     expect(f).toMatchObject({ larg: 44, alt: 44, letra: "none", xLarg: "20px", xAlt: "20px" });
     expect(f.mascara).toContain("data:image/svg+xml");
     if (pele === "xcom") expect(f).toMatchObject({ borda: "2px", cor: CHEIA.xcom, bordaCor: CHEIA.xcom });
+    /* o anel de foco do fechar: no Vidro, para dentro do chanfro do painel */
+    await x.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(x).toBeFocused();
+    await expect(x).toHaveCSS("outline-offset", pele === "vidro" ? "-8px" : "-3px");
     /* o botao principal: no Vidro, 13 px, 2 px entre as letras, 48 px e o canto cortado; no Militar, como era */
     const lutar = page.getByTestId("poc-lutar");
     const b = await lutar.evaluate(e => { const s = getComputedStyle(e); return { alt: e.getBoundingClientRect().height, letra: s.fontSize, vao: s.letterSpacing, caixa: s.textTransform, corte: s.clipPath }; });
@@ -100,7 +108,7 @@ for (const pele of ["vidro", "xcom"] as const) {
       return { caixa: s.textTransform, corte: s.clipPath, letra: s.fontSize, hachura: a.content === "none" ? "" : a.backgroundImage, hachuraAlt: a.height }; });
     expect(v.caixa).toBe("uppercase");
     if (pele === "vidro") { expect(v.letra).toBe("13px"); expect(v.corte).toContain("polygon"); }
-    else { expect(v.hachura).toContain("repeating-linear-gradient"); expect(v.hachuraAlt).toBe("6px"); }
+    else { expect(v.letra).toBe("16px"); expect(v.hachura).toContain("repeating-linear-gradient"); expect(v.hachuraAlt).toBe("6px"); }
     /* o Copiar, o botao secundario, fica em caixa mista (como na prancha) */
     expect(await page.locator(".rg2-bt:not(.rg2-bt--acao)").first().evaluate(e => getComputedStyle(e).textTransform)).toBe("none");
     /* o fechar continua fechando */
@@ -110,3 +118,17 @@ for (const pele of ["vidro", "xcom"] as const) {
     await fechar();
   });
 }
+
+test("vidro: o Atender do chamado tem a forma e a altura do botao principal", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const { page, erros, fechar } = await abrir(browser, SAVE_CHAMADO);
+  await page.goto(`${APP}?pele=vidro#/pet/estado`);
+  await expect(page.locator(".cena3d").first()).toBeVisible();
+  const atender = page.locator(".pet-alerta .chamado .hx-continuar");
+  await expect(atender).toBeVisible();
+  const b = await atender.evaluate(e => { const s = getComputedStyle(e); return { alt: e.getBoundingClientRect().height, letra: s.fontSize, vao: s.letterSpacing, caixa: s.textTransform, corte: s.clipPath }; });
+  expect(b).toMatchObject({ alt: 48, letra: "13px", vao: "2px", caixa: "uppercase" });
+  expect(b.corte).toContain("polygon");
+  expect(erros).toEqual([]);
+  await fechar();
+});

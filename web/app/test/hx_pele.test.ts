@@ -305,13 +305,17 @@ describe("acertos contra as pranchas D: o botao principal, o fechar e a chave", 
     expect(b).toMatch(/linear-gradient\(135deg, transparent calc\(50% - 1px\), var\(--hx-btn-borda\) calc\(50% - 1px\) 50%, transparent 50%\) right bottom/);
     expect(b).toContain("var(--bp-fundo) border-box");
     expect(regra(vidroCss, ':root[data-pele="vidro"] :where(.hx-continuar)')).toContain("min-height:48px");
+    /* o Atender do chamado tambem: a HUD o deixava com 44 px */
+    expect(regra(vidroCss, ':root[data-pele="vidro"] .pet-alerta .chamado .hx-continuar')).toContain("min-height:48px");
     /* o foco fica por dentro: o de fora seria cortado pelo clip-path */
     expect(regra(vidroCss, ':root[data-pele="vidro"] :is(.hx-continuar, .rg2-bt--acao):focus-visible')).toContain("outline-offset:-5px");
     expect(contraste("#06101A", tokenVidro("hx-btn-borda"))).toBeGreaterThanOrEqual(4.5);   // o texto do toque sobre o ciano
   });
 
   it("Militar: o Verificar do Registro e o botao principal da pele, com a hachura verde no topo e em caixa alta", () => {
-    expect(regra(xcomCss, ':root[data-pele="xcom"] .rg2-bt--acao')).toContain("text-transform:uppercase");
+    const v = regra(xcomCss, ':root[data-pele="xcom"] .rg2-bt--acao');
+    expect(v).toContain("text-transform:uppercase");
+    expect(v).toContain("font-size:16px");
     const h = regra(xcomCss, ':root[data-pele="xcom"] .rg2-bt--acao::before');
     expect(h).toContain("height:6px");
     expect(h).toContain("background:var(--hx-hachura-verde)");
@@ -328,6 +332,9 @@ describe("acertos contra as pranchas D: o botao principal, o fechar e a chave", 
     const m = regra(xcomCss, ':root[data-pele="xcom"] .hx-quad');
     expect(m).toContain("border:2px solid var(--hx-escolhido-borda)");
     expect(m).toContain("color:var(--hx-escolhido-borda)");
+    /* no Vidro o anel de foco fica para dentro do chanfro de 12 px do painel, que cortava o de 3 px */
+    expect(regra(vidroCss, ':root[data-pele="vidro"] .hx-quad:focus-visible')).toContain("outline-offset:-8px");
+    expect(tokenVidro("hx-chanfro")).toBe("12px");
     for (const f of [token("hx-chao"), token("hx-miolo-2")]) expect(contraste(token("hx-escolhido-borda"), f), f).toBeGreaterThanOrEqual(3);
     /* o botao continua sendo o mesmo: o × e o aria-label */
     expect(renderToStaticMarkup(h(PainelHx, { titulo: "Lutar", onFechar: () => {} }))).toContain('class="hx-quad" aria-label="Fechar"><span aria-hidden="true">×</span>');
@@ -339,6 +346,7 @@ describe("acertos contra as pranchas D: o botao principal, o fechar e a chave", 
       for (const p of ["appearance:none", "width:46px", "height:24px", "border-radius:0", "3px 50% / 16px 16px no-repeat"]) expect(base, pele).toContain(p);
       const ligada = regra(css, `:root[data-pele="${pele}"] ${CHAVE}:checked`);
       expect(ligada, pele).toContain("calc(100% - 3px) 50% / 16px 16px no-repeat var(--hx-escolhido-borda)");
+      expect(ligada, pele).not.toContain("box-shadow");   // sem brilho: a prancha nao tem
       expect(regra(css, `:root[data-pele="${pele}"] ${CHAVE}:disabled`), pele).toContain("opacity:.5");
       expect(regra(css, `:root[data-pele="${pele}"] ${CHAVE}:focus-visible`), pele).toContain("outline:2px solid var(--hx-foco)");
       /* a caixa de marcar de verdade (o aceite da conta, o "entendi" do aposentar) nao e role=switch e fica como e */
