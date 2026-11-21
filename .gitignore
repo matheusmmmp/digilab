@@ -135,6 +135,9 @@ artifacts_v3_acoes_novas/**/vidas/
 # PET_QUE_PENSA (docs/TAREFA_V3_PET_QUE_PENSA.md): o D0, replay so leitura; o medidas.json cru fica so no sha256 (o .gz e igual)
 !artifacts_v3_pet_que_pensa/
 artifacts_v3_pet_que_pensa/**/medidas.json
+# PLASTICIDADE_EVOLUIDA (docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md): a triagem C0 e, depois, o E0; as vidas soltas ficam fora (so o vidas.tar.gz)
+!artifacts_v3_plasticidade/
+artifacts_v3_plasticidade/**/vidas/
 # contabilidade local do gasto da fala livre com o Claude (CONVERSA_PET M5; nao versionar)
 servidor/gasto_fala_livre.json
 # CONVERSA_PET DC4 (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md): a calibracao e a validacao da voz da rede (falas, entradas, meta e o material da marcacao)
