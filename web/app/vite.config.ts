@@ -3,30 +3,16 @@
    para o servidor_local.py servir em /v1/web/dist/. O atlas do Digimon UP fica FORA do repositorio
    (D:/Trab/digilab/Assets): a pagina pede ../../../Assets/digilab_atlas_up_pecas.json e digilab_atlas_up_clipes.json, que no servidor local cai em
    /Assets/ e no modo dev e servido por este config (so os arquivos do atlas e da decoracao listada em decoracao_nomes.json, nada mais). */
-import { createReadStream, existsSync, readFileSync } from "node:fs";
+import { createReadStream, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { tipoDoAssetPublico } from "./scripts/assets_publicos.ts";
 import { AVISO_AUTORIA } from "./scripts/autoria.ts";
 
 const ASSETS = fileURLToPath(new URL("../../../Assets/", import.meta.url));
-/* decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs da lista do repositorio */
-const DECORACAO: string[] = JSON.parse(readFileSync(new URL("./decoracao_nomes.json", import.meta.url), "utf8")).pecas;
-const ATLAS: Record<string, string> = {
-  "/Assets/digilab_atlas_up_pecas.json": "application/json", "/Assets/digilab_atlas_up_pecas.png": "image/png",
-  "/Assets/digilab_atlas_up_clipes.json": "application/json", "/Assets/digilab_atlas_up_clipes.png": "image/png",
-  "/Assets/digilab_decoracao_up.json": "application/json",
-  ...Object.fromEntries(DECORACAO.map(n => [`/Assets/decoracao_up/${n}.png`, "image/png"])),
-};
-
-/* sons do Digimon UP (Assets/gerar_sons_up.py, src/som.ts): o mapa.json e so os MP3 dentro de Assets/sons/ (nome simples, nada de caminho) */
-const SOM_ROTA = /^\/Assets\/sons\/(mapa\.json|[A-Za-z0-9_]+\.mp3)$/;
-/* os cenarios da luta em tempo real (Assets/gerar_arena_up.py, src/telas/lutar/palcoTR/cenasTR.ts): so os PNG/JPG de mapas/ (nome simples) */
-const ARENA_ROTA = /^\/Assets\/arena_up\/(mapas\/[a-z0-9_]+\.(png|jpg)|efeitos\/[A-Za-z0-9_]+\.png|dados\/efeitos\.json)$/;
-const TIPO_ARENA: Record<string, string> = { png: "image/png", jpg: "image/jpeg", json: "application/json" };
-/* cena de evolucao (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): o mapa.json e os pacotes de nome simples de pacotes/ */
-const EVOLUCAO_ROTA = /^\/Assets\/evolucao_up\/(mapa\.json|pacotes\/[a-z0-9_]+\.bin)$/;
+/* o atlas, a decoracao listada, os sons, os cenarios da luta e a cena de evolucao: a lista do que se publica (scripts/assets_publicos.ts) */
 
 /* os mapas do habitat que nao se redistribuem (src/habitat.ts, so no dev): o kit Tiny Fantasy Forest (Unity Asset Store EULA) e os assets
    do Cassette Beasts extraidos pelas ferramentas de D:/Trab/digilab/extrair_cb; so modelos, texturas e o json, sem ".." no caminho */
@@ -41,10 +27,7 @@ function atlasDev(): Plugin {
       server.middlewares.use((req, res, next) => {
         let caminho = (req.url || "").split("?")[0];
         try { caminho = decodeURIComponent(caminho); } catch { return next(); }
-        const tipo = ATLAS[caminho] ?? (SOM_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "audio/mpeg")
-          : ARENA_ROTA.test(caminho) ? TIPO_ARENA[caminho.split(".").pop()!]
-          : EVOLUCAO_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "application/octet-stream")
-          : KITS_DEV_ROTA.test(caminho) ? TIPO_KIT[caminho.split(".").pop()!] : undefined);
+        const tipo = tipoDoAssetPublico(caminho) ?? (KITS_DEV_ROTA.test(caminho) ? TIPO_KIT[caminho.split(".").pop()!] : undefined);
         if (!tipo) return next();
         const arq = ASSETS + caminho.slice("/Assets/".length);
         if (!existsSync(arq)) { res.statusCode = 404; res.end("asset nao encontrado: " + arq); return; }

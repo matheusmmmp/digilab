@@ -4,6 +4,8 @@
    atlas: a pagina em /v1/web/dist/ pede ../../../Assets/arena_up/; no dev, o vite.config.ts serve so estes arquivos.
    Se nao carregar: o palco desenha so o efeito do elemento (E2) e mostra o aviso (falhar alto, nunca calado). */
 
+import { assetsAssinados, buscarAsset, srcDoAsset } from "../../../protecao/assets.ts";
+
 export const ARENA_UP_URL = "../../../Assets/arena_up/";
 
 /** uma camada de um efeito: o retangulo na folha, a grade (tx x ty quadros), quantos quadros, o tempo de cada um e se repete */
@@ -33,7 +35,7 @@ export function indexarEfeitos(ef: EfeitosArena): Map<string, EfeitoRef> {
 
 /** pede o efeitos.json uma vez (as folhas vem sob demanda, em folhaEfeito) */
 export function carregarEfeitos(): Promise<void> {
-  return pedido ??= fetch(`${ARENA_UP_URL}dados/efeitos.json`, { cache: "no-cache" })
+  return pedido ??= buscarAsset(`${ARENA_UP_URL}dados/efeitos.json`, { cache: "no-cache" })
     .then(r => { if (!r.ok) throw new Error(`dados/efeitos.json: HTTP ${r.status}`); return r.json() as Promise<EfeitosArena>; })
     .then(j => { estado = { tipo: "ok", prefabs: indexarEfeitos(j) }; avisar(); },
       (err: unknown) => { estado = { tipo: "erro", erro: err instanceof Error ? err.message : String(err) }; avisar(); });
@@ -48,6 +50,9 @@ export function folhaEfeito(dono: string): HTMLImageElement | null {
   const i = new Image();
   i.onload = () => { folhas.set(dono, i); avisar(); };
   i.onerror = () => { falhasEfeito.add(`efeitos/${dono}.png`); avisar(); };
-  i.src = `${ARENA_UP_URL}efeitos/${encodeURIComponent(dono)}.png`;
+  const url = `${ARENA_UP_URL}efeitos/${encodeURIComponent(dono)}.png`;
+  /* com a proteção ligada (CN4), a folha vem pela URL assinada; desligada, o mesmo de sempre */
+  if (assetsAssinados()) srcDoAsset(url).then(s => { if (s.crossOrigin) i.crossOrigin = s.crossOrigin; i.src = s.src; }, () => i.onerror?.(new Event("error")));
+  else i.src = url;
   return null;
 }

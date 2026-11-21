@@ -16,9 +16,10 @@ Matheus confere de novo na tela de compra.
 **O que este plano não faz:** não muda o `servidor_web/`, o `web/app/`, o CI nem o motor. As mudanças de código que o deploy pede estão
 listadas (seção 4) e vão em PRs próprios.
 
-**O PR do código (#1057, branch `v3-cn5`):** escrito em paralelo por outra sessão, traz o `--borda cloudflare` (o Tunnel), o roteiro em
-`docs/infra/DEPLOY_CN5.md`, o workflow `publicar` e a lista dos assets (`web/app/scripts/assets_publicos.ts`), com as D-CONTA-197 a 205.
-Este plano fica com a lista do Matheus, os preços, o que a CN4 entrega antes e as D-CONTA-206 a 209. Onde os dois divergem, a seção 8 diz.
+**O código já está na `main` (2026-11-21):** o código da CN5 (#1057, `f6327f9a`: o `--borda cloudflare`, o roteiro em
+`docs/infra/DEPLOY_CN5.md`, o workflow `publicar` desligado, o Worker dos assets) e a CN4 (#1058, `671a0efa`, e #1059, `a9275a6e`: o
+`robots.txt`, as URLs assinadas, o Turnstile, a cota da fala). Este plano fica com a lista do Matheus, os preços, o que precisava vir
+antes (a seção 4, agora com o estado) e as D-CONTA-206 a 209. A seção 8 diz onde ele divergia do #1057.
 
 ## 1. O que o Matheus cria ou contrata, em ordem
 
@@ -269,6 +270,15 @@ Em ordem, do mais fácil de voltar ao mais difícil:
 
 Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abre a fala a qualquer um.
 
+**O estado em 2026-11-21:** tudo o que a tabela 4.1 pedia antes do primeiro deploy está na `main`. O modo publicado do servidor é o
+`--borda cloudflare` (#1057). A fala vai ao endereço da API, só com a sessão e com a cota de 30 por conta e por dia (#1058, #1059, com a
+chave `VITE_DIGILAB_PROTECAO=1` no build). O `robots.txt` do jogo e o da API (#1058). Os assets saem só por URL assinada, com o bucket
+privado e o Worker na frente (#1058, #1059, #1057). O Turnstile já entrou na criação da conta e no visitante (#1058, #1059), antes do que a
+D-CONTA-206 pedia; a D-CONTA-206 fica sem efeito. **O que ainda falta:** os enfeites e os modelos 3D da ilha em `web/app/public/` seguem
+fora da URL assinada (D-CONTA-222); o aviso de mineração reservada (PI-6) não aparece no código; e conferir na Cloudflare de verdade o
+formato da assinatura e as políticas de robôs (as NÃO CONFERIDAS da CN4, D-CONTA-210, 212 e 217). A tabela abaixo fica como estava escrita,
+para o registro do que se pediu.
+
 ### 4.1 Bloqueiam o deploy (antes)
 
 | o quê | por quê | onde | etapa |
@@ -321,7 +331,7 @@ Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abr
 
 1. **A PI1:** o repositório privado e o teto do Actions (seção 1, linha 0).
 2. **O domínio** (linha 1) e **a conta da Cloudflare** (linhas 2 a 5): grátis, e destravam o Pages e os robôs.
-3. **A conta da AWS** com o alerta de gasto (linha 6). **A instância** (linha 7) só quando a CN4 estiver pronta, para não pagar a VPS
+3. **A conta da AWS** com o alerta de gasto (linha 6). **A instância** (linha 7): a CN4 já está na `main`; criar quando for configurar no mesmo dia, para não pagar a VPS
    parada.
 4. **A chave da Anthropic do servidor e os apps OAuth** (linhas 9 a 11): precisam do domínio (o callback).
 
