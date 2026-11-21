@@ -1,5 +1,6 @@
 {
  "modo": "run",
+ "plano": "docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md",
  "mecanismos": [
   "M1",
   "M1-inc0",

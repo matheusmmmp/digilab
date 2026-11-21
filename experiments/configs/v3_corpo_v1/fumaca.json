@@ -1,0 +1,15 @@
+{
+ "descricao": "CORPO V1-a: a fumaca, nas sementes dos testes",
+ "fase": "corpo_v1a",
+ "plano": "docs/PLANO_ANALISE_V3_CORPO_V1.md",
+ "dias": 1,
+ "orcamento_por_dia": 16,
+ "unidades": {
+  "prefixo": "digibrain_prototipo",
+  "bases": [
+   101,
+   202
+  ],
+  "k": 1
+ }
+}

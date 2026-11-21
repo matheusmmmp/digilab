@@ -229,3 +229,55 @@ relato é o `docs/RESULTADO_V3_CORPO_C4.md`.
 **O programa para no CHECKPOINT da C4.** Pela seção 9 do plano, "confirma com ressalva" volta ao Matheus com a célula: aceitar a ressalva
 e seguir para a C5, pedir outra mudança, ou deixar o corpo como está. O T_B continua PROPOSTO e SEM FONTE. Nenhum braço está ligado no
 jogo.
+
+## 19. A síntese e a especificação (C5, 2026-11-20)
+
+O CHECKPOINT da C4 foi decidido pelo Matheus em 2026-11-20: "Aceito, seguir à C5". A ressalva aceita é a célula do aleatório no
+comedouro. A C5 é só papel, sem run e sem código.
+- **A síntese,** `docs/SINTESE_CORPO.md`: a causa (a ponte da falta de combustível no cansaço, confirmada por intervenção; e o dano em
+  degrau, que derrubou a D sozinha), o conserto (o DTB), o efeito no forrageio, no bem-estar e no substrato social, o que ficou sem
+  explicação e o que não foi demonstrado. Cada número aponta para o resultado e para o artefato com o sha256.
+- **O limite principal:** as runs da C2 à C4 usaram o pet da bancada, sem o "sono que segura", o lance do dono e o equilíbrio do
+  cuidado do pet v38 do jogo. O DTB não foi medido no pet do jogo.
+- **A especificação,** `docs/ESPEC_CORPO_V1.md`, PROPOSTA: um pet do jogo que nasce com o DTB, em três etapas. A V1-a mede o DTB no
+  pet v38, no Python, com plano próprio. A V1-b cria a versão nova do pet, com a paridade, sem nenhum ovo chocar com ela. A V1-c faz
+  os ovos novos nascerem com ela. As decisões D-EC-1 a D-EC-5 são do Matheus.
+- **O pré-registro:** a seção `PR-CORPO-C2`, da ablação, escrita depois da run e dizendo isso. A da C3 e a da C4 já existiam.
+- **O painel:** a linha do `docs/PAINEL_V3.md` é do coordenador; a proposta vai no corpo do PR.
+
+**O programa para no CHECKPOINT da C5.** Nenhum braço está ligado no jogo, e o T_B continua PROPOSTO e SEM FONTE.
+
+## 20. O plano da V1-a, o teto baixo no pet do jogo (2026-11-20)
+
+No CHECKPOINT da C5, o Matheus decidiu a D-EC-1: "Medir no v38 antes". O plano é o `docs/PLANO_ANALISE_V3_CORPO_V1.md`, **APROVADO
+pelo Matheus em 2026-11-21** ("Aprovo todas", as D-V1A-1 a D-V1A-9, com as recomendações). Nenhuma vida de pesquisa rodou.
+- **Os braços:** o CTRL38 (o pet v38 de hoje, o da PET_VIVO: os inatos do E1, o "sono que segura", o lance do dono e o equilíbrio do
+  cuidado) e o DTB38 (o mesmo pet com as duas chaves do corpo). As 12 células × 200 unidades, 14 dias, sem os pares.
+- **A regra:** a da C4, sem o S2, com δ = 0,032 sem mudar. A primária é o "Tempo bem" nas 12 e nas 11 células.
+- **A contagem nas sementes dos testes** (120 vidas, 5 unidades; não é resultado): as premissas têm eventos. O pet v38 já parte de um
+  lugar melhor (o "Tempo bem" do CTRL em 0,727, contra 0,633 na C4), e o DTB − CTRL deu +0,016 [−0,003; +0,035] nas 12 células.
+- **A previsão do plano, escrita antes: "não confirma",** com a primária em "≈ 0". As 5 unidades não excluem um efeito de até +0,035.
+- **Conferido antes:** o CTRL38 montado para a análise refaz, byte a byte, a vida do pet v38 da PET_VIVO (3 vidas de 3 dias).
+- **O que o plano diz que falta no pet do Python:** a TV, a ilha grande e a memória de 128 células do jogo.
+
+**O que falta:** a faixa de 200 bases, o código e a seção `PR-CORPO-V1` do pré-registro, e depois a run, uma vez.
+
+## 21. O código da V1-a (2026-11-21)
+
+Pelo `docs/PLANO_ANALISE_V3_CORPO_V1.md`, seção 8. Nenhuma vida da faixa rodou.
+- **O orquestrador:** o `experiments/run_v3_corpo_v1.py`, um arquivo próprio para o `run_v3_corpo_c4.py` e o `pv2.py` ficarem
+  intactos. As fábricas montam o pet v38 da PET_VIVO no motor da sonda da C3, com as chaves do corpo do braço. Cada vida grava as
+  medidas da C4 e a fome (`fome_nas_decisoes`).
+- **A conferência do pet:** em cada vida, o corpo tem as chaves do braço e o cérebro é o do pet v38 (os inatos do E1, o "sono que
+  segura", o lance e o equilíbrio do cuidado). Ela troca a conferência do reflexo da C3, que não serve ao pet v38.
+- **A análise:** a primária, as guardas e a saúde por célula da C4, sem o S2; as premissas sem a dos pares; a leitura da C4 com o que
+  cada leitura faz na V1. O descritivo ganha a fome, a fração das vidas com o "Tempo bem" acima de 0,99 e os números da C4 ao lado.
+- **O relógio e o pacote:** como na C4. O tempo de cada vida vai para o `custos.json`; o `.tar.gz` é conferido contra a pasta crua
+  antes de ela ser apagada.
+- **A faixa:** a 109001…109200 entrou no `experiments/bancada/faixas.py`. As configs ficam em `experiments/configs/v3_corpo_v1/`.
+- **O pré-registro:** a seção `PR-CORPO-V1` do `docs/PREREGISTRO.md`, com o link para o plano no commit aprovado (`3c223667`).
+- **Os testes:** `tests/test_run_v3_corpo_v1.py`, 22 testes: o CTRL igual ao pet v38 da PET_VIVO byte a byte, a conferência do pet,
+  a regra de leitura caso a caso, as premissas, a trava, e a fumaça duas vezes com o `medidas.json` e o `resultado.json` iguais.
+- **Nada mudou no `digilab/` nem no web.**
+
+**O que falta:** o plano (#1055) e este código na `main`, o `pre_run` e a run, uma vez.
