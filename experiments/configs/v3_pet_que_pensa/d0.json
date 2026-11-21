@@ -1,0 +1,8 @@
+{
+  "descricao": "O D0 do pet que pensa (docs/TAREFA_V3_PET_QUE_PENSA.md, secao 4, APROVADA): o replay descritivo, sem gate e sem pre-registro. As vidas do R1, do R-a e do R-sono no corpo de hoje (o HOJE da run do PV-2, 2 400) e no v38 (o HOJE da checagem do v38, 320), rejogadas pelo log com a ConfigRastro ligada, para contar em quantas decisoes o planejador poderia decidir e quantas tem o conflito da fome urgente com a energia na faixa do reflexo suave. Nenhuma vida nova e nenhuma faixa nova: as bases sao as da run do PV-2, para a conferencia. Uma vez, ate 4 processos.",
+  "plano": "docs/TAREFA_V3_PET_QUE_PENSA.md",
+  "fase": "d0",
+  "unidades": {"bases": [26101, 26202, 26303, 26404, 26505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
