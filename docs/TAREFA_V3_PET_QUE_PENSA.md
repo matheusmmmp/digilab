@@ -216,7 +216,7 @@ replicado, deu +0,062 e **não passaria**.
 - Nada sobre a web antes da P5.
 - Nenhum número de resultado. Os que aparecem são citados de artefatos já na `main`.
 
-## 10. Adendo 1: o portão de "quando pensar" e a entropia da decisão (PROPOSTO, 2026-11-21)
+## 10. Adendo 1: o portão de "quando pensar" e a entropia da decisão (APROVADO pelo Matheus em 2026-11-21 ("Aprovo todas", à pergunta "Aprova as PQ3-10, PQ3-11 e PE-8 a PE-11 pela recomendação?"))
 
 **De onde vem.** O Matheus pediu a leitura das notas do vault sobre Bennett (2023) e Gleick (2011), em `20 Temas`, e escolheu levar às
 tarefas os três pontos que mexiam na etapa atual ("Os três"). Dois são desta tarefa:
@@ -255,7 +255,7 @@ fonte primária, já verificada no projeto.
   É descritiva, não gate.
 - **Também no D0:** a mesma medida pode sair das vidas já gravadas, por replay e sem vida nova, ao lado das frações do #1069 (PQ3-11).
 
-### 10.3 As decisões do adendo
+### 10.3 As decisões do adendo (DECIDIDAS em 2026-11-21, pela recomendação)
 
 | nº | decisão | recomendação | custo de errar |
 |---|---|---|---|

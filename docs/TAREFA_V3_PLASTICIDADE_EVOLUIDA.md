@@ -157,7 +157,7 @@ Escrito por uma sessão lateral da Gerência da V3 (Claude Code, Fable 5.2). **N
   genes, 25 configs e 3 000 vidas; os números desta seção que falam em 31 configs e 3 720 vidas são os de antes. Pelo custo medido na
   fumaça, as 3 000 vidas com 4 processos projetam 1,4 h pela parede e cerca de 0,8 h pela CPU.
 
-## 9. Adendo 1: o crítico e a entropia da decisão (PROPOSTO, 2026-11-21)
+## 9. Adendo 1: o crítico e a entropia da decisão (APROVADO pelo Matheus em 2026-11-21 ("Aprovo todas", à pergunta "Aprova as PQ3-10, PQ3-11 e PE-8 a PE-11 pela recomendação?"))
 
 **De onde vem.** O Matheus pediu a leitura das notas do vault sobre Bennett (2023) e Gleick (2011), em `20 Temas`, e escolheu levar às
 tarefas os três pontos que mexiam na etapa atual ("Os três"). Dois são desta tarefa:
@@ -207,7 +207,7 @@ primária.
 - **A previsão, escrita antes de calcular (D-RB-13):** os genes da disputa (`epsilon`, `tau_hab`) mexem em `H`; os da plasticidade mexem
   pouco. É descritiva.
 
-### 9.3 As decisões do adendo
+### 9.3 As decisões do adendo (DECIDIDAS em 2026-11-21, pela recomendação)
 
 | nº | decisão | recomendação | custo de errar |
 |---|---|---|---|
