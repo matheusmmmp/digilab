@@ -37,7 +37,7 @@ link para o plano commitado.
 | [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | "confirma com ressalva" (a célula do aleatório no comedouro) | não |
 | [PR-CORPO-V1](#pr-corpo-v1--o-teto-baixo-no-pet-do-jogo) | o teto baixo no pet do jogo (CORPO V1-a) | ainda não rodou; suspensa por uma triagem (o adendo 1 do plano) | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
-| [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | a rodar | não |
+| [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | rodado em 2026-11-20 | não |
 
 ## PR-C1 — o longe regular
 
@@ -357,8 +357,8 @@ que vale é o do plano, no commit citado.
 | regra de leitura | a tabela da seção 7, em ordem: o G-DET falha, "o substrato não deixa ver"; a PM-1 falha e ≈ 0, "inconclusivo por premissa"; ≈ 0, "nulo com um instrumento que vê"; fora de ±δ_A, "o parceiro responde"; indeterminado, registrado como está. A atribuição e o conjunto pelo B1 |
 | regra de parada | não declarada no plano; a mais perto: o código (MD1) e a run (MD2) em PRs separados (MD-8), e o orquestrador para no primeiro par em que o G-INSTR ou o G1 falha |
 | o que refutaria | pela regra de leitura: no B1, o M1+M2 em "nulo com um instrumento que vê", ou o C-APR ≈ 0, contrariam a previsão |
-| resultado | a rodar |
-| artefatos | a rodar (`artifacts_v3_social_par_md/run/`) |
+| resultado | [RESULTADO_V3_SOCIAL_PAR_MD.md](RESULTADO_V3_SOCIAL_PAR_MD.md) (rodado em 2026-11-20): no B1, o G-DET passa e o D_A < 0 nas quatro células (M1+M2 −6,79 [−9,32; −4,26]; M1 −9,16 [−12,52; −5,79]); o C-APR \| B1 ≈ 0 (−0,27 [−1,38; +0,85]) e o C-APR1 \| B1 ≈ 0; a PM-1 passa (0,98); no C, o G-DET falha nas quatro, "o substrato não deixa ver"; o conjunto: "a resposta vem das unidades a mais ou da companhia no corpo, não do aprendizado"; a previsão do C-APR < 0 não se confirmou; a run com `git_limpo: false` (D-SP-75), e a réplica com a árvore limpa igual byte a byte |
+| artefatos | [`artifacts_v3_social_par_md/run/`](../artifacts_v3_social_par_md/run/): `meta.json`, `resultado.json` `604bc9ce…`, `medidas.json` `c6b61b90…`, os 2.000 pares em `vidas/`; o meta da réplica limpa `meta_replica_limpa.json` |
 
 ## Como replicar uma run (`tools/replicar_run.py`)
 
