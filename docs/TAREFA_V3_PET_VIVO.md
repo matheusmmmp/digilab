@@ -406,3 +406,22 @@ O código da seção 8 do [plano do teste de recompensa](PLANO_ANALISE_V3_PET_VI
   processos, abaixo do corte de 4 h. Nenhuma medida foi lida nelas.
 - **Desvios:** D-RC-8 a D-RC-14.
 - **Próximo:** o merge do #1048 e deste PR; com o `pre_run` liberando, a run, uma vez.
+
+## A run do teste de recompensa (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-resultado`)
+
+A run do [plano do teste de recompensa](PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md) rodou uma vez, de 15:51 a 18:36, com 4 processos,
+no código da `main` (`82551431`). O pedido do Matheus: "Sim, merge e roda". O resultado está no
+[RESULTADO_V3_PET_VIVO_RECOMPENSA.md](RESULTADO_V3_PET_VIVO_RECOMPENSA.md).
+
+- **L-ACORDADO: "não: com a recompensa o pet dorme mais".** O D1 do T_ACORDADO é −0,0109 [−0,0113; −0,0105], n 200: cerca de 16
+  minutos a menos por dia. É o desfecho esperado, escrito antes. O efeito é pequeno.
+- **L-BEM: "o pet fica melhor".** O "Tempo bem" sobe +0,0183 [+0,0152; +0,0215], todo no lugar `longe`.
+- **L-PORQUÊ: "pela recompensa na hora, e pelo que o pet aprende".** A regra supunha o D1 no sentido do D2 e do D3, e saiu o
+  contrário: o crédito (D3 +0,0070) e a hora certa (D2 +0,0096) puxam para mais tempo acordado, e o carinho no corpo, para menos.
+- **As conferências passaram nas 9 600 vidas, e as três premissas cumprem.**
+- **A análise parou num erro do código** (`KeyError: 'saude_media'`) depois de gravar as medidas. Ela foi refeita pelo
+  `--reanalisar`, sem reviver nenhuma vida. A guarda da saúde dos dias 8 a 14 não foi medida.
+- **O código:** o `run_v3_pet_vivo_recompensa.py` perde a guarda não medida e ganha o `--reanalisar`; o teste das medidas passa a
+  conferir que toda medida da análise sai do registro de uma vida de verdade.
+- **Desvios:** D-RC-15 a D-RC-18.
+- **Próximo:** as decisões RC-8 a RC-10 do resultado, com o Matheus.
