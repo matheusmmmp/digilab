@@ -939,3 +939,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-21 — PET_QUE_PENSA: a tarefa V3 do planejador no modular (Gerente da V3, Claude Code, Opus 5.5, branch `v3-pet-que-pensa-tarefa`)](registro/2026-11.md)
 - [2026-11-21 — PLASTICIDADE_EVOLUIDA: a tarefa do teste de sensibilidade, o E0 (Gerente da V3, Claude Code, Fable 5.2, branch `v3-plasticidade-evoluida-tarefa`)](registro/2026-11.md)
 - [2026-11-21 — CORPO: a triagem antes da run de 200 (o adendo 1 do plano da V1-a)](registro/2026-11.md)
+- [2026-11-21 — PET_QUE_PENSA, P1: o D0, o replay descritivo (sessão lateral da Gerência da V3, Claude Code, Opus 5.5, branch `v3-pet-que-pensa-d0`)](registro/2026-11.md)
