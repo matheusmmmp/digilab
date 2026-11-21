@@ -1,0 +1,146 @@
+/* MODELO 2, ZINE: colagem de papel. Papel creme, traco preto de 3 px meio tremido, sombra dura, caixas giradas ate 1 grau, fita
+   amarela, reticula e tiras pretas de titulo. E a forma do modelo (o que no jogo seria um pele-zine.css); as cores vem dos tokens da
+   pagina (gerar.py, MODELOS). Nenhuma cor aqui fora dos tokens.
+   REGRA DESTE MODELO: a cor de sentido (necessidade, aprendido, alerta, perigo, ok) e sempre um FUNDO com texto preto por cima, nunca
+   a cor do texto: sobre o papel claro, o rosa e o ciano como letra nao dariam contraste. */
+:root{--papel:var(--hx-miolo);--tinta:var(--hx-borda);--amarelo:var(--hx-btn-bg);--anil:var(--hx-escolhido);--branco:var(--hx-escolhido-ink);
+  --reticula:radial-gradient(circle at 2px 2px,color-mix(in srgb,var(--hx-borda) 24%,transparent) 1.2px,transparent 1.6px) 0 0/7px 7px}
+
+/* ---- a caixa: um recorte de papel. O traco e a sombra passam pelo filtro "rabisco" (o corte a mao); o texto nao */
+.cx::before{inset:0;background:var(--tinta);transform:translate(5px,5px);filter:url(#rabisco)}
+.cx::after{inset:0;background:var(--papel);border:3px solid var(--tinta);filter:url(#rabisco)}
+.cx.p::before{transform:translate(4px,4px)}
+.cartao-pet{rotate:-1.2deg} .agora{rotate:.9deg} .relogio{rotate:1deg} .bits{rotate:-2.5deg} .trilho{rotate:-.7deg} .dock{rotate:.4deg}
+.jan:nth-child(odd){rotate:-.8deg} .jan:nth-child(even){rotate:.7deg} .mini{rotate:2deg} .lugar{rotate:-.4deg} .aviso{rotate:-1.6deg}
+.balao{rotate:1.5deg} .placa{rotate:-2deg}
+.tit b{font:900 italic 16px/1 var(--hx-f-tit);text-transform:uppercase}
+.tit small{font:600 12px/1.15 var(--hx-f)}
+.n,.hora{font-family:var(--hx-f-num)}
+.rot{font:800 12px/1.1 var(--hx-f-tit);letter-spacing:.06em}
+
+/* a fita adesiva: um retangulo amarelo meio transparente, torto, com as pontas picotadas */
+.fita{display:block;position:absolute;z-index:3;top:-13px;right:34px;width:82px;height:24px;rotate:4deg;
+  background:color-mix(in srgb,var(--amarelo) 82%,transparent);
+  clip-path:polygon(0 0,4% 25%,0 50%,4% 75%,0 100%,100% 100%,96% 75%,100% 50%,96% 25%,100% 0)}
+.cartao-pet .fita{right:auto;left:70px;width:60px;rotate:-7deg}
+.mini .fita{right:auto;left:58px;rotate:-4deg}
+.lugar .fita{right:90px;width:110px}
+
+/* ---- o topo */
+.retrato{background:var(--amarelo);box-shadow:inset 0 0 0 2.5px var(--tinta)}
+.cartao-pet .t b{font:900 italic 21px/1 var(--hx-f-tit);text-transform:uppercase;letter-spacing:-.01em}
+.cartao-pet .t small{font:700 12px/1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;color:var(--hx-sec)}
+.agora{padding-left:3px}
+.agora .rot{margin:3px 0;background:var(--tinta);color:var(--papel);font:900 italic 13px/1 var(--hx-f-tit)}
+.agora b{font:900 italic 18px/1 var(--hx-f-tit);text-transform:uppercase}
+.agora .porque{font:600 14px/1 var(--hx-f);color:var(--hx-sec)}
+.logo{rotate:-2deg;gap:0}
+.logo b{font:900 italic 32px/1 var(--hx-f-tit);letter-spacing:.02em;color:var(--papel);background:var(--tinta);padding:8px 20px 7px;box-shadow:5px 5px 0 var(--amarelo)}
+.logo .enf{display:block;position:relative;z-index:1;width:48px;height:22px;margin:0 -16px;rotate:-10deg;background:color-mix(in srgb,var(--amarelo) 82%,transparent)}
+.logo .enf:last-child{rotate:14deg}
+.dia{font:800 11px/1 var(--hx-f-tit);letter-spacing:.08em;text-transform:uppercase;color:var(--hx-sec)}
+.hora{font:900 italic 30px/1 var(--hx-f-num)}
+.salvo{font:800 12px/1 var(--hx-f-tit);text-transform:uppercase}
+.salvo::before{content:"";width:11px;height:11px;background:var(--hx-ok);border:2px solid var(--tinta)}
+.bits.cx::after{background:var(--amarelo)}
+.bits b{font:900 italic 24px/1 var(--hx-f-num)}
+
+/* ---- o trilho: o destino atual e um adesivo anil, torto */
+.nav{color:var(--tinta);font:800 10px/1 var(--hx-f-tit);letter-spacing:.04em;text-transform:uppercase}
+.nav[aria-current]{background:var(--anil);color:var(--branco);outline:3px solid var(--tinta);box-shadow:4px 4px 0 var(--tinta);rotate:-3deg}
+
+/* ---- as janelas: a tira preta do titulo dentro da moldura de papel */
+.jan{padding:6px}
+.jan-cab{background:var(--tinta);color:var(--papel);min-height:46px;padding:0 0 0 8px}
+.jan-cab .tit small{color:var(--hx-miolo-2)}
+.jan-cab .num{width:26px;height:26px;display:grid;place-items:center;flex:none;background:var(--amarelo);color:var(--tinta);font:900 13px/1 var(--hx-f-tit);rotate:-8deg}
+.jan-cab > .ic{color:var(--amarelo)}
+.risca{display:none}
+.jan-cab .seta{margin-left:auto}
+.jan-corpo{padding:12px 8px 8px}
+.vital{font:800 12px/1 var(--hx-f-tit);letter-spacing:.03em;text-transform:uppercase}
+.vital .n,.med .n{font:900 italic 17px/1 var(--hx-f-num)}
+.barra{border:2.5px solid var(--tinta)}
+.barra i{background:repeating-linear-gradient(-45deg,transparent 0 5px,color-mix(in srgb,var(--branco) 30%,transparent) 5px 7px),var(--hx-medidor)}
+.baixa .barra i{background:var(--hx-alerta)} .ok .barra i{background:var(--hx-ok)}
+
+/* ---- o aviso (necessidade), a fala e a placa */
+.aviso{color:var(--tinta);font:900 italic 17px/1 var(--hx-f-tit);text-transform:uppercase}
+.aviso.cx::after{background:var(--hx-necessidade)}
+.aviso button{background:var(--tinta);color:var(--papel);font:800 12px/1 var(--hx-f-tit);text-transform:uppercase}
+.balao{font:800 italic 18px/1.2 var(--hx-f-tit)}
+.balao.cx::after{background:var(--branco)}
+.rabo{width:26px;height:22px;margin-top:-3px;background:var(--tinta);clip-path:polygon(0 0,100% 0,10% 100%)}
+.rabo::after{content:"";position:absolute;inset:0 8px 9px 4px;background:var(--branco);clip-path:polygon(0 0,100% 0,10% 100%)}
+.placa{font:900 italic 14px/1 var(--hx-f-tit);text-transform:uppercase}
+.placa.cx::after{background:var(--amarelo)}
+
+/* ---- as acoes (com a linha de recorte entre uma e outra) e o minimapa */
+.dock{padding:8px 10px}
+.tecla{color:var(--tinta);font:800 11px/1 var(--hx-f-tit);letter-spacing:.03em;text-transform:uppercase}
+.tecla + .tecla::before{content:"";position:absolute;left:-4px;top:4px;bottom:4px;border-left:2.5px dashed var(--tinta)}
+.mini svg{inset:10px;width:calc(100% - 20px);height:calc(100% - 20px)}
+.m-agua{fill:var(--anil)} .m-areia{fill:var(--amarelo)} .m-ilha{fill:var(--papel);stroke:var(--tinta);stroke-width:3}
+.m-trilha{fill:none;stroke:var(--tinta);stroke-width:2.5;stroke-dasharray:4 5}
+.m-lugar{fill:var(--tinta)} .m-pet{fill:var(--amarelo);stroke:var(--tinta);stroke-width:3}
+
+/* ---- o lugar aberto */
+.lugar{padding:6px}
+.lugar .lg-cab,.folha .lg-cab{background:var(--tinta);color:var(--papel);padding:10px 8px 10px 14px}
+.lg-cab > .ic{width:38px;height:38px;padding:6px;background:var(--amarelo);color:var(--tinta);rotate:-6deg}
+.lg-cab .tit b{font-size:30px;letter-spacing:-.01em}
+.lg-cab .tit small{font:700 12px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase;color:var(--amarelo)}
+.fechar{background:var(--amarelo);color:var(--tinta)}
+.abas{padding:14px 10px 0;gap:4px;align-items:flex-end;border-bottom:3px solid var(--tinta)}
+.aba{font:800 13px/1 var(--hx-f-tit);text-transform:uppercase;color:var(--tinta);background:var(--hx-miolo-2);border:3px solid var(--tinta);border-bottom:0;min-height:38px}
+.aba[aria-selected="true"]{background:var(--amarelo);min-height:46px}
+.lg-corpo{padding:14px 10px 10px}
+.destaque{background:var(--reticula),var(--amarelo);border:3px solid var(--tinta);box-shadow:4px 4px 0 var(--tinta);rotate:-.5deg}
+.destaque .grande{font:900 italic 34px/1 var(--hx-f-tit);text-transform:uppercase}
+.destaque .sec{color:var(--tinta);font:700 13px/1 var(--hx-f)}
+.ex{background:var(--papel);border:2.5px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta)}
+.ex:nth-child(odd){rotate:-.6deg} .ex:nth-child(even){rotate:.5deg}
+.ex .ic{color:var(--anil)}
+.ex b{font:900 italic 16px/1.1 var(--hx-f-tit);text-transform:uppercase}
+.ex small{font:600 13px/1.2 var(--hx-f);color:var(--hx-sec)}
+.med .marca{background:var(--tinta);width:2.5px;top:-5px;bottom:-5px}
+.sec{font:600 14px/1.2 var(--hx-f)}
+.como{font:800 13px/1 var(--hx-f-tit);text-transform:uppercase;color:var(--tinta);border-top:2.5px dashed var(--tinta)}
+
+/* ---- botoes, etiquetas (adesivos) e chaves */
+.bt{font:900 italic 15px/1 var(--hx-f-tit);text-transform:uppercase;color:var(--tinta);padding:0 20px}
+.bt::before{inset:0;background:var(--tinta);transform:translate(4px,4px)}
+.bt::after{inset:0;background:var(--papel);border:3px solid var(--tinta)}
+.bt.acao::after{background:var(--amarelo)}
+.bt.perigo::after{background:var(--hx-perigo)}
+.bt:disabled{opacity:.45} .bt:disabled::before,.bt.trancado::before{display:none}
+.bt.trancado{color:var(--hx-sec)} .bt.trancado::after{border-style:dashed;background:var(--hx-miolo-2)}
+.etq{font:800 11px/1 var(--hx-f-tit);letter-spacing:.03em;text-transform:uppercase;color:var(--tinta);background:var(--papel);border:2px solid var(--tinta)}
+.etq.nv,.etq.alerta{background:var(--hx-alerta)}
+.etq.apr{background:var(--hx-aprendido);border-style:dashed}
+.etq.ok{background:var(--hx-ok)}
+.etq.perigo{background:var(--hx-perigo);border-style:dashed}
+.etq.nec{background:var(--hx-necessidade)}
+.etq.apt{right:-9px;top:-11px;width:30px;height:30px;padding:0;justify-content:center;rotate:12deg;background:var(--amarelo)}
+.etq.apt .ic{width:16px;height:16px;fill:var(--tinta)}
+.inter{background:var(--hx-miolo-2);border:2.5px solid var(--tinta)}
+.inter::after{top:3px;left:3px;width:17px;height:17px;background:var(--tinta)}
+.inter.on{background:var(--anil)} .inter.on::after{left:27px;background:var(--amarelo);box-shadow:0 0 0 2px var(--tinta)}
+
+/* ---- o celular */
+.bt48:nth-child(odd){rotate:-3deg} .bt48:nth-child(even){rotate:2.5deg}
+.bt48[aria-current]::after{background:var(--anil)} .bt48[aria-current]{color:var(--branco)}
+.m-tecla.cx::after{background:var(--amarelo)}
+.m-tecla:nth-child(odd){rotate:-3deg} .m-tecla:nth-child(even){rotate:3deg}
+.m-relogio small{font:800 12px/1 var(--hx-f-tit);color:var(--hx-sec)}
+.m-relogio .hora{font-size:22px}
+.m-retrato.cx::after{background:var(--amarelo)}
+.folha{padding:6px 6px 0}
+.folha .alca{background:var(--tinta);margin-bottom:6px}
+
+/* ---- a folha do modelo */
+.esp,.palco-cel{background:var(--reticula),var(--chao)}
+.caixa-demo .t-display{font-weight:900;font-style:italic;text-transform:uppercase}
+.caixa-demo .t-num{font-weight:900;font-style:italic}
+.esp-nome h1{font-weight:900;font-style:italic;text-transform:uppercase}
+.legenda-cel h1{font-weight:900;font-style:italic;text-transform:uppercase}

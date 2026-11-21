@@ -1,0 +1,133 @@
+/* MODELO 1, ESTENCIL: cartaz de rua. Tinta, osso e vermelhao; cantos cortados em 45 graus; letra vazada; paralelogramos; riscas de
+   sinalizacao. E a forma do modelo (o que no jogo seria um pele-estencil.css); as cores vem dos tokens da pagina (gerar.py, MODELOS).
+   Nenhuma cor aqui fora dos tokens. */
+:root{--osso:var(--hx-borda);--tinta:var(--hx-miolo);--verm:var(--hx-btn-bg);
+  --riscas:repeating-linear-gradient(-45deg,var(--osso) 0 4px,transparent 4px 8px)}
+body{letter-spacing:.01em}
+
+/* ---- a caixa: contorno de osso de 2 px, canto de cima a direita e de baixo a esquerda cortados, sombra dura */
+.cx{--c:14px;filter:drop-shadow(5px 5px 0 var(--hx-sombra-cor))}
+.cx.p{--c:9px;filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor))}
+.cx::before{inset:0;background:var(--osso);
+  clip-path:polygon(0 0,calc(100% - var(--c)) 0,100% var(--c),100% 100%,var(--c) 100%,0 calc(100% - var(--c)))}
+.cx::after{inset:2px;background:var(--tinta);
+  clip-path:polygon(0 0,calc(100% - var(--c) + 1px) 0,100% calc(var(--c) - 1px),100% 100%,calc(var(--c) - 1px) 100%,0 calc(100% - var(--c) + 1px))}
+.tit b{font:400 17px/1 var(--hx-f-tit);letter-spacing:.06em;text-transform:uppercase}
+.tit small{font:600 13px/1.15 var(--hx-f);color:var(--hx-sec);letter-spacing:.03em}
+.n,.hora{font-family:var(--hx-f-num)}
+
+/* ---- o topo */
+.retrato{background:var(--hx-miolo-2);clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.cartao-pet .t b{font:400 21px/1 var(--hx-f-tit);letter-spacing:.05em;text-transform:uppercase}
+.cartao-pet .t small{font:600 13px/1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-sec)}
+.agora{padding-left:2px}
+.agora .rot{margin:2px 0;background:var(--verm);color:var(--tinta);font:700 13px/1 var(--hx-f);letter-spacing:.16em;
+  clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%);padding:0 22px 0 12px}
+.agora b{font:700 18px/1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase}
+.agora .porque{font:500 14px/1 var(--hx-f);color:var(--hx-sec)}
+.logo b{font:400 30px/1 var(--hx-f-tit);letter-spacing:.14em;color:var(--osso);background:var(--tinta);padding:9px 16px 7px;
+  box-shadow:0 0 0 2px var(--osso),6px 6px 0 2px var(--verm)}
+.logo .enf{display:block;width:40px;height:14px;background:var(--riscas),var(--tinta);box-shadow:0 0 0 2px var(--tinta)}
+.dia{font:700 12px/1 var(--hx-f);letter-spacing:.16em;text-transform:uppercase;color:var(--hx-sec)}
+.hora{font:700 30px/1 var(--hx-f-num);letter-spacing:.02em}
+.salvo{font:700 12px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase;color:var(--hx-sec)}
+.salvo::before{content:"";width:9px;height:9px;background:var(--hx-ok)}
+.bits b{font:700 24px/1 var(--hx-f-num)}
+.bits .ic{color:var(--hx-alerta)}
+
+/* ---- o trilho */
+.nav{color:var(--hx-texto-2);font:700 11px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase}
+.nav[aria-current]{background:var(--osso);color:var(--tinta);clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%);box-shadow:inset 6px 0 0 var(--verm)}
+
+/* ---- as janelas */
+.jan-cab .num{font:700 13px/1 var(--hx-f);letter-spacing:.06em;background:var(--verm);color:var(--tinta);padding:5px 11px 4px;
+  clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.jan-cab > .ic{color:var(--osso)}
+.risca{width:40px;height:10px;background:var(--riscas);opacity:.85}
+.jan:not(.aberta) .risca{display:none}
+.jan.aberta .jan-cab{box-shadow:0 2px 0 var(--osso);margin:0 2px}
+.vital{font:700 13px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase;color:var(--hx-texto-2)}
+.vital .n,.med .n{font:700 17px/1 var(--hx-f-num);color:var(--osso);letter-spacing:0}
+.barra{-webkit-mask:repeating-linear-gradient(90deg,#000 0 9px,transparent 9px 12px);mask:repeating-linear-gradient(90deg,#000 0 9px,transparent 9px 12px)}
+.baixa .barra i{background:var(--hx-alerta)} .ok .barra i{background:var(--hx-ok)}
+.baixa > .ic{color:var(--hx-alerta)}
+
+/* ---- o aviso (necessidade), a fala e a placa: caixas claras */
+.aviso{color:var(--tinta);font:700 16px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase}
+.aviso.cx::before{background:var(--tinta)} .aviso.cx::after{background:var(--hx-necessidade)}
+.aviso button{background:var(--tinta);color:var(--osso);font:700 12px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase;
+  clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%);padding:0 14px}
+.balao{color:var(--tinta);font:600 18px/1.2 var(--hx-f);letter-spacing:.02em}
+.balao.cx::before{background:var(--tinta)} .balao.cx::after{background:var(--osso)}
+.rabo{width:26px;height:20px;margin-top:-2px;background:var(--tinta);clip-path:polygon(0 0,100% 0,12% 100%)}
+.rabo::after{content:"";position:absolute;inset:0 6px 7px 3px;background:var(--osso);clip-path:polygon(0 0,100% 0,12% 100%)}
+.placa{font:700 14px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase}
+.placa .ic{color:var(--verm)}
+
+/* ---- as acoes e o minimapa */
+.tecla{color:var(--hx-texto);font:700 12px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase}
+.tecla + .tecla::before{content:"";position:absolute;left:-4px;top:9px;bottom:9px;width:2px;background:var(--osso);opacity:.32;transform:skewX(-16deg)}
+.mini{--oito:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%)}
+.mini.cx::before,.mini.cx::after{clip-path:var(--oito)}
+.mini.cx::after{inset:3px}
+.mini svg{inset:3px;width:calc(100% - 6px);height:calc(100% - 6px);clip-path:var(--oito)}
+.m-agua{fill:var(--tinta)} .m-areia{fill:var(--hx-miolo-2)} .m-ilha{fill:none;stroke:var(--osso);stroke-width:2}
+.m-trilha{fill:none;stroke:var(--osso);stroke-width:2;stroke-dasharray:3 5}
+.m-lugar{fill:var(--osso)} .m-pet{fill:var(--verm);stroke:var(--osso);stroke-width:2}
+
+/* ---- o lugar aberto */
+.lugar .lg-cab{padding-bottom:12px}
+.lg-cab > .ic{width:34px;height:34px;color:var(--tinta);background:var(--verm);padding:6px;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
+.lg-cab .tit b{font-size:30px;letter-spacing:.08em}
+.lg-cab .tit small{letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+.fechar{background:var(--hx-miolo-2);clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%)}
+.abas{gap:2px;border-bottom:2px solid var(--osso);margin:0 16px;padding:0}
+.aba{font:700 14px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase;color:var(--hx-texto-2);background:var(--hx-miolo-2);
+  clip-path:polygon(11px 0,100% 0,calc(100% - 11px) 100%,0 100%);padding:0 22px}
+.aba[aria-selected="true"]{background:var(--osso);color:var(--tinta)}
+.destaque{background:var(--hx-miolo-2);box-shadow:inset 10px 0 0 var(--verm);padding-left:26px}
+.destaque .rot{color:var(--hx-sec)}
+.destaque .grande{font:400 32px/1 var(--hx-f-tit);letter-spacing:.06em;text-transform:uppercase}
+.sec{font:600 14px/1.2 var(--hx-f);letter-spacing:.03em}
+.ex{background:var(--hx-miolo-2);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%)}
+.ex .ic{color:var(--osso)}
+.ex b{font:700 18px/1.1 var(--hx-f);letter-spacing:.05em;text-transform:uppercase}
+.ex small{font:500 13px/1.2 var(--hx-f);color:var(--hx-sec)}
+.med .rot{letter-spacing:.14em}
+.med .marca{background:var(--verm);top:-4px;bottom:-4px}
+.como{font:700 13px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase;color:var(--hx-sec);border-top:2px dashed var(--hx-miolo-2)}
+
+/* ---- botoes (paralelogramo), etiquetas e chaves */
+.bt{font:700 15px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase;padding:0 24px;color:var(--osso)}
+.bt::before{inset:0;background:var(--osso);clip-path:polygon(11px 0,100% 0,calc(100% - 11px) 100%,0 100%)}
+.bt::after{inset:2px 3px;background:var(--tinta);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.bt.acao{color:var(--tinta)} .bt.acao::after{background:var(--verm)}
+.bt.perigo{color:var(--hx-perigo)} .bt.perigo::before{background:var(--hx-perigo)}
+.bt.perigo::after{background:repeating-linear-gradient(-45deg,transparent 0 6px,rgba(224,124,124,.16) 6px 9px),var(--tinta)}
+.bt:disabled{opacity:.45}
+.bt.trancado{color:var(--hx-texto-2)} .bt.trancado::before{background:var(--hx-sec)}
+.bt.trancado::after{background:repeating-linear-gradient(-45deg,transparent 0 6px,color-mix(in srgb,var(--osso) 9%,transparent) 6px 9px),var(--tinta)}
+.etq{font:700 11px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase;border:1.5px solid currentColor;color:var(--hx-texto-2)}
+.etq.nv,.etq.alerta{color:var(--hx-alerta)}
+.etq.apr{color:var(--hx-aprendido);border-style:dashed}
+.etq.ok{color:var(--hx-ok)}
+.etq.perigo{color:var(--hx-perigo);border-style:dashed}
+.etq.nec{background:var(--hx-necessidade);border-color:var(--hx-necessidade);color:var(--tinta)}
+.etq.apt{border:0;padding:0;min-height:0}
+.etq.apt .ic{width:18px;height:18px;fill:currentColor}
+.inter{background:var(--tinta);box-shadow:0 0 0 2px var(--hx-sec);clip-path:none}
+.inter::after{background:var(--hx-sec)}
+.inter.on{background:var(--verm);box-shadow:0 0 0 2px var(--osso)}
+.inter.on::after{background:var(--tinta)}
+
+/* ---- o celular */
+.bt48[aria-current]::after{background:var(--osso)} .bt48[aria-current]{color:var(--tinta)}
+.m-tecla{color:var(--osso)}
+.m-relogio small{font:700 12px/1 var(--hx-f);letter-spacing:.14em;color:var(--hx-sec)}
+.m-relogio .hora{font-size:22px}
+.folha .alca{background:var(--osso);opacity:.6}
+.folha.cx{--c:0px}
+
+/* ---- a folha do modelo */
+.caixa-demo .t-display{text-transform:uppercase;letter-spacing:.06em}
+.esp .trilho .nav{width:78px}

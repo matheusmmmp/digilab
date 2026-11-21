@@ -1,0 +1,80 @@
+/* MODELO 1, ESTENCIL, RODADA 2 (2026-11-20): a forma das pecas novas (Ajustes, Arena, Registro, o scan, o chamado e os estados).
+   Entra depois do estencil.css. Nenhuma cor fora dos tokens. */
+:root{--claro:color-mix(in srgb,var(--osso) 16%,var(--hx-miolo-2));--corte:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
+.frase{font:500 16px/1.35 var(--hx-f);color:var(--hx-texto-2)}
+.nome-pet{font:400 20px/1 var(--hx-f-tit);letter-spacing:.05em;text-transform:uppercase}
+.q{background:var(--tinta)}
+.lugar .lg-corpo > div > .rot{color:var(--hx-sec)}
+.parte-tit{font:400 22px/1 var(--hx-f-tit);letter-spacing:.06em;text-transform:uppercase}
+.aba.trancada{color:var(--hx-sec);background:repeating-linear-gradient(-45deg,transparent 0 6px,color-mix(in srgb,var(--osso) 9%,transparent) 6px 9px),var(--hx-miolo-2)}
+
+/* ---- a linha de Ajustes e o volume */
+.aj{background:var(--hx-miolo-2);clip-path:var(--corte);color:var(--osso)}
+.aj b{font:700 16px/1.1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase}
+.aj .seta{color:var(--hx-sec)}
+.aj.novo{box-shadow:inset 5px 0 0 var(--hx-alerta)}
+.vol{color:var(--hx-texto-2)}
+.vol > b{font:700 13px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase}
+.vol .trilha{background:var(--hx-medidor-trilho)}
+.vol .trilha i{background:var(--osso)}
+.vol .trilha b{width:20px;height:20px;background:var(--verm);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.vol .n{font:700 15px/1 var(--hx-f-num);color:var(--osso)}
+
+/* ---- a opcao de uma so: a escolhida vira osso, com a barra vermelha */
+.op{background:var(--hx-miolo-2);color:var(--osso);clip-path:var(--corte)}
+.op b{font:700 16px/1.1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase}
+.op small{font:500 13px/1.2 var(--hx-f);color:var(--hx-sec)}
+.op[aria-checked="true"]{background:var(--osso);color:var(--tinta);box-shadow:inset 6px 0 0 var(--verm)}
+.op[aria-checked="true"] small{color:var(--hx-miolo-2)}
+.op[aria-checked="true"] .q{background:var(--hx-miolo-2)}
+.op.mapa[aria-checked="true"]{padding-left:18px}
+.op:not(.mapa)[aria-checked="true"]{padding-left:12px}
+
+/* ---- o Registro */
+.reg-topo .n{font:700 24px/1 var(--hx-f-num)}
+.banner{color:var(--osso);outline:2px dashed var(--hx-sec);outline-offset:-2px;
+  background:repeating-linear-gradient(-45deg,transparent 0 8px,color-mix(in srgb,var(--osso) 7%,transparent) 8px 11px)}
+.banner b{font:400 20px/1 var(--hx-f-tit);letter-spacing:.08em;text-transform:uppercase}
+.banner small{font:600 12px/1.2 var(--hx-f);letter-spacing:.12em;text-transform:uppercase;color:var(--hx-sec)}
+.filtro{font:700 13px/1 var(--hx-f);letter-spacing:.12em;text-transform:uppercase;color:var(--hx-texto-2);background:var(--hx-miolo-2);
+  clip-path:polygon(9px 0,100% 0,calc(100% - 9px) 100%,0 100%);padding:0 20px}
+.filtro[aria-pressed="true"]{background:var(--osso);color:var(--tinta)}
+.reg-l{color:var(--osso);font:600 16px/1.2 var(--hx-f);letter-spacing:.02em;border-bottom:1px solid var(--hx-miolo-2)}
+.reg-l .t{font:700 14px/1 var(--hx-f-num);letter-spacing:.06em;color:var(--hx-sec)}
+.reg-l > .ic{color:var(--hx-sec)}
+.reg-l.voce{background:var(--hx-miolo-2);box-shadow:inset 5px 0 0 var(--verm)}
+.reg-l.voce > .ic:nth-child(2){color:var(--verm)}
+
+/* ---- o scan do DigiBrain: a moldura e da pele; o desenho da rede e conteudo e fica como e */
+.scan-cab b{font:400 20px/1 var(--hx-f-tit);letter-spacing:.06em;text-transform:uppercase}
+.scan-cab > .ic{color:var(--verm)}
+.vivo{background:var(--hx-ok);border-radius:0}
+.scan-tela{padding:2px;background:var(--osso);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.scan-tela img{clip-path:polygon(0 0,calc(100% - 13px) 0,100% 13px,100% 100%,13px 100%,0 calc(100% - 13px))}
+.scan-faixa{background:var(--hx-miolo-2);color:var(--osso)}
+.scan-faixa .rot{color:var(--hx-sec)}
+.estado{font:700 18px/1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-necessidade)}
+
+/* ---- o chamado: a cor da necessidade, com o botao escuro */
+.chamado{color:var(--tinta)}
+.chamado.cx::before{background:var(--tinta)}
+.chamado.cx::after{background:var(--hx-necessidade)}
+.chamado .tit b{font-size:20px}
+.chamado .tit small{color:var(--tinta);font-weight:700}
+.chamado .bt.acao{color:var(--osso)}
+.chamado .bt.acao::before,.chamado .bt.acao::after{background:var(--tinta)}
+
+/* ---- os estados: com o mouse o fundo clareia e entra um traco; pressionado, o botao afunda */
+.aj.s-mouse,.op.s-mouse,.aba.s-mouse,.nav.s-mouse,.tecla.s-mouse{background:var(--claro);color:var(--osso)}
+.aj.s-mouse,.op.s-mouse{box-shadow:inset 0 -3px 0 var(--osso)}
+.tecla.s-press{background:color-mix(in srgb,var(--osso) 30%,var(--hx-miolo-2));translate:0 2px}
+.bt.s-mouse{translate:-1px -2px;filter:drop-shadow(3px 4px 0 var(--hx-sombra-cor))}
+.bt.s-mouse::after{filter:brightness(1.14)}
+.bt.s-press{translate:2px 2px}
+.bt.s-press::after{filter:brightness(.86)}
+/* o foco: por fora onde a peca e reta; por dentro onde o canto e cortado (o corte comeria o contorno) */
+.aj.s-foco,.op.s-foco{outline-offset:-5px}
+/* a aba e inclinada dos dois lados: um contorno seria cortado; o foco sao duas barras, em cima e embaixo */
+.aba.s-foco{outline:0;box-shadow:inset 0 5px 0 var(--hx-foco),inset 0 -5px 0 var(--hx-foco)}
+.op[aria-checked="true"].s-foco{outline-color:var(--tinta)}
+.est .est-cx .nav:not([aria-current]),.est .est-cx .tecla{color:var(--osso)}

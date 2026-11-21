@@ -1,0 +1,172 @@
+/* Prancha "peles de rua: tres modelos base" (docs/PLANO_UX_PELES_RUA.md). So desenho; nenhum codigo do jogo.
+   ESTE ARQUIVO E O ESQUELETO: as posicoes e a estrutura das telas, iguais nos tres modelos, como numa pele de verdade (o DOM nao muda;
+   muda o bloco de tokens --hx-* e um arquivo de forma por pele, como o pele-vidro.css e o pele-xcom.css do jogo).
+   Aqui nao ha cor: toda cor vem dos tokens que o gerar.py escreve em cada pagina (um bloco por modelo). A forma, a letra, a textura
+   e os enfeites de cada modelo estao em estencil.css, zine.css e arcade.css. Os tamanhos sao PROPOSTO, SEM FONTE. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:950px}
+body{position:relative;overflow:hidden;background:var(--chao);color:var(--hx-texto);font:500 15px/1.3 var(--hx-f)}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;text-align:left}
+ul,ol{list-style:none}
+small{font-size:inherit}
+:focus-visible{outline:3px solid var(--hx-foco);outline-offset:3px}
+svg.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---- a cena: uma captura do jogo, sem a HUD. A pele nao toca o habitat nem o pet */
+.cena{position:absolute;inset:0;background:url("img/cena_1920.jpg") center/cover no-repeat}
+.spr{display:block;flex:none;image-rendering:pixelated;background:center/100% 100% no-repeat}
+.pet-chao{position:absolute;z-index:2;width:0;height:0}
+.pet-chao .sombra{position:absolute;left:-74px;top:-15px;width:148px;height:30px;border-radius:50%;background:rgba(0,0,0,.3)}
+.pet-chao .spr{position:absolute;bottom:0;left:0;transform:translateX(-50%)}
+
+/* ---- a caixa: toda superficie da pele. Duas camadas por tras do conteudo (::before o contorno ou a sombra, ::after o miolo); a forma
+   de cada modelo entra por --forma e --forma-in. Os ganchos de enfeite (.fita, .enf) so aparecem no modelo que os usa */
+.cx{position:relative;isolation:isolate}
+.cx::before,.cx::after{content:"";position:absolute;z-index:-1;pointer-events:none}
+.fita,.enf{display:none}
+.rot{font:700 12px/1.1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-rotulo)}
+.sec{color:var(--hx-sec)}
+
+/* ---- o topo: o cartao do pet, a linha do agora, a marca, o relogio e os Bits */
+.topo{position:absolute;z-index:20;top:14px;left:14px;right:18px;height:60px;display:flex;align-items:center;gap:14px}
+.cartao-pet{display:flex;align-items:center;gap:10px;height:60px;padding:0 14px 0 8px}
+.retrato{width:46px;height:46px;overflow:hidden;flex:none;display:flex;justify-content:center;align-items:flex-start}
+.cartao-pet .t{display:flex;flex-direction:column;gap:3px;line-height:1.1}
+.agora{display:flex;align-items:center;gap:10px;height:44px;padding:0 10px 0 0}
+.agora .rot{align-self:stretch;display:flex;align-items:center;padding:0 12px}
+.agora .ic{width:16px;height:16px}
+.logo{position:absolute;left:50%;top:2px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;height:52px;white-space:nowrap}
+.vao{margin-left:auto}
+.relogio{display:flex;align-items:center;gap:12px;height:60px;padding:0 14px}
+.relogio .d{display:flex;flex-direction:column;gap:2px;line-height:1}
+.salvo{display:inline-flex;align-items:center;gap:6px}
+.bits{display:flex;align-items:center;gap:8px;height:60px;padding:0 14px}
+
+/* ---- o trilho dos destinos */
+.trilho{position:absolute;z-index:20;left:14px;top:98px;width:88px;display:flex;flex-direction:column;gap:4px;padding:8px}
+.nav{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:72px;height:58px}
+.nav .ic{width:22px;height:22px}
+
+/* ---- as janelas da direita */
+.pilha{position:absolute;z-index:10;right:20px;top:98px;width:320px;display:flex;flex-direction:column;gap:14px}
+.jan-cab{display:flex;align-items:center;gap:9px;min-height:48px;padding:0 4px 0 10px}
+.jan-cab .tit{display:flex;flex-direction:column;gap:2px;line-height:1.1;min-width:0;white-space:nowrap}
+.risca{flex:none;margin-left:auto}
+.jan-cab .seta{width:40px;height:44px;display:grid;place-items:center;flex:none;margin-left:auto}
+.risca + .seta{margin-left:0}
+.jan.aberta .jan-cab .seta .ic{transform:rotate(90deg)}
+.jan-corpo{display:flex;flex-direction:column;gap:9px;padding:12px 14px 14px}
+.vital{display:grid;grid-template-columns:20px 72px 1fr 38px;align-items:center;gap:8px}
+.vital .ic{width:18px;height:18px}
+.barra{position:relative;display:block;height:var(--hx-medidor-alt);background:var(--hx-medidor-trilho)}
+.barra i{position:absolute;inset:0 auto 0 0;background:var(--hx-medidor)}
+.vital .n{text-align:right}
+
+/* ---- o aviso da necessidade, o balao da fala e a placa do lugar */
+.aviso{position:absolute;z-index:12;left:50%;top:96px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;height:44px;padding:0 5px 0 14px;white-space:nowrap}
+.aviso button{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 10px}
+.aviso button .ic{width:14px;height:14px}
+.balao{position:absolute;z-index:9;padding:10px 16px 11px;max-width:230px}
+.rabo{position:absolute;left:26px;top:100%}
+.placa{position:absolute;z-index:8;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;white-space:nowrap}
+
+/* ---- as acoes de baixo e o minimapa */
+.dock{position:absolute;z-index:20;left:50%;bottom:20px;transform:translateX(-50%);display:flex;gap:6px;padding:8px}
+.tecla{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:104px;height:56px}
+.tecla .ic{width:22px;height:22px}
+.mini{position:absolute;z-index:15;right:24px;bottom:24px;width:196px;height:196px}
+.mini svg{position:absolute;inset:0;width:100%;height:100%}
+
+/* ---- um lugar aberto: o cabecalho, as abas e o corpo (Crescer > Treinar) */
+.lugar{position:absolute;z-index:14;left:122px;top:98px;width:600px;display:flex;flex-direction:column}
+.lg-cab{display:flex;align-items:center;gap:12px;padding:12px 10px 10px 16px}
+.lg-cab > .ic{width:28px;height:28px}
+.lg-cab .tit{display:flex;flex-direction:column;gap:2px;line-height:1.05;margin-right:auto}
+.fechar{width:44px;height:44px;display:grid;place-items:center;flex:none}
+.abas{display:flex;gap:6px;padding:0 16px}
+.aba{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;white-space:nowrap}
+.lg-corpo{display:flex;flex-direction:column;gap:14px;padding:16px}
+.destaque{display:flex;align-items:center;gap:14px;padding:12px 16px}
+.destaque .g{display:flex;flex-direction:column;gap:3px;margin-right:auto}
+.exs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ex{position:relative;display:flex;flex-direction:column;gap:4px;align-items:flex-start;min-height:92px;padding:10px 12px}
+.ex .ic{width:26px;height:26px}
+.ex .apt{position:absolute;right:8px;top:8px}
+.etq.apt{position:absolute}
+.med{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:12px}
+.med .marca{position:absolute;top:-3px;bottom:-3px;width:2px;z-index:1}
+.med .n{text-align:right}
+.linha{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bt{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;white-space:nowrap}
+.bt::before,.bt::after{content:"";position:absolute;z-index:-1;pointer-events:none}
+.etq{display:inline-flex;align-items:center;gap:5px;min-height:22px;padding:1px 8px;white-space:nowrap}
+.etq .ic{width:13px;height:13px}
+.como{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;width:100%}
+.como .seta{margin-left:auto}
+.inter{position:relative;display:inline-block;width:52px;height:28px;flex:none}
+.inter::after{content:"";position:absolute;top:4px;left:4px;width:20px;height:20px}
+.inter.on::after{left:28px}
+
+/* ---- o celular: dois aparelhos de 390 x 844 lado a lado na mesma prancha */
+.palco-cel{position:absolute;inset:0;background:var(--chao)}
+.fone{position:absolute;top:53px;width:390px;height:844px;overflow:hidden;outline:8px solid #000}
+.fone .cena{background-size:auto 100%;background-position:54% 50%}
+.m-retrato{position:absolute;z-index:20;top:14px;left:14px;width:58px;height:58px;display:flex;justify-content:center;align-items:flex-start;overflow:hidden}
+.m-relogio{position:absolute;z-index:20;top:24px;left:84px;height:38px;display:flex;align-items:center;gap:8px;padding:0 12px;white-space:nowrap}
+.m-coluna{position:absolute;z-index:20;top:14px;right:14px;display:flex;flex-direction:column;gap:12px}
+.bt48{width:50px;height:50px;display:grid;place-items:center}
+.bt48 .ic{width:24px;height:24px}
+.m-dock{position:absolute;z-index:20;left:0;right:0;bottom:30px;display:flex;justify-content:center;gap:16px}
+.m-tecla{width:64px;height:64px;display:grid;place-items:center}
+.m-tecla .ic{width:28px;height:28px}
+.fone .aviso{top:92px;height:40px}
+.fone .balao{max-width:170px}
+.folha{position:absolute;z-index:14;left:0;right:0;top:384px;bottom:-8px;display:flex;flex-direction:column}
+.folha .alca{display:block;width:44px;height:5px;margin:8px auto 0;flex:none}
+.folha .lg-cab{padding:6px 10px 8px 14px}
+.folha .abas{padding:0 12px}
+.folha .aba{padding:0 12px}
+.folha .aba:not([aria-selected="true"]) span{display:none}
+.folha .lg-corpo{padding:12px;gap:10px}
+.folha .exs{grid-template-columns:1fr 1fr;gap:8px}
+.folha .ex{min-height:54px;padding:8px 10px;gap:3px}
+.folha .ex > .ic{display:none}
+.folha .ex b{font-size:14px}
+.folha .ex small{font-size:12px}
+.folha .destaque{padding:8px 12px}
+.folha .etq.apt{scale:.8}
+.folha .destaque .grande{font-size:24px}
+.folha .lg-cab .tit b{font-size:24px}
+.legenda-cel{position:absolute;top:53px;width:300px;display:flex;flex-direction:column;gap:14px}
+.legenda-cel h1{font:400 44px/1 var(--hx-f-tit)}
+
+/* ---- a folha do modelo: a paleta, as letras, as formas e as pecas soltas */
+.esp{position:absolute;inset:0;display:grid;grid-template-columns:400px 400px 1fr 380px;gap:34px;padding:38px 44px;background:var(--chao)}
+.esp-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.esp h2{font:700 13px/1 var(--hx-f);letter-spacing:.16em;text-transform:uppercase;color:var(--hx-chao-ink);opacity:.75;margin-top:6px}
+.esp-nome{color:var(--hx-chao-ink)}
+.esp-nome h1{font:400 76px/.9 var(--hx-f-tit);margin:6px 0 10px}
+.esp-nome p{font:500 17px/1.4 var(--hx-f);max-width:34ch}
+.amostras{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.amostra{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;color:var(--hx-chao-ink)}
+.amostra i{width:44px;height:44px;border:2px solid var(--hx-chao-ink)}
+.amostra b{display:block;font:700 14px/1.15 var(--hx-f)}
+.amostra small{display:block;font:500 12px/1.2 var(--hx-f);opacity:.75}
+.esp .caixa-demo{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.t-display{font:400 54px/.95 var(--hx-f-tit)}
+.t-num{font:700 30px/1 var(--hx-f-num)}
+.pecas{display:flex;flex-wrap:wrap;gap:12px 12px;align-items:center}
+.esp .jan{width:100%}
+.esp .trilho,.esp .dock,.esp .aviso,.esp .balao{position:relative;left:auto;top:auto;right:auto;bottom:auto;transform:none}
+.esp .trilho{flex-direction:row;width:auto}
+.esp .dock{align-self:flex-start}
+.esp .aviso{align-self:flex-start}
+.esp .balao{align-self:flex-start;margin-bottom:14px}
+.sem-linha{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;font:500 14px/1.3 var(--hx-f);color:var(--hx-chao-ink)}
+.esp-txt{font:500 14px/1.45 var(--hx-f);color:var(--hx-chao-ink)}
+.esp-txt li{margin-top:6px;padding-left:14px;position:relative}
+.esp-txt li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;background:currentColor}
+
+/* a nota amarela e etiqueta da prancha, nao do jogo (o literal da nota das outras pranchas) */
+.nota{position:absolute;z-index:60;font:600 11px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:2px 6px;border-radius:3px;max-width:300px;letter-spacing:0;text-transform:none}
+body.sem-notas .nota{display:none}

@@ -1,0 +1,140 @@
+/* MODELO 3, ARCADE: adesivo de fliperama. Azul-cobalto, contorno marinho, lima, cantos em degrau de pixel, a borda branca recortada
+   do adesivo e medidores em blocos. E a forma do modelo (o que no jogo seria um pele-arcade.css); as cores vem dos tokens da pagina
+   (gerar.py, MODELOS). Nenhuma cor aqui fora dos tokens.
+   REGRA DESTE MODELO: rosa, salmao e as outras cores de sentido entram como fundo de adesivo, com texto marinho; como letra sobre o
+   cobalto, so o alerta, o ok e o aprendido tem contraste. */
+:root{--cob:var(--hx-miolo);--mar:var(--hx-borda);--lima:var(--hx-btn-bg);--bco:var(--hx-texto);
+  --pontos:radial-gradient(circle at 3px 3px,var(--hx-texto) 1.5px,transparent 1.9px) 0 0/7px 7px;
+  /* um degrau de 4 px em cada canto: pecas pequenas (teclas, cartoes, etiquetas) */
+  --entalhe:polygon(4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px),0 4px,4px 4px)}
+
+/* ---- a caixa: dois degraus de --s em cada canto, contorno marinho de --s, sombra dura marinho */
+.cx{--s:4px;filter:drop-shadow(5px 5px 0 var(--hx-sombra-cor));
+  --degrau:polygon(0 calc(2*var(--s)),var(--s) calc(2*var(--s)),var(--s) var(--s),calc(2*var(--s)) var(--s),calc(2*var(--s)) 0,
+    calc(100% - 2*var(--s)) 0,calc(100% - 2*var(--s)) var(--s),calc(100% - var(--s)) var(--s),calc(100% - var(--s)) calc(2*var(--s)),100% calc(2*var(--s)),
+    100% calc(100% - 2*var(--s)),calc(100% - var(--s)) calc(100% - 2*var(--s)),calc(100% - var(--s)) calc(100% - var(--s)),calc(100% - 2*var(--s)) calc(100% - var(--s)),calc(100% - 2*var(--s)) 100%,
+    calc(2*var(--s)) 100%,calc(2*var(--s)) calc(100% - var(--s)),var(--s) calc(100% - var(--s)),var(--s) calc(100% - 2*var(--s)),0 calc(100% - 2*var(--s)))}
+.cx.p{--s:3px;filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor))}
+.cx::before{inset:0;background:var(--mar);clip-path:var(--degrau)}
+.cx::after{inset:var(--s);background:var(--cob);clip-path:var(--degrau)}
+/* o adesivo: a borda branca recortada em volta do que e solto na tela (o aviso, a fala, a placa) */
+.aviso.cx,.balao.cx,.placa.cx{filter:drop-shadow(3px 0 0 var(--bco)) drop-shadow(-3px 0 0 var(--bco)) drop-shadow(0 3px 0 var(--bco)) drop-shadow(0 -3px 0 var(--bco)) drop-shadow(5px 5px 0 var(--mar))}
+.tit b{font:400 15px/1 var(--hx-f-tit);text-transform:uppercase}
+.tit small{font:600 13px/1.15 var(--hx-f);color:var(--hx-sec)}
+.n,.hora{font-family:var(--hx-f-num)}
+.rot{font:800 12px/1.1 var(--hx-f);letter-spacing:.1em}
+
+/* ---- o topo */
+.retrato{background:var(--hx-miolo-2);clip-path:var(--entalhe)}
+.cartao-pet .t b{font:400 19px/1 var(--hx-f-tit);text-transform:uppercase}
+.cartao-pet .t small{font:700 12px/1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-sec)}
+.agora{padding-left:3px}
+.agora .rot{margin:6px 0 6px 3px;background:var(--lima);color:var(--mar);clip-path:var(--entalhe)}
+.agora b{font:400 16px/1 var(--hx-f-tit);text-transform:uppercase}
+.agora .porque{font:600 14px/1 var(--hx-f);color:var(--hx-sec)}
+.logo{gap:16px}
+.logo b{font:400 30px/1 var(--hx-f-tit);letter-spacing:.04em;color:var(--lima);background:var(--cob);padding:9px 18px 6px;text-shadow:3px 3px 0 var(--mar);
+  box-shadow:0 0 0 4px var(--mar),0 0 0 7px var(--bco),6px 6px 0 7px var(--mar)}
+.logo .enf{display:block;width:22px;height:22px;background:var(--lima);clip-path:polygon(0 100%,50% 0,100% 100%);rotate:-18deg}
+.logo .enf:last-child{background:var(--bco);rotate:24deg}
+.dia{font:400 12px/1 var(--hx-f-num);letter-spacing:.08em;text-transform:uppercase;color:var(--hx-sec)}
+.hora{font:400 27px/1 var(--hx-f-tit)}
+.salvo{font:400 13px/1 var(--hx-f-num);text-transform:uppercase}
+.salvo::before{content:"";width:10px;height:10px;background:var(--hx-ok);box-shadow:0 0 0 2px var(--mar)}
+.bits b{font:400 24px/1 var(--hx-f-tit);color:var(--lima)}
+.bits .ic{color:var(--lima)}
+
+/* ---- o trilho */
+.nav{color:var(--bco);font:800 11px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase}
+.nav[aria-current]{background:var(--lima);color:var(--mar);clip-path:var(--entalhe)}
+
+/* ---- as janelas */
+.jan-cab{padding-left:12px}
+.jan-cab .num{width:28px;height:28px;display:grid;place-items:center;flex:none;background:var(--lima);color:var(--mar);font:400 14px/1 var(--hx-f-num);clip-path:var(--entalhe)}
+.jan:not(.aberta) .risca{display:none}
+.risca{width:46px;height:20px;background:var(--pontos);opacity:.55;-webkit-mask:linear-gradient(90deg,transparent,#000 75%);mask:linear-gradient(90deg,transparent,#000 75%)}
+.jan.aberta .jan-cab{box-shadow:0 4px 0 var(--mar);margin:0 4px;padding-left:8px}
+.vital{font:800 12px/1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase}
+.vital .n,.med .n{font:400 18px/1 var(--hx-f-num);color:var(--lima)}
+.barra{background:repeating-linear-gradient(90deg,var(--hx-medidor-trilho) 0 11px,transparent 11px 14px)}
+.barra i{background:repeating-linear-gradient(90deg,var(--hx-medidor) 0 11px,transparent 11px 14px)}
+.baixa .barra i{background:repeating-linear-gradient(90deg,var(--hx-alerta) 0 11px,transparent 11px 14px)}
+.ok .barra i{background:repeating-linear-gradient(90deg,var(--hx-ok) 0 11px,transparent 11px 14px)}
+/* o numero nao leva a cor do alerta: como letra sobre o cobalto ela da 4,2 para 1 (abaixo de 4,5); o bloco da barra ja diz */
+.baixa .n{color:var(--bco)}
+
+/* ---- o aviso (necessidade), a fala e a placa: adesivos */
+.aviso{color:var(--mar);font:400 15px/1 var(--hx-f-tit);text-transform:uppercase}
+.aviso.cx::after{background:var(--hx-necessidade)}
+.aviso button{background:var(--mar);color:var(--bco);font:800 12px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase}
+.balao{color:var(--mar);font:800 18px/1.2 var(--hx-f)}
+.balao.cx::after{background:var(--bco)}
+.rabo{width:18px;height:18px;margin-top:-3px;background:var(--mar);clip-path:polygon(0 0,100% 0,100% 34%,67% 34%,67% 67%,34% 67%,34% 100%,0 100%)}
+.rabo::after{content:"";position:absolute;inset:0 6px 6px 3px;background:var(--bco);clip-path:polygon(0 0,100% 0,100% 34%,67% 34%,67% 67%,34% 67%,34% 100%,0 100%)}
+.placa{color:var(--mar);font:400 13px/1 var(--hx-f-tit);text-transform:uppercase}
+.placa.cx::after{background:var(--lima)}
+
+/* ---- as acoes e o minimapa */
+.tecla{color:var(--bco);font:800 11px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;background:var(--hx-miolo-2);clip-path:var(--entalhe)}
+.mini{--s:6px}
+.mini svg{inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);shape-rendering:crispEdges}
+.m-agua{fill:var(--hx-miolo-2)} .m-areia{fill:var(--bco)} .m-ilha{fill:var(--lima)}
+.m-trilha{fill:none;stroke:var(--mar);stroke-width:3;stroke-dasharray:3 4}
+.m-lugar{fill:var(--mar)} .m-pet{fill:var(--bco);stroke:var(--mar);stroke-width:3}
+
+/* ---- o lugar aberto */
+.lg-cab{position:relative}
+.lugar .lg-cab::after{content:"";position:absolute;right:66px;top:10px;bottom:10px;width:170px;background:var(--pontos);opacity:.42;
+  -webkit-mask:linear-gradient(90deg,transparent,#000);mask:linear-gradient(90deg,transparent,#000)}
+.lg-cab > .ic{width:40px;height:40px;padding:7px;background:var(--lima);color:var(--mar);clip-path:var(--entalhe)}
+.lg-cab .tit b{font-size:28px}
+.lg-cab .tit small{font:700 12px/1 var(--hx-f);letter-spacing:.14em;text-transform:uppercase}
+.fechar{position:relative;z-index:1;background:var(--hx-miolo-2);clip-path:var(--entalhe)}
+.abas{margin:0 4px;padding:0 12px;border-bottom:4px solid var(--mar)}
+.aba{color:var(--bco);font:800 13px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;background:var(--hx-miolo-2);
+  clip-path:polygon(4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,100% 100%,0 100%,0 4px,4px 4px)}
+.aba[aria-selected="true"]{background:var(--bco);color:var(--mar)}
+.destaque{background:var(--hx-miolo-2);clip-path:var(--entalhe);box-shadow:inset 0 -6px 0 var(--lima);padding-bottom:16px}
+.destaque .grande{font:400 30px/1 var(--hx-f-tit);text-transform:uppercase;color:var(--lima)}
+.sec{font:600 14px/1.2 var(--hx-f)}
+.ex{background:var(--hx-miolo-2);clip-path:var(--entalhe)}
+.ex .ic{color:var(--lima)}
+.ex b{font:800 16px/1.1 var(--hx-f);letter-spacing:.02em;text-transform:uppercase}
+.ex small{font:600 13px/1.2 var(--hx-f);color:var(--hx-sec)}
+.med .marca{background:var(--bco);width:3px;top:-4px;bottom:-4px}
+.como{color:var(--hx-sec);font:800 12px/1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;border-top:4px dotted var(--mar)}
+
+/* ---- botoes, etiquetas (adesivos) e chaves */
+.bt{color:var(--mar);font:800 14px/1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;padding:0 20px;filter:drop-shadow(3px 3px 0 var(--mar))}
+.bt::before{inset:0;background:var(--mar);clip-path:var(--entalhe)}
+.bt::after{inset:3px;background:var(--bco);clip-path:var(--entalhe)}
+.bt.acao::after{background:var(--lima)}
+.bt.perigo::after{background:var(--hx-perigo)}
+.bt:disabled{opacity:.5;filter:none}
+.bt.trancado{filter:none;color:var(--hx-sec)}
+.bt.trancado::before{background:repeating-linear-gradient(90deg,var(--mar) 0 6px,transparent 6px 10px)}
+.bt.trancado::after{background:var(--hx-miolo-2)}
+.etq{color:var(--mar);font:800 11px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;background:var(--bco);outline:2px solid var(--mar)}
+.etq.nv,.etq.alerta{background:var(--hx-alerta)}
+.etq.apr{background:var(--hx-aprendido);outline-style:dashed}
+.etq.ok{background:var(--hx-ok)}
+.etq.perigo{background:var(--hx-perigo);outline-style:dashed}
+.etq.nec{background:var(--hx-necessidade)}
+.etq.apt{width:26px;height:26px;padding:0;justify-content:center;background:var(--hx-alerta)}
+.etq.apt .ic{width:15px;height:15px;fill:var(--mar)}
+.inter{background:var(--hx-miolo-2);box-shadow:0 0 0 3px var(--mar)}
+.inter::after{background:var(--hx-sec)}
+.inter.on{background:var(--lima)} .inter.on::after{background:var(--mar)}
+
+/* ---- o celular */
+.bt48[aria-current]::after{background:var(--lima)} .bt48[aria-current]{color:var(--mar)}
+.m-tecla.cx::after{background:var(--lima)} .m-tecla{color:var(--mar)}
+.m-relogio small{font:400 13px/1 var(--hx-f-num);color:var(--hx-sec)}
+.m-relogio .hora{font-size:19px}
+.folha .alca{background:var(--bco)}
+
+/* ---- a folha do modelo */
+.esp,.palco-cel{background:radial-gradient(circle at 3px 3px,color-mix(in srgb,var(--hx-miolo) 55%,transparent) 1.5px,transparent 1.9px) 0 0/9px 9px,var(--chao)}
+.caixa-demo .t-display{text-transform:uppercase}
+.esp-nome h1,.legenda-cel h1{text-transform:uppercase;color:var(--lima);text-shadow:4px 4px 0 var(--hx-miolo)}
+.esp-nome h1{font-size:68px}
