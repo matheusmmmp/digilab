@@ -142,6 +142,8 @@ Cada uma com a recomendação e o custo de errar. **Todas DECIDIDAS** pelo Mathe
 
 ## 8. O que falta conferir antes de contratar (na CN5)
 
+**Conferido em 2026-11-20** no `docs/PLANO_V3_CONTA_CN5.md`, seção 2 (o que não abriu continua "não conferido" lá).
+
 - O preço exato do Lightsail em São Paulo e o do excedente de tráfego lá.
 - A região da Akamai na América do Sul (se é São Paulo).
 - O preço do domínio.
