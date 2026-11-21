@@ -17,6 +17,11 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **Teto de gasto TOTAL** (`--limite-usd`, padrão US$ 2), no mesmo arquivo do servidor Python (`servidor/gasto_fala.json`, fora do git):
   não zera ao reiniciar, e os dois servidores somam um teto só. `DIGILAB_GASTO_FALA` troca o arquivo. Modelo sem preço na tabela não sobe.
 - **Só escuta em `127.0.0.1`,** e pedido com cabeçalho de túnel ou proxy (`Cf-Ray`, `Cf-Connecting-Ip`, `X-Forwarded-For`) leva 403.
+  **A exceção é a VPS (CN5, `docs/infra/DEPLOY_CN5.md`):** com `--borda cloudflare` (ou `DIGILAB_BORDA=cloudflare`), o servidor continua
+  em `127.0.0.1`, mas só aceita o pedido que passou pelo Cloudflare Tunnel (com o `Cf-Ray` e o `Cf-Connecting-Ip`), e não sobe com a conta
+  local. Os arquivos da VPS (systemd, Litestream, instalar, publicar, restaurar) ficam em `deploy/`; o deploy é o `.github/workflows/publicar.yml`.
+  O Worker dos assets (`deploy/worker_assets/worker.ts`) confere a URL assinada da CN4 na frente do bucket privado; o teste
+  `test/worker_assets.test.ts` reprova se a conta dele se separar da do `assinatura.ts`.
 - **Testes sem custo:** o cliente da Anthropic nos testes é sempre o falso (`test/rotas.test.ts`); o Google e o GitHub, um `fetch` falso
   (`test/conta.test.ts`). O job `servidor-web` do CI roda `npm run tipos` e `npm test` quando o PR muda `servidor_web/`.
 - **Dependências** com versão exata, só o Hono (`hono`, `@hono/node-server`), o SDK `@anthropic-ai/sdk`, e no dev o Vitest, o

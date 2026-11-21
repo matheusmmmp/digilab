@@ -1,0 +1,15 @@
+# O modelo do wrangler.toml do Worker dos assets (CN5). O workflow publicar troca <DOMINIO> e <BUCKET> e publica; o segredo vai uma vez,
+# à mão: npx wrangler@4.158.0 secret put DIGILAB_SEGREDO_ASSETS (o mesmo valor do /etc/digilab/api.env da VPS). Nada de chave aqui.
+name = "digilab-assets"
+main = "worker.ts"
+compatibility_date = "2026-11-01"
+workers_dev = false
+routes = [{ pattern = "assets.<DOMINIO>", custom_domain = true }]
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "<BUCKET>"
+
+[vars]
+DIGILAB_ORIGEM_JOGO = "https://<DOMINIO>"
+DIGILAB_VALIDADE_ASSETS_S = "600"
