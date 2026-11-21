@@ -271,7 +271,7 @@ e "artefatos" entraram depois do replay (2026-11-20).
 ## PR-PET-VIVO-RECOMPENSA — o carinho depois do comer e do brincar
 
 **Seção escrita antes da run** (2026-11-20). O plano foi APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas"). Nenhuma vida roda antes da faixa
-reservada e do código na `main`. As linhas "resultado" e "artefatos" entram depois da run.
+reservada e do código na `main`. As linhas "resultado" e "artefatos" entraram depois da run (2026-11-20).
 
 | campo | valor |
 |---|---|
@@ -283,8 +283,8 @@ reservada e do código na `main`. As linhas "resultado" e "artefatos" entram dep
 | regra de leitura | L-ACORDADO, em ordem: o limite de cima do D1 < 0, "não: com a recompensa o pet dorme mais"; o IC dentro de ±δ_A, "não: fica igual"; o limite de baixo > δ_A, "sim, fica mais tempo acordado"; senão "inconclusivo". A L-PORQUÊ e a L-BEM, na seção 7. Nenhuma medida é gate |
 | regra de parada | roda uma vez; as conferências (C-G1, C-HOJE, C-CORPO, C-HORA, C-MESMO-N) falham alto antes de qualquer medida; as premissas (P-EVENTO, P-DOSE, P-SINAL) ficam registradas e não param; com a projeção da fumaça acima de 4 h a run não roda e o plano volta ao Matheus (seções 5 e 9) |
 | o que refutaria | pela regra de leitura: "sim, fica mais tempo acordado" contraria o desfecho esperado |
-| resultado | a run não rodou |
-| artefatos | nenhum ainda |
+| resultado | [RESULTADO_V3_PET_VIVO_RECOMPENSA.md](RESULTADO_V3_PET_VIVO_RECOMPENSA.md): "não: com a recompensa o pet dorme mais" (D1 −0,0109 [−0,0113; −0,0105], n 200); o "Tempo bem" sobe (+0,0183 [+0,0152; +0,0215]); o D2 e o D3 do T_ACORDADO acima de 0. A análise parou num erro do código e foi refeita sobre as medidas gravadas, sem reviver vidas; a guarda da saúde dos dias 8 a 14 não foi medida (D-RC-15) |
+| artefatos | [`artifacts_v3_pet_vivo/recompensa/run/`](../artifacts_v3_pet_vivo/recompensa/run/): `meta.json`, `resultado.json` `97892493…`, `medidas.json.gz` `24bee0aa…`; as vidas rodaram em `82551431`, e a análise, em `56921401` |
 
 ## PR-SOCIAL-PAR-S — o substrato do social
 
