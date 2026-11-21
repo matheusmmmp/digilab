@@ -1,0 +1,1922 @@
+{
+  "CTRL|aleatorio|comedouro|11306018194990864077": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.4536626000008255
+  },
+  "CTRL|aleatorio|comedouro|12444256524210730852": {
+    "vida_cpu": 3.0,
+    "vida_parede": 3.098550400000022
+  },
+  "CTRL|aleatorio|comedouro|13355223314235079827": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.233525000001464
+  },
+  "CTRL|aleatorio|comedouro|13521849304583623837": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.174238499999774
+  },
+  "CTRL|aleatorio|comedouro|14415098315691779268": {
+    "vida_cpu": 3.078125,
+    "vida_parede": 3.1633030000011786
+  },
+  "CTRL|aleatorio|comedouro|1492802588809488874": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.2342458000002807
+  },
+  "CTRL|aleatorio|comedouro|16479936130167219656": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.3203367999994953
+  },
+  "CTRL|aleatorio|comedouro|17463147852217300270": {
+    "vida_cpu": 2.984375,
+    "vida_parede": 3.049837700000353
+  },
+  "CTRL|aleatorio|comedouro|17545051000669625875": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.3576131999998324
+  },
+  "CTRL|aleatorio|comedouro|2011358493130290366": {
+    "vida_cpu": 3.03125,
+    "vida_parede": 3.0361223999989306
+  },
+  "CTRL|aleatorio|comedouro|3769710158804420762": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.261848699999973
+  },
+  "CTRL|aleatorio|comedouro|3782573028181517670": {
+    "vida_cpu": 3.109375,
+    "vida_parede": 3.1476222000001144
+  },
+  "CTRL|aleatorio|comedouro|3931281270658336269": {
+    "vida_cpu": 3.109375,
+    "vida_parede": 3.12609060000068
+  },
+  "CTRL|aleatorio|comedouro|4389490504701586789": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.234876599999552
+  },
+  "CTRL|aleatorio|comedouro|4462939972633478074": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2509761999990587
+  },
+  "CTRL|aleatorio|comedouro|5797409553483757578": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.3367347000003065
+  },
+  "CTRL|aleatorio|comedouro|6532324415081690818": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.224316899999394
+  },
+  "CTRL|aleatorio|comedouro|9346678109428391991": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.1685895999999047
+  },
+  "CTRL|aleatorio|comedouro|9451187992137983920": {
+    "vida_cpu": 3.03125,
+    "vida_parede": 3.0599327999989328
+  },
+  "CTRL|aleatorio|comedouro|9906326622429338203": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.294155399998999
+  },
+  "CTRL|aleatorio|longe_fixo|11306018194990864077": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 3.363401700000395
+  },
+  "CTRL|aleatorio|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 3.550214799999594
+  },
+  "CTRL|aleatorio|longe_fixo|13355223314235079827": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.19101210000008
+  },
+  "CTRL|aleatorio|longe_fixo|13521849304583623837": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.2097670000002836
+  },
+  "CTRL|aleatorio|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.0,
+    "vida_parede": 3.02564810000149
+  },
+  "CTRL|aleatorio|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2827362999996694
+  },
+  "CTRL|aleatorio|longe_fixo|16479936130167219656": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.5408091000008426
+  },
+  "CTRL|aleatorio|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.015625,
+    "vida_parede": 3.034134699999413
+  },
+  "CTRL|aleatorio|longe_fixo|17545051000669625875": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.4278608999993594
+  },
+  "CTRL|aleatorio|longe_fixo|2011358493130290366": {
+    "vida_cpu": 3.015625,
+    "vida_parede": 3.0847355000005336
+  },
+  "CTRL|aleatorio|longe_fixo|3769710158804420762": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.3731017999998585
+  },
+  "CTRL|aleatorio|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.419636399999945
+  },
+  "CTRL|aleatorio|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.514433000000281
+  },
+  "CTRL|aleatorio|longe_fixo|4389490504701586789": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.2630640999996103
+  },
+  "CTRL|aleatorio|longe_fixo|4462939972633478074": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.2232273000008718
+  },
+  "CTRL|aleatorio|longe_fixo|5797409553483757578": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.502420999999231
+  },
+  "CTRL|aleatorio|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2103146000008564
+  },
+  "CTRL|aleatorio|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.109375,
+    "vida_parede": 3.1507639000010386
+  },
+  "CTRL|aleatorio|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.455440499999895
+  },
+  "CTRL|aleatorio|longe_fixo|9906326622429338203": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.3351311000005808
+  },
+  "CTRL|aleatorio|longe|11306018194990864077": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.5621408999995765
+  },
+  "CTRL|aleatorio|longe|12444256524210730852": {
+    "vida_cpu": 3.078125,
+    "vida_parede": 3.090552100000423
+  },
+  "CTRL|aleatorio|longe|13355223314235079827": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.2537781999999424
+  },
+  "CTRL|aleatorio|longe|13521849304583623837": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2801677999996173
+  },
+  "CTRL|aleatorio|longe|14415098315691779268": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.210386300001119
+  },
+  "CTRL|aleatorio|longe|1492802588809488874": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.2737139000000752
+  },
+  "CTRL|aleatorio|longe|16479936130167219656": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.677983100000347
+  },
+  "CTRL|aleatorio|longe|17463147852217300270": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.1929201999992074
+  },
+  "CTRL|aleatorio|longe|17545051000669625875": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.5890304000004107
+  },
+  "CTRL|aleatorio|longe|2011358493130290366": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.1709171000002243
+  },
+  "CTRL|aleatorio|longe|3769710158804420762": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2963938000011694
+  },
+  "CTRL|aleatorio|longe|3782573028181517670": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 3.556909800001449
+  },
+  "CTRL|aleatorio|longe|3931281270658336269": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.1780818000006548
+  },
+  "CTRL|aleatorio|longe|4389490504701586789": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.301076899999316
+  },
+  "CTRL|aleatorio|longe|4462939972633478074": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2564265000000887
+  },
+  "CTRL|aleatorio|longe|5797409553483757578": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.5821524000002682
+  },
+  "CTRL|aleatorio|longe|6532324415081690818": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.343146199998955
+  },
+  "CTRL|aleatorio|longe|9346678109428391991": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.240623100000448
+  },
+  "CTRL|aleatorio|longe|9451187992137983920": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.156624399998691
+  },
+  "CTRL|aleatorio|longe|9906326622429338203": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.324271499999668
+  },
+  "CTRL|atencioso|comedouro|11306018194990864077": {
+    "vida_cpu": 3.96875,
+    "vida_parede": 4.00195100000019
+  },
+  "CTRL|atencioso|comedouro|12444256524210730852": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.2343273000005865
+  },
+  "CTRL|atencioso|comedouro|13355223314235079827": {
+    "vida_cpu": 3.75,
+    "vida_parede": 3.820213799999692
+  },
+  "CTRL|atencioso|comedouro|13521849304583623837": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.04767179999908
+  },
+  "CTRL|atencioso|comedouro|14415098315691779268": {
+    "vida_cpu": 5.203125,
+    "vida_parede": 11.03369080000084
+  },
+  "CTRL|atencioso|comedouro|1492802588809488874": {
+    "vida_cpu": 3.765625,
+    "vida_parede": 3.8171211999997468
+  },
+  "CTRL|atencioso|comedouro|16479936130167219656": {
+    "vida_cpu": 3.96875,
+    "vida_parede": 4.016987099999824
+  },
+  "CTRL|atencioso|comedouro|17463147852217300270": {
+    "vida_cpu": 5.515625,
+    "vida_parede": 11.593505999999252
+  },
+  "CTRL|atencioso|comedouro|17545051000669625875": {
+    "vida_cpu": 3.953125,
+    "vida_parede": 4.030253700000685
+  },
+  "CTRL|atencioso|comedouro|2011358493130290366": {
+    "vida_cpu": 5.0625,
+    "vida_parede": 10.644926099999793
+  },
+  "CTRL|atencioso|comedouro|3769710158804420762": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.5040523999996367
+  },
+  "CTRL|atencioso|comedouro|3782573028181517670": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.3352046999989398
+  },
+  "CTRL|atencioso|comedouro|3931281270658336269": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 3.423060400000395
+  },
+  "CTRL|atencioso|comedouro|4389490504701586789": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 3.4146015999995143
+  },
+  "CTRL|atencioso|comedouro|4462939972633478074": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 3.435973499999818
+  },
+  "CTRL|atencioso|comedouro|5797409553483757578": {
+    "vida_cpu": 4.09375,
+    "vida_parede": 4.150594300001103
+  },
+  "CTRL|atencioso|comedouro|6532324415081690818": {
+    "vida_cpu": 3.90625,
+    "vida_parede": 3.9477014999993116
+  },
+  "CTRL|atencioso|comedouro|9346678109428391991": {
+    "vida_cpu": 5.03125,
+    "vida_parede": 12.604815200000303
+  },
+  "CTRL|atencioso|comedouro|9451187992137983920": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.24672769999961
+  },
+  "CTRL|atencioso|comedouro|9906326622429338203": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.4925447999994503
+  },
+  "CTRL|atencioso|longe_fixo|11306018194990864077": {
+    "vida_cpu": 4.203125,
+    "vida_parede": 4.302709600000526
+  },
+  "CTRL|atencioso|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.3069166999994195
+  },
+  "CTRL|atencioso|longe_fixo|13355223314235079827": {
+    "vida_cpu": 4.078125,
+    "vida_parede": 4.084895800000595
+  },
+  "CTRL|atencioso|longe_fixo|13521849304583623837": {
+    "vida_cpu": 4.078125,
+    "vida_parede": 4.124883200000113
+  },
+  "CTRL|atencioso|longe_fixo|14415098315691779268": {
+    "vida_cpu": 6.296875,
+    "vida_parede": 24.102336800000558
+  },
+  "CTRL|atencioso|longe_fixo|1492802588809488874": {
+    "vida_cpu": 4.140625,
+    "vida_parede": 4.240078599999833
+  },
+  "CTRL|atencioso|longe_fixo|16479936130167219656": {
+    "vida_cpu": 4.40625,
+    "vida_parede": 4.4998302000003605
+  },
+  "CTRL|atencioso|longe_fixo|17463147852217300270": {
+    "vida_cpu": 5.5,
+    "vida_parede": 23.690924700000323
+  },
+  "CTRL|atencioso|longe_fixo|17545051000669625875": {
+    "vida_cpu": 4.46875,
+    "vida_parede": 4.576143399999637
+  },
+  "CTRL|atencioso|longe_fixo|2011358493130290366": {
+    "vida_cpu": 5.71875,
+    "vida_parede": 24.171235499999966
+  },
+  "CTRL|atencioso|longe_fixo|3769710158804420762": {
+    "vida_cpu": 3.609375,
+    "vida_parede": 3.6865107999983593
+  },
+  "CTRL|atencioso|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.2613076999987243
+  },
+  "CTRL|atencioso|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.3026716000003944
+  },
+  "CTRL|atencioso|longe_fixo|4389490504701586789": {
+    "vida_cpu": 3.5625,
+    "vida_parede": 3.673526300000958
+  },
+  "CTRL|atencioso|longe_fixo|4462939972633478074": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.588125199999922
+  },
+  "CTRL|atencioso|longe_fixo|5797409553483757578": {
+    "vida_cpu": 4.53125,
+    "vida_parede": 4.612441999999646
+  },
+  "CTRL|atencioso|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.828125,
+    "vida_parede": 3.909251299999596
+  },
+  "CTRL|atencioso|longe_fixo|9346678109428391991": {
+    "vida_cpu": 5.796875,
+    "vida_parede": 22.990621899998587
+  },
+  "CTRL|atencioso|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.266346100001101
+  },
+  "CTRL|atencioso|longe_fixo|9906326622429338203": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.584776600000623
+  },
+  "CTRL|atencioso|longe|11306018194990864077": {
+    "vida_cpu": 4.359375,
+    "vida_parede": 4.389637099999163
+  },
+  "CTRL|atencioso|longe|12444256524210730852": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 3.6106412000008277
+  },
+  "CTRL|atencioso|longe|13355223314235079827": {
+    "vida_cpu": 3.734375,
+    "vida_parede": 3.8216198999998596
+  },
+  "CTRL|atencioso|longe|13521849304583623837": {
+    "vida_cpu": 3.671875,
+    "vida_parede": 3.7116726000003837
+  },
+  "CTRL|atencioso|longe|14415098315691779268": {
+    "vida_cpu": 5.375,
+    "vida_parede": 11.065707400000974
+  },
+  "CTRL|atencioso|longe|1492802588809488874": {
+    "vida_cpu": 3.859375,
+    "vida_parede": 3.885634000000209
+  },
+  "CTRL|atencioso|longe|16479936130167219656": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.059080099999846
+  },
+  "CTRL|atencioso|longe|17463147852217300270": {
+    "vida_cpu": 5.390625,
+    "vida_parede": 9.880860000001121
+  },
+  "CTRL|atencioso|longe|17545051000669625875": {
+    "vida_cpu": 4.0625,
+    "vida_parede": 4.0987957999986975
+  },
+  "CTRL|atencioso|longe|2011358493130290366": {
+    "vida_cpu": 5.265625,
+    "vida_parede": 11.539072600000509
+  },
+  "CTRL|atencioso|longe|3769710158804420762": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.524781300000541
+  },
+  "CTRL|atencioso|longe|3782573028181517670": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.4740256999994017
+  },
+  "CTRL|atencioso|longe|3931281270658336269": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.4988728999996965
+  },
+  "CTRL|atencioso|longe|4389490504701586789": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.507312499999898
+  },
+  "CTRL|atencioso|longe|4462939972633478074": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.5046741999994993
+  },
+  "CTRL|atencioso|longe|5797409553483757578": {
+    "vida_cpu": 4.09375,
+    "vida_parede": 4.100313400000232
+  },
+  "CTRL|atencioso|longe|6532324415081690818": {
+    "vida_cpu": 3.65625,
+    "vida_parede": 3.676299900000231
+  },
+  "CTRL|atencioso|longe|9346678109428391991": {
+    "vida_cpu": 4.59375,
+    "vida_parede": 8.313465200000792
+  },
+  "CTRL|atencioso|longe|9451187992137983920": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.58179999999993
+  },
+  "CTRL|atencioso|longe|9906326622429338203": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 3.4360953999985213
+  },
+  "CTRL|incoerente|comedouro|11306018194990864077": {
+    "vida_cpu": 3.90625,
+    "vida_parede": 3.9623437999998714
+  },
+  "CTRL|incoerente|comedouro|12444256524210730852": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.350758600001427
+  },
+  "CTRL|incoerente|comedouro|13355223314235079827": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.391681499999322
+  },
+  "CTRL|incoerente|comedouro|13521849304583623837": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.3432686000014655
+  },
+  "CTRL|incoerente|comedouro|14415098315691779268": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.2361443000008876
+  },
+  "CTRL|incoerente|comedouro|1492802588809488874": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.2182167999999365
+  },
+  "CTRL|incoerente|comedouro|16479936130167219656": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.47712120000142
+  },
+  "CTRL|incoerente|comedouro|17463147852217300270": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.2691419000002497
+  },
+  "CTRL|incoerente|comedouro|17545051000669625875": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.512058000000252
+  },
+  "CTRL|incoerente|comedouro|2011358493130290366": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.2284270000000106
+  },
+  "CTRL|incoerente|comedouro|3769710158804420762": {
+    "vida_cpu": 3.125,
+    "vida_parede": 3.1964246000006824
+  },
+  "CTRL|incoerente|comedouro|3782573028181517670": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.4064283999996405
+  },
+  "CTRL|incoerente|comedouro|3931281270658336269": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.3681217999983346
+  },
+  "CTRL|incoerente|comedouro|4389490504701586789": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.256034699999873
+  },
+  "CTRL|incoerente|comedouro|4462939972633478074": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2347976000000926
+  },
+  "CTRL|incoerente|comedouro|5797409553483757578": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.4070327000008547
+  },
+  "CTRL|incoerente|comedouro|6532324415081690818": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.24828129999878
+  },
+  "CTRL|incoerente|comedouro|9346678109428391991": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.3654334000002564
+  },
+  "CTRL|incoerente|comedouro|9451187992137983920": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2880203000004258
+  },
+  "CTRL|incoerente|comedouro|9906326622429338203": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.2442441000002873
+  },
+  "CTRL|incoerente|longe_fixo|11306018194990864077": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.309289800001352
+  },
+  "CTRL|incoerente|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.6641445999994176
+  },
+  "CTRL|incoerente|longe_fixo|13355223314235079827": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.3096078999988094
+  },
+  "CTRL|incoerente|longe_fixo|13521849304583623837": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2408749999995052
+  },
+  "CTRL|incoerente|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.288522999999259
+  },
+  "CTRL|incoerente|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.207177899999806
+  },
+  "CTRL|incoerente|longe_fixo|16479936130167219656": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.5200009000000136
+  },
+  "CTRL|incoerente|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.2443583000003855
+  },
+  "CTRL|incoerente|longe_fixo|17545051000669625875": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 3.4482468999995035
+  },
+  "CTRL|incoerente|longe_fixo|2011358493130290366": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.2407474999999977
+  },
+  "CTRL|incoerente|longe_fixo|3769710158804420762": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.320246199999019
+  },
+  "CTRL|incoerente|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.3949690999997983
+  },
+  "CTRL|incoerente|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.6125436999991507
+  },
+  "CTRL|incoerente|longe_fixo|4389490504701586789": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.3112356000001455
+  },
+  "CTRL|incoerente|longe_fixo|4462939972633478074": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.298047800000859
+  },
+  "CTRL|incoerente|longe_fixo|5797409553483757578": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.4421567999997933
+  },
+  "CTRL|incoerente|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.284464399999706
+  },
+  "CTRL|incoerente|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.2716036000001623
+  },
+  "CTRL|incoerente|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.715898399999787
+  },
+  "CTRL|incoerente|longe_fixo|9906326622429338203": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.238051300000734
+  },
+  "CTRL|incoerente|longe|11306018194990864077": {
+    "vida_cpu": 4.203125,
+    "vida_parede": 4.251692899999398
+  },
+  "CTRL|incoerente|longe|12444256524210730852": {
+    "vida_cpu": 3.5625,
+    "vida_parede": 3.6056619999999384
+  },
+  "CTRL|incoerente|longe|13355223314235079827": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.323324400000274
+  },
+  "CTRL|incoerente|longe|13521849304583623837": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.4000486000004457
+  },
+  "CTRL|incoerente|longe|14415098315691779268": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.4995617999993556
+  },
+  "CTRL|incoerente|longe|1492802588809488874": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.498815700000705
+  },
+  "CTRL|incoerente|longe|16479936130167219656": {
+    "vida_cpu": 4.3125,
+    "vida_parede": 4.3529144000003726
+  },
+  "CTRL|incoerente|longe|17463147852217300270": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.472693400000935
+  },
+  "CTRL|incoerente|longe|17545051000669625875": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.020366400000057
+  },
+  "CTRL|incoerente|longe|2011358493130290366": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.4051429999999527
+  },
+  "CTRL|incoerente|longe|3769710158804420762": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.354858200000308
+  },
+  "CTRL|incoerente|longe|3782573028181517670": {
+    "vida_cpu": 3.59375,
+    "vida_parede": 3.5864626000002318
+  },
+  "CTRL|incoerente|longe|3931281270658336269": {
+    "vida_cpu": 3.578125,
+    "vida_parede": 3.5901155000010476
+  },
+  "CTRL|incoerente|longe|4389490504701586789": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.333752499998809
+  },
+  "CTRL|incoerente|longe|4462939972633478074": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.3265627000000677
+  },
+  "CTRL|incoerente|longe|5797409553483757578": {
+    "vida_cpu": 4.109375,
+    "vida_parede": 4.149100900000121
+  },
+  "CTRL|incoerente|longe|6532324415081690818": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.5287312000000384
+  },
+  "CTRL|incoerente|longe|9346678109428391991": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.5721148000011453
+  },
+  "CTRL|incoerente|longe|9451187992137983920": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.560777799999414
+  },
+  "CTRL|incoerente|longe|9906326622429338203": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.323575600001277
+  },
+  "CTRL|relapso|comedouro|11306018194990864077": {
+    "vida_cpu": 3.984375,
+    "vida_parede": 4.079858199998853
+  },
+  "CTRL|relapso|comedouro|12444256524210730852": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.6772554999988643
+  },
+  "CTRL|relapso|comedouro|13355223314235079827": {
+    "vida_cpu": 3.75,
+    "vida_parede": 3.803065299998707
+  },
+  "CTRL|relapso|comedouro|13521849304583623837": {
+    "vida_cpu": 3.5625,
+    "vida_parede": 3.590745000001334
+  },
+  "CTRL|relapso|comedouro|14415098315691779268": {
+    "vida_cpu": 3.015625,
+    "vida_parede": 3.031676900000093
+  },
+  "CTRL|relapso|comedouro|1492802588809488874": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.4748018000009324
+  },
+  "CTRL|relapso|comedouro|16479936130167219656": {
+    "vida_cpu": 3.765625,
+    "vida_parede": 3.8255275999999867
+  },
+  "CTRL|relapso|comedouro|17463147852217300270": {
+    "vida_cpu": 2.90625,
+    "vida_parede": 2.9893236000007164
+  },
+  "CTRL|relapso|comedouro|17545051000669625875": {
+    "vida_cpu": 3.90625,
+    "vida_parede": 3.9228065999996033
+  },
+  "CTRL|relapso|comedouro|2011358493130290366": {
+    "vida_cpu": 2.9375,
+    "vida_parede": 2.9831716000007873
+  },
+  "CTRL|relapso|comedouro|3769710158804420762": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2963055000000168
+  },
+  "CTRL|relapso|comedouro|3782573028181517670": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.664073700001609
+  },
+  "CTRL|relapso|comedouro|3931281270658336269": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.7023070999985066
+  },
+  "CTRL|relapso|comedouro|4389490504701586789": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.178357299999334
+  },
+  "CTRL|relapso|comedouro|4462939972633478074": {
+    "vida_cpu": 3.046875,
+    "vida_parede": 3.112431999999899
+  },
+  "CTRL|relapso|comedouro|5797409553483757578": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.028976699999475
+  },
+  "CTRL|relapso|comedouro|6532324415081690818": {
+    "vida_cpu": 3.578125,
+    "vida_parede": 3.6200284999995347
+  },
+  "CTRL|relapso|comedouro|9346678109428391991": {
+    "vida_cpu": 2.984375,
+    "vida_parede": 3.0364514000011695
+  },
+  "CTRL|relapso|comedouro|9451187992137983920": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.7303251000012096
+  },
+  "CTRL|relapso|comedouro|9906326622429338203": {
+    "vida_cpu": 3.09375,
+    "vida_parede": 3.121217500000057
+  },
+  "CTRL|relapso|longe_fixo|11306018194990864077": {
+    "vida_cpu": 4.046875,
+    "vida_parede": 4.081862199998795
+  },
+  "CTRL|relapso|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.015625,
+    "vida_parede": 3.075715599999967
+  },
+  "CTRL|relapso|longe_fixo|13355223314235079827": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.5845100000005914
+  },
+  "CTRL|relapso|longe_fixo|13521849304583623837": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.469002800000453
+  },
+  "CTRL|relapso|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.3875296999995044
+  },
+  "CTRL|relapso|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.4725899000004574
+  },
+  "CTRL|relapso|longe_fixo|16479936130167219656": {
+    "vida_cpu": 3.96875,
+    "vida_parede": 3.9784644999999728
+  },
+  "CTRL|relapso|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.3300338000008196
+  },
+  "CTRL|relapso|longe_fixo|17545051000669625875": {
+    "vida_cpu": 3.921875,
+    "vida_parede": 3.95447459999923
+  },
+  "CTRL|relapso|longe_fixo|2011358493130290366": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.699280099999669
+  },
+  "CTRL|relapso|longe_fixo|3769710158804420762": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.3380777000002126
+  },
+  "CTRL|relapso|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.16306860000077
+  },
+  "CTRL|relapso|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.03125,
+    "vida_parede": 3.080733099999634
+  },
+  "CTRL|relapso|longe_fixo|4389490504701586789": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.360988600001292
+  },
+  "CTRL|relapso|longe_fixo|4462939972633478074": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2940730999998777
+  },
+  "CTRL|relapso|longe_fixo|5797409553483757578": {
+    "vida_cpu": 3.828125,
+    "vida_parede": 3.8716529000012088
+  },
+  "CTRL|relapso|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.591412699999637
+  },
+  "CTRL|relapso|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.2893008000010013
+  },
+  "CTRL|relapso|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.046875,
+    "vida_parede": 3.0626377999997203
+  },
+  "CTRL|relapso|longe_fixo|9906326622429338203": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.3014208000004146
+  },
+  "CTRL|relapso|longe|11306018194990864077": {
+    "vida_cpu": 3.71875,
+    "vida_parede": 3.7404372000000876
+  },
+  "CTRL|relapso|longe|12444256524210730852": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.4821871999993164
+  },
+  "CTRL|relapso|longe|13355223314235079827": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.488148899999942
+  },
+  "CTRL|relapso|longe|13521849304583623837": {
+    "vida_cpu": 3.921875,
+    "vida_parede": 3.958187899999757
+  },
+  "CTRL|relapso|longe|14415098315691779268": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.166364999999132
+  },
+  "CTRL|relapso|longe|1492802588809488874": {
+    "vida_cpu": 3.953125,
+    "vida_parede": 4.014253199999075
+  },
+  "CTRL|relapso|longe|16479936130167219656": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.0775366999987455
+  },
+  "CTRL|relapso|longe|17463147852217300270": {
+    "vida_cpu": 3.046875,
+    "vida_parede": 3.0862880000004225
+  },
+  "CTRL|relapso|longe|17545051000669625875": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.0851966999998695
+  },
+  "CTRL|relapso|longe|2011358493130290366": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.168930099998761
+  },
+  "CTRL|relapso|longe|3769710158804420762": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 3.5658882000006997
+  },
+  "CTRL|relapso|longe|3782573028181517670": {
+    "vida_cpu": 3.640625,
+    "vida_parede": 3.6458843999989767
+  },
+  "CTRL|relapso|longe|3931281270658336269": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.4785644999992655
+  },
+  "CTRL|relapso|longe|4389490504701586789": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.5887000000002445
+  },
+  "CTRL|relapso|longe|4462939972633478074": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.5223523000004207
+  },
+  "CTRL|relapso|longe|5797409553483757578": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.0545934999991005
+  },
+  "CTRL|relapso|longe|6532324415081690818": {
+    "vida_cpu": 3.78125,
+    "vida_parede": 3.850732299999436
+  },
+  "CTRL|relapso|longe|9346678109428391991": {
+    "vida_cpu": 3.078125,
+    "vida_parede": 3.136681199999657
+  },
+  "CTRL|relapso|longe|9451187992137983920": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.431608499999129
+  },
+  "CTRL|relapso|longe|9906326622429338203": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.527942400000029
+  },
+  "DTB|aleatorio|comedouro|11306018194990864077": {
+    "vida_cpu": 3.8125,
+    "vida_parede": 3.8877661999995325
+  },
+  "DTB|aleatorio|comedouro|12444256524210730852": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2656732000014017
+  },
+  "DTB|aleatorio|comedouro|13355223314235079827": {
+    "vida_cpu": 3.765625,
+    "vida_parede": 3.7692145999990316
+  },
+  "DTB|aleatorio|comedouro|13521849304583623837": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.1927588999988075
+  },
+  "DTB|aleatorio|comedouro|14415098315691779268": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 3.508664199998748
+  },
+  "DTB|aleatorio|comedouro|1492802588809488874": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.18000260000008
+  },
+  "DTB|aleatorio|comedouro|16479936130167219656": {
+    "vida_cpu": 3.96875,
+    "vida_parede": 4.020695400000477
+  },
+  "DTB|aleatorio|comedouro|17463147852217300270": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.433577600000717
+  },
+  "DTB|aleatorio|comedouro|17545051000669625875": {
+    "vida_cpu": 3.875,
+    "vida_parede": 3.9355604000011226
+  },
+  "DTB|aleatorio|comedouro|2011358493130290366": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.4666063000004215
+  },
+  "DTB|aleatorio|comedouro|3769710158804420762": {
+    "vida_cpu": 5.125,
+    "vida_parede": 10.816931299999851
+  },
+  "DTB|aleatorio|comedouro|3782573028181517670": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.170730800000456
+  },
+  "DTB|aleatorio|comedouro|3931281270658336269": {
+    "vida_cpu": 3.109375,
+    "vida_parede": 3.1279278000001796
+  },
+  "DTB|aleatorio|comedouro|4389490504701586789": {
+    "vida_cpu": 4.765625,
+    "vida_parede": 12.107601600000635
+  },
+  "DTB|aleatorio|comedouro|4462939972633478074": {
+    "vida_cpu": 5.234375,
+    "vida_parede": 12.195090799999889
+  },
+  "DTB|aleatorio|comedouro|5797409553483757578": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.083710299999439
+  },
+  "DTB|aleatorio|comedouro|6532324415081690818": {
+    "vida_cpu": 3.125,
+    "vida_parede": 3.2032529000007344
+  },
+  "DTB|aleatorio|comedouro|9346678109428391991": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.862540699999954
+  },
+  "DTB|aleatorio|comedouro|9451187992137983920": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.2117342999990797
+  },
+  "DTB|aleatorio|comedouro|9906326622429338203": {
+    "vida_cpu": 5.046875,
+    "vida_parede": 11.064802099999724
+  },
+  "DTB|aleatorio|longe_fixo|11306018194990864077": {
+    "vida_cpu": 4.140625,
+    "vida_parede": 4.205783999999767
+  },
+  "DTB|aleatorio|longe_fixo|12444256524210730852": {
+    "vida_cpu": 4.0625,
+    "vida_parede": 4.105465599999661
+  },
+  "DTB|aleatorio|longe_fixo|13355223314235079827": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.238654000000679
+  },
+  "DTB|aleatorio|longe_fixo|13521849304583623837": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.2051654000006238
+  },
+  "DTB|aleatorio|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.2937264000011055
+  },
+  "DTB|aleatorio|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2685928999999305
+  },
+  "DTB|aleatorio|longe_fixo|16479936130167219656": {
+    "vida_cpu": 3.5625,
+    "vida_parede": 3.609796799999458
+  },
+  "DTB|aleatorio|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.40167239999937
+  },
+  "DTB|aleatorio|longe_fixo|17545051000669625875": {
+    "vida_cpu": 3.71875,
+    "vida_parede": 3.7860990000008314
+  },
+  "DTB|aleatorio|longe_fixo|2011358493130290366": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.290273900000102
+  },
+  "DTB|aleatorio|longe_fixo|3769710158804420762": {
+    "vida_cpu": 5.453125,
+    "vida_parede": 13.236366400000406
+  },
+  "DTB|aleatorio|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.890625,
+    "vida_parede": 3.9375316000005114
+  },
+  "DTB|aleatorio|longe_fixo|3931281270658336269": {
+    "vida_cpu": 4.046875,
+    "vida_parede": 4.107677500000136
+  },
+  "DTB|aleatorio|longe_fixo|4389490504701586789": {
+    "vida_cpu": 4.9375,
+    "vida_parede": 12.831416600000011
+  },
+  "DTB|aleatorio|longe_fixo|4462939972633478074": {
+    "vida_cpu": 5.28125,
+    "vida_parede": 12.667502899999818
+  },
+  "DTB|aleatorio|longe_fixo|5797409553483757578": {
+    "vida_cpu": 3.828125,
+    "vida_parede": 3.851312799999505
+  },
+  "DTB|aleatorio|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.1964673999991646
+  },
+  "DTB|aleatorio|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.5580205999995087
+  },
+  "DTB|aleatorio|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.828125,
+    "vida_parede": 3.9544628000003286
+  },
+  "DTB|aleatorio|longe_fixo|9906326622429338203": {
+    "vida_cpu": 5.140625,
+    "vida_parede": 13.31821409999975
+  },
+  "DTB|aleatorio|longe|11306018194990864077": {
+    "vida_cpu": 3.703125,
+    "vida_parede": 3.734871499998917
+  },
+  "DTB|aleatorio|longe|12444256524210730852": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.2585089999993215
+  },
+  "DTB|aleatorio|longe|13355223314235079827": {
+    "vida_cpu": 3.890625,
+    "vida_parede": 3.987873900001432
+  },
+  "DTB|aleatorio|longe|13521849304583623837": {
+    "vida_cpu": 3.890625,
+    "vida_parede": 3.942311400000108
+  },
+  "DTB|aleatorio|longe|14415098315691779268": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 4.167006400000901
+  },
+  "DTB|aleatorio|longe|1492802588809488874": {
+    "vida_cpu": 3.78125,
+    "vida_parede": 3.848906800001714
+  },
+  "DTB|aleatorio|longe|16479936130167219656": {
+    "vida_cpu": 4.046875,
+    "vida_parede": 4.078885799999625
+  },
+  "DTB|aleatorio|longe|17463147852217300270": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 4.12736170000062
+  },
+  "DTB|aleatorio|longe|17545051000669625875": {
+    "vida_cpu": 4.09375,
+    "vida_parede": 4.1260341000015615
+  },
+  "DTB|aleatorio|longe|2011358493130290366": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 4.201921100000618
+  },
+  "DTB|aleatorio|longe|3769710158804420762": {
+    "vida_cpu": 4.9375,
+    "vida_parede": 11.167902099999992
+  },
+  "DTB|aleatorio|longe|3782573028181517670": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2745295999993687
+  },
+  "DTB|aleatorio|longe|3931281270658336269": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.188791000000492
+  },
+  "DTB|aleatorio|longe|4389490504701586789": {
+    "vida_cpu": 5.09375,
+    "vida_parede": 10.143723600000158
+  },
+  "DTB|aleatorio|longe|4462939972633478074": {
+    "vida_cpu": 5.046875,
+    "vida_parede": 9.783010699999068
+  },
+  "DTB|aleatorio|longe|5797409553483757578": {
+    "vida_cpu": 3.984375,
+    "vida_parede": 4.035812199999782
+  },
+  "DTB|aleatorio|longe|6532324415081690818": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.018669999999474
+  },
+  "DTB|aleatorio|longe|9346678109428391991": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.2699582999994163
+  },
+  "DTB|aleatorio|longe|9451187992137983920": {
+    "vida_cpu": 3.125,
+    "vida_parede": 3.2051675000002433
+  },
+  "DTB|aleatorio|longe|9906326622429338203": {
+    "vida_cpu": 5.015625,
+    "vida_parede": 10.16291690000071
+  },
+  "DTB|atencioso|comedouro|11306018194990864077": {
+    "vida_cpu": 4.34375,
+    "vida_parede": 4.3943003000003955
+  },
+  "DTB|atencioso|comedouro|12444256524210730852": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.340071100001296
+  },
+  "DTB|atencioso|comedouro|13355223314235079827": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.319062500000655
+  },
+  "DTB|atencioso|comedouro|13521849304583623837": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.379662900000767
+  },
+  "DTB|atencioso|comedouro|14415098315691779268": {
+    "vida_cpu": 3.921875,
+    "vida_parede": 4.070005100000344
+  },
+  "DTB|atencioso|comedouro|1492802588809488874": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.365329299998848
+  },
+  "DTB|atencioso|comedouro|16479936130167219656": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.015677000001233
+  },
+  "DTB|atencioso|comedouro|17463147852217300270": {
+    "vida_cpu": 3.984375,
+    "vida_parede": 4.068268300001364
+  },
+  "DTB|atencioso|comedouro|17545051000669625875": {
+    "vida_cpu": 3.828125,
+    "vida_parede": 3.8634342000004835
+  },
+  "DTB|atencioso|comedouro|2011358493130290366": {
+    "vida_cpu": 3.8125,
+    "vida_parede": 3.981454999999187
+  },
+  "DTB|atencioso|comedouro|3769710158804420762": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2656630000001314
+  },
+  "DTB|atencioso|comedouro|3782573028181517670": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.4686287000004086
+  },
+  "DTB|atencioso|comedouro|3931281270658336269": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.470146499999828
+  },
+  "DTB|atencioso|comedouro|4389490504701586789": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.3171990999999252
+  },
+  "DTB|atencioso|comedouro|4462939972633478074": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.328896799999711
+  },
+  "DTB|atencioso|comedouro|5797409553483757578": {
+    "vida_cpu": 3.875,
+    "vida_parede": 3.9023505999994086
+  },
+  "DTB|atencioso|comedouro|6532324415081690818": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.35410469999988
+  },
+  "DTB|atencioso|comedouro|9346678109428391991": {
+    "vida_cpu": 3.703125,
+    "vida_parede": 3.7588840999997046
+  },
+  "DTB|atencioso|comedouro|9451187992137983920": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.502882900000259
+  },
+  "DTB|atencioso|comedouro|9906326622429338203": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.2799660000000586
+  },
+  "DTB|atencioso|longe_fixo|11306018194990864077": {
+    "vida_cpu": 4.265625,
+    "vida_parede": 4.343702599999233
+  },
+  "DTB|atencioso|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.625,
+    "vida_parede": 3.6529356999999436
+  },
+  "DTB|atencioso|longe_fixo|13355223314235079827": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.457258099999308
+  },
+  "DTB|atencioso|longe_fixo|13521849304583623837": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.31625189999977
+  },
+  "DTB|atencioso|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.828125,
+    "vida_parede": 3.8636967000002187
+  },
+  "DTB|atencioso|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.3352334999999584
+  },
+  "DTB|atencioso|longe_fixo|16479936130167219656": {
+    "vida_cpu": 4.328125,
+    "vida_parede": 4.43244919999961
+  },
+  "DTB|atencioso|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.84375,
+    "vida_parede": 3.859654199999568
+  },
+  "DTB|atencioso|longe_fixo|17545051000669625875": {
+    "vida_cpu": 4.265625,
+    "vida_parede": 4.35225089999949
+  },
+  "DTB|atencioso|longe_fixo|2011358493130290366": {
+    "vida_cpu": 4.0,
+    "vida_parede": 4.060292599999229
+  },
+  "DTB|atencioso|longe_fixo|3769710158804420762": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.301297900001373
+  },
+  "DTB|atencioso|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.4573784999993222
+  },
+  "DTB|atencioso|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 3.5544654999994236
+  },
+  "DTB|atencioso|longe_fixo|4389490504701586789": {
+    "vida_cpu": 3.109375,
+    "vida_parede": 3.1782602999992378
+  },
+  "DTB|atencioso|longe_fixo|4462939972633478074": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.266851200000019
+  },
+  "DTB|atencioso|longe_fixo|5797409553483757578": {
+    "vida_cpu": 4.421875,
+    "vida_parede": 4.542546900000161
+  },
+  "DTB|atencioso|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.409263600000486
+  },
+  "DTB|atencioso|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.96875,
+    "vida_parede": 4.053178500000286
+  },
+  "DTB|atencioso|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.5625,
+    "vida_parede": 3.575525700000071
+  },
+  "DTB|atencioso|longe_fixo|9906326622429338203": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.284002899999905
+  },
+  "DTB|atencioso|longe|11306018194990864077": {
+    "vida_cpu": 4.140625,
+    "vida_parede": 4.264773400000195
+  },
+  "DTB|atencioso|longe|12444256524210730852": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.657037399998444
+  },
+  "DTB|atencioso|longe|13355223314235079827": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.39124400000037
+  },
+  "DTB|atencioso|longe|13521849304583623837": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.3495493000009446
+  },
+  "DTB|atencioso|longe|14415098315691779268": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.601934499998606
+  },
+  "DTB|atencioso|longe|1492802588809488874": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.356320799999594
+  },
+  "DTB|atencioso|longe|16479936130167219656": {
+    "vida_cpu": 4.578125,
+    "vida_parede": 4.586051500000394
+  },
+  "DTB|atencioso|longe|17463147852217300270": {
+    "vida_cpu": 3.640625,
+    "vida_parede": 3.6697560000011435
+  },
+  "DTB|atencioso|longe|17545051000669625875": {
+    "vida_cpu": 4.5,
+    "vida_parede": 4.521400999999969
+  },
+  "DTB|atencioso|longe|2011358493130290366": {
+    "vida_cpu": 3.625,
+    "vida_parede": 3.6278091999993194
+  },
+  "DTB|atencioso|longe|3769710158804420762": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.5128801000009844
+  },
+  "DTB|atencioso|longe|3782573028181517670": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.5695763000003353
+  },
+  "DTB|atencioso|longe|3931281270658336269": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.5510047000007035
+  },
+  "DTB|atencioso|longe|4389490504701586789": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.490490800000771
+  },
+  "DTB|atencioso|longe|4462939972633478074": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.5063167000007525
+  },
+  "DTB|atencioso|longe|5797409553483757578": {
+    "vida_cpu": 4.40625,
+    "vida_parede": 4.416469999998299
+  },
+  "DTB|atencioso|longe|6532324415081690818": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.3497169999991456
+  },
+  "DTB|atencioso|longe|9346678109428391991": {
+    "vida_cpu": 3.640625,
+    "vida_parede": 3.685277100001258
+  },
+  "DTB|atencioso|longe|9451187992137983920": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.52739450000081
+  },
+  "DTB|atencioso|longe|9906326622429338203": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.4756956000001082
+  },
+  "DTB|incoerente|comedouro|11306018194990864077": {
+    "vida_cpu": 4.125,
+    "vida_parede": 4.2519056000001
+  },
+  "DTB|incoerente|comedouro|12444256524210730852": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.569365800000014
+  },
+  "DTB|incoerente|comedouro|13355223314235079827": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.072313899998335
+  },
+  "DTB|incoerente|comedouro|13521849304583623837": {
+    "vida_cpu": 4.28125,
+    "vida_parede": 4.352332299999034
+  },
+  "DTB|incoerente|comedouro|14415098315691779268": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.231826999999612
+  },
+  "DTB|incoerente|comedouro|1492802588809488874": {
+    "vida_cpu": 4.328125,
+    "vida_parede": 4.41623570000047
+  },
+  "DTB|incoerente|comedouro|16479936130167219656": {
+    "vida_cpu": 4.046875,
+    "vida_parede": 4.13119590000133
+  },
+  "DTB|incoerente|comedouro|17463147852217300270": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.220353199998499
+  },
+  "DTB|incoerente|comedouro|17545051000669625875": {
+    "vida_cpu": 3.90625,
+    "vida_parede": 3.987800899998547
+  },
+  "DTB|incoerente|comedouro|2011358493130290366": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.2175850000003265
+  },
+  "DTB|incoerente|comedouro|3769710158804420762": {
+    "vida_cpu": 5.78125,
+    "vida_parede": 11.641297500000292
+  },
+  "DTB|incoerente|comedouro|3782573028181517670": {
+    "vida_cpu": 3.671875,
+    "vida_parede": 3.7484825999999885
+  },
+  "DTB|incoerente|comedouro|3931281270658336269": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.500764299998991
+  },
+  "DTB|incoerente|comedouro|4389490504701586789": {
+    "vida_cpu": 5.296875,
+    "vida_parede": 10.613761600001453
+  },
+  "DTB|incoerente|comedouro|4462939972633478074": {
+    "vida_cpu": 5.515625,
+    "vida_parede": 10.748607800000173
+  },
+  "DTB|incoerente|comedouro|5797409553483757578": {
+    "vida_cpu": 4.140625,
+    "vida_parede": 4.207940899999812
+  },
+  "DTB|incoerente|comedouro|6532324415081690818": {
+    "vida_cpu": 4.21875,
+    "vida_parede": 4.245712300000378
+  },
+  "DTB|incoerente|comedouro|9346678109428391991": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.230532100000346
+  },
+  "DTB|incoerente|comedouro|9451187992137983920": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.5466883999997663
+  },
+  "DTB|incoerente|comedouro|9906326622429338203": {
+    "vida_cpu": 5.4375,
+    "vida_parede": 10.959008499999982
+  },
+  "DTB|incoerente|longe_fixo|11306018194990864077": {
+    "vida_cpu": 3.953125,
+    "vida_parede": 4.025523299998895
+  },
+  "DTB|incoerente|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.208340999999564
+  },
+  "DTB|incoerente|longe_fixo|13355223314235079827": {
+    "vida_cpu": 4.296875,
+    "vida_parede": 4.334919000000809
+  },
+  "DTB|incoerente|longe_fixo|13521849304583623837": {
+    "vida_cpu": 4.234375,
+    "vida_parede": 4.268789400000969
+  },
+  "DTB|incoerente|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.227199400000245
+  },
+  "DTB|incoerente|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.921875,
+    "vida_parede": 4.026070800000525
+  },
+  "DTB|incoerente|longe_fixo|16479936130167219656": {
+    "vida_cpu": 3.953125,
+    "vida_parede": 4.001056000000972
+  },
+  "DTB|incoerente|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.207666700000118
+  },
+  "DTB|incoerente|longe_fixo|17545051000669625875": {
+    "vida_cpu": 3.984375,
+    "vida_parede": 4.050804900000003
+  },
+  "DTB|incoerente|longe_fixo|2011358493130290366": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.3758453000009467
+  },
+  "DTB|incoerente|longe_fixo|3769710158804420762": {
+    "vida_cpu": 4.921875,
+    "vida_parede": 11.07744509999975
+  },
+  "DTB|incoerente|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.448594799998318
+  },
+  "DTB|incoerente|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.2166981999998825
+  },
+  "DTB|incoerente|longe_fixo|4389490504701586789": {
+    "vida_cpu": 5.015625,
+    "vida_parede": 12.152123800000481
+  },
+  "DTB|incoerente|longe_fixo|4462939972633478074": {
+    "vida_cpu": 5.21875,
+    "vida_parede": 12.276260000000548
+  },
+  "DTB|incoerente|longe_fixo|5797409553483757578": {
+    "vida_cpu": 3.9375,
+    "vida_parede": 3.9508076000001893
+  },
+  "DTB|incoerente|longe_fixo|6532324415081690818": {
+    "vida_cpu": 4.1875,
+    "vida_parede": 4.256241600000067
+  },
+  "DTB|incoerente|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.274638799999593
+  },
+  "DTB|incoerente|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.2957461000005424
+  },
+  "DTB|incoerente|longe_fixo|9906326622429338203": {
+    "vida_cpu": 5.15625,
+    "vida_parede": 12.265486300000703
+  },
+  "DTB|incoerente|longe|11306018194990864077": {
+    "vida_cpu": 3.921875,
+    "vida_parede": 3.974732500000755
+  },
+  "DTB|incoerente|longe|12444256524210730852": {
+    "vida_cpu": 4.65625,
+    "vida_parede": 4.7149437999996735
+  },
+  "DTB|incoerente|longe|13355223314235079827": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.5367473000005702
+  },
+  "DTB|incoerente|longe|13521849304583623837": {
+    "vida_cpu": 3.953125,
+    "vida_parede": 4.024845699999787
+  },
+  "DTB|incoerente|longe|14415098315691779268": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.3202402999995684
+  },
+  "DTB|incoerente|longe|1492802588809488874": {
+    "vida_cpu": 4.15625,
+    "vida_parede": 4.199435800001083
+  },
+  "DTB|incoerente|longe|16479936130167219656": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.07661089999965
+  },
+  "DTB|incoerente|longe|17463147852217300270": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2165502999996534
+  },
+  "DTB|incoerente|longe|17545051000669625875": {
+    "vida_cpu": 4.0625,
+    "vida_parede": 4.109966799998801
+  },
+  "DTB|incoerente|longe|2011358493130290366": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.2573767000012595
+  },
+  "DTB|incoerente|longe|3769710158804420762": {
+    "vida_cpu": 5.390625,
+    "vida_parede": 15.933430099999896
+  },
+  "DTB|incoerente|longe|3782573028181517670": {
+    "vida_cpu": 4.796875,
+    "vida_parede": 4.953508900000088
+  },
+  "DTB|incoerente|longe|3931281270658336269": {
+    "vida_cpu": 4.6875,
+    "vida_parede": 4.794194599999173
+  },
+  "DTB|incoerente|longe|4389490504701586789": {
+    "vida_cpu": 5.40625,
+    "vida_parede": 15.729777200000171
+  },
+  "DTB|incoerente|longe|4462939972633478074": {
+    "vida_cpu": 5.875,
+    "vida_parede": 15.522264900000664
+  },
+  "DTB|incoerente|longe|5797409553483757578": {
+    "vida_cpu": 3.859375,
+    "vida_parede": 3.922809799998504
+  },
+  "DTB|incoerente|longe|6532324415081690818": {
+    "vida_cpu": 4.015625,
+    "vida_parede": 4.113413400000354
+  },
+  "DTB|incoerente|longe|9346678109428391991": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.300434299999324
+  },
+  "DTB|incoerente|longe|9451187992137983920": {
+    "vida_cpu": 4.53125,
+    "vida_parede": 4.616535099999965
+  },
+  "DTB|incoerente|longe|9906326622429338203": {
+    "vida_cpu": 5.84375,
+    "vida_parede": 15.697681900001044
+  },
+  "DTB|relapso|comedouro|11306018194990864077": {
+    "vida_cpu": 3.875,
+    "vida_parede": 3.9168374000000767
+  },
+  "DTB|relapso|comedouro|12444256524210730852": {
+    "vida_cpu": 3.65625,
+    "vida_parede": 3.670567299999675
+  },
+  "DTB|relapso|comedouro|13355223314235079827": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.372393599998759
+  },
+  "DTB|relapso|comedouro|13521849304583623837": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.245973099999901
+  },
+  "DTB|relapso|comedouro|14415098315691779268": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.5497058000000834
+  },
+  "DTB|relapso|comedouro|1492802588809488874": {
+    "vida_cpu": 3.03125,
+    "vida_parede": 3.0973957999995037
+  },
+  "DTB|relapso|comedouro|16479936130167219656": {
+    "vida_cpu": 3.859375,
+    "vida_parede": 3.9247218999989855
+  },
+  "DTB|relapso|comedouro|17463147852217300270": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.558833000000959
+  },
+  "DTB|relapso|comedouro|17545051000669625875": {
+    "vida_cpu": 3.875,
+    "vida_parede": 3.991713699999309
+  },
+  "DTB|relapso|comedouro|2011358493130290366": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.572938299999805
+  },
+  "DTB|relapso|comedouro|3769710158804420762": {
+    "vida_cpu": 5.375,
+    "vida_parede": 18.744104500001413
+  },
+  "DTB|relapso|comedouro|3782573028181517670": {
+    "vida_cpu": 3.65625,
+    "vida_parede": 3.664139200000136
+  },
+  "DTB|relapso|comedouro|3931281270658336269": {
+    "vida_cpu": 3.609375,
+    "vida_parede": 3.657420900000943
+  },
+  "DTB|relapso|comedouro|4389490504701586789": {
+    "vida_cpu": 5.0625,
+    "vida_parede": 16.083340099999987
+  },
+  "DTB|relapso|comedouro|4462939972633478074": {
+    "vida_cpu": 5.140625,
+    "vida_parede": 15.181073899999319
+  },
+  "DTB|relapso|comedouro|5797409553483757578": {
+    "vida_cpu": 3.8125,
+    "vida_parede": 3.8317546999987826
+  },
+  "DTB|relapso|comedouro|6532324415081690818": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.260341700000936
+  },
+  "DTB|relapso|comedouro|9346678109428391991": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.4886614000006375
+  },
+  "DTB|relapso|comedouro|9451187992137983920": {
+    "vida_cpu": 3.59375,
+    "vida_parede": 3.5908807999985584
+  },
+  "DTB|relapso|comedouro|9906326622429338203": {
+    "vida_cpu": 5.21875,
+    "vida_parede": 17.20523890000004
+  },
+  "DTB|relapso|longe_fixo|11306018194990864077": {
+    "vida_cpu": 3.96875,
+    "vida_parede": 3.9826691999987816
+  },
+  "DTB|relapso|longe_fixo|12444256524210730852": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.3215930000005756
+  },
+  "DTB|relapso|longe_fixo|13355223314235079827": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.371826799999326
+  },
+  "DTB|relapso|longe_fixo|13521849304583623837": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.184855700001208
+  },
+  "DTB|relapso|longe_fixo|14415098315691779268": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.3824737000013556
+  },
+  "DTB|relapso|longe_fixo|1492802588809488874": {
+    "vida_cpu": 3.125,
+    "vida_parede": 3.1547649999993155
+  },
+  "DTB|relapso|longe_fixo|16479936130167219656": {
+    "vida_cpu": 3.8125,
+    "vida_parede": 3.8797348000007332
+  },
+  "DTB|relapso|longe_fixo|17463147852217300270": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.445843199999217
+  },
+  "DTB|relapso|longe_fixo|17545051000669625875": {
+    "vida_cpu": 3.9375,
+    "vida_parede": 3.9794698000005155
+  },
+  "DTB|relapso|longe_fixo|2011358493130290366": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 3.43489210000007
+  },
+  "DTB|relapso|longe_fixo|3769710158804420762": {
+    "vida_cpu": 4.5,
+    "vida_parede": 6.433222300000125
+  },
+  "DTB|relapso|longe_fixo|3782573028181517670": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 3.4373826999999437
+  },
+  "DTB|relapso|longe_fixo|3931281270658336269": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 3.323120099999869
+  },
+  "DTB|relapso|longe_fixo|4389490504701586789": {
+    "vida_cpu": 4.046875,
+    "vida_parede": 6.300268699998924
+  },
+  "DTB|relapso|longe_fixo|4462939972633478074": {
+    "vida_cpu": 4.296875,
+    "vida_parede": 6.257156300000133
+  },
+  "DTB|relapso|longe_fixo|5797409553483757578": {
+    "vida_cpu": 3.796875,
+    "vida_parede": 3.906117800001084
+  },
+  "DTB|relapso|longe_fixo|6532324415081690818": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.2441708000005747
+  },
+  "DTB|relapso|longe_fixo|9346678109428391991": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.460647899999458
+  },
+  "DTB|relapso|longe_fixo|9451187992137983920": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.225150099999155
+  },
+  "DTB|relapso|longe_fixo|9906326622429338203": {
+    "vida_cpu": 4.390625,
+    "vida_parede": 6.330309299999499
+  },
+  "DTB|relapso|longe|11306018194990864077": {
+    "vida_cpu": 3.890625,
+    "vida_parede": 3.9374705999998696
+  },
+  "DTB|relapso|longe|12444256524210730852": {
+    "vida_cpu": 4.390625,
+    "vida_parede": 5.880902499999138
+  },
+  "DTB|relapso|longe|13355223314235079827": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.324565099999745
+  },
+  "DTB|relapso|longe|13521849304583623837": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.5563916000010067
+  },
+  "DTB|relapso|longe|14415098315691779268": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.539226699998835
+  },
+  "DTB|relapso|longe|1492802588809488874": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.5432780999999522
+  },
+  "DTB|relapso|longe|16479936130167219656": {
+    "vida_cpu": 4.09375,
+    "vida_parede": 4.122091500001261
+  },
+  "DTB|relapso|longe|17463147852217300270": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.41229199999907
+  },
+  "DTB|relapso|longe|17545051000669625875": {
+    "vida_cpu": 3.953125,
+    "vida_parede": 3.975365199999942
+  },
+  "DTB|relapso|longe|2011358493130290366": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 3.7845849999994243
+  },
+  "DTB|relapso|longe|3769710158804420762": {
+    "vida_cpu": 5.4375,
+    "vida_parede": 14.032037700000728
+  },
+  "DTB|relapso|longe|3782573028181517670": {
+    "vida_cpu": 4.40625,
+    "vida_parede": 5.898179900001196
+  },
+  "DTB|relapso|longe|3931281270658336269": {
+    "vida_cpu": 4.046875,
+    "vida_parede": 5.8651432000006025
+  },
+  "DTB|relapso|longe|4389490504701586789": {
+    "vida_cpu": 5.328125,
+    "vida_parede": 14.470185199999833
+  },
+  "DTB|relapso|longe|4462939972633478074": {
+    "vida_cpu": 5.6875,
+    "vida_parede": 15.144695599999977
+  },
+  "DTB|relapso|longe|5797409553483757578": {
+    "vida_cpu": 3.921875,
+    "vida_parede": 3.9870955999995203
+  },
+  "DTB|relapso|longe|6532324415081690818": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.44032100000004
+  },
+  "DTB|relapso|longe|9346678109428391991": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 3.5249156999998377
+  },
+  "DTB|relapso|longe|9451187992137983920": {
+    "vida_cpu": 4.28125,
+    "vida_parede": 5.926154800001314
+  },
+  "DTB|relapso|longe|9906326622429338203": {
+    "vida_cpu": 5.140625,
+    "vida_parede": 14.644271500001196
+  }
+}
