@@ -70,10 +70,13 @@ P_CREDITO = "pelo credito, em qualquer hora"
 P_CORPO = "pelo carinho no corpo, e nao pelo que o pet aprende"
 B_MELHOR, B_NAO_PIORA, B_PIORA = "o pet fica melhor", "nao piora", "piora"
 MEDIDAS = {"t_acordado": lambda r: r["t_acordado"], "t_acordado_8_14": lambda r: r["t_acordado_8_14"],
-           "tempo_bem": lambda r: r["tempo_bem"], "saude_media": lambda r: r["saude_media"],
+           "tempo_bem": lambda r: r["tempo_bem"],
            "taxa_por_episodio": lambda r: r["episodios_fome"]["taxa"], "comer": lambda r: r["decisoes_comer"],
            "brincar": lambda r: r["decisoes_brincar"], "F_PESOS_DEC": lambda r: r["sono"]["F_PESOS_DEC"],
            "habito_comer": lambda r: r["habito"]["comer"], "habito_brincar": lambda r: r["habito"]["brincar"]}
+# D-RC-15: a saude dos dias 8 a 14 (uma guarda da secao 6) nao e medida por vida: o `medir` nunca a gravou, e a analise da run
+# parou nela depois das 9 600 vidas. Ela sai da analise e fica registrada como nao medida; so o replay dos logs a daria.
+GUARDAS_NAO_MEDIDAS = ("saude_media",)
 
 
 class RecompensaDivergiu(RuntimeError):
@@ -284,6 +287,7 @@ def analisar(registros: list[dict]) -> dict:
                                                prem["P-DOSE"]["cumpre"]),
                         "L-BEM": ler_bem(cont["tempo_bem"]["D1"]),
                         "numeros": {"delta_a": DELTA_A, "margem_bem": MARGEM_BEM},
+                        "guardas_nao_medidas": list(GUARDAS_NAO_MEDIDAS),
                         "nao_demonstra": ["nada sobre jogadores: o dono simulado recompensa toda vez e na hora",
                                           "nada sobre outras doses: o resultado vale para g = 2S e W = 1",
                                           "nada sobre outras recompensas (comida a mais, brinquedo, o credito do intervalo)",
@@ -378,6 +382,37 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     return {"meta": meta, "registros": registros, "resultado": resultado}
 
 
+def reanalisar(pasta: Path) -> dict:
+    """a analise sobre as medidas ja gravadas, sem reviver nenhuma vida (D-RC-15): a run viveu as 9 600 vidas, gravou o
+    `medidas.json` e parou na analise. Recusa-se com o `resultado.json` presente e com um numero de vidas que nao e o do plano."""
+    if (pasta / "resultado.json").exists() or (pasta / "vidas.tar.gz").exists():
+        raise FileExistsError(f"{pasta} ja tem o resultado: a analise nao se refaz por cima")
+    meta = json.loads((pasta / "meta.json").read_text(encoding="utf-8"))
+    if meta["modo"] != FASE or "fim" in meta:
+        raise RuntimeError("so a run do plano, parada antes do fim, se reanalisa")
+    lidos = json.loads((pasta / "medidas.json").read_text(encoding="utf-8"))
+    esperadas = len(meta["unidades"]) * len(BRACOS) * len(CELULAS)
+    if len(lidos) != esperadas or len({r["vida"] for r in lidos}) != esperadas:
+        raise RuntimeError(f"{len(lidos)} vidas no medidas.json, eram {esperadas}")
+    arquivos = sum(1 for _ in (pasta / "vidas").rglob("*.jsonl"))
+    if arquivos != esperadas:
+        raise RuntimeError(f"{arquivos} logs em vidas/, eram {esperadas}")
+    rc = orq.rc
+    resultado = {"modo": FASE, "fase": FASE, "plano": PLANO, "unidades": len(meta["unidades"]), "vidas": len(lidos), **analisar(lidos)}
+    bv._gravar(pasta / "resultado.json", bv._dump(resultado))
+    V.tar_deterministico(pasta / "vidas", pasta / "vidas.tar.gz")
+    meta["analise_refeita"] = {"motivo": "a analise da run parou num KeyError da guarda saude_media, depois de gravar o medidas.json; "
+                                         "nenhuma vida foi revivida (D-RC-15)",
+                               "guardas_nao_medidas": list(GUARDAS_NAO_MEDIDAS),
+                               "orquestrador_sha256": rc._sha_arquivo(Path(__file__)), "git_head": rc._git("rev-parse", "HEAD"),
+                               "medidas_gravadas_em": time.strftime("%Y-%m-%dT%H:%M:%S",
+                                                                    time.localtime((pasta / "medidas.json").stat().st_mtime))}
+    meta["fim"] = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
+    meta["artefatos_sha256"] = {n: bv._sha(pasta / n) for n in ("medidas.json", "resultado.json", "vidas.tar.gz")}
+    bv._gravar(pasta / "meta.json", bv._dump(meta))
+    return {"meta": meta, "resultado": resultado}
+
+
 def _resumo(r: dict) -> str:
     """o resumo no console, ASCII puro"""
     if r["modo"] == "fumaca":
@@ -390,10 +425,16 @@ def _resumo(r: dict) -> str:
 
 def main() -> None:
     ap_ = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap_.add_argument("--config", required=True)
+    ap_.add_argument("--config", default=None)
+    ap_.add_argument("--reanalisar", default=None, help="a pasta de uma run parada na analise (D-RC-15): nenhuma vida e revivida")
     ap_.add_argument("--saida", default=None)
     ap_.add_argument("--processos", type=int, default=1)
     a = ap_.parse_args()
+    if a.reanalisar:
+        print(_resumo(reanalisar(Path(a.reanalisar))["resultado"]))
+        return
+    if a.config is None:
+        raise SystemExit("falta --config")
     caminho = Path(a.config)
     cfg = json.loads(caminho.read_text(encoding="utf-8"))
     modo = modo_da_config(cfg)

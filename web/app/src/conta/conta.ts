@@ -28,7 +28,11 @@ export interface Conta {
   aceitoEm: number | null;
   aparelhos: Aparelho[];
 }
-export interface Primeiro { apelido: string; digimons: string[]; versaoTermos: string; versaoPrivacidade: string; provedor: string }
+export interface Primeiro {
+  apelido: string; digimons: string[]; versaoTermos: string; versaoPrivacidade: string; provedor: string;
+  /** a chave do site do Turnstile (CN4), se o servidor pede o desafio na criação da conta; null, sem desafio */
+  turnstile: string | null;
+}
 
 /** o passo da conta que a tela mostra */
 export type Passo =
@@ -53,7 +57,7 @@ export interface EstadoConta {
 }
 
 export const CT: EstadoConta = { passo: null, provedores: [], ocupado: false, erro: null };
-let amb: AmbienteConta | null = null, csrf: string | null = null, revisao = 0, pedido = 0;
+let amb: AmbienteConta | null = null, csrf: string | null = null, revisao = 0, pedido = 0, tentativasTurnstile = 0;
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { revisao++; for (const f of ouvintes) f(); };
 
@@ -66,6 +70,8 @@ export function desligarConta(): void { amb = null; CT.passo = null; CT.provedor
 export const contaLigada = (): boolean => amb !== null;
 export const ouvirConta = (f: () => void): (() => void) => { ouvintes.add(f); return () => { ouvintes.delete(f); }; };
 export const revisaoConta = (): number => revisao;
+/** sobe quando o Turnstile não passou: a tela desenha o widget de novo (o token já foi gasto) */
+export const tentativaTurnstile = (): number => tentativasTurnstile;
 /** o apelido da conta aberta, para a linha dos Ajustes; null sem conta ou antes de perguntar */
 export const apelidoDaConta = (): string | null => CT.passo?.tipo === "conta" ? CT.passo.conta.apelido : null;
 /** o endereco do arquivo "Baixar meus dados" (a sessao vai no cookie) */
@@ -127,7 +133,8 @@ async function lerPrimeiro(): Promise<Primeiro | null> {
   csrf = texto(d.csrf, "csrf");
   if (!Array.isArray(d.digimons) || !d.digimons.length) throw new Error("o primeiro acesso veio sem a lista do apelido");
   return { apelido: texto(d.apelido, "apelido"), digimons: d.digimons.map(x => texto(x, "digimon")), versaoTermos: texto(d.versao_termos, "versao_termos"),
-    versaoPrivacidade: texto(d.versao_privacidade, "versao_privacidade"), provedor: texto(d.provedor, "provedor") };
+    versaoPrivacidade: texto(d.versao_privacidade, "versao_privacidade"), provedor: texto(d.provedor, "provedor"),
+    turnstile: d.turnstile === undefined || d.turnstile === null ? null : texto(d.turnstile, "turnstile") };
 }
 
 /** o que o servidor pos em `?conta=` na volta do provedor */
@@ -209,11 +216,14 @@ export async function trocarApelido(digimon: string): Promise<void> {
   });
 }
 /** cria a conta com a idade e o aceite da versao que a tela mostrou. "menos_de_18": o servidor nao guarda nada */
-export async function criarConta(idade: "18_ou_mais" | "menos_de_18"): Promise<void> {
+/** `turnstile`: o token do widget, quando o servidor pede o desafio (Primeiro.turnstile); sem desafio, nada vai no pedido */
+export async function criarConta(idade: "18_ou_mais" | "menos_de_18", turnstile: string | null = null): Promise<void> {
   const p = CT.passo;
   if (p?.tipo !== "primeiro") throw new Error("criar a conta só no primeiro acesso");
+  if (p.dados.turnstile !== null && !turnstile) throw new Error("criar a conta pede o token do Turnstile");
   await mudar(async () => {
-    const r = await chamar("POST", "/conta/primeiro-acesso", { idade, aceite: { termos: p.dados.versaoTermos, privacidade: p.dados.versaoPrivacidade } });
+    const r = await chamar("POST", "/conta/primeiro-acesso", { idade, aceite: { termos: p.dados.versaoTermos, privacidade: p.dados.versaoPrivacidade },
+      ...(turnstile ? { turnstile } : {}) });
     if (r.status === 201) {
       const conta = await lerConta();
       if (!conta) throw new Error("a conta foi criada e a sessão não veio");
@@ -221,6 +231,12 @@ export async function criarConta(idade: "18_ou_mais" | "menos_de_18"): Promise<v
       return;
     }
     if (r.status === 403 && objeto(r.corpo).estado === "menos_de_18") { csrf = null; CT.passo = { tipo: "menos_de_18" }; return; }
+    if ((r.status === 403 || r.status === 503) && objeto(r.corpo).estado === "turnstile") {
+      /* o desafio não passou (ou a Cloudflare não respondeu): o acesso pendente fica; o widget volta para outra tentativa */
+      tentativasTurnstile++;
+      CT.erro = r.status === 503 ? "A verificação contra robôs não respondeu. Tente de novo em instantes." : "A verificação contra robôs não passou. Tente de novo.";
+      return;
+    }
     if (r.status === 401) return sessaoAcabou();
     if (r.status === 409) {
       /* os termos mudaram no meio, ou a identidade ja tem conta: pergunta de novo em que pe esta */

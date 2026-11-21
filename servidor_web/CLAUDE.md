@@ -17,6 +17,11 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **Teto de gasto TOTAL** (`--limite-usd`, padrão US$ 2), no mesmo arquivo do servidor Python (`servidor/gasto_fala.json`, fora do git):
   não zera ao reiniciar, e os dois servidores somam um teto só. `DIGILAB_GASTO_FALA` troca o arquivo. Modelo sem preço na tabela não sobe.
 - **Só escuta em `127.0.0.1`,** e pedido com cabeçalho de túnel ou proxy (`Cf-Ray`, `Cf-Connecting-Ip`, `X-Forwarded-For`) leva 403.
+  **A exceção é a VPS (CN5, `docs/infra/DEPLOY_CN5.md`):** com `--borda cloudflare` (ou `DIGILAB_BORDA=cloudflare`), o servidor continua
+  em `127.0.0.1`, mas só aceita o pedido que passou pelo Cloudflare Tunnel (com o `Cf-Ray` e o `Cf-Connecting-Ip`), e não sobe com a conta
+  local. Os arquivos da VPS (systemd, Litestream, instalar, publicar, restaurar) ficam em `deploy/`; o deploy é o `.github/workflows/publicar.yml`.
+  O Worker dos assets (`deploy/worker_assets/worker.ts`) confere a URL assinada da CN4 na frente do bucket privado; o teste
+  `test/worker_assets.test.ts` reprova se a conta dele se separar da do `assinatura.ts`.
 - **Testes sem custo:** o cliente da Anthropic nos testes é sempre o falso (`test/rotas.test.ts`); o Google e o GitHub, um `fetch` falso
   (`test/conta.test.ts`). O job `servidor-web` do CI roda `npm run tipos` e `npm test` quando o PR muda `servidor_web/`.
 - **Dependências** com versão exata, só o Hono (`hono`, `@hono/node-server`), o SDK `@anthropic-ai/sdk`, e no dev o Vitest, o
@@ -84,6 +89,20 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
   `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
 
+## A proteção (CN4, `src/protecao/`)
+
+- **O `robots.txt`:** o do jogo (`web/app/public/robots.txt`) é gerado da lista `ROBOS_DE_IA` de `robots.ts` por
+  `node scripts/gerar_robots.ts`, e o teste reprova se divergir; o da API (`GET /robots.txt`) recusa tudo.
+- **As URLs assinadas dos assets** (`assinatura.ts`): o formato do token da Cloudflare (`?verify=<hora>-<mac>`, o HMAC-SHA256 do caminho
+  mais a hora), para a borda conferir sem o servidor. `POST /assets/assinar` com a sessão ou o cookie do visitante (`POST /assets/visitante`,
+  pelo Turnstile); no local, `GET /assets/*` serve `DIGILAB_DIR_ASSETS` depois de conferir. Sem `DIGILAB_SEGREDO_ASSETS`, desligadas (503).
+- **O Turnstile** (`turnstile.ts`): na criação da conta e no visitante. Fora do local, sem `TURNSTILE_SECRET_KEY`/`TURNSTILE_SITE_KEY` o
+  servidor não sobe, a não ser com `DIGILAB_TURNSTILE=0`. **Nos testes, só as chaves de teste oficiais com o fetch falso** (`siteverifyDeTeste`).
+- **A cota da fala** (`cota.ts`, a migração 10): `DIGILAB_COTA_FALA_DIA` falas pela LLM por conta por dia de Brasília (30, PROPOSTO); só a
+  chamada que vai à LLM conta. Fora do local, a fala sem a sessão é só o template (`DIGILAB_FALA_SO_COM_CONTA`).
+- **A borda** (o WAF, o limite por IP, o cache, o R2) é configuração da Cloudflare, não código: o checklist está em
+  `docs/PLANO_V3_CONTA_BORDA.md`, para a CN5.
+
 ## Comandos
 
 ```bash
@@ -95,6 +114,7 @@ npm run dev -- --sem-conta          # sem as rotas da conta (a CN1)
 # o fluxo da conta com o provedor falso: http://127.0.0.1:8766/dev/conta
 npm test                            # Vitest: rotas com o cliente falso e a paridade com o Python
 npm run tipos                       # tsc --noEmit
+node scripts/gerar_robots.ts        # regrava o web/app/public/robots.txt da lista dos robôs de IA (CN4)
 node scripts/gerar_vida_teste.ts    # regrava a vida dos testes do envio (com o node_modules do web/app)
 node scripts/medir_conferencia.ts   # o tempo da conferência de 13 vidas -> medicoes/mmo3_conferencia.json
 python tools/gerar_catalogo_fala_web.py   # (da raiz) regera o catálogo e o gabarito

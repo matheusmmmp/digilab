@@ -5,6 +5,7 @@
    entra na lista do aviso visivel e aquele lugar fica com o visual de antes. */
 import { useEffect, useState } from "react";
 import NOMES from "../decoracao_nomes.json";
+import { assetsAssinados, buscarAsset, srcDoAsset } from "./protecao/assets.ts";
 
 export const DECORACAO_URL = "../../../Assets/digilab_decoracao_up.json";
 export type NomeDeco = string;
@@ -17,13 +18,22 @@ const falhas = new Map<NomeDeco, string>();
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
 
+/* com a proteção ligada (CN4; o bucket privado da CN5, D-CONTA-199 revista), cada peça vem pela URL assinada, pedida uma vez quando o
+   JSON chega; o navegador guarda a imagem pela URL (o Cache-Control do Worker dos assets) */
+const assinadas = new Map<NomeDeco, string>();
 export function carregarDecoracao(url = DECORACAO_URL): void {
-  fetch(url)
+  buscarAsset(url)
     .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} em ${url}`); return r.json() as Promise<DecoracaoUp>; })
-    .then(dados => {
+    .then(async dados => {
       if (dados.versao !== 1 || typeof dados.pecas !== "object") throw new Error("formato desconhecido em " + url);
       for (const n of NOMES.pecas) if (!dados.pecas[n]) falhas.set(n, "ausente no JSON");
-      estado = { tipo: "ok", dados, base: new URL(url, document.baseURI).href };
+      const base = new URL(url, document.baseURI).href;
+      if (assetsAssinados()) {
+        await Promise.all(Object.entries(dados.pecas).map(async ([n, p]) => {
+          assinadas.set(n, (await srcDoAsset(new URL(p.arquivo, base).href)).src);
+        }));
+      }
+      estado = { tipo: "ok", dados, base };
       avisar();
     })
     .catch((err: unknown) => {
@@ -42,7 +52,7 @@ export function useDecoracao(): { estado: Estado; falhas: ReadonlyMap<NomeDeco, 
 export function urlDeco(nome: NomeDeco): string | null {
   if (estado.tipo !== "ok" || falhas.has(nome)) return null;
   const p = estado.dados.pecas[nome];
-  return p ? new URL(p.arquivo, estado.base).href : null;
+  return p ? (assinadas.get(nome) ?? new URL(p.arquivo, estado.base).href) : null;
 }
 /** uma peca que nao abriu vai para o aviso (uma vez) e sai de cena */
 export function falhouDeco(nome: NomeDeco, url: string): void {
@@ -60,6 +70,7 @@ export function imagemDeco(nome: NomeDeco): HTMLImageElement | null {
   let img = imagens.get(nome);
   if (!img) {
     img = new Image();
+    if (assinadas.has(nome)) img.crossOrigin = "anonymous";
     img.onload = avisar;
     img.onerror = () => falhouDeco(nome, url);
     img.src = url;
