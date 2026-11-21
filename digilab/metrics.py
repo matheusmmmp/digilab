@@ -3783,6 +3783,78 @@ def medidas_carinho(elogios: Sequence[dict]) -> dict:
             "creditos_movem": movem, "fracao_movem": None if creditos == 0 else movem / creditos}
 
 
+# ================================================================== o D0 do pet que pensa (docs/TAREFA_V3_PET_QUE_PENSA.md, secao 4)
+FORA_DA_DISPUTA_D0 = ("REFLEXO", "SEGURA", "SEGURADA")
+
+
+def medidas_d0_plano(motivos: Sequence[dict], lambda_sono: int, piso: int, urgencia_lambda: int) -> dict:
+    """O D0 do pet que pensa numa vida com o rastro ligado (descritivo, sem gate). Por decisao (as com o rastro; a ultima nao fecha):
+      - fora da disputa hoje (`FORA_DA_DISPUTA_D0`): o REFLEXO (`reflexo` e a energia abaixo de `lambda_sono`), o SEGURA (`reflexo` e a
+        energia em `lambda_sono` ou acima, o sono que segura) e a SEGURADA (a escolha segurada da C3, so quando o motivo tem `segurada`);
+      - aberta hoje: as outras. Ali o planejador poderia decidir com o reflexo de hoje;
+      - a faixa do reflexo suave: a energia em [`piso`, `lambda_sono`), o que o desenho (PQ3-4) abre a disputa com o `g_plano` > 0;
+      - o conflito: a faixa com a fome urgente (a urgencia da fome acima de `urgencia_lambda`, a guarda do sono que segura);
+      - abaixo do piso: a energia abaixo de `piso`, que segue reflexo duro no desenho.
+    Com o desenho, as abertas sao as de hoje mais a faixa que hoje e reflexo (`abertas_plan_teto`). Sem o sono que segura, e a conta
+    certa. Com ele ligado, parte da faixa (o pet dormindo sem a fome urgente) segue segura no desenho, e o certo e so as de hoje mais o
+    conflito que hoje e reflexo (`abertas_plan_piso`), porque a fome urgente nunca e segura: o valor fica entre os dois. Falha alto sem o
+    rastro, sem a leitura da energia, sem a urgencia da fome, com o `segurada` em parte das decisoes ou com `piso` fora de (0, lambda_sono]."""
+    if type(piso) is not int or type(lambda_sono) is not int or not 0 < piso <= lambda_sono:
+        raise ValueError(f"medidas_d0_plano: o piso e inteiro em (0, lambda_sono]: {piso!r}, {lambda_sono!r}")
+    decisoes = [m for m in motivos if "cadeia" in m]
+    if not decisoes:
+        raise ValueError("medidas_d0_plano: a vida sem nenhuma decisao com o rastro (a ConfigRastro ligada?)")
+    com_segurada = {"segurada" in m for m in decisoes}
+    if len(com_segurada) != 1:
+        raise ValueError("medidas_d0_plano: o campo `segurada` so em parte das decisoes")
+    fora = dict.fromkeys(FORA_DA_DISPUTA_D0, 0)
+    abertas = abertas_sorteio = abertas_nada = abertas_fome = abertas_dormir = 0
+    faixa = faixa_fora_reflexo = conflito = conflito_reflexo = conflito_dormir = abaixo_piso = 0
+    for m in decisoes:
+        energia = m["cadeia"]["leitura"].get("energia")
+        if type(energia) is not int:
+            raise ValueError(f"medidas_d0_plano: a decisao {m['k']} sem a leitura da energia")
+        urg = m["afeto"]["urgencias"]
+        if "fome" not in urg:
+            raise ValueError(f"medidas_d0_plano: a decisao {m['k']} sem a urgencia da fome")
+        fome_urgente = urg["fome"] > urgencia_lambda
+        segurada = m.get("segurada", False)
+        if m["reflexo"] and segurada:
+            raise ValueError(f"medidas_d0_plano: a decisao {m['k']} com o reflexo e a escolha segurada")
+        dormir = m["escolha"][0] == "dormir"
+        if m["reflexo"]:
+            fora["REFLEXO" if energia < lambda_sono else "SEGURA"] += 1
+        elif segurada:
+            fora["SEGURADA"] += 1
+        else:
+            abertas += 1
+            abertas_sorteio += m["u"] is not None
+            abertas_nada += bool(m["nada_a_fazer"])
+            abertas_fome += fome_urgente
+            abertas_dormir += dormir
+        if energia < piso:
+            abaixo_piso += 1
+        elif energia < lambda_sono:
+            faixa += 1
+            faixa_fora_reflexo += not m["reflexo"]
+            if fome_urgente:
+                conflito += 1
+                conflito_reflexo += bool(m["reflexo"])
+                conflito_dormir += dormir
+    n = len(decisoes)
+    # o que hoje ja esta aberto (fora do reflexo) nao soma de novo; a faixa fora do reflexo so pela SEGURADA segue fora
+    teto = abertas + faixa - faixa_fora_reflexo
+    piso_plan = abertas + conflito_reflexo
+    return {"n": n, "fora": fora, "com_segurada": com_segurada.pop(), "abertas_hoje": abertas,
+            "abertas_hoje_sorteio": abertas_sorteio, "abertas_hoje_nada_a_fazer": abertas_nada,
+            "abertas_hoje_fome_urgente": abertas_fome, "abertas_hoje_dormir": abertas_dormir,
+            "faixa": faixa, "faixa_fora_reflexo": faixa_fora_reflexo, "conflito": conflito, "conflito_dormir": conflito_dormir,
+            "conflito_reflexo": conflito_reflexo, "abaixo_piso": abaixo_piso, "abertas_plan_teto": teto,
+            "abertas_plan_piso": piso_plan, "F_ABERTAS_HOJE": abertas / n, "F_ABERTAS_PLAN_TETO": teto / n,
+            "F_ABERTAS_PLAN_PISO": piso_plan / n,
+            "F_FAIXA": faixa / n, "F_CONFLITO": conflito / n, "F_CONFLITO_NA_FAIXA": None if faixa == 0 else conflito / faixa}
+
+
 # ================================================================== a plasticidade evoluida, o E0 (docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md,
 # secoes 2 e 3): o teste de sensibilidade que mexe um numero do aprendizado por vez
 def saude_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[int, int] = JANELA_8_14) -> dict:

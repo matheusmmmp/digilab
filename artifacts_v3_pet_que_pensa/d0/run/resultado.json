@@ -1,0 +1,1374 @@
+{
+  "fase": "d0",
+  "nao_demonstra": [
+    "nada sobre o planejador decidir: o D0 conta onde ele poderia entrar, nas vidas de hoje, sem ele",
+    "nada sobre o Tempo bem, a saude ou a exaustao: so o D1 mede",
+    "o v38 da so os limites (o piso e o teto) das abertas com o desenho: o dormindo nao esta no motivo",
+    "nada fora dos 14 dias, do mundo do MVP e dos lugares da C4, nem sobre o jogo web",
+    "o piso lambda_sono/2 e a fome urgente pelo urgencia_lambda sao PROPOSTOS, SEM FONTE"
+  ],
+  "resumos": {
+    "run|HOJE|comedouro": {
+      "medidas": {
+        "F_ABAIXO_PISO": {
+          "dp": 0.00036516884764661243,
+          "ic_inferior": 0.0005736160698035441,
+          "ic_superior": 0.0006754531781488014,
+          "media": 0.0006245346239761728,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0011094564408041698,
+            "atencioso": 0.00011169024571854059,
+            "incoerente": 0.00011169024571854059,
+            "relapso": 0.00116530156366344
+          }
+        },
+        "F_ABERTAS_HOJE": {
+          "dp": 0.014928976585137772,
+          "ic_inferior": 0.8446001965733709,
+          "ic_superior": 0.8487635413268526,
+          "media": 0.8466818689501118,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.7665562174236783,
+            "atencioso": 0.9082278481012658,
+            "incoerente": 0.9082278481012658,
+            "relapso": 0.8037155621742368
+          }
+        },
+        "F_ABERTAS_PLAN_PISO": {
+          "dp": 0.010494391247233855,
+          "ic_inferior": 0.9258728666781595,
+          "ic_superior": 0.9287995086010661,
+          "media": 0.9273361876396128,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9497580044676098,
+            "atencioso": 0.9150111690245718,
+            "incoerente": 0.9150111690245718,
+            "relapso": 0.9295644080416977
+          }
+        },
+        "F_ABERTAS_PLAN_TETO": {
+          "dp": 0.00036516884764662083,
+          "ic_inferior": 0.9993245468218512,
+          "ic_superior": 0.9994263839301964,
+          "media": 0.9993754653760238,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9988905435591958,
+            "atencioso": 0.9998883097542814,
+            "incoerente": 0.9998883097542814,
+            "relapso": 0.9988346984363364
+          }
+        },
+        "F_CONFLITO": {
+          "dp": 0.01298856640172975,
+          "ic_inferior": 0.07884321397393326,
+          "ic_superior": 0.08246542340506899,
+          "media": 0.08065431868950113,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.1832017870439315,
+            "atencioso": 0.006783320923306031,
+            "incoerente": 0.006783320923306031,
+            "relapso": 0.1258488458674609
+          }
+        },
+        "F_CONFLITO_NA_FAIXA": {
+          "dp": 0.038538994079248864,
+          "ic_inferior": 0.3865641092692256,
+          "ic_superior": 0.397311739415825,
+          "media": 0.3919379243425253,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.77683108917425,
+            "atencioso": 0.07384491843732499,
+            "incoerente": 0.07384491843732499,
+            "relapso": 0.6432307713212012
+          }
+        },
+        "F_FAIXA": {
+          "dp": 0.014893046616277588,
+          "ic_inferior": 0.150616934065983,
+          "ic_superior": 0.15477025878584125,
+          "media": 0.15269359642591213,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.2323343261355175,
+            "atencioso": 0.09166046165301564,
+            "incoerente": 0.09166046165301564,
+            "relapso": 0.19511913626209978
+          }
+        },
+        "F_FORA:REFLEXO": {
+          "dp": 0.014928976585137772,
+          "ic_inferior": 0.15123645867314747,
+          "ic_superior": 0.15539980342662915,
+          "media": 0.1533181310498883,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.23344378257632165,
+            "atencioso": 0.09177215189873417,
+            "incoerente": 0.09177215189873417,
+            "relapso": 0.1962844378257632
+          }
+        },
+        "F_FORA:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "F_FORA:SEGURADA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "abaixo_piso": {
+          "dp": 0.4904217623894005,
+          "ic_inferior": 0.7703663817461598,
+          "ic_superior": 0.9071336182538402,
+          "media": 0.83875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1.49,
+            "atencioso": 0.15,
+            "incoerente": 0.15,
+            "relapso": 1.565
+          }
+        },
+        "abertas:F_DORMIR": {
+          "dp": 0.010979511436488284,
+          "ic_inferior": 0.366647244149282,
+          "ic_superior": 0.3697091748231102,
+          "media": 0.3681782094861961,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.30581514442154506,
+            "atencioso": 0.4127774840018235,
+            "incoerente": 0.4127774840018235,
+            "relapso": 0.34134272551959255
+          }
+        },
+        "abertas:F_FOME_URGENTE": {
+          "dp": 0.029629064052839008,
+          "ic_inferior": 0.14333260453135513,
+          "ic_superior": 0.1515954621808048,
+          "media": 0.14746403335607997,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.365933848825311,
+            "atencioso": 0.010403135311537907,
+            "incoerente": 0.010403135311537907,
+            "relapso": 0.203116013975933
+          }
+        },
+        "abertas:F_NADA_A_FAZER": {
+          "dp": 0.0003711084179620446,
+          "ic_inferior": 0.00015973416275442143,
+          "ic_superior": 0.00026322767927807367,
+          "media": 0.00021148092101624754,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0003719039819105869,
+            "atencioso": 0.00019560672723734236,
+            "incoerente": 0.00019560672723734236,
+            "relapso": 8.280624767971857e-05
+          }
+        },
+        "abertas:F_SORTEIO": {
+          "dp": 0.00258998960849757,
+          "ic_inferior": 0.9925360721868642,
+          "ic_superior": 0.993258360120442,
+          "media": 0.9928972161536531,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9945750579934497,
+            "atencioso": 0.9920869611646994,
+            "incoerente": 0.9920869611646994,
+            "relapso": 0.9928398842917641
+          }
+        },
+        "abertas_hoje": {
+          "dp": 20.049615553840027,
+          "ic_inferior": 1134.2980639980372,
+          "ic_superior": 1139.8894360019628,
+          "media": 1137.09375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1029.485,
+            "atencioso": 1219.75,
+            "incoerente": 1219.75,
+            "relapso": 1079.39
+          }
+        },
+        "conflito": {
+          "dp": 17.443644677523054,
+          "ic_inferior": 105.88643636699237,
+          "ic_superior": 110.75106363300762,
+          "media": 108.31875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 246.04,
+            "atencioso": 9.11,
+            "incoerente": 9.11,
+            "relapso": 169.015
+          }
+        },
+        "faixa": {
+          "dp": 20.0013616056608,
+          "ic_inferior": 202.2785424506152,
+          "ic_superior": 207.8564575493848,
+          "media": 205.0675,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 312.025,
+            "atencioso": 123.1,
+            "incoerente": 123.1,
+            "relapso": 262.045
+          }
+        },
+        "n": {
+          "dp": 0.0,
+          "ic_inferior": 1343.0,
+          "ic_superior": 1343.0,
+          "media": 1343.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1343.0,
+            "atencioso": 1343.0,
+            "incoerente": 1343.0,
+            "relapso": 1343.0
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|HOJE|longe": {
+      "medidas": {
+        "F_ABAIXO_PISO": {
+          "dp": 0.00042973829428102266,
+          "ic_inferior": 0.0007619320445818265,
+          "ic_superior": 0.0008817760715760292,
+          "media": 0.0008218540580789279,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0016232315711094563,
+            "atencioso": 5.5845122859270295e-05,
+            "incoerente": 7.818317200297841e-05,
+            "relapso": 0.0015301563663440059
+          }
+        },
+        "F_ABERTAS_HOJE": {
+          "dp": 0.023445862349307404,
+          "ic_inferior": 0.7485317520438456,
+          "ic_superior": 0.7550702583805774,
+          "media": 0.7518010052122115,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.6588346984363366,
+            "atencioso": 0.8311615785554729,
+            "incoerente": 0.8413179448994788,
+            "relapso": 0.6758897989575577
+          }
+        },
+        "F_ABERTAS_PLAN_PISO": {
+          "dp": 0.005557894432372049,
+          "ic_inferior": 0.9632449342731453,
+          "ic_superior": 0.9647949019144944,
+          "media": 0.9640199180938198,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9592665673864482,
+            "atencioso": 0.9714631422189128,
+            "incoerente": 0.9715078183172002,
+            "relapso": 0.9538421444527178
+          }
+        },
+        "F_ABERTAS_PLAN_TETO": {
+          "dp": 0.0004297382942810204,
+          "ic_inferior": 0.999118223928424,
+          "ic_superior": 0.9992380679554183,
+          "media": 0.9991781459419211,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9983767684288906,
+            "atencioso": 0.9999441548771408,
+            "incoerente": 0.999921816827997,
+            "relapso": 0.9984698436336559
+          }
+        },
+        "F_CONFLITO": {
+          "dp": 0.025339884509826015,
+          "ic_inferior": 0.20868556032303967,
+          "ic_superior": 0.21575226544017698,
+          "media": 0.21221891288160832,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3004318689501117,
+            "atencioso": 0.14030156366344004,
+            "incoerente": 0.1301898734177215,
+            "relapso": 0.2779523454951601
+          }
+        },
+        "F_CONFLITO_NA_FAIXA": {
+          "dp": 0.05071433764119337,
+          "ic_inferior": 0.8242024782306995,
+          "ic_superior": 0.8383455288504559,
+          "media": 0.8312740035405777,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.881910670868944,
+            "atencioso": 0.8024549646444896,
+            "incoerente": 0.7817878510148426,
+            "relapso": 0.8589425276340341
+          }
+        },
+        "F_FAIXA": {
+          "dp": 0.023373510946303955,
+          "ic_inferior": 0.24411797612409228,
+          "ic_superior": 0.25063630533532694,
+          "media": 0.2473771407297096,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.339542069992554,
+            "atencioso": 0.1687825763216679,
+            "incoerente": 0.15860387192851824,
+            "relapso": 0.3225800446760983
+          }
+        },
+        "F_FORA:REFLEXO": {
+          "dp": 0.023445862349307404,
+          "ic_inferior": 0.24492974161942266,
+          "ic_superior": 0.2514682479561544,
+          "media": 0.24819899478778853,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3411653015636634,
+            "atencioso": 0.16883842144452718,
+            "incoerente": 0.15868205510052122,
+            "relapso": 0.3241102010424423
+          }
+        },
+        "F_FORA:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "F_FORA:SEGURADA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "abaixo_piso": {
+          "dp": 0.5771385292194134,
+          "ic_inferior": 1.023274735873393,
+          "ic_superior": 1.1842252641266071,
+          "media": 1.10375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 2.18,
+            "atencioso": 0.075,
+            "incoerente": 0.105,
+            "relapso": 2.055
+          }
+        },
+        "abertas:F_DORMIR": {
+          "dp": 0.01559123324388281,
+          "ic_inferior": 0.2815435339417202,
+          "ic_superior": 0.2858915666923945,
+          "media": 0.28371755031705737,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.22939951870525616,
+            "atencioso": 0.32710330110238206,
+            "incoerente": 0.33197657731832025,
+            "relapso": 0.2463908041422711
+          }
+        },
+        "abertas:F_FOME_URGENTE": {
+          "dp": 0.04859924032765658,
+          "ic_inferior": 0.3747072894640465,
+          "ic_superior": 0.38826048857903317,
+          "media": 0.38148388902153985,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5916522579254879,
+            "atencioso": 0.22231867369659425,
+            "incoerente": 0.2073558753942663,
+            "relapso": 0.5046087490698108
+          }
+        },
+        "abertas:F_NADA_A_FAZER": {
+          "dp": 0.00034720142254708635,
+          "ic_inferior": 0.00020572382855377775,
+          "ic_superior": 0.0003025502394413031,
+          "media": 0.00025413703399754044,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.00017255559668329098,
+            "atencioso": 0.00030247891893391335,
+            "incoerente": 0.000432824589107385,
+            "relapso": 0.0001086890312655724
+          }
+        },
+        "abertas:F_SORTEIO": {
+          "dp": 0.0021790445888823936,
+          "ic_inferior": 0.9917924359946878,
+          "ic_superior": 0.9924001209089878,
+          "media": 0.9920962784518378,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9958895126249147,
+            "atencioso": 0.9894497785544941,
+            "incoerente": 0.9890014735500479,
+            "relapso": 0.9940443490778941
+          }
+        },
+        "abertas_hoje": {
+          "dp": 31.487793135119848,
+          "ic_inferior": 1005.2781429948847,
+          "ic_superior": 1014.0593570051154,
+          "media": 1009.66875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 884.815,
+            "atencioso": 1116.25,
+            "incoerente": 1129.89,
+            "relapso": 907.72
+          }
+        },
+        "conflito": {
+          "dp": 34.03146489669634,
+          "ic_inferior": 280.26470751384227,
+          "ic_superior": 289.7552924861577,
+          "media": 285.01,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 403.48,
+            "atencioso": 188.425,
+            "incoerente": 174.845,
+            "relapso": 373.29
+          }
+        },
+        "faixa": {
+          "dp": 31.390625200886213,
+          "ic_inferior": 327.850441934656,
+          "ic_superior": 336.60455806534407,
+          "media": 332.2275,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 456.005,
+            "atencioso": 226.675,
+            "incoerente": 213.005,
+            "relapso": 433.225
+          }
+        },
+        "n": {
+          "dp": 0.0,
+          "ic_inferior": 1343.0,
+          "ic_superior": 1343.0,
+          "media": 1343.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1343.0,
+            "atencioso": 1343.0,
+            "incoerente": 1343.0,
+            "relapso": 1343.0
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|HOJE|longe_fixo": {
+      "medidas": {
+        "F_ABAIXO_PISO": {
+          "dp": 0.00040103127624650494,
+          "ic_inferior": 0.0006039840485074706,
+          "ic_superior": 0.0007158223550666171,
+          "media": 0.0006599032017870439,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.001347728965003723,
+            "atencioso": 6.329113924050633e-05,
+            "incoerente": 7.44601638123604e-05,
+            "relapso": 0.001154132539091586
+          }
+        },
+        "F_ABERTAS_HOJE": {
+          "dp": 0.05067749590726746,
+          "ic_inferior": 0.8035171933758607,
+          "ic_superior": 0.8176499696918982,
+          "media": 0.8105835815338794,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.7224981384959047,
+            "atencioso": 0.8840357408786299,
+            "incoerente": 0.878265078183172,
+            "relapso": 0.7575353685778109
+          }
+        },
+        "F_ABERTAS_PLAN_PISO": {
+          "dp": 0.009258260633647023,
+          "ic_inferior": 0.9561699515082909,
+          "ic_superior": 0.958751865319706,
+          "media": 0.9574609084139984,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9543484735666418,
+            "atencioso": 0.9628034251675354,
+            "incoerente": 0.9650148920327625,
+            "relapso": 0.9476768428890544
+          }
+        },
+        "F_ABERTAS_PLAN_TETO": {
+          "dp": 0.0004010312762465035,
+          "ic_inferior": 0.9992841776449334,
+          "ic_superior": 0.9993960159514926,
+          "media": 0.999340096798213,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9986522710349962,
+            "atencioso": 0.9999367088607595,
+            "incoerente": 0.9999255398361876,
+            "relapso": 0.9988458674609084
+          }
+        },
+        "F_CONFLITO": {
+          "dp": 0.0548739547123048,
+          "ic_inferior": 0.13922579128585394,
+          "ic_superior": 0.15452886247438435,
+          "media": 0.14687732688011915,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.23185033507073716,
+            "atencioso": 0.07876768428890543,
+            "incoerente": 0.08674981384959046,
+            "relapso": 0.1901414743112435
+          }
+        },
+        "F_CONFLITO_NA_FAIXA": {
+          "dp": 0.1364703067546543,
+          "ic_inferior": 0.5958654754286148,
+          "ic_superior": 0.6339238736311186,
+          "media": 0.6148946745298667,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.8307968884535594,
+            "atencioso": 0.4222939554635189,
+            "incoerente": 0.42567870522462864,
+            "relapso": 0.7808091489777601
+          }
+        },
+        "F_FAIXA": {
+          "dp": 0.05061319819933499,
+          "ic_inferior": 0.18169909267483375,
+          "ic_superior": 0.19581393785383344,
+          "media": 0.1887565152643336,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.27615413253909155,
+            "atencioso": 0.11590096798212957,
+            "incoerente": 0.12166046165301564,
+            "relapso": 0.24131049888309752
+          }
+        },
+        "F_FORA:REFLEXO": {
+          "dp": 0.05067749590726746,
+          "ic_inferior": 0.1823500303081019,
+          "ic_superior": 0.19648280662413933,
+          "media": 0.18941641846612062,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.2775018615040953,
+            "atencioso": 0.11596425912137005,
+            "incoerente": 0.121734921816828,
+            "relapso": 0.24246463142218913
+          }
+        },
+        "F_FORA:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "F_FORA:SEGURADA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "abaixo_piso": {
+          "dp": 0.5385850039990562,
+          "ic_inferior": 0.8111505771455332,
+          "ic_superior": 0.9613494228544668,
+          "media": 0.88625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1.81,
+            "atencioso": 0.085,
+            "incoerente": 0.1,
+            "relapso": 1.55
+          }
+        },
+        "abertas:F_DORMIR": {
+          "dp": 0.03336295316805273,
+          "ic_inferior": 0.3218693672344777,
+          "ic_superior": 0.3311735198159178,
+          "media": 0.32652144352519774,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.27708392332041965,
+            "atencioso": 0.3629725684421217,
+            "incoerente": 0.3589262634107497,
+            "relapso": 0.3071030189275
+          }
+        },
+        "abertas:F_FOME_URGENTE": {
+          "dp": 0.12004417118017548,
+          "ic_inferior": 0.2623690390785415,
+          "ic_superior": 0.29584656966604295,
+          "media": 0.2791078043722922,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4574492817047153,
+            "atencioso": 0.14874302955211086,
+            "incoerente": 0.17004487577930896,
+            "relapso": 0.3401940304530337
+          }
+        },
+        "abertas:F_NADA_A_FAZER": {
+          "dp": 0.00032004601268713584,
+          "ic_inferior": 7.634602926369149e-05,
+          "ic_superior": 0.00016559942719052793,
+          "media": 0.00012097272822710971,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.00023498786957822288,
+            "atencioso": 0.00011244838871532053,
+            "incoerente": 0.00010252056996923544,
+            "relapso": 3.393408464566003e-05
+          }
+        },
+        "abertas:F_SORTEIO": {
+          "dp": 0.003172500190235103,
+          "ic_inferior": 0.9902557930982552,
+          "ic_superior": 0.991140529700735,
+          "media": 0.9906981613994951,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9949569623473437,
+            "atencioso": 0.9877339738884338,
+            "incoerente": 0.9881844867954949,
+            "relapso": 0.9919172225667081
+          }
+        },
+        "abertas_hoje": {
+          "dp": 68.0598770034602,
+          "ic_inferior": 1079.1235907037808,
+          "ic_superior": 1098.1039092962192,
+          "media": 1088.61375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 970.315,
+            "atencioso": 1187.26,
+            "incoerente": 1179.51,
+            "relapso": 1017.37
+          }
+        },
+        "conflito": {
+          "dp": 73.69572117862535,
+          "ic_inferior": 186.98023769690184,
+          "ic_superior": 207.53226230309815,
+          "media": 197.25625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 311.375,
+            "atencioso": 105.785,
+            "incoerente": 116.505,
+            "relapso": 255.36
+          }
+        },
+        "faixa": {
+          "dp": 67.97352518170689,
+          "ic_inferior": 244.02188146230174,
+          "ic_superior": 262.97811853769826,
+          "media": 253.5,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 370.875,
+            "atencioso": 155.655,
+            "incoerente": 163.39,
+            "relapso": 324.08
+          }
+        },
+        "n": {
+          "dp": 0.0,
+          "ic_inferior": 1343.0,
+          "ic_superior": 1343.0,
+          "media": 1343.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1343.0,
+            "atencioso": 1343.0,
+            "incoerente": 1343.0,
+            "relapso": 1343.0
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "v38|HOJE|longe": {
+      "medidas": {
+        "F_ABAIXO_PISO": {
+          "dp": 0.0003987749580643986,
+          "ic_inferior": 0.0006124134591063129,
+          "ic_superior": 0.0008674822966643499,
+          "media": 0.0007399478778853314,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.001526433358153388,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0014333581533879374
+          }
+        },
+        "F_ABERTAS_HOJE": {
+          "dp": 0.007095656577503312,
+          "ic_inferior": 0.5869060526196834,
+          "ic_superior": 0.5914446547518728,
+          "media": 0.5891753536857781,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.5435033507073715,
+            "atencioso": 0.6312918838421444,
+            "incoerente": 0.6356105733432613,
+            "relapso": 0.5462956068503351
+          }
+        },
+        "F_ABERTAS_PLAN_PISO": {
+          "dp": 0.02318574251336417,
+          "ic_inferior": 0.738619836082995,
+          "ic_superior": 0.7534501564709886,
+          "media": 0.7460349962769918,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.7871183916604616,
+            "atencioso": 0.7268428890543559,
+            "incoerente": 0.7128816083395384,
+            "relapso": 0.7572970960536114
+          }
+        },
+        "F_ABERTAS_PLAN_TETO": {
+          "dp": 0.022681399068540973,
+          "ic_inferior": 0.74884721633717,
+          "ic_superior": 0.7633549430075806,
+          "media": 0.7561010796723753,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.8022710349962769,
+            "atencioso": 0.7311057334326135,
+            "incoerente": 0.7164743112434848,
+            "relapso": 0.7745532390171259
+          }
+        },
+        "F_CONFLITO": {
+          "dp": 0.028146209301088444,
+          "ic_inferior": 0.14785804815441553,
+          "ic_superior": 0.1658612370280119,
+          "media": 0.1568596425912137,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.24361504095309008,
+            "atencioso": 0.09555100521221147,
+            "incoerente": 0.077271034996277,
+            "relapso": 0.21100148920327624
+          }
+        },
+        "F_CONFLITO_NA_FAIXA": {
+          "dp": 0.07144109498725085,
+          "ic_inferior": 0.8947417964979135,
+          "ic_superior": 0.9404377377393608,
+          "media": 0.9175897671186372,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.9389337961575073,
+            "atencioso": 0.9206686693610744,
+            "incoerente": 0.8895714779535842,
+            "relapso": 0.921185125002383
+          }
+        },
+        "F_FAIXA": {
+          "dp": 0.02770039687798465,
+          "ic_inferior": 0.15806670927970703,
+          "ic_superior": 0.1757847426934873,
+          "media": 0.16692572598659716,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.2587676842889054,
+            "atencioso": 0.0998138495904691,
+            "incoerente": 0.08086373790022339,
+            "relapso": 0.22825763216679076
+          }
+        },
+        "F_FORA:REFLEXO": {
+          "dp": 0.027774367932622373,
+          "ic_inferior": 0.15878300006662185,
+          "ic_superior": 0.17654834766234315,
+          "media": 0.1676656738644825,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.26029411764705884,
+            "atencioso": 0.0998138495904691,
+            "incoerente": 0.08086373790022339,
+            "relapso": 0.2296909903201787
+          }
+        },
+        "F_FORA:SEGURA": {
+          "dp": 0.022731769850216844,
+          "ic_inferior": 0.2358889997570267,
+          "ic_superior": 0.25042894514245206,
+          "media": 0.24315897244973939,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.1962025316455696,
+            "atencioso": 0.26889426656738646,
+            "incoerente": 0.2835256887565153,
+            "relapso": 0.22401340282948623
+          }
+        },
+        "F_FORA:SEGURADA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "abaixo_piso": {
+          "dp": 0.5355547686804873,
+          "ic_inferior": 0.8224712755797781,
+          "ic_superior": 1.165028724420222,
+          "media": 0.99375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 2.05,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 1.925
+          }
+        },
+        "abertas:F_DORMIR": {
+          "dp": 0.005633510665243208,
+          "ic_inferior": 0.08511589638218406,
+          "ic_superior": 0.08871926461706289,
+          "media": 0.08691758049962348,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.07552031423915055,
+            "atencioso": 0.09719328909333633,
+            "incoerente": 0.10105274731362204,
+            "relapso": 0.073903971352385
+          }
+        },
+        "abertas:F_FOME_URGENTE": {
+          "dp": 0.05452949831906927,
+          "ic_inferior": 0.3400204348370957,
+          "ic_superior": 0.3748991940660586,
+          "media": 0.35745981445157715,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.5749571709430856,
+            "atencioso": 0.1935147249676328,
+            "incoerente": 0.15712320902720114,
+            "relapso": 0.504244152868389
+          }
+        },
+        "abertas:F_NADA_A_FAZER": {
+          "dp": 8.72439774402418e-05,
+          "ic_inferior": -3.426184942679644e-06,
+          "ic_superior": 5.237777029472119e-05,
+          "media": 2.447579267602077e-05,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 6.814126594217832e-05,
+            "atencioso": 2.9761904761904765e-05,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "abertas:F_SORTEIO": {
+          "dp": 0.0013064995663406352,
+          "ic_inferior": 0.9973128554680278,
+          "ic_superior": 0.9981485331326289,
+          "media": 0.9977306943003283,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.997545087644282,
+            "atencioso": 0.99767294152058,
+            "incoerente": 0.9974405642333444,
+            "relapso": 0.9982641838031071
+          }
+        },
+        "abertas_hoje": {
+          "dp": 9.529466783586958,
+          "ic_inferior": 788.2148286682349,
+          "ic_superior": 794.3101713317652,
+          "media": 791.2625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 729.925,
+            "atencioso": 847.825,
+            "incoerente": 853.625,
+            "relapso": 733.675
+          }
+        },
+        "conflito": {
+          "dp": 37.800359091361784,
+          "ic_inferior": 198.57335867138002,
+          "ic_superior": 222.75164132861997,
+          "media": 210.6625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 327.175,
+            "atencioso": 128.325,
+            "incoerente": 103.775,
+            "relapso": 283.375
+          }
+        },
+        "faixa": {
+          "dp": 37.20163300713338,
+          "ic_inferior": 212.28359056264657,
+          "ic_superior": 236.07890943735345,
+          "media": 224.18125,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 347.525,
+            "atencioso": 134.05,
+            "incoerente": 108.6,
+            "relapso": 306.55
+          }
+        },
+        "n": {
+          "dp": 0.0,
+          "ic_inferior": 1343.0,
+          "ic_superior": 1343.0,
+          "media": 1343.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 1343.0,
+            "atencioso": 1343.0,
+            "incoerente": 1343.0,
+            "relapso": 1343.0
+          }
+        }
+      },
+      "unidades": 40,
+      "vidas": 160
+    },
+    "v38|HOJE|longe_fixo": {
+      "medidas": {
+        "F_ABAIXO_PISO": {
+          "dp": 0.00031542217932114283,
+          "ic_inferior": 0.0003598453567115,
+          "ic_superior": 0.0005615991704664599,
+          "media": 0.00046072226358897996,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0010796723752792257,
+            "atencioso": 0.0,
+            "incoerente": 1.86150409530901e-05,
+            "relapso": 0.0007446016381236039
+          }
+        },
+        "F_ABERTAS_HOJE": {
+          "dp": 0.010835005175108976,
+          "ic_inferior": 0.5922161077334377,
+          "ic_superior": 0.5991465132643287,
+          "media": 0.5956813104988832,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.5634959046909903,
+            "atencioso": 0.6221705137751303,
+            "incoerente": 0.6293559195830231,
+            "relapso": 0.5677029039463887
+          }
+        },
+        "F_ABERTAS_PLAN_PISO": {
+          "dp": 0.045998137165439046,
+          "ic_inferior": 0.6851587767640511,
+          "ic_superior": 0.7145806126626056,
+          "media": 0.6998696947133284,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.747915115413254,
+            "atencioso": 0.6768801191362621,
+            "incoerente": 0.6811057334326136,
+            "relapso": 0.6935778108711839
+          }
+        },
+        "F_ABERTAS_PLAN_TETO": {
+          "dp": 0.04558593162191507,
+          "ic_inferior": 0.6951193481156739,
+          "ic_superior": 0.724277524557446,
+          "media": 0.7096984363365599,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.7631608339538347,
+            "atencioso": 0.6811429635145198,
+            "incoerente": 0.6838049143708116,
+            "relapso": 0.7106850335070737
+          }
+        },
+        "F_CONFLITO": {
+          "dp": 0.0544561796461226,
+          "ic_inferior": 0.08677245304914752,
+          "ic_superior": 0.12160431537974303,
+          "media": 0.10418838421444528,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.18441921072226358,
+            "atencioso": 0.0547096053611318,
+            "incoerente": 0.051749813849590466,
+            "relapso": 0.12587490692479525
+          }
+        },
+        "F_CONFLITO_NA_FAIXA": {
+          "dp": 0.1705856313681388,
+          "ic_inferior": 0.5747387262355663,
+          "ic_superior": 0.6838505894989269,
+          "media": 0.6292946578672466,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.9171500151470255,
+            "atencioso": 0.37004747528314036,
+            "incoerente": 0.3443653090104952,
+            "relapso": 0.8580349051032442
+          }
+        },
+        "F_FAIXA": {
+          "dp": 0.05414692406676302,
+          "ic_inferior": 0.09670009940491102,
+          "ic_superior": 0.13133415227044268,
+          "media": 0.11401712583767684,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.19966492926284438,
+            "atencioso": 0.058972449739389435,
+            "incoerente": 0.05444899478778853,
+            "relapso": 0.14298212956068504
+          }
+        },
+        "F_FORA:REFLEXO": {
+          "dp": 0.05421533197155324,
+          "ic_inferior": 0.09713894375916572,
+          "ic_superior": 0.13181675244336594,
+          "media": 0.11447784810126582,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.20074460163812363,
+            "atencioso": 0.058972449739389435,
+            "incoerente": 0.054467609828741624,
+            "relapso": 0.14372673119880863
+          }
+        },
+        "F_FORA:SEGURA": {
+          "dp": 0.04566946119242055,
+          "ic_inferior": 0.2752350391263149,
+          "ic_superior": 0.3044466436733873,
+          "media": 0.2898408413998511,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.23575949367088608,
+            "atencioso": 0.31885703648548025,
+            "incoerente": 0.3161764705882353,
+            "relapso": 0.2885703648548027
+          }
+        },
+        "F_FORA:SEGURADA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "abaixo_piso": {
+          "dp": 0.42361198682829476,
+          "ic_inferior": 0.48327231406354443,
+          "ic_superior": 0.7542276859364556,
+          "media": 0.61875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 1.45,
+            "atencioso": 0.0,
+            "incoerente": 0.025,
+            "relapso": 1.0
+          }
+        },
+        "abertas:F_DORMIR": {
+          "dp": 0.006943780790615937,
+          "ic_inferior": 0.09515025917572355,
+          "ic_superior": 0.09959171684176439,
+          "media": 0.09737098800874397,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.08674895520907251,
+            "atencioso": 0.10614708765484582,
+            "incoerente": 0.10995746013544619,
+            "relapso": 0.08663044903561135
+          }
+        },
+        "abertas:F_FOME_URGENTE": {
+          "dp": 0.11360295107477134,
+          "ic_inferior": 0.2183603832090239,
+          "ic_superior": 0.2910243559280055,
+          "media": 0.2546923695685147,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.45580695471416244,
+            "atencioso": 0.11938732627932173,
+            "incoerente": 0.10685753933496289,
+            "relapso": 0.3367176579456117
+          }
+        },
+        "abertas:F_NADA_A_FAZER": {
+          "dp": 0.00011561271022949124,
+          "ic_inferior": -1.2681004206157157e-05,
+          "ic_superior": 6.126847283299102e-05,
+          "media": 2.4293734313416933e-05,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 6.765899864682003e-05,
+            "atencioso": 0.0,
+            "incoerente": 2.9515938606847696e-05,
+            "relapso": 0.0
+          }
+        },
+        "abertas:F_SORTEIO": {
+          "dp": 0.001305292681413089,
+          "ic_inferior": 0.9976240776415117,
+          "ic_superior": 0.9984589833450621,
+          "media": 0.9980415304932869,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.9975656964382971,
+            "atencioso": 0.9984004452297508,
+            "incoerente": 0.9983299869696719,
+            "relapso": 0.9978699933354276
+          }
+        },
+        "abertas_hoje": {
+          "dp": 14.551411950171357,
+          "ic_inferior": 795.3462326860066,
+          "ic_superior": 804.6537673139934,
+          "media": 800.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 756.775,
+            "atencioso": 835.575,
+            "incoerente": 845.225,
+            "relapso": 762.425
+          }
+        },
+        "conflito": {
+          "dp": 73.13464926474265,
+          "ic_inferior": 116.53540444500511,
+          "ic_superior": 163.3145955549949,
+          "media": 139.925,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 247.675,
+            "atencioso": 73.475,
+            "incoerente": 69.5,
+            "relapso": 169.05
+          }
+        },
+        "faixa": {
+          "dp": 72.71931902166273,
+          "ic_inferior": 129.8682335007955,
+          "ic_superior": 176.3817664992045,
+          "media": 153.125,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 268.15,
+            "atencioso": 79.2,
+            "incoerente": 73.125,
+            "relapso": 192.025
+          }
+        },
+        "n": {
+          "dp": 0.0,
+          "ic_inferior": 1343.0,
+          "ic_superior": 1343.0,
+          "media": 1343.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 1343.0,
+            "atencioso": 1343.0,
+            "incoerente": 1343.0,
+            "relapso": 1343.0
+          }
+        }
+      },
+      "unidades": 40,
+      "vidas": 160
+    }
+  },
+  "tarefa": "docs/TAREFA_V3_PET_QUE_PENSA.md",
+  "vidas": 2720
+}

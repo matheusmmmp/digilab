@@ -158,7 +158,7 @@ Nada nesta seção entra na leitura. Os intervalos são o IC95 pelo t sobre as 2
   a saúde por lugar não é guarda neste plano. Fica escrito porque é o único lugar em que a saúde desce.
 - **O pet dorme menos e brinca mais** com o DTB, nos três lugares.
 - **Os episódios de fome a mais do DTB** (+3,8 por vida) repetem a C3. A causa continua sem explicação; a seção 3.6 traz a fome medida
-  de outro jeito.
+  de outro jeito, e ela desce na média.
 
 ### 3.2 As guardas da C3, ao lado (dias 8 a 14)
 
@@ -228,16 +228,61 @@ Os números da C3 vêm do `artifacts_v3_corpo/c3/resultado.json` e do `artifacts
 
 ### 3.6 A fome (replay acrescentado depois da aprovação)
 
-**Ainda não rodou.** Fica aqui o que ele é e por que ainda não tem número.
+Um descritivo acrescentado depois da aprovação do plano. **Não tem teste nem classe, não entra na leitura da seção 6 e não muda regra
+nenhuma.**
 - **De onde vem:** a Gerência sugeriu olhar a fome diretamente (a fome média e a fração do tempo com a fome acima de 0,5, por lugar e
-  por célula). A sugestão chegou depois da aprovação do plano. O Matheus escolheu, em 2026-11-20, "Replay depois": o descritivo entra
-  por um replay das vidas gravadas, e o orquestrador da run não muda.
-- **O que ele é:** o `experiments/run_v3_corpo_c4_fome.py` refaz as 4 800 vidas, confere cada uma contra o `log_sha256` e o "Tempo bem"
-  do `medidas.json`, e mede a fome nas decisões dos dias 1 a 14 (`digilab.metrics.fome_nas_decisoes`). A fome é o complemento da fome
-  da `Observacao`; 0,5 é o teto do DTB (C/2). O script e a métrica estão neste PR, com teste.
-- **Por que não rodou:** a máquina está com a run de outra frente (`run_v3_social_par_md.py`, desde as 13:58), e só roda uma run de
-  pesquisa por vez. O replay está na fila e sai quando ela terminar. Os números entram aqui num commit seguinte.
-- **O que ele não é:** não tem teste nem classe, não entra na leitura da seção 6 e não muda regra nenhuma.
+  por célula). A sugestão chegou depois da aprovação. O Matheus escolheu, em 2026-11-20, "Replay depois": o descritivo entra por um
+  replay das vidas gravadas, e o orquestrador da run não muda.
+- **O que ele faz:** o `experiments/run_v3_corpo_c4_fome.py` refaz as 4 800 vidas, confere cada uma contra o `log_sha256` e o "Tempo bem"
+  do `medidas.json` (todas bateram; uma que não batesse parava o replay), e mede a fome nas decisões dos dias 1 a 14
+  (`digilab.metrics.fome_nas_decisoes`).
+- **A medida:** a fome é o complemento da fome da `Observacao`, de 0 (saciado) a 1. O corte de 0,5 é o teto do DTB (C/2), SEM FONTE.
+  "Acima" é estrito: a decisão com a fome exatamente no teto não conta.
+- **O replay:** rodou em 2026-11-20, das 15:13 às 15:48 (34 min 53 s, 4 processos), no commit `d5176552` da `main`, com a saída 0 e o
+  log de erros vazio. Ele esperou a run de outra frente liberar a máquina.
+- **Os artefatos,** em `artifacts_v3_corpo/c4_fome/`: `fome.json` (`2d779867…8a4c`, as 4 800 vidas), `resumo.json` (`215533cc…c6c3`) e
+  `meta.json` (`26cc294b…8a3e`). O `meta.json` grava o sha256 do `medidas.json` e do `meta.json` da run.
+
+**Por lugar** (o IC95 pelo t sobre as 200 unidades):
+
+| onde | fome média: CTRL | DTB | DTB − CTRL | acima de 0,5: CTRL | DTB | DTB − CTRL |
+|---|---|---|---|---|---|---|
+| comedouro | 0,382 | 0,385 | +0,003 [+0,002; +0,005] | 0,302 | 0,332 | +0,030 [+0,028; +0,033] |
+| longe | 0,598 | 0,557 | −0,041 [−0,047; −0,035] | 0,572 | 0,542 | −0,030 [−0,038; −0,022] |
+| `longe_fixo` | 0,519 | 0,463 | −0,056 [−0,064; −0,048] | 0,465 | 0,421 | −0,044 [−0,054; −0,034] |
+| as 12 células | 0,500 | 0,469 | −0,031 [−0,035; −0,028] | 0,446 | 0,432 | −0,015 [−0,019; −0,010] |
+| as 11 células distintas | 0,525 | 0,493 | −0,032 [−0,036; −0,028] | 0,480 | 0,464 | −0,016 [−0,020; −0,011] |
+
+**Por célula:**
+
+| célula | fome média: CTRL | DTB | DTB − CTRL | acima de 0,5: CTRL | DTB | DTB − CTRL |
+|---|---|---|---|---|---|---|
+| atencioso, comedouro | 0,222 | 0,196 | −0,026 [−0,028; −0,024] | 0,079 | 0,075 | −0,004 [−0,007; −0,001] |
+| atencioso, longe | 0,470 | 0,406 | −0,064 [−0,083; −0,045] | 0,383 | 0,327 | −0,055 [−0,078; −0,032] |
+| atencioso, `longe_fixo` | 0,412 | 0,290 | −0,122 [−0,142; −0,102] | 0,304 | 0,184 | −0,120 [−0,145; −0,095] |
+| incoerente, comedouro | 0,222 | 0,196 | −0,026 [−0,028; −0,024] | 0,079 | 0,075 | −0,004 [−0,007; −0,001] |
+| incoerente, longe | 0,480 | 0,399 | −0,081 [−0,097; −0,065] | 0,394 | 0,319 | −0,075 [−0,094; −0,056] |
+| incoerente, `longe_fixo` | 0,402 | 0,302 | −0,100 [−0,117; −0,083] | 0,291 | 0,197 | −0,094 [−0,115; −0,073] |
+| relapso, comedouro | 0,491 | 0,531 | +0,041 [+0,038; +0,043] | 0,460 | 0,546 | +0,086 [+0,080; +0,091] |
+| relapso, longe | 0,694 | 0,686 | −0,008 [−0,016; −0,000] | 0,728 | 0,737 | +0,009 [−0,002; +0,021] |
+| relapso, `longe_fixo` | 0,587 | 0,591 | +0,004 [−0,003; +0,011] | 0,579 | 0,609 | +0,030 [+0,020; +0,041] |
+| aleatório, comedouro | 0,594 | 0,617 | +0,023 [+0,020; +0,027] | 0,588 | 0,633 | +0,045 [+0,039; +0,051] |
+| aleatório, longe | 0,750 | 0,738 | −0,011 [−0,018; −0,004] | 0,785 | 0,785 | +0,001 [−0,009; +0,011] |
+| aleatório, `longe_fixo` | 0,676 | 0,669 | −0,007 [−0,013; −0,000] | 0,687 | 0,693 | +0,006 [−0,004; +0,015] |
+
+**O que as tabelas mostram:**
+- **Na média das 12 células, o pet com o DTB tem menos fome,** e não mais: a fome média desce de 0,500 para 0,469, e a fração do tempo
+  acima de 0,5 desce de 0,446 para 0,432. A ponte passa a subir a fome, mas o pet come mais (+0,45 refeição por dia, seção 3.1).
+- **A queda vem do longe e do `longe_fixo`.** No comedouro a fome média quase não muda (+0,003), e o tempo acima de 0,5 sobe +0,030.
+- **Com os donos que alimentam** (o atencioso e o incoerente), a fome desce em todo lugar, até −0,122 no `longe_fixo`.
+- **Com o relapso e o aleatório no comedouro, a fome sobe:** o relapso passa +0,086 a mais do tempo acima de 0,5, e o aleatório,
+  +0,045. São as duas células em que a saúde desce (seção 2). É o mesmo quadro do diagnóstico da D, em tamanho menor: sem comida a
+  mais, a falta que ia para o cansaço vai para a fome.
+- **A célula da ressalva, o aleatório no comedouro:** a fome média sobe +0,023 [+0,020; +0,027], num pet que no CTRL já passa 0,588
+  do tempo acima de 0,5.
+
+**O que elas não explicam:** os episódios de fome a mais do DTB (+3,8 por vida). A fome média desce e os episódios sobem. Isso é
+compatível com episódios mais curtos, mas a duração dos episódios não foi medida aqui.
 
 ### 3.7 O bloco II
 
@@ -252,7 +297,8 @@ no CTRL e 7,49 no DTB. A bola fica fora da leitura dos pares (D-C4-4).
 - **Ligar o DTB no jogo não está em decisão aqui.** Pelo plano, é uma decisão à parte, depois da C5.
 - **O T_B = 225 000 continua PROPOSTO e SEM FONTE.** Passar a DECIDIDO é do Matheus.
 - **O comedouro:** o lugar em que o DTB ganha menos, com a privação um pouco acima e a saúde um pouco abaixo, tudo dentro de δ.
-- **Os episódios de fome a mais do DTB** continuam sem explicação.
+- **Os episódios de fome a mais do DTB** continuam sem explicação: a fome média desce com o DTB (seção 3.6), e a duração dos episódios
+  não foi medida.
 - **O incoerente no comedouro** é o atencioso; a causa exata fica para o replay dos donos (o R-c), que espera a confirmação do Matheus.
 - **A run inteira não foi replicada.** O `medidas.json` sem o relógio permite a réplica byte a byte.
 

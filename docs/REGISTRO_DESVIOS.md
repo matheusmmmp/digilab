@@ -925,6 +925,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-20 — PRODUTO: o atlas antigo sai, os sprites só do atlas de clipes (Gerente da V3, Claude Code, Opus 5.5, branch `v3-atlas-so-clipes`)](registro/2026-11.md)
 - [2026-11-20 — PET_VIVO: o plano do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-plano`)](registro/2026-11.md)
 - [2026-11-20 — PET_VIVO: o código do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-codigo`)](registro/2026-11.md)
+- [2026-11-20 — CORPO: o replay da fome da C4 (descritivo)](registro/2026-11.md)
 - [2026-11-20 — CONTA: a CN5 preparada, a hospedagem de teste só em documento (Claude Code, Opus 5.5, sessão lateral, branch `v3-cn5-plano`)](registro/2026-11.md)
 - [2026-11-20 — CONTA: a CN5, a parte do código da hospedagem de teste (Claude Code, Opus 5.5, branch `v3-cn5`)](registro/2026-11.md)
 - [2026-11-20 — CONTA: a CN4, a proteção no servidor (Claude Code, Opus 5.5, branch `v3-cn4`)](registro/2026-11.md)
@@ -939,3 +940,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-21 — PLASTICIDADE_EVOLUIDA: a tarefa do teste de sensibilidade, o E0 (Gerente da V3, Claude Code, Fable 5.2, branch `v3-plasticidade-evoluida-tarefa`)](registro/2026-11.md)
 - [2026-11-21 — PLASTICIDADE_EVOLUIDA: o código do E0 (sessão lateral da Gerência da V3, Claude Code, Fable 5.2, branch `v3-pe-e0-codigo`)](registro/2026-11.md)
 - [2026-11-21 — CORPO: a triagem antes da run de 200 (o adendo 1 do plano da V1-a)](registro/2026-11.md)
+- [2026-11-21 — PET_QUE_PENSA, P1: o D0, o replay descritivo (sessão lateral da Gerência da V3, Claude Code, Opus 5.5, branch `v3-pet-que-pensa-d0`)](registro/2026-11.md)

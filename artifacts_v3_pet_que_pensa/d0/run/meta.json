@@ -1,0 +1,96 @@
+{
+  "artefatos_sha256": {
+    "medidas.json": "871fcea63699d437f1fd4385191eb3bc9cd43b4632d3d690e2e75626c173c307",
+    "medidas.json.gz": "48f175556eaee016acc155c21ca83027f750cd5f36a3869b76f39bb7114e7d75",
+    "resultado.json": "220c534a0462eb2ec0c28806f55f39e257adbfaed2def13e7c48c60e026e6791"
+  },
+  "comando": "python experiments/run_v3_pet_que_pensa_d0.py --config D:/Trab/digilab/v3/.claude/worktrees/v3-pqp-d0-mplan-2f080b/experiments/configs/v3_pet_que_pensa/d0.json --processos 4 --vidas D:/Trab/digilab/guarda_vidas/pv2_run/vidas.tar.gz",
+  "config": {
+    "descricao": "O D0 do pet que pensa (docs/TAREFA_V3_PET_QUE_PENSA.md, secao 4, APROVADA): o replay descritivo, sem gate e sem pre-registro. As vidas do R1, do R-a e do R-sono no corpo de hoje (o HOJE da run do PV-2, 2 400) e no v38 (o HOJE da checagem do v38, 320), rejogadas pelo log com a ConfigRastro ligada, para contar em quantas decisoes o planejador poderia decidir e quantas tem o conflito da fome urgente com a energia na faixa do reflexo suave. Nenhuma vida nova e nenhuma faixa nova: as bases sao as da run do PV-2, para a conferencia. Uma vez, ate 4 processos.",
+    "dias": 14,
+    "fase": "d0",
+    "orcamento_por_dia": 16,
+    "plano": "docs/TAREFA_V3_PET_QUE_PENSA.md",
+    "unidades": {
+      "bases": [
+        26101,
+        26202,
+        26303,
+        26404,
+        26505
+      ],
+      "k": 40,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_pet_que_pensa/d0.json",
+  "config_sha256": "c3f8eb574f2eb051389efed6c3a49255d6ecb3d3fcdeba7f8b8a6ff40be95d6e",
+  "conjuntos": [
+    [
+      "run",
+      "HOJE"
+    ],
+    [
+      "v38",
+      "HOJE"
+    ]
+  ],
+  "disco_livre_gb": 55.00676345825195,
+  "duracao_s": 973.0456984043121,
+  "fase": "d0",
+  "fim": "2026-11-21T13:17:52",
+  "fonte": {
+    "artefatos_sha256": {
+      "medidas.json": "b7acc323af11c7f1f8a3d863392667e1d70000de92526f0acb392690c5eb9e0b",
+      "medidas.json.gz": "0bea4881a24e14c08f5b925c06ea06c8fcb4192287b5ec63c8fad2c65e53193c",
+      "resultado.json": "fc3f48ca03fb96a7069981f1f2f8694bc774672126cf4b0c11c677a2534b9464",
+      "vidas.tar.gz": "3dcb15b7d74c4fe385fd5c8c648f38c240e386749ef6b972047cd337776474df"
+    },
+    "git_head": "34894b505f1ac0f7cba4526b5263439cd365e8f3",
+    "pasta": "artifacts_v3_pet_vivo/pv2/run",
+    "vidas_tar": "D:\\Trab\\digilab\\guarda_vidas\\pv2_run\\vidas.tar.gz"
+  },
+  "fora_da_disputa": [
+    "REFLEXO",
+    "SEGURA",
+    "SEGURADA"
+  ],
+  "git_head": "e075a18951a50fd24bafffb3f8000ebcc81dcdb0",
+  "git_limpo": true,
+  "inicio": "2026-11-21T13:01:39",
+  "orquestrador_sha256": "616008fa0c6c53edbc9de3e784ca12f4414c061b0870f173eb352c6d89a66f11",
+  "passo": 15,
+  "processos": 4,
+  "pv2_sha256": "c6d031a445b91e0dfedaa56af4e2954ac9e86fbbcab4faed4f7ba3bc5a357f31",
+  "python": "3.13.0",
+  "r1_sha256": "d67d6e96327b7231aa3ab35a779aa2fcd2f0205a2a220cc6cb94738ea038f7e9",
+  "ra_sha256": "ea6c4c0d2daee62ee628f94ba1f496fe3dba2665038212d8dbfffb2dbc3bebfd",
+  "sha256": {
+    "config.py": "b102eb5bff55bbdd9d0f5c950b7d20951b470a74efa109e31b2625a53a94f44e",
+    "corpo.py": "47976fb85651aa738cf5555fee5d9e40a8bdaa1ead4c728ba419a42d40b4b983",
+    "digibrain/__init__.py": "a18292fc00ac5e260970d9de4d5afdcfb70d904b3cf660c351d8dcc0a9d8b5f2",
+    "digibrain/_comum.py": "ab4b8b0622c0b419833a68284594bd1519eb2a04041b313701dd0eee23d8f3a4",
+    "digibrain/adapt.py": "86c95b67b8ee74fb523e0f9864fb69692c77e0d31ac067335f98dc866111ddfc",
+    "digibrain/afeto.py": "89f33f272faa44253a1594f7b4fe52055aca2b4eddb974af79eed69d0af0b2bb",
+    "digibrain/arb.py": "ace91ebfedeec9f8884badc12ce95b771b6f38570d4b633e54f25f0cf7a9458c",
+    "digibrain/base.py": "723fc6aa7da85f0588e6c15173ce68b4bc0f9711341c29da9f30e229ddd6c724",
+    "digibrain/decodificador.py": "c597db7e836adf400707f56382f2443feb274512dba935a8e5c7e822fa988b3c",
+    "digibrain/dever.py": "c6cf340cb7c5cb18a81435caa8ff0b576b48890115f6149f193df4a1863cedb7",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "24fe8cef33444db55d0ad63383f2daed375055001a4503296d07e1a372622655",
+    "digibrain/mem.py": "83da27279608e21a7400139638f825de48799fa3a265bab32d0bbe2525cd26d2",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "e56f2b358c64bfd22397d4d39a326443174ec9a153ecd994d688fce5b8df6060",
+    "digibrain/rastro.py": "d15d5773ad41908ce360ae4e148dd4282c26a2385857738232ee4eb57d1cccec",
+    "digibrain/sens.py": "59215115ccc8a3d46ec30be93a2c9b4a2acf5b52d8a7e7c16d7e0003c4dec19c",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "1ee64617bbf2001847ce86e0079a0e01f4d0b7954d984108b75cb7c77ee22ec8",
+    "mundo.py": "3f5d0361365d0f492d2d0cea135c899e45d86d56e981fbe5fc1bf936a1f9caaa"
+  },
+  "sono_sha256": "b3c4e4ef884952d788a9fb286b3b8ecd17395aa5299b66ed8fd9be1005fb041c",
+  "tarefa": "docs/TAREFA_V3_PET_QUE_PENSA.md",
+  "tarefa_sha256": "2c4d2f74a9ad48a799c87b6f26803afee8708d630c54a0f0042a2e560eea031d",
+  "vidas": 2720,
+  "vidas_parede_s": 969.7026815000008
+}
