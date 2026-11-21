@@ -1054,3 +1054,79 @@ Com isso, a silhueta de cérebro e o CSS do mapa com nós e fios saíram dos doi
 - `e2e/lab_modular.spec.ts`: confere a rede viva e a faixa no pet do laboratório.
 
 Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, D1e".
+
+## 33. O Vidro e o Militar acertados pelas pranchas D: o botão principal, o fechar e a chave (2026-11-21)
+
+**De onde vem.** Em 2026-11-20 o Matheus pediu: "revise tanto as pranchas que eram do vidro quanto as que eram do militar [...] e veja
+se está alinhado com o que está no jogo, o que estava proposto nas pranchas". Uma sessão revisora leu as pranchas D (o canvas privado
+das duas peles, fora do git) e comparou com o jogo: a pele das duas bate com a prancha, a estrutura das telas mudou de propósito, e
+sobraram 9 desalinhamentos no Vidro e 8 no Militar sem decisão registrada. À pergunta "Corrijo os três desalinhamentos de pele do Vidro
+e do Militar?" ele respondeu "Sim, corrige" (2026-11-21).
+
+**A janela Estado atual fica como está.** Um dos três era a cor das necessidades: a prancha dá uma cor a cada necessidade, com o ícone
+colorido e cinco tracinhos sob o título; o jogo pinta a barra pelo estado (alerta abaixo de 50 %). Vendo o lado a lado da janela, o
+Matheus decidiu em 2026-11-21: "Nessa parte, quero que deixe como esta no jogo atual". Nada mudou nela. Com isso fica resolvida a
+contradição entre o `docs/TAREFA_V2_TEMA_MENUS.md` ("mantendo a cor de cada necessidade") e o `docs/PROPOSTAS_V3_UX_TELA_PET.md` (a
+barra abaixo de 50 % na cor do alerta): vale a regra do jogo.
+
+**O que mudou** (só CSS, cada regra sob a pele dela; o DOM, os tokens e as outras peles não mudam):
+
+- **O botão principal do Vidro** (`.hx-continuar`: Lutar, Atender, Começar, Continuar): 13 px, 700, caixa alta, 2 px entre as letras,
+  48 px de altura e o canto de baixo à direita cortado em 8 px. O corte é um `clip-path`: a diagonal é desenhada no fundo, o brilho
+  fica por dentro e o foco também. O Verificar do Registro leva a mesma forma, na altura da linha dele.
+- **O Verificar do Militar:** a hachura verde de 6 px no topo, a caixa alta e a letra de 16 px, como o botão principal da pele.
+- **O fechar dos painéis:** o "×" de traço fino (um desenho de 20 px, por máscara) nas duas peles. No Militar, a borda de 2 px e o
+  "×" na cor do escolhido. No Vidro, o anel de foco fica 8 px para dentro, para caber sob o chanfro do painel.
+- **A chave dos Ajustes:** o interruptor retangular de 46 × 24 px, com o cursor quadrado de 16 px, no lugar da caixa de marcar de
+  44 px. Desligada, o cursor fica à esquerda no tom da borda; ligada, a chave enche (o ciano dos destaques no Vidro, o caqui do
+  escolhido no Militar) e o cursor escuro vai para a direita. Vale só para os `role="switch"`: a caixa de marcar do aceite da conta
+  e a do "entendi" do aposentar ficam como são. A linha inteira continua sendo o alvo do toque.
+
+O antes e o depois estão em `docs/pranchas/ux-peles-acertos-vm/` (`antes_depois_vidro.jpg` e `antes_depois_militar.jpg`; só capturas
+do jogo).
+
+**O que ficou diferente da prancha, de propósito:**
+
+- as cores são as da pele de hoje (a refeitura aprovada em 2026-10-31), não as da prancha: o ciano pálido do Militar virou o caqui;
+- o fechar continua no canto do cabeçalho (a estrutura do cabeçalho dos lugares é decisão anterior);
+- o Copiar do Registro ficou como estava (na prancha ele é o botão secundário, em caixa mista);
+- o Verificar e o Lutar mantêm o ícone e o nome curto de hoje;
+- no Registro, o Verificar tem os 44 px da linha, ao lado do Copiar, e não os 48 px do botão principal;
+- sem transição na chave: as duas peles declaram que não têm animação.
+
+**A revisão independente.** A mesma sessão revisora conferiu as três peças nas duas peles, com as pranchas refotografadas a 3x.
+Ela não mexeu no repositório.
+
+- **Rodada 1:** das seis combinações de peça e pele, 4 iguais, 2 parecidas e nenhuma diferente (antes eram 1 igual e 5 parecidas).
+  Três acertos leves: a letra do Verificar do Militar (14 px contra os 16 px da prancha), o Atender do chamado no Vidro (44 px
+  contra 48) e o anel de foco do fechar do Vidro, cortado pelo chanfro. Ela recomendou tirar o brilho da chave ligada do Vidro, que
+  a prancha não tem. Os quatro foram feitos. As linhas de Ajustes "melhoraram": as com chave passaram de cerca de 60 px para 48 px,
+  a mesma altura das linhas com seta.
+- **Rodada 2:** os quatro pontos resolvidos e nenhuma vizinha fora do lugar: 5 das 6 combinações iguais à prancha. A sexta, o botão principal do Militar, segue "parecida" por uma medida que ela não tinha conferido antes (o Lutar e o Atender com 44 px e a letra de 18 px, contra 48 px e 16 px na prancha). Ela recomenda acertar; ficou como questão aberta.
+- **Os relatórios** estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\pranchas_d\` (`REVISAO_ACERTOS_1.md` e
+  `REVISAO_ACERTOS_2.md`), com as capturas em `D:\Trab\digilab\capturas_ux_peles_rua\acertos_vm\`.
+
+**Os testes:**
+
+- `test/hx_pele.test.ts`, 5 testes novos: a forma do botão principal do Vidro, o Verificar do Militar, o fechar, a chave (com o
+  contraste do cursor e da borda) e, o que não havia, toda regra do `pele-xcom.css` sob a pele dela e sem animação;
+- `e2e/pele_pranchas_d.spec.ts`, 5 testes: nas duas peles, a chave com a medida certa, ligando pela linha e pelo Espaço, sem mexer
+  no registro; o fechar e o botão principal como o navegador os desenha; e o Atender do chamado no Vidro;
+- `npm run tipos` limpo; `npm test` com 212 arquivos, 2167 passam e 3 pulam; o e2e inteiro no build final (porta 8811, 2 workers): 148 passam e 2 falham, os dois antigos e sem relação com a pele (`jogo.spec.ts:339` e `:378` esperam a versão 9 do registro do Tamer e recebem a 11).
+
+**O que não foi feito:**
+
+- **Os outros desalinhamentos das duas peles** ficam como estão: Conversar, as ações de Gerações, o filtro "falas" do Registro e
+  Cenários mexem no que o jogo mostra e pedem decisão; no Vidro, as caixas com a borda ciano inteira (sem o fio azul da esquerda)
+  são de pele e não entraram.
+- **O botão principal do Militar** fora do Verificar: o Lutar e o Atender têm 44 px de altura e a letra de 18 px; a prancha tem
+  48 px e 16 px. A revisora mediu isso na rodada 2 e recomenda acertar, como no Vidro. Não foi feito: não estava no pedido.
+- **O Começar das boas-vindas no Militar** tem uma faixa âmbar na base, de uma regra antiga do habitat (`.bv-comecar` em `pet.css`).
+  No Vidro ela sumiu com a forma nova do botão. No Militar ficou; a revisora recomenda tirar.
+- **Não conferido:** as outras telas com o botão principal (as que abrem sozinhas, Meus pets, Laboratório, a ranqueada) e os outros
+  lugares com chave (Exibir, a conta); o botão principal desligado e pressionado; o celular a 360 px; outros navegadores (só o
+  Chrome, pelo Playwright).
+- **O portão das capturas de referência** (`npm run capturas`) não foi rodado. As referências ficam fora do git e mudam nas telas
+  com o fechar, a chave e o botão principal do Vidro: regravar pede o ok do Matheus.
+
+Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, os acertos do Vidro e do Militar".

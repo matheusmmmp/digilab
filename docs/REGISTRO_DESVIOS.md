@@ -924,3 +924,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-20 — PET_VIVO: o plano do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-plano`)](registro/2026-11.md)
 - [2026-11-20 — PET_VIVO: o código do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-codigo`)](registro/2026-11.md)
 - [2026-11-20 — PET_VIVO: a run do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-resultado`)](registro/2026-11.md)
+- [2026-11-21 — UX_TELA_PET, os acertos do Vidro e do Militar contra as pranchas D (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-peles-acertos-vm`)](registro/2026-11.md)
