@@ -1,0 +1,321 @@
+/* A página de entrada (POC), a partir da prancha A (docs/pranchas/ux-pagina-inicial/inicial.css, rodadas 2 e 3 juntas).
+   AS CORES são os tokens do jogo, importados do próprio tokens.css (nenhum hex aqui); a página é só clara (data-tema="claro" no <html>).
+   As transparências saem de color-mix sobre esses tokens, como na prancha.
+   AS FONTES são as do guia (seção 4.2): Rajdhani nos títulos, Barlow no texto, DotGothic16 nos rótulos.
+   AS LARGURAS: a quebra é a 900 px (o corte do app); dentro de cada lado, 600 px e 1200 px. Todos os tamanhos são PROPOSTO, SEM FONTE.
+   O MOVIMENTO segue a seção 11 do guia: card entrando 180 ms ease-out, botão 80 ms, sprite 120 ms; nada pisca em loop; com
+   prefers-reduced-motion, tudo vira corte. */
+@import "../../src/estilo/tokens.css";
+
+:root{
+  --f-tit:"Rajdhani",system-ui,sans-serif; --f-txt:"Barlow",system-ui,sans-serif; --f-lcd:"DotGothic16",ui-monospace,monospace;
+  --linha:color-mix(in srgb,var(--dl-border) 34%,transparent);
+  --col:1080px; --lado:max(20px,calc((100% - var(--col))/2));
+  --oito:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);
+  /* a cor do foco: azul no claro, ciano no escuro (sobre a foto e na faixa azul) */
+  --foco:var(--dl-action);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light;background:var(--dl-surface);scroll-behavior:smooth;scroll-padding-top:16px}
+body{color:var(--dl-text);font:500 17px/1.55 var(--f-txt);
+  background:linear-gradient(var(--linha) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--linha) 1px,transparent 1px) 0 0/48px 48px,var(--dl-surface)}
+img{display:block;max-width:100%}
+a{color:inherit}
+ul,ol{list-style:none}
+main:focus{outline:none}
+:focus-visible{outline:3px solid var(--foco);outline-offset:3px}
+.ic{width:20px;height:20px;flex:none;stroke-width:2.2}
+.lcd{font:400 12px/1.2 var(--f-lcd);letter-spacing:.14em;text-transform:uppercase}
+.pet{display:block;flex:none;image-rendering:pixelated}
+.pet.vira{transform:scaleX(-1)}
+/* o pet sem atlas (build e e2e): uma caixa visível, do tamanho da caixa do ciclo (guia, princípio 8) */
+.pet-ausente{display:grid;place-items:center;overflow:hidden;border:1px dashed var(--dl-erro);color:var(--dl-erro);
+  background:var(--dl-surface);font:400 9px/1.1 var(--f-lcd);text-align:center;text-transform:uppercase}
+
+/* ---- pular para o conteúdo: aparece só com o foco */
+.pular{position:fixed;z-index:80;left:12px;top:12px;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;
+  background:var(--dl-text);color:var(--dl-surface);font:700 15px/1 var(--f-tit);letter-spacing:.1em;text-transform:uppercase;
+  transform:translateY(-200%)}
+.pular:focus-visible{transform:none;--foco:var(--dl-learned)}
+
+/* ---- os botões: retos, com a moldura deslocada (o Valorant, só a forma). Passar o mouse: a moldura encosta. Pressionar: o botão desce
+   até onde ela estava, em 80 ms */
+.bt{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 20px;
+  border:1px solid var(--dl-text);background:var(--dl-surface);color:var(--dl-text);
+  font:700 15px/1 var(--f-tit);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
+  transition:transform 80ms ease-out,background-color 80ms ease-out}
+.bt::after{content:"";position:absolute;inset:-6px;border:1px solid var(--moldura,currentColor);pointer-events:none;
+  transform:translate(4px,4px);transition:transform 80ms ease-out}
+.bt:hover::after{transform:none}
+.bt:active{transform:translate(2px,2px)}
+.bt:active::after{transform:translate(-2px,-2px)}
+.bt:focus-visible{outline-offset:9px}
+.bt.acao{background:var(--dl-text);color:var(--dl-surface);border-color:var(--dl-text);--moldura:var(--dl-text)}
+.bt.acao:hover{background:var(--dl-navy)}
+.bt.jogar{min-height:60px;padding:0 34px;font-size:19px}
+.bt.claro{background:var(--dl-surface);color:var(--dl-navy-deep);border-color:var(--dl-surface);--moldura:var(--dl-surface)}
+.bt.claro:hover{background:var(--dl-surface-2)}
+.garantias{display:flex;flex-wrap:wrap;gap:6px 18px;font:400 12px/1.2 var(--f-lcd);letter-spacing:.1em;text-transform:uppercase}
+.garantias li{display:inline-flex;align-items:center;gap:6px}
+.garantias .ic{width:14px;height:14px;stroke-width:3}
+
+/* ---- a barra do topo, sobre a foto */
+.barra{position:absolute;z-index:5;left:0;right:0;top:0;display:flex;align-items:center;gap:8px;min-height:72px;padding:12px var(--lado);
+  color:var(--dl-surface);--foco:var(--dl-learned)}
+.marca{display:flex;align-items:center;gap:10px;min-height:44px;margin-right:auto;font:700 22px/1 var(--f-tit);letter-spacing:.22em;text-decoration:none}
+.marca i{width:22px;height:22px;background:repeating-linear-gradient(-45deg,currentColor 0 3px,transparent 3px 6px)}
+.barra nav{display:flex}
+.barra nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;font:400 12px/1 var(--f-lcd);letter-spacing:.14em;
+  text-transform:uppercase;text-decoration:none;text-underline-offset:4px}
+.barra nav a:hover{text-decoration:underline}
+.barra .bt{padding:0 16px;font-size:14px;background:transparent;color:var(--dl-surface);border-color:var(--dl-surface);--moldura:transparent}
+.barra .bt:hover{background:color-mix(in srgb,var(--dl-surface) 14%,transparent)}
+.barra .bt.acao{background:var(--dl-surface);color:var(--dl-navy-deep)}
+.barra .bt.acao:hover{background:var(--dl-surface-2)}
+.barra .bt + .bt{margin-left:6px}
+
+/* ---- o herói: a ilha de verdade, o título grande, o botão; embaixo o corte reto em degrau e a linha do Agumon na régua.
+   O texto claro fica sobre um véu de --dl-navy-deep (o ponto fraco da prancha): o contraste medido está no POC.md */
+.heroi{position:relative;z-index:0;display:flex;flex-direction:column;min-height:max(780px,min(100svh,1000px));padding:128px 0 0;
+  color:var(--dl-surface);overflow:hidden;--foco:var(--dl-learned)}
+.heroi-foto{position:absolute;inset:0;z-index:-2}
+.heroi-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.heroi::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--dl-navy-deep) 92%,transparent) 0 40%,color-mix(in srgb,var(--dl-navy-deep) 86%,transparent) 66%,
+    color-mix(in srgb,var(--dl-navy-deep) 30%,transparent) 80%,transparent 92%)}
+.heroi-txt{position:relative;padding:0 var(--lado)}
+.heroi .olho{display:flex;align-items:center;gap:10px;color:var(--dl-learned)}
+.heroi .olho::before{content:"";width:34px;height:10px;background:repeating-linear-gradient(-45deg,currentColor 0 3px,transparent 3px 6px)}
+.heroi h1{margin-top:18px;font:700 clamp(64px,6.4vw,92px)/.88 var(--f-tit);letter-spacing:-.01em;text-transform:uppercase}
+.heroi h1 em{display:block;font-style:normal;color:var(--dl-learned)}
+.heroi .sub{margin-top:22px;max-width:30ch;font:500 21px/1.4 var(--f-txt);color:var(--dl-learned-ink)}
+.heroi .cta{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:28px;margin-bottom:24px}
+.heroi .garantias{color:var(--dl-learned-ink)}
+.heroi .ja{display:inline-flex;align-items:center;min-height:44px;font:500 15px/1 var(--f-txt);color:var(--dl-learned-ink);text-underline-offset:3px}
+.heroi .ja:hover{color:var(--dl-surface)}
+
+/* a linha do Agumon: a placa branca com o degrau, os pets em pé sobre a régua */
+/* a placa vai de ponta a ponta; --lado é resolvido na largura de cada elemento, por isso o herói não tem margem lateral e o texto e a
+   placa têm a deles */
+.linha{position:relative;z-index:0;isolation:isolate;margin-top:auto;padding:48px var(--lado) 18px;color:var(--dl-text);--foco:var(--dl-action)}
+.linha::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--dl-surface);
+  background:linear-gradient(var(--linha) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--linha) 1px,transparent 1px) 0 0/48px 48px,var(--dl-surface);
+  clip-path:polygon(0 38%,57% 38%,62% 0,100% 0,100% 100%,0 100%)}
+.fila{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.fila li{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fila .lcd{color:var(--dl-text-2);white-space:nowrap}
+.fila .lcd b{font-weight:400;color:var(--dl-text)}
+.regua{display:block;height:9px;margin-top:10px;border-bottom:1px solid var(--dl-text);
+  background:repeating-linear-gradient(90deg,var(--dl-text) 0 1px,transparent 1px 24px)}
+
+/* ---- as seções numeradas: o número, o rótulo espaçado, o título em caixa alta alinhado a um lado */
+.sec{position:relative;padding:96px var(--lado)}
+.sec::before{content:"";position:absolute;left:calc(var(--lado) - 30px);top:104px;width:8px;height:8px;background:var(--dl-action);
+  box-shadow:0 22px 0 var(--dl-text),0 44px 0 var(--dl-action),0 120px 0 var(--dl-border)}
+.marca-sec{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.marca-sec .num{padding:5px 10px;background:var(--dl-text);color:var(--dl-surface);font:400 14px/1 var(--f-lcd)}
+.marca-sec .lcd{color:var(--dl-text-2)}
+h2{font:700 clamp(44px,4.4vw,62px)/.92 var(--f-tit);letter-spacing:.005em;text-transform:uppercase;text-wrap:balance}
+h3{font:700 20px/1.1 var(--f-tit);letter-spacing:.16em;text-transform:uppercase}
+#lab .marca-sec{align-items:flex-end;text-align:right}
+#lab h2{color:var(--dl-action-press)}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:30px;padding-top:22px;border-top:1px solid var(--dl-text);color:var(--dl-text-2)}
+
+/* o espécime: o pet na moldura de oito lados, em camadas, com as trilhas de circuito e as três fichas */
+.especime{position:relative;height:560px;margin-top:40px;overflow-x:clip}
+.trilhas{position:absolute;left:50%;top:0;width:1080px;height:560px;transform:translateX(-50%);fill:none;stroke:var(--dl-border);stroke-width:1.5}
+.trilhas .no{fill:var(--dl-surface)} .trilhas .cheio{fill:var(--dl-border);stroke:none}
+.anel{position:absolute;left:50%;top:50%;width:330px;height:330px;transform:translate(-50%,-50%);display:grid;place-items:center;isolation:isolate}
+.anel::before{content:"";position:absolute;inset:-52px;z-index:-3;background:var(--dl-bg);clip-path:var(--oito)}
+.anel::after{content:"";position:absolute;inset:-26px;z-index:-2;clip-path:var(--oito);
+  background:linear-gradient(135deg,var(--dl-action) 0 34%,var(--dl-text) 34% 40%,var(--dl-learned) 40% 72%,var(--dl-action) 72%)}
+.anel .miolo{position:absolute;inset:0;z-index:-1;background:var(--dl-surface);clip-path:var(--oito)}
+.anel .sombra{position:absolute;left:50%;bottom:70px;width:150px;height:10px;transform:translateX(-50%);background:color-mix(in srgb,var(--dl-navy) 16%,transparent)}
+.anel .pet{position:relative;margin-top:26px}
+.ficha{position:absolute;display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--dl-surface);border:1px solid var(--dl-border);
+  border-left:4px solid var(--dl-action);box-shadow:6px 6px 0 var(--dl-sec-shadow)}
+.ficha .lcd{color:var(--dl-text-2)}
+.ficha b{font:700 22px/1 var(--f-tit);letter-spacing:.04em}
+.ficha img{width:230px;height:auto}
+.ficha.f1{left:calc(50% - 470px);top:70px}
+.ficha.f2{left:calc(50% + 250px);top:40px;padding:8px;border-left-width:1px}
+.ficha.f3{left:calc(50% - 480px);bottom:50px}
+.ficha .cab{display:flex;align-items:center;gap:10px}
+.exemplo{padding:1px 5px;border:1px solid var(--dl-text-2);letter-spacing:.08em}
+.etq-apr{align-self:flex-start;display:inline-flex;align-items:center;margin-top:4px;padding:3px 8px;border:1px dashed var(--dl-action-press);color:var(--dl-action-press);
+  font:400 12px/1.2 var(--f-lcd);letter-spacing:.1em;text-transform:uppercase}
+.barra-op{display:grid;grid-template-columns:74px 110px 40px;align-items:center;gap:8px;font:400 12px/1 var(--f-lcd);text-transform:uppercase}
+.barra-op i{height:8px;background:var(--dl-bg)} .barra-op i b{display:block;height:100%;background:var(--dl-action)}
+
+/* ---- a faixa larga: o jogo de verdade, de ponta a ponta, com o corte em degrau em cima e embaixo */
+.panorama{position:relative;height:520px;clip-path:polygon(0 12%,24% 12%,28% 0,100% 0,100% 88%,72% 88%,68% 100%,0 100%)}
+.panorama img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.panorama figcaption{position:absolute;left:var(--lado);bottom:22px;display:flex;align-items:center;gap:10px;padding:6px 10px;
+  background:var(--dl-surface);color:var(--dl-text)}
+.panorama figcaption::before{content:"";width:8px;height:8px;background:var(--dl-action)}
+
+/* ---- 02: o texto de um lado, a ficha do primeiro dia do outro */
+.lado-a-lado{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:72px;align-items:start}
+.lado-a-lado p{margin-top:22px;max-width:52ch;color:var(--dl-text-2)}
+.agenda{background:var(--dl-surface);border:1px solid var(--dl-text);box-shadow:8px 8px 0 var(--dl-text)}
+.agenda-cab{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--dl-navy-deep);color:var(--dl-surface)}
+.agenda li{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;min-height:80px;padding:14px 16px;border-top:1px solid var(--dl-bg)}
+.agenda .n{display:grid;place-items:center;width:52px;height:52px;background:var(--dl-bg);font:700 26px/1 var(--f-tit);color:var(--dl-action-press)}
+.agenda b{display:block;font:700 18px/1.15 var(--f-tit);letter-spacing:.04em}
+.agenda small{display:block;font:500 15px/1.3 var(--f-txt);color:var(--dl-text-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;min-height:28px;padding:2px 10px;border:1px solid var(--dl-border);background:var(--dl-surface);
+  font:400 12px/1.2 var(--f-lcd);letter-spacing:.08em;text-transform:uppercase}
+
+/* ---- 03: a faixa azul, com o corte em degrau em cima e em diagonal embaixo, as três colunas e o botão */
+.azul{position:relative;margin-top:60px;padding:150px var(--lado) 150px;color:var(--dl-surface);
+  background:linear-gradient(180deg,var(--dl-navy),var(--dl-navy-deep));
+  clip-path:polygon(0 0,100% 0,100% 100%,44% 100%,38% calc(100% - 64px),0 calc(100% - 64px));--foco:var(--dl-learned)}
+.azul::before{content:"";position:absolute;z-index:2;left:0;right:0;top:-1px;height:90px;background:var(--dl-surface);
+  clip-path:polygon(0 0,100% 0,100% 28%,66% 28%,60% 100%,0 100%)}
+.azul::after{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background:linear-gradient(color-mix(in srgb,var(--dl-learned) 22%,transparent) 1px,transparent 1px) 0 0/48px 48px,
+    linear-gradient(90deg,color-mix(in srgb,var(--dl-learned) 22%,transparent) 1px,transparent 1px) 0 0/48px 48px}
+.azul > *{position:relative;z-index:1}
+.azul .marca-sec{align-items:flex-end;text-align:right}
+.azul .marca-sec .num{background:var(--dl-learned);color:var(--dl-navy-deep)}
+.azul .marca-sec .lcd{color:var(--dl-learned-sub)}
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px;padding-top:30px;border-top:1px solid var(--dl-learned)}
+.tres li{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.tres .palco{height:120px;display:flex;align-items:flex-end}
+.tres p{max-width:30ch;color:var(--dl-learned-sub);font-size:16px}
+.fecho{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-top:64px}
+.fecho .garantias{color:var(--dl-learned-sub)}
+
+/* ---- o que o jogo não faz, e o rodapé */
+.sec-nao{padding-bottom:40px}
+.nao{display:grid;grid-template-columns:repeat(4,1fr);margin-top:34px;border:1px solid var(--dl-text);background:var(--dl-surface);box-shadow:8px 8px 0 var(--dl-text)}
+.nao li{padding:20px 20px 22px;border-left:1px solid var(--dl-bg)}
+.nao li:first-child{border-left:0}
+.nao b{display:block;font:700 19px/1.1 var(--f-tit);letter-spacing:.06em;text-transform:uppercase}
+.nao b::before{content:"";display:block;width:18px;height:6px;margin-bottom:10px;background:repeating-linear-gradient(-45deg,var(--dl-action) 0 2px,transparent 2px 4px)}
+.nao span{display:block;margin-top:6px;font:500 15px/1.4 var(--f-txt);color:var(--dl-text-2)}
+.rodape{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px var(--lado) 40px;color:var(--dl-text-2);font:500 15px/1.4 var(--f-txt);text-align:center}
+.rodape nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.rodape nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;font:400 12px/1 var(--f-lcd);letter-spacing:.14em;
+  text-transform:uppercase;text-decoration:none;color:var(--dl-text)}
+.rodape nav a:hover{text-decoration:underline}
+
+/* ---- a barra fixa do celular (só abaixo de 900 px e só quando os botões grandes saíram da tela) */
+.fixo{display:none}
+
+/* ---- a cortina da passagem para o jogo (PI-4, PROPOSTO): sobe de baixo com a borda em degrau, em 360 ms */
+/* o degrau fica 48 px acima da borda quando ela termina: no fim, a tela é toda azul */
+.cortina{position:fixed;z-index:90;inset:-48px 0 0;padding-top:48px;display:grid;place-items:center;pointer-events:none;visibility:hidden;
+  background:var(--dl-navy-deep);transform:translateY(105%);transition:transform 360ms cubic-bezier(.2,.7,.2,1),visibility 0s 360ms;
+  clip-path:polygon(0 48px,38% 48px,42% 0,100% 0,100% 100%,0 100%)}
+.cortina.aberta{visibility:visible;pointer-events:auto;transform:none;transition:transform 360ms cubic-bezier(.2,.7,.2,1)}
+.cortina-miolo{display:flex;flex-direction:column;align-items:center;gap:18px;color:var(--dl-learned-ink)}
+
+/* ---- as seções entram ao rolar (só com a classe "mov", que o JS põe quando o movimento não é reduzido) */
+.mov .entra{transition:opacity 180ms ease-out,transform 180ms ease-out}
+.mov .entra:not(.visto){opacity:0;transform:translateY(12px)}
+
+/* ================= de 900 a 1199 px (o 1024): o desktop mais apertado ================= */
+@media (min-width:900px) and (max-width:1199px){
+  .barra nav a{padding:0 10px}
+  .heroi{padding-top:130px}
+  .anel{width:260px;height:260px}
+  .anel::before{inset:-42px} .anel::after{inset:-20px}
+  .anel .sombra{bottom:52px;width:120px}
+  .ficha.f1{left:0;top:40px}
+  .ficha.f3{left:0;bottom:30px}
+  .ficha.f2{left:auto;right:8px;top:30px}
+  .ficha.f2 img{width:200px}
+  .lado-a-lado{grid-template-columns:minmax(0,1fr) 360px;gap:48px}
+  .nao b{font-size:17px}
+}
+
+/* ================= abaixo de 900 px: o celular da prancha ================= */
+@media (max-width:899px){
+  body{font-size:16px}
+  .barra nav,.barra .bt.acao{display:none}
+  .barra{min-height:64px}
+  .heroi{min-height:0;padding:96px 0 0}
+  .heroi::after{background:linear-gradient(180deg,color-mix(in srgb,var(--dl-navy-deep) 90%,transparent) 0 62%,
+    color-mix(in srgb,var(--dl-navy-deep) 50%,transparent) 78%,transparent 92%)}
+  .heroi h1{font-size:clamp(46px,14.5vw,72px)}
+  .heroi .sub{font-size:18px}
+  .heroi .cta{align-items:stretch}
+  .heroi .cta .bt.jogar{width:calc(100% - 4px)}
+  .linha{margin-top:56px;padding-top:56px}
+  .linha::before{clip-path:polygon(0 22%,50% 22%,58% 0,100% 0,100% 100%,0 100%)}
+  /* os cinco em escala 1, em duas fileiras: Koromon, Agumon e Greymon; MetalGreymon e WarGreymon */
+  .fila{flex-wrap:wrap;justify-content:space-around;gap:18px 6px}
+  .fila li{flex:0 0 30%}
+  .fila li:nth-child(n+4){flex-basis:44%}
+  .fila .nv{display:none}
+  .sec{padding:64px var(--lado)}
+  .sec::before{display:none}
+  h2{font-size:clamp(34px,10vw,48px)}
+  #lab .marca-sec,.azul .marca-sec{align-items:flex-start;text-align:left}
+  .duas{grid-template-columns:1fr;gap:16px}
+  .especime{height:auto;display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:28px;overflow-x:visible}
+  .trilhas{display:none}
+  .anel{position:relative;left:auto;top:auto;transform:none;width:230px;height:230px;margin:60px 0}
+  .anel::before{inset:-40px} .anel::after{inset:-20px}
+  .anel .sombra{bottom:42px;width:110px}
+  .anel .pet{margin-top:18px}
+  .ficha{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:100%}
+  .ficha.f1,.ficha.f2,.ficha.f3{left:auto;right:auto;top:auto;bottom:auto}
+  .ficha img{width:100%}
+  .barra-op{grid-template-columns:74px minmax(0,1fr) 40px}
+  .panorama{height:300px;clip-path:polygon(0 8%,40% 8%,46% 0,100% 0,100% 92%,60% 92%,54% 100%,0 100%)}
+  .panorama img{object-position:38% 40%}
+  .lado-a-lado{grid-template-columns:1fr;gap:28px}
+  .azul{margin-top:20px;padding:110px var(--lado) 110px;
+    clip-path:polygon(0 0,100% 0,100% 100%,60% 100%,52% calc(100% - 36px),0 calc(100% - 36px))}
+  .azul::before{height:50px}
+  .tres{grid-template-columns:1fr;gap:36px;margin-top:40px}
+  .fecho{align-items:stretch}
+  .fecho .bt.jogar{width:calc(100% - 4px)}
+  .nao{grid-template-columns:1fr 1fr}
+  .nao li:nth-child(3){border-left:0}
+  .nao li:nth-child(n+3){border-top:1px solid var(--dl-bg)}
+  .rodape{padding-bottom:110px}
+  .fixo{display:flex;position:fixed;z-index:50;left:0;right:0;bottom:0;padding:12px 20px 16px;background:var(--dl-surface);
+    border-top:1px solid var(--dl-border);visibility:hidden;transform:translateY(100%);
+    transition:transform 180ms ease-out,visibility 0s 180ms}
+  .fixo.mostra{visibility:visible;transform:none;transition:transform 180ms ease-out}
+  .fixo .bt{flex:1;min-height:52px;font-size:17px;margin-right:4px}
+}
+/* de 600 a 899 (o 768): ainda uma coluna, mas com o conteúdo em 640 px, a régua em escala 2 e as três colunas lado a lado */
+@media (min-width:600px) and (max-width:899px){
+  :root{--col:640px}
+  .fila{flex-wrap:nowrap;justify-content:space-between;align-items:flex-end}
+  .fila li,.fila li:nth-child(n+4){flex:none}
+  .fila .lcd{font-size:10px;letter-spacing:.08em}
+  .heroi .cta{align-items:flex-start}
+  .heroi .cta .bt.jogar{width:auto}
+  .ficha{max-width:460px}
+  .ficha.f2 img{width:auto;max-width:100%}
+  .fecho{align-items:flex-start}
+  .fecho .bt.jogar{width:auto}
+  .tres{grid-template-columns:repeat(3,1fr);gap:24px}
+  .nao{grid-template-columns:repeat(4,1fr)}
+  .nao li:nth-child(3){border-left:1px solid var(--dl-bg)}
+  .nao li:nth-child(n+3){border-top:0}
+}
+/* abaixo de 420 (o 360 e o 390): o que o jogo não faz em uma coluna */
+@media (max-width:420px){
+  .nao{grid-template-columns:1fr}
+  .nao li{border-left:0 !important;border-top:1px solid var(--dl-bg)}
+  .nao li:first-child{border-top:0}
+}
+
+/* ================= de 1920: o conteúdo para em 1080 + margens; a foto e a faixa larga vão de ponta a ponta ================= */
+@media (min-width:1600px){
+  :root{--col:1200px}
+}
+
+/* ================= movimento reduzido: tudo vira corte ================= */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none !important;animation:none !important}
+  .mov .entra:not(.visto){opacity:1;transform:none}
+}
