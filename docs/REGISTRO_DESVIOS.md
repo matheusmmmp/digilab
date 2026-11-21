@@ -934,3 +934,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-21 — CONTA: a CN5 refeita sobre a CN4, os assets no bucket privado (Claude Code, Opus 5.5, branch `v3-cn5`)](registro/2026-11.md)
 - [2026-11-20 — CORPO: o plano da V1-a (o teto baixo no pet do jogo)](registro/2026-11.md)
 - [2026-11-21 — CORPO: o código da V1-a (o orquestrador do teto baixo no pet do jogo)](registro/2026-11.md)
+- [2026-11-21 — PET_QUE_PENSA: a tarefa V3 do planejador no modular (Gerente da V3, Claude Code, Opus 5.5, branch `v3-pet-que-pensa-tarefa`)](registro/2026-11.md)
