@@ -280,4 +280,21 @@ Pelo `docs/PLANO_ANALISE_V3_CORPO_V1.md`, seção 8. Nenhuma vida da faixa rodou
   a regra de leitura caso a caso, as premissas, a trava, e a fumaça duas vezes com o `medidas.json` e o `resultado.json` iguais.
 - **Nada mudou no `digilab/` nem no web.**
 
-**O que falta:** o plano (#1055) e este código na `main`, o `pre_run` e a run, uma vez.
+**O que falta:** ver a seção 22: a run de 200 ficou suspensa por uma triagem.
+
+## 22. A triagem antes da run de 200 (o adendo 1 do plano da V1-a, 2026-11-21)
+
+O Matheus decidiu em 2026-11-21, na sessão da coordenação ("Sim, aplicar"), pausar as runs confirmatórias das frentes do cérebro e
+passar cada ideia antes por uma triagem de 10 a 20 unidades. Na sessão da CORPO, confirmou para a V1-a: "Sim, triagem antes".
+- **O adendo 1** do `docs/PLANO_ANALISE_V3_CORPO_V1.md` (seção 11), **PROPOSTO:** 20 unidades (as bases 109001…109020), as mesmas 12
+  células, os dois braços e o pet v38; 480 vidas, cerca de 7 minutos. A triagem só estima o tamanho do efeito: sem classe, sem p,
+  sem leitura e sem corte. As D-V1A-10 a D-V1A-14 esperam a aprovação do Matheus.
+- **A run de 200 fica suspensa.** O orquestrador a recusa (`RUN_SUSPENSA`). Se ela rodar depois, não repete as 20 bases da triagem.
+- **O código:** o modo de triagem no `experiments/run_v3_corpo_v1.py` (`estimativas` e `analisar_triagem`), a config
+  `experiments/configs/v3_corpo_v1/triagem.json` e a saída em `artifacts_v3_corpo/v1a_triagem/`. A triagem só roda com a linha
+  "Adendo 1, status: APROVADO pelo Matheus" no plano, e passa pelo `pre_run` e pelo disco, como uma run.
+- **Os testes:** 24 no `tests/test_run_v3_corpo_v1.py`. Os novos conferem que a run de 200 está suspensa, que a triagem pede o adendo
+  aprovado e as 20 primeiras bases, e que a análise da triagem não tem nada de leitura.
+- **O pré-registro:** a triagem não tem seção própria; a `PR-CORPO-V1` diz que a run está suspensa e aponta para o adendo.
+
+**O que falta:** a aprovação do adendo, este código na `main`, o `pre_run` e a triagem. Nenhuma vida da faixa rodou.

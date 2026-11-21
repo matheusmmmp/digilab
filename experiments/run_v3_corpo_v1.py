@@ -21,7 +21,11 @@ A trava (secao 0): sem o "APROVADO pelo Matheus" no cabecalho do plano, sem a fa
 existente ou fora das bases do plano, o orquestrador recusa; a run passa antes pelo `tools/pre_run.py` e confere o disco. A fumaca usa as
 sementes dos testes.
 
-Uso: python experiments/run_v3_corpo_v1.py --config experiments/configs/v3_corpo_v1/run.json --processos 4
+A triagem (o adendo 1 do plano, secao 11): antes da run de 200, uma triagem de 20 unidades (as bases 109001...109020) so estima o
+tamanho do efeito, sem classe, sem p e sem leitura. A run de 200 fica suspensa: o orquestrador a recusa (`RUN_SUSPENSA`), e a triagem
+so roda com o adendo APROVADO no plano.
+
+Uso: python experiments/run_v3_corpo_v1.py --config experiments/configs/v3_corpo_v1/triagem.json --processos 4
 """
 from __future__ import annotations
 
@@ -62,6 +66,12 @@ BASES = tuple(range(109001, 109201))                          # 200 sementes ind
 K_POR_BASE = 1
 DIAS, ORCAMENTO_POR_DIA = C3.DIAS, C3.ORCAMENTO_POR_DIA
 SAIDA = "artifacts_v3_corpo/v1a"                              # secao 7
+# o adendo 1 (secao 11): a triagem antes da run de 200
+BASES_TRIAGEM = tuple(range(109001, 109021))                  # 20 unidades, as primeiras da faixa (D-V1A-10)
+SAIDA_TRIAGEM = "artifacts_v3_corpo/v1a_triagem"
+ADENDO_TRIAGEM = "**Adendo 1, status: APROVADO pelo Matheus"  # a linha do adendo no plano; sem ela a triagem nao roda
+RUN_SUSPENSA = True                                           # a run de 200 espera a triagem e a decisao do Matheus (secao 11)
+SO_LEITURA = ("classe", "passa", "reprova_com", "p_unilateral")   # o que a triagem nao entrega (D-V1A-11)
 MAX_PROCESSOS = C3.MAX_PROCESSOS
 CONTROLE, TRATADO, BRACOS = C4.CONTROLE, C4.TRATADO, C4.BRACOS
 CELULAS, CELULAS_DISTINTAS, CELULAS_SEM_COMIDA = C4.CELULAS, C4.CELULAS_DISTINTAS, C4.CELULAS_SEM_COMIDA
@@ -255,6 +265,41 @@ def analisar(registros: list[dict], boot: dict = orq.BOOTSTRAP) -> dict:
                               "nada sobre outro teto alem de C/2", "nada sobre os pares e o social: o bloco II ficou fora (D-V1A-4)"]}
 
 
+# ================================================================== a triagem (secao 11, o adendo 1)
+def _sem_leitura(x):
+    """tira de um descritivo tudo o que e leitura (a classe, o passa, o p): a triagem so estima (D-V1A-11)"""
+    if isinstance(x, dict):
+        return {k: _sem_leitura(v) for k, v in x.items() if k not in SO_LEITURA}
+    return [_sem_leitura(v) for v in x] if isinstance(x, list) else x
+
+
+def estimativas(registros: list[dict]) -> dict:
+    """DTB - CTRL, pareado por unidade (os niveis, a media, o dp e o IC95), nas medidas da primaria, das guardas e da saude por celula;
+    sem classe, sem p e sem leitura. O "Tempo bem" das 12 e das 11 celulas leva tambem o efeito dividido pela margem."""
+    grupos = {"tempo_bem_12_celulas": (TEMPO_BEM, CELULAS), "tempo_bem_11_celulas": (TEMPO_BEM, CELULAS_DISTINTAS),
+              **{f"tempo_bem_{lugar}": (TEMPO_BEM, C3._celulas(lugar)) for lugar in LUGARES},
+              "saude_12_celulas": (SAUDE, CELULAS), "saude_sem_comida": (SAUDE, CELULAS_SEM_COMIDA),
+              C4.G_TAXA: (EPISODIO, C3._celulas(PRIMARIO)),
+              **{f"saude|{d}|{lugar}": (SAUDE, ((d, lugar),)) for d, lugar in CELULAS_SEM_COMIDA}}
+    out = {n: C4._descr(registros, f, cs) for n, (f, cs) in grupos.items()}
+    for n in ("tempo_bem_12_celulas", "tempo_bem_11_celulas"):
+        out[n]["efeito_sobre_a_margem"] = out[n]["DTB - CTRL"]["media"] / MARGEM
+    return out
+
+
+def analisar_triagem(registros: list[dict]) -> dict:
+    """a triagem: as estimativas, a contagem dos eventos das premissas (so os valores) e o descritivo, sem nada de leitura"""
+    d = descritivo(registros)
+    d.pop("guardas_11_celulas")
+    return {"o_que_e": "triagem (o adendo 1 do plano): so o tamanho do efeito; sem classe, sem p, sem leitura e sem corte",
+            "margem": MARGEM, "estimativas": estimativas(registros),
+            "eventos_das_premissas": {n: x["valores"] for n, x in premissas(registros).items()},
+            "descritivo": _sem_leitura(d),
+            "nao_demonstra": ["nao e a validacao: 20 unidades, sem regra de leitura (D-V1A-11)",
+                              "nada sobre o jogo web, nem sobre o pet v38 com a TV, a ilha grande e a memoria de 128 celulas",
+                              "nada sobre outro teto alem de C/2, nem sobre os pares e o social"]}
+
+
 # ================================================================== a trava e a run
 def modo_da_config(cfg: dict) -> str:
     faltam, sobram = (CHAVES_CONFIG - {"descricao"}) - set(cfg), set(cfg) - CHAVES_CONFIG
@@ -272,17 +317,23 @@ def modo_da_config(cfg: dict) -> str:
         if not 1 <= cfg["dias"] <= DIAS:
             raise ValueError(f"fumaca com {cfg['dias']} dias: de 1 a {DIAS}")
         return "fumaca"
-    if bases != BASES:
-        raise bv.SementeSemPlano("bases fora do plano: so as dos testes (fumaca) ou as da secao 4")
+    if bases not in (BASES, BASES_TRIAGEM):
+        raise bv.SementeSemPlano("bases fora do plano: so as dos testes (fumaca), as da triagem (secao 11) ou as da secao 4")
     if not any((lo, hi) == FAIXA for lo, hi, _ in FAIXAS_RESERVADAS):
         raise bv.SementeSemPlano(f"a faixa {FAIXA} nao esta em FAIXAS_RESERVADAS (secao 4)")
-    CA.exigir_aprovado((RAIZ / PLANO).read_text(encoding="utf-8"))
+    plano = (RAIZ / PLANO).read_text(encoding="utf-8")
+    CA.exigir_aprovado(plano)
+    triagem = bases == BASES_TRIAGEM
+    if triagem and not any(x.startswith(ADENDO_TRIAGEM) for x in plano.splitlines()):
+        raise RuntimeError(f"o adendo 1 do plano {PLANO} (a triagem) nao esta APROVADO pelo Matheus")
+    if not triagem and RUN_SUSPENSA:
+        raise bv.SementeSemPlano("a run de 200 esta suspensa pelo adendo 1 do plano (secao 11): antes dela vem a triagem")
     erros = [m for m, ok in ((f"dias {cfg['dias']} (o plano: {DIAS})", cfg["dias"] == DIAS),
                              (f"plano {cfg.get('plano')!r}", cfg.get("plano") == PLANO),
                              (f"K {u['k']} (o plano: {K_POR_BASE})", u["k"] == K_POR_BASE)) if not ok]
     if erros:
         raise ValueError(f"a run segue o plano a letra: {erros}")
-    return FASE
+    return "triagem" if triagem else FASE
 
 
 def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = None) -> dict:
@@ -325,7 +376,8 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     bv._gravar(pasta / "medidas.json", bv._dump(registros))
     bv._gravar(pasta / "custos.json", bv._dump(custos))
     lidos = json.loads((pasta / "medidas.json").read_text(encoding="utf-8"))
-    resultado = {"modo": modo, "fase": FASE, "plano": PLANO, "unidades": len(unidades), "vidas": len(lidos), **analisar(lidos)}
+    resultado = {"modo": modo, "fase": FASE, "plano": PLANO, "unidades": len(unidades), "vidas": len(lidos),
+                 **(analisar_triagem(lidos) if modo == "triagem" else analisar(lidos))}
     bv._gravar(pasta / "resultado.json", bv._dump(resultado))
     V.tar_deterministico(pasta / "vidas", pasta / "vidas.tar.gz")
     meta["pasta_crua_apagada"] = {"vidas": C4.conferir_e_apagar(pasta / "vidas", pasta / "vidas.tar.gz")}
@@ -339,6 +391,10 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
 
 def _resumo(r: dict) -> str:
     """o resumo no console, ASCII puro"""
+    if r["modo"] == "triagem":
+        return json.dumps({"modo": r["modo"], "vidas": r["vidas"], "unidades": r["unidades"],
+                           "estimativas": {n: {"niveis": x["niveis"], **{c: x["DTB - CTRL"][c] for c in ("media", "dp", "ic95")}}
+                                           for n, x in r["estimativas"].items()}}, indent=1, ensure_ascii=True, default=str)
     return json.dumps({"modo": r["modo"], "vidas": r["vidas"], "veredito": r["veredito"],
                        "primaria": {k: {c: v[c] for c in ("media", "ic95", "p_unilateral")} for k, v in r["primaria"].items()}},
                       indent=1, ensure_ascii=True, default=str)
@@ -352,7 +408,8 @@ def main() -> None:
     a = ap.parse_args()
     caminho = Path(a.config)
     cfg = json.loads(caminho.read_text(encoding="utf-8"))
-    if modo_da_config(cfg) == "fumaca":
+    modo = modo_da_config(cfg)
+    if modo == "fumaca":
         if a.saida is None:
             raise SystemExit(f"a fumaca precisa de --saida (fora de {SAIDA})")
     else:
@@ -360,7 +417,8 @@ def main() -> None:
         livre = shutil.disk_usage(RAIZ).free / 2**30
         if livre < PISO_DISCO_GB:
             raise SystemExit(f"so {livre:.1f} GB livres no disco: o piso e {PISO_DISCO_GB} GB (secao 4)")
-    print(_resumo(rodar(cfg, Path(a.saida) if a.saida else RAIZ / SAIDA, a.processos, caminho)["resultado"]))
+    padrao = RAIZ / (SAIDA_TRIAGEM if modo == "triagem" else SAIDA)
+    print(_resumo(rodar(cfg, Path(a.saida) if a.saida else padrao, a.processos, caminho)["resultado"]))
 
 
 if __name__ == "__main__":

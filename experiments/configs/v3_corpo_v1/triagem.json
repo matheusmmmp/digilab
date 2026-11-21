@@ -1,0 +1,33 @@
+{
+ "descricao": "CORPO V1-a, a triagem antes da run de 200 (docs/PLANO_ANALISE_V3_CORPO_V1.md, secao 11, o adendo 1): 20 unidades",
+ "fase": "corpo_v1a",
+ "plano": "docs/PLANO_ANALISE_V3_CORPO_V1.md",
+ "dias": 14,
+ "orcamento_por_dia": 16,
+ "unidades": {
+  "prefixo": "digibrain_prototipo",
+  "bases": [
+   109001,
+   109002,
+   109003,
+   109004,
+   109005,
+   109006,
+   109007,
+   109008,
+   109009,
+   109010,
+   109011,
+   109012,
+   109013,
+   109014,
+   109015,
+   109016,
+   109017,
+   109018,
+   109019,
+   109020
+  ],
+  "k": 1
+ }
+}
