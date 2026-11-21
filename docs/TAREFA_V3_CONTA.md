@@ -162,6 +162,8 @@ prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). B
 
 Pedido pela sessão da conta: a CN4 do `docs/PLANO_V3_CONTA.md` (seção 10; o desenho na seção 6), local e sem conta real. Branch `v3-cn4`.
 Em dois PRs: o servidor e o checklist da borda (este), e o cliente do jogo (o segundo). Os desvios são D-CONTA-210 a 221.
+**D-CONTA-210 a 226 DECIDIDAS em 2026-11-21 pela recomendação** (o Matheus: "Aprovo todas"); a conferência das NÃO CONFERIDAS (210, 212,
+217) fica para a CN5.
 
 - **O `robots.txt`:** o do jogo (`web/app/public/robots.txt`, gerado por `node servidor_web/scripts/gerar_robots.ts` da lista
   `ROBOS_DE_IA` de `servidor_web/src/protecao/robots.ts`) recusa 28 robôs de IA em tudo e os outros só nas pastas de assets; o da API
