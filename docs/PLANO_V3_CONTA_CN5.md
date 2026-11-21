@@ -1,6 +1,6 @@
 # Plano da CN5: a hospedagem de teste (2026-11-20)
 
-**Status:** PROPOSTO, sem código, sem conta criada e sem deploy. É a preparação da etapa **CN5** do `docs/PLANO_V3_CONTA.md` (seção 10),
+**Status:** APROVADO pelo Matheus em 2026-11-21 ("Aprovo todas"; as D-CONTA-206 a 209 DECIDIDAS pela recomendação), sem código, sem conta criada e sem deploy. É a preparação da etapa **CN5** do `docs/PLANO_V3_CONTA.md` (seção 10),
 dentro da pilha já decidida: a CN-7 (Node 24 + Hono numa VPS, SQLite com a cópia no R2, o login no próprio servidor, a Cloudflare na
 frente) e as **CH-1 a CH-7** do `docs/PLANO_V3_CONTA_HOSPEDAGEM.md` (Lightsail em São Paulo, 2 GB; Cloudflare Pages e R2; SQLite +
 Litestream; Sentry e Better Stack grátis; a Cloudflare Free; um ambiente só, o de teste com os convidados).
@@ -304,7 +304,7 @@ Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abr
 
 ## 6. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar; a do Tunnel é a D-CONTA-197 do PR #1057; as outras duas estão no registro (D-CONTA-206 e 207).
+**DECIDIDAS** pelo Matheus em 2026-11-21, pela recomendação ("Aprovo todas"). Cada uma com a recomendação e o custo de errar; a do Tunnel é a D-CONTA-197 do PR #1057; as outras duas estão no registro (D-CONTA-206 e 207).
 
 - **A ligação da VPS com a Cloudflare: o Cloudflare Tunnel** (a D-CONTA-197, no PR #1057, com o código). Nenhuma porta aberta além do SSH, o servidor segue em
   `127.0.0.1`, e o IP da VPS não aparece no DNS. A outra opção é abrir a 443 com um proxy (Caddy ou nginx) e o certificado de origem da
@@ -325,15 +325,14 @@ Cada uma com a recomendação e o custo de errar; a do Tunnel é a D-CONTA-197 d
    parada.
 4. **A chave da Anthropic do servidor e os apps OAuth** (linhas 9 a 11): precisam do domínio (o callback).
 
-## 8. Onde este plano diverge do PR #1057
+## 8. Onde este plano divergia do PR #1057 (resolvido em 2026-11-21)
 
-- **Os assets antes da CN4 (a D-CONTA-199 do #1057):** o #1057 propõe o bucket dos assets **público, num caminho fixo**, até a CN4. Este
-  plano (seção 4.1) põe a URL assinada **antes** do primeiro deploy, porque o caminho fixo é o download em lote que a CN-9 quis evitar, e
-  o repositório público diz qual é a lista. Os dois deixam a escolha com o Matheus; a recomendação daqui é publicar os assets só com a CN4,
-  ou, se o jogo tiver de abrir antes, com o domínio dos assets fora de qualquer texto do repositório. Custo de errar: médio (o atlas do
-  Digimon UP baixável).
-- **O excedente de tráfego em São Paulo (a D-CONTA-204 do #1057):** o #1057 dá US$ 0,15/GB. A leitura daqui (seção 2) é que esse número da
-  página do Lightsail é do **armazenamento de objetos** do Lightsail, e que a FAQ não lista São Paulo para a instância. Não pesa na conta.
+- **Os assets antes da CN4: RESOLVIDO pela recomendação deste plano.** O #1057 propunha o bucket dos assets público, num caminho fixo, até
+  a CN4 (a D-CONTA-199 dele). O Matheus aprovou este plano em 2026-11-21, e a D-CONTA-199 do #1057 foi trocada: **o bucket dos assets fica
+  privado, e os assets saem só por URL assinada**, que é a CN4 (os PRs #1058 e #1059). O primeiro deploy espera isso (seção 4.1).
+- **O excedente de tráfego em São Paulo (a D-CONTA-204 do #1057): fica para conferir no dia de contratar.** O #1057 dá US$ 0,15/GB; a
+  leitura daqui (seção 2) é que esse número da página do Lightsail é do armazenamento de objetos, e que a FAQ não lista São Paulo para a
+  instância. O Matheus confere na tela de criar a instância. Não pesa na conta.
 - **O Sentry (a D-CONTA-200 do #1057):** o #1057 deixa o Sentry fora por ora. Este plano o põe como "junto ou depois" (seção 4.2), não como
   bloqueio: não há contradição, e a linha 12 da seção 1 pode esperar.
 - **O workflow:** a seção 3.6 descreve o deploy pelo CI sem arquivo novo (D-CONTA-209); o #1057 já traz o workflow `publicar`. Vale o do
