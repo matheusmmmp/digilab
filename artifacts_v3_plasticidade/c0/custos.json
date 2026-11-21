@@ -1,0 +1,722 @@
+{
+  "CONGELADO|atencioso|comedouro|12548593614423404578": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.77857910000057
+  },
+  "CONGELADO|atencioso|comedouro|14344431731765171964": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.5280750000001717
+  },
+  "CONGELADO|atencioso|comedouro|15319372336215941532": {
+    "vida_cpu": 5.40625,
+    "vida_parede": 8.461495800000193
+  },
+  "CONGELADO|atencioso|comedouro|17614092493222048115": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 4.52413820000038
+  },
+  "CONGELADO|atencioso|comedouro|2195089478585996350": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.26753429999917
+  },
+  "CONGELADO|atencioso|comedouro|2247938157189845182": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.5817341999991186
+  },
+  "CONGELADO|atencioso|comedouro|5011486573033128983": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.6883887000003597
+  },
+  "CONGELADO|atencioso|comedouro|7655201434741070980": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 3.331111699999383
+  },
+  "CONGELADO|atencioso|comedouro|7987390043706992564": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 5.783770699999877
+  },
+  "CONGELADO|atencioso|comedouro|8770912317680979439": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.4247563000008086
+  },
+  "CONGELADO|atencioso|longe_fixo|12548593614423404578": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 11.85609100000147
+  },
+  "CONGELADO|atencioso|longe_fixo|14344431731765171964": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 10.19035040000017
+  },
+  "CONGELADO|atencioso|longe_fixo|15319372336215941532": {
+    "vida_cpu": 5.390625,
+    "vida_parede": 8.877800100000968
+  },
+  "CONGELADO|atencioso|longe_fixo|17614092493222048115": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.5094464999983757
+  },
+  "CONGELADO|atencioso|longe_fixo|2195089478585996350": {
+    "vida_cpu": 3.140625,
+    "vida_parede": 3.174809300000561
+  },
+  "CONGELADO|atencioso|longe_fixo|2247938157189845182": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.5439659000003303
+  },
+  "CONGELADO|atencioso|longe_fixo|5011486573033128983": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.366947099999379
+  },
+  "CONGELADO|atencioso|longe_fixo|7655201434741070980": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.2317633999991813
+  },
+  "CONGELADO|atencioso|longe_fixo|7987390043706992564": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 3.6066088000006857
+  },
+  "CONGELADO|atencioso|longe_fixo|8770912317680979439": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.7347125000014785
+  },
+  "CONGELADO|atencioso|longe|12548593614423404578": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.8543579999986832
+  },
+  "CONGELADO|atencioso|longe|14344431731765171964": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.399653499998749
+  },
+  "CONGELADO|atencioso|longe|15319372336215941532": {
+    "vida_cpu": 5.640625,
+    "vida_parede": 9.489385499999116
+  },
+  "CONGELADO|atencioso|longe|17614092493222048115": {
+    "vida_cpu": 3.453125,
+    "vida_parede": 4.413043200000175
+  },
+  "CONGELADO|atencioso|longe|2195089478585996350": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.236325100000613
+  },
+  "CONGELADO|atencioso|longe|2247938157189845182": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 3.977516300001298
+  },
+  "CONGELADO|atencioso|longe|5011486573033128983": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.545498800000132
+  },
+  "CONGELADO|atencioso|longe|7655201434741070980": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.304356099999495
+  },
+  "CONGELADO|atencioso|longe|7987390043706992564": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 5.7892355999993015
+  },
+  "CONGELADO|atencioso|longe|8770912317680979439": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.480137399999876
+  },
+  "CONGELADO|relapso|comedouro|12548593614423404578": {
+    "vida_cpu": 2.96875,
+    "vida_parede": 4.1214467999998305
+  },
+  "CONGELADO|relapso|comedouro|14344431731765171964": {
+    "vida_cpu": 3.0,
+    "vida_parede": 3.027653899998768
+  },
+  "CONGELADO|relapso|comedouro|15319372336215941532": {
+    "vida_cpu": 4.75,
+    "vida_parede": 8.288582799999858
+  },
+  "CONGELADO|relapso|comedouro|17614092493222048115": {
+    "vida_cpu": 3.03125,
+    "vida_parede": 3.0887182999995275
+  },
+  "CONGELADO|relapso|comedouro|2195089478585996350": {
+    "vida_cpu": 2.609375,
+    "vida_parede": 2.949705200000608
+  },
+  "CONGELADO|relapso|comedouro|2247938157189845182": {
+    "vida_cpu": 3.09375,
+    "vida_parede": 3.2001626000001124
+  },
+  "CONGELADO|relapso|comedouro|5011486573033128983": {
+    "vida_cpu": 2.9375,
+    "vida_parede": 3.476539100000082
+  },
+  "CONGELADO|relapso|comedouro|7655201434741070980": {
+    "vida_cpu": 2.859375,
+    "vida_parede": 2.883105999999316
+  },
+  "CONGELADO|relapso|comedouro|7987390043706992564": {
+    "vida_cpu": 3.0625,
+    "vida_parede": 3.0807811000013317
+  },
+  "CONGELADO|relapso|comedouro|8770912317680979439": {
+    "vida_cpu": 3.0,
+    "vida_parede": 3.114917200000491
+  },
+  "CONGELADO|relapso|longe_fixo|12548593614423404578": {
+    "vida_cpu": 3.03125,
+    "vida_parede": 4.055181100000482
+  },
+  "CONGELADO|relapso|longe_fixo|14344431731765171964": {
+    "vida_cpu": 3.09375,
+    "vida_parede": 3.1997303999996802
+  },
+  "CONGELADO|relapso|longe_fixo|15319372336215941532": {
+    "vida_cpu": 2.953125,
+    "vida_parede": 3.609292099999948
+  },
+  "CONGELADO|relapso|longe_fixo|17614092493222048115": {
+    "vida_cpu": 3.109375,
+    "vida_parede": 3.1691857000005257
+  },
+  "CONGELADO|relapso|longe_fixo|2195089478585996350": {
+    "vida_cpu": 2.578125,
+    "vida_parede": 2.6126524999999674
+  },
+  "CONGELADO|relapso|longe_fixo|2247938157189845182": {
+    "vida_cpu": 3.078125,
+    "vida_parede": 5.711587699999654
+  },
+  "CONGELADO|relapso|longe_fixo|5011486573033128983": {
+    "vida_cpu": 2.984375,
+    "vida_parede": 3.3442125000001397
+  },
+  "CONGELADO|relapso|longe_fixo|7655201434741070980": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 4.4116398999995
+  },
+  "CONGELADO|relapso|longe_fixo|7987390043706992564": {
+    "vida_cpu": 3.1875,
+    "vida_parede": 3.196510499999931
+  },
+  "CONGELADO|relapso|longe_fixo|8770912317680979439": {
+    "vida_cpu": 3.078125,
+    "vida_parede": 3.1828186999991885
+  },
+  "CONGELADO|relapso|longe|12548593614423404578": {
+    "vida_cpu": 3.09375,
+    "vida_parede": 4.075678799999878
+  },
+  "CONGELADO|relapso|longe|14344431731765171964": {
+    "vida_cpu": 3.25,
+    "vida_parede": 3.2761854000000312
+  },
+  "CONGELADO|relapso|longe|15319372336215941532": {
+    "vida_cpu": 2.984375,
+    "vida_parede": 3.402062400000432
+  },
+  "CONGELADO|relapso|longe|17614092493222048115": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.4518431999986205
+  },
+  "CONGELADO|relapso|longe|2195089478585996350": {
+    "vida_cpu": 2.921875,
+    "vida_parede": 3.2442962000004627
+  },
+  "CONGELADO|relapso|longe|2247938157189845182": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.4042177999999694
+  },
+  "CONGELADO|relapso|longe|5011486573033128983": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 3.4603975000009086
+  },
+  "CONGELADO|relapso|longe|7655201434741070980": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 4.49936660000094
+  },
+  "CONGELADO|relapso|longe|7987390043706992564": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.2438574000007065
+  },
+  "CONGELADO|relapso|longe|8770912317680979439": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.8190080000003945
+  },
+  "CRITICO|atencioso|comedouro|12548593614423404578": {
+    "vida_cpu": 3.515625,
+    "vida_parede": 11.432998399999633
+  },
+  "CRITICO|atencioso|comedouro|14344431731765171964": {
+    "vida_cpu": 3.40625,
+    "vida_parede": 3.4845737000014196
+  },
+  "CRITICO|atencioso|comedouro|15319372336215941532": {
+    "vida_cpu": 5.03125,
+    "vida_parede": 8.803047699999297
+  },
+  "CRITICO|atencioso|comedouro|17614092493222048115": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 4.194952099998773
+  },
+  "CRITICO|atencioso|comedouro|2195089478585996350": {
+    "vida_cpu": 3.46875,
+    "vida_parede": 3.5120903000006365
+  },
+  "CRITICO|atencioso|comedouro|2247938157189845182": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.4831049000003986
+  },
+  "CRITICO|atencioso|comedouro|5011486573033128983": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.7087996999998722
+  },
+  "CRITICO|atencioso|comedouro|7655201434741070980": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 12.369934099999227
+  },
+  "CRITICO|atencioso|comedouro|7987390043706992564": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 3.587803000000349
+  },
+  "CRITICO|atencioso|comedouro|8770912317680979439": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 29.866993999999977
+  },
+  "CRITICO|atencioso|longe_fixo|12548593614423404578": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.734606400001212
+  },
+  "CRITICO|atencioso|longe_fixo|14344431731765171964": {
+    "vida_cpu": 3.59375,
+    "vida_parede": 3.683704900000521
+  },
+  "CRITICO|atencioso|longe_fixo|15319372336215941532": {
+    "vida_cpu": 5.1875,
+    "vida_parede": 8.473431999998866
+  },
+  "CRITICO|atencioso|longe_fixo|17614092493222048115": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.5596138999990217
+  },
+  "CRITICO|atencioso|longe_fixo|2195089478585996350": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 3.4763444000000163
+  },
+  "CRITICO|atencioso|longe_fixo|2247938157189845182": {
+    "vida_cpu": 3.640625,
+    "vida_parede": 3.669981299999563
+  },
+  "CRITICO|atencioso|longe_fixo|5011486573033128983": {
+    "vida_cpu": 3.484375,
+    "vida_parede": 15.16021019999971
+  },
+  "CRITICO|atencioso|longe_fixo|7655201434741070980": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 12.354233500000191
+  },
+  "CRITICO|atencioso|longe_fixo|7987390043706992564": {
+    "vida_cpu": 3.5,
+    "vida_parede": 3.5881083000003855
+  },
+  "CRITICO|atencioso|longe_fixo|8770912317680979439": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 28.48958330000096
+  },
+  "CRITICO|atencioso|longe|12548593614423404578": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 10.496496199999456
+  },
+  "CRITICO|atencioso|longe|14344431731765171964": {
+    "vida_cpu": 3.546875,
+    "vida_parede": 3.610642399999051
+  },
+  "CRITICO|atencioso|longe|15319372336215941532": {
+    "vida_cpu": 5.28125,
+    "vida_parede": 8.55970460000026
+  },
+  "CRITICO|atencioso|longe|17614092493222048115": {
+    "vida_cpu": 3.59375,
+    "vida_parede": 4.29360220000126
+  },
+  "CRITICO|atencioso|longe|2195089478585996350": {
+    "vida_cpu": 3.375,
+    "vida_parede": 3.384484299998803
+  },
+  "CRITICO|atencioso|longe|2247938157189845182": {
+    "vida_cpu": 3.734375,
+    "vida_parede": 3.798471000000063
+  },
+  "CRITICO|atencioso|longe|5011486573033128983": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 3.7399087000012514
+  },
+  "CRITICO|atencioso|longe|7655201434741070980": {
+    "vida_cpu": 3.28125,
+    "vida_parede": 12.361117300000842
+  },
+  "CRITICO|atencioso|longe|7987390043706992564": {
+    "vida_cpu": 3.53125,
+    "vida_parede": 3.6493212999994284
+  },
+  "CRITICO|atencioso|longe|8770912317680979439": {
+    "vida_cpu": 3.4375,
+    "vida_parede": 29.705206700000417
+  },
+  "CRITICO|relapso|comedouro|12548593614423404578": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 10.61087199999929
+  },
+  "CRITICO|relapso|comedouro|14344431731765171964": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.4090324000007968
+  },
+  "CRITICO|relapso|comedouro|15319372336215941532": {
+    "vida_cpu": 4.578125,
+    "vida_parede": 8.220185000000129
+  },
+  "CRITICO|relapso|comedouro|17614092493222048115": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.3138751999995293
+  },
+  "CRITICO|relapso|comedouro|2195089478585996350": {
+    "vida_cpu": 2.96875,
+    "vida_parede": 3.039052399999491
+  },
+  "CRITICO|relapso|comedouro|2247938157189845182": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.381924600000275
+  },
+  "CRITICO|relapso|comedouro|5011486573033128983": {
+    "vida_cpu": 3.078125,
+    "vida_parede": 14.489945100000114
+  },
+  "CRITICO|relapso|comedouro|7655201434741070980": {
+    "vida_cpu": 3.125,
+    "vida_parede": 12.429926299999352
+  },
+  "CRITICO|relapso|comedouro|7987390043706992564": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 3.2991615000009915
+  },
+  "CRITICO|relapso|comedouro|8770912317680979439": {
+    "vida_cpu": 3.203125,
+    "vida_parede": 28.391357399999833
+  },
+  "CRITICO|relapso|longe_fixo|12548593614423404578": {
+    "vida_cpu": 3.3125,
+    "vida_parede": 10.627868599998692
+  },
+  "CRITICO|relapso|longe_fixo|14344431731765171964": {
+    "vida_cpu": 3.125,
+    "vida_parede": 3.1571248000000196
+  },
+  "CRITICO|relapso|longe_fixo|15319372336215941532": {
+    "vida_cpu": 3.171875,
+    "vida_parede": 3.21832859999995
+  },
+  "CRITICO|relapso|longe_fixo|17614092493222048115": {
+    "vida_cpu": 3.234375,
+    "vida_parede": 3.335321299999123
+  },
+  "CRITICO|relapso|longe_fixo|2195089478585996350": {
+    "vida_cpu": 3.0,
+    "vida_parede": 3.134504099998594
+  },
+  "CRITICO|relapso|longe_fixo|2247938157189845182": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.8125321000006807
+  },
+  "CRITICO|relapso|longe_fixo|5011486573033128983": {
+    "vida_cpu": 3.25,
+    "vida_parede": 14.535667500000272
+  },
+  "CRITICO|relapso|longe_fixo|7655201434741070980": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 4.424322800001391
+  },
+  "CRITICO|relapso|longe_fixo|7987390043706992564": {
+    "vida_cpu": 3.359375,
+    "vida_parede": 3.383522100000846
+  },
+  "CRITICO|relapso|longe_fixo|8770912317680979439": {
+    "vida_cpu": 3.296875,
+    "vida_parede": 11.229052599999704
+  },
+  "CRITICO|relapso|longe|12548593614423404578": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 10.640037199998915
+  },
+  "CRITICO|relapso|longe|14344431731765171964": {
+    "vida_cpu": 3.328125,
+    "vida_parede": 8.38011010000082
+  },
+  "CRITICO|relapso|longe|15319372336215941532": {
+    "vida_cpu": 3.265625,
+    "vida_parede": 3.8755228000009083
+  },
+  "CRITICO|relapso|longe|17614092493222048115": {
+    "vida_cpu": 3.390625,
+    "vida_parede": 4.063666000000012
+  },
+  "CRITICO|relapso|longe|2195089478585996350": {
+    "vida_cpu": 2.9375,
+    "vida_parede": 2.961707700000261
+  },
+  "CRITICO|relapso|longe|2247938157189845182": {
+    "vida_cpu": 3.21875,
+    "vida_parede": 3.876150100000814
+  },
+  "CRITICO|relapso|longe|5011486573033128983": {
+    "vida_cpu": 3.15625,
+    "vida_parede": 14.361981500000184
+  },
+  "CRITICO|relapso|longe|7655201434741070980": {
+    "vida_cpu": 3.5,
+    "vida_parede": 5.549836600001072
+  },
+  "CRITICO|relapso|longe|7987390043706992564": {
+    "vida_cpu": 3.34375,
+    "vida_parede": 3.370974600000409
+  },
+  "CRITICO|relapso|longe|8770912317680979439": {
+    "vida_cpu": 3.421875,
+    "vida_parede": 11.436925500000143
+  },
+  "HOJE|atencioso|comedouro|12548593614423404578": {
+    "vida_cpu": 4.921875,
+    "vida_parede": 4.955478799998673
+  },
+  "HOJE|atencioso|comedouro|14344431731765171964": {
+    "vida_cpu": 5.203125,
+    "vida_parede": 5.251378299999487
+  },
+  "HOJE|atencioso|comedouro|15319372336215941532": {
+    "vida_cpu": 7.296875,
+    "vida_parede": 14.513018100000409
+  },
+  "HOJE|atencioso|comedouro|17614092493222048115": {
+    "vida_cpu": 5.140625,
+    "vida_parede": 5.847403199999462
+  },
+  "HOJE|atencioso|comedouro|2195089478585996350": {
+    "vida_cpu": 5.015625,
+    "vida_parede": 9.10701490000065
+  },
+  "HOJE|atencioso|comedouro|2247938157189845182": {
+    "vida_cpu": 4.890625,
+    "vida_parede": 5.881295399998635
+  },
+  "HOJE|atencioso|comedouro|5011486573033128983": {
+    "vida_cpu": 6.140625,
+    "vida_parede": 10.813134200001514
+  },
+  "HOJE|atencioso|comedouro|7655201434741070980": {
+    "vida_cpu": 4.953125,
+    "vida_parede": 5.108300800000507
+  },
+  "HOJE|atencioso|comedouro|7987390043706992564": {
+    "vida_cpu": 5.265625,
+    "vida_parede": 7.058530099999189
+  },
+  "HOJE|atencioso|comedouro|8770912317680979439": {
+    "vida_cpu": 5.09375,
+    "vida_parede": 5.233118800000739
+  },
+  "HOJE|atencioso|longe_fixo|12548593614423404578": {
+    "vida_cpu": 4.96875,
+    "vida_parede": 5.139213799999197
+  },
+  "HOJE|atencioso|longe_fixo|14344431731765171964": {
+    "vida_cpu": 5.25,
+    "vida_parede": 5.308000200000606
+  },
+  "HOJE|atencioso|longe_fixo|15319372336215941532": {
+    "vida_cpu": 7.25,
+    "vida_parede": 14.539507699999376
+  },
+  "HOJE|atencioso|longe_fixo|17614092493222048115": {
+    "vida_cpu": 5.21875,
+    "vida_parede": 6.242515999998432
+  },
+  "HOJE|atencioso|longe_fixo|2195089478585996350": {
+    "vida_cpu": 5.28125,
+    "vida_parede": 5.291449899999861
+  },
+  "HOJE|atencioso|longe_fixo|2247938157189845182": {
+    "vida_cpu": 4.96875,
+    "vida_parede": 5.39522020000004
+  },
+  "HOJE|atencioso|longe_fixo|5011486573033128983": {
+    "vida_cpu": 4.984375,
+    "vida_parede": 5.472620900000038
+  },
+  "HOJE|atencioso|longe_fixo|7655201434741070980": {
+    "vida_cpu": 5.015625,
+    "vida_parede": 5.155860999999277
+  },
+  "HOJE|atencioso|longe_fixo|7987390043706992564": {
+    "vida_cpu": 4.84375,
+    "vida_parede": 5.563669899998786
+  },
+  "HOJE|atencioso|longe_fixo|8770912317680979439": {
+    "vida_cpu": 4.984375,
+    "vida_parede": 5.262350599999991
+  },
+  "HOJE|atencioso|longe|12548593614423404578": {
+    "vida_cpu": 5.171875,
+    "vida_parede": 5.559154099999432
+  },
+  "HOJE|atencioso|longe|14344431731765171964": {
+    "vida_cpu": 5.203125,
+    "vida_parede": 5.265785300000061
+  },
+  "HOJE|atencioso|longe|15319372336215941532": {
+    "vida_cpu": 7.4375,
+    "vida_parede": 14.741961099998662
+  },
+  "HOJE|atencioso|longe|17614092493222048115": {
+    "vida_cpu": 5.203125,
+    "vida_parede": 5.8761962999997195
+  },
+  "HOJE|atencioso|longe|2195089478585996350": {
+    "vida_cpu": 5.1875,
+    "vida_parede": 5.2144580999993195
+  },
+  "HOJE|atencioso|longe|2247938157189845182": {
+    "vida_cpu": 5.125,
+    "vida_parede": 5.483721199998399
+  },
+  "HOJE|atencioso|longe|5011486573033128983": {
+    "vida_cpu": 6.28125,
+    "vida_parede": 10.059430400000565
+  },
+  "HOJE|atencioso|longe|7655201434741070980": {
+    "vida_cpu": 4.984375,
+    "vida_parede": 5.065350799999578
+  },
+  "HOJE|atencioso|longe|7987390043706992564": {
+    "vida_cpu": 5.171875,
+    "vida_parede": 6.364983299999949
+  },
+  "HOJE|atencioso|longe|8770912317680979439": {
+    "vida_cpu": 5.109375,
+    "vida_parede": 5.288192099998923
+  },
+  "HOJE|relapso|comedouro|12548593614423404578": {
+    "vida_cpu": 4.84375,
+    "vida_parede": 9.27680169999985
+  },
+  "HOJE|relapso|comedouro|14344431731765171964": {
+    "vida_cpu": 4.6875,
+    "vida_parede": 4.736037700000452
+  },
+  "HOJE|relapso|comedouro|15319372336215941532": {
+    "vida_cpu": 6.65625,
+    "vida_parede": 13.733277699999235
+  },
+  "HOJE|relapso|comedouro|17614092493222048115": {
+    "vida_cpu": 4.765625,
+    "vida_parede": 5.150840199999948
+  },
+  "HOJE|relapso|comedouro|2195089478585996350": {
+    "vida_cpu": 4.484375,
+    "vida_parede": 4.56768430000011
+  },
+  "HOJE|relapso|comedouro|2247938157189845182": {
+    "vida_cpu": 4.546875,
+    "vida_parede": 4.979439099999581
+  },
+  "HOJE|relapso|comedouro|5011486573033128983": {
+    "vida_cpu": 4.5625,
+    "vida_parede": 5.297564699998475
+  },
+  "HOJE|relapso|comedouro|7655201434741070980": {
+    "vida_cpu": 4.609375,
+    "vida_parede": 4.746733399999357
+  },
+  "HOJE|relapso|comedouro|7987390043706992564": {
+    "vida_cpu": 4.9375,
+    "vida_parede": 5.0425691999989795
+  },
+  "HOJE|relapso|comedouro|8770912317680979439": {
+    "vida_cpu": 4.640625,
+    "vida_parede": 4.947437999999238
+  },
+  "HOJE|relapso|longe_fixo|12548593614423404578": {
+    "vida_cpu": 4.953125,
+    "vida_parede": 9.197379100000035
+  },
+  "HOJE|relapso|longe_fixo|14344431731765171964": {
+    "vida_cpu": 4.6875,
+    "vida_parede": 9.376360000000204
+  },
+  "HOJE|relapso|longe_fixo|15319372336215941532": {
+    "vida_cpu": 5.953125,
+    "vida_parede": 10.905772799998886
+  },
+  "HOJE|relapso|longe_fixo|17614092493222048115": {
+    "vida_cpu": 4.703125,
+    "vida_parede": 5.0483220999994955
+  },
+  "HOJE|relapso|longe_fixo|2195089478585996350": {
+    "vida_cpu": 4.421875,
+    "vida_parede": 4.772654899999907
+  },
+  "HOJE|relapso|longe_fixo|2247938157189845182": {
+    "vida_cpu": 4.71875,
+    "vida_parede": 7.717421800000011
+  },
+  "HOJE|relapso|longe_fixo|5011486573033128983": {
+    "vida_cpu": 4.5,
+    "vida_parede": 5.1676155000004655
+  },
+  "HOJE|relapso|longe_fixo|7655201434741070980": {
+    "vida_cpu": 4.953125,
+    "vida_parede": 5.693259199999375
+  },
+  "HOJE|relapso|longe_fixo|7987390043706992564": {
+    "vida_cpu": 5.03125,
+    "vida_parede": 5.107617699999537
+  },
+  "HOJE|relapso|longe_fixo|8770912317680979439": {
+    "vida_cpu": 4.8125,
+    "vida_parede": 4.887374300000374
+  },
+  "HOJE|relapso|longe|12548593614423404578": {
+    "vida_cpu": 5.0625,
+    "vida_parede": 9.30187450000085
+  },
+  "HOJE|relapso|longe|14344431731765171964": {
+    "vida_cpu": 5.03125,
+    "vida_parede": 5.230303099999219
+  },
+  "HOJE|relapso|longe|15319372336215941532": {
+    "vida_cpu": 6.078125,
+    "vida_parede": 12.215238000000681
+  },
+  "HOJE|relapso|longe|17614092493222048115": {
+    "vida_cpu": 4.9375,
+    "vida_parede": 5.256385099999534
+  },
+  "HOJE|relapso|longe|2195089478585996350": {
+    "vida_cpu": 4.625,
+    "vida_parede": 4.873037999999724
+  },
+  "HOJE|relapso|longe|2247938157189845182": {
+    "vida_cpu": 4.890625,
+    "vida_parede": 5.022089199999755
+  },
+  "HOJE|relapso|longe|5011486573033128983": {
+    "vida_cpu": 4.703125,
+    "vida_parede": 5.365445600000385
+  },
+  "HOJE|relapso|longe|7655201434741070980": {
+    "vida_cpu": 4.984375,
+    "vida_parede": 5.103866900000867
+  },
+  "HOJE|relapso|longe|7987390043706992564": {
+    "vida_cpu": 5.078125,
+    "vida_parede": 5.2004665000004024
+  },
+  "HOJE|relapso|longe|8770912317680979439": {
+    "vida_cpu": 5.078125,
+    "vida_parede": 5.162958799999615
+  }
+}

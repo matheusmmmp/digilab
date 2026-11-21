@@ -1,0 +1,165 @@
+{
+  "ao_lado": {
+    "aprendido_decidiu": {
+      "CONGELADO": 0.1502480158730159,
+      "CRITICO": 0.17907986111111113,
+      "HOJE": 0.18216765873015872
+    },
+    "credito_dormir": {
+      "CONGELADO": null,
+      "CRITICO": 0.11305804628102334,
+      "HOJE": 0.0
+    },
+    "credito_dormir_n": {
+      "CONGELADO": null,
+      "CRITICO": 0.473470694447869,
+      "HOJE": 0.47302528694626583
+    },
+    "entropia_bits": {
+      "CONGELADO": 1.7983661417520982,
+      "CRITICO": 1.8117924810662942,
+      "HOJE": 1.8249641679480646
+    },
+    "entropia_frac_baixa": {
+      "CONGELADO": 0.00012056932847739603,
+      "CRITICO": 6.342475374046072e-05,
+      "HOJE": 8.425796887093936e-05
+    },
+    "exaustao_8_14": {
+      "CONGELADO": 0.12197420634920635,
+      "CRITICO": 0.11671626984126984,
+      "HOJE": 0.11701388888888889
+    },
+    "habito_abs": {
+      "CONGELADO": 0.0,
+      "CRITICO": 1002.5666666666666,
+      "HOJE": 1097.3333333333333
+    },
+    "saude_8_14": {
+      "CONGELADO": 0.755615517526455,
+      "CRITICO": 0.7752163690476191,
+      "HOJE": 0.7599304150132276
+    }
+  },
+  "celulas": [
+    [
+      "atencioso",
+      "comedouro"
+    ],
+    [
+      "atencioso",
+      "longe"
+    ],
+    [
+      "atencioso",
+      "longe_fixo"
+    ],
+    [
+      "relapso",
+      "comedouro"
+    ],
+    [
+      "relapso",
+      "longe"
+    ],
+    [
+      "relapso",
+      "longe_fixo"
+    ]
+  ],
+  "critico": {
+    "eta_v": 64,
+    "gamma": 960,
+    "ligada": true
+  },
+  "entropia": {
+    "limiar_bits": 0.1
+  },
+  "fase": "plasticidade_c0",
+  "leitura": {
+    "corte_pq3_9": {
+      "delta": 0.032,
+      "passa": false,
+      "texto": "o corte para uma confirmacao (PQ3-9 do pet que pensa): o IC95 acima de 0 e a media em delta ou mais; so informado, o C0 e triagem"
+    },
+    "leitura": "nada muda",
+    "segue": "o E0 roda como esta, e a leitura 'estrutural' ganha forca"
+  },
+  "medida": "tempo_bem",
+  "modo": "plasticidade_c0",
+  "nao_diz": [
+    "nada confirmatorio: e uma triagem, com 10 unidades",
+    "nada sobre outros valores do eta_v e do gamma: o C0 testa um ponto so",
+    "nada sobre donos e lugares fora das seis celulas",
+    "nada sobre o jogo: a chave fica desligada nele, e o pet e o v38 do Python"
+  ],
+  "o_critico_nas_vidas": {
+    "creditos_que_movem": 6590,
+    "fechadas": 79311,
+    "pendentes_no_fim": 0,
+    "v_abs_medio": 2522.0,
+    "vidas": 60,
+    "vidas_iguais_as_de_hoje": 0
+  },
+  "plano": "docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md",
+  "tempo_bem": {
+    "CONGELADO": {
+      "dp": 0.032217424723769296,
+      "fora_de_zero": true,
+      "ic_inferior": 0.7673176260645949,
+      "ic_superior": 0.8134115406020717,
+      "media": 0.7903645833333333,
+      "motivo": null,
+      "n": 10
+    },
+    "CRITICO": {
+      "dp": 0.03370797387133757,
+      "fora_de_zero": true,
+      "ic_inferior": 0.7724393474699394,
+      "ic_superior": 0.8206658112602194,
+      "media": 0.7965525793650794,
+      "motivo": null,
+      "n": 10
+    },
+    "HOJE": {
+      "dp": 0.04254856089570762,
+      "fora_de_zero": true,
+      "ic_inferior": 0.7627545574098564,
+      "ic_superior": 0.8236293711615721,
+      "media": 0.7931919642857143,
+      "motivo": null,
+      "n": 10
+    }
+  },
+  "unidades": 10,
+  "valor_do_aprendizado": {
+    "com_o_critico": {
+      "dp": 0.02570203555073943,
+      "fora_de_zero": false,
+      "ic_inferior": -0.01219813259697893,
+      "ic_superior": 0.02457412466047102,
+      "media": 0.006187996031746046,
+      "motivo": null,
+      "n": 10
+    },
+    "contraste": {
+      "dp": 0.019830627278294148,
+      "fora_de_zero": false,
+      "ic_inferior": -0.010825361093892852,
+      "ic_superior": 0.017546591252623058,
+      "media": 0.0033606150793651034,
+      "motivo": null,
+      "n": 10
+    },
+    "sem_o_critico": {
+      "dp": 0.034871978403536646,
+      "fora_de_zero": false,
+      "ic_inferior": -0.022118529623448856,
+      "ic_superior": 0.02777329152821074,
+      "media": 0.0028273809523809423,
+      "motivo": null,
+      "n": 10
+    }
+  },
+  "vidas": 180
+}

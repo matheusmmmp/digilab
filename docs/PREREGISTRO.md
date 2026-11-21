@@ -38,6 +38,7 @@ link para o plano commitado.
 | [PR-CORPO-V1](#pr-corpo-v1--o-teto-baixo-no-pet-do-jogo) | o teto baixo no pet do jogo (CORPO V1-a) | ainda não rodou; suspensa por uma triagem (o adendo 1 do plano) | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | rodado em 2026-11-20 | não |
+| [PR-PLASTICIDADE-C0](#pr-plasticidade-c0--a-triagem-do-crítico) | a triagem do crítico | triagem, sem gate: "nada muda" | não |
 
 ## PR-C1 — o longe regular
 
@@ -413,3 +414,22 @@ registrá-la como provável, sem nova réplica (2026-11-17, "Registre como prov�
   autoriza dizer que a run inteira se reproduz byte a byte.
 - **Para runs novas:** um campo de relógio dentro do artefato comparado faz toda réplica "divergir". Isto é um achado, não uma mudança:
   o orquestrador da C4 não muda.
+
+## PR-PLASTICIDADE-C0 — a triagem do crítico
+
+**Seção escrita depois da run** (2026-11-21): a regra pede a seção antes, e ela não foi escrita (D-PE-C0-12). O que vale como registro
+de antes é o adendo 1 da tarefa, APROVADO pelo Matheus em 2026-11-21 ("Aprovo todas") e na `main` desde o commit abaixo, antes da primeira
+vida (a run começou às 14:42 do mesmo dia, no código `e73624eb`). É triagem: o adendo diz "sem gate".
+
+| campo | valor |
+|---|---|
+| plano | [`TAREFA_V3_PLASTICIDADE_EVOLUIDA.md`](https://github.com/matheusmmmp/digilab/blob/bf952e823b54024c680bcd9fb8df7a496d0b742d/docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md), seção 9.1, commit `bf952e823b54024c680bcd9fb8df7a496d0b742d` (2026-11-21, o APROVADO). Não há `PLANO_ANALISE_V3_*` separado (D-PE-12 do registro) |
+| hipótese | "o hábito (P2) aprende com a recompensa crua"; com o erro de diferença temporal no lugar dela, aprender passaria a valer mais (seção 9.1) |
+| células | o pet v38 do Python; os braços HOJE, CRÍTICO e CONGELADO; 6 células (atencioso e relapso × `comedouro`, `longe`, `longe_fixo`); 10 unidades, 14 dias. 180 vidas (a seção 9.1 diz 360; a conta dos três braços dá 180, D-PE-C0-5) |
+| sementes | as bases 110001…110010, as do E0, da faixa 110001…110200 reservada pela coordenadora (PE-5) |
+| contraste primário | **nenhum como gate.** A leitura usa o valor do aprendizado com o crítico menos sem ele, (CRÍTICO − CONGELADO) − (HOJE − CONGELADO), no "Tempo bem" dos dias 1 a 14, pareado por unidade, IC95 pelo t |
+| regra de leitura | "o crítico aumenta o valor do aprendizado": o E0 roda com o crítico ligado, e o `eta_v` entra entre os genes; "nada muda": o E0 roda como está, e a leitura "estrutural" ganha força (seção 9.1). Em código (D-PE-C0-8): o IC95 todo acima de 0, ou o IC95 contendo 0; todo abaixo de 0 volta ao Matheus |
+| regra de parada | roda uma vez; as conferências de cada vida (o replay, o T-CENARIO-1, o pet e o braço, a C-HOJE, a contabilidade do crédito) falham alto antes de qualquer medida; a pasta de saída existente recusa a run |
+| o que refutaria | pela regra de leitura: "nada muda" contraria a hipótese do adendo |
+| resultado | [RESULTADO_V3_PLASTICIDADE_C0.md](RESULTADO_V3_PLASTICIDADE_C0.md): "nada muda" (o contraste +0,0034, IC95 de −0,0108 a +0,0175) |
+| artefatos | [`artifacts_v3_plasticidade/c0/`](../artifacts_v3_plasticidade/c0/): `meta.json`, `resultado.json` `598e6daa…`, `medidas.json` `c356b0d6…`, `custos.json`, `vidas.tar.gz` `bd88a13c…`; a run rodou em `e73624eb` |
