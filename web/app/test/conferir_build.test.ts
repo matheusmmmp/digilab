@@ -3,9 +3,10 @@
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { AVISO_AUTORIA } from "../scripts/autoria.ts";
-import { conferirBuild } from "../scripts/conferir_build.ts";
+import { conferirBuild, conferirTdm } from "../scripts/conferir_build.ts";
 
 const pastas: string[] = [];
 function dist(arquivos: Record<string, string>): string {
@@ -17,11 +18,37 @@ function dist(arquivos: Record<string, string>): string {
   }
   return pasta;
 }
+/* o aviso de mineracao reservada (PI-6), como o build de verdade o traz de public/ e do index.html */
+const TDM = {
+  ".well-known/tdmrep.json": '[\n  {\n    "location": "/",\n    "tdm-reservation": 1\n  }\n]\n',
+  "_headers": "# comentario\n/*\n  tdm-reservation: 1\n",
+  "index.html": '<html><head><meta name="tdm-reservation" content="1"></head></html>',
+};
 afterEach(() => { for (const p of pastas.splice(0)) rmSync(p, { recursive: true, force: true }); });
 
 describe("PI2: o conferidor do build", () => {
   it("passa num build com o aviso e sem mapa", () => {
-    expect(conferirBuild(dist({ "index.html": "<html></html>", "assets/index-a1.js": AVISO_AUTORIA + "\nvar a=1;" }))).toEqual([]);
+    expect(conferirBuild(dist({ ...TDM, "assets/index-a1.js": AVISO_AUTORIA + "\nvar a=1;" }))).toEqual([]);
+  });
+
+  it("PI-6: reprova o build sem o tdmrep.json, com a reserva em 0, sem o _headers ou sem a meta", () => {
+    expect(conferirTdm(dist(TDM))).toEqual([]);
+    const sem = (tira: keyof typeof TDM) => conferirTdm(dist(Object.fromEntries(Object.entries(TDM).filter(([k]) => k !== tira))));
+    expect(sem(".well-known/tdmrep.json")).toEqual([expect.stringContaining("tdmrep.json")]);
+    expect(sem("_headers")).toEqual([expect.stringContaining("_headers")]);
+    expect(sem("index.html")).toEqual([expect.stringContaining("meta")]);
+    const zero = conferirTdm(dist({ ...TDM, ".well-known/tdmrep.json": '[{"location": "/", "tdm-reservation": 0}]' }));
+    expect(zero).toEqual([expect.stringContaining("tdmrep.json")]);
+    expect(conferirTdm(dist({ ...TDM, ".well-known/tdmrep.json": '{"location": "/", "tdm-reservation": 1}' })).length).toBe(1);
+  });
+
+  it("PI-6: o public/ e o index.html do jogo trazem o aviso (o servidor_web/scripts/gerar_robots.ts os grava)", () => {
+    const publico = fileURLToPath(new URL("../public/", import.meta.url));
+    const pasta = dist({});
+    mkdirSync(join(pasta, ".well-known"), { recursive: true });
+    for (const c of [".well-known/tdmrep.json", "_headers"]) writeFileSync(join(pasta, c), readFileSync(join(publico, c)));
+    writeFileSync(join(pasta, "index.html"), readFileSync(new URL("../index.html", import.meta.url)));
+    expect(conferirTdm(pasta)).toEqual([]);
   });
 
   it("reprova um .map no dist/", () => {

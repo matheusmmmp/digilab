@@ -42,6 +42,18 @@ conta. As variáveis estão no cabeçalho de `servidor_web/src/protecao/config.t
   (`web/app/public/robots.txt`, gerado de `servidor_web/src/protecao/robots.ts`); o da API é o `GET /robots.txt` do servidor. Dois
   `robots.txt` diferentes no mesmo domínio confundem o robô honesto.
 - [ ] Os robôs bons verificados (a busca) **seguem entrando** no domínio do jogo: as páginas públicas da CN6 precisam ser achadas.
+- [ ] **O aviso de mineração reservada (PI-6, o TDMRep; D-CONTA-231 a 234) chega intacto nos três nomes.** O código já o põe: o
+  arquivo `/.well-known/tdmrep.json` (`[{"location": "/", "tdm-reservation": 1}]`) e o cabeçalho `tdm-reservation: 1` no jogo (o
+  `_headers` e o `.well-known/` que o `montar_site.sh` leva para a raiz do Pages; a meta `tdm-reservation` no HTML), na API (toda
+  resposta) e no Worker dos assets (o arquivo sem assinatura; o cabeçalho em toda resposta). A fonte é
+  `servidor_web/src/protecao/tdmrep.ts`, e o protocolo é o relatório final do grupo do W3C de 2024-05-10
+  (https://www.w3.org/community/reports/tdmrep/CG-FINAL-tdmrep-20240510/). **Na Cloudflare:** nenhuma Transform Rule de cabeçalho de
+  resposta remove nem troca o `tdm-reservation` (as regras do `X-Robots-Tag` da seção 6 e as da seção 8 **acrescentam**, com "Set" só
+  no cabeçalho delas); nenhuma regra de cache, redirecionamento ou página gerenciada cobre o `/.well-known/tdmrep.json`; o `robots.txt`
+  gerenciado da Cloudflare, se ligado, não substitui o arquivo. **Depois do deploy:** `curl -sI https://digilab.exemplo/jogo/`,
+  `https://api.digilab.exemplo/saude` e um asset assinado mostram `tdm-reservation: 1`, e `curl -s https://<cada nome>/.well-known/tdmrep.json`
+  devolve o arquivo com 200 (os três nomes são origens diferentes, e o protocolo lê o arquivo de cada uma). Se a Cloudflare tirar o
+  cabeçalho, a volta é uma Transform Rule "Set static" `tdm-reservation` = `1` nos três nomes.
 
 ## 4. As regras de WAF (Security › WAF › Custom rules)
 
@@ -49,9 +61,9 @@ O Free dá poucas regras (5, **não conferido**); a ordem abaixo é a da priorid
 
 | # | onde | expressão (a linguagem de regras da Cloudflare) | ação | por quê |
 |---|---|---|---|---|
-| W1 | assets | `http.host eq "assets.digilab.exemplo" and not is_timed_hmac_valid_v0("<DIGILAB_SEGREDO_ASSETS>", http.request.uri, 600, http.request.timestamp.sec, 8)` | Block | a URL sem a assinatura certa, ou vencida, não baixa. O 600 é o `DIGILAB_VALIDADE_ASSETS_S`; o 8 é o tamanho de `?verify=`. **A função é de plano pago (não conferido):** no Free, a opção é um Worker na frente do R2 com o `verificar` de `servidor_web/src/protecao/assinatura.ts` (seção 6) |
+| W1 | assets | `http.host eq "assets.digilab.exemplo" and http.request.uri.path ne "/.well-known/tdmrep.json" and not is_timed_hmac_valid_v0("<DIGILAB_SEGREDO_ASSETS>", http.request.uri, 600, http.request.timestamp.sec, 8)` | Block | a URL sem a assinatura certa, ou vencida, não baixa. O 600 é o `DIGILAB_VALIDADE_ASSETS_S`; o 8 é o tamanho de `?verify=`. **A função é de plano pago (não conferido):** no Free, a opção é um Worker na frente do R2 com o `verificar` de `servidor_web/src/protecao/assinatura.ts` (seção 6) |
 | W2 | assets | `http.host eq "assets.digilab.exemplo" and ip.src.asnum in {<os ASN de datacenter: AWS, Google Cloud, Azure, OVH, Hetzner, DigitalOcean…>}` | Managed Challenge | a regra contra as faixas de datacenter da seção 6 do plano: o robô em nuvem leva o desafio; o jogador em casa, não. A lista de ASN se monta no dia (**SEM FONTE**) |
-| W3 | API | `http.host eq "api.digilab.exemplo" and not http.request.uri.path in {"/saude" "/robots.txt"} and not starts_with(http.request.uri.path, "/auth/") and http.request.method eq "GET" and not any(http.request.headers["origin"][*] eq "https://digilab.exemplo") and not http.cookie contains "dl_sessao="` | Block | o `GET` sem a origem do jogo e sem a sessão não tem nada a fazer na API (o login passa, porque vai por navegação) |
+| W3 | API | `http.host eq "api.digilab.exemplo" and not http.request.uri.path in {"/saude" "/robots.txt" "/.well-known/tdmrep.json"} and not starts_with(http.request.uri.path, "/auth/") and http.request.method eq "GET" and not any(http.request.headers["origin"][*] eq "https://digilab.exemplo") and not http.cookie contains "dl_sessao="` | Block | o `GET` sem a origem do jogo e sem a sessão não tem nada a fazer na API (o login passa, porque vai por navegação) |
 | W4 | tudo | `cf.threat_score gt 30` (ou o campo que o plano tiver; **não conferido** no Free) | Managed Challenge, só no jogo e nos assets | o IP com fama ruim |
 
 **O segredo dentro da regra W1** fica no painel da Cloudflare, não no repositório; trocar o segredo pede trocar a regra e o ambiente da
@@ -82,7 +94,8 @@ navegador antes de fechar o número, para não barrar o jogador que abre a ilha)
 - [ ] **Se o W1 não estiver no plano:** um Worker na rota `assets.digilab.exemplo/*` que confere o `verify` com o mesmo código do
   `verificar` (`servidor_web/src/protecao/assinatura.ts`, só `node:crypto` → WebCrypto) e lê o R2 pelo binding. O Workers grátis tem
   limite de pedidos por dia (**não conferido**); o jogo tem poucas centenas de peças por jogador por dia (a conta da seção 6 do plano da
-  hospedagem). O Worker é código novo: entra num PR próprio da CN5, com teste.
+  hospedagem). O Worker é código novo: entra num PR próprio da CN5, com teste. O Worker entrega o `/.well-known/tdmrep.json` sem
+  assinatura (PI-6, D-CONTA-234): é o único caminho aberto, e o W1 tem a mesma exceção.
 - [ ] O `X-Robots-Tag: noindex` nos assets (Rules › Transform Rules › Response headers), para o arquivo que vazar não ir para a busca.
 
 ## 7. A API atrás da borda
@@ -95,7 +108,11 @@ navegador antes de fechar o número, para não barrar o jogador que abre a ilha)
 
 ## 8. O jogo (Pages)
 
-- [ ] O `robots.txt` do build na raiz (o Vite copia `web/app/public/`).
+- [ ] O `robots.txt` do build na raiz (o Vite copia `web/app/public/`; o `montar_site.sh` o leva do `/jogo/` para a raiz, com o
+  `.well-known/` e o `_headers`, D-CONTA-233).
+- [ ] O `_headers` já existe (PI-6): `/*` com o `tdm-reservation: 1`, gerado de `servidor_web/src/protecao/tdmrep.ts` por
+  `node servidor_web/scripts/gerar_robots.ts`. Os cabeçalhos de segurança abaixo entram **no mesmo arquivo gerado** (o Pages lê um
+  `_headers` só), sem tirar a linha do TDMRep; o `conferir_build.ts` do jogo e o `test/tdmrep.test.ts` do servidor reprovam se ela sumir.
 - [ ] Os cabeçalhos (`_headers` do Pages, um arquivo no build, PR da CN5): `X-Content-Type-Options: nosniff`, `Referrer-Policy:
   strict-origin-when-cross-origin`, o `Content-Security-Policy` com o `challenges.cloudflare.com` no `script-src` e no `frame-src` (o
   widget do Turnstile) e a `api.` e a `assets.` no `connect-src` e no `img-src`.
