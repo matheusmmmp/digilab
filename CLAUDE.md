@@ -135,4 +135,5 @@ python tools/conferir_saude.py                 # o G-NADA-PERDIDO da rodada de s
 
 Os outros comandos, inclusive os das runs e do jogo web, estão em `docs/MAPA_REPOSITORIO.md` e em `web/app/CLAUDE.md`.
 
-Ambiente: Windows, Python 3.10 ou mais novo.
+Ambiente: Windows, CPython 3.12 ou mais novo: os gabaritos dependem da soma compensada de floats do `sum()`, que só existe a partir
+do 3.12 (D-DES-4; `docs/DESEMPENHO_PERFIL_2026-11.md`, seção 8).

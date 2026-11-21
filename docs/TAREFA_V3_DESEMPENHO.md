@@ -71,3 +71,5 @@ O tempo está na simulação e no replay G1. O log e as métricas pesam menos de
   - O CPython ≥ 3.12 fica fixado: no `docs/MAPA_REPOSITORIO.md` neste PR; no `CLAUDE.md`, com o ok direto do Matheus.
   - A lista de donos do `tests/test_memoria_autobio.py` também ganhou o `experiments/auditoria_pet_vivo.py`, a sobra que já fazia o
     teste falhar na `main`.
+- **2026-11-12:** o Matheus deu o ok direto na sessão ("Sim, troque"), e a linha "Ambiente" do `CLAUDE.md` passou a dizer CPython 3.12
+  ou mais novo, com o motivo.
