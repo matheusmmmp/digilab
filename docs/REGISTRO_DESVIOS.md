@@ -924,3 +924,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-20 — PET_VIVO: o plano do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-plano`)](registro/2026-11.md)
 - [2026-11-20 — PET_VIVO: o código do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-codigo`)](registro/2026-11.md)
 - [2026-11-20 — CONTA: a CN4, a proteção no servidor (Claude Code, Opus 5.5, branch `v3-cn4`)](registro/2026-11.md)
+- [2026-11-20 — PET_VIVO: a run do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-resultado`)](registro/2026-11.md)
