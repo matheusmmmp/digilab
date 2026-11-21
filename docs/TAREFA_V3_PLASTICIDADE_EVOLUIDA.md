@@ -156,3 +156,62 @@ Escrito por uma sessão lateral da Gerência da V3 (Claude Code, Fable 5.2). **N
 - **Depois do PR do código (2026-11-21):** o Matheus decidiu tirar os três genes inertes ("Sim, tira os três", D-PE-7). O E0 ficou com 12
   genes, 25 configs e 3 000 vidas; os números desta seção que falam em 31 configs e 3 720 vidas são os de antes. Pelo custo medido na
   fumaça, as 3 000 vidas com 4 processos projetam 1,4 h pela parede e cerca de 0,8 h pela CPU.
+
+## 9. Adendo 1: o crítico e a entropia da decisão (PROPOSTO, 2026-11-21)
+
+**De onde vem.** O Matheus pediu a leitura das notas do vault sobre Bennett (2023) e Gleick (2011), em `20 Temas`, e escolheu levar às
+tarefas os três pontos que mexiam na etapa atual ("Os três"). Dois são desta tarefa:
+- o crítico (Bennett, saltos 1, 2 e 3);
+- a entropia por decisão (Gleick, parte C).
+
+O portão de "quando pensar" entra na `docs/TAREFA_V3_PET_QUE_PENSA.md`. **O Bennett é moldura, não citação:** o adendo se apoia na fonte
+primária.
+
+### 9.1 O crítico (uma triagem nova, o C0, antes do E0)
+
+- **O problema:** o hábito (P2) aprende com a recompensa crua: `H ← H + g_apr·η_h·(r_n·e)` (`digilab/digibrain/plast.py`). Não há um valor
+  esperado aprendido, e por isso não há erro de previsão de recompensa. O pet aprende "isto foi bom", e não "isto foi melhor do que eu
+  esperava".
+- **Por que importa para o E0:**
+  - o E0 mede o valor de aprender (APRENDE − CONGELADO) de um aprendiz sem crítico;
+  - se sair "nada mexe", a leitura "o problema é estrutural" pode estar certa pelo motivo errado: falta a peça, e não os números;
+  - os achados da cadeia são o sintoma esperado da falta dessa peça: o crédito dominado pelo sono (R1 e R-a) e a linha de base por contexto
+    que apaga o sinal do intervalo.
+- **A fonte:** o erro de diferença temporal (Sutton, 1988, já no projeto) e o sinal da dopamina como erro de previsão (Schultz, Dayan e
+  Montague, 1997, `10.1126/science.275.5306.1593`, conferido pelo resumo nas notas do vault).
+- **O C0, uma troca só:**
+  - no lugar do `r_n` cru, o P2 recebe `δ = r_n + γ·V̂(z′) − V̂(z)`;
+  - `V̂(z)` é linear nas características `z` que o P2 já usa;
+  - o aprendizado é TD(0) local, em inteiros, com o passo `eta_v` e o `gamma` PROPOSTOS, SEM FONTE;
+  - tudo fica atrás de uma subchave nova (`critico`), desligada por padrão;
+  - o G2: com a subchave desligada, o log sai igual ao de hoje, bit a bit.
+- **Os braços:** HOJE, CRÍTICO (a subchave ligada) e CONGELADO (como no E0), no pet v38, nas mesmas 6 células e 10 unidades do E0. São 360
+  vidas, cerca de 10 min com 4 processos (estimativa pela fumaça do E0).
+- **As medidas:**
+  - o "Tempo bem";
+  - o valor do aprendizado (APRENDE − CONGELADO) com e sem o crítico;
+  - a fração `aprendido_decidiu`;
+  - a fração do crédito que vai ao sono (a medida do R1).
+- **A leitura:**
+  - **o crítico aumenta o valor do aprendizado:** o E0 roda com o crítico ligado nos dois braços, e o `eta_v` entra entre os genes;
+  - **nada muda:** o E0 roda como está, e a leitura "estrutural" ganha força.
+
+  É triagem, sem gate. O corte para uma confirmação é o da PQ3-9 do pet que pensa.
+- **A ordem:** o C0 roda antes do E0. O código do crítico é pequeno (uma subchave no P2) e vai num PR próprio.
+
+### 9.2 A entropia da decisão (um descritivo novo no E0 e no C0)
+
+- **A medida:** a entropia do sorteio `H(w/T)` em bits, por decisão, e a fração das decisões com `H` abaixo de 0,1 bit. Sai do motivo do
+  M-ARB, sem simulação a mais. Fonte: Shannon (1948).
+- **Por que:** diz, para cada gene mexido, se ele torna a escolha mais concentrada ou mais espalhada, além do efeito no "Tempo bem".
+- **A previsão, escrita antes de calcular (D-RB-13):** os genes da disputa (`epsilon`, `tau_hab`) mexem em `H`; os da plasticidade mexem
+  pouco. É descritiva.
+
+### 9.3 As decisões do adendo
+
+| nº | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PE-8 | o C0, a triagem do crítico, antes do E0 | **sim:** 360 vidas, uma subchave nova, e o E0 passa a medir o aprendiz certo | sem o C0: o E0 pode dar "estrutural" por falta da peça |
+| PE-9 | o `eta_v` e o `gamma` do crítico | **PROPOSTOS, SEM FONTE,** fixados no PR do código; o `eta_v` entra como gene do E0 se o C0 abrir | — |
+| PE-10 | a entropia da decisão como descritivo do E0 e do C0 | **sim** | — |
+| PE-11 | quem executa o C0 | **a sessão lateral do E0, com a revisão do Gerente;** a frente do crédito da cadeia, da coordenadora, segue pausada, e o crítico fica nesta tarefa | abrir na cadeia: reabre uma frente pausada pelo Matheus |
