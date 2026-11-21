@@ -265,3 +265,71 @@ Cada uma com a recomendação e o custo de errar.
 
 **O que este plano não afirma:** nada sobre o jogo web; nada sobre o pet v38 com a TV, a ilha grande e a memória longa; nada sobre
 outro teto; nada sobre os pares e o social. Nenhuma alegação de novidade.
+
+## 11. Adendo 1: a triagem antes da run de 200 (2026-11-21)
+
+**Adendo 1, status: APROVADO pelo Matheus em 2026-11-21** ("Aprovo todas", na sessão da CORPO, sobre as D-V1A-10 a D-V1A-14, com as
+recomendações). A direção é dele: em 2026-11-21 ele decidiu, na sessão da coordenação ("Sim, aplicar"), que as runs confirmatórias
+das frentes do cérebro ficam pausadas e que cada ideia passa antes por uma triagem de 10 a 20 unidades, só para estimar o tamanho do
+efeito. Perguntado na sessão da CORPO, confirmou para a V1-a: "Sim, triagem antes". **As D-V1A-10 a D-V1A-14 estão DECIDIDAS.**
+Nenhuma vida da triagem existe, e nenhuma roda antes de este adendo estar na `main` e do ok dele para soltar.
+
+**O que muda no plano:**
+- **A run de 200 unidades fica suspensa.** As seções 3, 4, 6 e 9 continuam valendo para ela, se ela vier a rodar; o orquestrador a
+  recusa enquanto este adendo não disser o contrário.
+- **Antes dela, uma triagem:** as mesmas 12 células, os mesmos dois braços e o mesmo pet v38, em 20 unidades.
+
+**A triagem:**
+
+| item | valor |
+|---|---|
+| unidades | 20: as bases **109001…109020** (k = 1, derivação `digibrain_prototipo`), as primeiras da faixa da V1-a (D-V1A-10) |
+| vidas | 2 braços × 12 células × 20 unidades = 480, com 14 dias e orçamento 16 |
+| custo | cerca de 7 minutos com 4 processos (a fumaça de vidas inteiras deu 3,1 s por vida) |
+| saída | `artifacts_v3_corpo/v1a_triagem/`: `resultado.json`, `medidas.json`, `custos.json`, `vidas.tar.gz` e `meta.json`, com o sha256 |
+| porta | o `tools/pre_run.py` e os 10 GB de disco, como numa run |
+
+**O que a triagem entrega, e o que não entrega:**
+- **Entrega uma estimativa:** DTB − CTRL no "Tempo bem" (nas 12 células, nas 11 e por lugar), na saúde (12 células, as 6 do relapso e
+  do aleatório, e cada uma delas) e na taxa por episódio do `longe_fixo`, cada uma com a média, o desvio-padrão e o IC95 sobre as 20
+  unidades. Vai também o efeito do "Tempo bem" dividido por δ, e o descritivo da seção 6.
+- **Não entrega leitura:** nenhuma classe, nenhum p, nenhum "confirma" ou "não confirma". A regra da seção 6 não é aplicada (D-V1A-11).
+- **A precisão esperada:** com 20 unidades e o desvio-padrão entre 0,015 (a contagem) e 0,031 (a C4), a meia largura do IC95 do
+  "Tempo bem" nas 12 células fica entre 0,007 e 0,015. Isso separa um efeito perto de +0,016 de um perto de +0,062.
+
+**O que acontece depois da triagem:** a estimativa vai ao Matheus, e ele decide se a run de 200 roda. **Nenhum corte é aplicado
+aqui** (D-V1A-12). O corte proposto pela coordenação (o efeito acima de 2δ, isto é, 0,064) ainda não foi decidido por ele.
+
+**As bases, se a run de 200 rodar** (D-V1A-13): as 20 da triagem não se repetem. Sobram 180 na faixa (109021…109200).
+
+**Sem seção própria no pré-registro** (D-V1A-14): a triagem não é experimento confirmatório. Ela fica escrita aqui, antes de rodar, e
+o resultado dela vai no relato do PR com o nome de triagem. A seção `PR-CORPO-V1` do `docs/PREREGISTRO.md` continua sendo a da run de
+200, e ganha uma linha dizendo que a run está suspensa.
+
+**O que já foi visto e a triagem não apaga:** a contagem nas sementes dos testes (5 unidades, seção 5.2) e a previsão "não confirma"
+(seção 1). A triagem usa sementes de pesquisa, e por isso as 20 bases dela ficam fora de qualquer run confirmatória.
+
+**As decisões do adendo,** cada uma com a recomendação e o custo de errar:
+
+- **D-V1A-10 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), o tamanho e as bases da triagem:** 20 unidades, as bases 109001…109020.
+  - **A recomendação:** aceitar. Vinte é o topo da faixa de 10 a 20 da decisão, e custa 7 minutos.
+  - **O custo de errar:** com 10 unidades a meia largura sobe para cerca de 0,011 a 0,022, e um efeito de +0,03 já não se separa de
+    +0,016.
+- **D-V1A-11 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), a triagem sem leitura:** só estimativas, sem classe e sem p.
+  - **A recomendação:** aceitar. Com 20 unidades uma leitura "não confirma" ou "confirma" pareceria uma validação, e não é.
+  - **O custo de errar:** sem uma regra escrita antes, a decisão de rodar ou não a run de 200 é do Matheus olhando o número.
+- **D-V1A-12 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), nenhum corte aplicado pelo worker.**
+  - **A recomendação:** aceitar, até o corte ser decidido. Se o Matheus quiser um corte, o melhor é decidi-lo antes de a triagem
+    rodar, para ele não ser escolhido depois de ver o número.
+  - **O custo de errar:** com o corte de 2δ (0,064), o próprio efeito da C4 no pet da bancada (+0,062) não passaria. A contagem sugere
+    +0,016 no pet v38.
+- **D-V1A-13 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), as bases de uma run de 200 depois da triagem.**
+  1. **As 180 que sobram (recomendada):** a run rodaria com 180 unidades. A meia largura sobe 5 % (a raiz de 200/180).
+  2. **Pedir mais 20 bases** ao coordenador, e manter as 200.
+  - **O custo de errar:** com a 1, a run difere do tamanho aprovado na D-V1A-3. Com a 2, a faixa cresce e há mais um pedido. A
+    escolha só importa se a run de 200 rodar, e é confirmada nessa hora.
+- **D-V1A-14 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), sem seção própria no pré-registro,** como a decisão repassada pela coordenação.
+  - **A recomendação:** aceitar, com a triagem escrita neste adendo antes de rodar. A regra do projeto ("nenhuma run sem plano de
+    análise registrado antes") fica cumprida pelo adendo.
+  - **O custo de errar:** um terceiro que só leia o `docs/PREREGISTRO.md` não acha a triagem lá; acha a linha que aponta para este
+    adendo.
