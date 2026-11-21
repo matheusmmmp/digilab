@@ -9,7 +9,8 @@
    A borda (CN5, docs/infra/DEPLOY_CN5.md): no local (o padrao), pedido vindo por tunel ou proxy (cabecalhos da Cloudflare e o
    X-Forwarded-For) leva 403, como no servidor local sem --remoto. Na borda "cloudflare" (a VPS, D-CONTA-197), o servidor continua so em
    127.0.0.1 e o pedido so chega pelo Cloudflare Tunnel: o que vem sem o Cf-Ray e o Cf-Connecting-Ip leva 403, e a conta tem de ser a de
-   fora (https, sem o provedor falso). */
+   fora (https, sem o provedor falso).
+   Toda resposta leva o `tdm-reservation: 1` (PI-6, o TDMRep; src/protecao/tdmrep.ts), e o GET /.well-known/tdmrep.json diz o mesmo. */
 import { Hono, type Context } from "hono";
 import { motivoDeDict, PedidoInvalido } from "./catalogo.ts";
 import type { ConfigConta } from "./conta/config.ts";
@@ -25,6 +26,7 @@ import { montarRotasRankings } from "./premios/rankings.ts";
 import { montarRotasNuvem } from "./nuvem/nuvem.ts";
 import { CotaDaConta, SEM_CONTA, type CotaFala, type EstadoCota } from "./protecao/cota.ts";
 import { montarRobots, montarRotasProtecao } from "./protecao/rotas.ts";
+import { CABECALHO_TDM, TDM_RESERVA } from "./protecao/tdmrep.ts";
 
 export const LIMITE_CORPO = 16 * 1024;
 const CABECALHOS_DE_FORA = ["cf-ray", "cf-connecting-ip", "x-forwarded-for"];
@@ -48,6 +50,11 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor, borda = "l
   const json = (c: { json: (d: unknown, s?: number, h?: Record<string, string>) => Response }, codigo: number, dados: unknown) =>
     c.json(dados, codigo, { "Cache-Control": "no-store" });
 
+  /* o aviso de mineração reservada em toda resposta, também nas recusas (PI-6, D-CONTA-231): o primeiro middleware, para valer em tudo */
+  app.use("*", async (c, next) => {
+    await next();
+    c.res.headers.set(CABECALHO_TDM, String(TDM_RESERVA));
+  });
   app.use("*", async (c, next) => {
     if (borda === "local" && CABECALHOS_DE_FORA.some(h => c.req.header(h))) return json(c, 403, { erro: "acesso externo so com --remoto" });
     if (borda === "cloudflare" && !CABECALHOS_DA_BORDA.every(h => c.req.header(h))) return json(c, 403, { erro: "so pela borda" });

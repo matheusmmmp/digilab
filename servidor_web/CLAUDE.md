@@ -93,6 +93,9 @@ O `servidor/` continua para o jogo local e a pesquisa.
 
 - **O `robots.txt`:** o do jogo (`web/app/public/robots.txt`) é gerado da lista `ROBOS_DE_IA` de `robots.ts` por
   `node scripts/gerar_robots.ts`, e o teste reprova se divergir; o da API (`GET /robots.txt`) recusa tudo.
+- **O aviso de mineração reservada (PI-6, o TDMRep, `tdmrep.ts`):** o `/.well-known/tdmrep.json` e o `tdm-reservation: 1` em toda
+  resposta da API e do Worker dos assets; no jogo, o `web/app/public/.well-known/tdmrep.json` e o `_headers` do Pages, gerados pelo mesmo
+  `node scripts/gerar_robots.ts` (o `test/tdmrep.test.ts` reprova se divergirem), e a meta no `index.html`.
 - **As URLs assinadas dos assets** (`assinatura.ts`): o formato do token da Cloudflare (`?verify=<hora>-<mac>`, o HMAC-SHA256 do caminho
   mais a hora), para a borda conferir sem o servidor. `POST /assets/assinar` com a sessão ou o cookie do visitante (`POST /assets/visitante`,
   pelo Turnstile); no local, `GET /assets/*` serve `DIGILAB_DIR_ASSETS` depois de conferir. Sem `DIGILAB_SEGREDO_ASSETS`, desligadas (503).
@@ -114,7 +117,7 @@ npm run dev -- --sem-conta          # sem as rotas da conta (a CN1)
 # o fluxo da conta com o provedor falso: http://127.0.0.1:8766/dev/conta
 npm test                            # Vitest: rotas com o cliente falso e a paridade com o Python
 npm run tipos                       # tsc --noEmit
-node scripts/gerar_robots.ts        # regrava o web/app/public/robots.txt da lista dos robôs de IA (CN4)
+node scripts/gerar_robots.ts        # regrava o robots.txt, o .well-known/tdmrep.json e o _headers do web/app/public/ (CN4, PI-6)
 node scripts/gerar_vida_teste.ts    # regrava a vida dos testes do envio (com o node_modules do web/app)
 node scripts/medir_conferencia.ts   # o tempo da conferência de 13 vidas -> medicoes/mmo3_conferencia.json
 python tools/gerar_catalogo_fala_web.py   # (da raiz) regera o catálogo e o gabarito

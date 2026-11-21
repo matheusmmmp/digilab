@@ -275,7 +275,7 @@ Lido no código da `main` (`04f32b41`). Sem estes, o deploy não funciona ou abr
 chave `VITE_DIGILAB_PROTECAO=1` no build). O `robots.txt` do jogo e o da API (#1058). Os assets saem só por URL assinada, com o bucket
 privado e o Worker na frente (#1058, #1059, #1057). O Turnstile já entrou na criação da conta e no visitante (#1058, #1059), antes do que a
 D-CONTA-206 pedia; a D-CONTA-206 fica sem efeito. **O que ainda falta:** os enfeites e os modelos 3D da ilha em `web/app/public/` seguem
-fora da URL assinada (D-CONTA-222); o aviso de mineração reservada (PI-6) não aparece no código; e conferir na Cloudflare de verdade o
+fora da URL assinada (D-CONTA-222); o aviso de mineração reservada (PI-6) não aparecia no código (entrou no branch `v3-pi6-tdmrep`, D-CONTA-231 a 234); e conferir na Cloudflare de verdade o
 formato da assinatura e as políticas de robôs (as NÃO CONFERIDAS da CN4, D-CONTA-210, 212 e 217). A tabela abaixo fica como estava escrita,
 para o registro do que se pediu.
 
