@@ -55,7 +55,8 @@ export function montar(conferidor: Conferidor = conferirAqui, ambiente: Record<s
 }
 
 /** o fluxo inteiro pelo provedor falso até a conta criada; devolve o csrf da sessão */
-export async function criarConta(nav: Navegador, usuario = "ana"): Promise<string> {
+/** `turnstile`: o token do widget, quando o Turnstile está ligado (CN4) */
+export async function criarConta(nav: Navegador, usuario = "ana", turnstile?: string): Promise<string> {
   const ida = await nav.pedir("/auth/falso?volta=%23%2Fconfig%2Fconta");
   const autorizar = new URL(ida.headers.get("location")!);
   const form = new URLSearchParams({ state: autorizar.searchParams.get("state")!, code_challenge: autorizar.searchParams.get("code_challenge")!,
@@ -65,7 +66,7 @@ export async function criarConta(nav: Navegador, usuario = "ana"): Promise<strin
   const cb = await nav.pedir(caminho(dado.headers.get("location")!));
   expect(new URL(cb.headers.get("location")!).searchParams.get("conta")).toBe("primeiro_acesso");
   const p = await (await nav.pedir("/conta/primeiro-acesso")).json() as { csrf: string };
-  const r = await nav.json("POST", "/conta/primeiro-acesso", { idade: "18_ou_mais", aceite: { termos: VERSAO_TERMOS, privacidade: VERSAO_PRIVACIDADE } }, p.csrf);
+  const r = await nav.json("POST", "/conta/primeiro-acesso", { idade: "18_ou_mais", aceite: { termos: VERSAO_TERMOS, privacidade: VERSAO_PRIVACIDADE }, ...(turnstile === undefined ? {} : { turnstile }) }, p.csrf);
   expect(r.status).toBe(201);
   return ((await (await nav.pedir("/conta")).json()) as { csrf: string }).csrf;
 }

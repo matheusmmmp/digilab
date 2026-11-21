@@ -4,11 +4,12 @@
      GET  /api/fala/status   {"ativo", "provedor", "modelo", "sem_custo", "motivo", "gasto", "estatisticas"}
      POST /api/fala          {"motivo": {...}, "estagio": "...", "humor": 0.5} -> {"texto", "fonte": "llm"|"template", "detalhe", "gasto"}
    Pedido vindo por tunel ou proxy (cabecalhos da Cloudflare e o X-Forwarded-For) leva 403, como no servidor local sem --remoto: o acesso
-   de fora e da CN5 (a borda, a conta e a cota). */
-import { Hono } from "hono";
+   de fora e da CN5. Com a conta, a fala usa a cota por conta e por dia (CN4, src/protecao/cota.ts): a resposta leva a `cota` ({limite,
+   usadas, restam, dia} com a sessão; null sem ela), e, fora do local, a fala sem a sessão é só o template. */
+import { Hono, type Context } from "hono";
 import { motivoDeDict, PedidoInvalido } from "./catalogo.ts";
 import type { ConfigConta } from "./conta/config.ts";
-import { montarRotasConta } from "./conta/rotas.ts";
+import { montarRotasConta, type GuardasConta } from "./conta/rotas.ts";
 import { montarRotasDesafio } from "./desafio/desafio.ts";
 import { ConferidorEmWorker, type Conferidor } from "./envio/conferidor.ts";
 import { montarRotasEnvio } from "./envio/rotas.ts";
@@ -18,6 +19,8 @@ import type { GeradorFala } from "./fala.ts";
 import { montarRotasPremios } from "./premios/premios.ts";
 import { montarRotasRankings } from "./premios/rankings.ts";
 import { montarRotasNuvem } from "./nuvem/nuvem.ts";
+import { CotaDaConta, SEM_CONTA, type CotaFala, type EstadoCota } from "./protecao/cota.ts";
+import { montarRobots, montarRotasProtecao } from "./protecao/rotas.ts";
 
 export const LIMITE_CORPO = 16 * 1024;
 const CABECALHOS_DE_FORA = ["cf-ray", "cf-connecting-ip", "x-forwarded-for"];
@@ -36,16 +39,52 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes):
     await next();
   });
 
+  /* a conta antes da fala: o CORS da conta vale também para a /api/fala, e a fala com a sessão usa a cota (CN4) */
+  let guardas: GuardasConta | null = null;
+  if (conta) {
+    guardas = montarRotasConta(app, conta);
+    const g = guardas;
+    montarRotasEnvio(app, conta, g, conferidor ?? new ConferidorEmWorker().conferir);
+    montarRotasSemente(app, conta, g);
+    montarRotasSemana(app, conta, g);
+    montarRotasDesafio(app, conta, g);
+    montarRotasPremios(app, conta, g);
+    montarRotasRankings(app, conta, g);
+    montarRotasNuvem(app, conta, g);
+    montarRotasProtecao(app, conta, g);
+    app.use("/api/fala", g.cors);
+    app.use("/api/fala/*", g.cors);
+  }
+
+  /** a cota da fala deste pedido (CN4): a da conta com a sessão; sem a sessão, nenhuma (CN1) ou a que nunca deixa (fora do local) */
+  const cotaDoPedido = (c: Context): { cota?: CotaFala; estado: () => EstadoCota | null } => {
+    if (!conta || !guardas) return { estado: () => null };
+    const s = guardas.sessaoDe(c);
+    if (s) {
+      const cota = new CotaDaConta(conta.banco, s.conta_id, conta.protecao.cotaFalaDia, conta.agora());
+      return { cota, estado: () => cota.estado() };
+    }
+    return { cota: conta.protecao.falaSoComConta ? SEM_CONTA : undefined, estado: () => null };
+  };
+  const origemDaFala = (c: Context): boolean => {
+    const o = c.req.header("origin");
+    return !conta || o === undefined || o === conta.origemJogo || o === new URL(conta.urlApi).origin;
+  };
+
+  montarRobots(app);
   app.get("/saude", c => json(c, 200, { ok: true, servico: "digilab-servidor-web" }));
 
   app.get("/api/fala/status", c => {
     const p = gerador.provedor;
     const [ativo, motivo] = p === null ? [false, motivoInicial] : p.disponivel();
     return json(c, 200, { ativo, provedor: p?.nome ?? null, modelo: gerador.modelo, sem_custo: p !== null && !p.temCusto, motivo,
-      gasto: gerador.gasto?.paraDict() ?? null, estatisticas: gerador.estatisticas });
+      gasto: gerador.gasto?.paraDict() ?? null, estatisticas: gerador.estatisticas,
+      ...(conta ? { cota: cotaDoPedido(c).estado(), so_com_conta: conta.protecao.falaSoComConta } : {}) });
   });
 
   app.post("/api/fala", async c => {
+    if (!origemDaFala(c)) return json(c, 403, { erro: "origem desconhecida" });
+    const pedidoCota = cotaDoPedido(c);
     const tamanho = Number(c.req.header("content-length") ?? "0");
     if (!(tamanho > 0 && tamanho <= LIMITE_CORPO)) return json(c, 400, { erro: "corpo ausente ou grande demais" });
     const corpo = await c.req.text();
@@ -62,24 +101,13 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes):
       const humor = d.humor ?? null;
       if (humor !== null && (typeof humor !== "number" || !Number.isFinite(humor))) throw new PedidoInvalido(`humor invalido: ${JSON.stringify(humor)}`);
       if (typeof d.estagio !== "string") throw new PedidoInvalido(`estagio desconhecido: ${JSON.stringify(d.estagio)}`);
-      resultado = await gerador.gerar(motivo, d.estagio, humor);
+      resultado = await gerador.gerar(motivo, d.estagio, humor, pedidoCota.cota);
     } catch (err) {
       if (err instanceof PedidoInvalido) return json(c, 400, { erro: `pedido invalido: ${err.message}` });
       throw err;
     }
-    return json(c, 200, { ...resultado, gasto: gerador.gasto?.paraDict() ?? null });
+    return json(c, 200, { ...resultado, gasto: gerador.gasto?.paraDict() ?? null, ...(conta ? { cota: pedidoCota.estado() } : {}) });
   });
-
-  if (conta) {
-    const guardas = montarRotasConta(app, conta);
-    montarRotasEnvio(app, conta, guardas, conferidor ?? new ConferidorEmWorker().conferir);
-    montarRotasSemente(app, conta, guardas);
-    montarRotasSemana(app, conta, guardas);
-    montarRotasDesafio(app, conta, guardas);
-    montarRotasPremios(app, conta, guardas);
-    montarRotasRankings(app, conta, guardas);
-    montarRotasNuvem(app, conta, guardas);
-  }
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));
   return app;
