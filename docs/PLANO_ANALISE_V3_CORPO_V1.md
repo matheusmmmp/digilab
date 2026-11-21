@@ -268,10 +268,11 @@ outro teto; nada sobre os pares e o social. Nenhuma alegação de novidade.
 
 ## 11. Adendo 1: a triagem antes da run de 200 (2026-11-21)
 
-**Adendo 1, status: PROPOSTO.** A direção é do Matheus: em 2026-11-21 ele decidiu, na sessão da coordenação ("Sim, aplicar"), que as
-runs confirmatórias das frentes do cérebro ficam pausadas e que cada ideia passa antes por uma triagem de 10 a 20 unidades, só para
-estimar o tamanho do efeito. Perguntado na sessão da CORPO, confirmou para a V1-a: "Sim, triagem antes". A forma abaixo e as D-V1A-10
-a D-V1A-14 esperam a aprovação dele. **Nenhuma vida da triagem roda antes disso.**
+**Adendo 1, status: APROVADO pelo Matheus em 2026-11-21** ("Aprovo todas", na sessão da CORPO, sobre as D-V1A-10 a D-V1A-14, com as
+recomendações). A direção é dele: em 2026-11-21 ele decidiu, na sessão da coordenação ("Sim, aplicar"), que as runs confirmatórias
+das frentes do cérebro ficam pausadas e que cada ideia passa antes por uma triagem de 10 a 20 unidades, só para estimar o tamanho do
+efeito. Perguntado na sessão da CORPO, confirmou para a V1-a: "Sim, triagem antes". **As D-V1A-10 a D-V1A-14 estão DECIDIDAS.**
+Nenhuma vida da triagem existe, e nenhuma roda antes de este adendo estar na `main` e do ok dele para soltar.
 
 **O que muda no plano:**
 - **A run de 200 unidades fica suspensa.** As seções 3, 4, 6 e 9 continuam valendo para ela, se ela vier a rodar; o orquestrador a
@@ -310,24 +311,24 @@ o resultado dela vai no relato do PR com o nome de triagem. A seção `PR-CORPO-
 
 **As decisões do adendo,** cada uma com a recomendação e o custo de errar:
 
-- **D-V1A-10 (PROPOSTA), o tamanho e as bases da triagem:** 20 unidades, as bases 109001…109020.
+- **D-V1A-10 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), o tamanho e as bases da triagem:** 20 unidades, as bases 109001…109020.
   - **A recomendação:** aceitar. Vinte é o topo da faixa de 10 a 20 da decisão, e custa 7 minutos.
   - **O custo de errar:** com 10 unidades a meia largura sobe para cerca de 0,011 a 0,022, e um efeito de +0,03 já não se separa de
     +0,016.
-- **D-V1A-11 (PROPOSTA), a triagem sem leitura:** só estimativas, sem classe e sem p.
+- **D-V1A-11 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), a triagem sem leitura:** só estimativas, sem classe e sem p.
   - **A recomendação:** aceitar. Com 20 unidades uma leitura "não confirma" ou "confirma" pareceria uma validação, e não é.
   - **O custo de errar:** sem uma regra escrita antes, a decisão de rodar ou não a run de 200 é do Matheus olhando o número.
-- **D-V1A-12 (PROPOSTA), nenhum corte aplicado pelo worker.**
+- **D-V1A-12 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), nenhum corte aplicado pelo worker.**
   - **A recomendação:** aceitar, até o corte ser decidido. Se o Matheus quiser um corte, o melhor é decidi-lo antes de a triagem
     rodar, para ele não ser escolhido depois de ver o número.
   - **O custo de errar:** com o corte de 2δ (0,064), o próprio efeito da C4 no pet da bancada (+0,062) não passaria. A contagem sugere
     +0,016 no pet v38.
-- **D-V1A-13 (PROPOSTA), as bases de uma run de 200 depois da triagem.**
+- **D-V1A-13 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), as bases de uma run de 200 depois da triagem.**
   1. **As 180 que sobram (recomendada):** a run rodaria com 180 unidades. A meia largura sobe 5 % (a raiz de 200/180).
   2. **Pedir mais 20 bases** ao coordenador, e manter as 200.
   - **O custo de errar:** com a 1, a run difere do tamanho aprovado na D-V1A-3. Com a 2, a faixa cresce e há mais um pedido. A
     escolha só importa se a run de 200 rodar, e é confirmada nessa hora.
-- **D-V1A-14 (PROPOSTA), sem seção própria no pré-registro,** como a decisão repassada pela coordenação.
+- **D-V1A-14 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), sem seção própria no pré-registro,** como a decisão repassada pela coordenação.
   - **A recomendação:** aceitar, com a triagem escrita neste adendo antes de rodar. A regra do projeto ("nenhuma run sem plano de
     análise registrado antes") fica cumprida pelo adendo.
   - **O custo de errar:** um terceiro que só leia o `docs/PREREGISTRO.md` não acha a triagem lá; acha a linha que aponta para este
