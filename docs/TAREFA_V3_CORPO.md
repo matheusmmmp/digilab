@@ -301,3 +301,17 @@ passar cada ideia antes por uma triagem de 10 a 20 unidades. Na sessão da CORPO
 
 **O que falta:** o adendo e o modo de triagem na `main` (o #1062 entrou sem eles; vão num PR próprio), o `pre_run` e a triagem, com o
 ok do Matheus. Nenhuma vida da faixa rodou.
+
+## 23. A triagem rodada (2026-11-21)
+
+A triagem do adendo 1, no commit `e5d95bfc` da `main`: 480 vidas (20 unidades), em 9 min 11 s, com 4 processos. O relato é o
+`docs/RESULTADO_V3_CORPO_V1_TRIAGEM.md`. **Só estimativas: sem leitura e sem corte.**
+- **"Tempo bem", DTB − CTRL no pet v38:** +0,024 [+0,009; +0,038] nas 12 células e +0,025 [+0,009; +0,041] nas 11. É 0,74 da margem do
+  plano (δ = 0,032). Na C4, no pet da bancada, o mesmo contraste deu +0,062 [+0,058; +0,067].
+- **Por lugar:** no comedouro, −0,005 [−0,009; −0,001]; no longe, +0,036 [+0,008; +0,064]; no
+  `longe_fixo`, +0,041 [+0,008; +0,073].
+- **A saúde:** +0,036 [+0,005; +0,067] nas 12 células; no aleatório do comedouro, −0,030 [−0,047; −0,013].
+- **A taxa por episódio no `longe_fixo`:** +0,113 [+0,062; +0,163].
+- **O pet com o DTB chuta menos a bola** (−2,8 [−3,8; −1,9] por vida), dorme menos e come mais.
+
+**O programa para aqui.** Se a run de 200 roda é decisão do Matheus; ela continua suspensa. Nenhum braço está ligado no jogo.

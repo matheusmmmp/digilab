@@ -260,7 +260,7 @@ Escrita antes da run (2026-11-21, Claude Code, Fable 5.2). As linhas "resultado"
 | o que refutaria | pela regra de leitura: a primária "≈ 0" ou "< 0" nas 12 ou nas 11 células, ou "> 0" sem o p; ou alguma guarda reprovando |
 | já visto antes da run | a run da C4 no pet da bancada (+0,062 [+0,058; +0,067]); e uma contagem nas sementes dos testes com o pet v38 (120 vidas, 5 unidades, sem artefato versionado): DTB − CTRL +0,016 [−0,003; +0,035] nas 12 células, de onde vem a previsão (seções 0, 1 e 5.2) |
 | resultado | a run ainda não rodou. **Está suspensa** pelo adendo 1 do plano (2026-11-21): antes dela vem uma triagem de 20 unidades (as bases 109001…109020), que só estima o tamanho do efeito, sem leitura e sem seção própria aqui. Se a run rodar, não repete essas bases |
-| artefatos | `artifacts_v3_corpo/v1a/`, depois da run; a triagem, em `artifacts_v3_corpo/v1a_triagem/` |
+| artefatos | `artifacts_v3_corpo/v1a/`, depois da run. A triagem rodou em 2026-11-21 ([RESULTADO_V3_CORPO_V1_TRIAGEM.md](RESULTADO_V3_CORPO_V1_TRIAGEM.md); [`artifacts_v3_corpo/v1a_triagem/`](../artifacts_v3_corpo/v1a_triagem/), `resultado.json` `02a9e2f0…`): só estimativas, sem leitura; DTB − CTRL no "Tempo bem" +0,024 [+0,009; +0,038] nas 12 células, com 20 unidades |
 
 ## PR-REPLICACAO-C4 — a réplica da C4
 
