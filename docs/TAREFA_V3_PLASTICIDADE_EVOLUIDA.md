@@ -1,9 +1,9 @@
 # Tarefa V3: a plasticidade evoluída (a busca dos números do aprendizado)
 
-**Status: PROPOSTO, só papel.** Escrito pelo Gerente da V3 (Claude Code, Fable 5.2) em 2026-11-21. O pedido é do Matheus: depois do
+**Status: APROVADO pelo Matheus em 2026-11-21** ("Aprovo todas", à pergunta "Aprova as PE-1 a PE-6 pela recomendação?"). **Só papel.** Escrito pelo Gerente da V3 (Claude Code, Fable 5.2) em 2026-11-21. O pedido é do Matheus: depois do
 levantamento de tecnologia recente, ele escolheu aprofundar a "Plasticidade evoluída" e, à pergunta "Transformo o teste de sensibilidade
-(E0) em tarefa no repositório?", respondeu "Sim, vira tarefa". **Esta tarefa abre só o E0. Nenhum código e nenhuma vida antes de as PE-1 a
-PE-6 (seção 7) serem decididas.**
+(E0) em tarefa no repositório?", respondeu "Sim, vira tarefa". **Esta tarefa abre só o E0. As PE-1 a PE-6
+(seção 7) estão DECIDIDAS pela recomendação. Nenhuma vida roda antes do código do E0 na `main`, da faixa de sementes e do ok do Matheus.**
 
 **Regras desta tarefa:**
 - Os números novos são PROPOSTOS e SEM FONTE, salvo onde citam um artefato.
@@ -115,7 +115,7 @@ confirmatório.
 - **CORPO, cadeia e VALUATION (a coordenadora):** pausadas para o cérebro. O E0 pede a ela só a faixa de sementes.
 - **A máquina:** o E0 entra na fila depois do D0 do pet que pensa e da triagem da V1-a.
 
-## 7. As decisões do Matheus
+## 7. As decisões do Matheus (DECIDIDAS em 2026-11-21, "Aprovo todas", pela recomendação)
 
 | nº | decisão | recomendação | custo de errar |
 |---|---|---|---|
