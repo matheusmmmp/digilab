@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const SAVES: Record<string, { semente: number; versao: number; log: unknown[] }> = JSON.parse(readFileSync(new URL("./saves_bola.json", import.meta.url), "utf8"));
 const REPO = fileURLToPath(new URL("../../..", import.meta.url)), PREFIXO = `/${basename(REPO)}`, APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const ROTULO = process.env.DIGILAB_CAPTURAS_ENFEITES_ROTULO ?? "referencia";
-/* o mapa do habitat (?mapa=): o padrao, ou outro estilo (o digital, docs/TAREFA_V3_MAPA_DIGITAL.md) */
+/* o mapa do habitat (?mapa=): o padrao (o digital desde 2026-11-21, docs/TAREFA_V3_MAPA_DIGITAL.md), ou outro estilo (ilha, voxel) */
 const MAPA = process.env.DIGILAB_CAPTURAS_ENFEITES_MAPA;
 const SAIDA = process.env.DIGILAB_CAPTURAS_ENFEITES_PASTA ?? join("D:\\Trab\\digilab\\capturas_enfeites", ROTULO);
 const TELAS: [number, number][] = [[390, 844], [1280, 800]];

@@ -19,20 +19,22 @@ async function carregar(busca: string, guardado: Record<string, string> | null):
 afterEach(() => { vi.unstubAllGlobals(); });
 
 describe("habitat.ts", () => {
-  it("padrao: a ilha com a camera de tras, numa chave propria ao lado da do save", async () => {
+  /* o padrao e o digital desde 2026-11-21 (o Matheus: "o Mapa do habitat oficial é o digital"); antes era a ilha */
+  it("padrao: o digital com a camera de tras, numa chave propria ao lado da do save", async () => {
     const { m } = await carregar("", {});
     m.iniciarHabitat(false);
     expect(m.CHAVE_HABITAT).toBe(CHAVE);
-    expect(m.habitatAtual()).toEqual({ mapa: "ilha", camera: "atras", visual: "normal", controle: "livre" });
+    expect(m.MAPA_PADRAO).toBe("digital");
+    expect(m.habitatAtual()).toEqual({ mapa: "digital", camera: "atras", visual: "normal", controle: "livre" });
   });
   it("os mapas com assets fora do repositorio so aparecem no dev", async () => {
     const { m } = await carregar("", {});
     expect(m.mapasDisponiveis(false)).toEqual(["ilha", "digital", "voxel"]);
     expect(m.mapasDisponiveis(true)).toEqual(["ilha", "digital", "voxel", "floresta", "cassette"]);
-    /* no build, um floresta gravado (de uma sessao do dev) ou no endereco cai na ilha */
+    /* no build, um floresta gravado (de uma sessao do dev) ou no endereco cai no padrao (o digital) */
     const b = await carregar("?mapa=cassette", { [CHAVE]: JSON.stringify({ mapa: "floresta", camera: "lateral", visual: "normal" }) });
     b.m.iniciarHabitat(false);
-    expect(b.m.habitatAtual()).toEqual({ mapa: "ilha", camera: "lateral", visual: "normal", controle: "livre" });
+    expect(b.m.habitatAtual()).toEqual({ mapa: "digital", camera: "lateral", visual: "normal", controle: "livre" });
   });
   it("escolher grava e vale ao recarregar; ?mapa= e ?camera= sobrepoem sem gravar", async () => {
     const { m, guardado } = await carregar("", {});
@@ -66,7 +68,7 @@ describe("habitat.ts", () => {
   it("valor invalido ou lixo no armazenamento: o padrao; sem armazenamento, escolher troca sem erro", async () => {
     const a = await carregar("?mapa=lua&camera=cima&visual=snes", { [CHAVE]: "{nao e json" });
     a.m.iniciarHabitat(true);
-    expect(a.m.habitatAtual()).toEqual({ mapa: "ilha", camera: "atras", visual: "normal", controle: "livre" });
+    expect(a.m.habitatAtual()).toEqual({ mapa: "digital", camera: "atras", visual: "normal", controle: "livre" });
     const b = await carregar("", null);
     b.m.iniciarHabitat(true);
     b.m.escolherMapa("voxel");
@@ -86,6 +88,14 @@ describe("habitat.ts", () => {
     m.escolherMapa("floresta");
     expect(m.habitatAtual().mapa).toBe("floresta");
     expect(m.mapaCaido()).toBeNull();
+  });
+  it("o padrao (o digital) que nao carregou tambem volta para a ilha: a reserva nao segue o MAPA_PADRAO, e nada se grava", async () => {
+    const { m, guardado } = await carregar("", {});
+    m.iniciarHabitat(false);
+    m.voltarParaIlha("digital");
+    expect(m.habitatAtual().mapa).toBe("ilha");
+    expect(m.habitatEscolhido().mapa).toBe("digital");
+    expect(guardado![CHAVE]).toBeUndefined();
   });
 });
 
@@ -121,7 +131,7 @@ describe("Ajustes > Visual", () => {
     m.iniciarHabitat(true);
     m.escolherVisual("hd-2d");
     const { resumoVisual } = await import("../src/telas/config/EscolhaHabitat.tsx");
-    expect(resumoVisual("vidro", "claro", m.habitatAtual(), true)).toBe("pele Sci-fi · tema claro · mapa Ilha · HD-2D");
+    expect(resumoVisual("vidro", "claro", m.habitatAtual(), true)).toBe("pele Sci-fi · tema claro · mapa Digital · HD-2D");
     expect(resumoVisual("vidro", "claro", m.habitatAtual(), false)).toBe("pele Sci-fi · tema claro");
   });
 });

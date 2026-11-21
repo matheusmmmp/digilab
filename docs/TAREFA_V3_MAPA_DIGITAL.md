@@ -258,3 +258,17 @@ Ficam: à noite ela fica escura e quase ilegível (o revisor sugere um leve bril
 O Matheus pediu em 2026-11-10 a lata dentro do mapa e refeita ("tá fora do mapa e ainda tá toda errada"). A lata presa ao horizonte da
 seção 12 sai do estilo Digital, com o `DIGITAL.lata`, a função `lata` e o `lugarDaLata`. A lata nova é um marco da grade, feita à mão
 por script: `docs/TAREFA_V3_MUNDO_ENFEITES.md`, seção 17.
+
+## 14. O Digital como padrão (2026-11-21, sessão lateral, Claude Code, Opus 5.5, branch `v3-mapa-padrao-digital`)
+
+O Matheus disse em 2026-11-21 que "o Mapa do habitat oficial é o digital". Pela leitura D-MD-24 do registro, isso fecha a D-MD1 (seção
+8): o `MAPA_PADRAO` de `web/app/src/habitat.ts` passa de `"ilha"` para `"digital"`.
+
+- **Quem muda:** só quem nunca escolheu um mapa. A escolha gravada em Ajustes › Visual fica, e `?mapa=` continua sobrepondo sem gravar.
+- **A reserva:** um mapa que não carrega continua voltando para a Ilha, inclusive o Digital. A reserva usa o literal `"ilha"`, e não o
+  `MAPA_PADRAO`.
+- **O que cai no padrão:** no build, um mapa só do modo dev gravado ou um valor inválido. Antes ia para a Ilha, agora vai para o Digital.
+- **Os testes:** `web/app/test/habitat.test.ts` acompanha o padrão novo e ganha o caso do Digital que cai.
+- **O portão de capturas:** 18 das 19 telas mudam, porque o habitat atrás delas agora é o Digital (D-MD-28). As referências não foram
+  regravadas.
+- **Fica com o Matheus:** o fps num celular (D-G5), que não foi medido de novo, e regravar as referências do portão de capturas.

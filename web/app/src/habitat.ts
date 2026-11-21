@@ -2,7 +2,9 @@
    pele (pele.ts): o motor, a vida, o log e o replay nao mudam; o pet anda onde o motor diz em qualquer mapa (caminho A de 2026-10-31:
    cada mapa e uma vista da grade do motor). A escolha fica numa chave propria ao lado da do save; ?mapa= e ?camera= no endereco
    sobrepoem sem gravar (conferencia e capturas). Trocar com o jogo rodando religa a cena 3D (CenaPet escuta useHabitat).
-   - Ilha: o estilo Animal Crossing da L4 (H0-H5), com o mundo curvo; o padrao.
+   - Ilha: o estilo Animal Crossing da L4 (H0-H5), com o mundo curvo; o padrao ate 2026-11-21, e ainda a reserva quando outro mapa cai.
+   - Digital: a mesma ilha no fundo de anime (docs/TAREFA_V3_MAPA_DIGITAL.md); o padrao desde 2026-11-21 (o Matheus: "o Mapa do habitat
+     oficial é o digital"). Quem ja escolheu um mapa em Ajustes fica com a escolha; so quem nunca escolheu passa a abrir no digital.
    - Voxel: a mesma ilha em cubos, gerada por codigo (sem asset); vai no build.
    - Floresta e Cassette: os kits que nao se redistribuem (Tiny Fantasy Forest e o Cassette Beasts do Matheus, em Assets/kits3d/), so no
      modo dev (o vite.config os serve); fora dele nao aparecem, e se faltar arquivo a cena volta para a ilha sem gravar (voltarParaIlha).
@@ -20,7 +22,7 @@ export type Camera = "atras" | "lateral";
 export type Visual = "normal" | "gba-hd" | "hd-2d";
 export type Controle = "livre" | "fixa";
 export const CHAVE_HABITAT = CHAVE + "-habitat";
-export const MAPA_PADRAO: Mapa = "ilha", CAMERA_PADRAO: Camera = "atras", VISUAL_PADRAO: Visual = "normal", CONTROLE_PADRAO: Controle = "livre";
+export const MAPA_PADRAO: Mapa = "digital", CAMERA_PADRAO: Camera = "atras", VISUAL_PADRAO: Visual = "normal", CONTROLE_PADRAO: Controle = "livre";
 export const NOME_MAPA: Record<Mapa, string> = { ilha: "Ilha", digital: "Digital", voxel: "Voxel", floresta: "Floresta", cassette: "Cassette" };
 export const NOME_CAMERA: Record<Camera, string> = { atras: "Atrás", lateral: "Lateral" };
 export const NOME_CONTROLE: Record<Controle, string> = { livre: "Livre", fixa: "Fixa" };
