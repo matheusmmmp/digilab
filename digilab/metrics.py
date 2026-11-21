@@ -3781,3 +3781,65 @@ def medidas_carinho(elogios: Sequence[dict]) -> dict:
             movem += cr["p2"] is not None and cr["p2"]["abs"] > 0
     return {"n": n, "sinal_zero": zero, "sinal_negativo": negativo, "sem_decisao": sem_decisao, "creditos": creditos,
             "creditos_movem": movem, "fracao_movem": None if creditos == 0 else movem / creditos}
+
+
+# ================================================================== a plasticidade evoluida, o E0 (docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md,
+# secoes 2 e 3): o teste de sensibilidade que mexe um numero do aprendizado por vez
+def saude_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """A saude media nas decisoes da janela: `decisoes` = (tick, saude), a saude na escala 0-1 da `Observacao`. Falha alto sem decisao."""
+    ini, fim = _checar_janela(janela)
+    sel = [_escala01("saude", s) for t, s in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("saude sem decisao na janela")
+    return {"n": len(sel), "media": sum(sel) / len(sel)}
+
+
+def _ic_resumido(valores: Sequence[float], nivel: float) -> dict:
+    ic = ic_t(valores, nivel)
+    fora = None if ic["ic_inferior"] is None else not (ic["ic_inferior"] <= 0.0 <= ic["ic_superior"])
+    return {"n": ic["n"], "media": ic["media"], "dp": ic["dp"], "ic_inferior": ic["ic_inferior"], "ic_superior": ic["ic_superior"],
+            "motivo": ic["motivo"], "fora_de_zero": fora}
+
+
+def sensibilidade_um_por_vez(valores: Mapping[str, Mapping[str, Mapping[object, float]]], referencia: str,
+                             aprende: str = "APRENDE", congelado: str = "CONGELADO", nivel: float = 0.95) -> dict:
+    """O resumo do E0 numa medida (o "Tempo bem"). `valores[config][braco][unidade]` = o valor da unidade (ja a media das celulas dela),
+    com os dois bracos em toda config e as mesmas unidades em toda config e braco (falha alto: o pareamento e por unidade).
+    Por config:
+      - `aprende` e `congelado`: o nivel de cada braco (a media e o IC pelo t sobre as unidades);
+      - `valor`: o valor do aprendizado, APRENDE - CONGELADO pareado por unidade;
+      - `contraste_aprende` e `contraste_valor`: a config menos a `referencia` (a de hoje), pareado por unidade, no nivel do APRENDE e
+        no valor do aprendizado; None na propria referencia.
+    Cada IC traz `fora_de_zero`: o IC nao contem o 0 ("alem do ruido entre unidades"; None sem IC). `acaso`: quantos contrastes ha em
+    cada uma das duas familias, quantos sairiam fora de zero por acaso (contrastes x (1 - nivel)) e quantos sairam. Nada aqui e gate."""
+    if referencia not in valores:
+        raise ValueError(f"sensibilidade: a referencia {referencia!r} nao esta nas configs")
+    unidades = None
+    for nome, bracos in valores.items():
+        if set(bracos) != {aprende, congelado}:
+            raise ValueError(f"sensibilidade, {nome}: os bracos sao {aprende} e {congelado}, nao {sorted(bracos)}")
+        for b, por_unidade in bracos.items():
+            if unidades is None:
+                unidades = sorted(por_unidade)
+                if not unidades:
+                    raise ValueError("sensibilidade sem unidade")
+            if sorted(por_unidade) != unidades:
+                raise ValueError(f"sensibilidade, {nome}/{b}: as unidades nao sao as das outras configs")
+            if any(type(v) not in (int, float) or isinstance(v, bool) for v in por_unidade.values()):
+                raise TypeError(f"sensibilidade, {nome}/{b}: valor que nao e numero")
+    valor = {nome: {u: bracos[aprende][u] - bracos[congelado][u] for u in unidades} for nome, bracos in valores.items()}
+    ref_aprende, ref_valor = valores[referencia][aprende], valor[referencia]
+    configs = {}
+    for nome, bracos in valores.items():
+        e_ref = nome == referencia
+        configs[nome] = {
+            "aprende": _ic_resumido([bracos[aprende][u] for u in unidades], nivel),
+            "congelado": _ic_resumido([bracos[congelado][u] for u in unidades], nivel),
+            "valor": _ic_resumido([valor[nome][u] for u in unidades], nivel),
+            "contraste_aprende": None if e_ref else _ic_resumido([bracos[aprende][u] - ref_aprende[u] for u in unidades], nivel),
+            "contraste_valor": None if e_ref else _ic_resumido([valor[nome][u] - ref_valor[u] for u in unidades], nivel)}
+    n = len(configs) - 1
+    acaso = {"contrastes_por_familia": n, "nivel": nivel, "esperados_por_acaso_por_familia": n * (1.0 - nivel),
+             "fora_de_zero": {f: sum(1 for nome, c in configs.items() if nome != referencia and c[f]["fora_de_zero"])
+                              for f in ("contraste_aprende", "contraste_valor")}}
+    return {"referencia": referencia, "unidades": len(unidades), "configs": configs, "acaso": acaso}

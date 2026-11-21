@@ -1,0 +1,27 @@
+{
+ "descricao": "PLASTICIDADE_EVOLUIDA, o E0: o teste de sensibilidade (docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md, secoes 2 e 3). 31 configs x 2 bracos x 6 celulas x 10 unidades, 14 dias: 3 720 vidas. As 10 bases sao as primeiras da faixa 110001...110200, reservada pela coordenadora (PE-5). A run pede a vez na maquina e o ok do Matheus.",
+ "fase": "plasticidade_e0",
+ "plano": "docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md",
+ "dias": 14,
+ "orcamento_por_dia": 16,
+ "faixa": [
+  110001,
+  110200
+ ],
+ "unidades": {
+  "prefixo": "digibrain_prototipo",
+  "bases": [
+   110001,
+   110002,
+   110003,
+   110004,
+   110005,
+   110006,
+   110007,
+   110008,
+   110009,
+   110010
+  ],
+  "k": 1
+ }
+}
