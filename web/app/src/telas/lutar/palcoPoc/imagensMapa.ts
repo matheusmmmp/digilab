@@ -5,8 +5,9 @@
    aviso (falhar alto, nunca calado).
    Portado do palcoTR/ (o palco 1D do combate por turnos) na LUTA_POC, LP4: ficaram so os geradores de pixel que o palco 2D usa
    (desenhoPoc.ts, visualPoc.ts); o que lia o estado da luta 1D saiu com ela. */
-import { BASE_ASSETS } from "../../../baseAssets.ts";
-export const MAPAS_URL = `${BASE_ASSETS}arena_up/mapas/`;
+import { assetsAssinados, srcDoAsset } from "../../../protecao/assets.ts";
+
+export const MAPAS_URL = "../../../Assets/arena_up/mapas/";
 
 /** as imagens dos mapas: uma promessa por arquivo; a falha fica guardada para o aviso */
 const imagens = new Map<string, Promise<HTMLImageElement | null>>();
@@ -21,7 +22,10 @@ export function imagemMapa(arq: string): Promise<HTMLImageElement | null> {
       const i = new Image();
       i.onload = () => { prontas.set(arq, i); ok(i); for (const o of ouvintes) o(); };
       i.onerror = () => { falhasMapa.add(arq); prontas.set(arq, null); ok(null); for (const o of ouvintes) o(); };
-      i.src = MAPAS_URL + encodeURIComponent(arq);
+      const url = MAPAS_URL + encodeURIComponent(arq);
+      /* com a proteção ligada (CN4), o mapa vem pela URL assinada; desligada, o mesmo de sempre */
+      if (assetsAssinados()) srcDoAsset(url).then(s => { if (s.crossOrigin) i.crossOrigin = s.crossOrigin; i.src = s.src; }, () => i.onerror?.(new Event("error")));
+      else i.src = url;
     });
     imagens.set(arq, p);
   }

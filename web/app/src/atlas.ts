@@ -9,10 +9,10 @@
    desenho ate ganhar export do Aseprite: o retrato do guia volta para o robozinho (Bit.tsx) e o do oraculo some (BalaoOraculo.tsx). */
 import { useEffect, useState } from "react";
 import { zoomAtual } from "./escala.ts";
-import { BASE_ASSETS } from "./baseAssets.ts";
+import { assetsAssinados, buscarAsset, srcDoAsset } from "./protecao/assets.ts";
 
-export const ATLAS_PECAS_URL = `${BASE_ASSETS}digilab_atlas_up_pecas.json`;
-export const ATLAS_CLIPES_URL = `${BASE_ASSETS}digilab_atlas_up_clipes.json`;
+export const ATLAS_PECAS_URL = "../../../Assets/digilab_atlas_up_pecas.json";
+export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
 
 /** [x, y, largura, altura, deslocamento x, deslocamento y] de cada quadro dentro da caixa do sprite */
 export type Quadro = [number, number, number, number, number, number];
@@ -67,12 +67,16 @@ function aplicarFundos(dados: AtlasUp, img: HTMLImageElement): void {
   st.setProperty("--dl-img-anel", pecaComoUrl(dados, img, "anel_plataforma"));
   document.documentElement.dataset.fundos = "up";
 }
-const carregarImagem = (png: string, rotulo: string): Promise<HTMLImageElement> => new Promise((ok, falha) => {
+const abrirImagem = (png: string, rotulo: string, crossOrigin: "anonymous" | null): Promise<HTMLImageElement> => new Promise((ok, falha) => {
   const img = new Image();
+  if (crossOrigin) img.crossOrigin = crossOrigin;
   img.onload = () => ok(img);
   img.onerror = () => falha(new Error(`imagem do ${rotulo} não carregou: ${png}`));
   img.src = png;
 });
+/* com a proteção ligada (CN4), a imagem vem pela URL assinada; desligada, o mesmo de sempre, sem esperar nada */
+const carregarImagem = (png: string, rotulo: string): Promise<HTMLImageElement> =>
+  assetsAssinados() ? srcDoAsset(png).then(s => abrirImagem(s.src, rotulo, s.crossOrigin)) : abrirImagem(png, rotulo, null);
 /** junta os clipes ao atlas atual: cada sprite do atlas de clipes troca o do atlas atual (caixa e Idle como `quadros`); o resto (ovos, pecas,
     oraculo, guia) fica. Falha alto: sprite sem Idle; clipe com `ms` que nao casa com os quadros; `<Tag>_objeto` sem o clipe dele ou que nao
     casa com ele em quadros e em ms; acao nova que existe numa forma e falta em outra (ou todas as formas tem, ou nenhuma; NPCs e bots nao
@@ -112,7 +116,7 @@ export interface AtlasPecas { atlas: string; ms_por_quadro: number; pecas: Recor
 export function carregarAtlas(urlPecas = ATLAS_PECAS_URL, urlClipes = ATLAS_CLIPES_URL): void {
   const abs = (u: string): string => new URL(u, document.baseURI).href;
   const json = async <T,>(u: string, rotulo: string): Promise<T> => {
-    const r = await fetch(u);
+    const r = await buscarAsset(u);
     if (!r.ok) throw new Error(`${rotulo}: HTTP ${r.status} em ${u}`);
     return await r.json() as T;
   };

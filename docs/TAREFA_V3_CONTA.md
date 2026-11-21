@@ -158,6 +158,46 @@ prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). B
   só-para-ver das histórias em Gerações; o revisor de acessibilidade; as capturas a 1920 e 390 das telas no jogo; a velocidade do tempo ao
   abrir noutro aparelho (D-CONTA-38).
 
+## A CN4: a proteção (2026-11-20)
+
+Pedido pela sessão da conta: a CN4 do `docs/PLANO_V3_CONTA.md` (seção 10; o desenho na seção 6), local e sem conta real. Branch `v3-cn4`.
+Em dois PRs: o servidor e o checklist da borda (este), e o cliente do jogo (o segundo). Os desvios são D-CONTA-210 a 221.
+**D-CONTA-210 a 226 DECIDIDAS em 2026-11-21 pela recomendação** (o Matheus: "Aprovo todas"); a conferência das NÃO CONFERIDAS (210, 212,
+217) fica para a CN5.
+
+- **O `robots.txt`:** o do jogo (`web/app/public/robots.txt`, gerado por `node servidor_web/scripts/gerar_robots.ts` da lista
+  `ROBOS_DE_IA` de `servidor_web/src/protecao/robots.ts`) recusa 28 robôs de IA em tudo e os outros só nas pastas de assets; o da API
+  (`GET /robots.txt`) recusa tudo.
+- **As URLs assinadas** (`servidor_web/src/protecao/assinatura.ts` e `rotas.ts`): o formato do token da Cloudflare (`?verify=<hora>-<mac>`,
+  D-CONTA-212), `POST /assets/assinar` com a sessão ou o cookie do visitante, o visitante pelo Turnstile (`POST /assets/visitante`), os
+  limites por pedido e por hora, e, no local, o `GET /assets/*` que confere antes de servir. Sem `DIGILAB_SEGREDO_ASSETS`, desligadas.
+- **O Turnstile** (`turnstile.ts`): na criação da conta e no visitante, com as chaves de teste oficiais e o fetch falso nos testes; fora do
+  local, sem as chaves o servidor não sobe (a não ser com `DIGILAB_TURNSTILE=0`).
+- **A cota da fala** (`cota.ts`, a migração 10): 30 falas pela LLM por conta por dia de Brasília (PROPOSTO), só a chamada que vai à LLM
+  conta; acabou, o template. Fora do local, a fala sem a sessão é só o template. A `/api/fala` ganhou o CORS da conta e recusa outra origem.
+- **A borda:** o checklist do WAF, do limite por IP, do cache e do R2 para a CN5 em `docs/PLANO_V3_CONTA_BORDA.md`. Nada configurado em
+  conta real.
+- **Os testes:** `servidor_web/test/protecao.test.ts` (19 testes); `npm test` do servidor, 218 passaram.
+- **O que falta:** o cliente do jogo (o segundo PR); a conferência do formato da assinatura e dos robôs na Cloudflare de verdade (CN5); a
+  troca da regra que recusa os cabeçalhos da Cloudflare (CN5, o checklist seção 2); o Worker na frente do R2 se a regra de WAF não estiver
+  no Free.
+
+### A CN4 no jogo (o segundo PR, branch `v3-cn4-cliente`)
+
+- **A chave:** `VITE_DIGILAB_PROTECAO=1` com o `VITE_DIGILAB_API`. Desligada, o atlas, a cena da evolução, os sons e a fala pedem o que
+  pediam: o gabarito `web/app/test/gabaritos/cn4_assets_desligados.json` (gravado no commit `8308121d`, antes do código) e
+  `web/app/test/assets_desligados.test.ts` conferem.
+- **Ligada:** `web/app/src/protecao/assets.ts` pede as URLs assinadas (juntando os pedidos, até 64 por vez, guardando cada uma até perto de
+  vencer) e vira visitante pelo Turnstile quando não há sessão (`src/protecao/turnstile.ts`, o script da Cloudflare só com a chave do site
+  vinda do servidor). A fala vai ao servidor da conta com o cookie.
+- **O Turnstile na criação da conta:** o widget no primeiro acesso quando o servidor manda a chave do site (sem ela, a tela é a de sempre);
+  o "Criar a conta" espera o token, e o token que não passa desenha o widget de novo.
+- **Os testes:** `web/app/test/protecao_cliente.test.ts` (11) e o gabarito; `npm test` do jogo, 2 174 passaram. No navegador, com o
+  `servidor_web` local e as chaves de teste oficiais do Turnstile: o atlas e os sons vieram por URL assinada como visitante (o desafio
+  resolvido no canto), o widget apareceu no primeiro acesso, passou, e a conta foi criada; a fala com a sessão mostrou a cota 0 de 30.
+- **O que falta:** os enfeites e os modelos 3D da ilha (`web/app/public/`) seguem fora da URL assinada (D-CONTA-222); o revisor de
+  acessibilidade do widget; o e2e no repositório.
+
 ## A CN5: a hospedagem de teste, a parte do código (2026-11-20)
 
 O código e o roteiro, sem contratar nada (a seção 6: contratar é do Matheus). O roteiro, com a ordem do que contratar, os segredos, a VPS, o
@@ -169,8 +209,11 @@ backup, os assets, o deploy e os preços do dia, está em `docs/infra/DEPLOY_CN5
 - **A VPS** (`servidor_web/deploy/`): o systemd do servidor e do Litestream, a `litestream.yml` para o R2, os modelos dos `.env` (só os
   nomes), o `instalar.sh` (o Node e o Litestream conferidos por sha256, o `cloudflared`, o `ufw`), o `publicar.sh` (volta a versão se a
   `/saude` não responder) e o `restaurar.sh` (o ensaio e a restauração de verdade).
-- **O jogo:** os assets por `src/baseAssets.ts` (`VITE_DIGILAB_ASSETS`; sem ela, o de sempre) e o envio ao R2 pela máquina do Matheus
-  (`web/app/scripts/publicar_assets.ts`, com a assinatura SigV4 em `scripts/r2.ts`, conferida com o exemplo da AWS).
-- **O CI:** `.github/workflows/publicar.yml`, desligado até a variável `DIGILAB_PUBLICAR = sim`: o servidor pelo SSH, depois o jogo no Pages.
+- **Os assets (refeito em 2026-11-21 sobre a CN4, pela D-CONTA-199 revista):** o bucket é privado, e o Worker
+  `servidor_web/deploy/worker_assets/worker.ts` só entrega a URL assinada da CN4 (D-CONTA-227). A decoração e a luta passam também pela
+  assinatura (D-CONTA-228). O envio ao R2 sai da máquina do Matheus (`web/app/scripts/publicar_assets.ts`, com a assinatura SigV4 em
+  `scripts/r2.ts`, conferida com o exemplo da AWS).
+- **O CI:** `.github/workflows/publicar.yml`, desligado até a variável `DIGILAB_PUBLICAR = sim`: o servidor pelo SSH, depois o jogo no Pages
+  e o Worker dos assets.
 - **O que falta:** o Matheus contratar e configurar (seção 2 do roteiro); o ensaio da restauração antes do primeiro convidado; o aviso da
-  RC-7; as URLs assinadas (CN4); o Sentry (D-CONTA-200).
+  RC-7; o Sentry (D-CONTA-200); o limite do Workers grátis (D-CONTA-227).

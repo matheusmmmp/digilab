@@ -5,13 +5,13 @@
    fundo e a frente, no osso AAA_Digimon da cena. So apresentacao: nada daqui entra no motor, no log ou no save. */
 import type { AtlasOk, Clipe, Quadro } from "./atlas.ts";
 import { quadroDoClipe } from "./atlas.ts";
-import { BASE_ASSETS } from "./baseAssets.ts";
+import { buscarAsset } from "./protecao/assets.ts";
 
 /** Chave da cena oficial (TAREFA_V2_UP_EVOLUCAO), LIGADA pelo Matheus em 2026-11-10 ("aplica no jogo"); desligada, a Revelacao de hoje.
     E do app, nao do motor. Sem os assets (o CI), a Revelacao mostra o aviso e segue no cartao. */
 export const CENA_EVOLUCAO_UP = true;
 /** a mesma convencao do atlas: relativo a pagina em /v1/web/dist/ (no servidor local cai em /Assets/evolucao_up/) */
-export const EVOLUCAO_URL = `${BASE_ASSETS}evolucao_up/`;
+export const EVOLUCAO_URL = "../../../Assets/evolucao_up/";
 
 export type NomeCena = "adventure" | "zero2" | "tamers" | "tamers_mega" | "jogress" | "dramon";
 /** o Digimon num quadro: o de antes, o novo, nenhum; "herda" (so na revelacao) = o que a Summon deixou, continuando */
@@ -106,7 +106,7 @@ export function lugarDigimon(mapa: MapaEvolucao, osso: [number, number, number, 
 let mapaPromessa: Promise<MapaEvolucao> | null = null;
 /** o mapa, uma vez por sessao; falha alto (quem chama mostra o aviso e cai na Revelacao de hoje) */
 export function carregarMapaEvolucao(base = EVOLUCAO_URL): Promise<MapaEvolucao> {
-  mapaPromessa ??= fetch(base + "mapa.json").then(r => {
+  mapaPromessa ??= buscarAsset(base + "mapa.json").then(r => {
     if (!r.ok) throw new Error(`HTTP ${r.status} em ${base}mapa.json`);
     return r.json() as Promise<MapaEvolucao>;
   }).then(m => { if (m.versao !== 1) throw new Error("mapa da evolucao com versao desconhecida: " + m.versao); return m; });
@@ -120,7 +120,7 @@ export async function baixarPacotes(seq: PassoCena[], progresso: (p: number) => 
   for (const p of seq) for (const [ini, tam] of p.pedacos) fim.set(p.pacote, Math.max(fim.get(p.pacote) ?? 0, ini + tam));
   const total = [...fim.values()].reduce((a, b) => a + b, 0), feitos = new Map<string, number>();
   const um = async (nome: string): Promise<[string, Blob]> => {
-    const url = `${base}pacotes/${nome}.bin`, r = await fetch(url);
+    const url = `${base}pacotes/${nome}.bin`, r = await buscarAsset(url);
     if (!r.ok || !r.body) throw new Error(`HTTP ${r.status} em ${url}`);
     const leitor = r.body.getReader(), partes: Uint8Array[] = [];
     for (;;) {

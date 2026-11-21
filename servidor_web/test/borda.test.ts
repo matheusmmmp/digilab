@@ -11,7 +11,7 @@ const PELA_BORDA = { "cf-ray": "8f1c2d3e4a5b6c7d-GRU", "cf-connecting-ip": "203.
 
 function contaDeFora() {
   return configDoAmbiente({ porta: 8766, banco: abrirBanco(":memory:"), ambiente: {
-    DIGILAB_URL_API: "https://api.exemplo.test", DIGILAB_URL_JOGO: "https://exemplo.test/jogo/", DIGILAB_PROVEDOR_FALSO: "0" } });
+    DIGILAB_URL_API: "https://api.exemplo.test", DIGILAB_URL_JOGO: "https://exemplo.test/jogo/", DIGILAB_PROVEDOR_FALSO: "0", DIGILAB_TURNSTILE: "0" } });
 }
 
 describe("a borda local (o padrão)", () => {

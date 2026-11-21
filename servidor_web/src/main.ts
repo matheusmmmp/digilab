@@ -66,5 +66,10 @@ serve({ fetch: criarApp({ gerador, motivoInicial: motivo, conta, borda }).fetch,
   console.log(`Digilab servidor_web em http://127.0.0.1:${info.port}  (/saude, /api/fala/status, POST /api/fala)  [${estado}]`);
   console.log(`  conta: ${estadoConta}`);
   console.log(`  borda: ${borda}${borda === "cloudflare" ? " (so pelo Cloudflare Tunnel)" : ""}`);
+  if (conta) {
+    const p = conta.protecao;
+    console.log(`  proteção: assets assinados ${p.segredoAssets ? `ligados (${p.urlAssets}, ${p.validadeAssetsS} s)` : `desligados (${p.motivoAssets})`}; `
+      + `Turnstile ${p.turnstile ? "ligado" : "desligado"}; cota da fala ${p.cotaFalaDia} por conta por dia; fala sem conta: ${p.falaSoComConta ? "só template" : "segue o teto total"}`);
+  }
   if (conta?.local) console.log(`  teste do fluxo da conta: ${conta.urlApi}/dev/conta`);
 });

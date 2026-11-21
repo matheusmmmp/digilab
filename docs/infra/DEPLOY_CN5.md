@@ -8,7 +8,8 @@ ordem, e o que pôr em cada lugar. Nenhuma chave entra no repositório: os segre
 `/etc/digilab/*.env` da VPS.
 
 **NÃO CONFERIDO:** nada disto rodou numa VPS, no Pages ou no R2. O que foi conferido aqui: o pacote do servidor sobe numa pasta limpa, a borda
-recusa o pedido que não vem pelo túnel, o build leva o endereço dos assets, a assinatura do envio ao R2 confere com o exemplo da AWS.
+recusa o pedido que não vem pelo túnel, o Worker dos assets aceita só a URL que o servidor assinou, a assinatura do envio ao R2 confere
+com o exemplo da AWS.
 
 ## 1. As peças
 
@@ -18,9 +19,10 @@ recusa o pedido que não vem pelo túnel, o build leva o endereço dos assets, a
 | a entrada da API | o Cloudflare Tunnel (`cloudflared`), de dentro da VPS para a Cloudflare | `api.<domínio>` → `http://127.0.0.1:8766`; nenhuma porta aberta além do SSH (D-CONTA-197) | o `instalar.sh` instala; o túnel é criado no painel |
 | o banco | `/var/lib/digilab/conta.sqlite` | o SQLite em WAL; a conta, o save na nuvem e o ranking | `servidor_web/src/conta/banco.ts` |
 | a cópia do banco | o bucket privado `digilab-banco` no R2 | o Litestream, sem parar (CH-4) | `servidor_web/deploy/litestream.yml`, `litestream.service` |
-| o jogo | o Cloudflare Pages: `<domínio>/jogo/` (RC-6) | o build do Vite, com a API e os assets do domínio | `.github/workflows/publicar.yml`, `servidor_web/deploy/montar_site.sh` |
+| o jogo | o Cloudflare Pages: `<domínio>/jogo/` (RC-6) | o build do Vite, com a API do domínio e as URLs assinadas da CN4 ligadas (`VITE_DIGILAB_PROTECAO=1`) | `.github/workflows/publicar.yml`, `servidor_web/deploy/montar_site.sh` |
 | a raiz do domínio | o Pages | um aviso que leva a `/jogo/`, até a página de entrada (RC-5) existir em código (D-CONTA-202) | `montar_site.sh` |
-| os assets | o bucket público `digilab-assets` no R2, em `assets.<domínio>` | o atlas, a decoração, os sons, a cena da evolução, os cenários da luta (478 arquivos, 108 MiB em 2026-11-20) | `web/app/scripts/publicar_assets.ts` |
+| os assets | o bucket **privado** `digilab-assets` no R2 (D-CONTA-199 revista) | o atlas, a decoração, os sons, a cena da evolução, os cenários da luta (478 arquivos, 108 MiB em 2026-11-20) | `web/app/scripts/publicar_assets.ts` |
+| a entrega dos assets | o Worker `digilab-assets` no domínio próprio `assets.<domínio>` | só entrega a URL que o servidor assinou (a da CN4), lê o bucket pelo binding e guarda na borda pelo caminho (D-CONTA-227) | `servidor_web/deploy/worker_assets/` |
 | o aviso de queda | o Better Stack (CH-5) | um monitor em `https://api.<domínio>/saude` | — |
 
 ## 2. A ordem do que contratar (o Matheus)
@@ -31,13 +33,16 @@ Os preços do dia estão na seção 8. Em cada passo, anote o que está em **neg
    a Cloudflare). Anote o **domínio**.
 2. **A Cloudflare, plano Free (CH-6).** Ponha o domínio na conta. Em *Security > Bots*, ligue o bloqueio dos robôs de IA (AI Crawl Control).
    Anote o **id da conta** (*Account ID*, no painel).
-3. **O R2.** Dois buckets:
-   - `digilab-banco`, **privado**: a cópia do SQLite;
-   - `digilab-assets`, **público** pelo domínio próprio `assets.<domínio>` (*Settings > Custom Domains*), com o CORS da seção 6.
+3. **O R2.** Dois buckets, **os dois privados** (sem domínio próprio e com o `r2.dev` desligado):
+   - `digilab-banco`: a cópia do SQLite;
+   - `digilab-assets`: os assets; só o Worker dos assets lê (seção 6).
    Dois tokens do R2 (*R2 > Manage API Tokens*), cada um com **"Object Read & Write" só no seu bucket**: o do banco vai para a VPS; o dos
    assets fica na máquina do Matheus. Anote o **id e o segredo** de cada um.
-4. **O Pages.** Crie um projeto "Direct Upload" (sem ligar ao GitHub), por exemplo `digilab`, e ligue o domínio próprio `<domínio>`.
-   Crie um token da API (*My Profile > API Tokens*) com só **"Cloudflare Pages: Edit"**. Anote o **nome do projeto** e o **token**.
+4. **O Pages e o Worker.** Crie um projeto do Pages "Direct Upload" (sem ligar ao GitHub), por exemplo `digilab`, e ligue o domínio
+   próprio `<domínio>`. Crie um token da API (*My Profile > API Tokens*) com só **"Cloudflare Pages: Edit"**, **"Workers Scripts: Edit"**,
+   **"Workers Routes: Edit"** (na zona do domínio) e **"Workers R2 Storage: Read"**. Anote o **nome do projeto** e o **token**.
+   Gere o **segredo dos assets** (pelo menos 32 caracteres, por exemplo `openssl rand -base64 48`): vai no `api.env` da VPS e no Worker.
+   **O Turnstile** (*Turnstile > Add widget*, o domínio do jogo): anote a **chave do site** e a **chave secreta**; vão no `api.env`.
 5. **A AWS e o Lightsail (CH-2).** Uma instância Linux **Ubuntu 24.04 LTS**, 2 GB, em **São Paulo**, com um IP estático. No *Networking*
    da instância, feche o 80 e o 443 (fica só o 22). Ligue os **snapshots automáticos** (cobrados como snapshot, seção 8). Anote o **IP**.
 6. **A VPS:** a seção 4 (o `instalar.sh`).
@@ -62,12 +67,17 @@ Os preços do dia estão na seção 8. Em cada passo, anote o que está em **neg
 | `CLOUDFLARE_ACCOUNT_ID` | segredo | o id da conta |
 | `DIGILAB_DOMINIO` | variável | o domínio, sem `https://` |
 | `DIGILAB_PAGES_PROJETO` | variável | o nome do projeto do Pages |
+| `DIGILAB_R2_BUCKET_ASSETS` | variável | o nome do bucket dos assets (`digilab-assets`), para o binding do Worker |
 | `DIGILAB_NUVEM` | variável | `1` liga o save na nuvem no build (CN3); vazio, desligado |
 | `DIGILAB_MARCO_RANQUEADA` | variável | o marco da luta ranqueada no jogo (`7` no beta, D-CONTA-76); vazio, o padrão |
 | `DIGILAB_PUBLICAR` | variável **do repositório** | `sim` liga o workflow `publicar`; sem ela, ele não roda |
 
 **Na VPS:** `/etc/digilab/api.env` e `/etc/digilab/litestream.env`, pelos modelos `servidor_web/deploy/*.env.exemplo` (o `instalar.sh` copia
-os modelos vazios, com o modo 640). O `DIGILAB_URL_API` é `https://api.<domínio>`; o `DIGILAB_URL_JOGO`, `https://<domínio>/jogo/`.
+os modelos vazios, com o modo 640). O `DIGILAB_URL_API` é `https://api.<domínio>`; o `DIGILAB_URL_JOGO`, `https://<domínio>/jogo/`; o
+`DIGILAB_URL_ASSETS`, `https://assets.<domínio>`; o `DIGILAB_SEGREDO_ASSETS`, o mesmo do Worker; e as duas chaves do Turnstile.
+
+**No Worker dos assets, uma vez** (da pasta `servidor_web/deploy/worker_assets`, depois do primeiro deploy pelo CI, ou antes, com um
+`wrangler.toml` feito do modelo): `npx wrangler@4.158.0 secret put DIGILAB_SEGREDO_ASSETS`, com o mesmo valor do `api.env`.
 
 **Na máquina do Matheus:** `DIGILAB_R2_CONTA`, `DIGILAB_R2_BUCKET_ASSETS`, `DIGILAB_R2_CHAVE_ID` e `DIGILAB_R2_CHAVE_SEGREDO` (o token dos
 assets), só no ambiente da sessão que publica os assets (seção 6).
@@ -110,7 +120,19 @@ sudo chmod 440 /etc/sudoers.d/digilab-publicar
 
 ## 6. Os assets
 
-O CI não tem a pasta Assets (fica fora do git). Os assets sobem da máquina do Matheus, quando mudam:
+**O bucket é privado (D-CONTA-199, revista em 2026-11-21):** nada sai dele sem a URL assinada da CN4. O caminho é este:
+
+1. O jogo (com `VITE_DIGILAB_PROTECAO=1`) pede ao servidor as URLs (`POST /assets/assinar`, com a sessão ou o visitante do Turnstile).
+2. O servidor devolve `https://assets.<domínio>/<caminho>?verify=<hora>-<mac>`, que vale `DIGILAB_VALIDADE_ASSETS_S` (600 s).
+3. O Worker `digilab-assets` (`servidor_web/deploy/worker_assets/worker.ts`) confere o `verify` com o mesmo segredo e a mesma conta do
+   servidor, lê o objeto do bucket pelo binding e responde com o CORS da origem do jogo e o `X-Robots-Tag: noindex`. Sem a assinatura
+   certa, ou vencida, 403. A borda guarda o arquivo pelo caminho, sem o `verify`: o R2 é lido uma vez por arquivo.
+
+É o caminho "se o W1 não estiver no plano" do `docs/PLANO_V3_CONTA_BORDA.md` (seção 6): o W1 (a regra de WAF com a HMAC) seria de plano
+pago, e com o bucket privado não há domínio público para a regra (D-CONTA-227). O Workers grátis tem um limite de pedidos por dia que
+este roteiro **não conferiu**; com o cache da borda, só a primeira leitura de cada arquivo chega ao R2, mas todo pedido passa pelo Worker.
+
+**O envio** sai da máquina do Matheus, quando os assets mudam (o CI não tem a pasta Assets, que fica fora do git):
 
 ```powershell
 cd D:\Trab\digilab\v3\web\app
@@ -118,16 +140,8 @@ node scripts/publicar_assets.ts            # só a lista: nada sai da máquina
 node scripts/publicar_assets.ts --enviar   # manda o que mudou (o MD5 contra o ETag do R2)
 ```
 
-A lista é a mesma que o dev do Vite serve (`web/app/scripts/assets_publicos.ts`). Os kits do habitat que não se redistribuem (o Tiny Fantasy
-Forest e o Cassette Beasts) não sobem. **Até a CN4, os assets ficam num caminho fixo e público** (D-CONTA-199): quem souber o endereço baixa
-o atlas.
-
-**O CORS do bucket `digilab-assets`** (*R2 > digilab-assets > Settings > CORS Policy*): o jogo lê os JSON por `fetch` e as imagens como
-textura, então a origem do jogo precisa estar liberada.
-
-```json
-[{ "AllowedOrigins": ["https://<domínio>"], "AllowedMethods": ["GET", "HEAD"], "AllowedHeaders": ["*"], "MaxAgeSeconds": 3600 }]
-```
+A lista é a mesma que o dev do Vite serve (`web/app/scripts/assets_publicos.ts`); a chave de cada objeto é o caminho que o jogo assina, sem
+a "/". Os kits do habitat que não se redistribuem (o Tiny Fantasy Forest e o Cassette Beasts) não sobem.
 
 ## 7. O deploy pelo CI
 
@@ -138,7 +152,7 @@ O workflow `.github/workflows/publicar.yml` roda a cada push na `main` que muda 
    jogo que ele importa), conferido numa pasta limpa (`conferir_pacote.sh`); o envio por `scp` com a chave do host fixada; o
    `digilab-publicar`, que troca a versão e **volta para a de antes se a `/saude` não responder em 30 s**. Guarda as 5 últimas versões.
 2. **O jogo, depois do servidor:** os tipos, o Vitest, o build com `VITE_DIGILAB_API=https://api.<domínio>` e
-   `VITE_DIGILAB_ASSETS=https://assets.<domínio>/`, e o `wrangler pages deploy` (versão fixa 4.158.0).
+   `VITE_DIGILAB_PROTECAO=1`, o `wrangler pages deploy` e o `wrangler deploy` do Worker dos assets (versão fixa 4.158.0).
 
 **Voltar uma versão:** rode o workflow à mão num commit anterior (*Run workflow* a partir de um branch com o commit), ou, na VPS, aponte
 `/opt/digilab/atual` para uma pasta de `/opt/digilab/versoes/` e reinicie o `digilab-api`.
@@ -166,7 +180,6 @@ domínio, mais a fala. Os assets (108 MiB) cabem nos 10 GB grátis do R2.
 
 ## 9. O que fica para depois
 
-- **As URLs assinadas e o Turnstile** (a CN4): até lá, os assets ficam num caminho fixo (D-CONTA-199).
 - **O Sentry** (CH-5): o SDK é uma dependência nova no servidor, e o `servidor_web/CLAUDE.md` fecha a lista. Até o ok, os erros ficam no
   `journalctl -u digilab-api` (D-CONTA-200).
 - **A página de entrada** (RC-5): é de outra sessão. Até lá, a raiz leva ao jogo (D-CONTA-202).

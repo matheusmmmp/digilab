@@ -6,9 +6,9 @@
    ou no save, e a variacao do som usa o Math.random do app, nunca a RNG do motor. A logica e a do bloco "sons do jogo" da arena do
    prototipo (eventos do script de batalha com atraso e variacao), reescrita. */
 import { useSyncExternalStore } from "react";
+import { buscarAsset as buscarAssetProtegido } from "./protecao/assets.ts";
 import { CHAVE } from "./save.ts";
 import type { EfeitoSom } from "./somEventos.ts";
-import { BASE_ASSETS } from "./baseAssets.ts";
 
 export const CHAVE_SOM = CHAVE + "-som";
 export const CHAVE_SOM_VOLUME = CHAVE + "-som-volume";
@@ -16,7 +16,7 @@ export const CHAVE_SOM_VOLUME = CHAVE + "-som-volume";
 export const CHAVE_SOM_VOL_MUSICA = CHAVE + "-som-vol-musica";
 export const CHAVE_SOM_VOL_EFEITOS = CHAVE + "-som-vol-efeitos";
 /** a mesma convencao do atlas: relativo a pagina em /v1/web/dist/ (no servidor local cai em /Assets/sons/) */
-export const SONS_URL = `${BASE_ASSETS}sons/`;
+export const SONS_URL = "../../../Assets/sons/";
 /** volume padrao ao ligar pela primeira vez (PROPOSTO, SEM FONTE) */
 export const VOLUME_PADRAO = 0.6;
 /** a musica de fundo nasce mais baixa que os efeitos (SD-6: baixa, para nao cansar). PROPOSTOS, SEM FONTE */
@@ -85,9 +85,12 @@ export interface Dependencias {
 }
 export interface EstadoSom { ligado: boolean; volume: number; volMusica: number; volEfeitos: number; aviso: string | null }
 
+/** o fetch dos sons (o mapa e os arquivos): com a proteção ligada (CN4), pela URL assinada; desligada, o fetch de sempre */
+export const buscarAsset = (url: string): Promise<Response> => buscarAssetProtegido(url);
+
 const depsPadrao = (): Dependencias => ({
   criarContexto: () => new (window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)() as unknown as ContextoAudio,
-  buscar: url => fetch(url),
+  buscar: buscarAsset,
   aleatorio: Math.random,
   armazenamento: (() => { try { return localStorage; } catch { return null; } })(),
   aoGesto: f => { const g = (): void => { removeEventListener("pointerdown", g); removeEventListener("keydown", g); f(); }; addEventListener("pointerdown", g); addEventListener("keydown", g); },

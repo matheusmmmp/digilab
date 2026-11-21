@@ -1,5 +1,6 @@
 /* Manda ao R2 os assets que ficam fora do repositório (CN5, docs/infra/DEPLOY_CN5.md, seção 6). Roda na máquina do Matheus, onde a pasta
-   Assets está: o CI não tem os assets, só o código.
+   Assets está: o CI não tem os assets, só o código. O bucket é PRIVADO (D-CONTA-199 revista em 2026-11-21): o jogo só lê pelo Worker dos
+   assets (servidor_web/deploy/worker_assets), com a URL assinada da CN4; a chave de cada objeto é o caminho que o jogo assina, sem a "/".
      node scripts/publicar_assets.ts                  # só lista o que iria (o padrão): nada sai da máquina
      node scripts/publicar_assets.ts --enviar         # manda o que mudou (compara o MD5 com o ETag do R2)
    A lista é a de scripts/assets_publicos.ts (a mesma do dev): os kits que não se redistribuem não sobem. As chaves vêm do ambiente, nunca do
@@ -12,8 +13,6 @@ import { parseArgs } from "node:util";
 import { faltandoNaLista, listarAssetsPublicos } from "./assets_publicos.ts";
 import { pedirR2 } from "./r2.ts";
 
-/** PROPOSTO, SEM FONTE: os nomes dos assets não mudam a cada versão, então o navegador guarda por 1 h e confere depois */
-export const CACHE_ASSETS = "public, max-age=3600";
 
 const { values: a } = parseArgs({ options: {
   enviar: { type: "boolean", default: false },
@@ -47,7 +46,7 @@ for (const x of achados) {
   const cab = await pedirR2(conta, cred, "HEAD", x.chave, bucket);
   if (cab.ok && cab.headers.get("etag")?.replaceAll('"', "") === md5) { iguais++; continue; }
   if (!cab.ok && cab.status !== 404) throw new Error(`HEAD ${x.chave}: ${cab.status}`);
-  const r = await pedirR2(conta, cred, "PUT", x.chave, bucket, corpo, { "content-type": x.tipo, "cache-control": CACHE_ASSETS });
+  const r = await pedirR2(conta, cred, "PUT", x.chave, bucket, corpo, { "content-type": x.tipo });
   if (!r.ok) throw new Error(`PUT ${x.chave}: ${r.status} ${await r.text()}`);
   enviados++;
   console.log(`  enviado ${x.chave}`);
