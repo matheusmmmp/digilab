@@ -5,6 +5,10 @@
      GET|HEAD /<caminho>?verify=<hora>-<mac>     a mesma conta do `verificar` de servidor_web/src/protecao/assinatura.ts, em WebCrypto
                                                  (o test/worker_assets.test.ts confere com URLs feitas pelo `urlAssinada` do servidor)
      OPTIONS                                     o CORS, só da origem do jogo
+     GET|HEAD /.well-known/tdmrep.json           o aviso de mineração reservada da origem dos assets (PI-6), sem assinatura: é o
+                                                 arquivo que o robô lê antes de baixar qualquer coisa (D-CONTA-234)
+
+   Toda resposta leva o `tdm-reservation: 1` (o TDMRep; as mesmas regras de servidor_web/src/protecao/tdmrep.ts, conferidas no teste).
 
    A chave do objeto é o caminho sem a "/" do começo (a mesma do web/app/scripts/publicar_assets.ts). O cache da borda guarda o arquivo pelo
    caminho, sem o `verify`, depois de conferir a assinatura: o R2 é lido uma vez por arquivo, não uma vez por jogador.
@@ -30,6 +34,11 @@ export const VALIDADE_PADRAO_S = 600;
 /** PROPOSTO, SEM FONTE (o da seção 6 do plano da borda): o navegador e a borda guardam o arquivo um dia */
 export const CACHE_ARQUIVO = "public, max-age=86400";
 export const TAMANHO_MINIMO_SEGREDO = 32;
+/* o TDMRep (PI-6): o mesmo de servidor_web/src/protecao/tdmrep.ts; o teste confere que não se separaram */
+export const CAMINHO_TDMREP = "/.well-known/tdmrep.json";
+export const CABECALHO_TDM = "tdm-reservation";
+export const TDM_RESERVA = 1;
+export const TDMREP_JSON = JSON.stringify([{ location: "/", "tdm-reservation": TDM_RESERVA }], null, 2) + "\n";
 
 export function caminhoValido(caminho: string): boolean {
   return /^\/[A-Za-z0-9._/-]{1,200}$/.test(caminho) && !caminho.includes("..") && !caminho.includes("//");
@@ -59,8 +68,9 @@ export async function verificarWeb(segredo: string, caminho: string, verify: str
 }
 
 const cors = (env: Ambiente): Record<string, string> => ({ "Access-Control-Allow-Origin": env.DIGILAB_ORIGEM_JOGO, Vary: "Origin" });
+const TDM: Record<string, string> = { [CABECALHO_TDM]: String(TDM_RESERVA) };
 const erro = (env: Ambiente, status: number, motivo: string): Response =>
-  new Response(JSON.stringify({ erro: motivo }), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...cors(env) } });
+  new Response(JSON.stringify({ erro: motivo }), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...TDM, ...cors(env) } });
 
 /** o Worker; `agora` e `cache` só para os testes (na Cloudflare: Date.now e caches.default) */
 export async function atender(req: Request, env: Ambiente, ctx: Contexto, agora: () => number = Date.now,
@@ -68,10 +78,14 @@ export async function atender(req: Request, env: Ambiente, ctx: Contexto, agora:
   if (!env.DIGILAB_SEGREDO_ASSETS || env.DIGILAB_SEGREDO_ASSETS.length < TAMANHO_MINIMO_SEGREDO) return erro(env, 503, "sem o segredo dos assets");
   if (!/^https:\/\/[^/]+$/.test(env.DIGILAB_ORIGEM_JOGO ?? "")) return erro(env, 503, "sem a origem do jogo");
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: { ...cors(env), "Access-Control-Allow-Methods": "GET, HEAD", "Access-Control-Max-Age": "3600" } });
+    return new Response(null, { status: 204, headers: { ...cors(env), ...TDM, "Access-Control-Allow-Methods": "GET, HEAD", "Access-Control-Max-Age": "3600" } });
   }
   if (req.method !== "GET" && req.method !== "HEAD") return erro(env, 405, "só GET e HEAD");
   const url = new URL(req.url), caminho = url.pathname;
+  if (caminho === CAMINHO_TDMREP) {
+    return new Response(req.method === "HEAD" ? null : TDMREP_JSON, { status: 200, headers: { "Content-Type": "application/json",
+      "Cache-Control": CACHE_ARQUIVO, "X-Robots-Tag": "noindex", ...TDM, ...cors(env) } });
+  }
   if (!caminhoValido(caminho)) return erro(env, 404, "caminho inválido");
   const validade = Number(env.DIGILAB_VALIDADE_ASSETS_S ?? VALIDADE_PADRAO_S);
   if (!Number.isInteger(validade) || validade <= 0) return erro(env, 503, "DIGILAB_VALIDADE_ASSETS_S inválida");
@@ -82,7 +96,7 @@ export async function atender(req: Request, env: Ambiente, ctx: Contexto, agora:
   const guardada = cache ? await cache.match(chaveCache) : undefined;
   const responder = (r: Response): Response => {
     const h = new Headers(r.headers);
-    for (const [k, x] of Object.entries(cors(env))) h.set(k, x);
+    for (const [k, x] of Object.entries({ ...TDM, ...cors(env) })) h.set(k, x);
     return new Response(req.method === "HEAD" ? null : r.body, { status: r.status, headers: h });
   };
   if (guardada) return responder(guardada);
@@ -95,6 +109,7 @@ export async function atender(req: Request, env: Ambiente, ctx: Contexto, agora:
     ETag: obj.httpEtag,
     "Cache-Control": CACHE_ARQUIVO,
     "X-Robots-Tag": "noindex",
+    ...TDM,
   } });
   if (cache) {
     ctx.waitUntil(cache.put(chaveCache, resp.clone()));

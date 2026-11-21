@@ -1,5 +1,6 @@
 /* As rotas da proteção (CN4, docs/PLANO_V3_CONTA.md seção 6):
      GET  /robots.txt          a da API: ninguém indexa nada (a do jogo é o web/app/public/robots.txt)
+     GET  /.well-known/tdmrep.json   o aviso de mineração reservada (PI-6, tdmrep.ts; o do jogo é o web/app/public/.well-known/)
      GET  /assets/estado       {ligado, motivo, validade_s, turnstile: <chave do site> | null}: o que o jogo precisa para pedir as URLs
      POST /assets/visitante    {turnstile}: o visitante sem conta passa pelo Turnstile e leva o cookie dl_visitante (DURACAO_VISITANTE_MS)
      POST /assets/assinar      {caminhos: ["/atlas/x.png", ...]} -> {urls: {caminho: url}, validade_s, expira_em}: com a sessão da conta
@@ -17,6 +18,7 @@ import type { GuardasConta } from "../conta/rotas.ts";
 import { caminhoValido, PARAMETRO, urlAssinada, verificar } from "./assinatura.ts";
 import { ASSINATURAS_POR_HORA, CAMINHOS_POR_PEDIDO, DURACAO_VISITANTE_MS } from "./config.ts";
 import { robotsDaApi } from "./robots.ts";
+import { CAMINHO_TDMREP, tdmrepJson } from "./tdmrep.ts";
 
 export const COOKIE_VISITANTE = "dl_visitante";
 const LIMITE_CORPO_ASSETS = 16 * 1024;
@@ -28,9 +30,10 @@ const TIPOS: Record<string, string> = {
   ".mp3": "audio/mpeg", ".wav": "audio/wav", ".m4a": "audio/mp4", ".txt": "text/plain; charset=utf-8",
 };
 
-/** só a rota do robots.txt (vale também sem a conta) */
+/** só as rotas do robots.txt e do tdmrep.json (valem também sem a conta) */
 export function montarRobots(app: Hono): void {
   app.get("/robots.txt", c => c.text(robotsDaApi(), 200, { "Cache-Control": "public, max-age=86400" }));
+  app.get(CAMINHO_TDMREP, c => c.body(tdmrepJson(), 200, { "Content-Type": "application/json", "Cache-Control": "public, max-age=86400" }));
 }
 
 const macVisitante = (segredo: string, expira: number, id: string): string =>

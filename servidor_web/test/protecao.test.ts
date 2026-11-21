@@ -212,10 +212,13 @@ describe("as URLs assinadas dos assets", () => {
     expect(arquivo.status).toBe(200);
     expect(arquivo.headers.get("content-type")).toBe("image/png");
     expect(arquivo.headers.get("x-robots-tag")).toBe("noindex");
+    expect(arquivo.headers.get("tdm-reservation"), "o aviso TDMRep (PI-6)").toBe("1");
     expect(new Uint8Array(await arquivo.arrayBuffer())).toEqual(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1, 2, 3]));
     /* sem a assinatura, com a de outro arquivo, e depois da validade */
     expect(await corpo(await app.request(u.pathname))).toMatchObject({ motivo: "sem_assinatura" });
-    expect((await app.request("/assets/segredo.txt" + u.search)).status).toBe(403);
+    const recusa = await app.request("/assets/segredo.txt" + u.search);
+    expect(recusa.status).toBe(403);
+    expect(recusa.headers.get("tdm-reservation")).toBe("1");
     relogio.t += (VALIDADE_ASSETS_S + 1) * 1000;
     expect(await corpo(await app.request(u.pathname + u.search))).toMatchObject({ motivo: "vencida" });
     /* um arquivo que não existe, assinado, é 404 */

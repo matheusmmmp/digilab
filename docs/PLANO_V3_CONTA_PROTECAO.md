@@ -122,5 +122,6 @@ Cada uma com a recomendação e o custo de errar. **Todas DECIDIDAS** pelo Mathe
 
 - O preço do minuto do runner Windows do GitHub e a cota do GitHub Pro.
 - Se as políticas de robôs de IA da Cloudflare existem no plano Free.
-- O protocolo TDMRep (o formato do cabeçalho e do arquivo).
+- ~~O protocolo TDMRep (o formato do cabeçalho e do arquivo).~~ Conferido em 2026-11-21 no relatório final do grupo do W3C de 2024-05-10
+  (https://www.w3.org/community/reports/tdmrep/CG-FINAL-tdmrep-20240510/); o aviso entrou no código (D-CONTA-231 a 234).
 - O preço do certificado digital ICP-Brasil e o que o e-Software pede do código (o código inteiro ou um resumo dele).
