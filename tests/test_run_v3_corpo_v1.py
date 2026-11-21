@@ -1,6 +1,7 @@
 """O orquestrador da V1-a, o teto baixo no pet do jogo (experiments/run_v3_corpo_v1.py; docs/PLANO_ANALISE_V3_CORPO_V1.md): o pet v38
 com as chaves do braco, o CTRL igual ao pet v38 da PET_VIVO byte a byte, a conferencia do pet, a regra da C4 sem o S2, as premissas sem
-a dos pares, a trava da config e uma fumaca nas sementes dos testes, com o relogio fora das medidas."""
+a dos pares, a trava da config, a triagem do adendo 1 (so estimativas; a run de 200 suspensa) e uma fumaca nas sementes dos testes,
+com o relogio fora das medidas."""
 from __future__ import annotations
 
 import hashlib
@@ -22,6 +23,7 @@ import run_v3_corpo_v1 as R  # noqa: E402
 
 FUMACA = json.loads((RAIZ / "experiments/configs/v3_corpo_v1/fumaca.json").read_text(encoding="utf-8"))
 RUN = json.loads((RAIZ / "experiments/configs/v3_corpo_v1/run.json").read_text(encoding="utf-8"))
+TRIAGEM = json.loads((RAIZ / "experiments/configs/v3_corpo_v1/triagem.json").read_text(encoding="utf-8"))
 GUARDAS = {"saude_12_celulas", "saude_sem_comida", C4.G_TAXA, "tempo_bem_comedouro", "tempo_bem_longe", "tempo_bem_longe_fixo"}
 
 
@@ -133,9 +135,44 @@ def test_a_trava_e_a_config():
         R.modo_da_config({**FUMACA, "pares": {"bases": [101]}})
 
 
-def test_a_run_so_roda_com_o_plano_aprovado():
-    assert R.modo_da_config(RUN) == R.FASE
+def test_o_plano_esta_aprovado_e_a_run_de_200_esta_suspensa_pela_triagem(monkeypatch):
     assert "APROVADO pelo Matheus" in (RAIZ / R.PLANO).read_text(encoding="utf-8")
+    assert R.RUN_SUSPENSA
+    with pytest.raises(bv.SementeSemPlano, match="suspensa"):
+        R.modo_da_config(RUN)
+    monkeypatch.setattr(R, "RUN_SUSPENSA", False)             # sem a suspensao, a config da run e a do plano
+    assert R.modo_da_config(RUN) == R.FASE
+
+
+def test_a_triagem_usa_as_20_primeiras_bases_e_so_roda_com_o_adendo_aprovado(monkeypatch):
+    assert tuple(TRIAGEM["unidades"]["bases"]) == R.BASES_TRIAGEM == R.BASES[:20] and TRIAGEM["unidades"]["k"] == 1
+    assert TRIAGEM["dias"] == R.DIAS and TRIAGEM["plano"] == R.PLANO and "pares" not in TRIAGEM
+    assert R.SAIDA_TRIAGEM != R.SAIDA
+    plano = (RAIZ / R.PLANO).read_text(encoding="utf-8")
+    aprovado = any(x.startswith(R.ADENDO_TRIAGEM) for x in plano.splitlines())
+    if aprovado:
+        assert R.modo_da_config(TRIAGEM) == "triagem"
+    else:
+        with pytest.raises(RuntimeError, match="adendo 1"):
+            R.modo_da_config(TRIAGEM)
+    monkeypatch.setattr(R, "ADENDO_TRIAGEM", "**Adendo 1, status:")      # a linha do adendo, com qualquer status
+    assert R.modo_da_config(TRIAGEM) == "triagem"
+    monkeypatch.setattr(R, "ADENDO_TRIAGEM", "**Adendo 9, status: APROVADO")
+    with pytest.raises(RuntimeError, match="adendo 1"):
+        R.modo_da_config(TRIAGEM)
+    with pytest.raises(bv.SementeSemPlano):                              # 20 bases que nao sao as da triagem
+        R.modo_da_config({**TRIAGEM, "unidades": {**TRIAGEM["unidades"], "bases": list(R.BASES[20:40])}})
+
+
+def _chaves(x) -> set:
+    if isinstance(x, dict):
+        return set(x) | {k for v in x.values() for k in _chaves(v)}
+    return {k for v in x for k in _chaves(v)} if isinstance(x, list) else set()
+
+
+def test_sem_leitura_tira_a_classe_o_passa_e_o_p():
+    x = {"media": 1, "classe": {"classe": "> 0"}, "dentro": [{"passa": True, "ic95": {"ic_inferior": 0}}, {"p_unilateral": 0.01, "n": 3}]}
+    assert R._sem_leitura(x) == {"media": 1, "dentro": [{"ic95": {"ic_inferior": 0}}, {"n": 3}]}
 
 
 def test_a_fumaca_roda_com_o_relogio_fora_das_medidas(tmp_path):
@@ -165,3 +202,14 @@ def test_a_fumaca_roda_com_o_relogio_fora_das_medidas(tmp_path):
     r2 = R.rodar(cfg, tmp_path / "g", 1)
     assert r2["meta"]["artefatos_sha256"]["medidas.json"] == r["meta"]["artefatos_sha256"]["medidas.json"]
     assert r2["meta"]["artefatos_sha256"]["resultado.json"] == r["meta"]["artefatos_sha256"]["resultado.json"]
+    # a triagem (o adendo 1), sobre as mesmas vidas: so estimativas, nada de leitura
+    tri = R.analisar_triagem(medidas)
+    assert not _chaves(tri) & {"classe", "passa", "reprova_com", "p_unilateral", "veredito", "leitura"}
+    e = tri["estimativas"]
+    assert {"tempo_bem_12_celulas", "tempo_bem_11_celulas", "tempo_bem_comedouro", "tempo_bem_longe", "tempo_bem_longe_fixo",
+            "saude_12_celulas", "saude_sem_comida", C4.G_TAXA} <= set(e)
+    assert {f"saude|{dn}|{lugar}" for dn, lugar in R.CELULAS_SEM_COMIDA} <= set(e)
+    x = e["tempo_bem_12_celulas"]
+    assert set(x["niveis"]) == set(R.BRACOS) and {"media", "dp", "ic95", "n"} <= set(x["DTB - CTRL"])
+    assert x["efeito_sobre_a_margem"] == pytest.approx(x["DTB - CTRL"]["media"] / R.MARGEM)
+    assert set(tri["eventos_das_premissas"]) == set(res["premissas"]) and "guardas_11_celulas" not in tri["descritivo"]

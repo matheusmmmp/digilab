@@ -35,7 +35,7 @@ link para o plano commitado.
 | [PR-CORPO-C2](#pr-corpo-c2--a-ablação-do-corpo) | a ablação do corpo (CORPO C2) | os três braços em "perda" | não |
 | [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
 | [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | "confirma com ressalva" (a célula do aleatório no comedouro) | não |
-| [PR-CORPO-V1](#pr-corpo-v1--o-teto-baixo-no-pet-do-jogo) | o teto baixo no pet do jogo (CORPO V1-a) | ainda não rodou | não |
+| [PR-CORPO-V1](#pr-corpo-v1--o-teto-baixo-no-pet-do-jogo) | o teto baixo no pet do jogo (CORPO V1-a) | ainda não rodou; suspensa por uma triagem (o adendo 1 do plano) | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | rodado em 2026-11-20 | não |
 
@@ -259,8 +259,8 @@ Escrita antes da run (2026-11-21, Claude Code, Fable 5.2). As linhas "resultado"
 | regra de parada | "A run roda uma vez. Nada se ajusta olhando para ela" (seção 4); "não confirma" ou "indeterminado" ficam registrados, a V1 para e a run não se repete (seção 9) |
 | o que refutaria | pela regra de leitura: a primária "≈ 0" ou "< 0" nas 12 ou nas 11 células, ou "> 0" sem o p; ou alguma guarda reprovando |
 | já visto antes da run | a run da C4 no pet da bancada (+0,062 [+0,058; +0,067]); e uma contagem nas sementes dos testes com o pet v38 (120 vidas, 5 unidades, sem artefato versionado): DTB − CTRL +0,016 [−0,003; +0,035] nas 12 células, de onde vem a previsão (seções 0, 1 e 5.2) |
-| resultado | a run ainda não rodou |
-| artefatos | `artifacts_v3_corpo/v1a/`, depois da run |
+| resultado | a run ainda não rodou. **Está suspensa** pelo adendo 1 do plano (2026-11-21): antes dela vem uma triagem de 20 unidades (as bases 109001…109020), que só estima o tamanho do efeito, sem leitura e sem seção própria aqui. Se a run rodar, não repete essas bases |
+| artefatos | `artifacts_v3_corpo/v1a/`, depois da run; a triagem, em `artifacts_v3_corpo/v1a_triagem/` |
 
 ## PR-REPLICACAO-C4 — a réplica da C4
 
