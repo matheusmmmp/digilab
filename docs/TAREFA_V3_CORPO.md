@@ -249,8 +249,8 @@ comedouro. A C5 é só papel, sem run e sem código.
 
 ## 20. O plano da V1-a, o teto baixo no pet do jogo (2026-11-20)
 
-No CHECKPOINT da C5, o Matheus decidiu a D-EC-1: "Medir no v38 antes". O plano é o `docs/PLANO_ANALISE_V3_CORPO_V1.md`, **PROPOSTO**.
-Nenhuma vida de pesquisa rodou.
+No CHECKPOINT da C5, o Matheus decidiu a D-EC-1: "Medir no v38 antes". O plano é o `docs/PLANO_ANALISE_V3_CORPO_V1.md`, **APROVADO
+pelo Matheus em 2026-11-21** ("Aprovo todas", as D-V1A-1 a D-V1A-9, com as recomendações). Nenhuma vida de pesquisa rodou.
 - **Os braços:** o CTRL38 (o pet v38 de hoje, o da PET_VIVO: os inatos do E1, o "sono que segura", o lance do dono e o equilíbrio do
   cuidado) e o DTB38 (o mesmo pet com as duas chaves do corpo). As 12 células × 200 unidades, 14 dias, sem os pares.
 - **A regra:** a da C4, sem o S2, com δ = 0,032 sem mudar. A primária é o "Tempo bem" nas 12 e nas 11 células.
@@ -260,4 +260,4 @@ Nenhuma vida de pesquisa rodou.
 - **Conferido antes:** o CTRL38 montado para a análise refaz, byte a byte, a vida do pet v38 da PET_VIVO (3 vidas de 3 dias).
 - **O que o plano diz que falta no pet do Python:** a TV, a ilha grande e a memória de 128 células do jogo.
 
-**O que falta:** a aprovação do Matheus (as D-V1A-1 a D-V1A-9), a faixa de 200 bases, o código e a seção `PR-CORPO-V1` do pré-registro.
+**O que falta:** a faixa de 200 bases, o código e a seção `PR-CORPO-V1` do pré-registro, e depois a run, uma vez.

@@ -1,8 +1,9 @@
 # Plano de análise V3: o teto baixo no pet do jogo (CORPO V1-a)
 
-**Status: PROPOSTO.** Nenhuma vida desta run existe, e nenhuma roda antes da aprovação do Matheus, da faixa e do código. A direção é
-dele: no CHECKPOINT da C5, à D-EC-1 da [ESPEC_CORPO_V1.md](ESPEC_CORPO_V1.md), a resposta foi "Medir no v38 antes" (2026-11-20). As
-D-V1A-1 a D-V1A-9 (seção 10) estão abertas.
+**Status: APROVADO pelo Matheus em 2026-11-21** ("Aprovo todas", na sessão da CORPO, sobre as D-V1A-1 a D-V1A-9, com as
+recomendações). A direção é dele: no CHECKPOINT da C5, à D-EC-1 da [ESPEC_CORPO_V1.md](ESPEC_CORPO_V1.md), a resposta foi "Medir no
+v38 antes" (2026-11-20). **As D-V1A-1 a D-V1A-9 estão DECIDIDAS.** Nenhuma vida desta run existe, e nenhuma roda antes da faixa na
+tabela e do código na `main`. A previsão da seção 1 ("não confirma") foi escrita antes da aprovação e não mudou.
 
 Escrito em 2026-11-20 por Claude Code (Fable 5.2, sessão lateral da CORPO), no branch `v3-corpo-v1-plano`, empilhado no #1049. A tarefa
 é a [TAREFA_V3_CORPO.md](TAREFA_V3_CORPO.md); a síntese que motiva a medida é a [SINTESE_CORPO.md](SINTESE_CORPO.md), seção 8.
@@ -225,40 +226,40 @@ Pela [ESPEC_CORPO_V1.md](ESPEC_CORPO_V1.md), seção 7:
 
 Cada uma com a recomendação e o custo de errar.
 
-- **D-V1A-1 (PROPOSTA), rodar com a previsão de "não confirma".** A contagem sugere um ganho menor que a margem (seção 1).
+- **D-V1A-1 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), rodar com a previsão de "não confirma".** A contagem sugere um ganho menor que a margem (seção 1).
   1. **Rodar assim mesmo (recomendada):** a decisão de medir já foi tomada, e 5 unidades de teste não são medida.
   2. **Não rodar:** parar a V1 aqui, com a contagem como motivo.
   - **O custo de errar:** com a 1, cerca de 1 h 20 min de máquina para um resultado que pode ser o previsto. Com a 2, o DTB sai do
     caminho do jogo por 5 unidades de teste, cujo intervalo vai até +0,035.
-- **D-V1A-2 (PROPOSTA), o pet v38 do Python como o pet da medida.** Ele não tem a TV, a ilha grande nem a memória de 128 células.
+- **D-V1A-2 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), o pet v38 do Python como o pet da medida.** Ele não tem a TV, a ilha grande nem a memória de 128 células.
   - **A recomendação:** aceitar. É o que o Python tem hoje, e é o que a PET_VIVO usou.
   - **O custo de errar:** o resultado vale para essa aproximação. Se a TV ou a ilha grande mudarem o sono ou a fome do pet, a medida
     não vê.
-- **D-V1A-3 (PROPOSTA), os tamanhos:** os da C4, com 12 células, 200 unidades, 14 dias e orçamento 16.
+- **D-V1A-3 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), os tamanhos:** os da C4, com 12 células, 200 unidades, 14 dias e orçamento 16.
   - **A recomendação:** aceitar. A precisão cabe (seção 5.3).
   - **O custo de errar:** a primária caberia com menos unidades; as 200 ficam pela saúde por célula.
-- **D-V1A-4 (PROPOSTA), os pares fora.** O pet dos pares (o da SOCIAL_PAR A0) não tem o "sono que segura" nem o equilíbrio do cuidado.
+- **D-V1A-4 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), os pares fora.** O pet dos pares (o da SOCIAL_PAR A0) não tem o "sono que segura" nem o equilíbrio do cuidado.
   1. **Fora (recomendada):** o S2 sai da regra. O substrato social fica com a medida da C4, no pet dos pares de lá.
   2. **Repetir os pares da C4:** 500 pares por braço, cerca de 9 min. Só repete a C4 em sementes novas.
   3. **Um par v39:** montar os dois pets com as mecânicas do jogo. É código novo no instrumento da SOCIAL_PAR.
   - **O custo de errar:** com a 1, a V1-a não diz nada sobre o reencontro no pet do jogo. Com a 3, a V1-a passa a depender de um
     instrumento que a frente do social ainda não validou.
-- **D-V1A-5 (PROPOSTA), a regra de leitura e a margem.** A regra é a da C4, com δ = 0,032, sem o S2.
+- **D-V1A-5 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), a regra de leitura e a margem.** A regra é a da C4, com δ = 0,032, sem o S2.
   - **A recomendação:** não mudar a margem. Ela foi escrita antes, e mudar agora seria mudar depois de ver a contagem.
   - **O custo de errar:** δ = 0,032 é SEM FONTE e veio da taxa por episódio. Um ganho real de 0,02 no "Tempo bem" sai "não confirma".
     Se você achar que um ganho desse tamanho vale o jogo, a margem tem de ser decidida agora, antes da run, e a decisão fica
     registrada como tomada depois da contagem.
-- **D-V1A-6 (PROPOSTA), os pisos das premissas:** os da C4 (5 % de vidas em 0 ou 1, 8 episódios por vida, 2 % de vidas sem episódio,
+- **D-V1A-6 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), os pisos das premissas:** os da C4 (5 % de vidas em 0 ou 1, 8 episódios por vida, 2 % de vidas sem episódio,
   0,10 dos ticks no teto; para os chutes, 1 por vida e 50 % das vidas). O piso da janela dos pares sai com os pares.
   - **A recomendação:** aceitar. A contagem cumpre todos.
   - **O custo de errar:** o piso do "Tempo bem" não vê as vidas perto de 1 (seção 5.2); elas vão no descritivo.
-- **D-V1A-7 (PROPOSTA), os chutes como descritivo.** No pet v38 a bola é chutada cerca de 21 vezes por vida, e na contagem o DTB38
+- **D-V1A-7 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), os chutes como descritivo.** No pet v38 a bola é chutada cerca de 21 vezes por vida, e na contagem o DTB38
   chutou menos.
   - **A recomendação:** descritivo, como na C4. Não há desvio-padrão de DTB − CTRL para os chutes no pet v38 em nenhuma run.
   - **O custo de errar:** se o DTB reduzir o brincar com a bola no jogo, isso aparece no resultado e vai a você, mas não muda o
     veredito.
-- **D-V1A-8 (PROPOSTA), a faixa:** 200 bases novas, pedidas ao coordenador depois da aprovação, e na tabela antes da run.
-- **D-V1A-9 (PROPOSTA), o que cada leitura faz:** a seção 9. "Não confirma" ou "indeterminado" param a V1.
+- **D-V1A-8 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), a faixa:** 200 bases novas, pedidas ao coordenador depois da aprovação, e na tabela antes da run.
+- **D-V1A-9 (DECIDIDA pelo Matheus em 2026-11-21, "Aprovo todas", com a recomendação), o que cada leitura faz:** a seção 9. "Não confirma" ou "indeterminado" param a V1.
   - **A recomendação:** aceitar.
   - **O custo de errar:** um "indeterminado" também para a V1, sem repetir a run.
 
