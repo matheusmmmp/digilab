@@ -32,6 +32,7 @@ link para o plano commitado.
 | [PR-COOP-A1](#pr-coop-a1--a-cooperação-com-o-irmão-aleatório) | a cooperação com o irmão aleatório | EMERGE e DOSE não confirmam; CUSTO confirma | não |
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
+| [PR-CORPO-C2](#pr-corpo-c2--a-ablação-do-corpo) | a ablação do corpo (CORPO C2) | os três braços em "perda" | não |
 | [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
 | [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | "confirma com ressalva" (a célula do aleatório no comedouro) | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
@@ -186,6 +187,25 @@ link para o plano commitado.
 | o que refutaria | o plano, 5.3: as distribuições iguais, com o IC95 de toda diferença A − B incluindo o 0 ("nula") |
 | resultado | [RESULTADO_V3_ABLACAO_APRENDIZADO.md](RESULTADO_V3_ABLACAO_APRENDIZADO.md): "muda", 9 das 15 no Holm; todas com \|A − B\| abaixo de 0,01; a distância de variação total das ações 0,0084 (descritivo), n = 200 |
 | artefatos | [`artifacts_v3_ablacao_aprendizado/run/`](../artifacts_v3_ablacao_aprendizado/run/): `resultado.json` `ced7c793…`, `medidas.json` `f2adac98…` |
+
+## PR-CORPO-C2 — a ablação do corpo
+
+**Esta seção foi escrita depois da run** (2026-11-20, Claude Code, Fable 5.2, na C5 do programa do corpo): a run rodou em 2026-11-19 e
+ficou sem seção neste índice. O que vale como registro anterior é o plano, no commit citado, na `main` desde o #1003, antes da primeira
+vida. Nenhum número e nenhuma leitura mudam aqui.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_CORPO.md`](https://github.com/matheusmmmp/digilab/blob/eba912e26580d9351a7870758a19c142f5fac3dd/docs/PLANO_ANALISE_V3_CORPO.md): PROPOSTO no commit `bd8bdf6b`, APROVADO por inteiro no `eba912e26580d9351a7870758a19c142f5fac3dd` (2026-11-18 18:27), ancestral do `git_head` da run, `eedfb2f4` (início 01:17 de 2026-11-19) |
+| hipótese | "ao menos um braço sobe a taxa de fechamento por episódio de fome no `longe_fixo` sem subir a privação nem a exaustão" (seção 1). Escrito antes, na seção 5: se a privação do comedouro da run da D se repetir, "os três braços (todos com a D) saem em "perda"" |
+| células | as 12 da C4 do modular (4 donos × comedouro, longe e `longe_fixo`); braços CTRL, D, D + E e D + C5; 14 dias; bloco II com 100 pares por braço, 5 dias (seções 2 a 4) |
+| sementes | 104001…104200 (200 unidades, k = 1, 9 600 vidas) e 104301…104400 (os pares), da faixa 104001…104400 (seção 4) |
+| contraste primário | braço − CTRL na taxa por episódio de fome no `longe_fixo`, pareado por unidade, IC95 pelo t, p unilateral, Holm sobre os 3 braços, α = 0,025 (seção 5) |
+| regra de leitura | a tabela da seção 5, com as classes de A6.6 e δ = 0,032: "ganho" se o F é "> 0", o Holm rejeita, nenhuma das seis guardas do bem-estar sai em "> 0" e o S1 e o S2 passam; "perda" se alguma guarda reprova; "nulo" e "indeterminado" pelo F |
+| regra de parada | "A run roda uma vez" (seção 4); sem braço em "ganho", "o programa para no CHECKPOINT C2.5" (seção 1) |
+| o que refutaria | "nenhum braço com "ganho"" (seção 1) |
+| resultado | [RESULTADO_V3_CORPO.md](RESULTADO_V3_CORPO.md): os três braços em "perda". O F sobe nos três (D +0,120 [+0,105; +0,136], D + E +0,110, D + C5 +0,168, o Holm rejeita), e a privação do comedouro reprova os três (D +0,074); na D + C5 reprovam cinco guardas. A hipótese geral é refutada: "tensão não localizada por estas opções". O S1 não mediu nada (nenhum par chutou a bola) |
+| artefatos | [`artifacts_v3_corpo/ablacao/`](../artifacts_v3_corpo/ablacao/): `resultado.json` `daf59ef8…`, `medidas.json.gz` `dac0abba…` (descomprime no `06de6baa…` do `meta.json`), `vidas.tar.gz` `73f31feb…`, `pares.tar.gz` `0288dc70…` |
 
 ## PR-CORPO-C3 — a ponte com teto
 

@@ -197,3 +197,23 @@ Em dois PRs: o servidor e o checklist da borda (este), e o cliente do jogo (o se
   resolvido no canto), o widget apareceu no primeiro acesso, passou, e a conta foi criada; a fala com a sessão mostrou a cota 0 de 30.
 - **O que falta:** os enfeites e os modelos 3D da ilha (`web/app/public/`) seguem fora da URL assinada (D-CONTA-222); o revisor de
   acessibilidade do widget; o e2e no repositório.
+
+## A CN5: a hospedagem de teste, a parte do código (2026-11-20)
+
+O código e o roteiro, sem contratar nada (a seção 6: contratar é do Matheus). O roteiro, com a ordem do que contratar, os segredos, a VPS, o
+backup, os assets, o deploy e os preços do dia, está em `docs/infra/DEPLOY_CN5.md`. As decisões D-CONTA-197 a 205 estão em
+`docs/registro/2026-11.md`, DECIDIDAS pelo Matheus em 2026-11-20 pela recomendação ("Aprovo as recomendações").
+
+- **O servidor:** a borda `cloudflare` (`--borda`, `DIGILAB_BORDA`): só em `127.0.0.1`, só o pedido que passou pelo Cloudflare Tunnel, e a
+  conta local não sobe (`servidor_web/src/app.ts`, `test/borda.test.ts`). Sem a opção, a regra de sempre.
+- **A VPS** (`servidor_web/deploy/`): o systemd do servidor e do Litestream, a `litestream.yml` para o R2, os modelos dos `.env` (só os
+  nomes), o `instalar.sh` (o Node e o Litestream conferidos por sha256, o `cloudflared`, o `ufw`), o `publicar.sh` (volta a versão se a
+  `/saude` não responder) e o `restaurar.sh` (o ensaio e a restauração de verdade).
+- **Os assets (refeito em 2026-11-21 sobre a CN4, pela D-CONTA-199 revista):** o bucket é privado, e o Worker
+  `servidor_web/deploy/worker_assets/worker.ts` só entrega a URL assinada da CN4 (D-CONTA-227). A decoração e a luta passam também pela
+  assinatura (D-CONTA-228). O envio ao R2 sai da máquina do Matheus (`web/app/scripts/publicar_assets.ts`, com a assinatura SigV4 em
+  `scripts/r2.ts`, conferida com o exemplo da AWS).
+- **O CI:** `.github/workflows/publicar.yml`, desligado até a variável `DIGILAB_PUBLICAR = sim`: o servidor pelo SSH, depois o jogo no Pages
+  e o Worker dos assets.
+- **O que falta:** o Matheus contratar e configurar (seção 2 do roteiro); o ensaio da restauração antes do primeiro convidado; o aviso da
+  RC-7; o Sentry (D-CONTA-200); o limite do Workers grátis (D-CONTA-227).

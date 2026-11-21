@@ -1,0 +1,27 @@
+# O servidor do jogo na VPS (CN5, docs/infra/DEPLOY_CN5.md). Escuta só em 127.0.0.1:8766; o pedido de fora chega pelo Cloudflare Tunnel
+# (cloudflared), e o --borda cloudflare recusa o que não passou por ele (D-CONTA-197). Os segredos ficam em /etc/digilab/api.env (fora do
+# git, dono root, modo 600; o modelo é o api.env.exemplo desta pasta).
+[Unit]
+Description=Digilab servidor_web (Node + Hono)
+After=network-online.target litestream.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=digilab
+Group=digilab
+WorkingDirectory=/opt/digilab/atual/servidor_web
+EnvironmentFile=/etc/digilab/api.env
+ExecStart=/usr/local/bin/node src/main.ts --porta 8766 --borda cloudflare
+Restart=on-failure
+RestartSec=5
+# o banco, o gasto da fala e nada mais é gravável
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/digilab
+MemoryMax=1536M
+
+[Install]
+WantedBy=multi-user.target

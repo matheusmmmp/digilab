@@ -1,0 +1,17 @@
+# Litestream 0.3.13 (CH-4): o SQLite da conta, do save na nuvem e do ranking, copiado sem parar para o R2. As variáveis vêm do
+# /etc/digilab/litestream.env (o Litestream expande ${VAR} neste arquivo). NÃO CONFERIDO numa VPS: a primeira subida e o ensaio da
+# restauração estão no docs/infra/DEPLOY_CN5.md, seção 5.
+dbs:
+  - path: /var/lib/digilab/conta.sqlite
+    replicas:
+      - type: s3
+        bucket: ${DIGILAB_R2_BUCKET_BANCO}
+        path: conta
+        endpoint: https://${DIGILAB_R2_CONTA}.r2.cloudflarestorage.com
+        region: auto
+        access-key-id: ${DIGILAB_R2_CHAVE_ID}
+        secret-access-key: ${DIGILAB_R2_CHAVE_SEGREDO}
+        # PROPOSTO, SEM FONTE: o WAL sobe a cada 10 s; uma cópia inteira por dia; guarda 30 dias (como as cópias do save, CN-5)
+        sync-interval: 10s
+        snapshot-interval: 24h
+        retention: 720h
