@@ -1,0 +1,1204 @@
+{
+  "celulas_da_leitura": [
+    [
+      "atencioso",
+      "comedouro"
+    ],
+    [
+      "atencioso",
+      "perto"
+    ],
+    [
+      "atencioso",
+      "longe"
+    ],
+    [
+      "relapso",
+      "comedouro"
+    ],
+    [
+      "relapso",
+      "perto"
+    ],
+    [
+      "relapso",
+      "longe"
+    ],
+    [
+      "aleatorio",
+      "comedouro"
+    ],
+    [
+      "aleatorio",
+      "perto"
+    ],
+    [
+      "aleatorio",
+      "longe"
+    ],
+    [
+      "incoerente",
+      "comedouro"
+    ],
+    [
+      "incoerente",
+      "perto"
+    ],
+    [
+      "incoerente",
+      "longe"
+    ]
+  ],
+  "celulas_fora": [],
+  "contrastes": {
+    "F_PESOS_DEC": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 0.005564335503748559,
+        "ic_inferior": 0.015456910365458066,
+        "ic_superior": 0.017008674271981047,
+        "media": 0.016232792318719557,
+        "media_a": 0.13069795808308313,
+        "media_b": 0.11446516576436357,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 0.007562045734979122,
+        "ic_inferior": -0.031786570471881166,
+        "ic_superior": -0.029677691590815958,
+        "media": -0.030732131031348562,
+        "media_a": 0.13069795808308313,
+        "media_b": 0.16143008911443169,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 0.005057032377323229,
+        "ic_inferior": 0.009029823278676349,
+        "ic_superior": 0.010440112128434195,
+        "media": 0.009734967703555272,
+        "media_a": 0.13069795808308313,
+        "media_b": 0.12096299037952786,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "brincar": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 4.370470276081856,
+        "ic_inferior": 10.918505352019436,
+        "ic_superior": 12.1373279813139,
+        "media": 11.527916666666668,
+        "media_a": 83.37375,
+        "media_b": 71.84583333333333,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 4.246806778189775,
+        "ic_inferior": 21.478665457049413,
+        "ic_superior": 22.66300120961726,
+        "media": 22.070833333333336,
+        "media_a": 83.37375,
+        "media_b": 61.30291666666667,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 3.5575823783237217,
+        "ic_inferior": 17.221436460566956,
+        "ic_superior": 18.213563539433046,
+        "media": 17.7175,
+        "media_a": 83.37375,
+        "media_b": 65.65625,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "comer": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 3.61959157271457,
+        "ic_inferior": 13.639873332012478,
+        "ic_superior": 14.649293334654189,
+        "media": 14.144583333333333,
+        "media_a": 81.32083333333333,
+        "media_b": 67.17625,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 3.9481402303635695,
+        "ic_inferior": 14.842811037971902,
+        "ic_superior": 15.943855628694763,
+        "media": 15.393333333333333,
+        "media_a": 81.32083333333333,
+        "media_b": 65.9275,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 3.205222392637468,
+        "ic_inferior": 15.661402301054334,
+        "ic_superior": 16.555264365612334,
+        "media": 16.108333333333334,
+        "media_a": 81.32083333333333,
+        "media_b": 65.2125,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "habito_brincar": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 54.36741665610184,
+        "ic_inferior": 385.2840952539616,
+        "ic_superior": 400.4459047460384,
+        "media": 392.865,
+        "media_a": 661.8591666666667,
+        "media_b": 268.9941666666667,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 54.088434750228814,
+        "ic_inferior": 416.98549604021133,
+        "ic_superior": 432.0695039597886,
+        "media": 424.5275,
+        "media_a": 661.8591666666667,
+        "media_b": 237.33166666666668,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 51.13506363753432,
+        "ic_inferior": 469.2135593368898,
+        "ic_superior": 483.4739406631102,
+        "media": 476.34375,
+        "media_a": 661.8591666666667,
+        "media_b": 185.51541666666668,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "habito_comer": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 98.85678267724154,
+        "ic_inferior": 882.8055699301214,
+        "ic_superior": 910.3744300698787,
+        "media": 896.59,
+        "media_a": 1484.6458333333335,
+        "media_b": 588.0558333333333,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 99.16960032187845,
+        "ic_inferior": 873.5761178097879,
+        "ic_superior": 901.2322155235455,
+        "media": 887.4041666666667,
+        "media_a": 1484.6458333333335,
+        "media_b": 597.2416666666667,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 98.86379235524485,
+        "ic_inferior": 977.6379258452782,
+        "ic_superior": 1005.2087408213883,
+        "media": 991.4233333333333,
+        "media_a": 1484.6458333333335,
+        "media_b": 493.2225,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "t_acordado": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 0.002951558288053702,
+        "ic_inferior": -0.011318058535212195,
+        "ic_superior": -0.010494937496533815,
+        "media": -0.010906498015873005,
+        "media_a": 0.5191055927579366,
+        "media_b": 0.5300120907738095,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 0.002714357095138838,
+        "ic_inferior": 0.009256001038936788,
+        "ic_superior": 0.010012972175348939,
+        "media": 0.009634486607142863,
+        "media_a": 0.5191055927579366,
+        "media_b": 0.5094711061507937,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 0.0021895762807584303,
+        "ic_inferior": 0.006655874536622143,
+        "ic_superior": 0.007266496495123894,
+        "media": 0.006961185515873019,
+        "media_a": 0.5191055927579366,
+        "media_b": 0.5121444072420634,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "t_acordado_8_14": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 0.00452255881559034,
+        "ic_inferior": -0.006877518096479177,
+        "ic_superior": -0.005616281506695437,
+        "media": -0.006246899801587307,
+        "media_a": 0.5130803571428572,
+        "media_b": 0.5193272569444445,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 0.0042230355468346375,
+        "ic_inferior": 0.011831781666447888,
+        "ic_superior": 0.01300948817482195,
+        "media": 0.012420634920634919,
+        "media_a": 0.5130803571428572,
+        "media_b": 0.5006597222222222,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 0.003541060844905902,
+        "ic_inferior": 0.00864314495840037,
+        "ic_superior": 0.009630664565409145,
+        "media": 0.009136904761904758,
+        "media_a": 0.5130803571428572,
+        "media_b": 0.5039434523809524,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "taxa_por_episodio": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 0.04387180122903658,
+        "ic_inferior": 0.014733335772491932,
+        "ic_superior": 0.026968161946346228,
+        "media": 0.02085074885941908,
+        "media_a": 0.6817346487593048,
+        "media_b": 0.6608838998998857,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 0.043130403848200716,
+        "ic_inferior": 0.0008576954059994731,
+        "ic_superior": 0.01288576307379375,
+        "media": 0.006871729239896611,
+        "media_a": 0.6817346487593048,
+        "media_b": 0.6748629195194081,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 0.04257982171113864,
+        "ic_inferior": 0.0005965107986228204,
+        "ic_superior": 0.012471033899003137,
+        "media": 0.006533772348812979,
+        "media_a": 0.6817346487593048,
+        "media_b": 0.6752008764104918,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    },
+    "tempo_bem": {
+      "D1": {
+        "a": "R-CB",
+        "b": "R0",
+        "dp": 0.02258685454782457,
+        "ic_inferior": 0.015190059221874073,
+        "ic_superior": 0.02148900823844338,
+        "media": 0.018339533730158727,
+        "media_a": 0.7950576636904763,
+        "media_b": 0.7767181299603174,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D2": {
+        "a": "R-CB",
+        "b": "R-SORT",
+        "dp": 0.022503477920848163,
+        "ic_inferior": -0.0006753610069106116,
+        "ic_superior": 0.005600336205323304,
+        "media": 0.002462487599206346,
+        "media_a": 0.7950576636904763,
+        "media_b": 0.7925951760912698,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      },
+      "D3": {
+        "a": "R-CB",
+        "b": "R-CORPO",
+        "dp": 0.01882417101557946,
+        "ic_inferior": -0.0014578973127573158,
+        "ic_superior": 0.0037917266778366653,
+        "media": 0.0011669146825396748,
+        "media_a": 0.7950576636904763,
+        "media_b": 0.7938907490079364,
+        "motivo": null,
+        "n": 200,
+        "sem_valor": 0
+      }
+    }
+  },
+  "fase": "recompensa",
+  "leitura": {
+    "L-ACORDADO": {
+      "leitura": "nao: com a recompensa o pet dorme mais",
+      "nota": null
+    },
+    "L-BEM": {
+      "leitura": "o pet fica melhor",
+      "nota": null
+    },
+    "L-PORQUE": {
+      "leitura": "pela recompensa na hora, e pelo que o pet aprende",
+      "nota": null
+    },
+    "guardas_nao_medidas": [
+      "saude_media"
+    ],
+    "nao_demonstra": [
+      "nada sobre jogadores: o dono simulado recompensa toda vez e na hora",
+      "nada sobre outras doses: o resultado vale para g = 2S e W = 1",
+      "nada sobre outras recompensas (comida a mais, brinquedo, o credito do intervalo)",
+      "nada sobre o corpo depois da C3 ou da C4, nem sobre o jogo web, nem fora dos 14 dias",
+      "a separacao entre o credito e o corpo nao e perfeita: os bracos divergem depois do primeiro carinho, e o credito alcanca tambem os carinhos do proprio dono"
+    ],
+    "numeros": {
+      "delta_a": 0.02,
+      "margem_bem": 0.032
+    }
+  },
+  "medias": {
+    "R-CB": {
+      "F_PESOS_DEC": 0.13069795808308313,
+      "brincar": 83.37375,
+      "comer": 81.32083333333333,
+      "habito_brincar": 661.8591666666667,
+      "habito_comer": 1484.6458333333335,
+      "t_acordado": 0.5191055927579366,
+      "t_acordado_8_14": 0.5130803571428572,
+      "taxa_por_episodio": 0.6817346487593048,
+      "tempo_bem": 0.7950576636904763
+    },
+    "R-CORPO": {
+      "F_PESOS_DEC": 0.12096299037952786,
+      "brincar": 65.65625,
+      "comer": 65.2125,
+      "habito_brincar": 185.51541666666668,
+      "habito_comer": 493.2225,
+      "t_acordado": 0.5121444072420634,
+      "t_acordado_8_14": 0.5039434523809524,
+      "taxa_por_episodio": 0.6752008764104918,
+      "tempo_bem": 0.7938907490079364
+    },
+    "R-SORT": {
+      "F_PESOS_DEC": 0.16143008911443169,
+      "brincar": 61.30291666666667,
+      "comer": 65.9275,
+      "habito_brincar": 237.33166666666668,
+      "habito_comer": 597.2416666666667,
+      "t_acordado": 0.5094711061507937,
+      "t_acordado_8_14": 0.5006597222222222,
+      "taxa_por_episodio": 0.6748629195194081,
+      "tempo_bem": 0.7925951760912698
+    },
+    "R0": {
+      "F_PESOS_DEC": 0.11446516576436357,
+      "brincar": 71.84583333333333,
+      "comer": 67.17625,
+      "habito_brincar": 268.9941666666667,
+      "habito_comer": 588.0558333333333,
+      "t_acordado": 0.5300120907738095,
+      "t_acordado_8_14": 0.5193272569444445,
+      "taxa_por_episodio": 0.6608838998998857,
+      "tempo_bem": 0.7767181299603174
+    }
+  },
+  "modo": "recompensa",
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md",
+  "por_dono": {
+    "aleatorio": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.0043436879471635634,
+          "ic_inferior": -0.006102948655367495,
+          "ic_superior": -0.004891594995426161,
+          "media": -0.005497271825396828,
+          "media_a": 0.5088306051587302,
+          "media_b": 0.514327876984127,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.004123805881382702,
+          "ic_inferior": 0.004036838328784699,
+          "ic_superior": 0.005186871988675607,
+          "media": 0.004611855158730153,
+          "media_a": 0.5088306051587302,
+          "media_b": 0.50421875,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.003734433704077264,
+          "ic_inferior": 0.0008718857243975869,
+          "ic_superior": 0.001913332529570658,
+          "media": 0.0013926091269841224,
+          "media_a": 0.5088306051587302,
+          "media_b": 0.507437996031746,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.022812789932786463,
+          "ic_inferior": 0.0004561742044206663,
+          "ic_superior": 0.0068181313511349,
+          "media": 0.003637152777777783,
+          "media_a": 0.5077827380952381,
+          "media_b": 0.5041455853174603,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.02292392699743221,
+          "ic_inferior": -0.005246326536581648,
+          "ic_superior": 0.0011466241556292588,
+          "media": -0.002049851190476195,
+          "media_a": 0.5077827380952381,
+          "media_b": 0.5098325892857143,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.02024693444042474,
+          "ic_inferior": -0.004699439908097755,
+          "ic_superior": 0.0009469597493676069,
+          "media": -0.001876240079365074,
+          "media_a": 0.5077827380952381,
+          "media_b": 0.5096589781746032,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    },
+    "atencioso": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.005843815431856182,
+          "ic_inferior": -0.014995159722609638,
+          "ic_superior": -0.013365455356755459,
+          "media": -0.014180307539682548,
+          "media_a": 0.5286321924603175,
+          "media_b": 0.5428125,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.005009995289622477,
+          "ic_inferior": 0.014204688160163789,
+          "ic_superior": 0.015601859458883812,
+          "media": 0.0149032738095238,
+          "media_a": 0.5286321924603175,
+          "media_b": 0.5137289186507936,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.004364813099625569,
+          "ic_inferior": 0.012020345766866707,
+          "ic_superior": 0.013237590741069782,
+          "media": 0.012628968253968245,
+          "media_a": 0.5286321924603175,
+          "media_b": 0.5160032242063491,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.061518061498517365,
+          "ic_inferior": 0.016588191524175934,
+          "ic_superior": 0.03374414974566532,
+          "media": 0.025166170634920628,
+          "media_a": 0.9388120039682539,
+          "media_b": 0.9136458333333333,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.05987984034526931,
+          "ic_inferior": -0.011562593834660753,
+          "ic_superior": 0.005136502564819483,
+          "media": -0.0032130456349206355,
+          "media_a": 0.9388120039682539,
+          "media_b": 0.9420250496031746,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.050452514401946064,
+          "ic_inferior": -0.010319987338477528,
+          "ic_superior": 0.003750046862287058,
+          "media": -0.003284970238095235,
+          "media_a": 0.9388120039682539,
+          "media_b": 0.9420969742063492,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    },
+    "incoerente": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.006608935463098938,
+          "ic_inferior": -0.015052243649084416,
+          "ic_superior": -0.01320916508107431,
+          "media": -0.014130704365079363,
+          "media_a": 0.5286842757936508,
+          "media_b": 0.5428149801587301,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.0048497404864053075,
+          "ic_inferior": 0.014172470338963593,
+          "ic_superior": 0.015524950295957043,
+          "media": 0.014848710317460318,
+          "media_a": 0.5286842757936508,
+          "media_b": 0.5138355654761905,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.004142643763918726,
+          "ic_inferior": 0.012197654065194609,
+          "ic_superior": 0.013352941172900628,
+          "media": 0.012775297619047618,
+          "media_a": 0.5286842757936508,
+          "media_b": 0.5159089781746031,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.05210719175548486,
+          "ic_inferior": 0.02544755101342381,
+          "ic_superior": 0.03997903628816348,
+          "media": 0.032713293650793646,
+          "media_a": 0.9448685515873017,
+          "media_b": 0.912155257936508,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.05587710516281905,
+          "ic_inferior": -0.0015897763676978932,
+          "ic_superior": 0.013993050177221706,
+          "media": 0.006201636904761907,
+          "media_a": 0.9448685515873017,
+          "media_b": 0.9386669146825396,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.048862526684998034,
+          "ic_inferior": -0.006725266146891936,
+          "ic_superior": 0.006901357416733196,
+          "media": 8.80456349206299e-05,
+          "media_a": 0.9448685515873017,
+          "media_b": 0.9447805059523811,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    },
+    "relapso": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.0038450019857038335,
+          "ic_inferior": -0.010353849198482899,
+          "ic_superior": -0.009281567468183764,
+          "media": -0.009817708333333331,
+          "media_a": 0.5102752976190476,
+          "media_b": 0.520093005952381,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.003909168146051656,
+          "ic_inferior": 0.003629019051971379,
+          "ic_superior": 0.004719195233742901,
+          "media": 0.00417410714285714,
+          "media_a": 0.5102752976190476,
+          "media_b": 0.5061011904761905,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.0032994433637707227,
+          "ic_inferior": 0.0005877980112155554,
+          "ic_superior": 0.0015079361157685602,
+          "media": 0.0010478670634920578,
+          "media_a": 0.5102752976190476,
+          "media_b": 0.5092274305555555,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.0280932173518723,
+          "ic_inferior": 0.007924245015186047,
+          "ic_superior": 0.01575879069909967,
+          "media": 0.011841517857142858,
+          "media_a": 0.7887673611111111,
+          "media_b": 0.7769258432539682,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.027450636686276612,
+          "ic_inferior": 0.005083537885402327,
+          "ic_superior": 0.012738882749518302,
+          "media": 0.008911210317460314,
+          "media_a": 0.7887673611111111,
+          "media_b": 0.7798561507936508,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.025963368914939538,
+          "ic_inferior": 0.006120533195941882,
+          "ic_superior": 0.013361113629454958,
+          "media": 0.00974082341269842,
+          "media_a": 0.7887673611111111,
+          "media_b": 0.7790265376984127,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    }
+  },
+  "por_lugar": {
+    "comedouro": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.0052700254855319135,
+          "ic_inferior": -0.009863378065980104,
+          "ic_superior": -0.00839369038640085,
+          "media": -0.009128534226190477,
+          "media_a": 0.5205487351190476,
+          "media_b": 0.5296772693452381,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.0047470272048896305,
+          "ic_inferior": 0.00993983070744564,
+          "ic_superior": 0.011263666316363889,
+          "media": 0.010601748511904764,
+          "media_a": 0.5205487351190476,
+          "media_b": 0.5099469866071429,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.004212558772098323,
+          "ic_inferior": 0.008541141836547078,
+          "ic_superior": 0.009715926615833878,
+          "media": 0.009128534226190478,
+          "media_a": 0.5205487351190476,
+          "media_b": 0.5114202008928571,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.01810043619376458,
+          "ic_inferior": -0.005696328616676665,
+          "ic_superior": -0.0006485374547519091,
+          "media": -0.003172433035714287,
+          "media_a": 0.8495126488095238,
+          "media_b": 0.8526850818452381,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.020626506280851706,
+          "ic_inferior": -0.009846922843902435,
+          "ic_superior": -0.004094669418002321,
+          "media": -0.006970796130952378,
+          "media_a": 0.8495126488095238,
+          "media_b": 0.8564834449404762,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.018547186741342286,
+          "ic_inferior": -0.008636226957956222,
+          "ic_superior": -0.00346384744680568,
+          "media": -0.006050037202380951,
+          "media_a": 0.8495126488095238,
+          "media_b": 0.8555626860119048,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    },
+    "longe": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.005625029250519761,
+          "ic_inferior": -0.016598147074591698,
+          "ic_superior": -0.01502945709207496,
+          "media": -0.015813802083333328,
+          "media_a": 0.5220182291666666,
+          "media_b": 0.53783203125,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.00471029204617315,
+          "ic_inferior": 0.006667423236725351,
+          "ic_superior": 0.00798101426327465,
+          "media": 0.00732421875,
+          "media_a": 0.5220182291666666,
+          "media_b": 0.5146940104166666,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.00417739050976382,
+          "ic_inferior": 0.0023983521898504768,
+          "ic_superior": 0.0035633293577685783,
+          "media": 0.0029808407738095275,
+          "media_a": 0.5220182291666666,
+          "media_b": 0.5190373883928572,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.06623085244619131,
+          "ic_inferior": 0.05056119389747816,
+          "ic_superior": 0.06903144003109327,
+          "media": 0.05979631696428571,
+          "media_a": 0.679487537202381,
+          "media_b": 0.6196912202380953,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.06439319210151405,
+          "ic_inferior": 0.009515350953801207,
+          "ic_superior": 0.027473116308103545,
+          "media": 0.018494233630952376,
+          "media_a": 0.679487537202381,
+          "media_b": 0.6609933035714286,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.0529216155636002,
+          "ic_inferior": 0.004704028755890421,
+          "ic_superior": 0.019462637910776247,
+          "media": 0.012083333333333335,
+          "media_a": 0.679487537202381,
+          "media_b": 0.6674042038690476,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    },
+    "perto": {
+      "t_acordado": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.003722125310238398,
+          "ic_inferior": -0.008296164878129526,
+          "ic_superior": -0.007258150598060945,
+          "media": -0.007777157738095236,
+          "media_a": 0.5147498139880953,
+          "media_b": 0.5225269717261906,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.0030413454524707813,
+          "ic_inferior": 0.010553412263032648,
+          "ic_superior": 0.011401572856014971,
+          "media": 0.01097749255952381,
+          "media_a": 0.5147498139880953,
+          "media_b": 0.5037723214285714,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.002638334687944518,
+          "ic_inferior": 0.008406296421055249,
+          "ic_superior": 0.009142066674182834,
+          "media": 0.008774181547619041,
+          "media_a": 0.5147498139880953,
+          "media_b": 0.5059756324404762,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      },
+      "tempo_bem": {
+        "D1": {
+          "a": "R-CB",
+          "b": "R0",
+          "dp": 0.006667527348065069,
+          "ic_inferior": -0.002534991979882707,
+          "ic_superior": -0.0006755734963077797,
+          "media": -0.0016052827380952433,
+          "media_a": 0.8561728050595238,
+          "media_b": 0.857778087797619,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D2": {
+          "a": "R-CB",
+          "b": "R-SORT",
+          "dp": 0.007028662872489935,
+          "ic_inferior": -0.005116040098266985,
+          "ic_superior": -0.0031559093064949285,
+          "media": -0.004135974702380957,
+          "media_a": 0.8561728050595238,
+          "media_b": 0.8603087797619048,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        },
+        "D3": {
+          "a": "R-CB",
+          "b": "R-CORPO",
+          "dp": 0.0066245008486847425,
+          "ic_inferior": -0.003456261779558047,
+          "ic_superior": -0.001608842387108636,
+          "media": -0.0025325520833333415,
+          "media_a": 0.8561728050595238,
+          "media_b": 0.8587053571428571,
+          "motivo": null,
+          "n": 200,
+          "sem_valor": 0
+        }
+      }
+    }
+  },
+  "premissas": {
+    "P-DOSE": {
+      "creditos": 451914,
+      "cumpre": true,
+      "fracao": 0.570117323207513,
+      "movem": 257644,
+      "piso": 0.3
+    },
+    "P-EVENTO": {
+      "cumpre": true,
+      "pisos": {
+        "carinhos_por_vida_min": 50,
+        "creditos_movem_min": 0.3,
+        "vidas_com_o_piso_min": 0.95
+      },
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 127.135,
+          "minimo": 65,
+          "vidas": 200
+        },
+        "aleatorio|longe": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 147.005,
+          "minimo": 82,
+          "vidas": 200
+        },
+        "aleatorio|perto": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 133.385,
+          "minimo": 64,
+          "vidas": 200
+        },
+        "atencioso|comedouro": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 194.05,
+          "minimo": 164,
+          "vidas": 200
+        },
+        "atencioso|longe": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 154.765,
+          "minimo": 74,
+          "vidas": 200
+        },
+        "atencioso|perto": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 202.175,
+          "minimo": 176,
+          "vidas": 200
+        },
+        "incoerente|comedouro": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 194.05,
+          "minimo": 164,
+          "vidas": 200
+        },
+        "incoerente|longe": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 155.245,
+          "minimo": 100,
+          "vidas": 200
+        },
+        "incoerente|perto": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 202.185,
+          "minimo": 181,
+          "vidas": 200
+        },
+        "relapso|comedouro": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 142.035,
+          "minimo": 101,
+          "vidas": 200
+        },
+        "relapso|longe": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 169.05,
+          "minimo": 125,
+          "vidas": 200
+        },
+        "relapso|perto": {
+          "cumpre": true,
+          "fracao_com_o_piso": 1.0,
+          "media": 155.255,
+          "minimo": 126,
+          "vidas": 200
+        }
+      }
+    },
+    "P-SINAL": {
+      "carinhos": 451914,
+      "cumpre": true,
+      "sinal_negativo": 0,
+      "sinal_zero": 5733
+    }
+  },
+  "unidades": 200,
+  "vidas": 9600
+}
