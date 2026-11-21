@@ -124,7 +124,7 @@ describe("entrar", () => {
 describe("o primeiro acesso", () => {
   beforeEach(async () => { srv.s.pendente = { apelido: "Agumon#4821" }; await abrirConta("primeiro_acesso"); });
   it("traz o apelido, a lista e a versão dos termos", () => {
-    expect(CT.passo).toEqual({ tipo: "primeiro", dados: { apelido: "Agumon#4821", digimons: ROOKIES, versaoTermos: "rascunho-2026-11", versaoPrivacidade: "rascunho-2026-11", provedor: "falso" } });
+    expect(CT.passo).toEqual({ tipo: "primeiro", dados: { apelido: "Agumon#4821", digimons: ROOKIES, versaoTermos: "rascunho-2026-11", versaoPrivacidade: "rascunho-2026-11", provedor: "falso", turnstile: null } });
   });
   it("troca o Digimon do apelido pela lista fechada, com o CSRF do acesso pendente", async () => {
     await trocarApelido("Gabumon");

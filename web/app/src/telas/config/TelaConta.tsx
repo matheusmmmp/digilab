@@ -11,13 +11,14 @@
    Tudo aqui e tela: a conta nao toca o motor, o registro nem o save. As regras e as chamadas ficam em src/conta/conta.ts e, as das
    pontuacoes, em src/cais/pontuacoes.ts. */
 import { CopiasDoSave, OfertaLevar } from "../../nuvem/NuvemRaiz.tsx";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { carregarTurnstile } from "../../protecao/turnstile.ts";
 import { Anchor, Check, ChevronRight, Crown, Download, Info, LogOut, Monitor, Shuffle, Smartphone, Trash2, Trophy, TriangleAlert, UserRound } from "lucide-react";
 import { DIGIMON_DA_FORMA } from "../../../motor/index.ts";
 import { apiDoBuild, enderecoDaPrivacidade, enderecoDosTermos } from "../../conta/apiDoBuild.ts";
 import {
   CT, abrirConta, apagarConta, apelidoDaConta, avisarErroDaConta, cancelarPrimeiro, conferirConta, contaLigada, criarConta, desconectar, enderecoDosDados,
-  entrarCom, ligarConta, ouvirConta, revisaoConta, sair, trocarApelido, voltaDaBusca, voltarAEntrar, type Conta, type Primeiro,
+  entrarCom, ligarConta, ouvirConta, revisaoConta, sair, tentativaTurnstile, trocarApelido, voltaDaBusca, voltarAEntrar, type Conta, type Primeiro,
 } from "../../conta/conta.ts";
 import { Retrato } from "../lutar/palcoPoc/TelaLugaresPoc.tsx";
 import { caisNoBuild } from "../cais/TelaCais.tsx";
@@ -129,9 +130,32 @@ function Entrar({ agoraNao }: { agoraNao: () => void }) {
   );
 }
 
+/* ------------------------------------------------------------ o Turnstile (CN4) */
+/** o widget da Cloudflare: só quando o servidor manda a chave do site; o token vai no "Criar a conta" */
+function WidgetTurnstile({ chave, aoToken }: { chave: string; aoToken: (t: string | null) => void }) {
+  const caixa = useRef<HTMLDivElement>(null), [falhou, setFalhou] = useState(false);
+  useEffect(() => {
+    let id: string | null = null, vivo = true;
+    carregarTurnstile().then(api => {
+      if (!vivo || !caixa.current) return;
+      id = api.render(caixa.current, { sitekey: chave, action: "cadastro", theme: "dark", callback: t => aoToken(t),
+        "expired-callback": () => aoToken(null), "error-callback": () => { aoToken(null); setFalhou(true); } });
+    }, () => { if (vivo) setFalhou(true); });
+    return () => { vivo = false; aoToken(null); if (id !== null) void carregarTurnstile().then(api => api.remove(id!)); };
+  }, [chave, aoToken]);
+  return (
+    <div data-testid="ct-turnstile">
+      <span className="ct-rot">Verificação contra robôs</span>
+      <div ref={caixa} />
+      {falhou && <p className="mc-erro" role="alert">A verificação não abriu. Recarregue a página e tente de novo.</p>}
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------ o primeiro acesso */
 function PrimeiroAcesso({ p }: { p: Primeiro }) {
   const [idade, setIdade] = useState<"18_ou_mais" | "menos_de_18" | null>(null), [aceite, setAceite] = useState(false), [trocando, setTrocando] = useState(false);
+  const [token, setToken] = useState<string | null>(null), tentativa = tentativaTurnstile();
   const termos = enderecoDosTermos(), privacidade = enderecoDaPrivacidade();
   if (trocando) return <TrocarApelido p={p} voltar={() => setTrocando(false)} />;
   const opcao = (v: "18_ou_mais" | "menos_de_18", rotulo: string) => (
@@ -149,9 +173,11 @@ function PrimeiroAcesso({ p }: { p: Primeiro }) {
         Li e aceito os {termos ? <a href={termos} target="_blank" rel="noreferrer">Termos</a> : "Termos"} e a {privacidade ? <a href={privacidade} target="_blank" rel="noreferrer">Privacidade</a> : "Privacidade"}
         <small>versão {p.versaoTermos}{p.versaoPrivacidade !== p.versaoTermos ? ` e ${p.versaoPrivacidade}` : ""}</small>
       </Marcar>
+      {p.turnstile !== null && <WidgetTurnstile key={tentativa} chave={p.turnstile} aoToken={setToken} />}
       <Erro />
       <div className="ct-bts">
-        <button type="button" className="hx-continuar" disabled={idade === null || !aceite || CT.ocupado} onClick={() => agir(() => criarConta(idade!))} data-testid="ct-criar">Criar a conta</button>
+        <button type="button" className="hx-continuar" disabled={idade === null || !aceite || CT.ocupado || (p.turnstile !== null && !token)}
+          onClick={() => agir(() => criarConta(idade!, p.turnstile !== null ? token : null))} data-testid="ct-criar">Criar a conta</button>
         <button type="button" className="hx-btn" disabled={CT.ocupado} onClick={() => agir(cancelarPrimeiro)} data-testid="ct-cancelar">Cancelar</button>
       </div>
     </div>
