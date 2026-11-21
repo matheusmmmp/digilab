@@ -942,3 +942,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-21 — CORPO: a triagem antes da run de 200 (o adendo 1 do plano da V1-a)](registro/2026-11.md)
 - [2026-11-21 — PET_QUE_PENSA, P1: o D0, o replay descritivo (sessão lateral da Gerência da V3, Claude Code, Opus 5.5, branch `v3-pet-que-pensa-d0`)](registro/2026-11.md)
 - [2026-11-21 — PLASTICIDADE_EVOLUIDA: o E0 com 12 genes, sem os três inertes (sessão lateral da Gerência da V3, Claude Code, Fable 5.2, branch `v3-pe-e0-12-genes`)](registro/2026-11.md)
+- [2026-11-21 — PET_QUE_PENSA e PLASTICIDADE_EVOLUIDA: os adendos das leituras de Bennett e Gleick (Gerente da V3, Claude Code, Opus 5.5, branch `v3-adendos-leituras`)](registro/2026-11.md)

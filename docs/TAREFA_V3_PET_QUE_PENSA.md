@@ -215,3 +215,49 @@ replicado, deu +0,062 e **não passaria**.
 - Nada sobre o planejador ser melhor que o aprendizado no "Tempo bem". É uma pergunta da triagem.
 - Nada sobre a web antes da P5.
 - Nenhum número de resultado. Os que aparecem são citados de artefatos já na `main`.
+
+## 10. Adendo 1: o portão de "quando pensar" e a entropia da decisão (APROVADO pelo Matheus em 2026-11-21 ("Aprovo todas", à pergunta "Aprova as PQ3-10, PQ3-11 e PE-8 a PE-11 pela recomendação?"))
+
+**De onde vem.** O Matheus pediu a leitura das notas do vault sobre Bennett (2023) e Gleick (2011), em `20 Temas`, e escolheu levar às
+tarefas os três pontos que mexiam na etapa atual ("Os três"). Dois são desta tarefa:
+- o portão de "quando pensar" (Bennett, salto 3);
+- a entropia por decisão (Gleick, parte C).
+
+O terceiro, o crítico, entra na `docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md`. **O Bennett é moldura, não citação:** o adendo se apoia na
+fonte primária, já verificada no projeto.
+
+### 10.1 O portão (um braço novo no D1)
+
+- **O problema:** o termo `plano` soma em toda decisão (PQ3-5). A arbitragem por incerteza entre o sistema de hábito e o de modelo, de Daw,
+  Niv e Dayan (2005), já verificada no projeto, põe no centro outra pergunta: **quando** simular. O J5 da V2 registrou isso como o risco R-6
+  e deixou para depois.
+- **O D0 mostrou onde fica o conflito** (`docs/RESULTADO_V3_PET_QUE_PENSA_D0.md`, #1069): a fome urgente com a energia na faixa do reflexo
+  suave aparece em 8 % a 21 % das decisões do corpo de hoje, e em 10 % a 16 % no v38.
+- **O braço PLAN-PORTÃO:** o PLAN, com o termo `plano` somado só nas decisões em que o portão abre. O portão abre em dois casos (PQ3-10):
+  1. a margem entre as duas unidades de maior peso, sem o termo `plano`, fica abaixo de `margem_portao` (PROPOSTO: S/8 da maior);
+  2. o inato, o hábito e o incentivo apontam unidades diferentes como a de maior peso.
+- **A sonda nova:** `portao_abriu`, por decisão, no motivo. Com o portão fechado, o `plano_decidiu` é falso por construção.
+- **O que o braço mede:** se planejar só no conflito dá o mesmo "Tempo bem" que planejar sempre. Na triagem, o PLAN-PORTÃO entra no
+  contraste contra HOJE e contra PLAN. Se ele empatar com o PLAN, é o desenho mais barato e o mais legível para o D3: o pet "pensa" só
+  quando hesita.
+- **O tamanho do D1:** passa de 4 para 5 braços, de 960 para 1 200 vidas.
+
+### 10.2 A entropia da decisão (um descritivo novo no D1)
+
+- **A medida:** a entropia do sorteio `H(w/T)` em bits, em cada decisão (os `w` e o `T` já estão no motivo do M-ARB), e a fração das
+  decisões com `H` abaixo de 0,1 bit ("quase reflexo"). Com o reflexo, `H` = 0. Fonte: Shannon (1948).
+- **Por que:** mede "quanto da decisão é escolha" de forma mais fina que a F_PESOS do R-sono e as frações abertas do D0. Mostra se o
+  planejador concentra a escolha (H cai) ou a espalha.
+- **A previsão, escrita antes de calcular (D-RB-13):**
+  - no HOJE, `H` ≈ 0 no sono e acima de 1 bit no acordado do `longe`;
+  - no PLAN, `H` cai nas decisões com conflito em relação ao HOJE.
+
+  É descritiva, não gate.
+- **Também no D0:** a mesma medida pode sair das vidas já gravadas, por replay e sem vida nova, ao lado das frações do #1069 (PQ3-11).
+
+### 10.3 As decisões do adendo (DECIDIDAS em 2026-11-21, pela recomendação)
+
+| nº | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PQ3-10 | o braço PLAN-PORTÃO no D1 | **sim, com o portão pela margem (S/8, SEM FONTE) ou pela discordância entre o inato, o hábito e o incentivo** | sem o braço: o D1 não diz se pensar sempre é preciso, e o motivo na tela fica "pensou" em quase toda decisão |
+| PQ3-11 | a entropia da decisão como descritivo do D1, e por replay ao lado do D0 | **sim** | sem ela: a pergunta "quanto é escolha" segue medida só por frações grossas |
