@@ -215,3 +215,20 @@ primária.
 | PE-9 | o `eta_v` e o `gamma` do crítico | **PROPOSTOS, SEM FONTE,** fixados no PR do código; o `eta_v` entra como gene do E0 se o C0 abrir | — |
 | PE-10 | a entropia da decisão como descritivo do E0 e do C0 | **sim** | — |
 | PE-11 | quem executa o C0 | **a sessão lateral do E0, com a revisão do Gerente;** a frente do crédito da cadeia, da coordenadora, segue pausada, e o crítico fica nesta tarefa | abrir na cadeia: reabre uma frente pausada pelo Matheus |
+
+## 10. O código do C0 e da entropia (etapa de código, 2026-11-21)
+
+Escrito pela sessão lateral do E0 (Claude Code, Fable 5.2). **Nenhuma vida de pesquisa rodou.** Os desvios estão em
+`docs/registro/2026-11.md` (D-PE-C0-1 a D-PE-C0-9).
+
+- **O crítico:** a `ConfigCritico` no `digilab/config.py` (desligada por padrão; `eta_v` = S/16 e `gamma` = 15S/16, PROPOSTOS, SEM FONTE)
+  e a conta no `digilab/digibrain/plast.py`. Ficou numa config própria, e não como campo da `ConfigDigibrain`, para o dump de paridade com
+  o jogo web não mudar (D-PE-C0-1).
+- **O G2:** `tests/gabaritos/critico_de_hoje.json`, gravado num commit próprio antes da mudança; desligada, as vidas saem iguais.
+- **O orquestrador:** `experiments/run_v3_plasticidade_c0.py`, com as configs em `experiments/configs/v3_plasticidade_c0/`. Os braços HOJE,
+  CRÍTICO e CONGELADO, nas 6 células e nas bases 110001…110010.
+- **A conta das vidas:** três braços × 6 células × 10 unidades = **180 vidas**. A seção 9.1 fala em 360 (D-PE-C0-5).
+- **As medidas novas no `digilab/metrics.py`:** `entropia_do_sorteio` (PE-10) e `credito_do_habito_por_linha` (a parte do crédito do
+  hábito que vai à linha do dormir). As duas entram também nas medidas de cada vida do E0.
+- **Os testes:** `tests/test_plasticidade_c0.py`.
+- **Falta para rodar:** a vez na máquina e o ok do Matheus. O C0 roda antes do E0.

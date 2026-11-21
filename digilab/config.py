@@ -3264,6 +3264,41 @@ CONFIG_RASTRO = ConfigRastro()
 CONFIG_RASTRO_LIGADA = ConfigRastro(ligada=True)
 
 
+@dataclass(frozen=True)
+class ConfigCritico:
+    """O critico do P2 no DigiBrain modular (docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md, secao 9.1, o C0; PE-8 e PE-9, APROVADAS em
+    2026-11-21). Ligada, o habito (P2) deixa de receber o r_n cru da opcao e recebe o erro de diferenca temporal
+    `delta = clamp(r_n + mul(gamma, V(z2)) - V(z), -S, S)`, com `V(z) = sum_j mul(v_j, z_j)` linear nas caracteristicas z que o P2 ja usa
+    (z, as da decisao que comecou a opcao; z2, as da decisao em que ela acaba, ou da seguinte quando acaba na consequencia). O V e
+    aprendido por TD(0) local, em inteiros: `v_j <- clamp(v_j + mul(mul(mul(g_apr, eta_v), delta), z_j), -S, S)`. Direcao: Sutton (1988)
+    e Schultz, Dayan e Montague (1997); os valores, SEM FONTE. Fica numa config propria, e nao em `ConfigDigibrain` (a subchave
+    `critico` do adendo), para o dump do modular nao mudar, como a `ConfigElogio` e a `ConfigRastro`. Desligada (o padrao), a vida de
+    hoje sai byte a byte (tests/gabaritos/critico_de_hoje.json). Status em PARAMETROS_CRITICO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+    eta_v: int = _S // 16                     # PROPOSTO, SEM FONTE (PE-9): o passo do V, na escala S
+    gamma: int = 15 * _S // 16                # PROPOSTO, SEM FONTE (PE-9): o desconto por opcao, na escala S
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigCritico.ligada e bool: {self.ligada!r}")
+        if type(self.eta_v) is not int or not 0 < self.eta_v <= _S:
+            raise ValueError(f"ConfigCritico.eta_v e inteiro em (0, S]: {self.eta_v!r}")
+        if type(self.gamma) is not int or not 0 <= self.gamma <= _S:
+            raise ValueError(f"ConfigCritico.gamma e inteiro em [0, S]: {self.gamma!r}")
+
+
+# Status dos campos da ConfigCritico (conferido por teste)
+PARAMETROS_CRITICO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_PLASTICIDADE_EVOLUIDA, secao 9.1 (PE-8, APROVADA em 2026-11-21); a chave, SEM FONTE"),
+    "eta_v": ("PROPOSTO", "TAREFA_V3_PLASTICIDADE_EVOLUIDA, PE-9: S/16, fixado no PR do codigo do C0; SEM FONTE"),
+    "gamma": ("PROPOSTO", "TAREFA_V3_PLASTICIDADE_EVOLUIDA, PE-9: 15S/16, fixado no PR do codigo do C0; SEM FONTE"),
+}
+
+CONFIG_CRITICO = ConfigCritico()
+CONFIG_CRITICO_LIGADA = ConfigCritico(ligada=True)
+
+
 BRACOS_PV2 = ("OLF-0", "OLF-DC", "OLF-DCV", "OLF-PLA", "OLF-G")
 
 

@@ -226,6 +226,8 @@ def _registros(efeitos: dict, valor_base: float = 0.0, unidades=(1, 2, 3, 4, 5, 
                     extra = (u % 3 - 1) / 10000 if braco == "APRENDE" else 0.0      # media 0 nas 6 unidades
                     out.append({"config": config, "braco": braco, "semente": u, "dono": dono, "lugar": lugar,
                                 "tempo_bem": 0.5 + ruido + d + extra, "saude_8_14": 0.8, "exaustao_8_14": 0.1, "aprendido_decidiu": 0.02,
+                                "entropia_bits": 1.5 + ruido + (0.2 if config == "epsilon_dobro" else 0.0), "entropia_frac_baixa": 0.0,
+                                "credito_dormir": None if braco == "CONGELADO" else 0.1,
                                 "vida_sha256": f"{'hoje' if config.startswith(('h_max', 'tau_hab')) else config}|{braco}|{u}|{dono}|{lugar}"})
     return out
 
@@ -254,6 +256,12 @@ def test_a_leitura_da_secao_3(efeitos, valor_base, leitura, mexem_valor):
     # as vidas iguais as da config de hoje (a `vida_sha256`): o gene inerte tem todas iguais, na metade e no dobro
     assert res["genes_inertes"] == ["h_max", "tau_hab"] and res["iguais_a_hoje"]["h_max_dobro"]["APRENDE"] == {"vidas": 36, "iguais": 36}
     assert res["iguais_a_hoje"]["eta_d_dobro"] == {b: {"vidas": 36, "iguais": 0} for b in R.BRACOS} and "hoje" not in res["iguais_a_hoje"]
+    # PE-10 (secao 9.2): a entropia do sorteio ao lado, e o contraste dela contra a config de hoje, com a previsao escrita antes
+    assert res["ao_lado"]["hoje"]["credito_dormir"] == {"APRENDE": pytest.approx(0.1), "CONGELADO": None}
+    ent = res["entropia"]
+    assert "epsilon" in ent["previsao"] and ent["limiar_bits"] == 0.1
+    assert ent["sensibilidade"]["configs"]["epsilon_dobro"]["contraste_aprende"]["media"] == pytest.approx(0.2, abs=0.005)
+    assert ent["sensibilidade"]["configs"]["eta_d_dobro"]["contraste_aprende"]["media"] == pytest.approx(0.0, abs=0.005)
     tabela = res["genes_pelo_efeito"]
     assert [g["gene"] for g in tabela] != [] and len(tabela) == 12 and tabela == sorted(tabela, key=lambda g: -g["efeito"])
     if efeitos:
@@ -323,11 +331,13 @@ def test_a_fumaca_roda_com_o_relogio_fora_das_medidas(tmp_path):
                for m in medidas)
     assert all(m["habito_abs"] == 0 and m["creditos_p2"] == 0 for m in medidas if m["braco"] == "CONGELADO")
     assert all(len(m["vida_sha256"]) == 64 and len(m["log_sha256"]) == 64 for m in medidas)
+    assert all(m["entropia_bits"] > 0 and (m["credito_dormir_n"] is None) == (m["braco"] == "CONGELADO") for m in medidas)
     assert set(custos) == {m["vida"] for m in medidas} and all(set(c) == {"vida_cpu", "vida_parede"} for c in custos.values())
     assert r["meta"]["custo"]["vidas_da_run"] == 3000 and r["meta"]["custo"]["projecao_parede_h_4_processos"] > 0
     assert [c["nome"] for c in r["meta"]["configs"]] == ["hoje", "eta_h_dobro"] and r["meta"]["bracos"]["CONGELADO"]["p1"] is False
     # a analise roda de ponta a ponta sobre as medidas gravadas (duas unidades: ha IC); nenhuma medida da fumaca e lida como resultado
     analise = R.analisar(medidas, R.configs_da_run(cfg))
+    assert analise["entropia"]["sensibilidade"]["unidades"] == 2
     assert analise["sensibilidade"]["unidades"] == 2 and analise["leitura"]["leitura"] in R.SEGUE and len(analise["genes_pelo_efeito"]) == 1
     with pytest.raises(FileExistsError):
         R.rodar(cfg, pasta, 1)

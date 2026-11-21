@@ -57,7 +57,7 @@ from bancada.faixas import FAIXAS_QUEIMADAS, FAIXAS_RESERVADAS  # noqa: E402
 from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab import metrics as met  # noqa: E402
 from digilab.config import (CONFIG_LANCE_DONO_LIGADA, CONFIG_PADRAO, CONFIG_SONO_SEGURA_LIGADA, TICKS_POR_DIA,  # noqa: E402
-                            ConfigDigibrain, ConfigDigibrainInatos, inatos_e1)
+                            ConfigCritico, ConfigDigibrain, ConfigDigibrainInatos, inatos_e1)
 from digilab.digibrain import DigiBrain  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.motor_corpo import com_corpo  # noqa: E402
@@ -99,7 +99,10 @@ NIVEL = 0.95                                                  # secao 3: o IC95 
 CHAVES_CONFIG = {"descricao", "fase", "plano", "dias", "orcamento_por_dia", "faixa", "unidades", "configs"}
 OPCIONAIS = {"descricao", "configs"}
 MEDIDA = "tempo_bem"
-AO_LADO = ("saude_8_14", "exaustao_8_14", "aprendido_decidiu")
+AO_LADO = ("saude_8_14", "exaustao_8_14", "aprendido_decidiu", "entropia_bits", "entropia_frac_baixa", "credito_dormir")
+ENTROPIA = "entropia_bits"                                    # PE-10 (secao 9.2): o descritivo da entropia da decisao
+PREVISAO_ENTROPIA = ("escrita antes de calcular (secao 9.2, D-RB-13): os genes da disputa (epsilon, tau_hab) mexem na entropia do "
+                     "sorteio; os da plasticidade mexem pouco. E descritiva")
 L_ESTRUTURAL = "estrutural: os numeros do aprendizado nao decidem"
 L_BUSCAR = "ha por onde buscar"
 L_REFLEXOS = "a busca afinaria os reflexos, nao o aprendizado"
@@ -182,10 +185,12 @@ def config_digibrain(braco: str) -> ConfigDigibrain:
 
 
 # ================================================================== as vidas
-def fabricas(config: str, braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int) -> tuple:
+def fabricas(config: str, braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int,
+             critico: ConfigCritico | None = None) -> tuple:
     """(a fabrica do cerebro, a do motor) do pet v38 da PET_VIVO (`pv2.fabricas("HOJE", ..., v38=True)`), com os inatos da config e a
     ConfigDigibrain do braco. Na config de hoje e no APRENDE a vida e, byte a byte, a do `pv2.viver("HOJE", ..., v38=True)` (teste, e a
-    conferencia C-HOJE de toda vida dessas)"""
+    conferencia C-HOJE de toda vida dessas). `critico` (o C0, secao 9.1): a ConfigCritico do cerebro; None, a vida de hoje"""
+    kw = {} if critico is None else {"cfg_critico": critico}
     inatos = CONFIGS[config]["inatos"]
     cd = config_digibrain(braco)
     cc = orq.bancada(dias, orcamento_por_dia).cfg_corpo_de(bv.EspecVida(dono, gl.BRACO_V11, semente))
@@ -197,26 +202,31 @@ def fabricas(config: str, braco: str, dono: str, semente: int, dias: int, orcame
     def fp(cfg=None):
         registro = orq.Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, orq.CM, semente=semente, inatos=inatos,
                                           cfg_sono=CONFIG_SONO_SEGURA_LIGADA, cfg_lance=CONFIG_LANCE_DONO_LIGADA,
-                                          cfg_equilibrio=pv2.EQUILIBRIO_V38), inatos.escala)
+                                          cfg_equilibrio=pv2.EQUILIBRIO_V38, **kw), inatos.escala)
         pv2.bebe_pelas_decisoes(orq.cerebro_de(registro))     # na fabrica, para o replay ter o mesmo bebe (como no pv2)
         return registro
 
     return fp, fm
 
 
-def viver(config: str, braco: str, dono: str, lugar: str, semente: int, dias: int, orcamento_por_dia: int = ORCAMENTO_POR_DIA) -> tuple:
+def viver(config: str, braco: str, dono: str, lugar: str, semente: int, dias: int, orcamento_por_dia: int = ORCAMENTO_POR_DIA,
+          critico: ConfigCritico | None = None) -> tuple:
     """uma vida: (o motor, o registro, as fabricas)"""
-    fp, fm = fabricas(config, braco, dono, semente, dias, orcamento_por_dia)
+    fp, fm = fabricas(config, braco, dono, semente, dias, orcamento_por_dia, critico)
     registro = fp(CONFIG_PADRAO)
     d = DonoComLugar(criar_dono(dono), lugar, semente, dono, orq.CM)
     motor, _ = simular_vida_fisico(d, registro, semente, dias, orcamento_por_dia * dias, dono, fm)
     return motor, registro, (fp, fm)
 
 
-def conferir_vida(config: str, braco: str, motor, registro) -> None:
-    """o pet da vida e o v38 com os inatos da config e a ConfigDigibrain do braco; no CONGELADO, o desfecho e o habito em 0 (falha alto)"""
+def conferir_vida(config: str, braco: str, motor, registro, critico: ConfigCritico | None = None) -> None:
+    """o pet da vida e o v38 com os inatos da config e a ConfigDigibrain do braco; no CONGELADO, o desfecho e o habito em 0; o critico
+    so esta no cerebro se a vida o pediu (falha alto)"""
     c = orq.cerebro_de(registro)
     nome = f"{config}/{braco}"
+    esperado = critico if critico is not None and critico.ligada else None
+    if c.cr != esperado or c.m.plast.cr != esperado or any(("critico" in m) != (esperado is not None) for m in c.motivos):
+        raise E0Divergiu(f"{nome}: o critico do cerebro nao e o da vida ({esperado!r})")
     erros = [n for n, ok in (("os inatos da config", c.inatos == CONFIGS[config]["inatos"]), ("a ConfigDigibrain do braco", c.cd == config_digibrain(braco)),
                              ("o sono que segura ligado", c.m.arb.sono == CONFIG_SONO_SEGURA_LIGADA),
                              ("o lance no cerebro", c.cl == CONFIG_LANCE_DONO_LIGADA), ("o lance no motor", motor.cld == CONFIG_LANCE_DONO_LIGADA),
@@ -242,7 +252,13 @@ def medir(dias: int, motor, registro) -> dict:
     tb = met.tempo_bem_nas_decisoes([(t, e[0], e[1], e[2]) for t, e in zip(ticks, es)], vida, orq.LIMIAR_PRIVACAO, orq.LIMIAR_EXAUSTAO)
     sondas = [(t, {"aprendido": m["sondas"]["aprendido_decidiu"]}) for t, m in zip(ticks, ms)]
     H = [v for linha in c.m.plast.H.values() for v in linha]
-    return {"tempo_bem": tb["frac"], "privacao_vida": tb["frac_privacao"], "exaustao_vida": tb["frac_exaustao"], "decisoes": tb["n"],
+    # PE-10 (secao 9.2): a entropia do sorteio, do motivo do M-ARB; e para onde vai o credito do habito (secao 9.1)
+    h = met.entropia_do_sorteio([None if m["u"] is None else [u["w"] for u in m["unidades"]] for m in ms])
+    creditos = [cr for m in ms for cr in m["creditos"] + (m["consequencia"] or {}).get("creditos", []) + m.get("critico", {}).get("fechados", [])]
+    cred = met.credito_do_habito_por_linha(creditos)
+    return {"entropia_bits": h["media_bits"], "entropia_frac_baixa": h["frac_abaixo"], "frac_sorteio": h["frac_sorteio"],
+            "credito_dormir": cred["frac_abs"], "credito_dormir_n": cred["frac_n"], "credito_abs": cred["abs"],
+            "tempo_bem": tb["frac"], "privacao_vida": tb["frac_privacao"], "exaustao_vida": tb["frac_exaustao"], "decisoes": tb["n"],
             "saude_8_14": met.saude_nas_decisoes([(t, e[4]) for t, e in zip(ticks, es)], janela)["media"],
             "exaustao_8_14": met.exaustao_nas_decisoes([(t, e[2]) for t, e in zip(ticks, es)], janela, orq.LIMIAR_EXAUSTAO)["frac"],
             "aprendido_decidiu": met.influencia_por_modulo(sondas, vida, ("aprendido",))["frac"]["aprendido"],
@@ -287,8 +303,16 @@ def tarefa(cfg: dict, config: str, unidade: dict, pasta: str) -> list[dict]:
 
 
 # ================================================================== a analise (secoes 2 e 3 da tarefa, escritas antes)
-def por_unidade(registros: list[dict], medida: str, configs) -> dict:
-    """config -> braco -> semente -> a media da medida nas seis celulas; falha alto com vida repetida ou faltando"""
+def _media_das_celulas(valores: list, com_none: bool):
+    if not com_none:
+        return sum(valores) / len(valores)
+    vs = [v for v in valores if v is not None]
+    return None if not vs else sum(vs) / len(vs)
+
+
+def por_unidade(registros: list[dict], medida: str, configs, com_none: bool = False) -> dict:
+    """config -> braco -> semente -> a media da medida nas seis celulas; falha alto com vida repetida ou faltando. `com_none` (so nos
+    descritivos ao lado): a celula sem valor (o CONGELADO nao tem credito) fica fora da media, e a unidade sem nenhuma fica None"""
     idx: dict = {}
     for r in registros:
         chave = (r["config"], r["braco"], r["semente"], r["dono"], r["lugar"])
@@ -300,7 +324,8 @@ def por_unidade(registros: list[dict], medida: str, configs) -> dict:
         raise E0Divergiu(f"{len(idx)} vidas: cada config tem {len(BRACOS)} bracos x {len(sementes)} unidades x {len(CELULAS)} celulas")
     out = {}
     for config in configs:
-        out[config] = {b: {s: sum(idx[(config, b, s, d, lugar)] for d, lugar in CELULAS) / len(CELULAS) for s in sementes} for b in BRACOS}
+        out[config] = {b: {s: _media_das_celulas([idx[(config, b, s, d, lugar)] for d, lugar in CELULAS], com_none) for s in sementes}
+                       for b in BRACOS}
     return out
 
 
@@ -389,14 +414,20 @@ def analisar(registros: list[dict], configs: dict | None = None) -> dict:
     resumo = met.sensibilidade_um_por_vez(por_unidade(registros, MEDIDA, configs), HOJE, APRENDE, CONGELADO, NIVEL)
     ao_lado = {}
     for m in AO_LADO:
-        pu = por_unidade(registros, m, configs)
+        pu = por_unidade(registros, m, configs, com_none=True)
         for config, bracos in pu.items():
-            ao_lado.setdefault(config, {})[m] = {b: sum(v.values()) / len(v) for b, v in bracos.items()}
+            ao_lado.setdefault(config, {})[m] = {b: _media_das_celulas(list(v.values()), True) for b, v in bracos.items()}
+    # PE-10: a entropia do sorteio de cada config contra a de hoje, pareada por unidade (descritivo; None se alguma unidade nao sorteou)
+    pu = por_unidade(registros, ENTROPIA, configs, com_none=True)
+    tem = all(v is not None for bracos in pu.values() for por in bracos.values() for v in por.values())
+    entropia = {"previsao": PREVISAO_ENTROPIA, "limiar_bits": met.LIMIAR_ENTROPIA_BAIXA,
+                "sensibilidade": met.sensibilidade_um_por_vez(pu, HOJE, APRENDE, CONGELADO, NIVEL) if tem else None}
     iguais = iguais_a_hoje(registros, configs)
     return {"medida": MEDIDA, "unidades": resumo["unidades"], "celulas": [list(c) for c in CELULAS],
             "configs": descricao_das_configs(configs), "sensibilidade": resumo, "ao_lado": ao_lado,
             "iguais_a_hoje": iguais, "genes_inertes": genes_inertes(iguais, configs),
-            "genes_pelo_efeito": tabela_dos_genes(resumo, configs), "leitura": ler(resumo, configs), "nao_diz": NAO_DIZ}
+            "genes_pelo_efeito": tabela_dos_genes(resumo, configs), "leitura": ler(resumo, configs), "entropia": entropia,
+            "nao_diz": NAO_DIZ}
 
 
 # ================================================================== a trava e a run
@@ -416,12 +447,13 @@ def configs_da_run(cfg: dict) -> dict:
     return {n: CONFIGS[n] for n in CONFIGS if n in nomes}
 
 
-def modo_da_config(cfg: dict) -> str:
+def modo_da_config(cfg: dict, fase: str = FASE) -> str:
+    """`fase`: a do E0, ou a de outra triagem da tarefa com a mesma trava (o C0, `run_v3_plasticidade_c0.py`)"""
     faltam, sobram = (CHAVES_CONFIG - OPCIONAIS) - set(cfg), set(cfg) - CHAVES_CONFIG
     if faltam or sobram:
         raise ValueError(f"config: faltam {sorted(faltam)}, sobram {sorted(sobram)}")
-    if cfg["fase"] != FASE:
-        raise ValueError(f"fase {cfg['fase']!r}: so {FASE!r}")
+    if cfg["fase"] != fase:
+        raise ValueError(f"fase {cfg['fase']!r}: so {fase!r}")
     u = cfg["unidades"]
     if u.get("prefixo") != PREFIXO or cfg["orcamento_por_dia"] != ORCAMENTO_POR_DIA or type(u.get("k")) is not int or u["k"] < 1:
         raise ValueError("config fora da tarefa: o prefixo, o orcamento ou o K")
@@ -450,7 +482,7 @@ def modo_da_config(cfg: dict) -> str:
                              ("um subconjunto das configs so vale na fumaca", "configs" not in cfg)) if not ok]
     if erros:
         raise ValueError(f"a run segue a tarefa a letra: {erros}")
-    return FASE
+    return fase
 
 
 def projecao_h(custos: dict, processos: int = MAX_PROCESSOS) -> float:
