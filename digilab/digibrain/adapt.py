@@ -110,7 +110,7 @@ from dataclasses import dataclass
 from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, TIPOS_ALVO_SOCIAIS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigElogio,
                       ConfigAblacaoValuation, ConfigConsertoValuation, ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlfato, ConfigOlhar,
-                      ConfigPV2, ConfigRastro, ConfigSonoSegura)
+                      ConfigCritico, ConfigPV2, ConfigRastro, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
@@ -171,12 +171,13 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
                    cfg_lance: ConfigLanceDono | None = None, cfg_enjoo: ConfigEnjooTela | None = None,
                    cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
                    cfg_ablacao: ConfigAblacaoValuation | None = None,
-                   cfg_conserto: ConfigConsertoValuation | None = None, cfg_pv2: ConfigPV2 | None = None) -> Modulos:
+                   cfg_conserto: ConfigConsertoValuation | None = None, cfg_pv2: ConfigPV2 | None = None,
+                   cfg_critico: ConfigCritico | None = None) -> Modulos:
     dc = cfg_pv2 is not None and cfg_pv2.ligada
     return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo, social=cd.unidades_sociais), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
                    estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio, cfg_ablacao, cfg_pv2=cfg_pv2), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
-                                 luta, cd.olhar, social=cd.unidades_sociais), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao, cfg_conserto), plast=Plasticidade(cd, inatos, dc_cheiro=dc),
+                                 luta, cd.olhar, social=cd.unidades_sociais), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao, cfg_conserto), plast=Plasticidade(cd, inatos, dc_cheiro=dc, critico=cfg_critico),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -222,7 +223,7 @@ class DigiBrain:
                  cfg_orgao=None, brasao: str | None = None, cfg_ablacao: ConfigAblacaoValuation | None = None,
                  cfg_conserto: ConfigConsertoValuation | None = None, cfg_elogio: ConfigElogio | None = None,
                  cfg_pv2: ConfigPV2 | None = None, cfg_olfato: ConfigOlfato | None = None,
-                 cfg_rastro: ConfigRastro | None = None) -> None:
+                 cfg_rastro: ConfigRastro | None = None, cfg_critico: ConfigCritico | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -275,9 +276,19 @@ class DigiBrain:
                 self.pv2 = cfg_pv2
         if self.pv2 is None and cfg_olfato is not None:
             raise ValueError("a ConfigOlfato vai ao cerebro so com o PV-2 ligado")
+        # o critico do P2 (docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md, secao 9.1, o C0): so com a ConfigCritico ligada; desligada, nada muda
+        self.cr: ConfigCritico | None = None
+        if cfg_critico is not None:
+            if not isinstance(cfg_critico, ConfigCritico):
+                raise TypeError(f"cfg_critico e uma ConfigCritico: {cfg_critico!r}")
+            if cfg_critico.ligada:
+                if cfg_elogio is not None and cfg_elogio.ligada:
+                    raise ValueError("o critico nao se combina com a ConfigElogio ligada (9.1: PROPOSTO, sem teste da combinacao)")
+                self.cr = cfg_critico
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
                                 self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce,
-                                cfg_equilibrio=self.ceq, cfg_ablacao=cfg_ablacao, cfg_conserto=cfg_conserto, cfg_pv2=self.pv2)
+                                cfg_equilibrio=self.ceq, cfg_ablacao=cfg_ablacao, cfg_conserto=cfg_conserto, cfg_pv2=self.pv2,
+                                **({} if self.cr is None else {"cfg_critico": self.cr}))
         if self.pv2 is not None:                      # o limiar do cheiro forte do explorar, pela conta do orgao (a mesma do motor)
             self.m.sens.ligar_olfato(leitura_do_orgao(self.cm.limiar_cheiro_explorar, cfg_olfato, self.S))
             self.executor = {"A": 0, "varrer": 0, "viradas": 0, "piruetas": 0, "seguidas": 0}
@@ -400,6 +411,10 @@ class DigiBrain:
             if "fome" not in afeto["urgencias"]:
                 raise RuntimeError("a guarda do brincar le a urgencia da fome, e ela nao veio do M-AFETO")
             guarda = afeto["urgencias"]["fome"] > self.inatos.urgencia_lambda
+        critico = None
+        if self.cr is not None:                       # o critico: as opcoes que acabaram na consequencia anterior fecham com o z desta
+            z_desta = m.impulso.contexto_z(sens, afeto, ctx)
+            critico = {"fechados": m.plast.fechar_pendentes(z_desta), "V": m.plast.valor(z_desta)}
         unidades, z = m.impulso.unidades(
             sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
             None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa),
@@ -416,6 +431,10 @@ class DigiBrain:
             evento = evento + (["E-FIM"] if esc["fora"] else [])
             m.estado.registrar_redecisao(unidade["chave"], esc["segurada"], reflexo, evento)
         creditos = _creditar(m.plast, fins, cd)
+        if self.cr is not None:                       # o critico: as opcoes que a escolha desta decisao fechou, com o z dela
+            if z != z_desta:
+                raise RuntimeError("o critico: o z da decisao nao e o que fechou as opcoes pendentes")
+            creditos = creditos + m.plast.fechar_pendentes(z)
         if cd.credito_corrida:                        # a C2: a corrida que a troca de comportamento fechou, ao P2 uma vez so
             fechadas = m.estado.corridas_fechadas
             corridas = [{"b": c["b"], "inicio": c["inicio"], "n": c["n"], "r": c["r"]} for c in fechadas]
@@ -455,6 +474,8 @@ class DigiBrain:
             self.motivos[-1]["faceta"] = {"valores": dict(m.pers.valores), "mudancas": mudancas}
         if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
             self.motivos[-1]["corridas"] = corridas
+        if self.cr is not None:                       # o critico: desligado, nenhum campo novo
+            self.motivos[-1]["critico"] = critico
         if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
             self.motivos[-1]["suspensa"] = m.estado.suspensa_resumo()
             self.motivos[-1]["retomou"] = m.estado.retomadas > retomadas

@@ -3915,3 +3915,46 @@ def sensibilidade_um_por_vez(valores: Mapping[str, Mapping[str, Mapping[object, 
              "fora_de_zero": {f: sum(1 for nome, c in configs.items() if nome != referencia and c[f]["fora_de_zero"])
                               for f in ("contraste_aprende", "contraste_valor")}}
     return {"referencia": referencia, "unidades": len(unidades), "configs": configs, "acaso": acaso}
+
+
+# ------------------------------------------------------------------ o adendo 1 da PLASTICIDADE_EVOLUIDA (a tarefa, secoes 9.1 e 9.2):
+# a entropia da decisao e para onde vai o credito do habito
+LIMIAR_ENTROPIA_BAIXA = 0.1                    # PE-10 (secao 9.2): a decisao com menos de 0,1 bit; PROPOSTO, SEM FONTE
+
+
+def entropia_do_sorteio(pesos_por_decisao: Sequence[Sequence[int] | None], limiar: float = LIMIAR_ENTROPIA_BAIXA) -> dict:
+    """A entropia do sorteio do M-ARB, H(w / T) em bits (`entropia_bits`; Shannon 1948), por decisao. `pesos_por_decisao`: os pesos w
+    das unidades de cada decisao com sorteio (o `u` do motivo), e None na decisao sem sorteio (o reflexo, um candidato so, a escolha
+    segurada). `media_bits` e `frac_abaixo` (a fracao com H < `limiar`) sao sobre os sorteios; `media_bits_decisao` conta a decisao sem
+    sorteio como 0 bit. None sem sorteio (ou sem decisao). Falha alto com um sorteio de menos de 2 pesos positivos."""
+    hs = []
+    for w in pesos_por_decisao:
+        if w is None:
+            continue
+        if sum(1 for x in w if x > 0) < 2:
+            raise ValueError(f"entropia do sorteio: menos de 2 pesos positivos num sorteio: {list(w)!r}")
+        hs.append(entropia_bits(w))
+    n, s = len(pesos_por_decisao), len(hs)
+    return {"n": n, "sorteios": s, "frac_sorteio": None if n == 0 else s / n, "limiar": limiar,
+            "media_bits": None if s == 0 else sum(hs) / s, "frac_abaixo": None if s == 0 else sum(1 for h in hs if h < limiar) / s,
+            "media_bits_decisao": None if n == 0 else sum(hs) / n}
+
+
+def credito_do_habito_por_linha(creditos: Sequence[Mapping], linha: str = "dormir") -> dict:
+    """Para onde vai o credito do P2 numa vida: `creditos` = os registros do `Plasticidade.creditar` (e do `fechar_pendentes` do
+    critico), cada um com a linha `b` do habito e o `abs` (a soma dos |delta H| que causou). Os registros `pendente` do critico (a opcao
+    ainda sem o credito) ficam fora. Por linha: quantos creditos e quanto do `abs`; `frac_n` e `frac_abs`, a parte da `linha` (o sono)
+    no numero de creditos e no `abs` total. None sem credito (ou com o `abs` total 0)."""
+    por: dict[str, dict] = {}
+    for c in creditos:
+        if c.get("pendente"):
+            continue
+        if type(c.get("b")) is not str or type(c.get("abs")) is not int or c["abs"] < 0:
+            raise ValueError(f"credito do habito: registro sem a linha ou sem o abs: {dict(c)!r}")
+        x = por.setdefault(c["b"], {"n": 0, "abs": 0})
+        x["n"] += 1
+        x["abs"] += c["abs"]
+    n, total = sum(x["n"] for x in por.values()), sum(x["abs"] for x in por.values())
+    da_linha = por.get(linha, {"n": 0, "abs": 0})
+    return {"n": n, "abs": total, "linha": linha, "por_linha": dict(sorted(por.items())),
+            "frac_n": None if n == 0 else da_linha["n"] / n, "frac_abs": None if total == 0 else da_linha["abs"] / total}

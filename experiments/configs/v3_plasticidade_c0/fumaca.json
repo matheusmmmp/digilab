@@ -1,0 +1,15 @@
+{
+ "descricao": "PLASTICIDADE_EVOLUIDA, o C0: a fumaca, numa semente dos testes, 14 dias, os 3 bracos nas 6 celulas (18 vidas) e todas as conferencias. So serve ao custo: nenhuma medida dela e lida.",
+ "fase": "plasticidade_c0",
+ "plano": "docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md",
+ "dias": 14,
+ "orcamento_por_dia": 16,
+ "faixa": "PENDENTE",
+ "unidades": {
+  "prefixo": "digibrain_prototipo",
+  "bases": [
+   101
+  ],
+  "k": 1
+ }
+}
