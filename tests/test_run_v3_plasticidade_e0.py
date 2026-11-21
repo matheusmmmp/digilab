@@ -1,5 +1,5 @@
 """O E0 da PLASTICIDADE_EVOLUIDA (experiments/run_v3_plasticidade_e0.py; docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md, secoes 2 e 3): a
-montagem das 31 configs (um gene por vez, os limites da config), o braco CONGELADO com os termos em 0, a config de hoje no APRENDE igual
+montagem das 25 configs (um gene por vez, os limites da config), o braco CONGELADO com os termos em 0, a config de hoje no APRENDE igual
 ao pet v38 de hoje byte a byte, o resumo do E0 no metrics.py, a leitura da secao 3, a trava da config (a faixa pendente) e uma fumaca nas
 sementes dos testes."""
 from __future__ import annotations
@@ -25,7 +25,7 @@ from digilab.config import CONFIG_DIGIBRAIN_INATOS, ConfigDigibrainInatos, inato
 
 FUMACA = json.loads((RAIZ / "experiments/configs/v3_plasticidade_e0/fumaca.json").read_text(encoding="utf-8"))
 RUN = json.loads((RAIZ / "experiments/configs/v3_plasticidade_e0/run.json").read_text(encoding="utf-8"))
-GENES_DA_TAREFA = ("eta_d", "eta_h", "h_max", "c_g", "g_max_incentivo", "g0", "beta_e", "g_min", "g_max", "w_pers", "w_mem", "w_lem",
+GENES_DA_TAREFA = ("eta_d", "eta_h", "h_max", "c_g", "g_max_incentivo", "g0", "w_pers", "w_mem", "w_lem",
                    "tau_hab", "epsilon", "lambda_sono")
 
 
@@ -33,13 +33,13 @@ def _sha(motor) -> str:
     return hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest()
 
 
-# ------------------------------------------------------------------ as 31 configs
+# ------------------------------------------------------------------ as 25 configs
 def test_os_genes_as_celulas_e_o_tamanho_sao_os_da_tarefa():
-    assert R.GENES == GENES_DA_TAREFA and len(R.GENES) == 15 and R.DISPUTA == {"tau_hab", "epsilon", "lambda_sono"}
+    assert R.GENES == GENES_DA_TAREFA and len(R.GENES) == 12 and R.DISPUTA == {"tau_hab", "epsilon", "lambda_sono"}
     inteiros = {f.name for f in fields(ConfigDigibrainInatos) if type(getattr(CONFIG_DIGIBRAIN_INATOS, f.name)) is int}
     assert set(R.GENES) <= inteiros
     assert R.CELULAS == tuple((d, lugar) for d in ("atencioso", "relapso") for lugar in ("comedouro", "longe", "longe_fixo"))
-    assert R.BRACOS == ("APRENDE", "CONGELADO") and len(R.CONFIGS) == 31 and R.N_VIDAS == 3720
+    assert R.BRACOS == ("APRENDE", "CONGELADO") and len(R.CONFIGS) == 25 and R.N_VIDAS == 3000
     assert R.INATOS_V38 == inatos_e1() and R.DIAS == 14 and R.N_BASES == 10
 
 
@@ -57,7 +57,7 @@ def test_cada_config_mexe_um_gene_so_na_metade_e_no_dobro():
         assert getattr(c["inatos"], c["gene"]) == c["valor"] and c["cortado"] == (c["valor"] != c["pedido"])
         vistos.add((c["gene"], c["fator"]))
     assert vistos == {(g, f) for g in R.GENES for f in R.FATORES}
-    # com os valores de hoje nenhum gene bate num limite: as 30 configs sao a metade e o dobro exatos
+    # com os valores de hoje nenhum gene bate num limite: as 24 configs sao a metade e o dobro exatos
     assert not any(c["cortado"] for c in R.CONFIGS.values())
 
 
@@ -138,17 +138,18 @@ def test_o_gene_da_config_chega_ao_cerebro():
     assert R.assinatura_da_vida(motor, registro) != R.assinatura_da_vida(hoje, registro_hoje)
 
 
-def test_os_tres_genes_do_g_apr_modulado_sao_inertes_no_pet_v38():
-    """o pet v38 tem a `modula_g_apr` desligada: o g_apr e o g0, e o beta_e, o g_min e o g_max nao entram em conta nenhuma. As 6 configs
-    deles saem iguais a de hoje por construcao (achado do codigo do E0, registrado; a lista dos genes e a da PE-3 e nao muda aqui)"""
+def test_os_tres_genes_do_g_apr_modulado_ficam_fora():
+    """D-PE-7 (o Matheus, 2026-11-21: "Sim, tira os tres"): o pet v38 tem a `modula_g_apr` desligada, o g_apr e o g0, e o beta_e, o g_min
+    e o g_max nao entram em conta nenhuma. Eles sairam da lista; o g0, que chega ao P1 e ao P2, fica"""
     assert not R.config_digibrain("APRENDE").modula_g_apr
+    assert not {"beta_e", "g_min", "g_max"} & set(R.GENES) and "g0" in R.GENES
+    assert not any(n.startswith(("beta_e", "g_min_", "g_max_metade", "g_max_dobro")) for n in R.CONFIGS)
+    for gene in ("beta_e", "g_min", "g_max"):
+        with pytest.raises(KeyError):
+            R.limites(gene, R.INATOS_V38)
     hoje, registro_hoje, _ = R.viver("hoje", "APRENDE", "relapso", "longe_fixo", 101, 2)
-    for config in ("beta_e_dobro", "g_min_dobro", "g_max_metade"):
-        motor, registro, _ = R.viver(config, "APRENDE", "relapso", "longe_fixo", 101, 2)
-        mesmos = orq.cerebro_de(registro).motivos == orq.cerebro_de(registro_hoje).motivos
-        assert registro.estados == registro_hoje.estados and mesmos
     motor, registro, _ = R.viver("g0_dobro", "APRENDE", "relapso", "longe_fixo", 101, 2)
-    assert registro.estados != registro_hoje.estados                           # o g0, esse, chega ao P1 e ao P2
+    assert registro.estados != registro_hoje.estados
 
 
 # ------------------------------------------------------------------ a medida (metrics.py)
@@ -188,10 +189,10 @@ def test_o_resumo_do_e0_pareia_por_unidade():
     assert b["contraste_valor"]["fora_de_zero"] is False
     assert r["acaso"] == {"contrastes_por_familia": 2, "nivel": 0.95, "esperados_por_acaso_por_familia": pytest.approx(0.1),
                           "fora_de_zero": {"contraste_aprende": 1, "contraste_valor": 1}}
-    # com as 31 configs: 30 contrastes por familia e 1,5 esperado por acaso (o "1 ou 2" da secao 3)
+    # com as 25 configs: 24 contrastes por familia e 1,2 esperado por acaso (o "1 ou 2" da secao 3)
     v = _valores()
-    grande = {"hoje": v["hoje"], **{f"c{i}": v["b"] for i in range(30)}}
-    assert met.sensibilidade_um_por_vez(grande, "hoje")["acaso"]["esperados_por_acaso_por_familia"] == pytest.approx(1.5)
+    grande = {"hoje": v["hoje"], **{f"c{i}": v["b"] for i in range(24)}}
+    assert met.sensibilidade_um_por_vez(grande, "hoje")["acaso"]["esperados_por_acaso_por_familia"] == pytest.approx(1.2)
 
 
 def test_o_resumo_do_e0_falha_alto():
@@ -213,7 +214,7 @@ def test_o_resumo_do_e0_falha_alto():
 
 # ------------------------------------------------------------------ a leitura da secao 3
 def _registros(efeitos: dict, valor_base: float = 0.0, unidades=(1, 2, 3, 4, 5, 6)) -> list[dict]:
-    """registros sinteticos das 31 configs: `efeitos[config]` = (o que soma ao APRENDE, o que soma ao CONGELADO); `valor_base`, o valor do
+    """registros sinteticos das 25 configs: `efeitos[config]` = (o que soma ao APRENDE, o que soma ao CONGELADO); `valor_base`, o valor do
     aprendizado de toda config. Um ruido pequeno por unidade e config, igual nos dois bracos (o valor do aprendizado fica sem ruido)"""
     out = []
     for i, config in enumerate(R.CONFIGS):
@@ -225,7 +226,7 @@ def _registros(efeitos: dict, valor_base: float = 0.0, unidades=(1, 2, 3, 4, 5, 
                     extra = (u % 3 - 1) / 10000 if braco == "APRENDE" else 0.0      # media 0 nas 6 unidades
                     out.append({"config": config, "braco": braco, "semente": u, "dono": dono, "lugar": lugar,
                                 "tempo_bem": 0.5 + ruido + d + extra, "saude_8_14": 0.8, "exaustao_8_14": 0.1, "aprendido_decidiu": 0.02,
-                                "vida_sha256": f"{'hoje' if config.startswith(('beta_e', 'g_min')) else config}|{braco}|{u}|{dono}|{lugar}"})
+                                "vida_sha256": f"{'hoje' if config.startswith(('h_max', 'tau_hab')) else config}|{braco}|{u}|{dono}|{lugar}"})
     return out
 
 
@@ -247,14 +248,14 @@ def test_a_leitura_da_secao_3(efeitos, valor_base, leitura, mexem_valor):
     ler = res["leitura"]
     assert ler["leitura"] == leitura and ler["segue"] == R.SEGUE[leitura]
     assert ler["genes_que_mexem_no_valor_do_aprendizado"] == mexem_valor
-    assert ler["acaso"]["contrastes_por_familia"] == 30 and ler["acaso"]["esperados_por_acaso_por_familia"] == pytest.approx(1.5)
-    assert res["sensibilidade"]["unidades"] == 6 and len(res["configs"]) == 31 and set(res["ao_lado"]) == set(R.CONFIGS)
+    assert ler["acaso"]["contrastes_por_familia"] == 24 and ler["acaso"]["esperados_por_acaso_por_familia"] == pytest.approx(1.2)
+    assert res["sensibilidade"]["unidades"] == 6 and len(res["configs"]) == 25 and set(res["ao_lado"]) == set(R.CONFIGS)
     assert res["ao_lado"]["hoje"]["saude_8_14"] == {"APRENDE": pytest.approx(0.8), "CONGELADO": pytest.approx(0.8)}
     # as vidas iguais as da config de hoje (a `vida_sha256`): o gene inerte tem todas iguais, na metade e no dobro
-    assert res["genes_inertes"] == ["beta_e", "g_min"] and res["iguais_a_hoje"]["beta_e_dobro"]["APRENDE"] == {"vidas": 36, "iguais": 36}
+    assert res["genes_inertes"] == ["h_max", "tau_hab"] and res["iguais_a_hoje"]["h_max_dobro"]["APRENDE"] == {"vidas": 36, "iguais": 36}
     assert res["iguais_a_hoje"]["eta_d_dobro"] == {b: {"vidas": 36, "iguais": 0} for b in R.BRACOS} and "hoje" not in res["iguais_a_hoje"]
     tabela = res["genes_pelo_efeito"]
-    assert [g["gene"] for g in tabela] != [] and len(tabela) == 15 and tabela == sorted(tabela, key=lambda g: -g["efeito"])
+    assert [g["gene"] for g in tabela] != [] and len(tabela) == 12 and tabela == sorted(tabela, key=lambda g: -g["efeito"])
     if efeitos:
         gene = next(iter(efeitos)).rsplit("_", 1)[0]
         assert tabela[0]["gene"] == gene and tabela[0]["efeito"] == pytest.approx(0.10, abs=0.01) and tabela[0]["fora_de_zero"]
@@ -264,7 +265,7 @@ def test_a_leitura_da_secao_3(efeitos, valor_base, leitura, mexem_valor):
 def test_a_ressalva_do_acaso_e_a_leitura_sem_ic():
     um = R.analisar(_registros({"eta_h_dobro": (0.10, 0.0)}))["leitura"]["acaso"]
     assert um["fora_de_zero"] == {"contraste_aprende": 1, "contraste_valor": 1}
-    assert um["ressalva"] == {"contraste_aprende": True, "contraste_valor": True}      # 1 fora de zero, 1,5 esperado: nao e achado
+    assert um["ressalva"] == {"contraste_aprende": True, "contraste_valor": True}      # 1 fora de zero, 1,2 esperado: nao e achado
     tres = R.analisar(_registros({"eta_h_dobro": (0.10, 0.0), "c_g_dobro": (0.10, 0.0), "g0_metade": (0.10, 0.0)}))["leitura"]["acaso"]
     assert tres["fora_de_zero"]["contraste_valor"] == 3 and tres["ressalva"]["contraste_valor"] is False
     assert R.analisar(_registros({}))["leitura"]["acaso"]["ressalva"] == {"contraste_aprende": False, "contraste_valor": False}
@@ -323,7 +324,7 @@ def test_a_fumaca_roda_com_o_relogio_fora_das_medidas(tmp_path):
     assert all(m["habito_abs"] == 0 and m["creditos_p2"] == 0 for m in medidas if m["braco"] == "CONGELADO")
     assert all(len(m["vida_sha256"]) == 64 and len(m["log_sha256"]) == 64 for m in medidas)
     assert set(custos) == {m["vida"] for m in medidas} and all(set(c) == {"vida_cpu", "vida_parede"} for c in custos.values())
-    assert r["meta"]["custo"]["vidas_da_run"] == 3720 and r["meta"]["custo"]["projecao_parede_h_4_processos"] > 0
+    assert r["meta"]["custo"]["vidas_da_run"] == 3000 and r["meta"]["custo"]["projecao_parede_h_4_processos"] > 0
     assert [c["nome"] for c in r["meta"]["configs"]] == ["hoje", "eta_h_dobro"] and r["meta"]["bracos"]["CONGELADO"]["p1"] is False
     # a analise roda de ponta a ponta sobre as medidas gravadas (duas unidades: ha IC); nenhuma medida da fumaca e lida como resultado
     analise = R.analisar(medidas, R.configs_da_run(cfg))

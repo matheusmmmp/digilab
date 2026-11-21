@@ -3,13 +3,14 @@ Matheus em 2026-11-21, D-PE-1 a D-PE-6). E uma triagem, nao uma run confirmatori
 
 Pergunta (secao 2): algum numero do aprendizado, mexido sozinho, muda o bem-estar do pet ou o valor de aprender?
 
-As 31 configs (PE-3): a de hoje e cada um dos 15 genes (campos inteiros da `ConfigDigibrainInatos`) na metade e no dobro, um por vez,
+As 25 configs (PE-3): a de hoje e cada um dos 12 genes (campos inteiros da `ConfigDigibrainInatos`) na metade e no dobro, um por vez,
 cortado nos limites que a config valida. Os dois bracos de cada config (PE-2), nas mesmas sementes: o APRENDE (como hoje) e o CONGELADO
 (as subchaves `p1` e `p2` da `ConfigDigibrain` desligadas: o desfecho e o habito ficam em 0). O pet (PE-4) e o v38 do Python, o da
 PET_VIVO e da V1-a (`experiments/pv2.py`, `fabricas(..., v38=True)`): este orquestrador monta as mesmas pecas com os inatos da config e
 a `ConfigDigibrain` do braco, e confere em toda vida da config de hoje no APRENDE que o log e o do `pv2.viver("HOJE", ..., v38=True)`,
 byte a byte. As celulas: os donos atencioso e relapso x os tres lugares da V1-a (comedouro, longe, longe_fixo). 10 unidades, 14 dias:
-31 x 2 x 6 x 10 = 3 720 vidas.
+25 x 2 x 6 x 10 = 3 000 vidas. O `beta_e`, o `g_min` e o `g_max` sairam da lista por decisao do Matheus em 2026-11-21 (D-PE-7): sao
+inertes no pet v38, que tem a `modula_g_apr` desligada (o `g_apr` e o `g0`).
 
 As medidas (secao 2), pelo `digilab/metrics.py`: o "Tempo bem" (dias 1 a 14) do APRENDE; o valor do aprendizado (APRENDE - CONGELADO,
 pareado por unidade); os contrastes contra a config de hoje com o IC95 pelo t (`sensibilidade_um_por_vez`); ao lado, a saude e a
@@ -83,10 +84,11 @@ BRACOS = (APRENDE, CONGELADO)
 SUBCHAVES_CONGELADO = {"p1": False, "p2": False}              # PE-2
 HOJE = "hoje"
 FATORES = ("metade", "dobro")                                 # PE-3; PROPOSTOS, SEM FONTE
-# os 15 genes (secao 2, PE-3; PROPOSTOS, SEM FONTE), por grupo; todos sao campos inteiros da ConfigDigibrainInatos
+# os 12 genes (secao 2, PE-3; PROPOSTOS, SEM FONTE), por grupo; todos sao campos inteiros da ConfigDigibrainInatos. O `beta_e`, o
+# `g_min` e o `g_max` sairam em 2026-11-21 (D-PE-7, "Sim, tira os tres"): inertes no pet v38, com a `modula_g_apr` desligada
 GRUPOS = {"a plasticidade": ("eta_d", "eta_h", "h_max"),
           "o incentivo": ("c_g", "g_max_incentivo"),
-          "o ganho do aprendizado e do afeto": ("g0", "beta_e", "g_min", "g_max"),
+          "o ganho do aprendizado": ("g0",),
           "os pesos dos termos": ("w_pers", "w_mem", "w_lem"),
           "a disputa": ("tau_hab", "epsilon", "lambda_sono")}
 GENES = tuple(g for grupo in GRUPOS.values() for g in grupo)
@@ -122,13 +124,13 @@ class GeneSemMexer(ValueError):
     """os limites da config nao deixam o gene sair do valor de hoje"""
 
 
-# ================================================================== as 31 configs
+# ================================================================== as 25 configs
 def limites(gene: str, inatos: ConfigDigibrainInatos) -> tuple[int | None, int | None]:
     """(o minimo, o maximo) que a `ConfigDigibrainInatos.__post_init__` aceita para o gene, com os outros campos como estao; None e sem
     limite daquele lado. A propria config confere depois (o `replace` valida): uma tabela errada aqui falha alto"""
     if gene not in GENES:
         raise KeyError(f"gene {gene!r}: so {GENES}")
-    return {"g0": (inatos.g_min, inatos.g_max), "g_min": (1, inatos.g0), "g_max": (inatos.g0, None), "h_max": (1, None),
+    return {"g0": (inatos.g_min, inatos.g_max), "h_max": (1, None),
             "tau_hab": (PASSO_CEREBRO, None), "w_lem": (0, None)}.get(gene, (None, None))
 
 
@@ -163,7 +165,7 @@ def montar_configs(inatos: ConfigDigibrainInatos | None = None) -> dict:
 
 
 CONFIGS = montar_configs()
-N_VIDAS = len(CONFIGS) * len(BRACOS) * len(CELULAS) * N_BASES * K_POR_BASE      # 3 720
+N_VIDAS = len(CONFIGS) * len(BRACOS) * len(CELULAS) * N_BASES * K_POR_BASE      # 3 000
 
 
 def descricao_das_configs(configs: dict | None = None) -> list[dict]:
@@ -405,7 +407,7 @@ def exigir_aprovado(plano: str) -> None:
 
 
 def configs_da_run(cfg: dict) -> dict:
-    """as configs que a run vive: as 31, ou, so na fumaca, as que a config nomeia (sempre com a de hoje)"""
+    """as configs que a run vive: as 25, ou, so na fumaca, as que a config nomeia (sempre com a de hoje)"""
     nomes = cfg.get("configs")
     if nomes is None:
         return CONFIGS
@@ -452,7 +454,7 @@ def modo_da_config(cfg: dict) -> str:
 
 
 def projecao_h(custos: dict, processos: int = MAX_PROCESSOS) -> float:
-    """a projecao de parede da run inteira (as 3 720 vidas), pelo custo medio por vida dos registros (a fumaca)"""
+    """a projecao de parede da run inteira (as 3 000 vidas), pelo custo medio por vida dos registros (a fumaca)"""
     por_vida = sum(c["vida_parede"] for c in custos.values()) / len(custos)
     return N_VIDAS * por_vida / processos / 3600
 
