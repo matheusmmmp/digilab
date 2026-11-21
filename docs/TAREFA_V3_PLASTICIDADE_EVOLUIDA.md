@@ -43,18 +43,19 @@ Ainda não estão em `docs/referencias/`: entram num CSV próprio com o PR do E0
 
 **A pergunta:** algum número do aprendizado, mexido sozinho, muda o bem-estar do pet ou o valor de aprender?
 
-**Os genes** (15, PROPOSTOS; todos são campos inteiros da `ConfigDigibrainInatos`, PE-3):
+**Os genes** (12, PROPOSTOS; todos são campos inteiros da `ConfigDigibrainInatos`, PE-3). Eram 15: o `beta_e`, o `g_min` e o `g_max`
+saíram por decisão do Matheus em 2026-11-21 (D-PE-7), por serem inertes no pet v38, que tem a subchave `modula_g_apr` desligada:
 
 | grupo | campos |
 |---|---|
 | a plasticidade | `eta_d`, `eta_h`, `h_max` |
 | o incentivo | `c_g`, `g_max_incentivo` |
-| o ganho do aprendizado e do afeto | `g0`, `beta_e`, `g_min`, `g_max` |
+| o ganho do aprendizado | `g0` |
 | os pesos dos termos | `w_pers`, `w_mem`, `w_lem` |
 | a disputa | `tau_hab`, `epsilon`, `lambda_sono` |
 
 **As configs:** a de hoje, e cada gene na metade e no dobro do valor de hoje, um por vez (cortado nos limites que a config já valida):
-31 configs.
+25 configs.
 
 **Os dois braços de cada config** (PE-2):
 - **APRENDE:** o pet com as subchaves do aprendizado ligadas, como hoje;
@@ -68,7 +69,7 @@ Ainda não estão em `docs/referencias/`: entram num CSV próprio com o PR do E0
 **O pet e as células** (PE-4): o pet v38 do jogo, no Python (o da PET_VIVO e da V1-a). Seis células: os donos atencioso e relapso × os
 três lugares. Dez unidades, 14 dias.
 
-**O tamanho:** 31 configs × 2 braços × 6 células × 10 unidades = **3 720 vidas**. A cerca de 4 s de processo por vida (a conta da run
+**O tamanho:** 25 configs × 2 braços × 6 células × 10 unidades = **3 000 vidas** (eram 31 configs e 3 720 vidas, com os 15 genes). A cerca de 4 s de processo por vida (a conta da run
 da recompensa: 9 600 vidas em 2 h 45 min com 4 processos), dá perto de **1 h** com 4 processos. É estimativa, sem medida.
 
 **As sementes** (PE-5): 10 bases de uma faixa pedida à coordenadora antes da run. Todas as configs vivem as mesmas sementes.
@@ -83,7 +84,7 @@ da recompensa: 9 600 vidas em 2 h 45 min com 4 processos), dá perto de **1 h** 
 | algum gene muda o valor do aprendizado, e ele fica acima de 0 em alguma config | "há por onde buscar" | o plano do E1 (a busca do nível A), com os genes que mexeram |
 | só os genes da disputa mexem (`lambda_sono`, `epsilon`, `tau_hab`), e o valor do aprendizado segue em 0 | "a busca afinaria os reflexos, não o aprendizado" | a busca não se abre como plasticidade; o achado vai para a frente do corpo |
 
-**"Além do ruído":** o IC95 do contraste pareado contra a config de hoje não contém 0. Com 10 unidades e 30 contrastes, alguns passam por
+**"Além do ruído":** o IC95 do contraste pareado contra a config de hoje não contém 0. Com 10 unidades e 24 contrastes, alguns passam por
 acaso: o resultado diz quantos seriam esperados (1 ou 2) e não trata um gene isolado como achado.
 
 **O que o E0 não diz:** nada sobre interações entre genes (ele mexe um por vez), nada sobre donos e lugares fora das seis células, e nada
@@ -121,7 +122,7 @@ confirmatório.
 |---|---|---|---|
 | PE-1 | rodar o E0 antes de qualquer busca | **sim** | pular: cerca de 9 h de busca sem saber se há o que achar |
 | PE-2 | os dois braços (APRENDE e CONGELADO) | **sim:** dobra as vidas, mas mede o valor de aprender | só o APRENDE: não separa "o número mexeu no reflexo" de "mexeu no aprendizado" |
-| PE-3 | os 15 genes da seção 2 | **estes,** um por vez, na metade e no dobro | uma lista maior: mais vidas; menor: um gene que importa fica de fora |
+| PE-3 | os 15 genes da seção 2; **12 desde 2026-11-21:** o `beta_e`, o `g_min` e o `g_max` saíram por decisão do Matheus ("Sim, tira os três", D-PE-7), inertes no v38 com a `modula_g_apr` desligada | **estes,** um por vez, na metade e no dobro | uma lista maior: mais vidas; menor: um gene que importa fica de fora |
 | PE-4 | o pet e as células | **o v38, 2 donos × 3 lugares, 10 unidades** | o pet da bancada: o resultado não vale para o pet do jogo (a lição da V1-a) |
 | PE-5 | as sementes | **10 bases de uma faixa pedida à coordenadora** | as sementes dos testes: são só 5 bases, e já foram vistas |
 | PE-6 | quem executa | **uma sessão lateral, com a revisão do Gerente;** o merge e o ok para rodar são do Matheus | — |
@@ -152,3 +153,6 @@ Escrito por uma sessão lateral da Gerência da V3 (Claude Code, Fable 5.2). **N
 - **Achado para decidir antes da run (D-PE-7):** o `beta_e`, o `g_min` e o `g_max` não chegam a nenhuma conta no pet v38, porque a
   subchave `modula_g_apr` está desligada nele. As 6 configs deles repetem a de hoje (720 das 3 720 vidas). A lista da PE-3 não foi mudada.
 - **Falta para rodar:** a vez na máquina (depois do D0 do pet que pensa e da triagem da V1-a) e o ok do Matheus.
+- **Depois do PR do código (2026-11-21):** o Matheus decidiu tirar os três genes inertes ("Sim, tira os três", D-PE-7). O E0 ficou com 12
+  genes, 25 configs e 3 000 vidas; os números desta seção que falam em 31 configs e 3 720 vidas são os de antes. Pelo custo medido na
+  fumaça, as 3 000 vidas com 4 processos projetam 1,4 h pela parede e cerca de 0,8 h pela CPU.
