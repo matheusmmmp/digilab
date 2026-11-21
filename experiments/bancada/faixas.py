@@ -255,6 +255,10 @@ FAIXAS_RESERVADAS = (
                      "digibrain_prototipo), os bracos CTRL e DTB no pet v38 do Python, nas 12 celulas da C4, sem os pares "
                      "(docs/PLANO_ANALISE_V3_CORPO_V1.md, secao 4; D-V1A-8, o plano aprovado pelo Matheus em 2026-11-21, \"Aprovo "
                      "todas\"; a faixa confirmada pela coordenadora em 2026-11-21, conferida livre na origin/main (60083c60) e nos PRs abertos)"),
+    (110001, 110200, "PLASTICIDADE_EVOLUIDA: 200 bases reservadas pela coordenadora em 2026-11-21 para a tarefa "
+                     "(docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md, PE-5). O E0, o teste de sensibilidade, usa so as 10 primeiras, "
+                     "110001...110010 (k = 1, prefixo digibrain_prototipo, experiments/run_v3_plasticidade_e0.py); as outras ficam para "
+                     "o E1, se ele vier, com plano proprio"),
 )
 
 
