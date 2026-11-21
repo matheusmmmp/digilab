@@ -8,7 +8,8 @@
    O primeiro acesso (o cookie dl_pendente, 15 min; nada fica guardado até "Criar a conta"):
      GET  /conta/primeiro-acesso           {apelido, digimons, idades, versao_termos, versao_privacidade, provedor, csrf}
      POST /conta/primeiro-acesso/apelido   {digimon}: troca o Digimon, o número sai por sorteio
-     POST /conta/primeiro-acesso           {idade, aceite: {termos, privacidade}, aparelho?}: cria a conta, ou 403 menos_de_18 (e esquece)
+     POST /conta/primeiro-acesso           {idade, aceite: {termos, privacidade}, aparelho?, turnstile?}: cria a conta, ou 403 menos_de_18
+                                           (e esquece); com o Turnstile ligado (CN4), o token do widget é obrigatório (403 turnstile)
      POST /conta/primeiro-acesso/cancelar  esquece o acesso pendente
    A conta (o cookie dl_sessao):
      GET    /conta                         {conta, provedores, consentimentos, aparelho, csrf}
@@ -31,6 +32,7 @@ import { desafiosDaConta } from "../desafio/desafio.ts";
 import { premiosDaConta } from "../premios/premios.ts";
 import { pontuacoesDaConta } from "../premios/rankings.ts";
 import { nuvemDaConta } from "../nuvem/nuvem.ts";
+import { cotaDaConta } from "../protecao/cota.ts";
 import { transacao } from "./banco.ts";
 import type { ConfigConta } from "./config.ts";
 import { paginaAutorizarFalso, paginaDevConta } from "./paginas.ts";
@@ -266,7 +268,9 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
     const p = pendenteDe(c);
     if (!p) return json(c, 401, { erro: "sem acesso pendente (entre de novo)" });
     return json(c, 200, { apelido: p.apelido, digimons: ROOKIES, idades: IDADES, versao_termos: cfg.versaoTermos,
-      versao_privacidade: cfg.versaoPrivacidade, provedor: p.provedor, csrf: p.csrf, expira_em: iso(p.expira_em) });
+      versao_privacidade: cfg.versaoPrivacidade, provedor: p.provedor, csrf: p.csrf, expira_em: iso(p.expira_em),
+      /* a chave do site do Turnstile (CN4), pública: a tela desenha o widget com ela; null, desligado */
+      turnstile: cfg.protecao.turnstile?.chaveSite ?? null });
   });
 
   app.post("/conta/primeiro-acesso/apelido", async c => {
@@ -295,6 +299,11 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
     const d = await lerCorpo(c);
     if (d instanceof Response) return d;
     if (!IDADES.includes(d.idade as typeof IDADES[number])) return json(c, 400, { erro: "idade: 18_ou_mais ou menos_de_18", idades: IDADES });
+    /* o Turnstile (CN4) antes de qualquer coisa: o acesso pendente fica, para tentar de novo com outro token */
+    if (cfg.protecao.turnstile !== null) {
+      const t = await cfg.protecao.turnstile.conferir(d.turnstile, "cadastro");
+      if (!t.ok) return json(c, t.motivo === "indisponivel" ? 503 : 403, { estado: "turnstile", erro: "o Turnstile não passou", motivo: t.motivo, codigos: t.codigos });
+    }
     const esquecer = () => {
       banco.prepare("DELETE FROM acessos_pendentes WHERE token_hash = ?").run(p.token_hash);
       deleteCookie(c, COOKIE_PENDENTE, { path: "/", secure: cfg.cookieSeguro });
@@ -390,6 +399,8 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
       pontuacoes: pontuacoesDaConta(banco, s.conta_id),
       /* o save na nuvem (CN3): o pet sem o registro, as cópias, as histórias não escolhidas e as divergências, só as linhas */
       nuvem: nuvemDaConta(banco, s.conta_id),
+      /* a cota da fala (CN4): quantas falas pela LLM em cada dia (só o número; a fala não se guarda) */
+      cota_fala: cotaDaConta(banco, s.conta_id),
       nao_guardamos: ["o nome", "o e-mail", "o lugar", "a fala", "a senha (não há senha)"],
     };
     const arquivo = `digilab-conta-${conta.apelido.replace(/[^A-Za-z0-9_-]/g, "-")}.json`;

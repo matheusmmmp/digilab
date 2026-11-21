@@ -1,0 +1,121 @@
+# Publica o servidor e o jogo a partir da main (CN5, docs/infra/DEPLOY_CN5.md, seção 7). DESLIGADO até o Matheus contratar e configurar:
+# só roda com a variável do repositório DIGILAB_PUBLICAR = "sim", e os segredos ficam no ambiente "teste" do GitHub (nunca no repositório).
+#   - o servidor: os tipos e o Vitest; o pacote (git archive do commit) conferido numa pasta limpa; o envio pelo SSH à VPS, com a chave do
+#     host fixada; o deploy em /usr/local/sbin/digilab-publicar, que volta para a versão de antes se a /saude não responder;
+#   - o jogo: os tipos, o Vitest e o build com a API do domínio e as URLs assinadas da CN4 ligadas; o Cloudflare Pages, com o jogo em
+#     /jogo/ (RC-6); e o Worker dos assets (servidor_web/deploy/worker_assets), na frente do bucket privado (D-CONTA-199 revista).
+# Os assets (o atlas, os sons) não estão no git e não passam por aqui: sobem da máquina do Matheus (web/app/scripts/publicar_assets.ts).
+name: publicar
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - servidor_web/**
+      - web/app/**
+      - .github/workflows/publicar.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# uma publicação por vez, e a que está no meio não é cortada
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  servidor:
+    if: vars.DIGILAB_PUBLICAR == 'sim'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: teste
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.19.0"
+          cache: npm
+          cache-dependency-path: servidor_web/package-lock.json
+      - name: Tipos e Vitest
+        working-directory: servidor_web
+        run: |
+          npm ci --no-audit --no-fund
+          npm run tipos
+          npm test
+      - name: O pacote, conferido numa pasta limpa
+        run: |
+          set -euo pipefail
+          bash servidor_web/deploy/montar_pacote.sh "$RUNNER_TEMP/pacote.tar.gz"
+          mkdir "$RUNNER_TEMP/limpo"
+          tar -xzf "$RUNNER_TEMP/pacote.tar.gz" -C "$RUNNER_TEMP/limpo"
+          bash servidor_web/deploy/conferir_pacote.sh "$RUNNER_TEMP/limpo"
+      - name: Enviar à VPS e publicar
+        env:
+          SSH_CHAVE: ${{ secrets.DIGILAB_SSH_CHAVE }}
+          SSH_HOST_CHAVE: ${{ secrets.DIGILAB_SSH_HOST_CHAVE }}
+          SSH_DESTINO: ${{ secrets.DIGILAB_SSH_DESTINO }}
+        run: |
+          set -euo pipefail
+          for v in SSH_CHAVE SSH_HOST_CHAVE SSH_DESTINO; do [ -n "${!v}" ] || { echo "falta o segredo de $v"; exit 1; }; done
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_CHAVE" > ~/.ssh/digilab && chmod 600 ~/.ssh/digilab
+          printf '%s\n' "$SSH_HOST_CHAVE" > ~/.ssh/known_hosts
+          o="-i $HOME/.ssh/digilab -o StrictHostKeyChecking=yes -o BatchMode=yes"
+          scp $o "$RUNNER_TEMP/pacote.tar.gz" "$SSH_DESTINO:/tmp/digilab-$GITHUB_SHA.tar.gz"
+          ssh $o "$SSH_DESTINO" "sudo /usr/local/sbin/digilab-publicar /tmp/digilab-$GITHUB_SHA.tar.gz $GITHUB_SHA"
+
+  jogo:
+    needs: servidor
+    if: vars.DIGILAB_PUBLICAR == 'sim'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: teste
+    defaults:
+      run:
+        working-directory: web/app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.19.0"
+          cache: npm
+          cache-dependency-path: web/app/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Tipos e Vitest
+        run: |
+          npm run tipos
+          npm test
+      - name: Build com os endereços do domínio
+        env:
+          DOMINIO: ${{ vars.DIGILAB_DOMINIO }}
+          VITE_DIGILAB_NUVEM: ${{ vars.DIGILAB_NUVEM }}
+          VITE_DIGILAB_MARCO_RANQUEADA: ${{ vars.DIGILAB_MARCO_RANQUEADA }}
+        run: |
+          set -euo pipefail
+          [[ "$DOMINIO" =~ ^[a-z0-9.-]+\.[a-z]{2,}$ ]] || { echo "DIGILAB_DOMINIO inválido: '$DOMINIO'"; exit 1; }
+          export VITE_DIGILAB_API="https://api.$DOMINIO" VITE_DIGILAB_PROTECAO=1
+          npm run build
+          bash ../../servidor_web/deploy/montar_site.sh ../dist "$RUNNER_TEMP/site"
+      - name: Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJETO: ${{ vars.DIGILAB_PAGES_PROJETO }}
+        run: |
+          set -euo pipefail
+          [ -n "$PROJETO" ] || { echo "falta a variável DIGILAB_PAGES_PROJETO"; exit 1; }
+          npx --yes wrangler@4.158.0 pages deploy "$RUNNER_TEMP/site" --project-name "$PROJETO" --branch main --commit-hash "$GITHUB_SHA"
+      - name: O Worker dos assets
+        working-directory: servidor_web/deploy/worker_assets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DOMINIO: ${{ vars.DIGILAB_DOMINIO }}
+          BUCKET: ${{ vars.DIGILAB_R2_BUCKET_ASSETS }}
+        run: |
+          set -euo pipefail
+          [[ "$BUCKET" =~ ^[a-z0-9-]{3,63}$ ]] || { echo "DIGILAB_R2_BUCKET_ASSETS inválido: '$BUCKET'"; exit 1; }
+          sed -e "s/<DOMINIO>/$DOMINIO/g" -e "s/<BUCKET>/$BUCKET/g" wrangler.modelo.toml > wrangler.toml
+          # o segredo (DIGILAB_SEGREDO_ASSETS) já está no Worker (wrangler secret put, uma vez); o deploy não o toca
+          npx --yes wrangler@4.158.0 deploy
