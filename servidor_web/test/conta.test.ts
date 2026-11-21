@@ -124,9 +124,9 @@ describe("os provedores reais sem as chaves", () => {
   });
   it("o provedor falso não liga fora do local, e o local sem lista deixa só a ana", () => {
     expect(() => configDoAmbiente({ porta: 1, banco: abrirBanco(":memory:"), ambiente: { DIGILAB_URL_API: "https://api.exemplo.test",
-      DIGILAB_URL_JOGO: "https://exemplo.test/jogo/", DIGILAB_PROVEDOR_FALSO: "1" } })).toThrow(/falso só liga no local/);
+      DIGILAB_URL_JOGO: "https://exemplo.test/jogo/", DIGILAB_PROVEDOR_FALSO: "1", DIGILAB_TURNSTILE: "0" } })).toThrow(/falso só liga no local/);
     const fora = configDoAmbiente({ porta: 1, banco: abrirBanco(":memory:"), ambiente: { DIGILAB_URL_API: "https://api.exemplo.test",
-      DIGILAB_URL_JOGO: "https://exemplo.test/jogo/" } });
+      DIGILAB_URL_JOGO: "https://exemplo.test/jogo/", DIGILAB_TURNSTILE: "0" } });
     expect(fora.provedores.has("falso")).toBe(false);
     expect(fora.cookieSeguro).toBe(true);
     expect(() => configDoAmbiente({ porta: 1, banco: abrirBanco(":memory:"), ambiente: { DIGILAB_URL_API: "http://api.exemplo.test" } })).toThrow(/https/);
@@ -380,7 +380,7 @@ describe("baixar os meus dados", () => {
     const texto = await r.text();
     const d = JSON.parse(texto);
     expect(d.formato).toBe("digilab-conta-dados-v1");
-    expect(Object.keys(d)).toEqual(["formato", "gerado_em", "conta", "identidades", "consentimentos", "aparelhos", "sessoes", "envios", "sementes", "desafio", "premios", "pontuacoes", "nuvem", "nao_guardamos"]);
+    expect(Object.keys(d)).toEqual(["formato", "gerado_em", "conta", "identidades", "consentimentos", "aparelhos", "sessoes", "envios", "sementes", "desafio", "premios", "pontuacoes", "nuvem", "cota_fala", "nao_guardamos"]);
     expect(d.identidades).toEqual([{ provedor: "falso", id_provedor: "id-ana", criada_em: expect.any(String) }]);
     expect(d.aparelhos).toHaveLength(1);
     expect(d.sessoes).toEqual([{ aparelho_id: d.aparelhos[0].id, criada_em: expect.any(String), expira_em: expect.any(String) }]);

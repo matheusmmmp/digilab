@@ -8,12 +8,15 @@
      DIGILAB_MARCO_RANQUEADA  o marco do Tamer que abre o pedido da semente ranqueada (MMO4): o padrão é o 10, o primeiro Mega (MMO-13); no
                               ambiente do beta, o 7 (BT0-1, D-CONTA-76). Só os marcos do registro do Tamer (MARCOS_DO_TAMER)
      GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET   os apps OAuth (sem elas, o provedor fica desligado)
+   A proteção (CN4: as URLs assinadas dos assets, o Turnstile e a cota da fala) tem as variáveis dela em src/protecao/config.ts.
    "Local" é a API em http:// num endereço de loopback (127.0.0.1, localhost, [::1]). Fora do local, a API tem de ser https://, o cookie
    leva Secure, e o provedor falso não liga (levanta). */
 import { fileURLToPath } from "node:url";
 import { MARCO_MEGA } from "../../../web/app/src/tamer.ts";
 import { abrirBanco, type Banco } from "./banco.ts";
 import { Convidados, lerListaAmbiente } from "./convidados.ts";
+import { protecaoDoAmbiente, type ConfigProtecao } from "../protecao/config.ts";
+import type { Buscar as BuscarTurnstile } from "../protecao/turnstile.ts";
 import { ProvedorFalso, provedoresReais, type Buscar, type NomeProvedor, type Provedor } from "./provedores.ts";
 
 export const BANCO_PADRAO = fileURLToPath(new URL("../../dados/conta.sqlite", import.meta.url));
@@ -40,6 +43,8 @@ export interface ConfigConta {
   agora: () => number;
   /** o marco do Tamer que abre o pedido da semente ranqueada (MMO4) */
   marcoRanqueada: number;
+  /** a proteção (CN4, src/protecao/config.ts): as URLs assinadas, o Turnstile e a cota da fala */
+  protecao: ConfigProtecao;
 }
 
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "[::1]"]);
@@ -55,9 +60,11 @@ export interface OpcoesConfig {
   banco?: Banco;
   buscar?: Buscar;
   agora?: () => number;
+  /** o fetch do siteverify do Turnstile (o falso nos testes) */
+  buscarTurnstile?: BuscarTurnstile;
 }
 
-export function configDoAmbiente({ porta, ambiente = process.env, banco, buscar, agora = Date.now }: OpcoesConfig): ConfigConta {
+export function configDoAmbiente({ porta, ambiente = process.env, banco, buscar, agora = Date.now, buscarTurnstile }: OpcoesConfig): ConfigConta {
   const urlApi = (ambiente.DIGILAB_URL_API?.trim() || `http://127.0.0.1:${porta}`).replace(/\/+$/, "");
   const local = ehLocal(urlApi);
   if (!local && new URL(urlApi).protocol !== "https:") throw new Error(`DIGILAB_URL_API fora do local precisa de https://: ${urlApi}`);
@@ -80,10 +87,11 @@ export function configDoAmbiente({ porta, ambiente = process.env, banco, buscar,
   if (!MARCOS_DO_TAMER.includes(marcoRanqueada))
     throw new Error(`DIGILAB_MARCO_RANQUEADA é um dos marcos do Tamer (${MARCOS_DO_TAMER.join(", ")}): ${textoMarco}`);
 
+  const protecao = protecaoDoAmbiente(ambiente, local, urlApi, buscarTurnstile);
   const b = banco ?? abrirBanco(ambiente.DIGILAB_BANCO?.trim() || BANCO_PADRAO);
   const provedores = new Map<NomeProvedor, Provedor>();
   for (const p of provedoresReais(ambiente, buscar)) provedores.set(p.nome, p);
   if (falso) provedores.set("falso", new ProvedorFalso(urlApi, agora));
   return { banco: b, provedores, convidados: new Convidados(b, lista), urlApi, urlJogo, origemJogo, local, cookieSeguro: !local,
-    versaoTermos: VERSAO_TERMOS, versaoPrivacidade: VERSAO_PRIVACIDADE, agora, marcoRanqueada };
+    versaoTermos: VERSAO_TERMOS, versaoPrivacidade: VERSAO_PRIVACIDADE, agora, marcoRanqueada, protecao };
 }

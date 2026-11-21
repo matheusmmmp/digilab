@@ -135,6 +135,8 @@ def test_as_medidas_de_uma_vida(celula):
     assert m["carinhos_a_mais"] == m["decisoes_comer"] + m["decisoes_brincar"] == m["credito"]["n"]
     assert 0 <= m["tempo_bem"] <= 1 and m["credito"]["sinal_negativo"] == 0
     assert RR.medir("R0", DIAS, celula["R0"])["credito"] is None
+    for nome, f in RR.MEDIDAS.items():                        # D-RC-15: toda medida da analise sai do registro de uma vida de verdade
+        f(m)
 
 
 # ------------------------------------------------------------------ as regras de leitura (secao 7)
@@ -174,7 +176,7 @@ def _registro(braco, dono, lugar, semente, acordado, carinhos=120, movem=60):
     credito = {"n": carinhos, "sinal_zero": 0, "sinal_negativo": 0, "sem_decisao": 0, "creditos": carinhos, "creditos_movem": movem,
                "fracao_movem": movem / carinhos} if braco in rec.COM_CREDITO else None
     return {"braco": braco, "dono": dono, "lugar": lugar, "semente": semente, "t_acordado": acordado, "t_acordado_8_14": acordado,
-            "tempo_bem": 0.9, "saude_media": 0.8, "episodios_fome": {"taxa": None}, "decisoes_comer": 60, "decisoes_brincar": 60,
+            "tempo_bem": 0.9, "episodios_fome": {"taxa": None}, "decisoes_comer": 60, "decisoes_brincar": 60,
             "sono": {"F_PESOS_DEC": 0.1}, "habito": {"comer": 0, "brincar": 0},
             "carinhos_a_mais": 0 if braco == "R0" else carinhos, "credito": credito}
 

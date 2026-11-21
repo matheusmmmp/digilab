@@ -358,6 +358,16 @@ export const MIGRACOES: readonly string[] = [
   ) STRICT;
   CREATE INDEX nuvem_historias_conta ON nuvem_historias(conta_id, criada_em);
   `,
+  /* 10: a cota da fala (CN4, servidor_web/src/protecao/cota.ts): quantas falas pela LLM a conta usou em cada dia de Brasília. Só o número,
+     nunca o texto (a fala não se guarda, seção 9 do plano). Pende da conta */
+  `
+  CREATE TABLE cota_fala (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    dia       TEXT NOT NULL,
+    usadas    INTEGER NOT NULL CHECK (usadas >= 0),
+    PRIMARY KEY (conta_id, dia)
+  ) STRICT;
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;
