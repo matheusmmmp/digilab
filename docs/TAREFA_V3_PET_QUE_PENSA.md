@@ -1,8 +1,9 @@
 # Tarefa V3: o pet que pensa (o planejador no modular)
 
-**Status: PROPOSTO, só papel.** Escrito pelo Gerente da V3 (Claude Code, Opus 5.5) em 2026-11-21. O pedido é do Matheus: "Eu quero já partir
-para a parte do pet que pensa", e, à pergunta de quem escreve o desenho, "Você escreve". **Nenhum código e nenhuma vida antes de as
-PQ3-1 a PQ3-9 (seção 8) serem decididas.**
+**Status: APROVADO pelo Matheus em 2026-11-21** ("Aprovo todas", à pergunta "Aprova as PQ3-1 a PQ3-9 pela recomendação?").
+Escrito pelo Gerente da V3 (Claude Code, Opus 5.5) em 2026-11-21. O pedido é do Matheus: "Eu quero já partir para a parte do pet que
+pensa", e, à pergunta de quem escreve o desenho, "Você escreve". **As PQ3-1 a PQ3-9 (seção 8) estão DECIDIDAS pela recomendação.** Os
+números novos seguem PROPOSTOS e SEM FONTE. Nenhuma vida roda antes do código da P2 na `main` e do ok do Matheus para cada degrau.
 
 **Regras desta tarefa:**
 - Os números novos são PROPOSTOS e SEM FONTE, salvo onde citam um artefato.
@@ -179,7 +180,7 @@ replicado, deu +0,062 e **não passaria**.
 
 | etapa | o quê | quem decide |
 |---|---|---|
-| **P0** | esta tarefa (papel) | o Matheus, as PQ3-1 a PQ3-9 |
+| **P0** | esta tarefa (papel) | FEITA: aprovada em 2026-11-21 |
 | **P1** | o D0: o replay descritivo, sem vida nova | depois da P0 |
 | **P2** | o código do M-PLAN atrás de chave (o modelo do corpo, o termo `plano`, a sonda, o piso), no Python, com testes e o G2 (com `g_plano` = 0, o log igual ao de hoje, bit a bit) | o merge |
 | **P3** | o D1, a triagem | o ok para rodar |
@@ -194,7 +195,7 @@ replicado, deu +0,062 e **não passaria**.
 - **VALUATION (a coordenadora):** o reflexo suave da C5 é a peça que a PQ3-4 reusa.
 - **SOCIAL_PAR:** pausada. O outro pet pode entrar no modelo depois, como no J5 (fora da primeira versão).
 
-## 8. As decisões do Matheus
+## 8. As decisões do Matheus (DECIDIDAS em 2026-11-21, "Aprovo todas", pela recomendação)
 
 | nº | decisão | recomendação | custo de errar |
 |---|---|---|---|
