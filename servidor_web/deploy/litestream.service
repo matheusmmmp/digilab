@@ -1,0 +1,22 @@
+# A cópia contínua do SQLite para o R2 (CH-4, CN5). A configuração é a litestream.yml desta pasta, instalada em /etc/litestream.yml; as
+# chaves do R2 ficam em /etc/digilab/litestream.env (fora do git, modo 600).
+[Unit]
+Description=Litestream: a cópia do banco do Digilab para o R2
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=digilab
+Group=digilab
+EnvironmentFile=/etc/digilab/litestream.env
+ExecStart=/usr/local/bin/litestream replicate -config /etc/litestream.yml
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/digilab
+
+[Install]
+WantedBy=multi-user.target

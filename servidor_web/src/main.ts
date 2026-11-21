@@ -6,11 +6,12 @@
    A chave so no ambiente (ANTHROPIC_API_KEY). O teto e TOTAL e acumulado no mesmo arquivo do servidor Python (servidor/gasto_fala.json,
    fora do git), para os dois servidores somarem um teto so; DIGILAB_GASTO_FALA troca o arquivo. So escuta em 127.0.0.1.
    A conta (CN2) pelas variaveis de src/conta/config.ts (DIGILAB_BANCO, DIGILAB_URL_API, DIGILAB_URL_JOGO, DIGILAB_CONVIDADOS, as chaves
-   dos apps OAuth); no local, o provedor falso liga sozinho e a pagina de teste fica em /dev/conta. --sem-conta sobe so a CN1. */
+   dos apps OAuth); no local, o provedor falso liga sozinho e a pagina de teste fica em /dev/conta. --sem-conta sobe so a CN1.
+     npm start -- --borda cloudflare               # na VPS (CN5): so pelo Cloudflare Tunnel; tambem por DIGILAB_BORDA */
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { serve } from "@hono/node-server";
-import { criarApp } from "./app.ts";
+import { BORDAS, criarApp, type Borda } from "./app.ts";
 import { configDoAmbiente } from "./conta/config.ts";
 import { CATALOGO } from "./catalogo.ts";
 import { criarClienteClaude, GeradorFala, ProvedorClaude } from "./fala.ts";
@@ -26,6 +27,7 @@ const { values: a } = parseArgs({
     modelo: { type: "string" },
     "limite-usd": { type: "string", default: String(CATALOGO.limite_usd_padrao) },
     "sem-conta": { type: "boolean", default: false },
+    borda: { type: "string", default: process.env.DIGILAB_BORDA?.trim() || "local" },
   },
   strict: true,
 });
@@ -33,6 +35,8 @@ const { values: a } = parseArgs({
 const porta = Number(a.porta), limite = Number(a["limite-usd"]);
 if (!Number.isInteger(porta) || porta <= 0 || porta > 65535) throw new Error(`--porta invalida: ${a.porta}`);
 if (!Number.isFinite(limite) || limite < 0) throw new Error(`--limite-usd invalido: ${a["limite-usd"]}`);
+if (!(BORDAS as readonly string[]).includes(a.borda)) throw new Error(`--borda desconhecida: ${a.borda} (${BORDAS.join(" ou ")})`);
+const borda = a.borda as Borda;
 if (!["auto", "claude", "nenhum"].includes(a.provedor)) throw new Error(`--provedor desconhecido: ${a.provedor} (auto, claude ou nenhum)`);
 
 let gerador: GeradorFala, motivo = "", estado: string;
@@ -58,8 +62,14 @@ const conta = a["sem-conta"] ? undefined : configDoAmbiente({ porta });
 const estadoConta = conta === undefined ? "sem conta (--sem-conta)"
   : [...conta.provedores.values()].map(p => { const [ligado, m] = p.estado(); return ligado ? `${p.nome}: ligado` : `${p.nome}: desligado (${m})`; }).join("; ");
 
-serve({ fetch: criarApp({ gerador, motivoInicial: motivo, conta }).fetch, hostname: "127.0.0.1", port: porta }, info => {
+serve({ fetch: criarApp({ gerador, motivoInicial: motivo, conta, borda }).fetch, hostname: "127.0.0.1", port: porta }, info => {
   console.log(`Digilab servidor_web em http://127.0.0.1:${info.port}  (/saude, /api/fala/status, POST /api/fala)  [${estado}]`);
   console.log(`  conta: ${estadoConta}`);
+  console.log(`  borda: ${borda}${borda === "cloudflare" ? " (so pelo Cloudflare Tunnel)" : ""}`);
+  if (conta) {
+    const p = conta.protecao;
+    console.log(`  proteção: assets assinados ${p.segredoAssets ? `ligados (${p.urlAssets}, ${p.validadeAssetsS} s)` : `desligados (${p.motivoAssets})`}; `
+      + `Turnstile ${p.turnstile ? "ligado" : "desligado"}; cota da fala ${p.cotaFalaDia} por conta por dia; fala sem conta: ${p.falaSoComConta ? "só template" : "segue o teto total"}`);
+  }
   if (conta?.local) console.log(`  teste do fluxo da conta: ${conta.urlApi}/dev/conta`);
 });
