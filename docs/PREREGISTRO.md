@@ -35,8 +35,9 @@ link para o plano commitado.
 | [PR-CORPO-C2](#pr-corpo-c2--a-ablação-do-corpo) | a ablação do corpo (CORPO C2) | os três braços em "perda" | não |
 | [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
 | [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | "confirma com ressalva" (a célula do aleatório no comedouro) | não |
+| [PR-CORPO-V1](#pr-corpo-v1--o-teto-baixo-no-pet-do-jogo) | o teto baixo no pet do jogo (CORPO V1-a) | ainda não rodou | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
-| [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | a rodar | não |
+| [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | rodado em 2026-11-20 | não |
 
 ## PR-C1 — o longe regular
 
@@ -243,6 +244,24 @@ Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). As linhas "resultado"
 | resultado | [RESULTADO_V3_CORPO_C4.md](RESULTADO_V3_CORPO_C4.md): **"confirma com ressalva"**. A primária "> 0" nas 12 células (+0,062 [+0,058; +0,067]) e nas 11 (+0,064 [+0,059; +0,068]), com p ≤ 0,025; nenhuma das sete guardas reprova; todas as premissas se cumprem; a saúde cai na célula do aleatório no comedouro (−0,049 [−0,061; −0,038]). As três hipóteses confirmam. O replay da fome ([`artifacts_v3_corpo/c4_fome/`](../artifacts_v3_corpo/c4_fome/), rodado em 2026-11-20; `resumo.json` `215533cc…`) é um descritivo acrescentado depois da aprovação e fora desta regra de leitura |
 | artefatos | [`artifacts_v3_corpo/c4/`](../artifacts_v3_corpo/c4/): `meta.json`, `resultado.json` `136c3048…`, `medidas.json` `c20881a8…`, `pares.json` `7cae1e19…`, `custos.json`, `vidas.tar.gz` `aabebacc…`, `pares.tar.gz` `35fc3804…`; run no commit `64a25595` |
 
+## PR-CORPO-V1 — o teto baixo no pet do jogo
+
+Escrita antes da run (2026-11-21, Claude Code, Fable 5.2). As linhas "resultado" e "artefatos" entram depois dela.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_CORPO_V1.md`](https://github.com/matheusmmmp/digilab/blob/3c2236674500f9fbe17efab95037d8de9b46a4e4/docs/PLANO_ANALISE_V3_CORPO_V1.md), APROVADO pelo Matheus em 2026-11-21 ("Aprovo todas", D-V1A-1 a D-V1A-9), no commit `3c2236674500f9fbe17efab95037d8de9b46a4e4`; PROPOSTO no `51f02fe9` |
+| hipótese | H1: DTB − CTRL no "Tempo bem" é "> 0", nas 12 células e nas 11 distintas, no pet v38. H2: nenhuma guarda reprova. H3: a saúde do DTB continua abaixo da do CTRL na célula do aleatório no comedouro. **A previsão do plano, escrita antes: "não confirma"**, com a primária em "≈ 0" (seção 1) |
+| células | as 12 da C4 do modular (4 donos × comedouro, longe e `longe_fixo`), das quais 11 distintas; braços CTRL e DTB (a ponte da D com teto em C/2, 225 000, SEM FONTE) no pet v38 do Python (os inatos do E1, o "sono que segura", o lance do dono e o equilíbrio do cuidado; sem a TV, a ilha grande e a memória de 128 células); 14 dias, orçamento 16; sem os pares (seções 2 a 4) |
+| sementes | 109001…109200 (200 unidades, k = 1, 4 800 vidas), da faixa 109001…109200 (seção 4) |
+| contraste primário | DTB − CTRL no "Tempo bem" (a fração das decisões dos dias 1 a 14 sem privação e sem exaustão), a média das células por unidade, pareado, IC95 pelo t, p unilateral com α = 0,025; nas 12 células e nas 11 distintas, e só passa se sair "> 0" nas duas (seção 6) |
+| regra de leitura | a da C4 sem o S2, com as classes de A6.6 e δ = 0,032 (SEM FONTE, sem mudar): "confirma", "confirma com ressalva" (alguma das 6 células do relapso e do aleatório com a saúde "< 0"), "não confirma" (a primária fora do "> 0", inclusive "≈ 0" com o sinal positivo, ou alguma guarda reprova: a saúde, a taxa por episódio, o "Tempo bem" por lugar) ou "indeterminado". Uma premissa da seção 5.2 abaixo do piso deixa a medida "inconclusiva por premissa" |
+| regra de parada | "A run roda uma vez. Nada se ajusta olhando para ela" (seção 4); "não confirma" ou "indeterminado" ficam registrados, a V1 para e a run não se repete (seção 9) |
+| o que refutaria | pela regra de leitura: a primária "≈ 0" ou "< 0" nas 12 ou nas 11 células, ou "> 0" sem o p; ou alguma guarda reprovando |
+| já visto antes da run | a run da C4 no pet da bancada (+0,062 [+0,058; +0,067]); e uma contagem nas sementes dos testes com o pet v38 (120 vidas, 5 unidades, sem artefato versionado): DTB − CTRL +0,016 [−0,003; +0,035] nas 12 células, de onde vem a previsão (seções 0, 1 e 5.2) |
+| resultado | a run ainda não rodou |
+| artefatos | `artifacts_v3_corpo/v1a/`, depois da run |
+
 ## PR-REPLICACAO-C4 — a réplica da C4
 
 | campo | valor |
@@ -338,8 +357,8 @@ que vale é o do plano, no commit citado.
 | regra de leitura | a tabela da seção 7, em ordem: o G-DET falha, "o substrato não deixa ver"; a PM-1 falha e ≈ 0, "inconclusivo por premissa"; ≈ 0, "nulo com um instrumento que vê"; fora de ±δ_A, "o parceiro responde"; indeterminado, registrado como está. A atribuição e o conjunto pelo B1 |
 | regra de parada | não declarada no plano; a mais perto: o código (MD1) e a run (MD2) em PRs separados (MD-8), e o orquestrador para no primeiro par em que o G-INSTR ou o G1 falha |
 | o que refutaria | pela regra de leitura: no B1, o M1+M2 em "nulo com um instrumento que vê", ou o C-APR ≈ 0, contrariam a previsão |
-| resultado | a rodar |
-| artefatos | a rodar (`artifacts_v3_social_par_md/run/`) |
+| resultado | [RESULTADO_V3_SOCIAL_PAR_MD.md](RESULTADO_V3_SOCIAL_PAR_MD.md) (rodado em 2026-11-20): no B1, o G-DET passa e o D_A < 0 nas quatro células (M1+M2 −6,79 [−9,32; −4,26]; M1 −9,16 [−12,52; −5,79]); o C-APR \| B1 ≈ 0 (−0,27 [−1,38; +0,85]) e o C-APR1 \| B1 ≈ 0; a PM-1 passa (0,98); no C, o G-DET falha nas quatro, "o substrato não deixa ver"; o conjunto: "a resposta vem das unidades a mais ou da companhia no corpo, não do aprendizado"; a previsão do C-APR < 0 não se confirmou; a run com `git_limpo: false` (D-SP-75), e a réplica com a árvore limpa igual byte a byte |
+| artefatos | [`artifacts_v3_social_par_md/run/`](../artifacts_v3_social_par_md/run/): `meta.json`, `resultado.json` `604bc9ce…`, `medidas.json` `c6b61b90…`, os 2.000 pares em `vidas/`; o meta da réplica limpa `meta_replica_limpa.json` |
 
 ## Como replicar uma run (`tools/replicar_run.py`)
 

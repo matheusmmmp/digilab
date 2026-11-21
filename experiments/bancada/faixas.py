@@ -251,6 +251,10 @@ FAIXAS_RESERVADAS = (
                      "(docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md, secao 4; RC-6, o plano aprovado pelo Matheus em 2026-11-20, \"Aprovo "
                      "todas\"; a 108xxx conferida livre no faixas.py da origin/main (3ed5fdd6) e nos PRs abertos em 2026-11-20; a "
                      "faixa confirmada pela coordenadora em 2026-11-20, conferida livre na origin/main (72e7bf65) e nos PRs abertos)"),
+    (109001, 109200, "CORPO V1-a, o teto baixo no pet do jogo: 200 bases (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo), os bracos CTRL e DTB no pet v38 do Python, nas 12 celulas da C4, sem os pares "
+                     "(docs/PLANO_ANALISE_V3_CORPO_V1.md, secao 4; D-V1A-8, o plano aprovado pelo Matheus em 2026-11-21, \"Aprovo "
+                     "todas\"; a faixa confirmada pela coordenadora em 2026-11-21, conferida livre na origin/main (60083c60) e nos PRs abertos)"),
 )
 
 

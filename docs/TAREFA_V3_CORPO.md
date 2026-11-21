@@ -263,3 +263,23 @@ pelo Matheus em 2026-11-21** ("Aprovo todas", as D-V1A-1 a D-V1A-9, com as recom
 - **O que o plano diz que falta no pet do Python:** a TV, a ilha grande e a memória de 128 células do jogo.
 
 **O que falta:** a faixa de 200 bases, o código e a seção `PR-CORPO-V1` do pré-registro, e depois a run, uma vez.
+
+## 21. O código da V1-a (2026-11-21)
+
+Pelo `docs/PLANO_ANALISE_V3_CORPO_V1.md`, seção 8. Nenhuma vida da faixa rodou.
+- **O orquestrador:** o `experiments/run_v3_corpo_v1.py`, um arquivo próprio para o `run_v3_corpo_c4.py` e o `pv2.py` ficarem
+  intactos. As fábricas montam o pet v38 da PET_VIVO no motor da sonda da C3, com as chaves do corpo do braço. Cada vida grava as
+  medidas da C4 e a fome (`fome_nas_decisoes`).
+- **A conferência do pet:** em cada vida, o corpo tem as chaves do braço e o cérebro é o do pet v38 (os inatos do E1, o "sono que
+  segura", o lance e o equilíbrio do cuidado). Ela troca a conferência do reflexo da C3, que não serve ao pet v38.
+- **A análise:** a primária, as guardas e a saúde por célula da C4, sem o S2; as premissas sem a dos pares; a leitura da C4 com o que
+  cada leitura faz na V1. O descritivo ganha a fome, a fração das vidas com o "Tempo bem" acima de 0,99 e os números da C4 ao lado.
+- **O relógio e o pacote:** como na C4. O tempo de cada vida vai para o `custos.json`; o `.tar.gz` é conferido contra a pasta crua
+  antes de ela ser apagada.
+- **A faixa:** a 109001…109200 entrou no `experiments/bancada/faixas.py`. As configs ficam em `experiments/configs/v3_corpo_v1/`.
+- **O pré-registro:** a seção `PR-CORPO-V1` do `docs/PREREGISTRO.md`, com o link para o plano no commit aprovado (`3c223667`).
+- **Os testes:** `tests/test_run_v3_corpo_v1.py`, 22 testes: o CTRL igual ao pet v38 da PET_VIVO byte a byte, a conferência do pet,
+  a regra de leitura caso a caso, as premissas, a trava, e a fumaça duas vezes com o `medidas.json` e o `resultado.json` iguais.
+- **Nada mudou no `digilab/` nem no web.**
+
+**O que falta:** o plano (#1055) e este código na `main`, o `pre_run` e a run, uma vez.
