@@ -39,6 +39,7 @@ link para o plano commitado.
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | rodado em 2026-11-20 | não |
 | [PR-PLASTICIDADE-C0](#pr-plasticidade-c0--a-triagem-do-crítico) | a triagem do crítico | triagem, sem gate: "nada muda" | não |
+| [PR-PLASTICIDADE-E0](#pr-plasticidade-e0--o-teste-de-sensibilidade) | o teste de sensibilidade dos números do aprendizado | RESULTADO_PENDENTE | não |
 
 ## PR-C1 — o longe regular
 
@@ -433,3 +434,23 @@ vida (a run começou às 14:42 do mesmo dia, no código `e73624eb`). É triagem:
 | o que refutaria | pela regra de leitura: "nada muda" contraria a hipótese do adendo |
 | resultado | [RESULTADO_V3_PLASTICIDADE_C0.md](RESULTADO_V3_PLASTICIDADE_C0.md): "nada muda" (o contraste +0,0034, IC95 de −0,0108 a +0,0175) |
 | artefatos | [`artifacts_v3_plasticidade/c0/`](../artifacts_v3_plasticidade/c0/): `meta.json`, `resultado.json` `598e6daa…`, `medidas.json` `c356b0d6…`, `custos.json`, `vidas.tar.gz` `bd88a13c…`; a run rodou em `e73624eb` |
+
+## PR-PLASTICIDADE-E0 — o teste de sensibilidade
+
+**Seção escrita antes da run** (2026-11-21). A tarefa foi APROVADA pelo Matheus em 2026-11-21 ("Aprovo todas"), a lista ficou em 12 genes
+no mesmo dia ("Sim, tira os três"), e a run foi liberada com "Sim, libera o E0" (recado da Gerência da V3), depois do C0 ("nada muda": o E0
+roda como está, sem o crítico). É triagem: a seção 3 diz "não há gate nem classe". As linhas "resultado" e "artefatos" entram depois.
+
+| campo | valor |
+|---|---|
+| plano | [`TAREFA_V3_PLASTICIDADE_EVOLUIDA.md`](https://github.com/matheusmmmp/digilab/blob/ff0f6f3c/docs/TAREFA_V3_PLASTICIDADE_EVOLUIDA.md), seções 2, 3 e 9.2, no commit `ff0f6f3c` (2026-11-21, a `main` antes da primeira vida). Não há `PLANO_ANALISE_V3_*` separado (D-PE-12 do registro) |
+| hipótese | duas leituras: "é estrutural" (nenhum número do aprendizado muda o resultado) ou "é de calibração" (outros valores dariam ao aprendizado um papel) (seção 0) |
+| células | o pet v38 do Python; 25 configs (a de hoje e 12 genes na metade e no dobro, um por vez) × os braços APRENDE e CONGELADO × 6 células (atencioso e relapso × `comedouro`, `longe`, `longe_fixo`); 10 unidades, 14 dias. 3 000 vidas |
+| sementes | as bases 110001…110010, da faixa 110001…110200 reservada pela coordenadora (PE-5); as mesmas do C0 |
+| contraste primário | **nenhum como gate.** Por config, contra a de hoje, pareado por unidade, IC95 pelo t: o "Tempo bem" do APRENDE (dias 1 a 14) e o valor do aprendizado (APRENDE − CONGELADO). São 24 contrastes em cada uma das duas famílias |
+| regra de leitura | a tabela da seção 3: "estrutural" (nenhum gene muda nada além do ruído), "há por onde buscar" (algum gene muda o valor do aprendizado, e ele fica acima de 0 em alguma config), "a busca afinaria os reflexos" (só os genes da disputa mexem, e o valor segue em 0). Em código (D-PE-10): "além do ruído" é o IC95 do contraste sem o 0; "acima de 0" é o IC95 do valor todo acima de 0; outro caso sai "fora da tabela". Com 24 contrastes por família, 1,2 sai por acaso; com até 2, um gene isolado não é achado |
+| descritivos ditos antes | a entropia do sorteio de cada config contra a de hoje (seção 9.2; a previsão: os genes da disputa mexem, os da plasticidade mexem pouco). **O `eta_h` em destaque** (pedido da Gerência depois do C0, antes desta run): o C0 mostrou que só 8,3 % dos créditos movem o hábito com o passo de hoje, então o `eta_h` no dobro é a config que separa "o hábito quase não anda" de "o hábito anda e não decide". Para ela vão ao lado o hábito no fim da vida (a soma dos \|H\|) e a soma dos \|ΔH\| creditados, das medidas por vida. Nada disso é gate |
+| regra de parada | roda uma vez; as conferências de cada vida (o replay, o T-CENARIO-1, o pet da config e do braço, a C-HOJE, o CONGELADO em 0) falham alto antes de qualquer medida; a pasta de saída existente recusa a run |
+| o que refutaria | pela regra de leitura: "estrutural" contraria a leitura "é de calibração", e "há por onde buscar" contraria a "é estrutural" |
+| resultado | RESULTADO_PENDENTE |
+| artefatos | ARTEFATOS_PENDENTES |
