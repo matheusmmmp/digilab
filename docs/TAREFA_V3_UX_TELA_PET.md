@@ -1112,7 +1112,8 @@ Ela não mexeu no repositório.
   contraste do cursor e da borda) e, o que não havia, toda regra do `pele-xcom.css` sob a pele dela e sem animação;
 - `e2e/pele_pranchas_d.spec.ts`, 5 testes: nas duas peles, a chave com a medida certa, ligando pela linha e pelo Espaço, sem mexer
   no registro; o fechar e o botão principal como o navegador os desenha; e o Atender do chamado no Vidro;
-- `npm run tipos` limpo; `npm test` com 212 arquivos, 2167 passam e 3 pulam; o e2e inteiro no build final (porta 8811, 2 workers): 148 passam e 2 falham, os dois antigos e sem relação com a pele (`jogo.spec.ts:339` e `:378` esperam a versão 9 do registro do Tamer e recebem a 11).
+- na árvore com a `main` de 2026-11-21 juntada: `npm run tipos` limpo; `npm test` com 215 arquivos, 2181 passam e 3 pulam; e o
+  `e2e/pele_pranchas_d.spec.ts` passa. Antes de juntar a `main`, o e2e inteiro (porta 8811, 2 workers): 148 passam e 2 falham, os dois antigos e sem relação com a pele (`jogo.spec.ts:339` e `:378` esperam a versão 9 do registro do Tamer e recebem a 11).
 
 **O que não foi feito:**
 
