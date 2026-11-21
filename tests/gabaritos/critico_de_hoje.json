@@ -1,0 +1,146 @@
+{
+ "APRENDE|atencioso|comedouro|101": {
+  "cerebro": "37d89be9a824afc7d7227f9fff2bd932dd32d401f10a3bb71ecd13295d074ad1",
+  "creditos_p2": 285,
+  "decisoes": 288,
+  "estados": "5a5a2afd65ea30618756199a9bd03cf352eb018ea1559cb94abd3682526f1e62",
+  "log": "56b2961e6a1e9ca1abb63316a68a1fb198569ac9cd7279b908547abdcf438310",
+  "motivos": "28b37d3df8cd1598fd4043d16393f3e14e6b37d5778dc652796df268ca564f6d",
+  "motor": "397ac40ec1e73be1fc4fe1e98c69481e17bb799b9f661f4f4551ff366ca32b4e"
+ },
+ "APRENDE|atencioso|comedouro|202": {
+  "cerebro": "c938bc5c9087137fd24098c9d09581a9734eb484cde14aa06a8b5b15291071fa",
+  "creditos_p2": 283,
+  "decisoes": 288,
+  "estados": "82c66f3847932e9bc38b9ed3fae2479faa836a8cfe303661a4f701bd105e7849",
+  "log": "043b54c315228121746e18b2455df0c1285e8e04910a4e82697ca33ac87f16dd",
+  "motivos": "60858ab697b64229e338a95630057ec94a1f8d1096cd7411a3244ff7ba05fa29",
+  "motor": "16928e39a8b9b9e34f1351ed28270847927ab3dde578f890fef692c8ef621055"
+ },
+ "APRENDE|atencioso|longe_fixo|101": {
+  "cerebro": "81cf578e87c6d903e0f0ad0e2cae7ee9bf1f4c0116f2099750b192d22207625d",
+  "creditos_p2": 287,
+  "decisoes": 288,
+  "estados": "d6827f2a8868c56132c4d61cc4f82cf7a32a4a7ce926d95d3a3fb3e1af3c9142",
+  "log": "05de0f4e5b29de83eef32076c790524bbbf7fddcb1a69c1c32ea5a6c470e2c01",
+  "motivos": "4ce7c9b4273ff7c6394d656a3863f0685f7ddf565f6cd8dc68bd36ca94b085f3",
+  "motor": "adcb67b8e31541908e2024036c536cb637d482348310b62b32f111e1ebc9be8f"
+ },
+ "APRENDE|atencioso|longe_fixo|202": {
+  "cerebro": "27fa16c2b726370fb587a1b3bec95a7c62031e49ee378ae7b5ee1cab4eeb8da5",
+  "creditos_p2": 277,
+  "decisoes": 288,
+  "estados": "9acb4a2dc7689fd7c474f73b6687fd031bf98eaaba4e2b2ea66664d8bc4c365a",
+  "log": "a067c386147dfbedf8bd85e30978058eb0a7c774d90c9ee5d4efff7f1f71b63f",
+  "motivos": "9e492829c1431d083ad7d097080530df571653872ef1e5c5bb4e89e5dc7f5495",
+  "motor": "f84ba9310a2528d493852a4a26908614607f54df083125c3e4cb236acf288e7b"
+ },
+ "APRENDE|relapso|comedouro|101": {
+  "cerebro": "3562bd3fab1f6030d79cd7b5e466316b5e803349970186317656fb0355592a87",
+  "creditos_p2": 281,
+  "decisoes": 288,
+  "estados": "ff8b7c9250c497983c74c1ed89d75b4034756ae309b2ddfcb9aebca28d98df2c",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "motivos": "112df2aad681eca8cff0892723448e5eb1827262c640131723d9234725e03957",
+  "motor": "65cbccbe2a0c95d1d825aa6eccba5c3a9090a0c6ce4594baf9c5432d3d474b0b"
+ },
+ "APRENDE|relapso|comedouro|202": {
+  "cerebro": "48510d7ffbdfc844b456ebd1e6872e12da97de4488293df29b8b696a5c1fa2fb",
+  "creditos_p2": 279,
+  "decisoes": 288,
+  "estados": "17f9042c6710b18ef62e1203d5496bb941ad168ed1ff86b11bc4cf80087a5cb6",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "motivos": "8747573978e6145a53f6ea9375bf15f0341e85cb34ccf5f48a8dad21f038726c",
+  "motor": "3248f879d773314a38deae6e54af23583be6e66bbeade36c16e16c501fd68365"
+ },
+ "APRENDE|relapso|longe_fixo|101": {
+  "cerebro": "8962b6e6e6dd559323c5f2bfa66fdfb5a01be51e71e1521b6c5a60e6807986b3",
+  "creditos_p2": 284,
+  "decisoes": 288,
+  "estados": "7ca3eb1cd98e3e1231e36bf239a32fe38c8b6ae3020232da0565bba489b8984b",
+  "log": "d33c233147c637f6717777bbccb6aabd1ebba174c9b492e13481de07aba1d64e",
+  "motivos": "713b890000e90b0bbc163fa0c601a45088c65e61986bdd5536f092617ecb513e",
+  "motor": "e3763e00ca7ffc12bb128462d72c71dd8a33f5e5b388b334b9bb9fb3a56862da"
+ },
+ "APRENDE|relapso|longe_fixo|202": {
+  "cerebro": "dfd30c37dd669c595a4dacdfb7f37355f9d88c8e0bc2db6192ae4e7f7a9ead9c",
+  "creditos_p2": 275,
+  "decisoes": 288,
+  "estados": "4c4822f0bb36b25b0d11f860cad8f6e1d9dd4173de90a256932d3a067886c7ca",
+  "log": "c1e53d7bc16525b656feee191360735a2e4c4bfe908f497d83f2b29dc04edb70",
+  "motivos": "494fc1d8d7a1dd4f19ad1cece9f476610257b4b32afe5532f486e34b609bd0f8",
+  "motor": "f56e3124cc1c2871e099871f35ff839c7a940a9454e38d6b7354b4034858ddf4"
+ },
+ "CONGELADO|atencioso|comedouro|101": {
+  "cerebro": "060ccc325fe0b1b648210901ff602be311001bc7c15d03e1c023d504f9f84655",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "00fa98a4a93cdf9062da37538bacffca3d99b6ebf828f6855c24da351f0c84ac",
+  "log": "0f28761dd8f8f02f0062593d800af4fa3474d308255213d8bde1cece0616029a",
+  "motivos": "85026d28c8a21e388fa3087c09119edecabc40c024ffd311841ace93fd38bca7",
+  "motor": "e79c5e409d1c08500bdfccc710289e261c69f314102c4a44e24fa5d91c0606e8"
+ },
+ "CONGELADO|atencioso|comedouro|202": {
+  "cerebro": "f8a98e9e28d6f0a366c3abfb30570cae3a0461229afa74a95463ed1314d8f59b",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "0ca35cdf05d1e579184ea7ffc6da351e58b3b305d93f1776d7db489e03ab8350",
+  "log": "efa34f7508f82343ee3d7bb949e84fe90e9997e195275025a4a428a9b7bde295",
+  "motivos": "4914628e6f2c052582a18ab5dc30cc61a76a8cb5f416afde38791e0c4b50fb54",
+  "motor": "4804a7747404f534df18f968c60f8fda6700895b2bff8a47b074b4be950a46af"
+ },
+ "CONGELADO|atencioso|longe_fixo|101": {
+  "cerebro": "8d3a40575f1e11cd0e1a9b8531c622945ea575b474234e800ccf8e5f6340879b",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "1855b78391a89efa50543802102e43cb3e78c82ae0209bbd0954372edf03de88",
+  "log": "05de0f4e5b29de83eef32076c790524bbbf7fddcb1a69c1c32ea5a6c470e2c01",
+  "motivos": "fd06bbd98d42beaea3819575fd07205eb3d9c71587820344fd10ed3fc4b23a6f",
+  "motor": "4917c4def696598078f63f8784565233b598493cbaea35a3d2dc05c6aae805a2"
+ },
+ "CONGELADO|atencioso|longe_fixo|202": {
+  "cerebro": "83ddf1191c5ebfcb5dec654057f300ad6308f8dca7c56828aa91e961120537f8",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "78ce172ecc28af07f8640d7752a9b7944637e16e83135505f62caadbf14dd877",
+  "log": "43675638b11c651459155af565e6ea7ee8687cdf7df9a86e0a5ce7fa403aff51",
+  "motivos": "e335f50e2d85be59a7458ea96772710f3d6bfe3628e7e125eb53bd0f0c31b0f3",
+  "motor": "235590acf247728a56e47273de61865caf67c6c1a8c4af8895ee2e3888d94f5c"
+ },
+ "CONGELADO|relapso|comedouro|101": {
+  "cerebro": "b0f874e88952025fbbb783987bfffbdd78a16d2cf3711fc542658886c7eee7b0",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "b29270da324d6735fc3613e2fa225cb1712194f948e49a1aaa2d77a99ced8cae",
+  "log": "479059e6ce0ef22e39e304386db10f88aafae5d91a536335ca2d4c285372adee",
+  "motivos": "43c849054b9462461cce442c60729b1b850828f0b57bd2efcdf33ab9b002f1d7",
+  "motor": "697099bbdd728c8b424b6a70ce286e219ad0aa4c169ec0652f50f38049ee09f8"
+ },
+ "CONGELADO|relapso|comedouro|202": {
+  "cerebro": "b0e1d4e9b57be29d3432469eaf56f57c4d08f8808ab11316dbb4ee29761c829a",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "35b0b78af52a11241a5f6ad49d37ee8195fd4893d0e9b890fa37a20d116877a2",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "motivos": "47ee466fb692b05cc4bba30b6887f09feb0305a13215f0b048dd741a16e7b814",
+  "motor": "f33be0b3f8c718174ceb0699d0d3816973b628106f7a2df98baf2773f2295299"
+ },
+ "CONGELADO|relapso|longe_fixo|101": {
+  "cerebro": "ff26c583259c2ac7aa877f3312e886e698994a3c541ddf08c3aa893e768938c7",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "9f5a7a86e5af417cef824551b1b44f0c0bb2491bc6c7d7bd0eeb0864a86d9f2b",
+  "log": "d33c233147c637f6717777bbccb6aabd1ebba174c9b492e13481de07aba1d64e",
+  "motivos": "1370bba2c55b467e58eba13ecf6cc6e5c3e7fa058fd2d09784df641ec1d61354",
+  "motor": "caabf6916263a18d485147c2ba21ee85dc32023ea0aa0d0d6b453de1c4a8a83d"
+ },
+ "CONGELADO|relapso|longe_fixo|202": {
+  "cerebro": "985fd418a25810fd26f2dea1d744e61e5c4aa5457fdecad7149a546b3437662d",
+  "creditos_p2": 0,
+  "decisoes": 288,
+  "estados": "c15cf17e37e508bbe536345ae92037ab959f6d090143ec76f4fcd1aeb27e8641",
+  "log": "c1e53d7bc16525b656feee191360735a2e4c4bfe908f497d83f2b29dc04edb70",
+  "motivos": "c680790fe6ce85da7d65a545da1c5cfb239c11e1e70941a35b1dfef211f423ae",
+  "motor": "16126cf411e6aa94f2b559eb50bb23f6fc7a5084459f87b92c101dab0d4227e1"
+ }
+}
